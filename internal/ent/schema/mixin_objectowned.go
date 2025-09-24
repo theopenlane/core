@@ -2,12 +2,14 @@ package schema
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"slices"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -45,6 +47,8 @@ type ObjectOwnedMixin struct {
 	// SkipListFilterInterceptor skips the the filter for list queries, this can be used to bypass fga checks
 	// when permissions can be determined solely based on the organization filter and group permissions
 	SkipListFilterInterceptor interceptors.SkipMode
+	// SkipListFilterInterceptorSkipperFunc is a custom function to determine if the list filter interceptor should be skipped
+	SkipListFilterInterceptorSkipperFunc func(ctx context.Context) bool
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
 	// IncludeOrganizationOwner adds the organization owner_id field and hooks to the schema
@@ -124,6 +128,13 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 func withSkipForSystemAdmin(allow bool) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.AllowEmptyForSystemAdmin = allow
+	}
+}
+
+// withSkipperFunc allows to set a custom skipper function for the list filter interceptor
+func withSkipperFunc(skipper func(ctx context.Context) bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.SkipListFilterInterceptorSkipperFunc = skipper
 	}
 }
 
@@ -396,6 +407,18 @@ func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
 	return false
 }
 
+// skipInterceptorForOrgMembers skips the interceptor if the user is an org members, allowing the view of the
+// object owned objects without needing explicit tuples
+// this can be used when an object adds tuples for explicit behavior, but all org members should be able to view the object
+// for example, a questionnaire template owned by the organization but is sent to an external user to fill out
+func skipInterceptorForOrgMembers(ctx context.Context) bool {
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); errors.Is(err, privacy.Allow) {
+		return true
+	}
+
+	return false
+}
+
 // getObjectInterceptor adds the interceptor for the object owned mixin
 // based on the settings configured in the mixin
 func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
@@ -421,6 +444,14 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 			return skipQueryModeCheck(ctx, o.SkipListFilterInterceptor)
 		}
 
+	}
+
+	if o.SkipListFilterInterceptorSkipperFunc != nil {
+		originalFunc := customSkipperFunc
+
+		customSkipperFunc = func(ctx context.Context) bool {
+			return originalFunc(ctx) || o.SkipListFilterInterceptorSkipperFunc(ctx)
+		}
 	}
 
 	o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {

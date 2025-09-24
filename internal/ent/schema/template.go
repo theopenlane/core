@@ -93,8 +93,9 @@ func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Template](t,
-				withParents(TrustCenter{}, Organization{}),
+				withParents(Organization{}, TrustCenter{}),
 				withOrganizationOwner(true),
+				withSkipperFunc(skipInterceptorForOrgMembers),
 			),
 			mixin.NewSystemOwnedMixin(),
 		},
