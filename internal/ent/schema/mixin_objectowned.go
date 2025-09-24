@@ -406,8 +406,10 @@ func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
 	return false
 }
 
-// skipInterceptorForOrgMembers skips the interceptor if the user is an org admin, allowing the view of the
+// skipInterceptorForOrgMembers skips the interceptor if the user is an org members, allowing the view of the
 // object owned objects without needing explicit tuples
+// this can be used when an object adds tuples for explicit behavior, but all org members should be able to view the object
+// for example, a questionnaire template owned by the organization but is sent to an external user to fill out
 func skipInterceptorForOrgMembers(ctx context.Context) bool {
 	if allow := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); allow == privacy.Allow {
 		return true
