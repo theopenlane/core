@@ -60,7 +60,8 @@ type Resolver struct {
 	complexityLimit   int
 	maxResultLimit    *int
 	// mappable domain that trust center records will resolve to
-	trustCenterCnameTarget string
+	trustCenterCnameTarget   string
+	defaultTrustCenterDomain string
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -73,6 +74,12 @@ func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
 
 func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	r.trustCenterCnameTarget = cname
+
+	return &r
+}
+
+func (r Resolver) WithTrustCenterDefaultDomain(domain string) *Resolver {
+	r.defaultTrustCenterDomain = domain
 
 	return &r
 }

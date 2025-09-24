@@ -144,8 +144,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
 	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	SlugValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.

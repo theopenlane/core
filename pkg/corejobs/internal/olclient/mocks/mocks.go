@@ -38881,6 +38881,89 @@ func (_c *MockOpenlaneGraphClient_GlobalSearch_Call) RunAndReturn(run func(ctx c
 	return _c
 }
 
+// SendTrustCenterNDAEmail provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) SendTrustCenterNDAEmail(ctx context.Context, input openlaneclient.SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.SendTrustCenterNDAEmail, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for SendTrustCenterNDAEmail")
+	}
+
+	var r0 *openlaneclient.SendTrustCenterNDAEmail
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.SendTrustCenterNDAInput, ...clientv2.RequestInterceptor) (*openlaneclient.SendTrustCenterNDAEmail, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.SendTrustCenterNDAInput, ...clientv2.RequestInterceptor) *openlaneclient.SendTrustCenterNDAEmail); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.SendTrustCenterNDAEmail)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.SendTrustCenterNDAInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SendTrustCenterNDAEmail'
+type MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call struct {
+	*mock.Call
+}
+
+// SendTrustCenterNDAEmail is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.SendTrustCenterNDAInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) SendTrustCenterNDAEmail(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call {
+	return &MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call{Call: _e.mock.On("SendTrustCenterNDAEmail",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call) Run(run func(ctx context.Context, input openlaneclient.SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.SendTrustCenterNDAInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.SendTrustCenterNDAInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call) Return(sendTrustCenterNDAEmail *openlaneclient.SendTrustCenterNDAEmail, err error) *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call {
+	_c.Call.Return(sendTrustCenterNDAEmail, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.SendTrustCenterNDAEmail, error)) *MockOpenlaneGraphClient_SendTrustCenterNDAEmail_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateAPIToken provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateAPIToken(ctx context.Context, updateAPITokenID string, input openlaneclient.UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateAPIToken, error) {
 	var tmpRet mock.Arguments

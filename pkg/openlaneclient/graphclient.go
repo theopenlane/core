@@ -490,6 +490,7 @@ type OpenlaneGraphClient interface {
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterNda(ctx context.Context, input CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNda, error)
 	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNda, error)
+	SendTrustCenterNDAEmail(ctx context.Context, input SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*SendTrustCenterNDAEmail, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
 	DeleteTrustCenterSetting(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSetting, error)
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
@@ -71873,6 +71874,17 @@ func (t *UpdateTrustCenterNda_UpdateTrustCenterNda) GetTemplate() *UpdateTrustCe
 	return &t.Template
 }
 
+type SendTrustCenterNDAEmail_SendTrustCenterNDAEmail struct {
+	Success bool "json:\"success\" graphql:\"success\""
+}
+
+func (t *SendTrustCenterNDAEmail_SendTrustCenterNDAEmail) GetSuccess() bool {
+	if t == nil {
+		t = &SendTrustCenterNDAEmail_SendTrustCenterNDAEmail{}
+	}
+	return t.Success
+}
+
 type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
 	AccentColor        *string                     "json:\"accentColor,omitempty\" graphql:\"accentColor\""
 	BackgroundColor    *string                     "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
@@ -82209,6 +82221,17 @@ func (t *UpdateTrustCenterNda) GetUpdateTrustCenterNda() *UpdateTrustCenterNda_U
 		t = &UpdateTrustCenterNda{}
 	}
 	return &t.UpdateTrustCenterNda
+}
+
+type SendTrustCenterNDAEmail struct {
+	SendTrustCenterNDAEmail SendTrustCenterNDAEmail_SendTrustCenterNDAEmail "json:\"sendTrustCenterNDAEmail\" graphql:\"sendTrustCenterNDAEmail\""
+}
+
+func (t *SendTrustCenterNDAEmail) GetSendTrustCenterNDAEmail() *SendTrustCenterNDAEmail_SendTrustCenterNDAEmail {
+	if t == nil {
+		t = &SendTrustCenterNDAEmail{}
+	}
+	return &t.SendTrustCenterNDAEmail
 }
 
 type CreateTrustCenterSetting struct {
@@ -104076,6 +104099,30 @@ func (c *Client) UpdateTrustCenterNda(ctx context.Context, id string, templateFi
 	return &res, nil
 }
 
+const SendTrustCenterNDAEmailDocument = `mutation SendTrustCenterNDAEmail ($input: SendTrustCenterNDAInput!) {
+	sendTrustCenterNDAEmail(input: $input) {
+		success
+	}
+}
+`
+
+func (c *Client) SendTrustCenterNDAEmail(ctx context.Context, input SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*SendTrustCenterNDAEmail, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res SendTrustCenterNDAEmail
+	if err := c.Client.Post(ctx, "SendTrustCenterNDAEmail", SendTrustCenterNDAEmailDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterSettingDocument = `mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!) {
 	createTrustCenterSetting(input: $input) {
 		trustCenterSetting {
@@ -106124,6 +106171,7 @@ var DocumentOperationNames = map[string]string{
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
 	CreateTrustCenterNdaDocument:                   "CreateTrustCenterNda",
 	UpdateTrustCenterNdaDocument:                   "UpdateTrustCenterNda",
+	SendTrustCenterNDAEmailDocument:                "SendTrustCenterNDAEmail",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
 	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
 	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",

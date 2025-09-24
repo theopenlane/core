@@ -328,11 +328,6 @@ func (_c *TrustCenterCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TrustCenterCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := trustcenter.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}

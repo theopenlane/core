@@ -23,6 +23,13 @@ extend type Mutation{
         """
         templateFiles: [Upload!]
     ): TrustCenterNDAUpdatePayload!
+
+    sendTrustCenterNDAEmail(
+        """
+        values of the trustCenterNDA
+        """
+        input: SendTrustCenterNDAInput!
+    ): SendTrustCenterNDAEmailPayload!
 }
 
 type TrustCenterNDACreatePayload {
@@ -38,4 +45,19 @@ input CreateTrustCenterNDAInput {
 
 type TrustCenterNDAUpdatePayload {
     template: Template!
+}
+
+type SendTrustCenterNDAEmailPayload {
+    success: Boolean!
+}
+
+input SendTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+    """
+    email address
+    """
+    email: String!
 }
