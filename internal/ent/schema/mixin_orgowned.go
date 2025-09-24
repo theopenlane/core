@@ -150,10 +150,6 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 		return nil
 	}
 
-	if trustCenterNdaCtx, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
-		return m.SetField(ownerFieldName, trustCenterNdaCtx.OrgID)
-	}
-
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)
@@ -170,14 +166,9 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 // addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
 func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
 	var orgID string
-	if trustCenterNdaCtx, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
-		orgID = trustCenterNdaCtx.OrgID
-	} else {
-		// always add the organization owner relationship as an editor
-		orgID, err = auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
-			return fmt.Errorf("failed to get organization id from context: %w", err)
-		}
+	orgID, err = auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
 
 	tr := fgax.TupleRequest{

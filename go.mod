@@ -94,7 +94,7 @@ require (
 	github.com/theopenlane/entx v0.15.0
 	github.com/theopenlane/gqlgen-plugins v0.9.1
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.17.2
+	github.com/theopenlane/iam v0.17.3
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.0
 	github.com/theopenlane/utils v0.5.0

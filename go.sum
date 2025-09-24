@@ -657,6 +657,8 @@ github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.17.2 h1:dMAXmZ8qr2snTERotFkql8f4iVGVz0TUONzOidCYq7o=
 github.com/theopenlane/iam v0.17.2/go.mod h1:DM/YPKv++iol2di6ZwJlM+ZqJ+E8MZO7G7yzFUbCHgw=
+github.com/theopenlane/iam v0.17.3 h1:6z/RMpxtK7IGbeiz2Uplh/HisiD6WQ6fRR/lfS14kDE=
+github.com/theopenlane/iam v0.17.3/go.mod h1:DM/YPKv++iol2di6ZwJlM+ZqJ+E8MZO7G7yzFUbCHgw=
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
 github.com/theopenlane/riverboat v0.4.0 h1:uw2tScCJy0FdH+sKSTnm5U58n7N1eqBt8lGE6oNaNJE=
