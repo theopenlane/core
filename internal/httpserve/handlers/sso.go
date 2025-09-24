@@ -73,8 +73,6 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		RedirectURI: authURL,
 	}
 
-	metrics.RecordLogin(true)
-
 	return h.Success(ctx, out, openapi)
 }
 

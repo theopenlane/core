@@ -265,8 +265,6 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 		Session:             s,
 	}
 
-	metrics.RecordLogin(true)
-
 	return h.Success(ctx, out, openapi)
 }
 
