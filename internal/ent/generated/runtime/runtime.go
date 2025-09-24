@@ -6955,6 +6955,7 @@ func init() {
 	trustcenterwatermarkconfigMixinHooks1 := trustcenterwatermarkconfigMixin[1].Hooks()
 	trustcenterwatermarkconfigMixinHooks2 := trustcenterwatermarkconfigMixin[2].Hooks()
 	trustcenterwatermarkconfigMixinHooks5 := trustcenterwatermarkconfigMixin[5].Hooks()
+	trustcenterwatermarkconfigHooks := schema.TrustCenterWatermarkConfig{}.Hooks()
 
 	trustcenterwatermarkconfig.Hooks[1] = trustcenterwatermarkconfigMixinHooks0[0]
 
@@ -6963,6 +6964,8 @@ func init() {
 	trustcenterwatermarkconfig.Hooks[3] = trustcenterwatermarkconfigMixinHooks2[0]
 
 	trustcenterwatermarkconfig.Hooks[4] = trustcenterwatermarkconfigMixinHooks5[0]
+
+	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigHooks[0]
 	trustcenterwatermarkconfigMixinInters1 := trustcenterwatermarkconfigMixin[1].Interceptors()
 	trustcenterwatermarkconfigMixinInters2 := trustcenterwatermarkconfigMixin[2].Interceptors()
 	trustcenterwatermarkconfigMixinInters5 := trustcenterwatermarkconfigMixin[5].Interceptors()

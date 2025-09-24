@@ -10955,6 +10955,95 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) RunAndRetu
 	return _c
 }
 
+// CreateTrustCenterWatermarkConfig provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenterWatermarkConfig(ctx context.Context, input openlaneclient.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterWatermarkConfig, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, logoFile, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input, logoFile)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenterWatermarkConfig")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenterWatermarkConfig
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterWatermarkConfig, error)); ok {
+		return returnFunc(ctx, input, logoFile, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenterWatermarkConfig); ok {
+		r0 = returnFunc(ctx, input, logoFile, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenterWatermarkConfig)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, logoFile, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenterWatermarkConfig'
+type MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenterWatermarkConfig is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterWatermarkConfigInput
+//   - logoFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenterWatermarkConfig(ctx interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call{Call: _e.mock.On("CreateTrustCenterWatermarkConfig",
+		append([]interface{}{ctx, input, logoFile}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterWatermarkConfigInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterWatermarkConfigInput)
+		}
+		var arg2 *graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call) Return(createTrustCenterWatermarkConfig *openlaneclient.CreateTrustCenterWatermarkConfig, err error) *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call {
+	_c.Call.Return(createTrustCenterWatermarkConfig, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterWatermarkConfig, error)) *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateUploadProcedure provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error) {
 	var tmpRet mock.Arguments
@@ -15694,6 +15783,89 @@ func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call) Return(del
 }
 
 func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTrustCenterWatermarkConfig provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTrustCenterWatermarkConfig(ctx context.Context, deleteTrustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterWatermarkConfig, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterWatermarkConfigID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterWatermarkConfigID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTrustCenterWatermarkConfig")
+	}
+
+	var r0 *openlaneclient.DeleteTrustCenterWatermarkConfig
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterWatermarkConfig, error)); ok {
+		return returnFunc(ctx, deleteTrustCenterWatermarkConfigID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTrustCenterWatermarkConfig); ok {
+		r0 = returnFunc(ctx, deleteTrustCenterWatermarkConfigID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTrustCenterWatermarkConfig)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTrustCenterWatermarkConfigID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTrustCenterWatermarkConfig'
+type MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call struct {
+	*mock.Call
+}
+
+// DeleteTrustCenterWatermarkConfig is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTrustCenterWatermarkConfigID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTrustCenterWatermarkConfig(ctx interface{}, deleteTrustCenterWatermarkConfigID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call {
+	return &MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call{Call: _e.mock.On("DeleteTrustCenterWatermarkConfig",
+		append([]interface{}{ctx, deleteTrustCenterWatermarkConfigID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call) Run(run func(ctx context.Context, deleteTrustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call) Return(deleteTrustCenterWatermarkConfig *openlaneclient.DeleteTrustCenterWatermarkConfig, err error) *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call {
+	_c.Call.Return(deleteTrustCenterWatermarkConfig, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterWatermarkConfig, error)) *MockOpenlaneGraphClient_DeleteTrustCenterWatermarkConfig_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -23810,6 +23982,160 @@ func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call) Return(ge
 }
 
 func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessors, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterWatermarkConfigHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterWatermarkConfigHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterWatermarkConfigHistories")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterWatermarkConfigHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigHistories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterWatermarkConfigHistories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterWatermarkConfigHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterWatermarkConfigHistories'
+type MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterWatermarkConfigHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterWatermarkConfigHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call{Call: _e.mock.On("GetAllTrustCenterWatermarkConfigHistories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call) Return(getAllTrustCenterWatermarkConfigHistories *openlaneclient.GetAllTrustCenterWatermarkConfigHistories, err error) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Return(getAllTrustCenterWatermarkConfigHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigHistories, error)) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterWatermarkConfigs provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterWatermarkConfigs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigs, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterWatermarkConfigs")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterWatermarkConfigs
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigs, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterWatermarkConfigs); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterWatermarkConfigs)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterWatermarkConfigs'
+type MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterWatermarkConfigs is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterWatermarkConfigs(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call{Call: _e.mock.On("GetAllTrustCenterWatermarkConfigs",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call) Return(getAllTrustCenterWatermarkConfigs *openlaneclient.GetAllTrustCenterWatermarkConfigs, err error) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call {
+	_c.Call.Return(getAllTrustCenterWatermarkConfigs, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterWatermarkConfigs, error)) *MockOpenlaneGraphClient_GetAllTrustCenterWatermarkConfigs_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -38157,6 +38483,279 @@ func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call) RunAndReturn
 	return _c
 }
 
+// GetTrustCenterWatermarkConfigByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterWatermarkConfigByID(ctx context.Context, trustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, trustCenterWatermarkConfigID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, trustCenterWatermarkConfigID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterWatermarkConfigByID")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterWatermarkConfigByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigByID, error)); ok {
+		return returnFunc(ctx, trustCenterWatermarkConfigID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterWatermarkConfigByID); ok {
+		r0 = returnFunc(ctx, trustCenterWatermarkConfigID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterWatermarkConfigByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, trustCenterWatermarkConfigID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterWatermarkConfigByID'
+type MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterWatermarkConfigByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - trustCenterWatermarkConfigID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterWatermarkConfigByID(ctx interface{}, trustCenterWatermarkConfigID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call{Call: _e.mock.On("GetTrustCenterWatermarkConfigByID",
+		append([]interface{}{ctx, trustCenterWatermarkConfigID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call) Run(run func(ctx context.Context, trustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call) Return(getTrustCenterWatermarkConfigByID *openlaneclient.GetTrustCenterWatermarkConfigByID, err error) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call {
+	_c.Call.Return(getTrustCenterWatermarkConfigByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call) RunAndReturn(run func(ctx context.Context, trustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigByID, error)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterWatermarkConfigHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterWatermarkConfigHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterWatermarkConfigHistories")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterWatermarkConfigHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterWatermarkConfigHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterWatermarkConfigHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterWatermarkConfigHistories'
+type MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterWatermarkConfigHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterWatermarkConfigHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call{Call: _e.mock.On("GetTrustCenterWatermarkConfigHistories",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call) Return(getTrustCenterWatermarkConfigHistories *openlaneclient.GetTrustCenterWatermarkConfigHistories, err error) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Return(getTrustCenterWatermarkConfigHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigHistories, error)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterWatermarkConfigs provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterWatermarkConfigs(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigs, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterWatermarkConfigs")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterWatermarkConfigs
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigs, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterWatermarkConfigs); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterWatermarkConfigs)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWatermarkConfigWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterWatermarkConfigs'
+type MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterWatermarkConfigs is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterWatermarkConfigWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterWatermarkConfigs(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call{Call: _e.mock.On("GetTrustCenterWatermarkConfigs",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterWatermarkConfigWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterWatermarkConfigWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call) Return(getTrustCenterWatermarkConfigs *openlaneclient.GetTrustCenterWatermarkConfigs, err error) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call {
+	_c.Call.Return(getTrustCenterWatermarkConfigs, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWatermarkConfigWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterWatermarkConfigs, error)) *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetTrustCenters provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetTrustCenters(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error) {
 	var tmpRet mock.Arguments
@@ -43624,6 +44223,101 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call) Return(upd
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterSubprocessorID string, input openlaneclient.UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTrustCenterWatermarkConfig provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenterWatermarkConfig(ctx context.Context, updateTrustCenterWatermarkConfigID string, input openlaneclient.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterWatermarkConfig, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateTrustCenterWatermarkConfigID, input, logoFile, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateTrustCenterWatermarkConfigID, input, logoFile)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTrustCenterWatermarkConfig")
+	}
+
+	var r0 *openlaneclient.UpdateTrustCenterWatermarkConfig
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterWatermarkConfig, error)); ok {
+		return returnFunc(ctx, updateTrustCenterWatermarkConfigID, input, logoFile, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenterWatermarkConfig); ok {
+		r0 = returnFunc(ctx, updateTrustCenterWatermarkConfigID, input, logoFile, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenterWatermarkConfig)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterWatermarkConfigInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustCenterWatermarkConfigID, input, logoFile, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTrustCenterWatermarkConfig'
+type MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call struct {
+	*mock.Call
+}
+
+// UpdateTrustCenterWatermarkConfig is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateTrustCenterWatermarkConfigID string
+//   - input openlaneclient.UpdateTrustCenterWatermarkConfigInput
+//   - logoFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenterWatermarkConfig(ctx interface{}, updateTrustCenterWatermarkConfigID interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call {
+	return &MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call{Call: _e.mock.On("UpdateTrustCenterWatermarkConfig",
+		append([]interface{}{ctx, updateTrustCenterWatermarkConfigID, input, logoFile}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call) Run(run func(ctx context.Context, updateTrustCenterWatermarkConfigID string, input openlaneclient.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTrustCenterWatermarkConfigInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTrustCenterWatermarkConfigInput)
+		}
+		var arg3 *graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].(*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call) Return(updateTrustCenterWatermarkConfig *openlaneclient.UpdateTrustCenterWatermarkConfig, err error) *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call {
+	_c.Call.Return(updateTrustCenterWatermarkConfig, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterWatermarkConfigID string, input openlaneclient.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterWatermarkConfig, error)) *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call {
 	_c.Call.Return(run)
 	return _c
 }

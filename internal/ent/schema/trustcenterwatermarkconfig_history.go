@@ -37,8 +37,8 @@ func (TrustCenterWatermarkConfigHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "trust_center_watermark_config",
-			IDField:      "Ref",
+			ObjectType:   "trust_center",
+			IDField:      "TrustCenterID",
 			IncludeHooks: false,
 		},
 	}
@@ -113,6 +113,6 @@ func (TrustCenterWatermarkConfigHistory) Policy() ent.Policy {
 // Interceptors of the TrustCenterWatermarkConfigHistory
 func (TrustCenterWatermarkConfigHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, "trust_center"),
 	}
 }

@@ -5181,6 +5181,16 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterwatermarkconfig_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// TrustCenterWatermarkConfigHistoryColumns holds the columns for the "trust_center_watermark_config_history" table.
 	TrustCenterWatermarkConfigHistoryColumns = []*schema.Column{
@@ -8737,6 +8747,10 @@ func init() {
 		Table: "trust_center_subprocessor_history",
 	}
 	TrustCenterWatermarkConfigsTable.ForeignKeys[0].RefTable = FilesTable
+	TrustCenterWatermarkConfigsTable.Annotation = &entsql.Annotation{}
+	TrustCenterWatermarkConfigsTable.Annotation.Checks = map[string]string{
+		"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",
+	}
 	TrustCenterWatermarkConfigHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_watermark_config_history",
 	}
