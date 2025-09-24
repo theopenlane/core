@@ -2,6 +2,7 @@ package schema
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"slices"
 
@@ -411,7 +412,7 @@ func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
 // this can be used when an object adds tuples for explicit behavior, but all org members should be able to view the object
 // for example, a questionnaire template owned by the organization but is sent to an external user to fill out
 func skipInterceptorForOrgMembers(ctx context.Context) bool {
-	if allow := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); allow == privacy.Allow {
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); errors.Is(err, privacy.Allow) {
 		return true
 	}
 
