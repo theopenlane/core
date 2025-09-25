@@ -10,11 +10,86 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 )
+
+func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+
+	uploadFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	require.Nil(t, err)
+	up := graphql.Upload{
+		File:        uploadFile.File,
+		Filename:    uploadFile.Filename,
+		Size:        uploadFile.Size,
+		ContentType: uploadFile.ContentType,
+	}
+	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{up})
+
+	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+		TrustCenterID: trustCenter.ID,
+	}, []*graphql.Upload{&up})
+
+	require.Nil(t, err)
+	require.NotNil(t, trustCenterNDA)
+
+	// Create anonymous trust center context helper
+	anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+
+	anonUser := &auth.AnonymousTrustCenterUser{
+		SubjectID:          anonUserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     trustCenter.OwnerID,
+		AuthenticationType: auth.JWTAuthentication,
+		TrustCenterID:      trustCenter.ID,
+		SubjectEmail:       "test@example.com",
+	}
+
+	input := testclient.SubmitTrustCenterNDAResponseInput{
+		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+		Response: map[string]any{
+			"signatory_info": map[string]any{
+				"email": "test@example.com",
+			},
+			"acknowledgment": true,
+			"signature_metadata": map[string]any{
+				"ip_address": "192.168.1.100",
+				"timestamp":  "2025-09-22T19:37:59.988Z",
+				"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+				"user_id":    anonUserID,
+			},
+			"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+			"trust_center_id": trustCenter.ID,
+		},
+	}
+
+	ctx := context.Background()
+	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+
+	// check that the anonymous user can't query the protected doc's files
+	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
+	require.Nil(t, err)
+	require.Nil(t, getTrustCenterDocResp.TrustCenterDoc.File)
+
+	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// now, check that the anonymous user can query the protected doc's files
+	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
+	require.Nil(t, err)
+	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.File != nil)
+
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
 
 func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 	// Create test trust centers
