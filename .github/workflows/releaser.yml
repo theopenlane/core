@@ -1,7 +1,9 @@
 name: Release
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*.*.0' # excludes patch releases like v1.2.3
+  workflow_dispatch: # manual trigger from any tag or branch
 
 permissions:
   contents: write
