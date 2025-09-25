@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -75,7 +76,25 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			return next.Mutate(ctx, m)
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// add the nda_signed tuple to the anonymous user to allow file access
+			tuple := fgax.GetTupleKey(fgax.TupleRequest{
+				SubjectID:   anon.SubjectID,
+				SubjectType: "user",
+				ObjectID:    anon.TrustCenterID,
+				ObjectType:  "trust_center",
+				Relation:    "nda_signed",
+			})
+
+			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+				return nil, err
+			}
+
+			return v, err
 		})
 	}, ent.OpCreate)
 }
