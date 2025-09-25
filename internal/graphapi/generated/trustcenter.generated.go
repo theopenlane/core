@@ -74,6 +74,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "watermarkConfig":
+				return ec.fieldContext_TrustCenter_watermarkConfig(ctx, field)
 			case "trustCenterSubprocessors":
 				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
 			case "trustCenterDocs":
@@ -162,6 +164,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "watermarkConfig":
+				return ec.fieldContext_TrustCenter_watermarkConfig(ctx, field)
 			case "trustCenterSubprocessors":
 				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
 			case "trustCenterDocs":

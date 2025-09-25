@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -1306,6 +1307,21 @@ func (_c *OrganizationCreate) AddExports(v ...*Export) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddExportIDs(ids...)
+}
+
+// AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterWatermarkConfigs adds the "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
+func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigs(v ...*TrustCenterWatermarkConfig) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterWatermarkConfigIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2655,6 +2671,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterWatermarkConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

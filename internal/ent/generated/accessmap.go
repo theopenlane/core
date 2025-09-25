@@ -1278,6 +1278,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "export",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_watermark_configs": {
+	ObjectType:      "trust_center_watermark_config",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1768,6 +1772,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "setting",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "watermark_config": {
+	ObjectType:      "watermark_config",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "trust_center_subprocessors": {
 	ObjectType:      "organization",
 	SkipEditCheck:   true,
@@ -1828,6 +1836,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "organization",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+},
+}, "trust_center_watermark_config": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "user": {"personal_access_tokens": {
 	ObjectType:      "personal_access_token",

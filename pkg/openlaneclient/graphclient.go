@@ -510,6 +510,14 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSubprocessor, error)
 	GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessorHistories, error)
 	GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorHistories, error)
+	CreateTrustCenterWatermarkConfig(ctx context.Context, input CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterWatermarkConfig, error)
+	DeleteTrustCenterWatermarkConfig(ctx context.Context, deleteTrustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterWatermarkConfig, error)
+	GetAllTrustCenterWatermarkConfigs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterWatermarkConfigs, error)
+	GetTrustCenterWatermarkConfigByID(ctx context.Context, trustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigByID, error)
+	GetTrustCenterWatermarkConfigs(ctx context.Context, first *int64, last *int64, where *TrustCenterWatermarkConfigWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigs, error)
+	UpdateTrustCenterWatermarkConfig(ctx context.Context, updateTrustCenterWatermarkConfigID string, input UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterWatermarkConfig, error)
+	GetAllTrustCenterWatermarkConfigHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterWatermarkConfigHistories, error)
+	GetTrustCenterWatermarkConfigHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterWatermarkConfigHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
@@ -74309,6 +74317,1031 @@ func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) G
 	return t.TotalCount
 }
 
+type CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig struct {
+	Color         *string                                                                                            "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt     *time.Time                                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
+	Font          *enums.Font                                                                                        "json:\"font,omitempty\" graphql:\"font\""
+	FontSize      *float64                                                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
+	ID            string                                                                                             "json:\"id\" graphql:\"id\""
+	LogoID        *string                                                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
+	Opacity       *float64                                                                                           "json:\"opacity,omitempty\" graphql:\"opacity\""
+	Rotation      *float64                                                                                           "json:\"rotation,omitempty\" graphql:\"rotation\""
+	Text          *string                                                                                            "json:\"text,omitempty\" graphql:\"text\""
+	TrustCenterID *string                                                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetColor() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Color
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFile() *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.File
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *enums.Font {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Font
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFontSize() *float64 {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.FontSize
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetLogoID() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.LogoID
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetOpacity() *float64 {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Opacity
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetRotation() *float64 {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Rotation
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetText() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Text
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig struct {
+	TrustCenterWatermarkConfig CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig "json:\"trustCenterWatermarkConfig\" graphql:\"trustCenterWatermarkConfig\""
+}
+
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig) GetTrustCenterWatermarkConfig() *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig{}
+	}
+	return &t.TrustCenterWatermarkConfig
+}
+
+type DeleteTrustCenterWatermarkConfig_DeleteTrustCenterWatermarkConfig struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterWatermarkConfig_DeleteTrustCenterWatermarkConfig) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterWatermarkConfig_DeleteTrustCenterWatermarkConfig{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node struct {
+	Color         *string                                                                        "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt     *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
+	Font          *enums.Font                                                                    "json:\"font,omitempty\" graphql:\"font\""
+	FontSize      *float64                                                                       "json:\"fontSize,omitempty\" graphql:\"fontSize\""
+	ID            string                                                                         "json:\"id\" graphql:\"id\""
+	LogoID        *string                                                                        "json:\"logoID,omitempty\" graphql:\"logoID\""
+	Opacity       *float64                                                                       "json:\"opacity,omitempty\" graphql:\"opacity\""
+	Rotation      *float64                                                                       "json:\"rotation,omitempty\" graphql:\"rotation\""
+	Text          *string                                                                        "json:\"text,omitempty\" graphql:\"text\""
+	TrustCenterID *string                                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFile() *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.File
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *enums.Font {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Font
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFontSize() *float64 {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.FontSize
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetLogoID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.LogoID
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetOpacity() *float64 {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Opacity
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetRotation() *float64 {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Rotation
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetText() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges struct {
+	Node *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges) GetNode() *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs struct {
+	Edges      []*GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetEdges() []*GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetPageInfo() *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig struct {
+	Color         *string                                                            "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt     *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
+	Font          *enums.Font                                                        "json:\"font,omitempty\" graphql:\"font\""
+	FontSize      *float64                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
+	ID            string                                                             "json:\"id\" graphql:\"id\""
+	LogoID        *string                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
+	Opacity       *float64                                                           "json:\"opacity,omitempty\" graphql:\"opacity\""
+	Rotation      *float64                                                           "json:\"rotation,omitempty\" graphql:\"rotation\""
+	Text          *string                                                            "json:\"text,omitempty\" graphql:\"text\""
+	TrustCenterID *string                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetColor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.Color
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFile() *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.File
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFont() *enums.Font {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFontSize() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.FontSize
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetLogoID() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.LogoID
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetOpacity() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.Opacity
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetRotation() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.Rotation
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetText() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.Text
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node struct {
+	Color         *string                                                                     "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt     *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
+	Font          *enums.Font                                                                 "json:\"font,omitempty\" graphql:\"font\""
+	FontSize      *float64                                                                    "json:\"fontSize,omitempty\" graphql:\"fontSize\""
+	ID            string                                                                      "json:\"id\" graphql:\"id\""
+	LogoID        *string                                                                     "json:\"logoID,omitempty\" graphql:\"logoID\""
+	Opacity       *float64                                                                    "json:\"opacity,omitempty\" graphql:\"opacity\""
+	Rotation      *float64                                                                    "json:\"rotation,omitempty\" graphql:\"rotation\""
+	Text          *string                                                                     "json:\"text,omitempty\" graphql:\"text\""
+	TrustCenterID *string                                                                     "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFile() *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.File
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *enums.Font {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFontSize() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.FontSize
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetLogoID() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.LogoID
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetOpacity() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Opacity
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetRotation() *float64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Rotation
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetText() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges struct {
+	Node *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges) GetNode() *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs struct {
+	Edges      []*GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetEdges() []*GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetPageInfo() *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig struct {
+	Color         *string                                                                                            "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt     *time.Time                                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
+	Font          *enums.Font                                                                                        "json:\"font,omitempty\" graphql:\"font\""
+	FontSize      *float64                                                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
+	ID            string                                                                                             "json:\"id\" graphql:\"id\""
+	LogoID        *string                                                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
+	Opacity       *float64                                                                                           "json:\"opacity,omitempty\" graphql:\"opacity\""
+	Rotation      *float64                                                                                           "json:\"rotation,omitempty\" graphql:\"rotation\""
+	Text          *string                                                                                            "json:\"text,omitempty\" graphql:\"text\""
+	TrustCenterID *string                                                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Color
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFile() *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.File
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *enums.Font {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Font
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFontSize() *float64 {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.FontSize
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetLogoID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.LogoID
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetOpacity() *float64 {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Opacity
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetRotation() *float64 {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Rotation
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetText() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.Text
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.TrustCenterID
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig struct {
+	TrustCenterWatermarkConfig UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig "json:\"trustCenterWatermarkConfig\" graphql:\"trustCenterWatermarkConfig\""
+}
+
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig) GetTrustCenterWatermarkConfig() *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig{}
+	}
+	return &t.TrustCenterWatermarkConfig
+}
+
+type GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges struct {
+	Node *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges) GetNode() *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories struct {
+	Edges      []*GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetEdges() []*GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetPageInfo() *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges struct {
+	Node *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges) GetNode() *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories struct {
+	Edges      []*GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetEdges() []*GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetPageInfo() *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateUser_CreateUser_User struct {
 	AuthProvider      enums.AuthProvider  "json:\"authProvider\" graphql:\"authProvider\""
 	AvatarLocalFileID *string             "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
@@ -82464,6 +83497,94 @@ func (t *GetTrustCenterSubprocessorHistories) GetTrustCenterSubprocessorHistorie
 		t = &GetTrustCenterSubprocessorHistories{}
 	}
 	return &t.TrustCenterSubprocessorHistories
+}
+
+type CreateTrustCenterWatermarkConfig struct {
+	CreateTrustCenterWatermarkConfig CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig "json:\"createTrustCenterWatermarkConfig\" graphql:\"createTrustCenterWatermarkConfig\""
+}
+
+func (t *CreateTrustCenterWatermarkConfig) GetCreateTrustCenterWatermarkConfig() *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig {
+	if t == nil {
+		t = &CreateTrustCenterWatermarkConfig{}
+	}
+	return &t.CreateTrustCenterWatermarkConfig
+}
+
+type DeleteTrustCenterWatermarkConfig struct {
+	DeleteTrustCenterWatermarkConfig DeleteTrustCenterWatermarkConfig_DeleteTrustCenterWatermarkConfig "json:\"deleteTrustCenterWatermarkConfig\" graphql:\"deleteTrustCenterWatermarkConfig\""
+}
+
+func (t *DeleteTrustCenterWatermarkConfig) GetDeleteTrustCenterWatermarkConfig() *DeleteTrustCenterWatermarkConfig_DeleteTrustCenterWatermarkConfig {
+	if t == nil {
+		t = &DeleteTrustCenterWatermarkConfig{}
+	}
+	return &t.DeleteTrustCenterWatermarkConfig
+}
+
+type GetAllTrustCenterWatermarkConfigs struct {
+	TrustCenterWatermarkConfigs GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs "json:\"trustCenterWatermarkConfigs\" graphql:\"trustCenterWatermarkConfigs\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigs) GetTrustCenterWatermarkConfigs() *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigs{}
+	}
+	return &t.TrustCenterWatermarkConfigs
+}
+
+type GetTrustCenterWatermarkConfigByID struct {
+	TrustCenterWatermarkConfig GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig "json:\"trustCenterWatermarkConfig\" graphql:\"trustCenterWatermarkConfig\""
+}
+
+func (t *GetTrustCenterWatermarkConfigByID) GetTrustCenterWatermarkConfig() *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigByID{}
+	}
+	return &t.TrustCenterWatermarkConfig
+}
+
+type GetTrustCenterWatermarkConfigs struct {
+	TrustCenterWatermarkConfigs GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs "json:\"trustCenterWatermarkConfigs\" graphql:\"trustCenterWatermarkConfigs\""
+}
+
+func (t *GetTrustCenterWatermarkConfigs) GetTrustCenterWatermarkConfigs() *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigs{}
+	}
+	return &t.TrustCenterWatermarkConfigs
+}
+
+type UpdateTrustCenterWatermarkConfig struct {
+	UpdateTrustCenterWatermarkConfig UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig "json:\"updateTrustCenterWatermarkConfig\" graphql:\"updateTrustCenterWatermarkConfig\""
+}
+
+func (t *UpdateTrustCenterWatermarkConfig) GetUpdateTrustCenterWatermarkConfig() *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig {
+	if t == nil {
+		t = &UpdateTrustCenterWatermarkConfig{}
+	}
+	return &t.UpdateTrustCenterWatermarkConfig
+}
+
+type GetAllTrustCenterWatermarkConfigHistories struct {
+	TrustCenterWatermarkConfigHistories GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories "json:\"trustCenterWatermarkConfigHistories\" graphql:\"trustCenterWatermarkConfigHistories\""
+}
+
+func (t *GetAllTrustCenterWatermarkConfigHistories) GetTrustCenterWatermarkConfigHistories() *GetAllTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories {
+	if t == nil {
+		t = &GetAllTrustCenterWatermarkConfigHistories{}
+	}
+	return &t.TrustCenterWatermarkConfigHistories
+}
+
+type GetTrustCenterWatermarkConfigHistories struct {
+	TrustCenterWatermarkConfigHistories GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories "json:\"trustCenterWatermarkConfigHistories\" graphql:\"trustCenterWatermarkConfigHistories\""
+}
+
+func (t *GetTrustCenterWatermarkConfigHistories) GetTrustCenterWatermarkConfigHistories() *GetTrustCenterWatermarkConfigHistories_TrustCenterWatermarkConfigHistories {
+	if t == nil {
+		t = &GetTrustCenterWatermarkConfigHistories{}
+	}
+	return &t.TrustCenterWatermarkConfigHistories
 }
 
 type CreateUser struct {
@@ -104950,6 +106071,343 @@ func (c *Client) GetTrustCenterSubprocessorHistories(ctx context.Context, first 
 	return &res, nil
 }
 
+const CreateTrustCenterWatermarkConfigDocument = `mutation CreateTrustCenterWatermarkConfig ($input: CreateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
+	createTrustCenterWatermarkConfig(input: $input, logoFile: $logoFile) {
+		trustCenterWatermarkConfig {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			trustCenterID
+			file {
+				id
+				presignedURL
+			}
+			logoID
+			text
+			fontSize
+			opacity
+			rotation
+			color
+			font
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterWatermarkConfig(ctx context.Context, input CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterWatermarkConfig, error) {
+	vars := map[string]any{
+		"input":    input,
+		"logoFile": logoFile,
+	}
+
+	var res CreateTrustCenterWatermarkConfig
+	if err := c.Client.Post(ctx, "CreateTrustCenterWatermarkConfig", CreateTrustCenterWatermarkConfigDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterWatermarkConfigDocument = `mutation DeleteTrustCenterWatermarkConfig ($deleteTrustCenterWatermarkConfigId: ID!) {
+	deleteTrustCenterWatermarkConfig(id: $deleteTrustCenterWatermarkConfigId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterWatermarkConfig(ctx context.Context, deleteTrustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterWatermarkConfig, error) {
+	vars := map[string]any{
+		"deleteTrustCenterWatermarkConfigId": deleteTrustCenterWatermarkConfigID,
+	}
+
+	var res DeleteTrustCenterWatermarkConfig
+	if err := c.Client.Post(ctx, "DeleteTrustCenterWatermarkConfig", DeleteTrustCenterWatermarkConfigDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterWatermarkConfigsDocument = `query GetAllTrustCenterWatermarkConfigs {
+	trustCenterWatermarkConfigs {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				trustCenterID
+				file {
+					id
+					presignedURL
+				}
+				logoID
+				text
+				fontSize
+				opacity
+				rotation
+				color
+				font
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterWatermarkConfigs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterWatermarkConfigs, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterWatermarkConfigs
+	if err := c.Client.Post(ctx, "GetAllTrustCenterWatermarkConfigs", GetAllTrustCenterWatermarkConfigsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterWatermarkConfigByIDDocument = `query GetTrustCenterWatermarkConfigByID ($trustCenterWatermarkConfigId: ID!) {
+	trustCenterWatermarkConfig(id: $trustCenterWatermarkConfigId) {
+		createdAt
+		createdBy
+		id
+		updatedAt
+		updatedBy
+		trustCenterID
+		file {
+			id
+			presignedURL
+		}
+		logoID
+		text
+		fontSize
+		opacity
+		rotation
+		color
+		font
+	}
+}
+`
+
+func (c *Client) GetTrustCenterWatermarkConfigByID(ctx context.Context, trustCenterWatermarkConfigID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigByID, error) {
+	vars := map[string]any{
+		"trustCenterWatermarkConfigId": trustCenterWatermarkConfigID,
+	}
+
+	var res GetTrustCenterWatermarkConfigByID
+	if err := c.Client.Post(ctx, "GetTrustCenterWatermarkConfigByID", GetTrustCenterWatermarkConfigByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterWatermarkConfigsDocument = `query GetTrustCenterWatermarkConfigs ($first: Int, $last: Int, $where: TrustCenterWatermarkConfigWhereInput) {
+	trustCenterWatermarkConfigs(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				trustCenterID
+				file {
+					id
+					presignedURL
+				}
+				logoID
+				text
+				fontSize
+				opacity
+				rotation
+				color
+				font
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterWatermarkConfigs(ctx context.Context, first *int64, last *int64, where *TrustCenterWatermarkConfigWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigs, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterWatermarkConfigs
+	if err := c.Client.Post(ctx, "GetTrustCenterWatermarkConfigs", GetTrustCenterWatermarkConfigsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterWatermarkConfigDocument = `mutation UpdateTrustCenterWatermarkConfig ($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
+	updateTrustCenterWatermarkConfig(id: $updateTrustCenterWatermarkConfigId, input: $input, logoFile: $logoFile) {
+		trustCenterWatermarkConfig {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			trustCenterID
+			file {
+				id
+				presignedURL
+			}
+			logoID
+			text
+			fontSize
+			opacity
+			rotation
+			color
+			font
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterWatermarkConfig(ctx context.Context, updateTrustCenterWatermarkConfigID string, input UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterWatermarkConfig, error) {
+	vars := map[string]any{
+		"updateTrustCenterWatermarkConfigId": updateTrustCenterWatermarkConfigID,
+		"input":                              input,
+		"logoFile":                           logoFile,
+	}
+
+	var res UpdateTrustCenterWatermarkConfig
+	if err := c.Client.Post(ctx, "UpdateTrustCenterWatermarkConfig", UpdateTrustCenterWatermarkConfigDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterWatermarkConfigHistoriesDocument = `query GetAllTrustCenterWatermarkConfigHistories {
+	trustCenterWatermarkConfigHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterWatermarkConfigHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterWatermarkConfigHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterWatermarkConfigHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterWatermarkConfigHistories", GetAllTrustCenterWatermarkConfigHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterWatermarkConfigHistoriesDocument = `query GetTrustCenterWatermarkConfigHistories ($first: Int, $last: Int, $where: TrustCenterWatermarkConfigHistoryWhereInput) {
+	trustCenterWatermarkConfigHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterWatermarkConfigHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterWatermarkConfigHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterWatermarkConfigHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterWatermarkConfigHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterWatermarkConfigHistories", GetTrustCenterWatermarkConfigHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!) {
 	createUser(input: $input) {
 		user {
@@ -105755,518 +107213,526 @@ func (c *Client) GetAllWebauthns(ctx context.Context, interceptors ...clientv2.R
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateBulkCSVActionPlanDocument:                "CreateBulkCSVActionPlan",
-	CreateBulkActionPlanDocument:                   "CreateBulkActionPlan",
-	CreateActionPlanDocument:                       "CreateActionPlan",
-	DeleteActionPlanDocument:                       "DeleteActionPlan",
-	GetAllActionPlansDocument:                      "GetAllActionPlans",
-	GetActionPlanByIDDocument:                      "GetActionPlanByID",
-	GetActionPlansDocument:                         "GetActionPlans",
-	UpdateActionPlanDocument:                       "UpdateActionPlan",
-	GetAllActionPlanHistoriesDocument:              "GetAllActionPlanHistories",
-	GetActionPlanHistoriesDocument:                 "GetActionPlanHistories",
-	CreateAPITokenDocument:                         "CreateAPIToken",
-	CreateBulkAPITokenDocument:                     "CreateBulkAPIToken",
-	CreateBulkCSVAPITokenDocument:                  "CreateBulkCSVAPIToken",
-	DeleteAPITokenDocument:                         "DeleteAPIToken",
-	GetAllAPITokensDocument:                        "GetAllAPITokens",
-	GetAPITokenByIDDocument:                        "GetAPITokenByID",
-	GetAPITokensDocument:                           "GetAPITokens",
-	UpdateAPITokenDocument:                         "UpdateAPIToken",
-	CreateBulkCSVAssetDocument:                     "CreateBulkCSVAsset",
-	CreateBulkAssetDocument:                        "CreateBulkAsset",
-	CreateAssetDocument:                            "CreateAsset",
-	DeleteAssetDocument:                            "DeleteAsset",
-	GetAllAssetsDocument:                           "GetAllAssets",
-	GetAssetByIDDocument:                           "GetAssetByID",
-	GetAssetsDocument:                              "GetAssets",
-	UpdateAssetDocument:                            "UpdateAsset",
-	GetAllAssetHistoriesDocument:                   "GetAllAssetHistories",
-	GetAssetHistoriesDocument:                      "GetAssetHistories",
-	CreateBulkCSVContactDocument:                   "CreateBulkCSVContact",
-	CreateBulkContactDocument:                      "CreateBulkContact",
-	CreateContactDocument:                          "CreateContact",
-	DeleteContactDocument:                          "DeleteContact",
-	GetAllContactsDocument:                         "GetAllContacts",
-	GetContactByIDDocument:                         "GetContactByID",
-	GetContactsDocument:                            "GetContacts",
-	UpdateContactDocument:                          "UpdateContact",
-	GetAllContactHistoriesDocument:                 "GetAllContactHistories",
-	GetContactHistoriesDocument:                    "GetContactHistories",
-	CreateBulkCSVControlDocument:                   "CreateBulkCSVControl",
-	CreateBulkControlDocument:                      "CreateBulkControl",
-	CreateControlDocument:                          "CreateControl",
-	DeleteControlDocument:                          "DeleteControl",
-	GetAllControlsDocument:                         "GetAllControls",
-	GetControlByIDDocument:                         "GetControlByID",
-	GetControlsDocument:                            "GetControls",
-	UpdateControlDocument:                          "UpdateControl",
-	CreateControlsByCloneDocument:                  "CreateControlsByClone",
-	CreateControlsByCloneReturnIDDocument:          "CreateControlsByCloneReturnID",
-	GetControlCategoriesDocument:                   "GetControlCategories",
-	GetControlCategoriesWithFrameworkDocument:      "GetControlCategoriesWithFramework",
-	GetControlsGroupByCategoryDocument:             "GetControlsGroupByCategory",
-	GetControlSubcategoriesDocument:                "GetControlSubcategories",
-	GetControlSubcategoriesWithFrameworkDocument:   "GetControlSubcategoriesWithFramework",
-	GetAllControlHistoriesDocument:                 "GetAllControlHistories",
-	GetControlHistoriesDocument:                    "GetControlHistories",
-	CreateBulkCSVControlImplementationDocument:     "CreateBulkCSVControlImplementation",
-	CreateBulkControlImplementationDocument:        "CreateBulkControlImplementation",
-	CreateControlImplementationDocument:            "CreateControlImplementation",
-	DeleteControlImplementationDocument:            "DeleteControlImplementation",
-	GetAllControlImplementationsDocument:           "GetAllControlImplementations",
-	GetControlImplementationByIDDocument:           "GetControlImplementationByID",
-	GetControlImplementationsDocument:              "GetControlImplementations",
-	UpdateControlImplementationDocument:            "UpdateControlImplementation",
-	GetAllControlImplementationHistoriesDocument:   "GetAllControlImplementationHistories",
-	GetControlImplementationHistoriesDocument:      "GetControlImplementationHistories",
-	CreateBulkControlObjectiveDocument:             "CreateBulkControlObjective",
-	CreateBulkCSVControlObjectiveDocument:          "CreateBulkCSVControlObjective",
-	CreateControlObjectiveDocument:                 "CreateControlObjective",
-	DeleteControlObjectiveDocument:                 "DeleteControlObjective",
-	GetAllControlObjectivesDocument:                "GetAllControlObjectives",
-	GetControlObjectiveByIDDocument:                "GetControlObjectiveByID",
-	GetControlObjectivesDocument:                   "GetControlObjectives",
-	UpdateControlObjectiveDocument:                 "UpdateControlObjective",
-	GetAllControlObjectiveHistoriesDocument:        "GetAllControlObjectiveHistories",
-	GetControlObjectiveHistoriesDocument:           "GetControlObjectiveHistories",
-	CreateBulkCSVCustomDomainDocument:              "CreateBulkCSVCustomDomain",
-	CreateBulkCustomDomainDocument:                 "CreateBulkCustomDomain",
-	CreateCustomDomainDocument:                     "CreateCustomDomain",
-	DeleteCustomDomainDocument:                     "DeleteCustomDomain",
-	GetAllCustomDomainsDocument:                    "GetAllCustomDomains",
-	GetCustomDomainByIDDocument:                    "GetCustomDomainByID",
-	GetCustomDomainsDocument:                       "GetCustomDomains",
-	UpdateCustomDomainDocument:                     "UpdateCustomDomain",
-	GetAllCustomDomainHistoriesDocument:            "GetAllCustomDomainHistories",
-	GetCustomDomainHistoriesDocument:               "GetCustomDomainHistories",
-	CreateBulkCSVDNSVerificationDocument:           "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:              "CreateBulkDNSVerification",
-	CreateDNSVerificationDocument:                  "CreateDNSVerification",
-	DeleteDNSVerificationDocument:                  "DeleteDNSVerification",
-	GetAllDNSVerificationsDocument:                 "GetAllDNSVerifications",
-	GetDNSVerificationByIDDocument:                 "GetDNSVerificationByID",
-	GetDNSVerificationsDocument:                    "GetDNSVerifications",
-	UpdateDNSVerificationDocument:                  "UpdateDNSVerification",
-	GetAllDNSVerificationHistoriesDocument:         "GetAllDNSVerificationHistories",
-	GetDNSVerificationHistoriesDocument:            "GetDNSVerificationHistories",
-	CreateBulkCSVDocumentDataDocument:              "CreateBulkCSVDocumentData",
-	CreateBulkDocumentDataDocument:                 "CreateBulkDocumentData",
-	CreateDocumentDataDocument:                     "CreateDocumentData",
-	DeleteDocumentDataDocument:                     "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                    "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                     "UpdateDocumentData",
-	GetAllDocumentDataHistoriesDocument:            "GetAllDocumentDataHistories",
-	GetDocumentDataHistoriesDocument:               "GetDocumentDataHistories",
-	CreateBulkCSVEntityDocument:                    "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                       "CreateBulkEntity",
-	CreateEntityDocument:                           "CreateEntity",
-	DeleteEntityDocument:                           "DeleteEntity",
-	GetAllEntitiesDocument:                         "GetAllEntities",
-	GetEntitiesDocument:                            "GetEntities",
-	GetEntityByIDDocument:                          "GetEntityByID",
-	UpdateEntityDocument:                           "UpdateEntity",
-	GetAllEntityHistoriesDocument:                  "GetAllEntityHistories",
-	GetEntityHistoriesDocument:                     "GetEntityHistories",
-	CreateBulkCSVEntityTypeDocument:                "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                   "CreateBulkEntityType",
-	CreateEntityTypeDocument:                       "CreateEntityType",
-	DeleteEntityTypeDocument:                       "DeleteEntityType",
-	GetAllEntityTypesDocument:                      "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                      "GetEntityTypeByID",
-	GetEntityTypesDocument:                         "GetEntityTypes",
-	UpdateEntityTypeDocument:                       "UpdateEntityType",
-	GetAllEntityTypeHistoriesDocument:              "GetAllEntityTypeHistories",
-	GetEntityTypeHistoriesDocument:                 "GetEntityTypeHistories",
-	CreateBulkCSVEventDocument:                     "CreateBulkCSVEvent",
-	CreateBulkEventDocument:                        "CreateBulkEvent",
-	CreateEventDocument:                            "CreateEvent",
-	DeleteEventDocument:                            "DeleteEvent",
-	GetAllEventsDocument:                           "GetAllEvents",
-	GetEventByIDDocument:                           "GetEventByID",
-	GetEventsDocument:                              "GetEvents",
-	UpdateEventDocument:                            "UpdateEvent",
-	CreateEvidenceDocument:                         "CreateEvidence",
-	DeleteEvidenceDocument:                         "DeleteEvidence",
-	GetAllEvidencesDocument:                        "GetAllEvidences",
-	GetEvidenceByIDDocument:                        "GetEvidenceByID",
-	GetEvidencesDocument:                           "GetEvidences",
-	UpdateEvidenceDocument:                         "UpdateEvidence",
-	GetAllEvidenceHistoriesDocument:                "GetAllEvidenceHistories",
-	GetEvidenceHistoriesDocument:                   "GetEvidenceHistories",
-	CreateExportDocument:                           "CreateExport",
-	GetAllExportsDocument:                          "GetAllExports",
-	GetExportByIDDocument:                          "GetExportByID",
-	GetExportsDocument:                             "GetExports",
-	UpdateExportDocument:                           "UpdateExport",
-	DeleteExportDocument:                           "DeleteExport",
-	DeleteBulkExportDocument:                       "DeleteBulkExport",
-	DeleteFileDocument:                             "DeleteFile",
-	GetAllFilesDocument:                            "GetAllFiles",
-	GetFileByIDDocument:                            "GetFileByID",
-	GetFilesDocument:                               "GetFiles",
-	GetAllFileHistoriesDocument:                    "GetAllFileHistories",
-	GetFileHistoriesDocument:                       "GetFileHistories",
-	CreateBulkCSVGroupDocument:                     "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                        "CreateBulkGroup",
-	CreateGroupDocument:                            "CreateGroup",
-	DeleteGroupDocument:                            "DeleteGroup",
-	GetAllGroupsDocument:                           "GetAllGroups",
-	GetGroupByIDDocument:                           "GetGroupByID",
-	GetGroupsDocument:                              "GetGroups",
-	UpdateGroupDocument:                            "UpdateGroup",
-	GetAllGroupHistoriesDocument:                   "GetAllGroupHistories",
-	GetGroupHistoriesDocument:                      "GetGroupHistories",
-	CreateBulkCSVGroupMembershipDocument:           "CreateBulkCSVGroupMembership",
-	CreateBulkGroupMembershipDocument:              "CreateBulkGroupMembership",
-	CreateGroupMembershipDocument:                  "CreateGroupMembership",
-	DeleteGroupMembershipDocument:                  "DeleteGroupMembership",
-	GetAllGroupMembershipsDocument:                 "GetAllGroupMemberships",
-	GetGroupMembershipByIDDocument:                 "GetGroupMembershipByID",
-	GetGroupMembershipsDocument:                    "GetGroupMemberships",
-	UpdateGroupMembershipDocument:                  "UpdateGroupMembership",
-	GetAllGroupMembershipHistoriesDocument:         "GetAllGroupMembershipHistories",
-	GetGroupMembershipHistoriesDocument:            "GetGroupMembershipHistories",
-	CreateBulkCSVGroupSettingDocument:              "CreateBulkCSVGroupSetting",
-	CreateBulkGroupSettingDocument:                 "CreateBulkGroupSetting",
-	CreateGroupSettingDocument:                     "CreateGroupSetting",
-	DeleteGroupSettingDocument:                     "DeleteGroupSetting",
-	GetAllGroupSettingsDocument:                    "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                    "GetGroupSettingByID",
-	GetGroupSettingsDocument:                       "GetGroupSettings",
-	UpdateGroupSettingDocument:                     "UpdateGroupSetting",
-	GetAllGroupSettingHistoriesDocument:            "GetAllGroupSettingHistories",
-	GetGroupSettingHistoriesDocument:               "GetGroupSettingHistories",
-	CreateBulkCSVHushDocument:                      "CreateBulkCSVHush",
-	CreateBulkHushDocument:                         "CreateBulkHush",
-	CreateHushDocument:                             "CreateHush",
-	DeleteHushDocument:                             "DeleteHush",
-	GetAllHushesDocument:                           "GetAllHushes",
-	GetHushByIDDocument:                            "GetHushByID",
-	GetHushesDocument:                              "GetHushes",
-	UpdateHushDocument:                             "UpdateHush",
-	GetAllHushHistoriesDocument:                    "GetAllHushHistories",
-	GetHushHistoriesDocument:                       "GetHushHistories",
-	DeleteIntegrationDocument:                      "DeleteIntegration",
-	GetAllIntegrationsDocument:                     "GetAllIntegrations",
-	GetIntegrationByIDDocument:                     "GetIntegrationByID",
-	GetIntegrationsDocument:                        "GetIntegrations",
-	GetAllIntegrationHistoriesDocument:             "GetAllIntegrationHistories",
-	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
-	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",
-	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
-	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
-	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
-	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
-	GetInternalPolicyByIDDocument:                  "GetInternalPolicyByID",
-	GetInternalPoliciesDocument:                    "GetInternalPolicies",
-	UpdateInternalPolicyDocument:                   "UpdateInternalPolicy",
-	GetAllInternalPolicyHistoriesDocument:          "GetAllInternalPolicyHistories",
-	GetInternalPolicyHistoriesDocument:             "GetInternalPolicyHistories",
-	CreateBulkCSVInviteDocument:                    "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                       "CreateBulkInvite",
-	CreateInviteDocument:                           "CreateInvite",
-	DeleteInviteDocument:                           "DeleteInvite",
-	GetAllInvitesDocument:                          "GetAllInvites",
-	GetInviteByIDDocument:                          "GetInviteByID",
-	GetInvitesDocument:                             "GetInvites",
-	UpdateInviteDocument:                           "UpdateInvite",
-	CreateJobResultDocument:                        "CreateJobResult",
-	DeleteJobResultDocument:                        "DeleteJobResult",
-	GetAllJobResultsDocument:                       "GetAllJobResults",
-	GetJobResultByIDDocument:                       "GetJobResultByID",
-	GetJobResultsDocument:                          "GetJobResults",
-	UpdateJobResultDocument:                        "UpdateJobResult",
-	CreateJobRunnerDocument:                        "CreateJobRunner",
-	DeleteJobRunnerDocument:                        "DeleteJobRunner",
-	GetAllJobRunnersDocument:                       "GetAllJobRunners",
-	GetJobRunnerByIDDocument:                       "GetJobRunnerByID",
-	GetJobRunnersDocument:                          "GetJobRunners",
-	UpdateJobRunnerDocument:                        "UpdateJobRunner",
-	CreateJobRunnerRegistrationTokenDocument:       "CreateJobRunnerRegistrationToken",
-	DeleteJobRunnerRegistrationTokenDocument:       "DeleteJobRunnerRegistrationToken",
-	GetAllJobRunnerRegistrationTokensDocument:      "GetAllJobRunnerRegistrationTokens",
-	GetJobRunnerRegistrationTokenByIDDocument:      "GetJobRunnerRegistrationTokenByID",
-	GetJobRunnerRegistrationTokensDocument:         "GetJobRunnerRegistrationTokens",
-	CreateJobRunnerTokenDocument:                   "CreateJobRunnerToken",
-	DeleteJobRunnerTokenDocument:                   "DeleteJobRunnerToken",
-	GetAllJobRunnerTokensDocument:                  "GetAllJobRunnerTokens",
-	GetJobRunnerTokenByIDDocument:                  "GetJobRunnerTokenByID",
-	GetJobRunnerTokensDocument:                     "GetJobRunnerTokens",
-	CreateBulkCSVJobTemplateDocument:               "CreateBulkCSVJobTemplate",
-	CreateBulkJobTemplateDocument:                  "CreateBulkJobTemplate",
-	CreateJobTemplateDocument:                      "CreateJobTemplate",
-	DeleteJobTemplateDocument:                      "DeleteJobTemplate",
-	GetAllJobTemplatesDocument:                     "GetAllJobTemplates",
-	GetJobTemplateByIDDocument:                     "GetJobTemplateByID",
-	GetJobTemplatesDocument:                        "GetJobTemplates",
-	UpdateJobTemplateDocument:                      "UpdateJobTemplate",
-	GetAllJobTemplateHistoriesDocument:             "GetAllJobTemplateHistories",
-	GetJobTemplateHistoriesDocument:                "GetJobTemplateHistories",
-	CreateBulkCSVMappableDomainDocument:            "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:               "CreateBulkMappableDomain",
-	CreateMappableDomainDocument:                   "CreateMappableDomain",
-	DeleteMappableDomainDocument:                   "DeleteMappableDomain",
-	GetAllMappableDomainsDocument:                  "GetAllMappableDomains",
-	GetMappableDomainByIDDocument:                  "GetMappableDomainByID",
-	GetMappableDomainsDocument:                     "GetMappableDomains",
-	UpdateMappableDomainDocument:                   "UpdateMappableDomain",
-	GetAllMappableDomainHistoriesDocument:          "GetAllMappableDomainHistories",
-	GetMappableDomainHistoriesDocument:             "GetMappableDomainHistories",
-	CreateBulkCSVMappedControlDocument:             "CreateBulkCSVMappedControl",
-	CreateBulkMappedControlDocument:                "CreateBulkMappedControl",
-	CreateMappedControlDocument:                    "CreateMappedControl",
-	DeleteMappedControlDocument:                    "DeleteMappedControl",
-	GetAllMappedControlsDocument:                   "GetAllMappedControls",
-	GetMappedControlByIDDocument:                   "GetMappedControlByID",
-	GetMappedControlsDocument:                      "GetMappedControls",
-	UpdateMappedControlDocument:                    "UpdateMappedControl",
-	GetAllMappedControlHistoriesDocument:           "GetAllMappedControlHistories",
-	GetMappedControlHistoriesDocument:              "GetMappedControlHistories",
-	CreateBulkCSVNarrativeDocument:                 "CreateBulkCSVNarrative",
-	CreateBulkNarrativeDocument:                    "CreateBulkNarrative",
-	CreateNarrativeDocument:                        "CreateNarrative",
-	DeleteNarrativeDocument:                        "DeleteNarrative",
-	GetAllNarrativesDocument:                       "GetAllNarratives",
-	GetNarrativeByIDDocument:                       "GetNarrativeByID",
-	GetNarrativesDocument:                          "GetNarratives",
-	UpdateNarrativeDocument:                        "UpdateNarrative",
-	GetAllNarrativeHistoriesDocument:               "GetAllNarrativeHistories",
-	GetNarrativeHistoriesDocument:                  "GetNarrativeHistories",
-	GetAllNoteHistoriesDocument:                    "GetAllNoteHistories",
-	GetNoteHistoriesDocument:                       "GetNoteHistories",
-	CreateOnboardingDocument:                       "CreateOnboarding",
-	CreateOrganizationDocument:                     "CreateOrganization",
-	DeleteOrganizationDocument:                     "DeleteOrganization",
-	GetAllOrganizationsDocument:                    "GetAllOrganizations",
-	GetOrganizationByIDDocument:                    "GetOrganizationByID",
-	GetOrganizationsDocument:                       "GetOrganizations",
-	UpdateOrganizationDocument:                     "UpdateOrganization",
-	GetAllOrganizationHistoriesDocument:            "GetAllOrganizationHistories",
-	GetOrganizationHistoriesDocument:               "GetOrganizationHistories",
-	CreateBulkCSVOrganizationSettingDocument:       "CreateBulkCSVOrganizationSetting",
-	CreateBulkOrganizationSettingDocument:          "CreateBulkOrganizationSetting",
-	CreateOrganizationSettingDocument:              "CreateOrganizationSetting",
-	DeleteOrganizationSettingDocument:              "DeleteOrganizationSetting",
-	GetAllOrganizationSettingsDocument:             "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:             "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:                "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:              "UpdateOrganizationSetting",
-	GetAllOrganizationSettingHistoriesDocument:     "GetAllOrganizationSettingHistories",
-	GetOrganizationSettingHistoriesDocument:        "GetOrganizationSettingHistories",
-	CreateBulkCSVOrgMembershipDocument:             "CreateBulkCSVOrgMembership",
-	CreateBulkOrgMembershipDocument:                "CreateBulkOrgMembership",
-	CreateOrgMembershipDocument:                    "CreateOrgMembership",
-	DeleteOrgMembershipDocument:                    "DeleteOrgMembership",
-	GetAllOrgMembershipsDocument:                   "GetAllOrgMemberships",
-	GetOrgMembershipByIDDocument:                   "GetOrgMembershipByID",
-	GetOrgMembershipsDocument:                      "GetOrgMemberships",
-	UpdateOrgMembershipDocument:                    "UpdateOrgMembership",
-	GetAllOrgMembershipHistoriesDocument:           "GetAllOrgMembershipHistories",
-	GetOrgMembershipHistoriesDocument:              "GetOrgMembershipHistories",
-	GetAllOrgSubscriptionsDocument:                 "GetAllOrgSubscriptions",
-	GetOrgSubscriptionByIDDocument:                 "GetOrgSubscriptionByID",
-	GetOrgSubscriptionsDocument:                    "GetOrgSubscriptions",
-	GetAllOrgSubscriptionHistoriesDocument:         "GetAllOrgSubscriptionHistories",
-	GetOrgSubscriptionHistoriesDocument:            "GetOrgSubscriptionHistories",
-	CreatePersonalAccessTokenDocument:              "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:              "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:             "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:             "GetPersonalAccessTokenByID",
-	GetPersonalAccessTokensDocument:                "GetPersonalAccessTokens",
-	UpdatePersonalAccessTokenDocument:              "UpdatePersonalAccessToken",
-	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
-	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
-	CreateProcedureDocument:                        "CreateProcedure",
-	CreateUploadProcedureDocument:                  "CreateUploadProcedure",
-	DeleteProcedureDocument:                        "DeleteProcedure",
-	GetAllProceduresDocument:                       "GetAllProcedures",
-	GetProcedureByIDDocument:                       "GetProcedureByID",
-	GetProceduresDocument:                          "GetProcedures",
-	UpdateProcedureDocument:                        "UpdateProcedure",
-	GetAllProcedureHistoriesDocument:               "GetAllProcedureHistories",
-	GetProcedureHistoriesDocument:                  "GetProcedureHistories",
-	CreateBulkCSVProgramDocument:                   "CreateBulkCSVProgram",
-	CreateBulkProgramDocument:                      "CreateBulkProgram",
-	CreateProgramDocument:                          "CreateProgram",
-	DeleteProgramDocument:                          "DeleteProgram",
-	GetAllProgramsDocument:                         "GetAllPrograms",
-	GetProgramByIDDocument:                         "GetProgramByID",
-	GetProgramsDocument:                            "GetPrograms",
-	UpdateProgramDocument:                          "UpdateProgram",
-	GetAllProgramHistoriesDocument:                 "GetAllProgramHistories",
-	GetProgramHistoriesDocument:                    "GetProgramHistories",
-	CreateBulkCSVProgramMembershipDocument:         "CreateBulkCSVProgramMembership",
-	CreateBulkProgramMembershipDocument:            "CreateBulkProgramMembership",
-	CreateProgramMembershipDocument:                "CreateProgramMembership",
-	DeleteProgramMembershipDocument:                "DeleteProgramMembership",
-	GetAllProgramMembershipsDocument:               "GetAllProgramMemberships",
-	GetProgramMembershipByIDDocument:               "GetProgramMembershipByID",
-	GetProgramMembershipsDocument:                  "GetProgramMemberships",
-	UpdateProgramMembershipDocument:                "UpdateProgramMembership",
-	GetAllProgramMembershipHistoriesDocument:       "GetAllProgramMembershipHistories",
-	GetProgramMembershipHistoriesDocument:          "GetProgramMembershipHistories",
-	CreateBulkCSVRiskDocument:                      "CreateBulkCSVRisk",
-	CreateBulkRiskDocument:                         "CreateBulkRisk",
-	CreateRiskDocument:                             "CreateRisk",
-	DeleteRiskDocument:                             "DeleteRisk",
-	GetAllRisksDocument:                            "GetAllRisks",
-	GetRiskByIDDocument:                            "GetRiskByID",
-	GetRisksDocument:                               "GetRisks",
-	UpdateRiskDocument:                             "UpdateRisk",
-	GetAllRiskHistoriesDocument:                    "GetAllRiskHistories",
-	GetRiskHistoriesDocument:                       "GetRiskHistories",
-	CreateBulkCSVScanDocument:                      "CreateBulkCSVScan",
-	CreateBulkScanDocument:                         "CreateBulkScan",
-	CreateScanDocument:                             "CreateScan",
-	DeleteScanDocument:                             "DeleteScan",
-	GetAllScansDocument:                            "GetAllScans",
-	GetScanByIDDocument:                            "GetScanByID",
-	GetScansDocument:                               "GetScans",
-	UpdateScanDocument:                             "UpdateScan",
-	GetAllScanHistoriesDocument:                    "GetAllScanHistories",
-	GetScanHistoriesDocument:                       "GetScanHistories",
-	CreateBulkCSVScheduledJobDocument:              "CreateBulkCSVScheduledJob",
-	CreateBulkScheduledJobDocument:                 "CreateBulkScheduledJob",
-	CreateScheduledJobDocument:                     "CreateScheduledJob",
-	DeleteScheduledJobDocument:                     "DeleteScheduledJob",
-	GetAllScheduledJobsDocument:                    "GetAllScheduledJobs",
-	GetScheduledJobByIDDocument:                    "GetScheduledJobByID",
-	GetScheduledJobsDocument:                       "GetScheduledJobs",
-	UpdateScheduledJobDocument:                     "UpdateScheduledJob",
-	GetAllScheduledJobHistoriesDocument:            "GetAllScheduledJobHistories",
-	GetScheduledJobHistoriesDocument:               "GetScheduledJobHistories",
-	CreateScheduledJobRunDocument:                  "CreateScheduledJobRun",
-	DeleteScheduledJobRunDocument:                  "DeleteScheduledJobRun",
-	GetAllScheduledJobRunsDocument:                 "GetAllScheduledJobRuns",
-	GetScheduledJobRunByIDDocument:                 "GetScheduledJobRunByID",
-	GetScheduledJobRunsDocument:                    "GetScheduledJobRuns",
-	UpdateScheduledJobRunDocument:                  "UpdateScheduledJobRun",
-	GlobalSearchDocument:                           "GlobalSearch",
-	CreateStandardDocument:                         "CreateStandard",
-	DeleteStandardDocument:                         "DeleteStandard",
-	GetAllStandardsDocument:                        "GetAllStandards",
-	GetStandardByIDDocument:                        "GetStandardByID",
-	GetStandardsDocument:                           "GetStandards",
-	UpdateStandardDocument:                         "UpdateStandard",
-	GetAllStandardHistoriesDocument:                "GetAllStandardHistories",
-	GetStandardHistoriesDocument:                   "GetStandardHistories",
-	CreateBulkCSVSubcontrolDocument:                "CreateBulkCSVSubcontrol",
-	CreateBulkSubcontrolDocument:                   "CreateBulkSubcontrol",
-	CreateSubcontrolDocument:                       "CreateSubcontrol",
-	DeleteSubcontrolDocument:                       "DeleteSubcontrol",
-	GetAllSubcontrolsDocument:                      "GetAllSubcontrols",
-	GetSubcontrolByIDDocument:                      "GetSubcontrolByID",
-	GetSubcontrolsDocument:                         "GetSubcontrols",
-	UpdateSubcontrolDocument:                       "UpdateSubcontrol",
-	GetAllSubcontrolHistoriesDocument:              "GetAllSubcontrolHistories",
-	GetSubcontrolHistoriesDocument:                 "GetSubcontrolHistories",
-	CreateSubprocessorDocument:                     "CreateSubprocessor",
-	DeleteSubprocessorDocument:                     "DeleteSubprocessor",
-	GetAllSubprocessorsDocument:                    "GetAllSubprocessors",
-	GetSubprocessorByIDDocument:                    "GetSubprocessorByID",
-	GetSubprocessorsDocument:                       "GetSubprocessors",
-	UpdateSubprocessorDocument:                     "UpdateSubprocessor",
-	GetAllSubprocessorHistoriesDocument:            "GetAllSubprocessorHistories",
-	GetSubprocessorHistoriesDocument:               "GetSubprocessorHistories",
-	CreateBulkCSVSubscriberDocument:                "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                   "CreateBulkSubscriber",
-	CreateSubscriberDocument:                       "CreateSubscriber",
-	DeleteSubscriberDocument:                       "DeleteSubscriber",
-	GetAllSubscribersDocument:                      "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                   "GetSubscriberByEmail",
-	GetSubscribersDocument:                         "GetSubscribers",
-	UpdateSubscriberDocument:                       "UpdateSubscriber",
-	CreateBulkCSVTaskDocument:                      "CreateBulkCSVTask",
-	CreateBulkTaskDocument:                         "CreateBulkTask",
-	CreateTaskDocument:                             "CreateTask",
-	DeleteTaskDocument:                             "DeleteTask",
-	GetAllTasksDocument:                            "GetAllTasks",
-	GetTaskByIDDocument:                            "GetTaskByID",
-	GetTasksDocument:                               "GetTasks",
-	UpdateTaskDocument:                             "UpdateTask",
-	GetAllTaskHistoriesDocument:                    "GetAllTaskHistories",
-	GetTaskHistoriesDocument:                       "GetTaskHistories",
-	CreateBulkCSVTemplateDocument:                  "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                     "CreateBulkTemplate",
-	CreateTemplateDocument:                         "CreateTemplate",
-	DeleteTemplateDocument:                         "DeleteTemplate",
-	GetAllTemplatesDocument:                        "GetAllTemplates",
-	GetTemplateByIDDocument:                        "GetTemplateByID",
-	GetTemplatesDocument:                           "GetTemplates",
-	UpdateTemplateDocument:                         "UpdateTemplate",
-	GetAllTemplateHistoriesDocument:                "GetAllTemplateHistories",
-	GetTemplateHistoriesDocument:                   "GetTemplateHistories",
-	CreateTFASettingDocument:                       "CreateTFASetting",
-	GetAllTFASettingsDocument:                      "GetAllTFASettings",
-	GetTFASettingByIDDocument:                      "GetTFASettingByID",
-	GetTFASettingsDocument:                         "GetTFASettings",
-	UpdateTFASettingDocument:                       "UpdateTFASetting",
-	CreateTrustCenterDocument:                      "CreateTrustCenter",
-	DeleteTrustCenterDocument:                      "DeleteTrustCenter",
-	GetAllTrustCentersDocument:                     "GetAllTrustCenters",
-	GetTrustCenterByIDDocument:                     "GetTrustCenterByID",
-	GetTrustCentersDocument:                        "GetTrustCenters",
-	UpdateTrustCenterDocument:                      "UpdateTrustCenter",
-	CreateBulkCSVTrustCenterComplianceDocument:     "CreateBulkCSVTrustCenterCompliance",
-	CreateBulkTrustCenterComplianceDocument:        "CreateBulkTrustCenterCompliance",
-	CreateTrustCenterComplianceDocument:            "CreateTrustCenterCompliance",
-	DeleteTrustCenterComplianceDocument:            "DeleteTrustCenterCompliance",
-	GetAllTrustCenterCompliancesDocument:           "GetAllTrustCenterCompliances",
-	GetTrustCenterComplianceByIDDocument:           "GetTrustCenterComplianceByID",
-	GetTrustCenterCompliancesDocument:              "GetTrustCenterCompliances",
-	UpdateTrustCenterComplianceDocument:            "UpdateTrustCenterCompliance",
-	GetAllTrustCenterComplianceHistoriesDocument:   "GetAllTrustCenterComplianceHistories",
-	GetTrustCenterComplianceHistoriesDocument:      "GetTrustCenterComplianceHistories",
-	CreateTrustCenterDocDocument:                   "CreateTrustCenterDoc",
-	DeleteTrustCenterDocDocument:                   "DeleteTrustCenterDoc",
-	GetAllTrustCenterDocsDocument:                  "GetAllTrustCenterDocs",
-	GetTrustCenterDocByIDDocument:                  "GetTrustCenterDocByID",
-	GetTrustCenterDocsDocument:                     "GetTrustCenterDocs",
-	UpdateTrustCenterDocDocument:                   "UpdateTrustCenterDoc",
-	GetAllTrustCenterDocHistoriesDocument:          "GetAllTrustCenterDocHistories",
-	GetTrustCenterDocHistoriesDocument:             "GetTrustCenterDocHistories",
-	CreateTrustCenterDomainDocument:                "CreateTrustCenterDomain",
-	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
-	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
-	CreateTrustCenterNdaDocument:                   "CreateTrustCenterNda",
-	SendTrustCenterNDAEmailDocument:                "SendTrustCenterNDAEmail",
-	SubmitTrustCenterNDAResponseDocument:           "SubmitTrustCenterNDAResponse",
-	UpdateTrustCenterNdaDocument:                   "UpdateTrustCenterNda",
-	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
-	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
-	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",
-	GetTrustCenterSettingByIDDocument:              "GetTrustCenterSettingByID",
-	GetTrustCenterSettingsDocument:                 "GetTrustCenterSettings",
-	UpdateTrustCenterSettingDocument:               "UpdateTrustCenterSetting",
-	GetAllTrustCenterSettingHistoriesDocument:      "GetAllTrustCenterSettingHistories",
-	GetTrustCenterSettingHistoriesDocument:         "GetTrustCenterSettingHistories",
-	CreateBulkCSVTrustCenterSubprocessorDocument:   "CreateBulkCSVTrustCenterSubprocessor",
-	CreateBulkTrustCenterSubprocessorDocument:      "CreateBulkTrustCenterSubprocessor",
-	CreateTrustCenterSubprocessorDocument:          "CreateTrustCenterSubprocessor",
-	DeleteTrustCenterSubprocessorDocument:          "DeleteTrustCenterSubprocessor",
-	GetAllTrustCenterSubprocessorsDocument:         "GetAllTrustCenterSubprocessors",
-	GetTrustCenterSubprocessorByIDDocument:         "GetTrustCenterSubprocessorByID",
-	GetTrustCenterSubprocessorsDocument:            "GetTrustCenterSubprocessors",
-	UpdateTrustCenterSubprocessorDocument:          "UpdateTrustCenterSubprocessor",
-	GetAllTrustCenterSubprocessorHistoriesDocument: "GetAllTrustCenterSubprocessorHistories",
-	GetTrustCenterSubprocessorHistoriesDocument:    "GetTrustCenterSubprocessorHistories",
-	CreateUserDocument:                             "CreateUser",
-	DeleteUserDocument:                             "DeleteUser",
-	GetAllUsersDocument:                            "GetAllUsers",
-	GetSelfDocument:                                "GetSelf",
-	GetUserByIDDocument:                            "GetUserByID",
-	GetUsersDocument:                               "GetUsers",
-	UpdateUserDocument:                             "UpdateUser",
-	GetAllUserHistoriesDocument:                    "GetAllUserHistories",
-	GetUserHistoriesDocument:                       "GetUserHistories",
-	CreateUserSettingDocument:                      "CreateUserSetting",
-	GetAllUserSettingsDocument:                     "GetAllUserSettings",
-	GetUserSettingByIDDocument:                     "GetUserSettingByID",
-	GetUserSettingsDocument:                        "GetUserSettings",
-	UpdateUserSettingDocument:                      "UpdateUserSetting",
-	GetAllUserSettingHistoriesDocument:             "GetAllUserSettingHistories",
-	GetUserSettingHistoriesDocument:                "GetUserSettingHistories",
-	DeleteWebauthnDocument:                         "DeleteWebauthn",
-	GetAllWebauthnsDocument:                        "GetAllWebauthns",
+	CreateBulkCSVActionPlanDocument:                   "CreateBulkCSVActionPlan",
+	CreateBulkActionPlanDocument:                      "CreateBulkActionPlan",
+	CreateActionPlanDocument:                          "CreateActionPlan",
+	DeleteActionPlanDocument:                          "DeleteActionPlan",
+	GetAllActionPlansDocument:                         "GetAllActionPlans",
+	GetActionPlanByIDDocument:                         "GetActionPlanByID",
+	GetActionPlansDocument:                            "GetActionPlans",
+	UpdateActionPlanDocument:                          "UpdateActionPlan",
+	GetAllActionPlanHistoriesDocument:                 "GetAllActionPlanHistories",
+	GetActionPlanHistoriesDocument:                    "GetActionPlanHistories",
+	CreateAPITokenDocument:                            "CreateAPIToken",
+	CreateBulkAPITokenDocument:                        "CreateBulkAPIToken",
+	CreateBulkCSVAPITokenDocument:                     "CreateBulkCSVAPIToken",
+	DeleteAPITokenDocument:                            "DeleteAPIToken",
+	GetAllAPITokensDocument:                           "GetAllAPITokens",
+	GetAPITokenByIDDocument:                           "GetAPITokenByID",
+	GetAPITokensDocument:                              "GetAPITokens",
+	UpdateAPITokenDocument:                            "UpdateAPIToken",
+	CreateBulkCSVAssetDocument:                        "CreateBulkCSVAsset",
+	CreateBulkAssetDocument:                           "CreateBulkAsset",
+	CreateAssetDocument:                               "CreateAsset",
+	DeleteAssetDocument:                               "DeleteAsset",
+	GetAllAssetsDocument:                              "GetAllAssets",
+	GetAssetByIDDocument:                              "GetAssetByID",
+	GetAssetsDocument:                                 "GetAssets",
+	UpdateAssetDocument:                               "UpdateAsset",
+	GetAllAssetHistoriesDocument:                      "GetAllAssetHistories",
+	GetAssetHistoriesDocument:                         "GetAssetHistories",
+	CreateBulkCSVContactDocument:                      "CreateBulkCSVContact",
+	CreateBulkContactDocument:                         "CreateBulkContact",
+	CreateContactDocument:                             "CreateContact",
+	DeleteContactDocument:                             "DeleteContact",
+	GetAllContactsDocument:                            "GetAllContacts",
+	GetContactByIDDocument:                            "GetContactByID",
+	GetContactsDocument:                               "GetContacts",
+	UpdateContactDocument:                             "UpdateContact",
+	GetAllContactHistoriesDocument:                    "GetAllContactHistories",
+	GetContactHistoriesDocument:                       "GetContactHistories",
+	CreateBulkCSVControlDocument:                      "CreateBulkCSVControl",
+	CreateBulkControlDocument:                         "CreateBulkControl",
+	CreateControlDocument:                             "CreateControl",
+	DeleteControlDocument:                             "DeleteControl",
+	GetAllControlsDocument:                            "GetAllControls",
+	GetControlByIDDocument:                            "GetControlByID",
+	GetControlsDocument:                               "GetControls",
+	UpdateControlDocument:                             "UpdateControl",
+	CreateControlsByCloneDocument:                     "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:             "CreateControlsByCloneReturnID",
+	GetControlCategoriesDocument:                      "GetControlCategories",
+	GetControlCategoriesWithFrameworkDocument:         "GetControlCategoriesWithFramework",
+	GetControlsGroupByCategoryDocument:                "GetControlsGroupByCategory",
+	GetControlSubcategoriesDocument:                   "GetControlSubcategories",
+	GetControlSubcategoriesWithFrameworkDocument:      "GetControlSubcategoriesWithFramework",
+	GetAllControlHistoriesDocument:                    "GetAllControlHistories",
+	GetControlHistoriesDocument:                       "GetControlHistories",
+	CreateBulkCSVControlImplementationDocument:        "CreateBulkCSVControlImplementation",
+	CreateBulkControlImplementationDocument:           "CreateBulkControlImplementation",
+	CreateControlImplementationDocument:               "CreateControlImplementation",
+	DeleteControlImplementationDocument:               "DeleteControlImplementation",
+	GetAllControlImplementationsDocument:              "GetAllControlImplementations",
+	GetControlImplementationByIDDocument:              "GetControlImplementationByID",
+	GetControlImplementationsDocument:                 "GetControlImplementations",
+	UpdateControlImplementationDocument:               "UpdateControlImplementation",
+	GetAllControlImplementationHistoriesDocument:      "GetAllControlImplementationHistories",
+	GetControlImplementationHistoriesDocument:         "GetControlImplementationHistories",
+	CreateBulkControlObjectiveDocument:                "CreateBulkControlObjective",
+	CreateBulkCSVControlObjectiveDocument:             "CreateBulkCSVControlObjective",
+	CreateControlObjectiveDocument:                    "CreateControlObjective",
+	DeleteControlObjectiveDocument:                    "DeleteControlObjective",
+	GetAllControlObjectivesDocument:                   "GetAllControlObjectives",
+	GetControlObjectiveByIDDocument:                   "GetControlObjectiveByID",
+	GetControlObjectivesDocument:                      "GetControlObjectives",
+	UpdateControlObjectiveDocument:                    "UpdateControlObjective",
+	GetAllControlObjectiveHistoriesDocument:           "GetAllControlObjectiveHistories",
+	GetControlObjectiveHistoriesDocument:              "GetControlObjectiveHistories",
+	CreateBulkCSVCustomDomainDocument:                 "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:                    "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                        "CreateCustomDomain",
+	DeleteCustomDomainDocument:                        "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                       "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                       "GetCustomDomainByID",
+	GetCustomDomainsDocument:                          "GetCustomDomains",
+	UpdateCustomDomainDocument:                        "UpdateCustomDomain",
+	GetAllCustomDomainHistoriesDocument:               "GetAllCustomDomainHistories",
+	GetCustomDomainHistoriesDocument:                  "GetCustomDomainHistories",
+	CreateBulkCSVDNSVerificationDocument:              "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:                 "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                     "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                     "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:                    "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:                    "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                       "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                     "UpdateDNSVerification",
+	GetAllDNSVerificationHistoriesDocument:            "GetAllDNSVerificationHistories",
+	GetDNSVerificationHistoriesDocument:               "GetDNSVerificationHistories",
+	CreateBulkCSVDocumentDataDocument:                 "CreateBulkCSVDocumentData",
+	CreateBulkDocumentDataDocument:                    "CreateBulkDocumentData",
+	CreateDocumentDataDocument:                        "CreateDocumentData",
+	DeleteDocumentDataDocument:                        "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                       "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                        "UpdateDocumentData",
+	GetAllDocumentDataHistoriesDocument:               "GetAllDocumentDataHistories",
+	GetDocumentDataHistoriesDocument:                  "GetDocumentDataHistories",
+	CreateBulkCSVEntityDocument:                       "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                          "CreateBulkEntity",
+	CreateEntityDocument:                              "CreateEntity",
+	DeleteEntityDocument:                              "DeleteEntity",
+	GetAllEntitiesDocument:                            "GetAllEntities",
+	GetEntitiesDocument:                               "GetEntities",
+	GetEntityByIDDocument:                             "GetEntityByID",
+	UpdateEntityDocument:                              "UpdateEntity",
+	GetAllEntityHistoriesDocument:                     "GetAllEntityHistories",
+	GetEntityHistoriesDocument:                        "GetEntityHistories",
+	CreateBulkCSVEntityTypeDocument:                   "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                      "CreateBulkEntityType",
+	CreateEntityTypeDocument:                          "CreateEntityType",
+	DeleteEntityTypeDocument:                          "DeleteEntityType",
+	GetAllEntityTypesDocument:                         "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                         "GetEntityTypeByID",
+	GetEntityTypesDocument:                            "GetEntityTypes",
+	UpdateEntityTypeDocument:                          "UpdateEntityType",
+	GetAllEntityTypeHistoriesDocument:                 "GetAllEntityTypeHistories",
+	GetEntityTypeHistoriesDocument:                    "GetEntityTypeHistories",
+	CreateBulkCSVEventDocument:                        "CreateBulkCSVEvent",
+	CreateBulkEventDocument:                           "CreateBulkEvent",
+	CreateEventDocument:                               "CreateEvent",
+	DeleteEventDocument:                               "DeleteEvent",
+	GetAllEventsDocument:                              "GetAllEvents",
+	GetEventByIDDocument:                              "GetEventByID",
+	GetEventsDocument:                                 "GetEvents",
+	UpdateEventDocument:                               "UpdateEvent",
+	CreateEvidenceDocument:                            "CreateEvidence",
+	DeleteEvidenceDocument:                            "DeleteEvidence",
+	GetAllEvidencesDocument:                           "GetAllEvidences",
+	GetEvidenceByIDDocument:                           "GetEvidenceByID",
+	GetEvidencesDocument:                              "GetEvidences",
+	UpdateEvidenceDocument:                            "UpdateEvidence",
+	GetAllEvidenceHistoriesDocument:                   "GetAllEvidenceHistories",
+	GetEvidenceHistoriesDocument:                      "GetEvidenceHistories",
+	CreateExportDocument:                              "CreateExport",
+	GetAllExportsDocument:                             "GetAllExports",
+	GetExportByIDDocument:                             "GetExportByID",
+	GetExportsDocument:                                "GetExports",
+	UpdateExportDocument:                              "UpdateExport",
+	DeleteExportDocument:                              "DeleteExport",
+	DeleteBulkExportDocument:                          "DeleteBulkExport",
+	DeleteFileDocument:                                "DeleteFile",
+	GetAllFilesDocument:                               "GetAllFiles",
+	GetFileByIDDocument:                               "GetFileByID",
+	GetFilesDocument:                                  "GetFiles",
+	GetAllFileHistoriesDocument:                       "GetAllFileHistories",
+	GetFileHistoriesDocument:                          "GetFileHistories",
+	CreateBulkCSVGroupDocument:                        "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                           "CreateBulkGroup",
+	CreateGroupDocument:                               "CreateGroup",
+	DeleteGroupDocument:                               "DeleteGroup",
+	GetAllGroupsDocument:                              "GetAllGroups",
+	GetGroupByIDDocument:                              "GetGroupByID",
+	GetGroupsDocument:                                 "GetGroups",
+	UpdateGroupDocument:                               "UpdateGroup",
+	GetAllGroupHistoriesDocument:                      "GetAllGroupHistories",
+	GetGroupHistoriesDocument:                         "GetGroupHistories",
+	CreateBulkCSVGroupMembershipDocument:              "CreateBulkCSVGroupMembership",
+	CreateBulkGroupMembershipDocument:                 "CreateBulkGroupMembership",
+	CreateGroupMembershipDocument:                     "CreateGroupMembership",
+	DeleteGroupMembershipDocument:                     "DeleteGroupMembership",
+	GetAllGroupMembershipsDocument:                    "GetAllGroupMemberships",
+	GetGroupMembershipByIDDocument:                    "GetGroupMembershipByID",
+	GetGroupMembershipsDocument:                       "GetGroupMemberships",
+	UpdateGroupMembershipDocument:                     "UpdateGroupMembership",
+	GetAllGroupMembershipHistoriesDocument:            "GetAllGroupMembershipHistories",
+	GetGroupMembershipHistoriesDocument:               "GetGroupMembershipHistories",
+	CreateBulkCSVGroupSettingDocument:                 "CreateBulkCSVGroupSetting",
+	CreateBulkGroupSettingDocument:                    "CreateBulkGroupSetting",
+	CreateGroupSettingDocument:                        "CreateGroupSetting",
+	DeleteGroupSettingDocument:                        "DeleteGroupSetting",
+	GetAllGroupSettingsDocument:                       "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                       "GetGroupSettingByID",
+	GetGroupSettingsDocument:                          "GetGroupSettings",
+	UpdateGroupSettingDocument:                        "UpdateGroupSetting",
+	GetAllGroupSettingHistoriesDocument:               "GetAllGroupSettingHistories",
+	GetGroupSettingHistoriesDocument:                  "GetGroupSettingHistories",
+	CreateBulkCSVHushDocument:                         "CreateBulkCSVHush",
+	CreateBulkHushDocument:                            "CreateBulkHush",
+	CreateHushDocument:                                "CreateHush",
+	DeleteHushDocument:                                "DeleteHush",
+	GetAllHushesDocument:                              "GetAllHushes",
+	GetHushByIDDocument:                               "GetHushByID",
+	GetHushesDocument:                                 "GetHushes",
+	UpdateHushDocument:                                "UpdateHush",
+	GetAllHushHistoriesDocument:                       "GetAllHushHistories",
+	GetHushHistoriesDocument:                          "GetHushHistories",
+	DeleteIntegrationDocument:                         "DeleteIntegration",
+	GetAllIntegrationsDocument:                        "GetAllIntegrations",
+	GetIntegrationByIDDocument:                        "GetIntegrationByID",
+	GetIntegrationsDocument:                           "GetIntegrations",
+	GetAllIntegrationHistoriesDocument:                "GetAllIntegrationHistories",
+	GetIntegrationHistoriesDocument:                   "GetIntegrationHistories",
+	CreateBulkCSVInternalPolicyDocument:               "CreateBulkCSVInternalPolicy",
+	CreateBulkInternalPolicyDocument:                  "CreateBulkInternalPolicy",
+	CreateInternalPolicyDocument:                      "CreateInternalPolicy",
+	DeleteInternalPolicyDocument:                      "DeleteInternalPolicy",
+	GetAllInternalPoliciesDocument:                    "GetAllInternalPolicies",
+	GetInternalPolicyByIDDocument:                     "GetInternalPolicyByID",
+	GetInternalPoliciesDocument:                       "GetInternalPolicies",
+	UpdateInternalPolicyDocument:                      "UpdateInternalPolicy",
+	GetAllInternalPolicyHistoriesDocument:             "GetAllInternalPolicyHistories",
+	GetInternalPolicyHistoriesDocument:                "GetInternalPolicyHistories",
+	CreateBulkCSVInviteDocument:                       "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                          "CreateBulkInvite",
+	CreateInviteDocument:                              "CreateInvite",
+	DeleteInviteDocument:                              "DeleteInvite",
+	GetAllInvitesDocument:                             "GetAllInvites",
+	GetInviteByIDDocument:                             "GetInviteByID",
+	GetInvitesDocument:                                "GetInvites",
+	UpdateInviteDocument:                              "UpdateInvite",
+	CreateJobResultDocument:                           "CreateJobResult",
+	DeleteJobResultDocument:                           "DeleteJobResult",
+	GetAllJobResultsDocument:                          "GetAllJobResults",
+	GetJobResultByIDDocument:                          "GetJobResultByID",
+	GetJobResultsDocument:                             "GetJobResults",
+	UpdateJobResultDocument:                           "UpdateJobResult",
+	CreateJobRunnerDocument:                           "CreateJobRunner",
+	DeleteJobRunnerDocument:                           "DeleteJobRunner",
+	GetAllJobRunnersDocument:                          "GetAllJobRunners",
+	GetJobRunnerByIDDocument:                          "GetJobRunnerByID",
+	GetJobRunnersDocument:                             "GetJobRunners",
+	UpdateJobRunnerDocument:                           "UpdateJobRunner",
+	CreateJobRunnerRegistrationTokenDocument:          "CreateJobRunnerRegistrationToken",
+	DeleteJobRunnerRegistrationTokenDocument:          "DeleteJobRunnerRegistrationToken",
+	GetAllJobRunnerRegistrationTokensDocument:         "GetAllJobRunnerRegistrationTokens",
+	GetJobRunnerRegistrationTokenByIDDocument:         "GetJobRunnerRegistrationTokenByID",
+	GetJobRunnerRegistrationTokensDocument:            "GetJobRunnerRegistrationTokens",
+	CreateJobRunnerTokenDocument:                      "CreateJobRunnerToken",
+	DeleteJobRunnerTokenDocument:                      "DeleteJobRunnerToken",
+	GetAllJobRunnerTokensDocument:                     "GetAllJobRunnerTokens",
+	GetJobRunnerTokenByIDDocument:                     "GetJobRunnerTokenByID",
+	GetJobRunnerTokensDocument:                        "GetJobRunnerTokens",
+	CreateBulkCSVJobTemplateDocument:                  "CreateBulkCSVJobTemplate",
+	CreateBulkJobTemplateDocument:                     "CreateBulkJobTemplate",
+	CreateJobTemplateDocument:                         "CreateJobTemplate",
+	DeleteJobTemplateDocument:                         "DeleteJobTemplate",
+	GetAllJobTemplatesDocument:                        "GetAllJobTemplates",
+	GetJobTemplateByIDDocument:                        "GetJobTemplateByID",
+	GetJobTemplatesDocument:                           "GetJobTemplates",
+	UpdateJobTemplateDocument:                         "UpdateJobTemplate",
+	GetAllJobTemplateHistoriesDocument:                "GetAllJobTemplateHistories",
+	GetJobTemplateHistoriesDocument:                   "GetJobTemplateHistories",
+	CreateBulkCSVMappableDomainDocument:               "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:                  "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                      "CreateMappableDomain",
+	DeleteMappableDomainDocument:                      "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                     "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                     "GetMappableDomainByID",
+	GetMappableDomainsDocument:                        "GetMappableDomains",
+	UpdateMappableDomainDocument:                      "UpdateMappableDomain",
+	GetAllMappableDomainHistoriesDocument:             "GetAllMappableDomainHistories",
+	GetMappableDomainHistoriesDocument:                "GetMappableDomainHistories",
+	CreateBulkCSVMappedControlDocument:                "CreateBulkCSVMappedControl",
+	CreateBulkMappedControlDocument:                   "CreateBulkMappedControl",
+	CreateMappedControlDocument:                       "CreateMappedControl",
+	DeleteMappedControlDocument:                       "DeleteMappedControl",
+	GetAllMappedControlsDocument:                      "GetAllMappedControls",
+	GetMappedControlByIDDocument:                      "GetMappedControlByID",
+	GetMappedControlsDocument:                         "GetMappedControls",
+	UpdateMappedControlDocument:                       "UpdateMappedControl",
+	GetAllMappedControlHistoriesDocument:              "GetAllMappedControlHistories",
+	GetMappedControlHistoriesDocument:                 "GetMappedControlHistories",
+	CreateBulkCSVNarrativeDocument:                    "CreateBulkCSVNarrative",
+	CreateBulkNarrativeDocument:                       "CreateBulkNarrative",
+	CreateNarrativeDocument:                           "CreateNarrative",
+	DeleteNarrativeDocument:                           "DeleteNarrative",
+	GetAllNarrativesDocument:                          "GetAllNarratives",
+	GetNarrativeByIDDocument:                          "GetNarrativeByID",
+	GetNarrativesDocument:                             "GetNarratives",
+	UpdateNarrativeDocument:                           "UpdateNarrative",
+	GetAllNarrativeHistoriesDocument:                  "GetAllNarrativeHistories",
+	GetNarrativeHistoriesDocument:                     "GetNarrativeHistories",
+	GetAllNoteHistoriesDocument:                       "GetAllNoteHistories",
+	GetNoteHistoriesDocument:                          "GetNoteHistories",
+	CreateOnboardingDocument:                          "CreateOnboarding",
+	CreateOrganizationDocument:                        "CreateOrganization",
+	DeleteOrganizationDocument:                        "DeleteOrganization",
+	GetAllOrganizationsDocument:                       "GetAllOrganizations",
+	GetOrganizationByIDDocument:                       "GetOrganizationByID",
+	GetOrganizationsDocument:                          "GetOrganizations",
+	UpdateOrganizationDocument:                        "UpdateOrganization",
+	GetAllOrganizationHistoriesDocument:               "GetAllOrganizationHistories",
+	GetOrganizationHistoriesDocument:                  "GetOrganizationHistories",
+	CreateBulkCSVOrganizationSettingDocument:          "CreateBulkCSVOrganizationSetting",
+	CreateBulkOrganizationSettingDocument:             "CreateBulkOrganizationSetting",
+	CreateOrganizationSettingDocument:                 "CreateOrganizationSetting",
+	DeleteOrganizationSettingDocument:                 "DeleteOrganizationSetting",
+	GetAllOrganizationSettingsDocument:                "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:                "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                   "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:                 "UpdateOrganizationSetting",
+	GetAllOrganizationSettingHistoriesDocument:        "GetAllOrganizationSettingHistories",
+	GetOrganizationSettingHistoriesDocument:           "GetOrganizationSettingHistories",
+	CreateBulkCSVOrgMembershipDocument:                "CreateBulkCSVOrgMembership",
+	CreateBulkOrgMembershipDocument:                   "CreateBulkOrgMembership",
+	CreateOrgMembershipDocument:                       "CreateOrgMembership",
+	DeleteOrgMembershipDocument:                       "DeleteOrgMembership",
+	GetAllOrgMembershipsDocument:                      "GetAllOrgMemberships",
+	GetOrgMembershipByIDDocument:                      "GetOrgMembershipByID",
+	GetOrgMembershipsDocument:                         "GetOrgMemberships",
+	UpdateOrgMembershipDocument:                       "UpdateOrgMembership",
+	GetAllOrgMembershipHistoriesDocument:              "GetAllOrgMembershipHistories",
+	GetOrgMembershipHistoriesDocument:                 "GetOrgMembershipHistories",
+	GetAllOrgSubscriptionsDocument:                    "GetAllOrgSubscriptions",
+	GetOrgSubscriptionByIDDocument:                    "GetOrgSubscriptionByID",
+	GetOrgSubscriptionsDocument:                       "GetOrgSubscriptions",
+	GetAllOrgSubscriptionHistoriesDocument:            "GetAllOrgSubscriptionHistories",
+	GetOrgSubscriptionHistoriesDocument:               "GetOrgSubscriptionHistories",
+	CreatePersonalAccessTokenDocument:                 "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:                 "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:                "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:                "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:                   "GetPersonalAccessTokens",
+	UpdatePersonalAccessTokenDocument:                 "UpdatePersonalAccessToken",
+	CreateBulkCSVProcedureDocument:                    "CreateBulkCSVProcedure",
+	CreateBulkProcedureDocument:                       "CreateBulkProcedure",
+	CreateProcedureDocument:                           "CreateProcedure",
+	CreateUploadProcedureDocument:                     "CreateUploadProcedure",
+	DeleteProcedureDocument:                           "DeleteProcedure",
+	GetAllProceduresDocument:                          "GetAllProcedures",
+	GetProcedureByIDDocument:                          "GetProcedureByID",
+	GetProceduresDocument:                             "GetProcedures",
+	UpdateProcedureDocument:                           "UpdateProcedure",
+	GetAllProcedureHistoriesDocument:                  "GetAllProcedureHistories",
+	GetProcedureHistoriesDocument:                     "GetProcedureHistories",
+	CreateBulkCSVProgramDocument:                      "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                         "CreateBulkProgram",
+	CreateProgramDocument:                             "CreateProgram",
+	DeleteProgramDocument:                             "DeleteProgram",
+	GetAllProgramsDocument:                            "GetAllPrograms",
+	GetProgramByIDDocument:                            "GetProgramByID",
+	GetProgramsDocument:                               "GetPrograms",
+	UpdateProgramDocument:                             "UpdateProgram",
+	GetAllProgramHistoriesDocument:                    "GetAllProgramHistories",
+	GetProgramHistoriesDocument:                       "GetProgramHistories",
+	CreateBulkCSVProgramMembershipDocument:            "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:               "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:                   "CreateProgramMembership",
+	DeleteProgramMembershipDocument:                   "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:                  "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:                  "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                     "GetProgramMemberships",
+	UpdateProgramMembershipDocument:                   "UpdateProgramMembership",
+	GetAllProgramMembershipHistoriesDocument:          "GetAllProgramMembershipHistories",
+	GetProgramMembershipHistoriesDocument:             "GetProgramMembershipHistories",
+	CreateBulkCSVRiskDocument:                         "CreateBulkCSVRisk",
+	CreateBulkRiskDocument:                            "CreateBulkRisk",
+	CreateRiskDocument:                                "CreateRisk",
+	DeleteRiskDocument:                                "DeleteRisk",
+	GetAllRisksDocument:                               "GetAllRisks",
+	GetRiskByIDDocument:                               "GetRiskByID",
+	GetRisksDocument:                                  "GetRisks",
+	UpdateRiskDocument:                                "UpdateRisk",
+	GetAllRiskHistoriesDocument:                       "GetAllRiskHistories",
+	GetRiskHistoriesDocument:                          "GetRiskHistories",
+	CreateBulkCSVScanDocument:                         "CreateBulkCSVScan",
+	CreateBulkScanDocument:                            "CreateBulkScan",
+	CreateScanDocument:                                "CreateScan",
+	DeleteScanDocument:                                "DeleteScan",
+	GetAllScansDocument:                               "GetAllScans",
+	GetScanByIDDocument:                               "GetScanByID",
+	GetScansDocument:                                  "GetScans",
+	UpdateScanDocument:                                "UpdateScan",
+	GetAllScanHistoriesDocument:                       "GetAllScanHistories",
+	GetScanHistoriesDocument:                          "GetScanHistories",
+	CreateBulkCSVScheduledJobDocument:                 "CreateBulkCSVScheduledJob",
+	CreateBulkScheduledJobDocument:                    "CreateBulkScheduledJob",
+	CreateScheduledJobDocument:                        "CreateScheduledJob",
+	DeleteScheduledJobDocument:                        "DeleteScheduledJob",
+	GetAllScheduledJobsDocument:                       "GetAllScheduledJobs",
+	GetScheduledJobByIDDocument:                       "GetScheduledJobByID",
+	GetScheduledJobsDocument:                          "GetScheduledJobs",
+	UpdateScheduledJobDocument:                        "UpdateScheduledJob",
+	GetAllScheduledJobHistoriesDocument:               "GetAllScheduledJobHistories",
+	GetScheduledJobHistoriesDocument:                  "GetScheduledJobHistories",
+	CreateScheduledJobRunDocument:                     "CreateScheduledJobRun",
+	DeleteScheduledJobRunDocument:                     "DeleteScheduledJobRun",
+	GetAllScheduledJobRunsDocument:                    "GetAllScheduledJobRuns",
+	GetScheduledJobRunByIDDocument:                    "GetScheduledJobRunByID",
+	GetScheduledJobRunsDocument:                       "GetScheduledJobRuns",
+	UpdateScheduledJobRunDocument:                     "UpdateScheduledJobRun",
+	GlobalSearchDocument:                              "GlobalSearch",
+	CreateStandardDocument:                            "CreateStandard",
+	DeleteStandardDocument:                            "DeleteStandard",
+	GetAllStandardsDocument:                           "GetAllStandards",
+	GetStandardByIDDocument:                           "GetStandardByID",
+	GetStandardsDocument:                              "GetStandards",
+	UpdateStandardDocument:                            "UpdateStandard",
+	GetAllStandardHistoriesDocument:                   "GetAllStandardHistories",
+	GetStandardHistoriesDocument:                      "GetStandardHistories",
+	CreateBulkCSVSubcontrolDocument:                   "CreateBulkCSVSubcontrol",
+	CreateBulkSubcontrolDocument:                      "CreateBulkSubcontrol",
+	CreateSubcontrolDocument:                          "CreateSubcontrol",
+	DeleteSubcontrolDocument:                          "DeleteSubcontrol",
+	GetAllSubcontrolsDocument:                         "GetAllSubcontrols",
+	GetSubcontrolByIDDocument:                         "GetSubcontrolByID",
+	GetSubcontrolsDocument:                            "GetSubcontrols",
+	UpdateSubcontrolDocument:                          "UpdateSubcontrol",
+	GetAllSubcontrolHistoriesDocument:                 "GetAllSubcontrolHistories",
+	GetSubcontrolHistoriesDocument:                    "GetSubcontrolHistories",
+	CreateSubprocessorDocument:                        "CreateSubprocessor",
+	DeleteSubprocessorDocument:                        "DeleteSubprocessor",
+	GetAllSubprocessorsDocument:                       "GetAllSubprocessors",
+	GetSubprocessorByIDDocument:                       "GetSubprocessorByID",
+	GetSubprocessorsDocument:                          "GetSubprocessors",
+	UpdateSubprocessorDocument:                        "UpdateSubprocessor",
+	GetAllSubprocessorHistoriesDocument:               "GetAllSubprocessorHistories",
+	GetSubprocessorHistoriesDocument:                  "GetSubprocessorHistories",
+	CreateBulkCSVSubscriberDocument:                   "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                      "CreateBulkSubscriber",
+	CreateSubscriberDocument:                          "CreateSubscriber",
+	DeleteSubscriberDocument:                          "DeleteSubscriber",
+	GetAllSubscribersDocument:                         "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                      "GetSubscriberByEmail",
+	GetSubscribersDocument:                            "GetSubscribers",
+	UpdateSubscriberDocument:                          "UpdateSubscriber",
+	CreateBulkCSVTaskDocument:                         "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                            "CreateBulkTask",
+	CreateTaskDocument:                                "CreateTask",
+	DeleteTaskDocument:                                "DeleteTask",
+	GetAllTasksDocument:                               "GetAllTasks",
+	GetTaskByIDDocument:                               "GetTaskByID",
+	GetTasksDocument:                                  "GetTasks",
+	UpdateTaskDocument:                                "UpdateTask",
+	GetAllTaskHistoriesDocument:                       "GetAllTaskHistories",
+	GetTaskHistoriesDocument:                          "GetTaskHistories",
+	CreateBulkCSVTemplateDocument:                     "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                        "CreateBulkTemplate",
+	CreateTemplateDocument:                            "CreateTemplate",
+	DeleteTemplateDocument:                            "DeleteTemplate",
+	GetAllTemplatesDocument:                           "GetAllTemplates",
+	GetTemplateByIDDocument:                           "GetTemplateByID",
+	GetTemplatesDocument:                              "GetTemplates",
+	UpdateTemplateDocument:                            "UpdateTemplate",
+	GetAllTemplateHistoriesDocument:                   "GetAllTemplateHistories",
+	GetTemplateHistoriesDocument:                      "GetTemplateHistories",
+	CreateTFASettingDocument:                          "CreateTFASetting",
+	GetAllTFASettingsDocument:                         "GetAllTFASettings",
+	GetTFASettingByIDDocument:                         "GetTFASettingByID",
+	GetTFASettingsDocument:                            "GetTFASettings",
+	UpdateTFASettingDocument:                          "UpdateTFASetting",
+	CreateTrustCenterDocument:                         "CreateTrustCenter",
+	DeleteTrustCenterDocument:                         "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                        "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                        "GetTrustCenterByID",
+	GetTrustCentersDocument:                           "GetTrustCenters",
+	UpdateTrustCenterDocument:                         "UpdateTrustCenter",
+	CreateBulkCSVTrustCenterComplianceDocument:        "CreateBulkCSVTrustCenterCompliance",
+	CreateBulkTrustCenterComplianceDocument:           "CreateBulkTrustCenterCompliance",
+	CreateTrustCenterComplianceDocument:               "CreateTrustCenterCompliance",
+	DeleteTrustCenterComplianceDocument:               "DeleteTrustCenterCompliance",
+	GetAllTrustCenterCompliancesDocument:              "GetAllTrustCenterCompliances",
+	GetTrustCenterComplianceByIDDocument:              "GetTrustCenterComplianceByID",
+	GetTrustCenterCompliancesDocument:                 "GetTrustCenterCompliances",
+	UpdateTrustCenterComplianceDocument:               "UpdateTrustCenterCompliance",
+	GetAllTrustCenterComplianceHistoriesDocument:      "GetAllTrustCenterComplianceHistories",
+	GetTrustCenterComplianceHistoriesDocument:         "GetTrustCenterComplianceHistories",
+	CreateTrustCenterDocDocument:                      "CreateTrustCenterDoc",
+	DeleteTrustCenterDocDocument:                      "DeleteTrustCenterDoc",
+	GetAllTrustCenterDocsDocument:                     "GetAllTrustCenterDocs",
+	GetTrustCenterDocByIDDocument:                     "GetTrustCenterDocByID",
+	GetTrustCenterDocsDocument:                        "GetTrustCenterDocs",
+	UpdateTrustCenterDocDocument:                      "UpdateTrustCenterDoc",
+	GetAllTrustCenterDocHistoriesDocument:             "GetAllTrustCenterDocHistories",
+	GetTrustCenterDocHistoriesDocument:                "GetTrustCenterDocHistories",
+	CreateTrustCenterDomainDocument:                   "CreateTrustCenterDomain",
+	GetAllTrustCenterHistoriesDocument:                "GetAllTrustCenterHistories",
+	GetTrustCenterHistoriesDocument:                   "GetTrustCenterHistories",
+	CreateTrustCenterNdaDocument:                      "CreateTrustCenterNda",
+	SendTrustCenterNDAEmailDocument:                   "SendTrustCenterNDAEmail",
+	SubmitTrustCenterNDAResponseDocument:              "SubmitTrustCenterNDAResponse",
+	UpdateTrustCenterNdaDocument:                      "UpdateTrustCenterNda",
+	CreateTrustCenterSettingDocument:                  "CreateTrustCenterSetting",
+	DeleteTrustCenterSettingDocument:                  "DeleteTrustCenterSetting",
+	GetAllTrustCenterSettingsDocument:                 "GetAllTrustCenterSettings",
+	GetTrustCenterSettingByIDDocument:                 "GetTrustCenterSettingByID",
+	GetTrustCenterSettingsDocument:                    "GetTrustCenterSettings",
+	UpdateTrustCenterSettingDocument:                  "UpdateTrustCenterSetting",
+	GetAllTrustCenterSettingHistoriesDocument:         "GetAllTrustCenterSettingHistories",
+	GetTrustCenterSettingHistoriesDocument:            "GetTrustCenterSettingHistories",
+	CreateBulkCSVTrustCenterSubprocessorDocument:      "CreateBulkCSVTrustCenterSubprocessor",
+	CreateBulkTrustCenterSubprocessorDocument:         "CreateBulkTrustCenterSubprocessor",
+	CreateTrustCenterSubprocessorDocument:             "CreateTrustCenterSubprocessor",
+	DeleteTrustCenterSubprocessorDocument:             "DeleteTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorsDocument:            "GetAllTrustCenterSubprocessors",
+	GetTrustCenterSubprocessorByIDDocument:            "GetTrustCenterSubprocessorByID",
+	GetTrustCenterSubprocessorsDocument:               "GetTrustCenterSubprocessors",
+	UpdateTrustCenterSubprocessorDocument:             "UpdateTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorHistoriesDocument:    "GetAllTrustCenterSubprocessorHistories",
+	GetTrustCenterSubprocessorHistoriesDocument:       "GetTrustCenterSubprocessorHistories",
+	CreateTrustCenterWatermarkConfigDocument:          "CreateTrustCenterWatermarkConfig",
+	DeleteTrustCenterWatermarkConfigDocument:          "DeleteTrustCenterWatermarkConfig",
+	GetAllTrustCenterWatermarkConfigsDocument:         "GetAllTrustCenterWatermarkConfigs",
+	GetTrustCenterWatermarkConfigByIDDocument:         "GetTrustCenterWatermarkConfigByID",
+	GetTrustCenterWatermarkConfigsDocument:            "GetTrustCenterWatermarkConfigs",
+	UpdateTrustCenterWatermarkConfigDocument:          "UpdateTrustCenterWatermarkConfig",
+	GetAllTrustCenterWatermarkConfigHistoriesDocument: "GetAllTrustCenterWatermarkConfigHistories",
+	GetTrustCenterWatermarkConfigHistoriesDocument:    "GetTrustCenterWatermarkConfigHistories",
+	CreateUserDocument:                                "CreateUser",
+	DeleteUserDocument:                                "DeleteUser",
+	GetAllUsersDocument:                               "GetAllUsers",
+	GetSelfDocument:                                   "GetSelf",
+	GetUserByIDDocument:                               "GetUserByID",
+	GetUsersDocument:                                  "GetUsers",
+	UpdateUserDocument:                                "UpdateUser",
+	GetAllUserHistoriesDocument:                       "GetAllUserHistories",
+	GetUserHistoriesDocument:                          "GetUserHistories",
+	CreateUserSettingDocument:                         "CreateUserSetting",
+	GetAllUserSettingsDocument:                        "GetAllUserSettings",
+	GetUserSettingByIDDocument:                        "GetUserSettingByID",
+	GetUserSettingsDocument:                           "GetUserSettings",
+	UpdateUserSettingDocument:                         "UpdateUserSetting",
+	GetAllUserSettingHistoriesDocument:                "GetAllUserSettingHistories",
+	GetUserSettingHistoriesDocument:                   "GetUserSettingHistories",
+	DeleteWebauthnDocument:                            "DeleteWebauthn",
+	GetAllWebauthnsDocument:                           "GetAllWebauthns",
 }

@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -3704,6 +3705,78 @@ func (_m *TrustCenterSubprocessorHistory) Diff(history *TrustCenterSubprocessorH
 	return nil, ErrIdenticalHistory
 }
 
+func (_m *TrustCenterWatermarkConfigHistory) changes(new *TrustCenterWatermarkConfigHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(_m.LogoID, new.LogoID) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldLogoID, _m.LogoID, new.LogoID))
+	}
+	if !reflect.DeepEqual(_m.Text, new.Text) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldText, _m.Text, new.Text))
+	}
+	if !reflect.DeepEqual(_m.FontSize, new.FontSize) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldFontSize, _m.FontSize, new.FontSize))
+	}
+	if !reflect.DeepEqual(_m.Opacity, new.Opacity) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldOpacity, _m.Opacity, new.Opacity))
+	}
+	if !reflect.DeepEqual(_m.Rotation, new.Rotation) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldRotation, _m.Rotation, new.Rotation))
+	}
+	if !reflect.DeepEqual(_m.Color, new.Color) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldColor, _m.Color, new.Color))
+	}
+	if !reflect.DeepEqual(_m.Font, new.Font) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldFont, _m.Font, new.Font))
+	}
+	return changes
+}
+
+func (_m *TrustCenterWatermarkConfigHistory) Diff(history *TrustCenterWatermarkConfigHistory) (*HistoryDiff[TrustCenterWatermarkConfigHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[TrustCenterWatermarkConfigHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TrustCenterWatermarkConfigHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (_m *UserHistory) changes(new *UserHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
@@ -4160,6 +4233,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditTrustCenterSubprocessorHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditTrustCenterWatermarkConfigHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5979,6 +6058,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditTrustCenterSubprocessorHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("TrustCenterWatermarkConfigHistory", "History") {
+		// map AuditLogWhereInput to TrustCenterWatermarkConfigHistoryWhereInput
+		whereInput := &TrustCenterWatermarkConfigHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to TrustCenterWatermarkConfigHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &TrustCenterWatermarkConfigHistoryOrder{
+			Field:     TrustCenterWatermarkConfigHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditTrustCenterWatermarkConfigHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -9283,6 +9403,79 @@ func auditTrustCenterSubprocessorHistory(ctx context.Context, config config, aft
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &TrustCenterSubprocessorHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type trustcenterwatermarkconfighistoryref struct {
+	Ref string
+}
+
+func auditTrustCenterWatermarkConfigHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *TrustCenterWatermarkConfigHistoryOrder, where *TrustCenterWatermarkConfigHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []TrustCenterWatermarkConfigHistoryPaginateOption{
+		WithTrustCenterWatermarkConfigHistoryOrder(orderBy),
+		WithTrustCenterWatermarkConfigHistoryFilter(where.Filter),
+	}
+
+	client := NewTrustCenterWatermarkConfigHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "TrustCenterWatermarkConfigHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&TrustCenterWatermarkConfigHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&TrustCenterWatermarkConfigHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					trustcenterwatermarkconfighistory.Ref(curr.Node.Ref),
+					trustcenterwatermarkconfighistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(trustcenterwatermarkconfighistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &TrustCenterWatermarkConfigHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

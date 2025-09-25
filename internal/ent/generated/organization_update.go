@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1287,6 +1288,21 @@ func (_u *OrganizationUpdate) AddExports(v ...*Export) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddExportIDs(ids...)
+}
+
+// AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
+func (_u *OrganizationUpdate) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterWatermarkConfigs adds the "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
+func (_u *OrganizationUpdate) AddTrustCenterWatermarkConfigs(v ...*TrustCenterWatermarkConfig) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterWatermarkConfigIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2642,6 +2658,27 @@ func (_u *OrganizationUpdate) RemoveExports(v ...*Export) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveExportIDs(ids...)
+}
+
+// ClearTrustCenterWatermarkConfigs clears all "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
+func (_u *OrganizationUpdate) ClearTrustCenterWatermarkConfigs() *OrganizationUpdate {
+	_u.mutation.ClearTrustCenterWatermarkConfigs()
+	return _u
+}
+
+// RemoveTrustCenterWatermarkConfigIDs removes the "trust_center_watermark_configs" edge to TrustCenterWatermarkConfig entities by IDs.
+func (_u *OrganizationUpdate) RemoveTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTrustCenterWatermarkConfigIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterWatermarkConfigs removes "trust_center_watermark_configs" edges to TrustCenterWatermarkConfig entities.
+func (_u *OrganizationUpdate) RemoveTrustCenterWatermarkConfigs(v ...*TrustCenterWatermarkConfig) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterWatermarkConfigIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5936,6 +5973,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterWatermarkConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterWatermarkConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7213,6 +7298,21 @@ func (_u *OrganizationUpdateOne) AddExports(v ...*Export) *OrganizationUpdateOne
 		ids[i] = v[i].ID
 	}
 	return _u.AddExportIDs(ids...)
+}
+
+// AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
+func (_u *OrganizationUpdateOne) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterWatermarkConfigs adds the "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
+func (_u *OrganizationUpdateOne) AddTrustCenterWatermarkConfigs(v ...*TrustCenterWatermarkConfig) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterWatermarkConfigIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -8568,6 +8668,27 @@ func (_u *OrganizationUpdateOne) RemoveExports(v ...*Export) *OrganizationUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveExportIDs(ids...)
+}
+
+// ClearTrustCenterWatermarkConfigs clears all "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
+func (_u *OrganizationUpdateOne) ClearTrustCenterWatermarkConfigs() *OrganizationUpdateOne {
+	_u.mutation.ClearTrustCenterWatermarkConfigs()
+	return _u
+}
+
+// RemoveTrustCenterWatermarkConfigIDs removes the "trust_center_watermark_configs" edge to TrustCenterWatermarkConfig entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTrustCenterWatermarkConfigIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterWatermarkConfigs removes "trust_center_watermark_configs" edges to TrustCenterWatermarkConfig entities.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterWatermarkConfigs(v ...*TrustCenterWatermarkConfig) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterWatermarkConfigIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -11887,6 +12008,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterWatermarkConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterWatermarkConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

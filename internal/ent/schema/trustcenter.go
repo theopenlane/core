@@ -100,6 +100,14 @@ func (t TrustCenter) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "watermark_config",
+			t:          TrustCenterWatermarkConfig.Type,
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("TrustCenter"),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
 			name:          "subprocessors",

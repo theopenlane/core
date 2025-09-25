@@ -809,6 +809,35 @@ func HasSettingWith(preds ...predicate.TrustCenterSetting) predicate.TrustCenter
 	})
 }
 
+// HasWatermarkConfig applies the HasEdge predicate on the "watermark_config" edge.
+func HasWatermarkConfig() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, WatermarkConfigTable, WatermarkConfigColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWatermarkConfigWith applies the HasEdge predicate on the "watermark_config" edge with a given conditions (other predicates).
+func HasWatermarkConfigWith(preds ...predicate.TrustCenterWatermarkConfig) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newWatermarkConfigStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTrustCenterSubprocessors applies the HasEdge predicate on the "trust_center_subprocessors" edge.
 func HasTrustCenterSubprocessors() predicate.TrustCenter {
 	return predicate.TrustCenter(func(s *sql.Selector) {

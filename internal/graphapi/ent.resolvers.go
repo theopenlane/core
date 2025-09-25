@@ -3337,6 +3337,72 @@ func (r *queryResolver) TrustCenterSubprocessorHistories(ctx context.Context, af
 	return res, err
 }
 
+// TrustCenterWatermarkConfigs is the resolver for the trustCenterWatermarkConfigs field.
+func (r *queryResolver) TrustCenterWatermarkConfigs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) (*generated.TrustCenterWatermarkConfigConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterWatermarkConfigOrder{
+			{
+				Field:     generated.TrustCenterWatermarkConfigOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterWatermarkConfigOrder(orderBy),
+		generated.WithTrustCenterWatermarkConfigFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+	}
+
+	return res, err
+}
+
+// TrustCenterWatermarkConfigHistories is the resolver for the trustCenterWatermarkConfigHistories field.
+func (r *queryResolver) TrustCenterWatermarkConfigHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterWatermarkConfigHistoryOrder, where *generated.TrustCenterWatermarkConfigHistoryWhereInput) (*generated.TrustCenterWatermarkConfigHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustCenterWatermarkConfigHistoryOrder{
+			Field:     generated.TrustCenterWatermarkConfigHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfigHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterWatermarkConfigHistoryOrder(orderBy),
+		generated.WithTrustCenterWatermarkConfigHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
+	}
+
+	return res, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set

@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -2077,6 +2078,52 @@ func (tcshq *TrustCenterSubprocessorHistoryQuery) AsOf(ctx context.Context, time
 	return tcshq.
 		Where(trustcentersubprocessorhistory.HistoryTimeLTE(time)).
 		Order(trustcentersubprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *TrustCenterWatermarkConfig) History() *TrustCenterWatermarkConfigHistoryQuery {
+	historyClient := NewTrustCenterWatermarkConfigHistoryClient(_m.config)
+	return historyClient.Query().Where(trustcenterwatermarkconfighistory.Ref(_m.ID))
+}
+
+func (_m *TrustCenterWatermarkConfigHistory) Next(ctx context.Context) (*TrustCenterWatermarkConfigHistory, error) {
+	client := NewTrustCenterWatermarkConfigHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcenterwatermarkconfighistory.Ref(_m.Ref),
+			trustcenterwatermarkconfighistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(trustcenterwatermarkconfighistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *TrustCenterWatermarkConfigHistory) Prev(ctx context.Context) (*TrustCenterWatermarkConfigHistory, error) {
+	client := NewTrustCenterWatermarkConfigHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcenterwatermarkconfighistory.Ref(_m.Ref),
+			trustcenterwatermarkconfighistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(trustcenterwatermarkconfighistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) Earliest(ctx context.Context) (*TrustCenterWatermarkConfigHistory, error) {
+	return tcwchq.
+		Order(trustcenterwatermarkconfighistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) Latest(ctx context.Context) (*TrustCenterWatermarkConfigHistory, error) {
+	return tcwchq.
+		Order(trustcenterwatermarkconfighistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TrustCenterWatermarkConfigHistory, error) {
+	return tcwchq.
+		Where(trustcenterwatermarkconfighistory.HistoryTimeLTE(time)).
+		Order(trustcenterwatermarkconfighistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

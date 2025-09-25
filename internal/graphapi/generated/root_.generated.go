@@ -2587,6 +2587,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
 		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
 		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
@@ -2645,6 +2646,7 @@ type ComplexityRoot struct {
 		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
 		DeleteTrustCenterSetting             func(childComplexity int, id string) int
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
+		DeleteTrustCenterWatermarkConfig     func(childComplexity int, id string) int
 		DeleteUser                           func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
@@ -2710,6 +2712,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
@@ -3071,6 +3074,7 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TrustCenterWatermarkConfigs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -3857,6 +3861,9 @@ type ComplexityRoot struct {
 		TrustCenterSubprocessor               func(childComplexity int, id string) int
 		TrustCenterSubprocessorHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSubprocessorHistoryOrder, where *generated.TrustCenterSubprocessorHistoryWhereInput) int
 		TrustCenterSubprocessors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
+		TrustCenterWatermarkConfig            func(childComplexity int, id string) int
+		TrustCenterWatermarkConfigHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterWatermarkConfigHistoryOrder, where *generated.TrustCenterWatermarkConfigHistoryWhereInput) int
+		TrustCenterWatermarkConfigs           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
 		TrustCenters                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		User                                  func(childComplexity int, id string) int
 		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
@@ -4816,6 +4823,7 @@ type ComplexityRoot struct {
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
+		WatermarkConfig          func(childComplexity int) int
 	}
 
 	TrustCenterCompliance struct {
@@ -5167,6 +5175,84 @@ type ComplexityRoot struct {
 
 	TrustCenterUpdatePayload struct {
 		TrustCenter func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfig struct {
+		Color         func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		File          func(childComplexity int) int
+		Font          func(childComplexity int) int
+		FontSize      func(childComplexity int) int
+		ID            func(childComplexity int) int
+		LogoID        func(childComplexity int) int
+		Opacity       func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Rotation      func(childComplexity int) int
+		Text          func(childComplexity int) int
+		TrustCenter   func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigBulkCreatePayload struct {
+		TrustCenterWatermarkConfigs func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigCreatePayload struct {
+		TrustCenterWatermarkConfig func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigHistory struct {
+		Color         func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Font          func(childComplexity int) int
+		FontSize      func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		LogoID        func(childComplexity int) int
+		Opacity       func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Rotation      func(childComplexity int) int
+		Text          func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterWatermarkConfigUpdatePayload struct {
+		TrustCenterWatermarkConfig func(childComplexity int) int
 	}
 
 	User struct {
@@ -18545,6 +18631,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateTrustCenterSubprocessor(childComplexity, args["input"].(generated.CreateTrustCenterSubprocessorInput)), true
 
+	case "Mutation.createTrustCenterWatermarkConfig":
+		if e.complexity.Mutation.CreateTrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterWatermarkConfig_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["logoFile"].(*graphql.Upload)), true
+
 	case "Mutation.createUploadInternalPolicy":
 		if e.complexity.Mutation.CreateUploadInternalPolicy == nil {
 			break
@@ -19240,6 +19338,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteTrustCenterSubprocessor(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteTrustCenterWatermarkConfig":
+		if e.complexity.Mutation.DeleteTrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTrustCenterWatermarkConfig_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTrustCenterWatermarkConfig(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
@@ -20020,6 +20130,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
+
+	case "Mutation.updateTrustCenterWatermarkConfig":
+		if e.complexity.Mutation.UpdateTrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterWatermarkConfig_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterWatermarkConfig(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -22162,6 +22284,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+
+	case "Organization.trustCenterWatermarkConfigs":
+		if e.complexity.Organization.TrustCenterWatermarkConfigs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterWatermarkConfigs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterWatermarkConfigs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterWatermarkConfigOrder), args["where"].(*generated.TrustCenterWatermarkConfigWhereInput)), true
 
 	case "Organization.trustCenters":
 		if e.complexity.Organization.TrustCenters == nil {
@@ -27841,6 +27975,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterSubprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterSubprocessorOrder), args["where"].(*generated.TrustCenterSubprocessorWhereInput)), true
 
+	case "Query.trustCenterWatermarkConfig":
+		if e.complexity.Query.TrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterWatermarkConfig_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterWatermarkConfig(childComplexity, args["id"].(string)), true
+
+	case "Query.trustCenterWatermarkConfigHistories":
+		if e.complexity.Query.TrustCenterWatermarkConfigHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterWatermarkConfigHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterWatermarkConfigHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterWatermarkConfigHistoryOrder), args["where"].(*generated.TrustCenterWatermarkConfigHistoryWhereInput)), true
+
+	case "Query.trustCenterWatermarkConfigs":
+		if e.complexity.Query.TrustCenterWatermarkConfigs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterWatermarkConfigs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterWatermarkConfigs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterWatermarkConfigOrder), args["where"].(*generated.TrustCenterWatermarkConfigWhereInput)), true
+
 	case "Query.trustCenters":
 		if e.complexity.Query.TrustCenters == nil {
 			break
@@ -32664,6 +32834,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.UpdatedBy(childComplexity), true
 
+	case "TrustCenter.watermarkConfig":
+		if e.complexity.TrustCenter.WatermarkConfig == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.WatermarkConfig(childComplexity), true
+
 	case "TrustCenterCompliance.createdAt":
 		if e.complexity.TrustCenterCompliance.CreatedAt == nil {
 			break
@@ -34055,6 +34232,342 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterUpdatePayload.TrustCenter(childComplexity), true
 
+	case "TrustCenterWatermarkConfig.color":
+		if e.complexity.TrustCenterWatermarkConfig.Color == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Color(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.createdAt":
+		if e.complexity.TrustCenterWatermarkConfig.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.CreatedAt(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.createdBy":
+		if e.complexity.TrustCenterWatermarkConfig.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.CreatedBy(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.file":
+		if e.complexity.TrustCenterWatermarkConfig.File == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.File(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.font":
+		if e.complexity.TrustCenterWatermarkConfig.Font == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Font(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.fontSize":
+		if e.complexity.TrustCenterWatermarkConfig.FontSize == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.FontSize(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.id":
+		if e.complexity.TrustCenterWatermarkConfig.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.ID(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.logoID":
+		if e.complexity.TrustCenterWatermarkConfig.LogoID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.LogoID(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.opacity":
+		if e.complexity.TrustCenterWatermarkConfig.Opacity == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Opacity(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.owner":
+		if e.complexity.TrustCenterWatermarkConfig.Owner == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Owner(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.ownerID":
+		if e.complexity.TrustCenterWatermarkConfig.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.OwnerID(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.rotation":
+		if e.complexity.TrustCenterWatermarkConfig.Rotation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Rotation(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.text":
+		if e.complexity.TrustCenterWatermarkConfig.Text == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Text(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.trustCenter":
+		if e.complexity.TrustCenterWatermarkConfig.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.TrustCenter(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.trustCenterID":
+		if e.complexity.TrustCenterWatermarkConfig.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.TrustCenterID(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.updatedAt":
+		if e.complexity.TrustCenterWatermarkConfig.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.UpdatedAt(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.updatedBy":
+		if e.complexity.TrustCenterWatermarkConfig.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.UpdatedBy(childComplexity), true
+
+	case "TrustCenterWatermarkConfigBulkCreatePayload.trustCenterWatermarkConfigs":
+		if e.complexity.TrustCenterWatermarkConfigBulkCreatePayload.TrustCenterWatermarkConfigs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigBulkCreatePayload.TrustCenterWatermarkConfigs(childComplexity), true
+
+	case "TrustCenterWatermarkConfigConnection.edges":
+		if e.complexity.TrustCenterWatermarkConfigConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigConnection.Edges(childComplexity), true
+
+	case "TrustCenterWatermarkConfigConnection.pageInfo":
+		if e.complexity.TrustCenterWatermarkConfigConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterWatermarkConfigConnection.totalCount":
+		if e.complexity.TrustCenterWatermarkConfigConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterWatermarkConfigCreatePayload.trustCenterWatermarkConfig":
+		if e.complexity.TrustCenterWatermarkConfigCreatePayload.TrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigCreatePayload.TrustCenterWatermarkConfig(childComplexity), true
+
+	case "TrustCenterWatermarkConfigDeletePayload.deletedID":
+		if e.complexity.TrustCenterWatermarkConfigDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigDeletePayload.DeletedID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigEdge.cursor":
+		if e.complexity.TrustCenterWatermarkConfigEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigEdge.Cursor(childComplexity), true
+
+	case "TrustCenterWatermarkConfigEdge.node":
+		if e.complexity.TrustCenterWatermarkConfigEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigEdge.Node(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.color":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Color == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Color(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.createdAt":
+		if e.complexity.TrustCenterWatermarkConfigHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.createdBy":
+		if e.complexity.TrustCenterWatermarkConfigHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.font":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Font == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Font(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.fontSize":
+		if e.complexity.TrustCenterWatermarkConfigHistory.FontSize == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.FontSize(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.historyTime":
+		if e.complexity.TrustCenterWatermarkConfigHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.id":
+		if e.complexity.TrustCenterWatermarkConfigHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.ID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.logoID":
+		if e.complexity.TrustCenterWatermarkConfigHistory.LogoID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.LogoID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.opacity":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Opacity == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Opacity(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.operation":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Operation(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.ownerID":
+		if e.complexity.TrustCenterWatermarkConfigHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.OwnerID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.ref":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Ref(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.rotation":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Rotation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Rotation(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.text":
+		if e.complexity.TrustCenterWatermarkConfigHistory.Text == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.Text(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.trustCenterID":
+		if e.complexity.TrustCenterWatermarkConfigHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.updatedAt":
+		if e.complexity.TrustCenterWatermarkConfigHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.updatedBy":
+		if e.complexity.TrustCenterWatermarkConfigHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistoryConnection.edges":
+		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistoryConnection.totalCount":
+		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistoryEdge.cursor":
+		if e.complexity.TrustCenterWatermarkConfigHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistoryEdge.node":
+		if e.complexity.TrustCenterWatermarkConfigHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistoryEdge.Node(childComplexity), true
+
+	case "TrustCenterWatermarkConfigUpdatePayload.trustCenterWatermarkConfig":
+		if e.complexity.TrustCenterWatermarkConfigUpdatePayload.TrustCenterWatermarkConfig == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigUpdatePayload.TrustCenterWatermarkConfig(childComplexity), true
+
 	case "User.actionPlans":
 		if e.complexity.User.ActionPlans == nil {
 			break
@@ -35180,6 +35693,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterNDAInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
+		ec.unmarshalInputCreateTrustCenterWatermarkConfigInput,
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCustomDomainHistoryOrder,
@@ -35362,6 +35876,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterSubprocessorHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSubprocessorOrder,
 		ec.unmarshalInputTrustCenterSubprocessorWhereInput,
+		ec.unmarshalInputTrustCenterWatermarkConfigHistoryOrder,
+		ec.unmarshalInputTrustCenterWatermarkConfigHistoryWhereInput,
+		ec.unmarshalInputTrustCenterWatermarkConfigOrder,
+		ec.unmarshalInputTrustCenterWatermarkConfigWhereInput,
 		ec.unmarshalInputTrustCenterWhereInput,
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
@@ -35417,6 +35935,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTrustCenterInput,
 		ec.unmarshalInputUpdateTrustCenterSettingInput,
 		ec.unmarshalInputUpdateTrustCenterSubprocessorInput,
+		ec.unmarshalInputUpdateTrustCenterWatermarkConfigInput,
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUserHistoryOrder,
@@ -46882,6 +47401,7 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  trustCenterWatermarkConfigIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -47726,6 +48246,7 @@ input CreateTrustCenterInput {
   ownerID: ID
   customDomainID: ID
   settingID: ID
+  watermarkConfigID: ID
   trustCenterSubprocessorIDs: [ID!]
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
@@ -47796,6 +48317,43 @@ input CreateTrustCenterSubprocessorInput {
   category: String!
   trustCenterID: ID
   subprocessorID: ID!
+}
+"""
+CreateTrustCenterWatermarkConfigInput is used for create TrustCenterWatermarkConfig object.
+Input was generated by ent.
+"""
+input CreateTrustCenterWatermarkConfigInput {
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  text to watermark the document with
+  """
+  text: String
+  """
+  font size of the watermark text
+  """
+  fontSize: Float
+  """
+  opacity of the watermark text
+  """
+  opacity: Float
+  """
+  rotation of the watermark text
+  """
+  rotation: Float
+  """
+  color of the watermark text
+  """
+  color: String
+  """
+  font of the watermark text
+  """
+  font: TrustCenterWatermarkConfigFont
+  ownerID: ID
+  trustCenterIDs: [ID!]
+  fileID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -68915,6 +69473,37 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  trustCenterWatermarkConfigs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    orderBy: [TrustCenterWatermarkConfigOrder!]
+
+    """
+    Filtering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    where: TrustCenterWatermarkConfigWhereInput
+  ): TrustCenterWatermarkConfigConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -71024,6 +71613,11 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
+  """
+  trust_center_watermark_configs edge predicates
+  """
+  hasTrustCenterWatermarkConfigs: Boolean
+  hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
   """
   members edge predicates
   """
@@ -77889,6 +78483,68 @@ type Query {
     """
     where: TrustCenterSubprocessorHistoryWhereInput
   ): TrustCenterSubprocessorHistoryConnection!
+  trustCenterWatermarkConfigs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    orderBy: [TrustCenterWatermarkConfigOrder!]
+
+    """
+    Filtering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    where: TrustCenterWatermarkConfigWhereInput
+  ): TrustCenterWatermarkConfigConnection!
+  trustCenterWatermarkConfigHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterWatermarkConfigHistories returned from the connection.
+    """
+    orderBy: TrustCenterWatermarkConfigHistoryOrder
+
+    """
+    Filtering options for TrustCenterWatermarkConfigHistories returned from the connection.
+    """
+    where: TrustCenterWatermarkConfigHistoryWhereInput
+  ): TrustCenterWatermarkConfigHistoryConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -87033,6 +87689,7 @@ type TrustCenter implements Node {
   owner: Organization
   customDomain: CustomDomain
   setting: TrustCenterSetting
+  watermarkConfig: TrustCenterWatermarkConfig
   trustCenterSubprocessors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -89890,6 +90547,745 @@ input TrustCenterSubprocessorWhereInput {
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
 }
+type TrustCenterWatermarkConfig implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  ID of the file containing the document
+  """
+  logoID: ID
+  """
+  text to watermark the document with
+  """
+  text: String
+  """
+  font size of the watermark text
+  """
+  fontSize: Float
+  """
+  opacity of the watermark text
+  """
+  opacity: Float
+  """
+  rotation of the watermark text
+  """
+  rotation: Float
+  """
+  color of the watermark text
+  """
+  color: String
+  """
+  font of the watermark text
+  """
+  font: TrustCenterWatermarkConfigFont
+  owner: Organization
+  trustCenter: [TrustCenter!]
+  """
+  the file containing the image for watermarking, if applicable
+  """
+  file: File
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterWatermarkConfigConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterWatermarkConfigEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterWatermarkConfigEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterWatermarkConfig
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterWatermarkConfigFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+  arial
+  helvetica
+  times
+  times new roman
+  georgia
+  verdana
+  courier
+  courier new
+  trebuchet ms
+  comic sans ms
+  impact
+  palatino
+  garamond
+  bookman
+  avant garde
+}
+type TrustCenterWatermarkConfigHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterWatermarkConfigHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  ID of the file containing the document
+  """
+  logoID: String
+  """
+  text to watermark the document with
+  """
+  text: String
+  """
+  font size of the watermark text
+  """
+  fontSize: Float
+  """
+  opacity of the watermark text
+  """
+  opacity: Float
+  """
+  rotation of the watermark text
+  """
+  rotation: Float
+  """
+  color of the watermark text
+  """
+  color: String
+  """
+  font of the watermark text
+  """
+  font: TrustCenterWatermarkConfigHistoryFont
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterWatermarkConfigHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterWatermarkConfigHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterWatermarkConfigHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterWatermarkConfigHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterWatermarkConfigHistoryFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+  arial
+  helvetica
+  times
+  times new roman
+  georgia
+  verdana
+  courier
+  courier new
+  trebuchet ms
+  comic sans ms
+  impact
+  palatino
+  garamond
+  bookman
+  avant garde
+}
+"""
+TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
+"""
+enum TrustCenterWatermarkConfigHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterWatermarkConfigHistory connections
+"""
+input TrustCenterWatermarkConfigHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterWatermarkConfigHistories.
+  """
+  field: TrustCenterWatermarkConfigHistoryOrderField!
+}
+"""
+Properties by which TrustCenterWatermarkConfigHistory connections can be ordered.
+"""
+enum TrustCenterWatermarkConfigHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterWatermarkConfigHistoryWhereInput is used for filtering TrustCenterWatermarkConfigHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterWatermarkConfigHistoryWhereInput {
+  not: TrustCenterWatermarkConfigHistoryWhereInput
+  and: [TrustCenterWatermarkConfigHistoryWhereInput!]
+  or: [TrustCenterWatermarkConfigHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterWatermarkConfigHistoryOpType
+  operationNEQ: TrustCenterWatermarkConfigHistoryOpType
+  operationIn: [TrustCenterWatermarkConfigHistoryOpType!]
+  operationNotIn: [TrustCenterWatermarkConfigHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  logo_id field predicates
+  """
+  logoID: String
+  logoIDNEQ: String
+  logoIDIn: [String!]
+  logoIDNotIn: [String!]
+  logoIDGT: String
+  logoIDGTE: String
+  logoIDLT: String
+  logoIDLTE: String
+  logoIDContains: String
+  logoIDHasPrefix: String
+  logoIDHasSuffix: String
+  logoIDIsNil: Boolean
+  logoIDNotNil: Boolean
+  logoIDEqualFold: String
+  logoIDContainsFold: String
+  """
+  text field predicates
+  """
+  text: String
+  textNEQ: String
+  textIn: [String!]
+  textNotIn: [String!]
+  textGT: String
+  textGTE: String
+  textLT: String
+  textLTE: String
+  textContains: String
+  textHasPrefix: String
+  textHasSuffix: String
+  textIsNil: Boolean
+  textNotNil: Boolean
+  textEqualFold: String
+  textContainsFold: String
+  """
+  font_size field predicates
+  """
+  fontSize: Float
+  fontSizeNEQ: Float
+  fontSizeIn: [Float!]
+  fontSizeNotIn: [Float!]
+  fontSizeGT: Float
+  fontSizeGTE: Float
+  fontSizeLT: Float
+  fontSizeLTE: Float
+  fontSizeIsNil: Boolean
+  fontSizeNotNil: Boolean
+  """
+  opacity field predicates
+  """
+  opacity: Float
+  opacityNEQ: Float
+  opacityIn: [Float!]
+  opacityNotIn: [Float!]
+  opacityGT: Float
+  opacityGTE: Float
+  opacityLT: Float
+  opacityLTE: Float
+  opacityIsNil: Boolean
+  opacityNotNil: Boolean
+  """
+  rotation field predicates
+  """
+  rotation: Float
+  rotationNEQ: Float
+  rotationIn: [Float!]
+  rotationNotIn: [Float!]
+  rotationGT: Float
+  rotationGTE: Float
+  rotationLT: Float
+  rotationLTE: Float
+  rotationIsNil: Boolean
+  rotationNotNil: Boolean
+  """
+  color field predicates
+  """
+  color: String
+  colorNEQ: String
+  colorIn: [String!]
+  colorNotIn: [String!]
+  colorGT: String
+  colorGTE: String
+  colorLT: String
+  colorLTE: String
+  colorContains: String
+  colorHasPrefix: String
+  colorHasSuffix: String
+  colorIsNil: Boolean
+  colorNotNil: Boolean
+  colorEqualFold: String
+  colorContainsFold: String
+  """
+  font field predicates
+  """
+  font: TrustCenterWatermarkConfigHistoryFont
+  fontNEQ: TrustCenterWatermarkConfigHistoryFont
+  fontIn: [TrustCenterWatermarkConfigHistoryFont!]
+  fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+}
+"""
+Ordering options for TrustCenterWatermarkConfig connections
+"""
+input TrustCenterWatermarkConfigOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterWatermarkConfigs.
+  """
+  field: TrustCenterWatermarkConfigOrderField!
+}
+"""
+Properties by which TrustCenterWatermarkConfig connections can be ordered.
+"""
+enum TrustCenterWatermarkConfigOrderField {
+  created_at
+  updated_at
+}
+"""
+TrustCenterWatermarkConfigWhereInput is used for filtering TrustCenterWatermarkConfig objects.
+Input was generated by ent.
+"""
+input TrustCenterWatermarkConfigWhereInput {
+  not: TrustCenterWatermarkConfigWhereInput
+  and: [TrustCenterWatermarkConfigWhereInput!]
+  or: [TrustCenterWatermarkConfigWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  logo_id field predicates
+  """
+  logoID: ID
+  logoIDNEQ: ID
+  logoIDIn: [ID!]
+  logoIDNotIn: [ID!]
+  logoIDGT: ID
+  logoIDGTE: ID
+  logoIDLT: ID
+  logoIDLTE: ID
+  logoIDContains: ID
+  logoIDHasPrefix: ID
+  logoIDHasSuffix: ID
+  logoIDIsNil: Boolean
+  logoIDNotNil: Boolean
+  logoIDEqualFold: ID
+  logoIDContainsFold: ID
+  """
+  text field predicates
+  """
+  text: String
+  textNEQ: String
+  textIn: [String!]
+  textNotIn: [String!]
+  textGT: String
+  textGTE: String
+  textLT: String
+  textLTE: String
+  textContains: String
+  textHasPrefix: String
+  textHasSuffix: String
+  textIsNil: Boolean
+  textNotNil: Boolean
+  textEqualFold: String
+  textContainsFold: String
+  """
+  font_size field predicates
+  """
+  fontSize: Float
+  fontSizeNEQ: Float
+  fontSizeIn: [Float!]
+  fontSizeNotIn: [Float!]
+  fontSizeGT: Float
+  fontSizeGTE: Float
+  fontSizeLT: Float
+  fontSizeLTE: Float
+  fontSizeIsNil: Boolean
+  fontSizeNotNil: Boolean
+  """
+  opacity field predicates
+  """
+  opacity: Float
+  opacityNEQ: Float
+  opacityIn: [Float!]
+  opacityNotIn: [Float!]
+  opacityGT: Float
+  opacityGTE: Float
+  opacityLT: Float
+  opacityLTE: Float
+  opacityIsNil: Boolean
+  opacityNotNil: Boolean
+  """
+  rotation field predicates
+  """
+  rotation: Float
+  rotationNEQ: Float
+  rotationIn: [Float!]
+  rotationNotIn: [Float!]
+  rotationGT: Float
+  rotationGTE: Float
+  rotationLT: Float
+  rotationLTE: Float
+  rotationIsNil: Boolean
+  rotationNotNil: Boolean
+  """
+  color field predicates
+  """
+  color: String
+  colorNEQ: String
+  colorIn: [String!]
+  colorNotIn: [String!]
+  colorGT: String
+  colorGTE: String
+  colorLT: String
+  colorLTE: String
+  colorContains: String
+  colorHasPrefix: String
+  colorHasSuffix: String
+  colorIsNil: Boolean
+  colorNotNil: Boolean
+  colorEqualFold: String
+  colorContainsFold: String
+  """
+  font field predicates
+  """
+  font: TrustCenterWatermarkConfigFont
+  fontNEQ: TrustCenterWatermarkConfigFont
+  fontIn: [TrustCenterWatermarkConfigFont!]
+  fontNotIn: [TrustCenterWatermarkConfigFont!]
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
+}
 """
 TrustCenterWhereInput is used for filtering TrustCenter objects.
 Input was generated by ent.
@@ -90042,6 +91438,11 @@ input TrustCenterWhereInput {
   """
   hasSetting: Boolean
   hasSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  watermark_config edge predicates
+  """
+  hasWatermarkConfig: Boolean
+  hasWatermarkConfigWith: [TrustCenterWatermarkConfigWhereInput!]
   """
   trust_center_subprocessors edge predicates
   """
@@ -92150,6 +93551,9 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addTrustCenterWatermarkConfigIDs: [ID!]
+  removeTrustCenterWatermarkConfigIDs: [ID!]
+  clearTrustCenterWatermarkConfigs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -93311,6 +94715,8 @@ input UpdateTrustCenterInput {
   clearCustomDomain: Boolean
   settingID: ID
   clearSetting: Boolean
+  watermarkConfigID: ID
+  clearWatermarkConfig: Boolean
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
@@ -93407,6 +94813,52 @@ input UpdateTrustCenterSubprocessorInput {
   trustCenterID: ID
   clearTrustCenter: Boolean
   subprocessorID: ID
+}
+"""
+UpdateTrustCenterWatermarkConfigInput is used for update TrustCenterWatermarkConfig object.
+Input was generated by ent.
+"""
+input UpdateTrustCenterWatermarkConfigInput {
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  clearTrustCenterID: Boolean
+  """
+  text to watermark the document with
+  """
+  text: String
+  clearText: Boolean
+  """
+  font size of the watermark text
+  """
+  fontSize: Float
+  clearFontSize: Boolean
+  """
+  opacity of the watermark text
+  """
+  opacity: Float
+  clearOpacity: Boolean
+  """
+  rotation of the watermark text
+  """
+  rotation: Float
+  clearRotation: Boolean
+  """
+  color of the watermark text
+  """
+  color: String
+  clearColor: Boolean
+  """
+  font of the watermark text
+  """
+  font: TrustCenterWatermarkConfigFont
+  clearFont: Boolean
+  addTrustCenterIDs: [ID!]
+  removeTrustCenterIDs: [ID!]
+  clearTrustCenter: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -101972,6 +103424,93 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}`, BuiltIn: false},
+	{Name: "../schema/trustcenterwatermarkconfig.graphql", Input: `extend type Query {
+    """
+    Look up trustCenterWatermarkConfig by ID
+    """
+     trustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+    ):  TrustCenterWatermarkConfig!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterWatermarkConfig
+    """
+    createTrustCenterWatermarkConfig(
+        """
+        values of the trustCenterWatermarkConfig
+        """
+        input: CreateTrustCenterWatermarkConfigInput!
+        logoFile: Upload
+    ): TrustCenterWatermarkConfigCreatePayload!
+    """
+    Update an existing trustCenterWatermarkConfig
+    """
+    updateTrustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+        """
+        New values for the trustCenterWatermarkConfig
+        """
+        input: UpdateTrustCenterWatermarkConfigInput!
+        logoFile: Upload
+    ): TrustCenterWatermarkConfigUpdatePayload!
+    """
+    Delete an existing trustCenterWatermarkConfig
+    """
+    deleteTrustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+    ): TrustCenterWatermarkConfigDeletePayload!
+}
+
+"""
+Return response for createTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigCreatePayload {
+    """
+    Created trustCenterWatermarkConfig
+    """
+    trustCenterWatermarkConfig: TrustCenterWatermarkConfig!
+}
+
+"""
+Return response for updateTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigUpdatePayload {
+    """
+    Updated trustCenterWatermarkConfig
+    """
+    trustCenterWatermarkConfig: TrustCenterWatermarkConfig!
+}
+
+"""
+Return response for deleteTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigDeletePayload {
+    """
+    Deleted trustCenterWatermarkConfig ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigBulkCreatePayload {
+    """
+    Created trustCenterWatermarkConfigs
+    """
+    trustCenterWatermarkConfigs: [TrustCenterWatermarkConfig!]
 }`, BuiltIn: false},
 	{Name: "../schema/user.graphql", Input: `extend type Query {
     """

@@ -112,6 +112,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -6939,6 +6941,171 @@ func init() {
 	trustcentersubprocessorhistoryDescID := trustcentersubprocessorhistoryFields[9].Descriptor()
 	// trustcentersubprocessorhistory.DefaultID holds the default value on creation for the id field.
 	trustcentersubprocessorhistory.DefaultID = trustcentersubprocessorhistoryDescID.Default.(func() string)
+	trustcenterwatermarkconfigMixin := schema.TrustCenterWatermarkConfig{}.Mixin()
+	trustcenterwatermarkconfig.Policy = privacy.NewPolicies(schema.TrustCenterWatermarkConfig{})
+	trustcenterwatermarkconfig.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterwatermarkconfig.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterwatermarkconfigMixinHooks0 := trustcenterwatermarkconfigMixin[0].Hooks()
+	trustcenterwatermarkconfigMixinHooks1 := trustcenterwatermarkconfigMixin[1].Hooks()
+	trustcenterwatermarkconfigMixinHooks2 := trustcenterwatermarkconfigMixin[2].Hooks()
+	trustcenterwatermarkconfigMixinHooks5 := trustcenterwatermarkconfigMixin[5].Hooks()
+	trustcenterwatermarkconfigHooks := schema.TrustCenterWatermarkConfig{}.Hooks()
+
+	trustcenterwatermarkconfig.Hooks[1] = trustcenterwatermarkconfigMixinHooks0[0]
+
+	trustcenterwatermarkconfig.Hooks[2] = trustcenterwatermarkconfigMixinHooks1[0]
+
+	trustcenterwatermarkconfig.Hooks[3] = trustcenterwatermarkconfigMixinHooks2[0]
+
+	trustcenterwatermarkconfig.Hooks[4] = trustcenterwatermarkconfigMixinHooks5[0]
+
+	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigMixinHooks5[1]
+
+	trustcenterwatermarkconfig.Hooks[6] = trustcenterwatermarkconfigHooks[0]
+	trustcenterwatermarkconfigMixinInters1 := trustcenterwatermarkconfigMixin[1].Interceptors()
+	trustcenterwatermarkconfigMixinInters2 := trustcenterwatermarkconfigMixin[2].Interceptors()
+	trustcenterwatermarkconfigMixinInters5 := trustcenterwatermarkconfigMixin[5].Interceptors()
+	trustcenterwatermarkconfig.Interceptors[0] = trustcenterwatermarkconfigMixinInters1[0]
+	trustcenterwatermarkconfig.Interceptors[1] = trustcenterwatermarkconfigMixinInters2[0]
+	trustcenterwatermarkconfig.Interceptors[2] = trustcenterwatermarkconfigMixinInters5[0]
+	trustcenterwatermarkconfig.Interceptors[3] = trustcenterwatermarkconfigMixinInters5[1]
+	trustcenterwatermarkconfigMixinFields0 := trustcenterwatermarkconfigMixin[0].Fields()
+	_ = trustcenterwatermarkconfigMixinFields0
+	trustcenterwatermarkconfigMixinFields3 := trustcenterwatermarkconfigMixin[3].Fields()
+	_ = trustcenterwatermarkconfigMixinFields3
+	trustcenterwatermarkconfigMixinFields5 := trustcenterwatermarkconfigMixin[5].Fields()
+	_ = trustcenterwatermarkconfigMixinFields5
+	trustcenterwatermarkconfigFields := schema.TrustCenterWatermarkConfig{}.Fields()
+	_ = trustcenterwatermarkconfigFields
+	// trustcenterwatermarkconfigDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterwatermarkconfigDescCreatedAt := trustcenterwatermarkconfigMixinFields0[0].Descriptor()
+	// trustcenterwatermarkconfig.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterwatermarkconfig.DefaultCreatedAt = trustcenterwatermarkconfigDescCreatedAt.Default.(func() time.Time)
+	// trustcenterwatermarkconfigDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterwatermarkconfigDescUpdatedAt := trustcenterwatermarkconfigMixinFields0[1].Descriptor()
+	// trustcenterwatermarkconfig.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterwatermarkconfig.DefaultUpdatedAt = trustcenterwatermarkconfigDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterwatermarkconfig.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterwatermarkconfig.UpdateDefaultUpdatedAt = trustcenterwatermarkconfigDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterwatermarkconfigDescOwnerID is the schema descriptor for owner_id field.
+	trustcenterwatermarkconfigDescOwnerID := trustcenterwatermarkconfigMixinFields5[0].Descriptor()
+	// trustcenterwatermarkconfig.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.OwnerIDValidator = trustcenterwatermarkconfigDescOwnerID.Validators[0].(func(string) error)
+	// trustcenterwatermarkconfigDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterwatermarkconfigDescTrustCenterID := trustcenterwatermarkconfigFields[0].Descriptor()
+	// trustcenterwatermarkconfig.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.TrustCenterIDValidator = trustcenterwatermarkconfigDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcenterwatermarkconfigDescText is the schema descriptor for text field.
+	trustcenterwatermarkconfigDescText := trustcenterwatermarkconfigFields[2].Descriptor()
+	// trustcenterwatermarkconfig.TextValidator is a validator for the "text" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.TextValidator = trustcenterwatermarkconfigDescText.Validators[0].(func(string) error)
+	// trustcenterwatermarkconfigDescFontSize is the schema descriptor for font_size field.
+	trustcenterwatermarkconfigDescFontSize := trustcenterwatermarkconfigFields[3].Descriptor()
+	// trustcenterwatermarkconfig.DefaultFontSize holds the default value on creation for the font_size field.
+	trustcenterwatermarkconfig.DefaultFontSize = trustcenterwatermarkconfigDescFontSize.Default.(float64)
+	// trustcenterwatermarkconfigDescOpacity is the schema descriptor for opacity field.
+	trustcenterwatermarkconfigDescOpacity := trustcenterwatermarkconfigFields[4].Descriptor()
+	// trustcenterwatermarkconfig.DefaultOpacity holds the default value on creation for the opacity field.
+	trustcenterwatermarkconfig.DefaultOpacity = trustcenterwatermarkconfigDescOpacity.Default.(float64)
+	// trustcenterwatermarkconfig.OpacityValidator is a validator for the "opacity" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.OpacityValidator = func() func(float64) error {
+		validators := trustcenterwatermarkconfigDescOpacity.Validators
+		fns := [...]func(float64) error{
+			validators[0].(func(float64) error),
+			validators[1].(func(float64) error),
+		}
+		return func(opacity float64) error {
+			for _, fn := range fns {
+				if err := fn(opacity); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcenterwatermarkconfigDescRotation is the schema descriptor for rotation field.
+	trustcenterwatermarkconfigDescRotation := trustcenterwatermarkconfigFields[5].Descriptor()
+	// trustcenterwatermarkconfig.DefaultRotation holds the default value on creation for the rotation field.
+	trustcenterwatermarkconfig.DefaultRotation = trustcenterwatermarkconfigDescRotation.Default.(float64)
+	// trustcenterwatermarkconfig.RotationValidator is a validator for the "rotation" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.RotationValidator = func() func(float64) error {
+		validators := trustcenterwatermarkconfigDescRotation.Validators
+		fns := [...]func(float64) error{
+			validators[0].(func(float64) error),
+			validators[1].(func(float64) error),
+		}
+		return func(rotation float64) error {
+			for _, fn := range fns {
+				if err := fn(rotation); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcenterwatermarkconfigDescColor is the schema descriptor for color field.
+	trustcenterwatermarkconfigDescColor := trustcenterwatermarkconfigFields[6].Descriptor()
+	// trustcenterwatermarkconfig.DefaultColor holds the default value on creation for the color field.
+	trustcenterwatermarkconfig.DefaultColor = trustcenterwatermarkconfigDescColor.Default.(string)
+	// trustcenterwatermarkconfig.ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	trustcenterwatermarkconfig.ColorValidator = trustcenterwatermarkconfigDescColor.Validators[0].(func(string) error)
+	// trustcenterwatermarkconfigDescID is the schema descriptor for id field.
+	trustcenterwatermarkconfigDescID := trustcenterwatermarkconfigMixinFields3[0].Descriptor()
+	// trustcenterwatermarkconfig.DefaultID holds the default value on creation for the id field.
+	trustcenterwatermarkconfig.DefaultID = trustcenterwatermarkconfigDescID.Default.(func() string)
+	trustcenterwatermarkconfighistory.Policy = privacy.NewPolicies(schema.TrustCenterWatermarkConfigHistory{})
+	trustcenterwatermarkconfighistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterwatermarkconfighistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterwatermarkconfighistoryInters := schema.TrustCenterWatermarkConfigHistory{}.Interceptors()
+	trustcenterwatermarkconfighistory.Interceptors[0] = trustcenterwatermarkconfighistoryInters[0]
+	trustcenterwatermarkconfighistoryFields := schema.TrustCenterWatermarkConfigHistory{}.Fields()
+	_ = trustcenterwatermarkconfighistoryFields
+	// trustcenterwatermarkconfighistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcenterwatermarkconfighistoryDescHistoryTime := trustcenterwatermarkconfighistoryFields[0].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcenterwatermarkconfighistory.DefaultHistoryTime = trustcenterwatermarkconfighistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcenterwatermarkconfighistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterwatermarkconfighistoryDescCreatedAt := trustcenterwatermarkconfighistoryFields[3].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterwatermarkconfighistory.DefaultCreatedAt = trustcenterwatermarkconfighistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcenterwatermarkconfighistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterwatermarkconfighistoryDescUpdatedAt := trustcenterwatermarkconfighistoryFields[4].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterwatermarkconfighistory.DefaultUpdatedAt = trustcenterwatermarkconfighistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterwatermarkconfighistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterwatermarkconfighistory.UpdateDefaultUpdatedAt = trustcenterwatermarkconfighistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterwatermarkconfighistoryDescFontSize is the schema descriptor for font_size field.
+	trustcenterwatermarkconfighistoryDescFontSize := trustcenterwatermarkconfighistoryFields[14].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultFontSize holds the default value on creation for the font_size field.
+	trustcenterwatermarkconfighistory.DefaultFontSize = trustcenterwatermarkconfighistoryDescFontSize.Default.(float64)
+	// trustcenterwatermarkconfighistoryDescOpacity is the schema descriptor for opacity field.
+	trustcenterwatermarkconfighistoryDescOpacity := trustcenterwatermarkconfighistoryFields[15].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultOpacity holds the default value on creation for the opacity field.
+	trustcenterwatermarkconfighistory.DefaultOpacity = trustcenterwatermarkconfighistoryDescOpacity.Default.(float64)
+	// trustcenterwatermarkconfighistoryDescRotation is the schema descriptor for rotation field.
+	trustcenterwatermarkconfighistoryDescRotation := trustcenterwatermarkconfighistoryFields[16].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultRotation holds the default value on creation for the rotation field.
+	trustcenterwatermarkconfighistory.DefaultRotation = trustcenterwatermarkconfighistoryDescRotation.Default.(float64)
+	// trustcenterwatermarkconfighistoryDescColor is the schema descriptor for color field.
+	trustcenterwatermarkconfighistoryDescColor := trustcenterwatermarkconfighistoryFields[17].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultColor holds the default value on creation for the color field.
+	trustcenterwatermarkconfighistory.DefaultColor = trustcenterwatermarkconfighistoryDescColor.Default.(string)
+	// trustcenterwatermarkconfighistoryDescID is the schema descriptor for id field.
+	trustcenterwatermarkconfighistoryDescID := trustcenterwatermarkconfighistoryFields[9].Descriptor()
+	// trustcenterwatermarkconfighistory.DefaultID holds the default value on creation for the id field.
+	trustcenterwatermarkconfighistory.DefaultID = trustcenterwatermarkconfighistoryDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

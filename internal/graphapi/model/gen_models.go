@@ -1614,6 +1614,30 @@ type TrustCenterUpdatePayload struct {
 	TrustCenter *generated.TrustCenter `json:"trustCenter"`
 }
 
+// Return response for createBulkTrustCenterWatermarkConfig mutation
+type TrustCenterWatermarkConfigBulkCreatePayload struct {
+	// Created trustCenterWatermarkConfigs
+	TrustCenterWatermarkConfigs []*generated.TrustCenterWatermarkConfig `json:"trustCenterWatermarkConfigs,omitempty"`
+}
+
+// Return response for createTrustCenterWatermarkConfig mutation
+type TrustCenterWatermarkConfigCreatePayload struct {
+	// Created trustCenterWatermarkConfig
+	TrustCenterWatermarkConfig *generated.TrustCenterWatermarkConfig `json:"trustCenterWatermarkConfig"`
+}
+
+// Return response for deleteTrustCenterWatermarkConfig mutation
+type TrustCenterWatermarkConfigDeletePayload struct {
+	// Deleted trustCenterWatermarkConfig ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterWatermarkConfig mutation
+type TrustCenterWatermarkConfigUpdatePayload struct {
+	// Updated trustCenterWatermarkConfig
+	TrustCenterWatermarkConfig *generated.TrustCenterWatermarkConfig `json:"trustCenterWatermarkConfig"`
+}
+
 // Return response for createBulkUser mutation
 type UserBulkCreatePayload struct {
 	// Created users

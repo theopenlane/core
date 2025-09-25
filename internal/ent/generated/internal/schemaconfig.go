@@ -222,6 +222,8 @@ type SchemaConfig struct {
 	TrustCenterSettingHistory          string // TrustCenterSettingHistory table.
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
 	TrustCenterSubprocessorHistory     string // TrustCenterSubprocessorHistory table.
+	TrustCenterWatermarkConfig         string // TrustCenterWatermarkConfig table.
+	TrustCenterWatermarkConfigHistory  string // TrustCenterWatermarkConfigHistory table.
 	User                               string // User table.
 	UserGroups                         string // User-groups->Group table.
 	UserOrganizations                  string // User-organizations->Organization table.

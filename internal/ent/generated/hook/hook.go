@@ -1281,6 +1281,30 @@ func (f TrustCenterSubprocessorHistoryFunc) Mutate(ctx context.Context, m genera
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterSubprocessorHistoryMutation", m)
 }
 
+// The TrustCenterWatermarkConfigFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterWatermarkConfig mutator.
+type TrustCenterWatermarkConfigFunc func(context.Context, *generated.TrustCenterWatermarkConfigMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterWatermarkConfigFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterWatermarkConfigMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterWatermarkConfigMutation", m)
+}
+
+// The TrustCenterWatermarkConfigHistoryFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterWatermarkConfigHistory mutator.
+type TrustCenterWatermarkConfigHistoryFunc func(context.Context, *generated.TrustCenterWatermarkConfigHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterWatermarkConfigHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterWatermarkConfigHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterWatermarkConfigHistoryMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *generated.UserMutation) (generated.Value, error)

@@ -66,6 +66,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -837,6 +838,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -1051,6 +1059,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", trustcentersubprocessorCount).Msg("deleting trustcentersubprocessor")
@@ -1132,6 +1147,18 @@ func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterSubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterWatermarkConfigEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfig edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterWatermarkConfigHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfighistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

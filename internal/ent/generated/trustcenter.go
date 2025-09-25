@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 )
 
 // TrustCenter is the model entity for the TrustCenter schema.
@@ -43,8 +44,9 @@ type TrustCenter struct {
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
-	Edges        TrustCenterEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                         TrustCenterEdges `json:"edges"`
+	trust_center_watermark_config *string
+	selectValues                  sql.SelectValues
 }
 
 // TrustCenterEdges holds the relations/edges for other nodes in the graph.
@@ -55,6 +57,8 @@ type TrustCenterEdges struct {
 	CustomDomain *CustomDomain `json:"custom_domain,omitempty"`
 	// Setting holds the value of the setting edge.
 	Setting *TrustCenterSetting `json:"setting,omitempty"`
+	// WatermarkConfig holds the value of the watermark_config edge.
+	WatermarkConfig *TrustCenterWatermarkConfig `json:"watermark_config,omitempty"`
 	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
 	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
 	// TrustCenterDocs holds the value of the trust_center_docs edge.
@@ -65,9 +69,9 @@ type TrustCenterEdges struct {
 	Templates []*Template `json:"templates,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 	namedTrustCenterDocs          map[string][]*TrustCenterDoc
@@ -108,10 +112,21 @@ func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 	return nil, &NotLoadedError{edge: "setting"}
 }
 
+// WatermarkConfigOrErr returns the WatermarkConfig value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterEdges) WatermarkConfigOrErr() (*TrustCenterWatermarkConfig, error) {
+	if e.WatermarkConfig != nil {
+		return e.WatermarkConfig, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: trustcenterwatermarkconfig.Label}
+	}
+	return nil, &NotLoadedError{edge: "watermark_config"}
+}
+
 // TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.TrustCenterSubprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
@@ -120,7 +135,7 @@ func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubproc
 // TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.TrustCenterDocs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
@@ -129,7 +144,7 @@ func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
 // TrustCenterCompliancesOrErr returns the TrustCenterCompliances value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.TrustCenterCompliances, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_compliances"}
@@ -138,7 +153,7 @@ func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterComplianc
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -155,6 +170,8 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case trustcenter.ForeignKeys[0]: // trust_center_watermark_config
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -238,6 +255,13 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
 			}
+		case trustcenter.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_watermark_config", values[i])
+			} else if value.Valid {
+				_m.trust_center_watermark_config = new(string)
+				*_m.trust_center_watermark_config = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -264,6 +288,11 @@ func (_m *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
 // QuerySetting queries the "setting" edge of the TrustCenter entity.
 func (_m *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
 	return NewTrustCenterClient(_m.config).QuerySetting(_m)
+}
+
+// QueryWatermarkConfig queries the "watermark_config" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryWatermarkConfig() *TrustCenterWatermarkConfigQuery {
+	return NewTrustCenterClient(_m.config).QueryWatermarkConfig(_m)
 }
 
 // QueryTrustCenterSubprocessors queries the "trust_center_subprocessors" edge of the TrustCenter entity.

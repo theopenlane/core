@@ -110,6 +110,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -626,6 +628,16 @@ var trustcentersubprocessorhistoryImplementors = []string{"TrustCenterSubprocess
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterSubprocessorHistory) IsNode() {}
+
+var trustcenterwatermarkconfigImplementors = []string{"TrustCenterWatermarkConfig", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterWatermarkConfig) IsNode() {}
+
+var trustcenterwatermarkconfighistoryImplementors = []string{"TrustCenterWatermarkConfigHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterWatermarkConfigHistory) IsNode() {}
 
 var userImplementors = []string{"User", "Node"}
 
@@ -1615,6 +1627,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcentersubprocessorhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcentersubprocessorhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterwatermarkconfig.Table:
+		query := c.TrustCenterWatermarkConfig.Query().
+			Where(trustcenterwatermarkconfig.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterwatermarkconfigImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterwatermarkconfighistory.Table:
+		query := c.TrustCenterWatermarkConfigHistory.Query().
+			Where(trustcenterwatermarkconfighistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterwatermarkconfighistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -3341,6 +3371,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterSubprocessorHistory.Query().
 			Where(trustcentersubprocessorhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcentersubprocessorhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterwatermarkconfig.Table:
+		query := c.TrustCenterWatermarkConfig.Query().
+			Where(trustcenterwatermarkconfig.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterwatermarkconfigImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterwatermarkconfighistory.Table:
+		query := c.TrustCenterWatermarkConfigHistory.Query().
+			Where(trustcenterwatermarkconfighistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterwatermarkconfighistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

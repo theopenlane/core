@@ -3031,6 +3031,35 @@ func HasExportsWith(preds ...predicate.Export) predicate.Organization {
 	})
 }
 
+// HasTrustCenterWatermarkConfigs applies the HasEdge predicate on the "trust_center_watermark_configs" edge.
+func HasTrustCenterWatermarkConfigs() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterWatermarkConfigsTable, TrustCenterWatermarkConfigsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWatermarkConfigsWith applies the HasEdge predicate on the "trust_center_watermark_configs" edge with a given conditions (other predicates).
+func HasTrustCenterWatermarkConfigsWith(preds ...predicate.TrustCenterWatermarkConfig) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTrustCenterWatermarkConfigsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

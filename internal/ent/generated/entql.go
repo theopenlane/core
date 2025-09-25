@@ -110,6 +110,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -124,7 +126,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 111)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 113)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -3414,6 +3416,65 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[106] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcenterwatermarkconfig.Table,
+			Columns: trustcenterwatermarkconfig.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcenterwatermarkconfig.FieldID,
+			},
+		},
+		Type: "TrustCenterWatermarkConfig",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcenterwatermarkconfig.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfig.FieldCreatedAt},
+			trustcenterwatermarkconfig.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfig.FieldUpdatedAt},
+			trustcenterwatermarkconfig.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldCreatedBy},
+			trustcenterwatermarkconfig.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldUpdatedBy},
+			trustcenterwatermarkconfig.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfig.FieldDeletedAt},
+			trustcenterwatermarkconfig.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldDeletedBy},
+			trustcenterwatermarkconfig.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldOwnerID},
+			trustcenterwatermarkconfig.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldTrustCenterID},
+			trustcenterwatermarkconfig.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldLogoID},
+			trustcenterwatermarkconfig.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldText},
+			trustcenterwatermarkconfig.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldFontSize},
+			trustcenterwatermarkconfig.FieldOpacity:       {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldOpacity},
+			trustcenterwatermarkconfig.FieldRotation:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldRotation},
+			trustcenterwatermarkconfig.FieldColor:         {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldColor},
+			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
+		},
+	}
+	graph.Nodes[107] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcenterwatermarkconfighistory.Table,
+			Columns: trustcenterwatermarkconfighistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcenterwatermarkconfighistory.FieldID,
+			},
+		},
+		Type: "TrustCenterWatermarkConfigHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcenterwatermarkconfighistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcenterwatermarkconfighistory.FieldHistoryTime},
+			trustcenterwatermarkconfighistory.FieldRef:           {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldRef},
+			trustcenterwatermarkconfighistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldOperation},
+			trustcenterwatermarkconfighistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfighistory.FieldCreatedAt},
+			trustcenterwatermarkconfighistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfighistory.FieldUpdatedAt},
+			trustcenterwatermarkconfighistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldCreatedBy},
+			trustcenterwatermarkconfighistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldUpdatedBy},
+			trustcenterwatermarkconfighistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfighistory.FieldDeletedAt},
+			trustcenterwatermarkconfighistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldDeletedBy},
+			trustcenterwatermarkconfighistory.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldOwnerID},
+			trustcenterwatermarkconfighistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldTrustCenterID},
+			trustcenterwatermarkconfighistory.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldLogoID},
+			trustcenterwatermarkconfighistory.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldText},
+			trustcenterwatermarkconfighistory.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldFontSize},
+			trustcenterwatermarkconfighistory.FieldOpacity:       {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldOpacity},
+			trustcenterwatermarkconfighistory.FieldRotation:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldRotation},
+			trustcenterwatermarkconfighistory.FieldColor:         {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldColor},
+			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
+		},
+	}
+	graph.Nodes[108] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -3446,7 +3507,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[107] = &sqlgraph.Node{
+	graph.Nodes[109] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3483,7 +3544,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[108] = &sqlgraph.Node{
+	graph.Nodes[110] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3512,7 +3573,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[109] = &sqlgraph.Node{
+	graph.Nodes[111] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3544,7 +3605,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[110] = &sqlgraph.Node{
+	graph.Nodes[112] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -7258,6 +7319,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Export",
 	)
 	graph.MustAddE(
+		"trust_center_watermark_configs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"TrustCenterWatermarkConfig",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8674,6 +8747,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenterSetting",
 	)
 	graph.MustAddE(
+		"watermark_config",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.WatermarkConfigTable,
+			Columns: []string{trustcenter.WatermarkConfigColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"TrustCenterWatermarkConfig",
+	)
+	graph.MustAddE(
 		"trust_center_subprocessors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8840,6 +8925,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSubprocessor",
 		"Subprocessor",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterwatermarkconfig.OwnerTable,
+			Columns: []string{trustcenterwatermarkconfig.OwnerColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"Organization",
+	)
+	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   trustcenterwatermarkconfig.TrustCenterTable,
+			Columns: []string{trustcenterwatermarkconfig.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"TrustCenter",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.FileTable,
+			Columns: []string{trustcenterwatermarkconfig.FileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"File",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -21829,6 +21950,20 @@ func (f *OrganizationFilter) WhereHasExportsWith(preds ...predicate.Export) {
 	})))
 }
 
+// WhereHasTrustCenterWatermarkConfigs applies a predicate to check if query has an edge trust_center_watermark_configs.
+func (f *OrganizationFilter) WhereHasTrustCenterWatermarkConfigs() {
+	f.Where(entql.HasEdge("trust_center_watermark_configs"))
+}
+
+// WhereHasTrustCenterWatermarkConfigsWith applies a predicate to check if query has an edge trust_center_watermark_configs with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterWatermarkConfigsWith(preds ...predicate.TrustCenterWatermarkConfig) {
+	f.Where(entql.HasEdgeWith("trust_center_watermark_configs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -27876,6 +28011,20 @@ func (f *TrustCenterFilter) WhereHasSettingWith(preds ...predicate.TrustCenterSe
 	})))
 }
 
+// WhereHasWatermarkConfig applies a predicate to check if query has an edge watermark_config.
+func (f *TrustCenterFilter) WhereHasWatermarkConfig() {
+	f.Where(entql.HasEdge("watermark_config"))
+}
+
+// WhereHasWatermarkConfigWith applies a predicate to check if query has an edge watermark_config with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasWatermarkConfigWith(preds ...predicate.TrustCenterWatermarkConfig) {
+	f.Where(entql.HasEdgeWith("watermark_config", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTrustCenterSubprocessors applies a predicate to check if query has an edge trust_center_subprocessors.
 func (f *TrustCenterFilter) WhereHasTrustCenterSubprocessors() {
 	f.Where(entql.HasEdge("trust_center_subprocessors"))
@@ -29058,6 +29207,293 @@ func (f *TrustCenterSubprocessorHistoryFilter) WhereCategory(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterWatermarkConfigQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterWatermarkConfigQuery builder.
+func (_q *TrustCenterWatermarkConfigQuery) Filter() *TrustCenterWatermarkConfigFilter {
+	return &TrustCenterWatermarkConfigFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterWatermarkConfigMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterWatermarkConfigMutation builder.
+func (m *TrustCenterWatermarkConfigMutation) Filter() *TrustCenterWatermarkConfigFilter {
+	return &TrustCenterWatermarkConfigFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterWatermarkConfigFilter provides a generic filtering capability at runtime for TrustCenterWatermarkConfigQuery.
+type TrustCenterWatermarkConfigFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterWatermarkConfigFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterWatermarkConfigFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterWatermarkConfigFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterWatermarkConfigFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterWatermarkConfigFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterWatermarkConfigFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterWatermarkConfigFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterWatermarkConfigFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldOwnerID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterWatermarkConfigFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldTrustCenterID))
+}
+
+// WhereLogoID applies the entql string predicate on the logo_id field.
+func (f *TrustCenterWatermarkConfigFilter) WhereLogoID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldLogoID))
+}
+
+// WhereText applies the entql string predicate on the text field.
+func (f *TrustCenterWatermarkConfigFilter) WhereText(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldText))
+}
+
+// WhereFontSize applies the entql float64 predicate on the font_size field.
+func (f *TrustCenterWatermarkConfigFilter) WhereFontSize(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldFontSize))
+}
+
+// WhereOpacity applies the entql float64 predicate on the opacity field.
+func (f *TrustCenterWatermarkConfigFilter) WhereOpacity(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldOpacity))
+}
+
+// WhereRotation applies the entql float64 predicate on the rotation field.
+func (f *TrustCenterWatermarkConfigFilter) WhereRotation(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldRotation))
+}
+
+// WhereColor applies the entql string predicate on the color field.
+func (f *TrustCenterWatermarkConfigFilter) WhereColor(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterWatermarkConfigFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldFont))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterWatermarkConfigHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterWatermarkConfigHistoryQuery builder.
+func (_q *TrustCenterWatermarkConfigHistoryQuery) Filter() *TrustCenterWatermarkConfigHistoryFilter {
+	return &TrustCenterWatermarkConfigHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterWatermarkConfigHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterWatermarkConfigHistoryMutation builder.
+func (m *TrustCenterWatermarkConfigHistoryMutation) Filter() *TrustCenterWatermarkConfigHistoryFilter {
+	return &TrustCenterWatermarkConfigHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterWatermarkConfigHistoryFilter provides a generic filtering capability at runtime for TrustCenterWatermarkConfigHistoryQuery.
+type TrustCenterWatermarkConfigHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterWatermarkConfigHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldOwnerID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldTrustCenterID))
+}
+
+// WhereLogoID applies the entql string predicate on the logo_id field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereLogoID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldLogoID))
+}
+
+// WhereText applies the entql string predicate on the text field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereText(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldText))
+}
+
+// WhereFontSize applies the entql float64 predicate on the font_size field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereFontSize(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldFontSize))
+}
+
+// WhereOpacity applies the entql float64 predicate on the opacity field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOpacity(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldOpacity))
+}
+
+// WhereRotation applies the entql float64 predicate on the rotation field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereRotation(p entql.Float64P) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldRotation))
+}
+
+// WhereColor applies the entql string predicate on the color field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereColor(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldFont))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *UserQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -29086,7 +29522,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29497,7 +29933,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29657,7 +30093,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29819,7 +30255,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[111].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29954,7 +30390,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[112].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
