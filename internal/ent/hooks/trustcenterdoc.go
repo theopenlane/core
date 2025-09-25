@@ -55,17 +55,24 @@ func HookTrustCenterDoc() ent.Hook {
 			}
 
 			if m.Op() == ent.OpUpdateOne && (len(fileIDs) == 0 || mutationSetsFileID) {
-				err = updateTrustCenterDocVisibility(ctx, m, *trustCenterDoc.FileID)
+				err = updateTrustCenterDocVisibility(ctx, m, *trustCenterDoc.FileID, trustCenterDoc.ID)
 				return v, err
 			}
 
-			if trustCenterDoc.Visibility != enums.TrustCenterDocumentVisibilityPubliclyVisible {
+			if m.Op() != ent.OpCreate {
 				return v, nil
 			}
 
-			// If the document is public, add wildcard access to the file
-			wildcardTuples := fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)
-			if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuples, nil); err != nil {
+			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityNotVisible {
+				return v, nil
+			}
+			tuples := fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")
+
+			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+				tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)...)
+			}
+
+			if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 				return nil, err
 			}
 
@@ -75,7 +82,7 @@ func HookTrustCenterDoc() ent.Hook {
 }
 
 // updateTrustCenterDocVisibility updates fga tuples based on the visibility of the trust center doc
-func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCenterDocMutation, fileID string) error {
+func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCenterDocMutation, fileID string, docID string) error {
 	// 1. Check if the visibility of the document has changed
 	visibility, visibilityChanged := m.Visibility()
 	if !visibilityChanged {
@@ -106,6 +113,16 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 	if oldVisibility == enums.TrustCenterDocumentVisibilityPubliclyVisible &&
 		(visibility == enums.TrustCenterDocumentVisibilityNotVisible || visibility == enums.TrustCenterDocumentVisibilityProtected) {
 		deletes = append(deletes, fgax.CreateWildcardViewerTuple(fileID, generated.TypeFile)...)
+	}
+
+	// 4. If the visibility changed from not visible -> protected or public, add the wildcard viewer tuples
+	if oldVisibility == enums.TrustCenterDocumentVisibilityNotVisible {
+		writes = append(writes, fgax.CreateWildcardViewerTuple(docID, "trust_center_doc")...)
+	}
+
+	// 5. If the visibility changed from protected or public -> not visible, remove the wildcard viewer tuples
+	if visibility == enums.TrustCenterDocumentVisibilityNotVisible {
+		deletes = append(deletes, fgax.CreateWildcardViewerTuple(docID, "trust_center_doc")...)
 	}
 
 	// Apply the tuple changes if any
