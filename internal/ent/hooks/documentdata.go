@@ -27,7 +27,7 @@ var (
 	errMissingResponse                      = errors.New("missing response")
 )
 
-// HookDocumentData runs on document data create mutations to set default values that are not provided
+// HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
 func HookDocumentDataTrustCenterNDA() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.DocumentDataFunc(func(ctx context.Context, m *generated.DocumentDataMutation) (generated.Value, error) {
