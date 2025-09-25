@@ -18,6 +18,7 @@ type OrganizationCustomer struct {
 	PaymentMethodAdded           bool   `json:"payment_method_added"`
 	Features                     []string
 	FeatureNames                 []string
+	Metadata                     map[string]string `json:"metadata"`
 
 	Subscription
 	ContactInfo

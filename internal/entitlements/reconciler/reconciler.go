@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"text/tabwriter"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -13,6 +12,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -26,12 +26,13 @@ type Reconciler struct {
 	writer io.Writer
 }
 
+// actionRow represents a single reconciliation action to be performed
 type actionRow struct {
 	OrgID  string
 	Action string
 }
 
-// Option configures the Reconciler
+// Option configures the Reconciler using the functional options pattern
 type Option func(*Reconciler)
 
 // WithDB sets the ent client
@@ -57,20 +58,21 @@ func WithDryRun(writer io.Writer) Option {
 }
 
 var (
-	ErrMissingClients        = fmt.Errorf("missing db or stripe client")
+	ErrMissingStripeClient   = fmt.Errorf("missing stripe client")
+	ErrMissingDBClient       = fmt.Errorf("missing database client")
 	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
 	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
 )
 
-// New creates a new Reconciler
+// New creates a new Reconciler instance with the provided options
 func New(opts ...Option) (*Reconciler, error) {
 	r := &Reconciler{}
 	for _, opt := range opts {
 		opt(r)
 	}
 
-	if r.db == nil || r.stripe == nil {
-		return nil, ErrMissingClients
+	if r.stripe == nil {
+		return nil, ErrMissingStripeClient
 	}
 
 	if r.dryRun && r.writer == nil {
@@ -80,15 +82,31 @@ func New(opts ...Option) (*Reconciler, error) {
 	return r, nil
 }
 
-// Reconcile iterates organizations and ensures customer records and subscriptions exist
-func (r *Reconciler) Reconcile(ctx context.Context) error {
+// ReconcileResult contains the results of a reconcile operation with actions that need to be taken
+type ReconcileResult struct {
+	Actions []actionRow
+}
+
+// Reconcile iterates through all organizations and ensures customer records and subscriptions exist in Stripe
+func (r *Reconciler) Reconcile(ctx context.Context) (*ReconcileResult, error) {
+	if r.db == nil {
+		return nil, ErrMissingDBClient
+	}
+
+	// Add internal context for administrative operations
+	internalCtx := rule.WithInternalContext(ctx)
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
 		WithSetting().
-		Where(organization.DeletedAtIsNil()).
-		All(ctx)
+		Where(
+			organization.And(
+				organization.DeletedAtIsNil(),
+				organization.Not(organization.ID("01101101011010010111010001100010")),
+			),
+		).
+		All(internalCtx)
 	if err != nil {
-		return fmt.Errorf("query organizations: %w", err)
+		return nil, fmt.Errorf("query organizations: %w", err)
 	}
 
 	var rows []actionRow
@@ -96,7 +114,7 @@ func (r *Reconciler) Reconcile(ctx context.Context) error {
 		if r.dryRun {
 			action, err := r.analyzeOrg(ctx, org)
 			if err != nil {
-				return err
+				return nil, err
 			}
 
 			if action != "" {
@@ -107,35 +125,27 @@ func (r *Reconciler) Reconcile(ctx context.Context) error {
 		}
 
 		if err := r.reconcileOrg(ctx, org); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	if r.dryRun {
-		if err := r.printRows(rows); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return &ReconcileResult{Actions: rows}, nil
 }
 
-// reconcileOrg ensures the organization has a customer and subscription in Stripe
+// reconcileOrg ensures the organization has a customer and subscription in Stripe, creating them if missing
 func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) error {
+	// Add internal context for administrative operations
+	internalCtx := rule.WithInternalContext(ctx)
+
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
 		sub = org.Edges.OrgSubscriptions[0]
 	} else {
 		var err error
-		sub, err = r.db.OrgSubscription.Create().SetOwnerID(org.ID).Save(ctx)
+		sub, err = r.db.OrgSubscription.Create().SetOwnerID(org.ID).Save(internalCtx)
 		if err != nil {
 			return fmt.Errorf("create subscription: %w", err)
 		}
-	}
-
-	if org.PersonalOrg {
-		// no need to create a customer for personal organizations
-		return nil
 	}
 
 	cust := &entitlements.OrganizationCustomer{
@@ -155,6 +165,13 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		},
 	}
 
+	// Set metadata for personal organizations
+	if org.PersonalOrg {
+		cust.Metadata = map[string]string{
+			"personal_org": "true",
+		}
+	}
+
 	if err := r.stripe.FindOrCreateCustomer(ctx, cust); err != nil {
 		return fmt.Errorf("stripe customer: %w", err)
 	}
@@ -168,8 +185,10 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	return nil
 }
 
-// updateSubscription updates the organization subscription in the database
+// updateSubscription updates the organization subscription in the database with current Stripe data
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
+	// Add internal context for administrative operations
+	internalCtx := rule.WithInternalContext(ctx)
 	if c.OrganizationSubscriptionID == "" {
 		return ErrMissingSubscriptionID
 	}
@@ -213,7 +232,7 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 		update.SetExpiresAt(expiresAt)
 	}
 
-	if err := update.Exec(ctx); err != nil {
+	if err := update.Exec(internalCtx); err != nil {
 		return fmt.Errorf("update subscription: %w", err)
 	}
 
@@ -222,7 +241,7 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 	return nil
 }
 
-// analyzeOrg checks the organization subscription and returns the action needed
+// analyzeOrg checks the organization subscription status and returns a description of the action needed
 func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (string, error) {
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
@@ -254,19 +273,4 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	default:
 		return "", nil
 	}
-}
-
-// printRows prints the action rows in a tabular format
-func (r *Reconciler) printRows(rows []actionRow) error {
-	if len(rows) == 0 {
-		return nil
-	}
-
-	tw := tabwriter.NewWriter(r.writer, 0, 8, 2, ' ', 0) // nolint:mnd
-	fmt.Fprintln(tw, "ORGANIZATION\tACTION")
-	for _, row := range rows {
-		fmt.Fprintf(tw, "%s\t%s\n", row.OrgID, row.Action)
-	}
-
-	return tw.Flush()
 }
