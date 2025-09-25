@@ -10,7 +10,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterWatermarkConfig is the model entity for the TrustCenterWatermarkConfig schema.
@@ -30,6 +32,8 @@ type TrustCenterWatermarkConfig struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// ID of the file containing the document
@@ -45,7 +49,7 @@ type TrustCenterWatermarkConfig struct {
 	// color of the watermark text
 	Color string `json:"color,omitempty"`
 	// font of the watermark text
-	Font string `json:"font,omitempty"`
+	Font enums.Font `json:"font,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterWatermarkConfigQuery when eager-loading is set.
 	Edges        TrustCenterWatermarkConfigEdges `json:"edges"`
@@ -54,23 +58,36 @@ type TrustCenterWatermarkConfig struct {
 
 // TrustCenterWatermarkConfigEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterWatermarkConfigEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter []*TrustCenter `json:"trust_center,omitempty"`
 	// the file containing the image for watermarking, if applicable
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedTrustCenter map[string][]*TrustCenter
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterWatermarkConfigEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterWatermarkConfigEdges) TrustCenterOrErr() ([]*TrustCenter, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.TrustCenter, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -81,7 +98,7 @@ func (e TrustCenterWatermarkConfigEdges) TrustCenterOrErr() ([]*TrustCenter, err
 func (e TrustCenterWatermarkConfigEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -94,7 +111,7 @@ func (*TrustCenterWatermarkConfig) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterwatermarkconfig.FieldFontSize, trustcenterwatermarkconfig.FieldOpacity, trustcenterwatermarkconfig.FieldRotation:
 			values[i] = new(sql.NullFloat64)
-		case trustcenterwatermarkconfig.FieldID, trustcenterwatermarkconfig.FieldCreatedBy, trustcenterwatermarkconfig.FieldUpdatedBy, trustcenterwatermarkconfig.FieldDeletedBy, trustcenterwatermarkconfig.FieldTrustCenterID, trustcenterwatermarkconfig.FieldLogoID, trustcenterwatermarkconfig.FieldText, trustcenterwatermarkconfig.FieldColor, trustcenterwatermarkconfig.FieldFont:
+		case trustcenterwatermarkconfig.FieldID, trustcenterwatermarkconfig.FieldCreatedBy, trustcenterwatermarkconfig.FieldUpdatedBy, trustcenterwatermarkconfig.FieldDeletedBy, trustcenterwatermarkconfig.FieldOwnerID, trustcenterwatermarkconfig.FieldTrustCenterID, trustcenterwatermarkconfig.FieldLogoID, trustcenterwatermarkconfig.FieldText, trustcenterwatermarkconfig.FieldColor, trustcenterwatermarkconfig.FieldFont:
 			values[i] = new(sql.NullString)
 		case trustcenterwatermarkconfig.FieldCreatedAt, trustcenterwatermarkconfig.FieldUpdatedAt, trustcenterwatermarkconfig.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -155,6 +172,12 @@ func (_m *TrustCenterWatermarkConfig) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case trustcenterwatermarkconfig.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
 		case trustcenterwatermarkconfig.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
@@ -202,7 +225,7 @@ func (_m *TrustCenterWatermarkConfig) assignValues(columns []string, values []an
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field font", values[i])
 			} else if value.Valid {
-				_m.Font = value.String
+				_m.Font = enums.Font(value.String)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -215,6 +238,11 @@ func (_m *TrustCenterWatermarkConfig) assignValues(columns []string, values []an
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterWatermarkConfig) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the TrustCenterWatermarkConfig entity.
+func (_m *TrustCenterWatermarkConfig) QueryOwner() *OrganizationQuery {
+	return NewTrustCenterWatermarkConfigClient(_m.config).QueryOwner(_m)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterWatermarkConfig entity.
@@ -268,6 +296,9 @@ func (_m *TrustCenterWatermarkConfig) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
@@ -292,7 +323,7 @@ func (_m *TrustCenterWatermarkConfig) String() string {
 	builder.WriteString(_m.Color)
 	builder.WriteString(", ")
 	builder.WriteString("font=")
-	builder.WriteString(_m.Font)
+	builder.WriteString(fmt.Sprintf("%v", _m.Font))
 	builder.WriteByte(')')
 	return builder.String()
 }

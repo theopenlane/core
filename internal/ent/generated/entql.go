@@ -3431,6 +3431,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldUpdatedBy},
 			trustcenterwatermarkconfig.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfig.FieldDeletedAt},
 			trustcenterwatermarkconfig.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldDeletedBy},
+			trustcenterwatermarkconfig.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldOwnerID},
 			trustcenterwatermarkconfig.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldTrustCenterID},
 			trustcenterwatermarkconfig.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldLogoID},
 			trustcenterwatermarkconfig.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldText},
@@ -3438,7 +3439,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldOpacity:       {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldOpacity},
 			trustcenterwatermarkconfig.FieldRotation:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldRotation},
 			trustcenterwatermarkconfig.FieldColor:         {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldColor},
-			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldFont},
+			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
 	graph.Nodes[107] = &sqlgraph.Node{
@@ -3461,6 +3462,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldUpdatedBy},
 			trustcenterwatermarkconfighistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterwatermarkconfighistory.FieldDeletedAt},
 			trustcenterwatermarkconfighistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldDeletedBy},
+			trustcenterwatermarkconfighistory.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldOwnerID},
 			trustcenterwatermarkconfighistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldTrustCenterID},
 			trustcenterwatermarkconfighistory.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldLogoID},
 			trustcenterwatermarkconfighistory.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldText},
@@ -3468,7 +3470,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldOpacity:       {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldOpacity},
 			trustcenterwatermarkconfighistory.FieldRotation:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldRotation},
 			trustcenterwatermarkconfighistory.FieldColor:         {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldColor},
-			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldFont},
+			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
 		},
 	}
 	graph.Nodes[108] = &sqlgraph.Node{
@@ -7317,6 +7319,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Export",
 	)
 	graph.MustAddE(
+		"trust_center_watermark_configs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterWatermarkConfigsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"TrustCenterWatermarkConfig",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8911,6 +8925,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSubprocessor",
 		"Subprocessor",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterwatermarkconfig.OwnerTable,
+			Columns: []string{trustcenterwatermarkconfig.OwnerColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"Organization",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -21924,6 +21950,20 @@ func (f *OrganizationFilter) WhereHasExportsWith(preds ...predicate.Export) {
 	})))
 }
 
+// WhereHasTrustCenterWatermarkConfigs applies a predicate to check if query has an edge trust_center_watermark_configs.
+func (f *OrganizationFilter) WhereHasTrustCenterWatermarkConfigs() {
+	f.Where(entql.HasEdge("trust_center_watermark_configs"))
+}
+
+// WhereHasTrustCenterWatermarkConfigsWith applies a predicate to check if query has an edge trust_center_watermark_configs with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterWatermarkConfigsWith(preds ...predicate.TrustCenterWatermarkConfig) {
+	f.Where(entql.HasEdgeWith("trust_center_watermark_configs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -29236,6 +29276,11 @@ func (f *TrustCenterWatermarkConfigFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldDeletedBy))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterWatermarkConfigFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldOwnerID))
+}
+
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TrustCenterWatermarkConfigFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldTrustCenterID))
@@ -29274,6 +29319,20 @@ func (f *TrustCenterWatermarkConfigFilter) WhereColor(p entql.StringP) {
 // WhereFont applies the entql string predicate on the font field.
 func (f *TrustCenterWatermarkConfigFilter) WhereFont(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldFont))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
@@ -29387,6 +29446,11 @@ func (f *TrustCenterWatermarkConfigHistoryFilter) WhereDeletedAt(p entql.TimeP) 
 // WhereDeletedBy applies the entql string predicate on the deleted_by field.
 func (f *TrustCenterWatermarkConfigHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldOwnerID))
 }
 
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.

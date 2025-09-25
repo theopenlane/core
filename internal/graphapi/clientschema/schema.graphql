@@ -9292,6 +9292,7 @@ input CreateOrganizationInput {
 	scanIDs: [ID!]
 	subprocessorIDs: [ID!]
 	exportIDs: [ID!]
+	trustCenterWatermarkConfigIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -10266,7 +10267,8 @@ input CreateTrustCenterWatermarkConfigInput {
 	"""
 	font of the watermark text
 	"""
-	font: String
+	font: TrustCenterWatermarkConfigFont
+	ownerID: ID
 	trustCenterIDs: [ID!]
 	fileID: ID
 }
@@ -35260,6 +35262,37 @@ type Organization implements Node {
 		"""
 		where: ExportWhereInput
 	): ExportConnection!
+	trustCenterWatermarkConfigs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterWatermarkConfigs returned from the connection.
+		"""
+		orderBy: [TrustCenterWatermarkConfigOrder!]
+
+		"""
+		Filtering options for TrustCenterWatermarkConfigs returned from the connection.
+		"""
+		where: TrustCenterWatermarkConfigWhereInput
+	): TrustCenterWatermarkConfigConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -37441,6 +37474,11 @@ input OrganizationWhereInput {
 	"""
 	hasExports: Boolean
 	hasExportsWith: [ExportWhereInput!]
+	"""
+	trust_center_watermark_configs edge predicates
+	"""
+	hasTrustCenterWatermarkConfigs: Boolean
+	hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -60603,6 +60641,10 @@ type TrustCenterWatermarkConfig implements Node {
 	createdBy: String
 	updatedBy: String
 	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID
+	"""
 	ID of the trust center
 	"""
 	trustCenterID: String
@@ -60633,7 +60675,8 @@ type TrustCenterWatermarkConfig implements Node {
 	"""
 	font of the watermark text
 	"""
-	font: String
+	font: TrustCenterWatermarkConfigFont
+	owner: Organization
 	trustCenter: [TrustCenter!]
 	"""
 	the file containing the image for watermarking, if applicable
@@ -60697,6 +60740,33 @@ type TrustCenterWatermarkConfigEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+TrustCenterWatermarkConfigFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+	arial
+	helvetica
+	times
+	times
+	new
+	roman
+	georgia
+	verdana
+	courier
+	courier
+	new
+	trebuchet
+	ms
+	comic
+	sans
+	ms
+	impact
+	palatino
+	garamond
+	bookman
+	avant
+	garde
+}
 type TrustCenterWatermarkConfigHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -60706,6 +60776,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String
 	"""
 	ID of the trust center
 	"""
@@ -60737,7 +60811,7 @@ type TrustCenterWatermarkConfigHistory implements Node {
 	"""
 	font of the watermark text
 	"""
-	font: String
+	font: TrustCenterWatermarkConfigHistoryFont
 }
 """
 A connection to a list of items.
@@ -60768,6 +60842,33 @@ type TrustCenterWatermarkConfigHistoryEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+TrustCenterWatermarkConfigHistoryFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+	arial
+	helvetica
+	times
+	times
+	new
+	roman
+	georgia
+	verdana
+	courier
+	courier
+	new
+	trebuchet
+	ms
+	comic
+	sans
+	ms
+	impact
+	palatino
+	garamond
+	bookman
+	avant
+	garde
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
@@ -60918,6 +61019,24 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
 	trust_center_id field predicates
 	"""
 	trustCenterID: String
@@ -61031,21 +61150,12 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
 	"""
 	font field predicates
 	"""
-	font: String
-	fontNEQ: String
-	fontIn: [String!]
-	fontNotIn: [String!]
-	fontGT: String
-	fontGTE: String
-	fontLT: String
-	fontLTE: String
-	fontContains: String
-	fontHasPrefix: String
-	fontHasSuffix: String
+	font: TrustCenterWatermarkConfigHistoryFont
+	fontNEQ: TrustCenterWatermarkConfigHistoryFont
+	fontIn: [TrustCenterWatermarkConfigHistoryFont!]
+	fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
 	fontIsNil: Boolean
 	fontNotNil: Boolean
-	fontEqualFold: String
-	fontContainsFold: String
 }
 """
 Ordering options for TrustCenterWatermarkConfig connections
@@ -61160,6 +61270,24 @@ input TrustCenterWatermarkConfigWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	trust_center_id field predicates
 	"""
 	trustCenterID: String
@@ -61273,21 +61401,17 @@ input TrustCenterWatermarkConfigWhereInput {
 	"""
 	font field predicates
 	"""
-	font: String
-	fontNEQ: String
-	fontIn: [String!]
-	fontNotIn: [String!]
-	fontGT: String
-	fontGTE: String
-	fontLT: String
-	fontLTE: String
-	fontContains: String
-	fontHasPrefix: String
-	fontHasSuffix: String
+	font: TrustCenterWatermarkConfigFont
+	fontNEQ: TrustCenterWatermarkConfigFont
+	fontIn: [TrustCenterWatermarkConfigFont!]
+	fontNotIn: [TrustCenterWatermarkConfigFont!]
 	fontIsNil: Boolean
 	fontNotNil: Boolean
-	fontEqualFold: String
-	fontContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
 	"""
 	trust_center edge predicates
 	"""
@@ -63576,6 +63700,9 @@ input UpdateOrganizationInput {
 	addExportIDs: [ID!]
 	removeExportIDs: [ID!]
 	clearExports: Boolean
+	addTrustCenterWatermarkConfigIDs: [ID!]
+	removeTrustCenterWatermarkConfigIDs: [ID!]
+	clearTrustCenterWatermarkConfigs: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -64888,7 +65015,7 @@ input UpdateTrustCenterWatermarkConfigInput {
 	"""
 	font of the watermark text
 	"""
-	font: String
+	font: TrustCenterWatermarkConfigFont
 	clearFont: Boolean
 	addTrustCenterIDs: [ID!]
 	removeTrustCenterIDs: [ID!]

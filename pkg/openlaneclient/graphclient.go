@@ -74340,7 +74340,7 @@ type CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCent
 	CreatedAt     *time.Time                                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	File          *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
-	Font          *string                                                                                            "json:\"font,omitempty\" graphql:\"font\""
+	Font          *enums.Font                                                                                        "json:\"font,omitempty\" graphql:\"font\""
 	FontSize      *float64                                                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
 	ID            string                                                                                             "json:\"id\" graphql:\"id\""
 	LogoID        *string                                                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
@@ -74376,7 +74376,7 @@ func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_Trust
 	}
 	return t.File
 }
-func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *string {
+func (t *CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *enums.Font {
 	if t == nil {
 		t = &CreateTrustCenterWatermarkConfig_CreateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
 	}
@@ -74514,7 +74514,7 @@ type GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node st
 	CreatedAt     *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	File          *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
-	Font          *string                                                                        "json:\"font,omitempty\" graphql:\"font\""
+	Font          *enums.Font                                                                    "json:\"font,omitempty\" graphql:\"font\""
 	FontSize      *float64                                                                       "json:\"fontSize,omitempty\" graphql:\"fontSize\""
 	ID            string                                                                         "json:\"id\" graphql:\"id\""
 	LogoID        *string                                                                        "json:\"logoID,omitempty\" graphql:\"logoID\""
@@ -74550,7 +74550,7 @@ func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Nod
 	}
 	return t.File
 }
-func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *string {
+func (t *GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *enums.Font {
 	if t == nil {
 		t = &GetAllTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
 	}
@@ -74670,7 +74670,7 @@ type GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig struct {
 	CreatedAt     *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	File          *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
-	Font          *string                                                            "json:\"font,omitempty\" graphql:\"font\""
+	Font          *enums.Font                                                        "json:\"font,omitempty\" graphql:\"font\""
 	FontSize      *float64                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
 	ID            string                                                             "json:\"id\" graphql:\"id\""
 	LogoID        *string                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
@@ -74706,7 +74706,7 @@ func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFile()
 	}
 	return t.File
 }
-func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFont() *string {
+func (t *GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig) GetFont() *enums.Font {
 	if t == nil {
 		t = &GetTrustCenterWatermarkConfigByID_TrustCenterWatermarkConfig{}
 	}
@@ -74822,7 +74822,7 @@ type GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node struc
 	CreatedAt     *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	File          *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
-	Font          *string                                                                     "json:\"font,omitempty\" graphql:\"font\""
+	Font          *enums.Font                                                                 "json:\"font,omitempty\" graphql:\"font\""
 	FontSize      *float64                                                                    "json:\"fontSize,omitempty\" graphql:\"fontSize\""
 	ID            string                                                                      "json:\"id\" graphql:\"id\""
 	LogoID        *string                                                                     "json:\"logoID,omitempty\" graphql:\"logoID\""
@@ -74858,7 +74858,7 @@ func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) 
 	}
 	return t.File
 }
-func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *string {
+func (t *GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) GetFont() *enums.Font {
 	if t == nil {
 		t = &GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{}
 	}
@@ -74978,7 +74978,7 @@ type UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCent
 	CreatedAt     *time.Time                                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	File          *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig_File "json:\"file,omitempty\" graphql:\"file\""
-	Font          *string                                                                                            "json:\"font,omitempty\" graphql:\"font\""
+	Font          *enums.Font                                                                                        "json:\"font,omitempty\" graphql:\"font\""
 	FontSize      *float64                                                                                           "json:\"fontSize,omitempty\" graphql:\"fontSize\""
 	ID            string                                                                                             "json:\"id\" graphql:\"id\""
 	LogoID        *string                                                                                            "json:\"logoID,omitempty\" graphql:\"logoID\""
@@ -75014,7 +75014,7 @@ func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_Trust
 	}
 	return t.File
 }
-func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *string {
+func (t *UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig) GetFont() *enums.Font {
 	if t == nil {
 		t = &UpdateTrustCenterWatermarkConfig_UpdateTrustCenterWatermarkConfig_TrustCenterWatermarkConfig{}
 	}

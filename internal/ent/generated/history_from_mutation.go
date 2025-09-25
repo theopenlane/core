@@ -12454,6 +12454,10 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if trustCenterID, exists := m.TrustCenterID(); exists {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
@@ -12553,6 +12557,12 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			create = create.SetDeletedBy(trustcenterwatermarkconfig.DeletedBy)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(trustcenterwatermarkconfig.OwnerID)
+		}
+
 		if trustCenterID, exists := m.TrustCenterID(); exists {
 			create = create.SetTrustCenterID(trustCenterID)
 		} else {
@@ -12642,6 +12652,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetUpdatedBy(trustcenterwatermarkconfig.UpdatedBy).
 			SetDeletedAt(trustcenterwatermarkconfig.DeletedAt).
 			SetDeletedBy(trustcenterwatermarkconfig.DeletedBy).
+			SetOwnerID(trustcenterwatermarkconfig.OwnerID).
 			SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID).
 			SetNillableLogoID(trustcenterwatermarkconfig.LogoID).
 			SetText(trustcenterwatermarkconfig.Text).

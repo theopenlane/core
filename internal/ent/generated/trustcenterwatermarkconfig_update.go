@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -267,13 +268,13 @@ func (_u *TrustCenterWatermarkConfigUpdate) ClearColor() *TrustCenterWatermarkCo
 }
 
 // SetFont sets the "font" field.
-func (_u *TrustCenterWatermarkConfigUpdate) SetFont(v string) *TrustCenterWatermarkConfigUpdate {
+func (_u *TrustCenterWatermarkConfigUpdate) SetFont(v enums.Font) *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.SetFont(v)
 	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdate) SetNillableFont(v *string) *TrustCenterWatermarkConfigUpdate {
+func (_u *TrustCenterWatermarkConfigUpdate) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigUpdate {
 	if v != nil {
 		_u.SetFont(*v)
 	}
@@ -401,6 +402,11 @@ func (_u *TrustCenterWatermarkConfigUpdate) check() error {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Text(); ok {
+		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
+			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Opacity(); ok {
 		if err := trustcenterwatermarkconfig.OpacityValidator(v); err != nil {
 			return &ValidationError{Name: "opacity", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.opacity": %w`, err)}
@@ -409,6 +415,16 @@ func (_u *TrustCenterWatermarkConfigUpdate) check() error {
 	if v, ok := _u.mutation.Rotation(); ok {
 		if err := trustcenterwatermarkconfig.RotationValidator(v); err != nil {
 			return &ValidationError{Name: "rotation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.rotation": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := trustcenterwatermarkconfig.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfig.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.font": %w`, err)}
 		}
 	}
 	return nil
@@ -508,10 +524,10 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 		_spec.ClearField(trustcenterwatermarkconfig.FieldColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum, value)
 	}
 	if _u.mutation.FontCleared() {
-		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeString)
+		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -850,13 +866,13 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) ClearColor() *TrustCenterWatermar
 }
 
 // SetFont sets the "font" field.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetFont(v string) *TrustCenterWatermarkConfigUpdateOne {
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetFont(v enums.Font) *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.SetFont(v)
 	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableFont(v *string) *TrustCenterWatermarkConfigUpdateOne {
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigUpdateOne {
 	if v != nil {
 		_u.SetFont(*v)
 	}
@@ -997,6 +1013,11 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) check() error {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Text(); ok {
+		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
+			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Opacity(); ok {
 		if err := trustcenterwatermarkconfig.OpacityValidator(v); err != nil {
 			return &ValidationError{Name: "opacity", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.opacity": %w`, err)}
@@ -1005,6 +1026,16 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) check() error {
 	if v, ok := _u.mutation.Rotation(); ok {
 		if err := trustcenterwatermarkconfig.RotationValidator(v); err != nil {
 			return &ValidationError{Name: "rotation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.rotation": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := trustcenterwatermarkconfig.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfig.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.font": %w`, err)}
 		}
 	}
 	return nil
@@ -1121,10 +1152,10 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 		_spec.ClearField(trustcenterwatermarkconfig.FieldColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum, value)
 	}
 	if _u.mutation.FontCleared() {
-		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeString)
+		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{

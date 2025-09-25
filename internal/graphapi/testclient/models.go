@@ -5616,6 +5616,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string                        `json:"scanIDs,omitempty"`
 	SubprocessorIDs                 []string                        `json:"subprocessorIDs,omitempty"`
 	ExportIDs                       []string                        `json:"exportIDs,omitempty"`
+	TrustCenterWatermarkConfigIDs   []string                        `json:"trustCenterWatermarkConfigIDs,omitempty"`
 	CreateOrgSettings               *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -6219,9 +6220,10 @@ type CreateTrustCenterWatermarkConfigInput struct {
 	// color of the watermark text
 	Color *string `json:"color,omitempty"`
 	// font of the watermark text
-	Font           *string  `json:"font,omitempty"`
-	TrustCenterIDs []string `json:"trustCenterIDs,omitempty"`
-	FileID         *string  `json:"fileID,omitempty"`
+	Font           *enums.Font `json:"font,omitempty"`
+	OwnerID        *string     `json:"ownerID,omitempty"`
+	TrustCenterIDs []string    `json:"trustCenterIDs,omitempty"`
+	FileID         *string     `json:"fileID,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -18759,6 +18761,7 @@ type Organization struct {
 	Scans                         *ScanConnection                       `json:"scans"`
 	Subprocessors                 *SubprocessorConnection               `json:"subprocessors"`
 	Exports                       *ExportConnection                     `json:"exports"`
+	TrustCenterWatermarkConfigs   *TrustCenterWatermarkConfigConnection `json:"trustCenterWatermarkConfigs"`
 	Members                       *OrgMembershipConnection              `json:"members"`
 }
 
@@ -20293,6 +20296,9 @@ type OrganizationWhereInput struct {
 	// exports edge predicates
 	HasExports     *bool               `json:"hasExports,omitempty"`
 	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
+	// trust_center_watermark_configs edge predicates
+	HasTrustCenterWatermarkConfigs     *bool                                   `json:"hasTrustCenterWatermarkConfigs,omitempty"`
+	HasTrustCenterWatermarkConfigsWith []*TrustCenterWatermarkConfigWhereInput `json:"hasTrustCenterWatermarkConfigsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -30585,6 +30591,8 @@ type TrustCenterWatermarkConfig struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// ID of the file containing the document
@@ -30600,7 +30608,8 @@ type TrustCenterWatermarkConfig struct {
 	// color of the watermark text
 	Color *string `json:"color,omitempty"`
 	// font of the watermark text
-	Font        *string        `json:"font,omitempty"`
+	Font        *enums.Font    `json:"font,omitempty"`
+	Owner       *Organization  `json:"owner,omitempty"`
 	TrustCenter []*TrustCenter `json:"trustCenter,omitempty"`
 	// the file containing the image for watermarking, if applicable
 	File *File `json:"file,omitempty"`
@@ -30653,6 +30662,8 @@ type TrustCenterWatermarkConfigHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// ID of the file containing the document
@@ -30668,7 +30679,7 @@ type TrustCenterWatermarkConfigHistory struct {
 	// color of the watermark text
 	Color *string `json:"color,omitempty"`
 	// font of the watermark text
-	Font *string `json:"font,omitempty"`
+	Font *enums.Font `json:"font,omitempty"`
 }
 
 func (TrustCenterWatermarkConfigHistory) IsNode() {}
@@ -30800,6 +30811,22 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -30898,21 +30925,12 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	ColorEqualFold    *string  `json:"colorEqualFold,omitempty"`
 	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
 	// font field predicates
-	Font             *string  `json:"font,omitempty"`
-	FontNeq          *string  `json:"fontNEQ,omitempty"`
-	FontIn           []string `json:"fontIn,omitempty"`
-	FontNotIn        []string `json:"fontNotIn,omitempty"`
-	FontGt           *string  `json:"fontGT,omitempty"`
-	FontGte          *string  `json:"fontGTE,omitempty"`
-	FontLt           *string  `json:"fontLT,omitempty"`
-	FontLte          *string  `json:"fontLTE,omitempty"`
-	FontContains     *string  `json:"fontContains,omitempty"`
-	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
-	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
-	FontIsNil        *bool    `json:"fontIsNil,omitempty"`
-	FontNotNil       *bool    `json:"fontNotNil,omitempty"`
-	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
-	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	Font       *enums.Font  `json:"font,omitempty"`
+	FontNeq    *enums.Font  `json:"fontNEQ,omitempty"`
+	FontIn     []enums.Font `json:"fontIn,omitempty"`
+	FontNotIn  []enums.Font `json:"fontNotIn,omitempty"`
+	FontIsNil  *bool        `json:"fontIsNil,omitempty"`
+	FontNotNil *bool        `json:"fontNotNil,omitempty"`
 }
 
 // Ordering options for TrustCenterWatermarkConfig connections
@@ -31000,6 +31018,22 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -31098,21 +31132,15 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	ColorEqualFold    *string  `json:"colorEqualFold,omitempty"`
 	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
 	// font field predicates
-	Font             *string  `json:"font,omitempty"`
-	FontNeq          *string  `json:"fontNEQ,omitempty"`
-	FontIn           []string `json:"fontIn,omitempty"`
-	FontNotIn        []string `json:"fontNotIn,omitempty"`
-	FontGt           *string  `json:"fontGT,omitempty"`
-	FontGte          *string  `json:"fontGTE,omitempty"`
-	FontLt           *string  `json:"fontLT,omitempty"`
-	FontLte          *string  `json:"fontLTE,omitempty"`
-	FontContains     *string  `json:"fontContains,omitempty"`
-	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
-	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
-	FontIsNil        *bool    `json:"fontIsNil,omitempty"`
-	FontNotNil       *bool    `json:"fontNotNil,omitempty"`
-	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
-	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	Font       *enums.Font  `json:"font,omitempty"`
+	FontNeq    *enums.Font  `json:"fontNEQ,omitempty"`
+	FontIn     []enums.Font `json:"fontIn,omitempty"`
+	FontNotIn  []enums.Font `json:"fontNotIn,omitempty"`
+	FontIsNil  *bool        `json:"fontIsNil,omitempty"`
+	FontNotNil *bool        `json:"fontNotNil,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -32881,6 +32909,9 @@ type UpdateOrganizationInput struct {
 	AddExportIDs                          []string                        `json:"addExportIDs,omitempty"`
 	RemoveExportIDs                       []string                        `json:"removeExportIDs,omitempty"`
 	ClearExports                          *bool                           `json:"clearExports,omitempty"`
+	AddTrustCenterWatermarkConfigIDs      []string                        `json:"addTrustCenterWatermarkConfigIDs,omitempty"`
+	RemoveTrustCenterWatermarkConfigIDs   []string                        `json:"removeTrustCenterWatermarkConfigIDs,omitempty"`
+	ClearTrustCenterWatermarkConfigs      *bool                           `json:"clearTrustCenterWatermarkConfigs,omitempty"`
 	AddOrgMembers                         []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                      []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                     *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -33829,13 +33860,13 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 	Color      *string `json:"color,omitempty"`
 	ClearColor *bool   `json:"clearColor,omitempty"`
 	// font of the watermark text
-	Font                 *string  `json:"font,omitempty"`
-	ClearFont            *bool    `json:"clearFont,omitempty"`
-	AddTrustCenterIDs    []string `json:"addTrustCenterIDs,omitempty"`
-	RemoveTrustCenterIDs []string `json:"removeTrustCenterIDs,omitempty"`
-	ClearTrustCenter     *bool    `json:"clearTrustCenter,omitempty"`
-	FileID               *string  `json:"fileID,omitempty"`
-	ClearFile            *bool    `json:"clearFile,omitempty"`
+	Font                 *enums.Font `json:"font,omitempty"`
+	ClearFont            *bool       `json:"clearFont,omitempty"`
+	AddTrustCenterIDs    []string    `json:"addTrustCenterIDs,omitempty"`
+	RemoveTrustCenterIDs []string    `json:"removeTrustCenterIDs,omitempty"`
+	ClearTrustCenter     *bool       `json:"clearTrustCenter,omitempty"`
+	FileID               *string     `json:"fileID,omitempty"`
+	ClearFile            *bool       `json:"clearFile,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.

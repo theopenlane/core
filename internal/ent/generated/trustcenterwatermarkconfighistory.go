@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -36,6 +37,8 @@ type TrustCenterWatermarkConfigHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// ID of the file containing the document
@@ -51,7 +54,7 @@ type TrustCenterWatermarkConfigHistory struct {
 	// color of the watermark text
 	Color string `json:"color,omitempty"`
 	// font of the watermark text
-	Font         string `json:"font,omitempty"`
+	Font         enums.Font `json:"font,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -64,7 +67,7 @@ func (*TrustCenterWatermarkConfigHistory) scanValues(columns []string) ([]any, e
 			values[i] = new(history.OpType)
 		case trustcenterwatermarkconfighistory.FieldFontSize, trustcenterwatermarkconfighistory.FieldOpacity, trustcenterwatermarkconfighistory.FieldRotation:
 			values[i] = new(sql.NullFloat64)
-		case trustcenterwatermarkconfighistory.FieldID, trustcenterwatermarkconfighistory.FieldRef, trustcenterwatermarkconfighistory.FieldCreatedBy, trustcenterwatermarkconfighistory.FieldUpdatedBy, trustcenterwatermarkconfighistory.FieldDeletedBy, trustcenterwatermarkconfighistory.FieldTrustCenterID, trustcenterwatermarkconfighistory.FieldLogoID, trustcenterwatermarkconfighistory.FieldText, trustcenterwatermarkconfighistory.FieldColor, trustcenterwatermarkconfighistory.FieldFont:
+		case trustcenterwatermarkconfighistory.FieldID, trustcenterwatermarkconfighistory.FieldRef, trustcenterwatermarkconfighistory.FieldCreatedBy, trustcenterwatermarkconfighistory.FieldUpdatedBy, trustcenterwatermarkconfighistory.FieldDeletedBy, trustcenterwatermarkconfighistory.FieldOwnerID, trustcenterwatermarkconfighistory.FieldTrustCenterID, trustcenterwatermarkconfighistory.FieldLogoID, trustcenterwatermarkconfighistory.FieldText, trustcenterwatermarkconfighistory.FieldColor, trustcenterwatermarkconfighistory.FieldFont:
 			values[i] = new(sql.NullString)
 		case trustcenterwatermarkconfighistory.FieldHistoryTime, trustcenterwatermarkconfighistory.FieldCreatedAt, trustcenterwatermarkconfighistory.FieldUpdatedAt, trustcenterwatermarkconfighistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -143,6 +146,12 @@ func (_m *TrustCenterWatermarkConfigHistory) assignValues(columns []string, valu
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case trustcenterwatermarkconfighistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
 		case trustcenterwatermarkconfighistory.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
@@ -190,7 +199,7 @@ func (_m *TrustCenterWatermarkConfigHistory) assignValues(columns []string, valu
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field font", values[i])
 			} else if value.Valid {
-				_m.Font = value.String
+				_m.Font = enums.Font(value.String)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -255,6 +264,9 @@ func (_m *TrustCenterWatermarkConfigHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
@@ -279,7 +291,7 @@ func (_m *TrustCenterWatermarkConfigHistory) String() string {
 	builder.WriteString(_m.Color)
 	builder.WriteString(", ")
 	builder.WriteString("font=")
-	builder.WriteString(_m.Font)
+	builder.WriteString(fmt.Sprintf("%v", _m.Font))
 	builder.WriteByte(')')
 	return builder.String()
 }

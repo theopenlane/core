@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -139,6 +140,20 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableDeletedBy(v *strin
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetOwnerID(v string) *TrustCenterWatermarkConfigHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableOwnerID(v *string) *TrustCenterWatermarkConfigHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_c *TrustCenterWatermarkConfigHistoryCreate) SetTrustCenterID(v string) *TrustCenterWatermarkConfigHistoryCreate {
 	_c.mutation.SetTrustCenterID(v)
@@ -238,13 +253,13 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableColor(v *string) *
 }
 
 // SetFont sets the "font" field.
-func (_c *TrustCenterWatermarkConfigHistoryCreate) SetFont(v string) *TrustCenterWatermarkConfigHistoryCreate {
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetFont(v enums.Font) *TrustCenterWatermarkConfigHistoryCreate {
 	_c.mutation.SetFont(v)
 	return _c
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableFont(v *string) *TrustCenterWatermarkConfigHistoryCreate {
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigHistoryCreate {
 	if v != nil {
 		_c.SetFont(*v)
 	}
@@ -335,6 +350,14 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) defaults() error {
 		v := trustcenterwatermarkconfighistory.DefaultRotation
 		_c.mutation.SetRotation(v)
 	}
+	if _, ok := _c.mutation.Color(); !ok {
+		v := trustcenterwatermarkconfighistory.DefaultColor
+		_c.mutation.SetColor(v)
+	}
+	if _, ok := _c.mutation.Font(); !ok {
+		v := trustcenterwatermarkconfighistory.DefaultFont
+		_c.mutation.SetFont(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterwatermarkconfighistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterwatermarkconfighistory.DefaultID (forgotten import generated/runtime?)")
@@ -356,6 +379,11 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) check() error {
 	if v, ok := _c.mutation.Operation(); ok {
 		if err := trustcenterwatermarkconfighistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfigHistory.operation": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfighistory.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfigHistory.font": %w`, err)}
 		}
 	}
 	return nil
@@ -430,6 +458,10 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) createSpec() (*TrustCenterWat
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(trustcenterwatermarkconfighistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
@@ -459,7 +491,7 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) createSpec() (*TrustCenterWat
 		_node.Color = value
 	}
 	if value, ok := _c.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeEnum, value)
 		_node.Font = value
 	}
 	return _node, _spec

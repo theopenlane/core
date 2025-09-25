@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -35,6 +36,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldLogoID holds the string denoting the logo_id field in the database.
@@ -67,6 +70,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldOwnerID,
 	FieldTrustCenterID,
 	FieldLogoID,
 	FieldText,
@@ -110,6 +114,8 @@ var (
 	DefaultOpacity float64
 	// DefaultRotation holds the default value on creation for the "rotation" field.
 	DefaultRotation float64
+	// DefaultColor holds the default value on creation for the "color" field.
+	DefaultColor string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -121,6 +127,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcenterwatermarkconfighistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultFont enums.Font = "arial"
+
+// FontValidator is a validator for the "font" field enum values. It is called by the builders before save.
+func FontValidator(f enums.Font) error {
+	switch f.String() {
+	case "arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterwatermarkconfighistory: invalid enum value for font field: %q", f)
 	}
 }
 
@@ -177,6 +195,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
@@ -222,4 +245,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.Font must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Font)(nil)
+	// enums.Font must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Font)(nil)
 )

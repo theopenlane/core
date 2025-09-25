@@ -31078,6 +31078,95 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
+		case "trustCenterWatermarkConfigs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterWatermarkConfigClient{config: _q.config}).Query()
+			)
+			args := newTrustCenterWatermarkConfigPaginateArgs(fieldArgs(ctx, new(TrustCenterWatermarkConfigWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterWatermarkConfigPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.TrustCenterWatermarkConfigsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.TrustCenterWatermarkConfigsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[63][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterWatermarkConfigs)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[63][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterwatermarkconfigImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.TrustCenterWatermarkConfigsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterWatermarkConfigs(alias, func(wq *TrustCenterWatermarkConfigQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -31121,10 +31210,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -31132,10 +31221,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -46270,6 +46359,21 @@ func (_q *TrustCenterWatermarkConfigQuery) collectField(ctx context.Context, one
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldOwnerID)
+				fieldSeen[trustcenterwatermarkconfig.FieldOwnerID] = struct{}{}
+			}
+
 		case "trustCenter":
 			var (
 				alias = field.Alias
@@ -46316,6 +46420,11 @@ func (_q *TrustCenterWatermarkConfigQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldUpdatedBy)
 				fieldSeen[trustcenterwatermarkconfig.FieldUpdatedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldOwnerID)
+				fieldSeen[trustcenterwatermarkconfig.FieldOwnerID] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldTrustCenterID]; !ok {
@@ -46481,6 +46590,11 @@ func (_q *TrustCenterWatermarkConfigHistoryQuery) collectField(ctx context.Conte
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldUpdatedBy)
 				fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldOwnerID)
+				fieldSeen[trustcenterwatermarkconfighistory.FieldOwnerID] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldTrustCenterID]; !ok {

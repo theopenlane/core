@@ -5153,6 +5153,27 @@ func (_m *Organization) Exports(
 	return _m.QueryExports().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Organization) TrustCenterWatermarkConfigs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterWatermarkConfigOrder, where *TrustCenterWatermarkConfigWhereInput,
+) (*TrustCenterWatermarkConfigConnection, error) {
+	opts := []TrustCenterWatermarkConfigPaginateOption{
+		WithTrustCenterWatermarkConfigOrder(orderBy),
+		WithTrustCenterWatermarkConfigFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[63][alias]
+	if nodes, err := _m.NamedTrustCenterWatermarkConfigs(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterWatermarkConfigPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterWatermarkConfigConnection{Edges: []*TrustCenterWatermarkConfigEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterWatermarkConfigs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -5161,7 +5182,7 @@ func (_m *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[63][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[64][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -7262,6 +7283,14 @@ func (_m *TrustCenterSubprocessor) Subprocessor(ctx context.Context) (*Subproces
 		result, err = _m.QuerySubprocessor().Only(ctx)
 	}
 	return result, err
+}
+
+func (_m *TrustCenterWatermarkConfig) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (_m *TrustCenterWatermarkConfig) TrustCenter(ctx context.Context) (result []*TrustCenter, err error) {

@@ -16075,6 +16075,25 @@ func (c *OrganizationClient) QueryExports(_m *Organization) *ExportQuery {
 	return query
 }
 
+// QueryTrustCenterWatermarkConfigs queries the trust_center_watermark_configs edge of a Organization.
+func (c *OrganizationClient) QueryTrustCenterWatermarkConfigs(_m *Organization) *TrustCenterWatermarkConfigQuery {
+	query := (&TrustCenterWatermarkConfigClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterWatermarkConfigsTable, organization.TrustCenterWatermarkConfigsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -24135,6 +24154,25 @@ func (c *TrustCenterWatermarkConfigClient) GetX(ctx context.Context, id string) 
 		panic(err)
 	}
 	return obj
+}
+
+// QueryOwner queries the owner edge of a TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) QueryOwner(_m *TrustCenterWatermarkConfig) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterwatermarkconfig.OwnerTable, trustcenterwatermarkconfig.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryTrustCenter queries the trust_center edge of a TrustCenterWatermarkConfig.

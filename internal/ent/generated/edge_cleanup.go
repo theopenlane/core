@@ -838,6 +838,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")

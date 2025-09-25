@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -97,6 +98,11 @@ func DeletedBy(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
 func TrustCenterID(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldTrustCenterID, v))
@@ -130,11 +136,6 @@ func Rotation(v float64) predicate.TrustCenterWatermarkConfig {
 // Color applies equality check predicate on the "color" field. It's identical to ColorEQ.
 func Color(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldColor, v))
-}
-
-// Font applies equality check predicate on the "font" field. It's identical to FontEQ.
-func Font(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldFont, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -510,6 +511,81 @@ func DeletedByEqualFold(v string) predicate.TrustCenterWatermarkConfig {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
@@ -963,58 +1039,33 @@ func ColorContainsFold(v string) predicate.TrustCenterWatermarkConfig {
 }
 
 // FontEQ applies the EQ predicate on the "font" field.
-func FontEQ(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldFont, v))
+func FontEQ(v enums.Font) predicate.TrustCenterWatermarkConfig {
+	vc := v
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldFont, vc))
 }
 
 // FontNEQ applies the NEQ predicate on the "font" field.
-func FontNEQ(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldNEQ(FieldFont, v))
+func FontNEQ(v enums.Font) predicate.TrustCenterWatermarkConfig {
+	vc := v
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNEQ(FieldFont, vc))
 }
 
 // FontIn applies the In predicate on the "font" field.
-func FontIn(vs ...string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldIn(FieldFont, vs...))
+func FontIn(vs ...enums.Font) predicate.TrustCenterWatermarkConfig {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterWatermarkConfig(sql.FieldIn(FieldFont, v...))
 }
 
 // FontNotIn applies the NotIn predicate on the "font" field.
-func FontNotIn(vs ...string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldNotIn(FieldFont, vs...))
-}
-
-// FontGT applies the GT predicate on the "font" field.
-func FontGT(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldGT(FieldFont, v))
-}
-
-// FontGTE applies the GTE predicate on the "font" field.
-func FontGTE(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldGTE(FieldFont, v))
-}
-
-// FontLT applies the LT predicate on the "font" field.
-func FontLT(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldLT(FieldFont, v))
-}
-
-// FontLTE applies the LTE predicate on the "font" field.
-func FontLTE(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldLTE(FieldFont, v))
-}
-
-// FontContains applies the Contains predicate on the "font" field.
-func FontContains(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldContains(FieldFont, v))
-}
-
-// FontHasPrefix applies the HasPrefix predicate on the "font" field.
-func FontHasPrefix(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldHasPrefix(FieldFont, v))
-}
-
-// FontHasSuffix applies the HasSuffix predicate on the "font" field.
-func FontHasSuffix(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldHasSuffix(FieldFont, v))
+func FontNotIn(vs ...enums.Font) predicate.TrustCenterWatermarkConfig {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNotIn(FieldFont, v...))
 }
 
 // FontIsNil applies the IsNil predicate on the "font" field.
@@ -1027,14 +1078,33 @@ func FontNotNil() predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldNotNull(FieldFont))
 }
 
-// FontEqualFold applies the EqualFold predicate on the "font" field.
-func FontEqualFold(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldEqualFold(FieldFont, v))
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		sqlgraph.HasNeighbors(s, step)
+	})
 }
 
-// FontContainsFold applies the ContainsFold predicate on the "font" field.
-func FontContainsFold(v string) predicate.TrustCenterWatermarkConfig {
-	return predicate.TrustCenterWatermarkConfig(sql.FieldContainsFold(FieldFont, v))
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Organization) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
+		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.

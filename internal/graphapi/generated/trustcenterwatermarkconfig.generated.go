@@ -60,6 +60,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
 			case "logoID":
@@ -76,6 +78,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
 			case "font":
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":
@@ -119,6 +123,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
 			case "logoID":
@@ -135,6 +141,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
 			case "font":
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":
@@ -205,6 +213,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
 			case "logoID":
@@ -221,6 +231,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
 			case "font":
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":

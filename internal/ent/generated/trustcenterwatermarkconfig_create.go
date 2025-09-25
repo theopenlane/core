@@ -10,8 +10,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterWatermarkConfigCreate is the builder for creating a TrustCenterWatermarkConfig entity.
@@ -101,6 +103,20 @@ func (_c *TrustCenterWatermarkConfigCreate) SetDeletedBy(v string) *TrustCenterW
 func (_c *TrustCenterWatermarkConfigCreate) SetNillableDeletedBy(v *string) *TrustCenterWatermarkConfigCreate {
 	if v != nil {
 		_c.SetDeletedBy(*v)
+	}
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *TrustCenterWatermarkConfigCreate) SetOwnerID(v string) *TrustCenterWatermarkConfigCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *TrustCenterWatermarkConfigCreate) SetNillableOwnerID(v *string) *TrustCenterWatermarkConfigCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
 	return _c
 }
@@ -204,13 +220,13 @@ func (_c *TrustCenterWatermarkConfigCreate) SetNillableColor(v *string) *TrustCe
 }
 
 // SetFont sets the "font" field.
-func (_c *TrustCenterWatermarkConfigCreate) SetFont(v string) *TrustCenterWatermarkConfigCreate {
+func (_c *TrustCenterWatermarkConfigCreate) SetFont(v enums.Font) *TrustCenterWatermarkConfigCreate {
 	_c.mutation.SetFont(v)
 	return _c
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_c *TrustCenterWatermarkConfigCreate) SetNillableFont(v *string) *TrustCenterWatermarkConfigCreate {
+func (_c *TrustCenterWatermarkConfigCreate) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigCreate {
 	if v != nil {
 		_c.SetFont(*v)
 	}
@@ -229,6 +245,11 @@ func (_c *TrustCenterWatermarkConfigCreate) SetNillableID(v *string) *TrustCente
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_c *TrustCenterWatermarkConfigCreate) SetOwner(v *Organization) *TrustCenterWatermarkConfigCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddTrustCenterIDs adds the "trust_center" edge to the TrustCenter entity by IDs.
@@ -328,6 +349,14 @@ func (_c *TrustCenterWatermarkConfigCreate) defaults() error {
 		v := trustcenterwatermarkconfig.DefaultRotation
 		_c.mutation.SetRotation(v)
 	}
+	if _, ok := _c.mutation.Color(); !ok {
+		v := trustcenterwatermarkconfig.DefaultColor
+		_c.mutation.SetColor(v)
+	}
+	if _, ok := _c.mutation.Font(); !ok {
+		v := trustcenterwatermarkconfig.DefaultFont
+		_c.mutation.SetFont(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterwatermarkconfig.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterwatermarkconfig.DefaultID (forgotten import generated/runtime?)")
@@ -340,9 +369,19 @@ func (_c *TrustCenterWatermarkConfigCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TrustCenterWatermarkConfigCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := trustcenterwatermarkconfig.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.TrustCenterID(); ok {
 		if err := trustcenterwatermarkconfig.TrustCenterIDValidator(v); err != nil {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Text(); ok {
+		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
+			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Opacity(); ok {
@@ -353,6 +392,16 @@ func (_c *TrustCenterWatermarkConfigCreate) check() error {
 	if v, ok := _c.mutation.Rotation(); ok {
 		if err := trustcenterwatermarkconfig.RotationValidator(v); err != nil {
 			return &ValidationError{Name: "rotation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.rotation": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Color(); ok {
+		if err := trustcenterwatermarkconfig.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.color": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfig.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.font": %w`, err)}
 		}
 	}
 	return nil
@@ -440,8 +489,26 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 		_node.Color = value
 	}
 	if value, ok := _c.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum, value)
 		_node.Font = value
+	}
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterwatermarkconfig.OwnerTable,
+			Columns: []string{trustcenterwatermarkconfig.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

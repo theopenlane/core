@@ -7072,6 +7072,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string
 	SubprocessorIDs                 []string
 	ExportIDs                       []string
+	TrustCenterWatermarkConfigIDs   []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -7281,6 +7282,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExportIDs; len(v) > 0 {
 		m.AddExportIDs(v...)
 	}
+	if v := i.TrustCenterWatermarkConfigIDs; len(v) > 0 {
+		m.AddTrustCenterWatermarkConfigIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7480,6 +7484,9 @@ type UpdateOrganizationInput struct {
 	ClearExports                          bool
 	AddExportIDs                          []string
 	RemoveExportIDs                       []string
+	ClearTrustCenterWatermarkConfigs      bool
+	AddTrustCenterWatermarkConfigIDs      []string
+	RemoveTrustCenterWatermarkConfigIDs   []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8050,6 +8057,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveExportIDs; len(v) > 0 {
 		m.RemoveExportIDs(v...)
+	}
+	if i.ClearTrustCenterWatermarkConfigs {
+		m.ClearTrustCenterWatermarkConfigs()
+	}
+	if v := i.AddTrustCenterWatermarkConfigIDs; len(v) > 0 {
+		m.AddTrustCenterWatermarkConfigIDs(v...)
+	}
+	if v := i.RemoveTrustCenterWatermarkConfigIDs; len(v) > 0 {
+		m.RemoveTrustCenterWatermarkConfigIDs(v...)
 	}
 }
 
@@ -12479,7 +12495,8 @@ type CreateTrustCenterWatermarkConfigInput struct {
 	Opacity        *float64
 	Rotation       *float64
 	Color          *string
-	Font           *string
+	Font           *enums.Font
+	OwnerID        *string
 	TrustCenterIDs []string
 	FileID         *string
 }
@@ -12506,6 +12523,9 @@ func (i *CreateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkCo
 	}
 	if v := i.Font; v != nil {
 		m.SetFont(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.TrustCenterIDs; len(v) > 0 {
 		m.AddTrustCenterIDs(v...)
@@ -12536,7 +12556,7 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearColor           bool
 	Color                *string
 	ClearFont            bool
-	Font                 *string
+	Font                 *enums.Font
 	ClearTrustCenter     bool
 	AddTrustCenterIDs    []string
 	RemoveTrustCenterIDs []string

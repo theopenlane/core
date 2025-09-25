@@ -181,6 +181,8 @@ const (
 	EdgeSubprocessors = "subprocessors"
 	// EdgeExports holds the string denoting the exports edge name in mutations.
 	EdgeExports = "exports"
+	// EdgeTrustCenterWatermarkConfigs holds the string denoting the trust_center_watermark_configs edge name in mutations.
+	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -633,6 +635,13 @@ const (
 	ExportsInverseTable = "exports"
 	// ExportsColumn is the table column denoting the exports relation/edge.
 	ExportsColumn = "owner_id"
+	// TrustCenterWatermarkConfigsTable is the table that holds the trust_center_watermark_configs relation/edge.
+	TrustCenterWatermarkConfigsTable = "trust_center_watermark_configs"
+	// TrustCenterWatermarkConfigsInverseTable is the table name for the TrustCenterWatermarkConfig entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterwatermarkconfig" package.
+	TrustCenterWatermarkConfigsInverseTable = "trust_center_watermark_configs"
+	// TrustCenterWatermarkConfigsColumn is the table column denoting the trust_center_watermark_configs relation/edge.
+	TrustCenterWatermarkConfigsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1717,6 +1726,20 @@ func ByExports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByTrustCenterWatermarkConfigsCount orders the results by trust_center_watermark_configs count.
+func ByTrustCenterWatermarkConfigsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterWatermarkConfigsStep(), opts...)
+	}
+}
+
+// ByTrustCenterWatermarkConfigs orders the results by trust_center_watermark_configs terms.
+func ByTrustCenterWatermarkConfigs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterWatermarkConfigsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2190,6 +2213,13 @@ func newExportsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ExportsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
+	)
+}
+func newTrustCenterWatermarkConfigsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterWatermarkConfigsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterWatermarkConfigsTable, TrustCenterWatermarkConfigsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

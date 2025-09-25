@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -265,13 +266,13 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) ClearColor() *TrustCenterWate
 }
 
 // SetFont sets the "font" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetFont(v string) *TrustCenterWatermarkConfigHistoryUpdate {
+func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetFont(v enums.Font) *TrustCenterWatermarkConfigHistoryUpdate {
 	_u.mutation.SetFont(v)
 	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetNillableFont(v *string) *TrustCenterWatermarkConfigHistoryUpdate {
+func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigHistoryUpdate {
 	if v != nil {
 		_u.SetFont(*v)
 	}
@@ -331,6 +332,16 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterWatermarkConfigHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfighistory.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfigHistory.font": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterWatermarkConfigHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterWatermarkConfigHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -338,6 +349,9 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) Modify(modifiers ...func(u *s
 }
 
 func (_u *TrustCenterWatermarkConfigHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterwatermarkconfighistory.Table, trustcenterwatermarkconfighistory.Columns, sqlgraph.NewFieldSpec(trustcenterwatermarkconfighistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -378,6 +392,9 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) sqlSave(ctx context.Context) 
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldDeletedBy, field.TypeString)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(trustcenterwatermarkconfighistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
@@ -431,10 +448,10 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) sqlSave(ctx context.Context) 
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeEnum, value)
 	}
 	if _u.mutation.FontCleared() {
-		_spec.ClearField(trustcenterwatermarkconfighistory.FieldFont, field.TypeString)
+		_spec.ClearField(trustcenterwatermarkconfighistory.FieldFont, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterWatermarkConfigHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -694,13 +711,13 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) ClearColor() *TrustCenterW
 }
 
 // SetFont sets the "font" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetFont(v string) *TrustCenterWatermarkConfigHistoryUpdateOne {
+func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetFont(v enums.Font) *TrustCenterWatermarkConfigHistoryUpdateOne {
 	_u.mutation.SetFont(v)
 	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetNillableFont(v *string) *TrustCenterWatermarkConfigHistoryUpdateOne {
+func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetNillableFont(v *enums.Font) *TrustCenterWatermarkConfigHistoryUpdateOne {
 	if v != nil {
 		_u.SetFont(*v)
 	}
@@ -773,6 +790,16 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Font(); ok {
+		if err := trustcenterwatermarkconfighistory.FontValidator(v); err != nil {
+			return &ValidationError{Name: "font", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfigHistory.font": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterWatermarkConfigHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -780,6 +807,9 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) Modify(modifiers ...func(u
 }
 
 func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterWatermarkConfigHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterwatermarkconfighistory.Table, trustcenterwatermarkconfighistory.Columns, sqlgraph.NewFieldSpec(trustcenterwatermarkconfighistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -838,6 +868,9 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) sqlSave(ctx context.Contex
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldDeletedBy, field.TypeString)
 	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(trustcenterwatermarkconfighistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
 	}
@@ -890,10 +923,10 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) sqlSave(ctx context.Contex
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldColor, field.TypeString)
 	}
 	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeString, value)
+		_spec.SetField(trustcenterwatermarkconfighistory.FieldFont, field.TypeEnum, value)
 	}
 	if _u.mutation.FontCleared() {
-		_spec.ClearField(trustcenterwatermarkconfighistory.FieldFont, field.TypeString)
+		_spec.ClearField(trustcenterwatermarkconfighistory.FieldFont, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterWatermarkConfigHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

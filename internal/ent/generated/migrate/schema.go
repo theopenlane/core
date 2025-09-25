@@ -5160,12 +5160,13 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
-		{Name: "text", Type: field.TypeString, Nullable: true},
+		{Name: "text", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "font_size", Type: field.TypeFloat64, Nullable: true, Default: 48},
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
-		{Name: "color", Type: field.TypeString, Nullable: true},
-		{Name: "font", Type: field.TypeString, Nullable: true},
+		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterWatermarkConfigsTable holds the schema information for the "trust_center_watermark_configs" table.
@@ -5175,13 +5176,27 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_watermark_configs_files_file",
+				Symbol:     "trust_center_watermark_configs_organizations_trust_center_watermark_configs",
 				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_watermark_configs_files_file",
+				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[15]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterwatermarkconfig_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 			{
 				Name:    "trustcenterwatermarkconfig_trust_center_id",
 				Unique:  true,
@@ -5204,14 +5219,15 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
-		{Name: "text", Type: field.TypeString, Nullable: true},
+		{Name: "text", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "font_size", Type: field.TypeFloat64, Nullable: true, Default: 48},
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
-		{Name: "color", Type: field.TypeString, Nullable: true},
-		{Name: "font", Type: field.TypeString, Nullable: true},
+		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
 	}
 	// TrustCenterWatermarkConfigHistoryTable holds the schema information for the "trust_center_watermark_config_history" table.
 	TrustCenterWatermarkConfigHistoryTable = &schema.Table{
@@ -8746,7 +8762,8 @@ func init() {
 	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_subprocessor_history",
 	}
-	TrustCenterWatermarkConfigsTable.ForeignKeys[0].RefTable = FilesTable
+	TrustCenterWatermarkConfigsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TrustCenterWatermarkConfigsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterWatermarkConfigsTable.Annotation = &entsql.Annotation{}
 	TrustCenterWatermarkConfigsTable.Annotation.Checks = map[string]string{
 		"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",

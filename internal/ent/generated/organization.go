@@ -194,13 +194,15 @@ type OrganizationEdges struct {
 	Subprocessors []*Subprocessor `json:"subprocessors,omitempty"`
 	// Exports holds the value of the exports edge.
 	Exports []*Export `json:"exports,omitempty"`
+	// TrustCenterWatermarkConfigs holds the value of the trust_center_watermark_configs edge.
+	TrustCenterWatermarkConfigs []*TrustCenterWatermarkConfig `json:"trust_center_watermark_configs,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [67]bool
+	loadedTypes [68]bool
 	// totalCount holds the count of the edges above.
-	totalCount [64]map[string]int
+	totalCount [65]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -265,6 +267,7 @@ type OrganizationEdges struct {
 	namedScans                         map[string][]*Scan
 	namedSubprocessors                 map[string][]*Subprocessor
 	namedExports                       map[string][]*Export
+	namedTrustCenterWatermarkConfigs   map[string][]*TrustCenterWatermarkConfig
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -868,10 +871,19 @@ func (e OrganizationEdges) ExportsOrErr() ([]*Export, error) {
 	return nil, &NotLoadedError{edge: "exports"}
 }
 
+// TrustCenterWatermarkConfigsOrErr returns the TrustCenterWatermarkConfigs value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TrustCenterWatermarkConfigsOrErr() ([]*TrustCenterWatermarkConfig, error) {
+	if e.loadedTypes[66] {
+		return e.TrustCenterWatermarkConfigs, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_watermark_configs"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[66] {
+	if e.loadedTypes[67] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1360,6 +1372,11 @@ func (_m *Organization) QuerySubprocessors() *SubprocessorQuery {
 // QueryExports queries the "exports" edge of the Organization entity.
 func (_m *Organization) QueryExports() *ExportQuery {
 	return NewOrganizationClient(_m.config).QueryExports(_m)
+}
+
+// QueryTrustCenterWatermarkConfigs queries the "trust_center_watermark_configs" edge of the Organization entity.
+func (_m *Organization) QueryTrustCenterWatermarkConfigs() *TrustCenterWatermarkConfigQuery {
+	return NewOrganizationClient(_m.config).QueryTrustCenterWatermarkConfigs(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2961,6 +2978,30 @@ func (_m *Organization) appendNamedExports(name string, edges ...*Export) {
 		_m.Edges.namedExports[name] = []*Export{}
 	} else {
 		_m.Edges.namedExports[name] = append(_m.Edges.namedExports[name], edges...)
+	}
+}
+
+// NamedTrustCenterWatermarkConfigs returns the TrustCenterWatermarkConfigs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedTrustCenterWatermarkConfigs(name string) ([]*TrustCenterWatermarkConfig, error) {
+	if _m.Edges.namedTrustCenterWatermarkConfigs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterWatermarkConfigs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedTrustCenterWatermarkConfigs(name string, edges ...*TrustCenterWatermarkConfig) {
+	if _m.Edges.namedTrustCenterWatermarkConfigs == nil {
+		_m.Edges.namedTrustCenterWatermarkConfigs = make(map[string][]*TrustCenterWatermarkConfig)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterWatermarkConfigs[name] = []*TrustCenterWatermarkConfig{}
+	} else {
+		_m.Edges.namedTrustCenterWatermarkConfigs[name] = append(_m.Edges.namedTrustCenterWatermarkConfigs[name], edges...)
 	}
 }
 

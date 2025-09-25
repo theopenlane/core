@@ -3074,6 +3074,7 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TrustCenterWatermarkConfigs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -5186,6 +5187,8 @@ type ComplexityRoot struct {
 		ID            func(childComplexity int) int
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
 		Rotation      func(childComplexity int) int
 		Text          func(childComplexity int) int
 		TrustCenter   func(childComplexity int) int
@@ -5228,6 +5231,7 @@ type ComplexityRoot struct {
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
 		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
 		Ref           func(childComplexity int) int
 		Rotation      func(childComplexity int) int
 		Text          func(childComplexity int) int
@@ -22281,6 +22285,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
+	case "Organization.trustCenterWatermarkConfigs":
+		if e.complexity.Organization.TrustCenterWatermarkConfigs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterWatermarkConfigs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterWatermarkConfigs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterWatermarkConfigOrder), args["where"].(*generated.TrustCenterWatermarkConfigWhereInput)), true
+
 	case "Organization.trustCenters":
 		if e.complexity.Organization.TrustCenters == nil {
 			break
@@ -34279,6 +34295,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterWatermarkConfig.Opacity(childComplexity), true
 
+	case "TrustCenterWatermarkConfig.owner":
+		if e.complexity.TrustCenterWatermarkConfig.Owner == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.Owner(childComplexity), true
+
+	case "TrustCenterWatermarkConfig.ownerID":
+		if e.complexity.TrustCenterWatermarkConfig.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.OwnerID(childComplexity), true
+
 	case "TrustCenterWatermarkConfig.rotation":
 		if e.complexity.TrustCenterWatermarkConfig.Rotation == nil {
 			break
@@ -34446,6 +34476,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterWatermarkConfigHistory.Operation(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.ownerID":
+		if e.complexity.TrustCenterWatermarkConfigHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.OwnerID(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.ref":
 		if e.complexity.TrustCenterWatermarkConfigHistory.Ref == nil {
@@ -47364,6 +47401,7 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  trustCenterWatermarkConfigIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -48312,7 +48350,8 @@ input CreateTrustCenterWatermarkConfigInput {
   """
   font of the watermark text
   """
-  font: String
+  font: TrustCenterWatermarkConfigFont
+  ownerID: ID
   trustCenterIDs: [ID!]
   fileID: ID
 }
@@ -69434,6 +69473,37 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  trustCenterWatermarkConfigs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    orderBy: [TrustCenterWatermarkConfigOrder!]
+
+    """
+    Filtering options for TrustCenterWatermarkConfigs returned from the connection.
+    """
+    where: TrustCenterWatermarkConfigWhereInput
+  ): TrustCenterWatermarkConfigConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -71543,6 +71613,11 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
+  """
+  trust_center_watermark_configs edge predicates
+  """
+  hasTrustCenterWatermarkConfigs: Boolean
+  hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
   """
   members edge predicates
   """
@@ -90479,6 +90554,10 @@ type TrustCenterWatermarkConfig implements Node {
   createdBy: String
   updatedBy: String
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   ID of the trust center
   """
   trustCenterID: String
@@ -90509,7 +90588,8 @@ type TrustCenterWatermarkConfig implements Node {
   """
   font of the watermark text
   """
-  font: String
+  font: TrustCenterWatermarkConfigFont
+  owner: Organization
   trustCenter: [TrustCenter!]
   """
   the file containing the image for watermarking, if applicable
@@ -90546,6 +90626,26 @@ type TrustCenterWatermarkConfigEdge {
   """
   cursor: Cursor!
 }
+"""
+TrustCenterWatermarkConfigFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+  arial
+  helvetica
+  times
+  times new roman
+  georgia
+  verdana
+  courier
+  courier new
+  trebuchet ms
+  comic sans ms
+  impact
+  palatino
+  garamond
+  bookman
+  avant garde
+}
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -90555,6 +90655,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   ID of the trust center
   """
@@ -90586,7 +90690,7 @@ type TrustCenterWatermarkConfigHistory implements Node {
   """
   font of the watermark text
   """
-  font: String
+  font: TrustCenterWatermarkConfigHistoryFont
 }
 """
 A connection to a list of items.
@@ -90617,6 +90721,26 @@ type TrustCenterWatermarkConfigHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+TrustCenterWatermarkConfigHistoryFont is enum for the field font
+"""
+enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+  arial
+  helvetica
+  times
+  times new roman
+  georgia
+  verdana
+  courier
+  courier new
+  trebuchet ms
+  comic sans ms
+  impact
+  palatino
+  garamond
+  bookman
+  avant garde
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
@@ -90767,6 +90891,24 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -90880,21 +91022,12 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   """
   font field predicates
   """
-  font: String
-  fontNEQ: String
-  fontIn: [String!]
-  fontNotIn: [String!]
-  fontGT: String
-  fontGTE: String
-  fontLT: String
-  fontLTE: String
-  fontContains: String
-  fontHasPrefix: String
-  fontHasSuffix: String
+  font: TrustCenterWatermarkConfigHistoryFont
+  fontNEQ: TrustCenterWatermarkConfigHistoryFont
+  fontIn: [TrustCenterWatermarkConfigHistoryFont!]
+  fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
   fontIsNil: Boolean
   fontNotNil: Boolean
-  fontEqualFold: String
-  fontContainsFold: String
 }
 """
 Ordering options for TrustCenterWatermarkConfig connections
@@ -90999,6 +91132,24 @@ input TrustCenterWatermarkConfigWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
   """
   trust_center_id field predicates
   """
@@ -91113,21 +91264,17 @@ input TrustCenterWatermarkConfigWhereInput {
   """
   font field predicates
   """
-  font: String
-  fontNEQ: String
-  fontIn: [String!]
-  fontNotIn: [String!]
-  fontGT: String
-  fontGTE: String
-  fontLT: String
-  fontLTE: String
-  fontContains: String
-  fontHasPrefix: String
-  fontHasSuffix: String
+  font: TrustCenterWatermarkConfigFont
+  fontNEQ: TrustCenterWatermarkConfigFont
+  fontIn: [TrustCenterWatermarkConfigFont!]
+  fontNotIn: [TrustCenterWatermarkConfigFont!]
   fontIsNil: Boolean
   fontNotNil: Boolean
-  fontEqualFold: String
-  fontContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   trust_center edge predicates
   """
@@ -93404,6 +93551,9 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addTrustCenterWatermarkConfigIDs: [ID!]
+  removeTrustCenterWatermarkConfigIDs: [ID!]
+  clearTrustCenterWatermarkConfigs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -94702,7 +94852,7 @@ input UpdateTrustCenterWatermarkConfigInput {
   """
   font of the watermark text
   """
-  font: String
+  font: TrustCenterWatermarkConfigFont
   clearFont: Boolean
   addTrustCenterIDs: [ID!]
   removeTrustCenterIDs: [ID!]

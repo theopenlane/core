@@ -3,11 +3,14 @@
 package trustcenterwatermarkconfig
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -27,6 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldLogoID holds the string denoting the logo_id field in the database.
@@ -43,12 +48,21 @@ const (
 	FieldColor = "color"
 	// FieldFont holds the string denoting the font field in the database.
 	FieldFont = "font"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
 	// Table holds the table name of the trustcenterwatermarkconfig in the database.
 	Table = "trust_center_watermark_configs"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "trust_center_watermark_configs"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "trust_centers"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -74,6 +88,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldOwnerID,
 	FieldTrustCenterID,
 	FieldLogoID,
 	FieldText,
@@ -100,8 +115,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -109,8 +124,12 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
 	TrustCenterIDValidator func(string) error
+	// TextValidator is a validator for the "text" field. It is called by the builders before save.
+	TextValidator func(string) error
 	// DefaultFontSize holds the default value on creation for the "font_size" field.
 	DefaultFontSize float64
 	// DefaultOpacity holds the default value on creation for the "opacity" field.
@@ -121,9 +140,25 @@ var (
 	DefaultRotation float64
 	// RotationValidator is a validator for the "rotation" field. It is called by the builders before save.
 	RotationValidator func(float64) error
+	// DefaultColor holds the default value on creation for the "color" field.
+	DefaultColor string
+	// ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	ColorValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultFont enums.Font = "arial"
+
+// FontValidator is a validator for the "font" field enum values. It is called by the builders before save.
+func FontValidator(f enums.Font) error {
+	switch f.String() {
+	case "arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterwatermarkconfig: invalid enum value for font field: %q", f)
+	}
+}
 
 // OrderOption defines the ordering options for the TrustCenterWatermarkConfig queries.
 type OrderOption func(*sql.Selector)
@@ -161,6 +196,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByTrustCenterID orders the results by the trust_center_id field.
@@ -203,6 +243,13 @@ func ByFont(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFont, opts...).ToFunc()
 }
 
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByTrustCenterCount orders the results by trust_center count.
 func ByTrustCenterCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -223,6 +270,13 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
 func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -237,3 +291,10 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
+
+var (
+	// enums.Font must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Font)(nil)
+	// enums.Font must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Font)(nil)
+)

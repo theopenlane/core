@@ -54016,6 +54016,10 @@ type OrganizationWhereInput struct {
 	HasExports     *bool               `json:"hasExports,omitempty"`
 	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
 
+	// "trust_center_watermark_configs" edge predicates.
+	HasTrustCenterWatermarkConfigs     *bool                                   `json:"hasTrustCenterWatermarkConfigs,omitempty"`
+	HasTrustCenterWatermarkConfigsWith []*TrustCenterWatermarkConfigWhereInput `json:"hasTrustCenterWatermarkConfigsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -55622,6 +55626,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasExportsWith(with...))
+	}
+	if i.HasTrustCenterWatermarkConfigs != nil {
+		p := organization.HasTrustCenterWatermarkConfigs()
+		if !*i.HasTrustCenterWatermarkConfigs {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWatermarkConfigsWith) > 0 {
+		with := make([]predicate.TrustCenterWatermarkConfig, 0, len(i.HasTrustCenterWatermarkConfigsWith))
+		for _, w := range i.HasTrustCenterWatermarkConfigsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWatermarkConfigsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasTrustCenterWatermarkConfigsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -92010,6 +92032,23 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -92115,21 +92154,16 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
 
 	// "font" field predicates.
-	Font             *string  `json:"font,omitempty"`
-	FontNEQ          *string  `json:"fontNEQ,omitempty"`
-	FontIn           []string `json:"fontIn,omitempty"`
-	FontNotIn        []string `json:"fontNotIn,omitempty"`
-	FontGT           *string  `json:"fontGT,omitempty"`
-	FontGTE          *string  `json:"fontGTE,omitempty"`
-	FontLT           *string  `json:"fontLT,omitempty"`
-	FontLTE          *string  `json:"fontLTE,omitempty"`
-	FontContains     *string  `json:"fontContains,omitempty"`
-	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
-	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
-	FontIsNil        bool     `json:"fontIsNil,omitempty"`
-	FontNotNil       bool     `json:"fontNotNil,omitempty"`
-	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
-	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	Font       *enums.Font  `json:"font,omitempty"`
+	FontNEQ    *enums.Font  `json:"fontNEQ,omitempty"`
+	FontIn     []enums.Font `json:"fontIn,omitempty"`
+	FontNotIn  []enums.Font `json:"fontNotIn,omitempty"`
+	FontIsNil  bool         `json:"fontIsNil,omitempty"`
+	FontNotNil bool         `json:"fontNotNil,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -92390,6 +92424,51 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterwatermarkconfig.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDEQ(*i.TrustCenterID))
@@ -92673,40 +92752,31 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	if len(i.FontNotIn) > 0 {
 		predicates = append(predicates, trustcenterwatermarkconfig.FontNotIn(i.FontNotIn...))
 	}
-	if i.FontGT != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontGT(*i.FontGT))
-	}
-	if i.FontGTE != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontGTE(*i.FontGTE))
-	}
-	if i.FontLT != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontLT(*i.FontLT))
-	}
-	if i.FontLTE != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontLTE(*i.FontLTE))
-	}
-	if i.FontContains != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontContains(*i.FontContains))
-	}
-	if i.FontHasPrefix != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontHasPrefix(*i.FontHasPrefix))
-	}
-	if i.FontHasSuffix != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontHasSuffix(*i.FontHasSuffix))
-	}
 	if i.FontIsNil {
 		predicates = append(predicates, trustcenterwatermarkconfig.FontIsNil())
 	}
 	if i.FontNotNil {
 		predicates = append(predicates, trustcenterwatermarkconfig.FontNotNil())
 	}
-	if i.FontEqualFold != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontEqualFold(*i.FontEqualFold))
-	}
-	if i.FontContainsFold != nil {
-		predicates = append(predicates, trustcenterwatermarkconfig.FontContainsFold(*i.FontContainsFold))
-	}
 
+	if i.HasOwner != nil {
+		p := trustcenterwatermarkconfig.HasOwner()
+		if !*i.HasOwner {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasOwnerWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterwatermarkconfig.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -92863,6 +92933,23 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -92968,21 +93055,12 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
 
 	// "font" field predicates.
-	Font             *string  `json:"font,omitempty"`
-	FontNEQ          *string  `json:"fontNEQ,omitempty"`
-	FontIn           []string `json:"fontIn,omitempty"`
-	FontNotIn        []string `json:"fontNotIn,omitempty"`
-	FontGT           *string  `json:"fontGT,omitempty"`
-	FontGTE          *string  `json:"fontGTE,omitempty"`
-	FontLT           *string  `json:"fontLT,omitempty"`
-	FontLTE          *string  `json:"fontLTE,omitempty"`
-	FontContains     *string  `json:"fontContains,omitempty"`
-	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
-	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
-	FontIsNil        bool     `json:"fontIsNil,omitempty"`
-	FontNotNil       bool     `json:"fontNotNil,omitempty"`
-	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
-	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	Font       *enums.Font  `json:"font,omitempty"`
+	FontNEQ    *enums.Font  `json:"fontNEQ,omitempty"`
+	FontIn     []enums.Font `json:"fontIn,omitempty"`
+	FontNotIn  []enums.Font `json:"fontNotIn,omitempty"`
+	FontIsNil  bool         `json:"fontIsNil,omitempty"`
+	FontNotNil bool         `json:"fontNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -93317,6 +93395,51 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDEQ(*i.TrustCenterID))
 	}
@@ -93599,38 +93722,11 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	if len(i.FontNotIn) > 0 {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.FontNotIn(i.FontNotIn...))
 	}
-	if i.FontGT != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontGT(*i.FontGT))
-	}
-	if i.FontGTE != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontGTE(*i.FontGTE))
-	}
-	if i.FontLT != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontLT(*i.FontLT))
-	}
-	if i.FontLTE != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontLTE(*i.FontLTE))
-	}
-	if i.FontContains != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontContains(*i.FontContains))
-	}
-	if i.FontHasPrefix != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontHasPrefix(*i.FontHasPrefix))
-	}
-	if i.FontHasSuffix != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontHasSuffix(*i.FontHasSuffix))
-	}
 	if i.FontIsNil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.FontIsNil())
 	}
 	if i.FontNotNil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.FontNotNil())
-	}
-	if i.FontEqualFold != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontEqualFold(*i.FontEqualFold))
-	}
-	if i.FontContainsFold != nil {
-		predicates = append(predicates, trustcenterwatermarkconfighistory.FontContainsFold(*i.FontContainsFold))
 	}
 
 	switch len(predicates) {
