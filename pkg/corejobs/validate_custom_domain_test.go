@@ -269,7 +269,6 @@ func TestValidateCustomDomainWorkerAllDomains(t *testing.T) {
 						},
 						DNSVerificationID: lo.ToPtr("dnsVerificationID1"),
 						ID:                "1",
-						MappableDomainID:  mappableDomainID,
 						OwnerID:           lo.ToPtr("ownerID1"),
 						MappableDomain: openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_MappableDomain{
 							ID:     mappableDomainID,
@@ -304,7 +303,6 @@ func TestValidateCustomDomainWorkerAllDomains(t *testing.T) {
 						DNSVerification:   nil,
 						DNSVerificationID: nil,
 						ID:                "3",
-						MappableDomainID:  mappableDomainID,
 						OwnerID:           lo.ToPtr("ownerID3"),
 						MappableDomain: openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_MappableDomain{
 							ID:     mappableDomainID,
@@ -326,7 +324,6 @@ func TestValidateCustomDomainWorkerAllDomains(t *testing.T) {
 						},
 						DNSVerificationID: lo.ToPtr("dnsVerificationID4"),
 						ID:                "4",
-						MappableDomainID:  mappableDomainID,
 						OwnerID:           lo.ToPtr("ownerID4"),
 						MappableDomain: openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_MappableDomain{
 							ID:     mappableDomainID,

@@ -121,7 +121,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 				ID:                cd.Node.ID,
 				OwnerID:           cd.Node.OwnerID,
 				CnameRecord:       cd.Node.CnameRecord,
-				MappableDomainID:  cd.Node.MappableDomainID,
+				MappableDomainID:  cd.Node.MappableDomain.ID,
 				DNSVerificationID: cd.Node.DNSVerificationID,
 				MappableDomain: &openlaneclient.MappableDomain{
 					ID:     cd.Node.MappableDomain.ID,

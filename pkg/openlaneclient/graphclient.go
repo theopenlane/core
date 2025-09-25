@@ -13074,7 +13074,6 @@ type GetAllCustomDomains_CustomDomains_Edges_Node struct {
 	DNSVerificationID *string                                                       "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
 	ID                string                                                        "json:\"id\" graphql:\"id\""
 	MappableDomain    GetAllCustomDomains_CustomDomains_Edges_Node_MappableDomain   "json:\"mappableDomain\" graphql:\"mappableDomain\""
-	MappableDomainID  string                                                        "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID           *string                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Tags              []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt         *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -13122,12 +13121,6 @@ func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetMappableDomain() *GetA
 		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
 	}
 	return &t.MappableDomain
-}
-func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetMappableDomainID() string {
-	if t == nil {
-		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
-	}
-	return t.MappableDomainID
 }
 func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -87597,7 +87590,6 @@ const GetAllCustomDomainsDocument = `query GetAllCustomDomains {
 					cloudflareHostnameID
 				}
 				id
-				mappableDomainID
 				mappableDomain {
 					id
 					name

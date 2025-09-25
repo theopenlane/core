@@ -89,7 +89,6 @@ query GetAllCustomDomains {
           cloudflareHostnameID
         }
         id
-        mappableDomainID
         mappableDomain {
           id
           name
