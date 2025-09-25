@@ -75,7 +75,7 @@ func TestQueryGroup(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  group1.ID,
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

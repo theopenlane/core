@@ -17,7 +17,9 @@ import (
 
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -338,6 +340,19 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	o.PWithField(w, "id", objectIDs)
 }
 
+// defaultSkipCreateUserPermissionsFunc is the default function to skip creating user permissions
+var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutation) bool {
+	if m.Op() != ent.OpCreate {
+		return true
+	}
+
+	if _, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
+		return true
+	}
+
+	return false
+}
+
 // defaultTupleUpdateFunc is the default hook function for the object owned mixin
 // to add tuples to the database when creating or updating an object based on the edges
 // that can own the object
@@ -348,7 +363,7 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, defaultSkipCreateUserPermissionsFunc),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }

@@ -26201,6 +26201,17 @@ type SubcontrolWhereInput struct {
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
+type SubmitTrustCenterNDAResponseInput struct {
+	// template id
+	TemplateID string `json:"templateID"`
+	// json response
+	Response map[string]any `json:"response"`
+}
+
+type SubmitTrustCenterNDAResponsePayload struct {
+	DocumentData *DocumentData `json:"documentData"`
+}
+
 type Subprocessor struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`

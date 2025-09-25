@@ -102,7 +102,7 @@ func TestQueryEvidence(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  evidence.ID,
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

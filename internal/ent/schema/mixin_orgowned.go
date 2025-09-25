@@ -164,9 +164,9 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 }
 
 // addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
-func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) error {
-	// always add the organization owner relationship as an editor
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
+	var orgID string
+	orgID, err = auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
@@ -205,13 +205,15 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		if o.AllowAnonymousTrustCenterAccess {
-			if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-				if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-					o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
-					return nil
-				}
+		anon, hasAnonUser := auth.AnonymousTrustCenterUserFromContext(ctx)
+
+		if o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
+				o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
+				return nil
 			}
+		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			return privacy.Deny
 		}
 
 		// add owner id(s) to the query
@@ -278,6 +280,10 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 	}
 
 	if _, trustCenterAnonAuth := contextx.From[auth.TrustCenterContextKey](ctx); trustCenterAnonAuth {
+		return true
+	}
+
+	if _, trustCenterNda := contextx.From[auth.TrustCenterNDAContextKey](ctx); trustCenterNda {
 		return true
 	}
 

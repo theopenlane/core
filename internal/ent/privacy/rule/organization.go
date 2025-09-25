@@ -32,6 +32,7 @@ type genericMutation interface {
 // This rule assumes that the organization id and user id are set in the context
 // and only checks for access to the single organization
 func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
+	zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("checking access for organization")
 	// skip if permission is already set to allow or if it's an internal request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
 		return privacy.Allow

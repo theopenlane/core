@@ -489,8 +489,9 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterNda(ctx context.Context, input CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNda, error)
-	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNda, error)
 	SendTrustCenterNDAEmail(ctx context.Context, input SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*SendTrustCenterNDAEmail, error)
+	SubmitTrustCenterNDAResponse(ctx context.Context, input SubmitTrustCenterNDAResponseInput, interceptors ...clientv2.RequestInterceptor) (*SubmitTrustCenterNDAResponse, error)
+	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNda, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
 	DeleteTrustCenterSetting(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSetting, error)
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
@@ -71777,6 +71778,39 @@ func (t *CreateTrustCenterNda_CreateTrustCenterNda) GetTemplate() *CreateTrustCe
 	return &t.Template
 }
 
+type SendTrustCenterNDAEmail_SendTrustCenterNDAEmail struct {
+	Success bool "json:\"success\" graphql:\"success\""
+}
+
+func (t *SendTrustCenterNDAEmail_SendTrustCenterNDAEmail) GetSuccess() bool {
+	if t == nil {
+		t = &SendTrustCenterNDAEmail_SendTrustCenterNDAEmail{}
+	}
+	return t.Success
+}
+
+type SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse_DocumentData struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse_DocumentData) GetID() string {
+	if t == nil {
+		t = &SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse_DocumentData{}
+	}
+	return t.ID
+}
+
+type SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse struct {
+	DocumentData SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse_DocumentData "json:\"documentData\" graphql:\"documentData\""
+}
+
+func (t *SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse) GetDocumentData() *SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse_DocumentData {
+	if t == nil {
+		t = &SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse{}
+	}
+	return &t.DocumentData
+}
+
 type UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node struct {
 	ID           string  "json:\"id\" graphql:\"id\""
 	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
@@ -71872,17 +71906,6 @@ func (t *UpdateTrustCenterNda_UpdateTrustCenterNda) GetTemplate() *UpdateTrustCe
 		t = &UpdateTrustCenterNda_UpdateTrustCenterNda{}
 	}
 	return &t.Template
-}
-
-type SendTrustCenterNDAEmail_SendTrustCenterNDAEmail struct {
-	Success bool "json:\"success\" graphql:\"success\""
-}
-
-func (t *SendTrustCenterNDAEmail_SendTrustCenterNDAEmail) GetSuccess() bool {
-	if t == nil {
-		t = &SendTrustCenterNDAEmail_SendTrustCenterNDAEmail{}
-	}
-	return t.Success
 }
 
 type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
@@ -82212,17 +82235,6 @@ func (t *CreateTrustCenterNda) GetCreateTrustCenterNda() *CreateTrustCenterNda_C
 	return &t.CreateTrustCenterNda
 }
 
-type UpdateTrustCenterNda struct {
-	UpdateTrustCenterNda UpdateTrustCenterNda_UpdateTrustCenterNda "json:\"updateTrustCenterNDA\" graphql:\"updateTrustCenterNDA\""
-}
-
-func (t *UpdateTrustCenterNda) GetUpdateTrustCenterNda() *UpdateTrustCenterNda_UpdateTrustCenterNda {
-	if t == nil {
-		t = &UpdateTrustCenterNda{}
-	}
-	return &t.UpdateTrustCenterNda
-}
-
 type SendTrustCenterNDAEmail struct {
 	SendTrustCenterNDAEmail SendTrustCenterNDAEmail_SendTrustCenterNDAEmail "json:\"sendTrustCenterNDAEmail\" graphql:\"sendTrustCenterNDAEmail\""
 }
@@ -82232,6 +82244,28 @@ func (t *SendTrustCenterNDAEmail) GetSendTrustCenterNDAEmail() *SendTrustCenterN
 		t = &SendTrustCenterNDAEmail{}
 	}
 	return &t.SendTrustCenterNDAEmail
+}
+
+type SubmitTrustCenterNDAResponse struct {
+	SubmitTrustCenterNDAResponse SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse "json:\"submitTrustCenterNDAResponse\" graphql:\"submitTrustCenterNDAResponse\""
+}
+
+func (t *SubmitTrustCenterNDAResponse) GetSubmitTrustCenterNDAResponse() *SubmitTrustCenterNDAResponse_SubmitTrustCenterNDAResponse {
+	if t == nil {
+		t = &SubmitTrustCenterNDAResponse{}
+	}
+	return &t.SubmitTrustCenterNDAResponse
+}
+
+type UpdateTrustCenterNda struct {
+	UpdateTrustCenterNda UpdateTrustCenterNda_UpdateTrustCenterNda "json:\"updateTrustCenterNDA\" graphql:\"updateTrustCenterNDA\""
+}
+
+func (t *UpdateTrustCenterNda) GetUpdateTrustCenterNda() *UpdateTrustCenterNda_UpdateTrustCenterNda {
+	if t == nil {
+		t = &UpdateTrustCenterNda{}
+	}
+	return &t.UpdateTrustCenterNda
 }
 
 type CreateTrustCenterSetting struct {
@@ -104060,6 +104094,56 @@ func (c *Client) CreateTrustCenterNda(ctx context.Context, input CreateTrustCent
 	return &res, nil
 }
 
+const SendTrustCenterNDAEmailDocument = `mutation SendTrustCenterNDAEmail ($input: SendTrustCenterNDAInput!) {
+	sendTrustCenterNDAEmail(input: $input) {
+		success
+	}
+}
+`
+
+func (c *Client) SendTrustCenterNDAEmail(ctx context.Context, input SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*SendTrustCenterNDAEmail, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res SendTrustCenterNDAEmail
+	if err := c.Client.Post(ctx, "SendTrustCenterNDAEmail", SendTrustCenterNDAEmailDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const SubmitTrustCenterNDAResponseDocument = `mutation SubmitTrustCenterNDAResponse ($input: SubmitTrustCenterNDAResponseInput!) {
+	submitTrustCenterNDAResponse(input: $input) {
+		documentData {
+			id
+		}
+	}
+}
+`
+
+func (c *Client) SubmitTrustCenterNDAResponse(ctx context.Context, input SubmitTrustCenterNDAResponseInput, interceptors ...clientv2.RequestInterceptor) (*SubmitTrustCenterNDAResponse, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res SubmitTrustCenterNDAResponse
+	if err := c.Client.Post(ctx, "SubmitTrustCenterNDAResponse", SubmitTrustCenterNDAResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const UpdateTrustCenterNdaDocument = `mutation UpdateTrustCenterNda ($id: ID!, $templateFiles: [Upload!]) {
 	updateTrustCenterNDA(id: $id, templateFiles: $templateFiles) {
 		template {
@@ -104089,30 +104173,6 @@ func (c *Client) UpdateTrustCenterNda(ctx context.Context, id string, templateFi
 
 	var res UpdateTrustCenterNda
 	if err := c.Client.Post(ctx, "UpdateTrustCenterNda", UpdateTrustCenterNdaDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const SendTrustCenterNDAEmailDocument = `mutation SendTrustCenterNDAEmail ($input: SendTrustCenterNDAInput!) {
-	sendTrustCenterNDAEmail(input: $input) {
-		success
-	}
-}
-`
-
-func (c *Client) SendTrustCenterNDAEmail(ctx context.Context, input SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*SendTrustCenterNDAEmail, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res SendTrustCenterNDAEmail
-	if err := c.Client.Post(ctx, "SendTrustCenterNDAEmail", SendTrustCenterNDAEmailDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -106170,8 +106230,9 @@ var DocumentOperationNames = map[string]string{
 	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
 	CreateTrustCenterNdaDocument:                   "CreateTrustCenterNda",
-	UpdateTrustCenterNdaDocument:                   "UpdateTrustCenterNda",
 	SendTrustCenterNDAEmailDocument:                "SendTrustCenterNDAEmail",
+	SubmitTrustCenterNDAResponseDocument:           "SubmitTrustCenterNDAResponse",
+	UpdateTrustCenterNdaDocument:                   "UpdateTrustCenterNda",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
 	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
 	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",

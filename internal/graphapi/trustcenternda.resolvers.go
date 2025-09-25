@@ -8,12 +8,24 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // CreateTrustCenterNda is the resolver for the createTrustCenterNDA field.
 func (r *mutationResolver) CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error) {
-	return createTrustCenterNDA(ctx, input)
+	trustCenterNDAPayload, err := createTrustCenterNDA(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	wildcardTuple := fgax.CreateWildcardViewerTuple(trustCenterNDAPayload.Template.ID, generated.TypeTemplate)
+	if _, err := r.db.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
+		return nil, err
+	}
+
+	return trustCenterNDAPayload, nil
 }
 
 // UpdateTrustCenterNda is the resolver for the updateTrustCenterNDA field.
@@ -24,4 +36,9 @@ func (r *mutationResolver) UpdateTrustCenterNda(ctx context.Context, id string, 
 // SendTrustCenterNDAEmail is the resolver for the sendTrustCenterNDAEmail field.
 func (r *mutationResolver) SendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput) (*model.SendTrustCenterNDAEmailPayload, error) {
 	return sendTrustCenterNDAEmail(ctx, input, r)
+}
+
+// SubmitTrustCenterNDAResponse is the resolver for the submitTrustCenterNDAResponse field.
+func (r *mutationResolver) SubmitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
+	return submitTrustCenterNDAResponse(ctx, input)
 }

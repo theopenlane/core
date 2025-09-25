@@ -30,6 +30,15 @@ extend type Mutation{
         """
         input: SendTrustCenterNDAInput!
     ): SendTrustCenterNDAEmailPayload!
+    """
+    Submit a response to a Trust Center NDA
+    """
+    submitTrustCenterNDAResponse(
+        """
+        values of the trustCenterNDA submission
+        """
+        input: SubmitTrustCenterNDAResponseInput!
+    ): SubmitTrustCenterNDAResponsePayload!
 }
 
 type TrustCenterNDACreatePayload {
@@ -60,4 +69,19 @@ input SendTrustCenterNDAInput {
     email address
     """
     email: String!
+}
+
+input SubmitTrustCenterNDAResponseInput {
+    """
+    template id
+    """
+    templateID: ID!
+    """
+    json response
+    """
+    response: Map!
+}
+
+type SubmitTrustCenterNDAResponsePayload {
+    documentData: DocumentData!
 }

@@ -14,6 +14,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjective"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/customdomain"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/dnsverification"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/documentdata"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entity"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytype"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/evidence"

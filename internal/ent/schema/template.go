@@ -96,6 +96,7 @@ func (t Template) Mixin() []ent.Mixin {
 				withParents(Organization{}, TrustCenter{}),
 				withOrganizationOwner(true),
 				withSkipperFunc(skipInterceptorForOrgMembers),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.NewSystemOwnedMixin(),
 		},

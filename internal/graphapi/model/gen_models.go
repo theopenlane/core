@@ -1355,6 +1355,17 @@ type SubcontrolUpdatePayload struct {
 	Subcontrol *generated.Subcontrol `json:"subcontrol"`
 }
 
+type SubmitTrustCenterNDAResponseInput struct {
+	// template id
+	TemplateID string `json:"templateID"`
+	// json response
+	Response map[string]any `json:"response"`
+}
+
+type SubmitTrustCenterNDAResponsePayload struct {
+	DocumentData *generated.DocumentData `json:"documentData"`
+}
+
 // Return response for createBulkSubprocessor mutation
 type SubprocessorBulkCreatePayload struct {
 	// Created subprocessors

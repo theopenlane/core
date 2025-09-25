@@ -71,7 +71,7 @@ func TestQueryRisk(t *testing.T) {
 			name:     "no access, anonymous user",
 			client:   suite.client.api,
 			ctx:      anonymousContext,
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

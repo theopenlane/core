@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -31,8 +32,8 @@ import (
 var trustCenterNDATemplate string
 
 var (
-	errOneNDAOnly               = errors.New("one NDA file is required")
 	errTrustCenterOwnerNotFound = errors.New("trust center owner not found")
+	errOneNDAOnly               = errors.New("one NDA file is required")
 )
 
 func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
@@ -265,5 +266,31 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 
 	return &model.SendTrustCenterNDAEmailPayload{
 		Success: true,
+	}, nil
+}
+
+// submitTrustCenterNDAResponse submits a trust center NDA response
+func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
+	anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
+	if !ok || anon.SubjectEmail == "" || anon.TrustCenterID == "" || anon.OrganizationID == "" {
+		return nil, newPermissionDeniedError()
+	}
+
+	allowCtx := contextx.With(privacy.DecisionContext(ctx, privacy.Allow), auth.TrustCenterNDAContextKey{
+		OrgID: anon.OrganizationID,
+	})
+
+	res, err := withTransactionalMutation(allowCtx).DocumentData.Create().SetInput(
+		generated.CreateDocumentDataInput{
+			TemplateID: input.TemplateID,
+			Data:       input.Response,
+		},
+	).Save(allowCtx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenternda"})
+	}
+
+	return &model.SubmitTrustCenterNDAResponsePayload{
+		DocumentData: res,
 	}, nil
 }

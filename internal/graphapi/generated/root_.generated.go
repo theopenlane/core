@@ -2648,6 +2648,7 @@ type ComplexityRoot struct {
 		DeleteUser                           func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
+		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -4449,6 +4450,10 @@ type ComplexityRoot struct {
 
 	SubcontrolUpdatePayload struct {
 		Subcontrol func(childComplexity int) int
+	}
+
+	SubmitTrustCenterNDAResponsePayload struct {
+		DocumentData func(childComplexity int) int
 	}
 
 	Subprocessor struct {
@@ -19272,6 +19277,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.SendTrustCenterNDAEmail(childComplexity, args["input"].(model.SendTrustCenterNDAInput)), true
 
+	case "Mutation.submitTrustCenterNDAResponse":
+		if e.complexity.Mutation.SubmitTrustCenterNDAResponse == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_submitTrustCenterNDAResponse_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SubmitTrustCenterNDAResponse(childComplexity, args["input"].(model.SubmitTrustCenterNDAResponseInput)), true
+
 	case "Mutation.updateAPIToken":
 		if e.complexity.Mutation.UpdateAPIToken == nil {
 			break
@@ -30930,6 +30947,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolUpdatePayload.Subcontrol(childComplexity), true
 
+	case "SubmitTrustCenterNDAResponsePayload.documentData":
+		if e.complexity.SubmitTrustCenterNDAResponsePayload.DocumentData == nil {
+			break
+		}
+
+		return e.complexity.SubmitTrustCenterNDAResponsePayload.DocumentData(childComplexity), true
+
 	case "Subprocessor.createdAt":
 		if e.complexity.Subprocessor.CreatedAt == nil {
 			break
@@ -35302,6 +35326,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubcontrolHistoryWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
 		ec.unmarshalInputSubcontrolWhereInput,
+		ec.unmarshalInputSubmitTrustCenterNDAResponseInput,
 		ec.unmarshalInputSubprocessorHistoryOrder,
 		ec.unmarshalInputSubprocessorHistoryWhereInput,
 		ec.unmarshalInputSubprocessorOrder,
@@ -101700,6 +101725,15 @@ extend input CreateTrustCenterInput {
         """
         input: SendTrustCenterNDAInput!
     ): SendTrustCenterNDAEmailPayload!
+    """
+    Submit a response to a Trust Center NDA
+    """
+    submitTrustCenterNDAResponse(
+        """
+        values of the trustCenterNDA submission
+        """
+        input: SubmitTrustCenterNDAResponseInput!
+    ): SubmitTrustCenterNDAResponsePayload!
 }
 
 type TrustCenterNDACreatePayload {
@@ -101730,6 +101764,21 @@ input SendTrustCenterNDAInput {
     email address
     """
     email: String!
+}
+
+input SubmitTrustCenterNDAResponseInput {
+    """
+    template id
+    """
+    templateID: ID!
+    """
+    json response
+    """
+    response: Map!
+}
+
+type SubmitTrustCenterNDAResponsePayload {
+    documentData: DocumentData!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {

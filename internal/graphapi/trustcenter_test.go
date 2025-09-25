@@ -302,7 +302,9 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
-			if tc.request.CreateTrustCenterSetting != nil {
+			if tc.request.CreateTrustCenterSetting != nil && tc.request.CreateTrustCenterSetting.Title != nil {
+				require.NotNil(t, setting)
+				require.NotNil(t, setting.Title)
 				assert.Equal(t, *tc.request.CreateTrustCenterSetting.Title, *setting.Title)
 			} else {
 				assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)

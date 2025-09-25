@@ -55,6 +55,61 @@ func (ec *executionContext) fieldContext_SendTrustCenterNDAEmailPayload_success(
 	return fc, nil
 }
 
+func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.SubmitTrustCenterNDAResponsePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubmitTrustCenterNDAResponsePayload_documentData,
+		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		nil,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubmitTrustCenterNDAResponsePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubmitTrustCenterNDAResponsePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DocumentData_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DocumentData_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_DocumentData_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_DocumentData_ownerID(ctx, field)
+			case "templateID":
+				return ec.fieldContext_DocumentData_templateID(ctx, field)
+			case "data":
+				return ec.fieldContext_DocumentData_data(ctx, field)
+			case "owner":
+				return ec.fieldContext_DocumentData_owner(ctx, field)
+			case "template":
+				return ec.fieldContext_DocumentData_template(ctx, field)
+			case "entities":
+				return ec.fieldContext_DocumentData_entities(ctx, field)
+			case "files":
+				return ec.fieldContext_DocumentData_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DocumentData", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterNDACreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -262,6 +317,40 @@ func (ec *executionContext) unmarshalInputSendTrustCenterNDAInput(ctx context.Co
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSubmitTrustCenterNDAResponseInput(ctx context.Context, obj any) (model.SubmitTrustCenterNDAResponseInput, error) {
+	var it model.SubmitTrustCenterNDAResponseInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"templateID", "response"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "templateID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("templateID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TemplateID = data
+		case "response":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("response"))
+			data, err := ec.unmarshalNMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Response = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -283,6 +372,45 @@ func (ec *executionContext) _SendTrustCenterNDAEmailPayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("SendTrustCenterNDAEmailPayload")
 		case "success":
 			out.Values[i] = ec._SendTrustCenterNDAEmailPayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var submitTrustCenterNDAResponsePayloadImplementors = []string{"SubmitTrustCenterNDAResponsePayload"}
+
+func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, submitTrustCenterNDAResponsePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubmitTrustCenterNDAResponsePayload")
+		case "documentData":
+			out.Values[i] = ec._SubmitTrustCenterNDAResponsePayload_documentData(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -413,6 +541,25 @@ func (ec *executionContext) marshalNSendTrustCenterNDAEmailPayload2ᚖgithubᚗc
 func (ec *executionContext) unmarshalNSendTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAInput(ctx context.Context, v any) (model.SendTrustCenterNDAInput, error) {
 	res, err := ec.unmarshalInputSendTrustCenterNDAInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNSubmitTrustCenterNDAResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponseInput(ctx context.Context, v any) (model.SubmitTrustCenterNDAResponseInput, error) {
+	res, err := ec.unmarshalInputSubmitTrustCenterNDAResponseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
+	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTrustCenterNDACreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDACreatePayload) graphql.Marshaler {

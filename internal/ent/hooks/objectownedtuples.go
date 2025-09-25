@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
+type skipCreateUserPermissions func(context.Context, ent.Mutation) bool
+
 // HookObjectOwnedTuples is a hook that adds object owned tuples for the object being created
 // given a set of parent id fields, it will add the user and parent permissions to the object
 // on creation
@@ -22,7 +24,7 @@ import (
 // ownerRelation should normally be set to fgax.ParentRelation, but in some cases
 // this is set to owner to account for different inherited permissions from parent objects
 // vs. the user/service owner of the object (see notes as an example)
-func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
+func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUserPermissions skipCreateUserPermissions) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -37,8 +39,8 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 
 			var addTuples []fgax.TupleKey
 
-			// add user permissions to the object on creation
-			if m.Op() == ent.OpCreate {
+			if skip := skipCreateUserPermissions(ctx, m); !skip {
+				// add user permissions to the object on creation
 				subjectID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, err
