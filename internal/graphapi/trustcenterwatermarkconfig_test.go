@@ -227,7 +227,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				FontSize: lo.ToPtr(48.0),
 				Opacity:  lo.ToPtr(0.3),
 				Rotation: lo.ToPtr(45.0),
-				Color:    lo.ToPtr("red"),
+				Color:    lo.ToPtr("#808080"),
 				Font:     &enums.FontArial,
 			},
 			client: suite.client.api,

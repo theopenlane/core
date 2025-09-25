@@ -2157,7 +2157,7 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 	}
 
 	if tcwcb.Color == "" {
-		tcwcb.Color = "gray"
+		tcwcb.Color = "#808080"
 	}
 
 	if tcwcb.Font == "" {
