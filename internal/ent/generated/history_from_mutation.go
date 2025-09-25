@@ -7585,6 +7585,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowedEmailDomains(allowedEmailDomains)
 	}
 
+	if allowMatchingDomainsAutojoin, exists := m.AllowMatchingDomainsAutojoin(); exists {
+		create = create.SetAllowMatchingDomainsAutojoin(allowMatchingDomainsAutojoin)
+	}
+
 	if identityProvider, exists := m.IdentityProvider(); exists {
 		create = create.SetIdentityProvider(identityProvider)
 	}
@@ -7613,8 +7617,24 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOidcDiscoveryEndpoint(oidcDiscoveryEndpoint)
 	}
 
+	if samlSigninURL, exists := m.SamlSigninURL(); exists {
+		create = create.SetSamlSigninURL(samlSigninURL)
+	}
+
+	if samlIssuer, exists := m.SamlIssuer(); exists {
+		create = create.SetSamlIssuer(samlIssuer)
+	}
+
+	if samlCert, exists := m.SamlCert(); exists {
+		create = create.SetSamlCert(samlCert)
+	}
+
 	if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
 		create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
+	}
+
+	if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
+		create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 	}
 
 	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
@@ -7758,6 +7778,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains)
 		}
 
+		if allowMatchingDomainsAutojoin, exists := m.AllowMatchingDomainsAutojoin(); exists {
+			create = create.SetAllowMatchingDomainsAutojoin(allowMatchingDomainsAutojoin)
+		} else {
+			create = create.SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin)
+		}
+
 		if identityProvider, exists := m.IdentityProvider(); exists {
 			create = create.SetIdentityProvider(identityProvider)
 		} else {
@@ -7800,10 +7826,34 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint)
 		}
 
+		if samlSigninURL, exists := m.SamlSigninURL(); exists {
+			create = create.SetSamlSigninURL(samlSigninURL)
+		} else {
+			create = create.SetSamlSigninURL(organizationsetting.SamlSigninURL)
+		}
+
+		if samlIssuer, exists := m.SamlIssuer(); exists {
+			create = create.SetSamlIssuer(samlIssuer)
+		} else {
+			create = create.SetSamlIssuer(organizationsetting.SamlIssuer)
+		}
+
+		if samlCert, exists := m.SamlCert(); exists {
+			create = create.SetSamlCert(samlCert)
+		} else {
+			create = create.SetSamlCert(organizationsetting.SamlCert)
+		}
+
 		if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
 			create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
 		} else {
 			create = create.SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced)
+		}
+
+		if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
+			create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
+		} else {
+			create = create.SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced)
 		}
 
 		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
@@ -7870,6 +7920,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOrganizationID(organizationsetting.OrganizationID).
 			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
 			SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains).
+			SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin).
 			SetIdentityProvider(organizationsetting.IdentityProvider).
 			SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID).
 			SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret).
@@ -7877,7 +7928,11 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetIdentityProviderAuthTested(organizationsetting.IdentityProviderAuthTested).
 			SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID).
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
+			SetSamlSigninURL(organizationsetting.SamlSigninURL).
+			SetSamlIssuer(organizationsetting.SamlIssuer).
+			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
+			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			Save(ctx)
@@ -11039,6 +11094,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUischema(uischema)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11172,6 +11231,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUischema(template.Uischema)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(template.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11224,6 +11289,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetKind(template.Kind).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
+			SetTrustCenterID(template.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -11668,10 +11734,6 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
 	if trustCenterID, exists := m.TrustCenterID(); exists {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
@@ -11765,12 +11827,6 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(trustcenterdoc.OwnerID)
-		}
-
 		if trustCenterID, exists := m.TrustCenterID(); exists {
 			create = create.SetTrustCenterID(trustCenterID)
 		} else {
@@ -11843,7 +11899,6 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
-			SetOwnerID(trustcenterdoc.OwnerID).
 			SetTrustCenterID(trustcenterdoc.TrustCenterID).
 			SetTitle(trustcenterdoc.Title).
 			SetCategory(trustcenterdoc.Category).

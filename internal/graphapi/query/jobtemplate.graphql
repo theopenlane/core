@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVJobTemplate($input: Upload!) {
   createBulkCSVJobTemplate(input: $input) {
     jobTemplates {
@@ -97,6 +96,7 @@ query GetAllJobTemplates {
     }
   }
 }
+
 query GetJobTemplateByID($jobTemplateId: ID!) {
   jobTemplate(id: $jobTemplateId) {
     createdAt
@@ -145,6 +145,7 @@ query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
     }
   }
 }
+
 mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateInput!) {
   updateJobTemplate(id: $updateJobTemplateId, input: $input) {
     jobTemplate {

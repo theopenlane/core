@@ -61,6 +61,8 @@ type OrganizationSettingHistory struct {
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
 	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
+	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+	AllowMatchingDomainsAutojoin bool `json:"allow_matching_domains_autojoin,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider enums.SSOProvider `json:"identity_provider,omitempty"`
 	// client ID for SSO integration
@@ -75,8 +77,16 @@ type OrganizationSettingHistory struct {
 	IdentityProviderEntityID string `json:"identity_provider_entity_id,omitempty"`
 	// OIDC discovery URL for the SSO provider
 	OidcDiscoveryEndpoint string `json:"oidc_discovery_endpoint,omitempty"`
+	// the sign in URL to be used for SAML-based authentication
+	SamlSigninURL string `json:"saml_signin_url,omitempty"`
+	// the SAML issuer
+	SamlIssuer string `json:"saml_issuer,omitempty"`
+	// the x509 certificate used to validate SAML responses
+	SamlCert string `json:"saml_cert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
+	// enforce 2fa / multifactor authentication for organization members
+	MultifactorAuthEnforced bool `json:"multifactor_auth_enforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
@@ -93,9 +103,9 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldPaymentMethodAdded:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldComplianceWebhookToken:
+		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldSamlSigninURL, organizationsettinghistory.FieldSamlIssuer, organizationsettinghistory.FieldSamlCert, organizationsettinghistory.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -248,6 +258,12 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 					return fmt.Errorf("unmarshal field allowed_email_domains: %w", err)
 				}
 			}
+		case organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field allow_matching_domains_autojoin", values[i])
+			} else if value.Valid {
+				_m.AllowMatchingDomainsAutojoin = value.Bool
+			}
 		case organizationsettinghistory.FieldIdentityProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider", values[i])
@@ -292,11 +308,35 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.OidcDiscoveryEndpoint = value.String
 			}
+		case organizationsettinghistory.FieldSamlSigninURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field saml_signin_url", values[i])
+			} else if value.Valid {
+				_m.SamlSigninURL = value.String
+			}
+		case organizationsettinghistory.FieldSamlIssuer:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field saml_issuer", values[i])
+			} else if value.Valid {
+				_m.SamlIssuer = value.String
+			}
+		case organizationsettinghistory.FieldSamlCert:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field saml_cert", values[i])
+			} else if value.Valid {
+				_m.SamlCert = value.String
+			}
 		case organizationsettinghistory.FieldIdentityProviderLoginEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_login_enforced", values[i])
 			} else if value.Valid {
 				_m.IdentityProviderLoginEnforced = value.Bool
+			}
+		case organizationsettinghistory.FieldMultifactorAuthEnforced:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field multifactor_auth_enforced", values[i])
+			} else if value.Valid {
+				_m.MultifactorAuthEnforced = value.Bool
 			}
 		case organizationsettinghistory.FieldComplianceWebhookToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -406,6 +446,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString("allowed_email_domains=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AllowedEmailDomains))
 	builder.WriteString(", ")
+	builder.WriteString("allow_matching_domains_autojoin=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AllowMatchingDomainsAutojoin))
+	builder.WriteString(", ")
 	builder.WriteString("identity_provider=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProvider))
 	builder.WriteString(", ")
@@ -431,8 +474,20 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString("oidc_discovery_endpoint=")
 	builder.WriteString(_m.OidcDiscoveryEndpoint)
 	builder.WriteString(", ")
+	builder.WriteString("saml_signin_url=")
+	builder.WriteString(_m.SamlSigninURL)
+	builder.WriteString(", ")
+	builder.WriteString("saml_issuer=")
+	builder.WriteString(_m.SamlIssuer)
+	builder.WriteString(", ")
+	builder.WriteString("saml_cert=")
+	builder.WriteString(_m.SamlCert)
+	builder.WriteString(", ")
 	builder.WriteString("identity_provider_login_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderLoginEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("multifactor_auth_enforced=")
+	builder.WriteString(fmt.Sprintf("%v", _m.MultifactorAuthEnforced))
 	builder.WriteString(", ")
 	builder.WriteString("compliance_webhook_token=")
 	builder.WriteString(_m.ComplianceWebhookToken)

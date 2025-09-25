@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVEntity($input: Upload!) {
   createBulkCSVEntity(input: $input) {
     entities {
@@ -93,23 +92,6 @@ query GetAllEntities {
     }
   }
 }
-query GetEntityByID($entityId: ID!) {
-  entity(id: $entityId) {
-    createdAt
-    createdBy
-    description
-    displayName
-    domains
-    entityTypeID
-    id
-    name
-    ownerID
-    status
-    tags
-    updatedAt
-    updatedBy
-  }
-}
 
 query GetEntities($first: Int, $last: Int, $where: EntityWhereInput) {
   entities(first: $first, last: $last, where: $where) {
@@ -139,6 +121,25 @@ query GetEntities($first: Int, $last: Int, $where: EntityWhereInput) {
     }
   }
 }
+
+query GetEntityByID($entityId: ID!) {
+  entity(id: $entityId) {
+    createdAt
+    createdBy
+    description
+    displayName
+    domains
+    entityTypeID
+    id
+    name
+    ownerID
+    status
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
 mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
   updateEntity(id: $updateEntityId, input: $input) {
     entity {

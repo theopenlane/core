@@ -136,6 +136,11 @@ func RecordLogin(success bool) {
 	Logins.WithLabelValues(successStr).Inc()
 }
 
+// RecordRegistration records a registration attempt
+func RecordRegistration() {
+	Registrations.Inc()
+}
+
 // RecordRequestValidation records a request validation result
 func RecordRequestValidation(requestType string, success bool) {
 	successStr := LabelFailure

@@ -230,7 +230,8 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
-			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget)
+			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
+			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

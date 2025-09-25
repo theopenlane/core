@@ -79,7 +79,7 @@ func TestQueryProgram(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  program1.ID,
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

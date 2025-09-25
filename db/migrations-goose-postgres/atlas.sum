@@ -1,4 +1,4 @@
-h1:sUTrmWahXiO2zWgB4/EJtKojgm2j2juNus/JaMU9DyA=
+h1:Sc+bSO9vK5CohstBRBhca/hjivQP4KzU77h2Fto2Kvk=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -53,3 +53,7 @@ h1:sUTrmWahXiO2zWgB4/EJtKojgm2j2juNus/JaMU9DyA=
 20250917191810_init_tc_doc_schema.sql h1:D0T7sqpJ8YWodBveceqvZ5sBdb2Y27G+uW3xnM1EnrU=
 20250918231521_trustcenterdoc_schema.sql h1:EkewIwLM6MvBdhkoRc9ieczNmctckj10adSD1WuIbJI=
 20250919172314_system_owned.sql h1:7wy9TXqWOQ85ZmmrC3D+18q4v8cl+Yeri8S+L4aoQCg=
+20250922153331_trust_center_nda.sql h1:j/1E8/2skO2fVCCwhOUaSs1vvHOOQvRMEBfNvzrBPF8=
+20250923144753_evidence_default.sql h1:sKkpIRM7oERDqicc+xM2SIIA6qEQEXjA/aXKXm/AqY4=
+20250923202813_organizationenforced2fa.sql h1:6PqVCA5DKxoxu/UoFVWSQMVTl/3Z8qXbmaGYo1tEIdU=
+20250923220618_normalize_trustcenter_ownership.sql h1:WCgsRcpXsb4/EpYuQ31uV0shlTIqNy2b4doKaQ99Rbs=

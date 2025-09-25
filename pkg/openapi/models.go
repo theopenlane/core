@@ -57,8 +57,9 @@ type LoginRequest struct {
 type LoginReply struct {
 	rout.Reply
 	AuthData
-	TFAEnabled bool   `json:"tfa_enabled,omitempty"`
-	Message    string `json:"message"`
+	TFAEnabled       bool   `json:"tfa_enabled,omitempty"`
+	TFASetupRequired bool   `json:"tfa_required,omitempty"`
+	Message          string `json:"message"`
 }
 
 // ExampleResponse returns an example LoginReply for OpenAPI documentation
@@ -346,6 +347,7 @@ type SwitchOrganizationReply struct {
 	rout.Reply
 	AuthData
 	NeedsSSO    bool   `json:"needs_sso,omitempty"`
+	NeedsTFA    bool   `json:"needs_tfa,omitempty"`
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
@@ -952,6 +954,7 @@ type OauthTokenRequest struct {
 	ExternalUserName string `json:"externalUserName" description:"The username of the user from the external provider" example:"jsnow"`
 	ClientToken      string `json:"clientToken" description:"The token provided by the external provider"`
 	Image            string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
+	OrgID            string `json:"org_id,omitempty" description:"the organization id for the sso connection"`
 }
 
 // ExampleOauthTokenRequest is an example OAuth token request for OpenAPI documentation
@@ -1532,7 +1535,10 @@ type SSOStatusReply struct {
 	Enforced       bool              `json:"enforced"`
 	Provider       enums.SSOProvider `json:"provider,omitempty"`
 	DiscoveryURL   string            `json:"discovery_url,omitempty"`
+	SAMLSignInURL  string            `json:"saml_signin_url,omitempty"`
 	OrganizationID string            `json:"organization_id,omitempty"`
+	OrgTFAEnforced bool              `json:"tfa_enforced"`
+	UserTFAEnabled bool              `json:"user_tfa_enabled,omitempty"`
 }
 
 // ExampleResponse returns an example SSOStatusReply for OpenAPI documentation
@@ -1542,7 +1548,10 @@ func (r *SSOStatusReply) ExampleResponse() any {
 		Enforced:       true,
 		Provider:       enums.SSOProviderOkta,
 		DiscoveryURL:   "https://accounts.example.com/.well-known/openid_configuration",
+		SAMLSignInURL:  "https://accounts.example.com/saml/signin",
 		OrganizationID: ulids.New().String(),
+		OrgTFAEnforced: true,
+		UserTFAEnabled: false,
 	}
 }
 
@@ -1557,7 +1566,10 @@ var ExampleSSOStatusReply = SSOStatusReply{
 	Enforced:       true,
 	Provider:       enums.SSOProviderOkta,
 	DiscoveryURL:   "https://id.example.com/.well-known/openid-configuration",
+	SAMLSignInURL:  "https://id.example.com/saml/signin",
 	OrganizationID: ulids.New().String(),
+	OrgTFAEnforced: true,
+	UserTFAEnabled: false,
 }
 
 // SSOTokenAuthorizeRequest is the request for authorizing a token for SSO use

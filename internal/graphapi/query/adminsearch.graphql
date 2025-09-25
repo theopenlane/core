@@ -650,6 +650,9 @@ query AdminSearch($query: String!) {
           identityProviderMetadataEndpoint
           identityProviderEntityID
           oidcDiscoveryEndpoint
+          samlSigninURL
+          samlIssuer
+          samlCert
           complianceWebhookToken
         }
       }
@@ -920,6 +923,7 @@ query AdminSearch($query: String!) {
           description
           jsonconfig
           uischema
+          trustCenterID
         }
       }
     }
@@ -970,7 +974,6 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
-          ownerID
           trustCenterID
           title
           category

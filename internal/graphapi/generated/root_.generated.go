@@ -2579,11 +2579,12 @@ type ComplexityRoot struct {
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
+		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
@@ -2646,6 +2647,8 @@ type ComplexityRoot struct {
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
 		DeleteUser                           func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
+		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
+		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -2700,10 +2703,11 @@ type ComplexityRoot struct {
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
+		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -3067,7 +3071,6 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		TrustCenterDocs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -3130,6 +3133,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
+		AllowMatchingDomainsAutojoin     func(childComplexity int) int
 		AllowedEmailDomains              func(childComplexity int) int
 		BillingAddress                   func(childComplexity int) int
 		BillingContact                   func(childComplexity int) int
@@ -3150,10 +3154,14 @@ type ComplexityRoot struct {
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Organization                     func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
+		SamlCert                         func(childComplexity int) int
+		SamlIssuer                       func(childComplexity int) int
+		SamlSigninURL                    func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -3184,6 +3192,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
+		AllowMatchingDomainsAutojoin     func(childComplexity int) int
 		AllowedEmailDomains              func(childComplexity int) int
 		BillingAddress                   func(childComplexity int) int
 		BillingContact                   func(childComplexity int) int
@@ -3204,11 +3213,15 @@ type ComplexityRoot struct {
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
 		Ref                              func(childComplexity int) int
+		SamlCert                         func(childComplexity int) int
+		SamlIssuer                       func(childComplexity int) int
+		SamlSigninURL                    func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -4212,6 +4225,10 @@ type ComplexityRoot struct {
 		Webauthns                   func(childComplexity int) int
 	}
 
+	SendTrustCenterNDAEmailPayload struct {
+		Success func(childComplexity int) int
+	}
+
 	Standard struct {
 		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt              func(childComplexity int) int
@@ -4433,6 +4450,10 @@ type ComplexityRoot struct {
 
 	SubcontrolUpdatePayload struct {
 		Subcontrol func(childComplexity int) int
+	}
+
+	SubmitTrustCenterNDAResponsePayload struct {
+		DocumentData func(childComplexity int) int
 	}
 
 	Subprocessor struct {
@@ -4710,6 +4731,8 @@ type ComplexityRoot struct {
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		TemplateType     func(childComplexity int) int
+		TrustCenter      func(childComplexity int) int
+		TrustCenterID    func(childComplexity int) int
 		Uischema         func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -4755,6 +4778,7 @@ type ComplexityRoot struct {
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		TemplateType     func(childComplexity int) int
+		TrustCenterID    func(childComplexity int) int
 		Uischema         func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -4786,6 +4810,7 @@ type ComplexityRoot struct {
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
 		TrustCenterDocs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
@@ -4879,8 +4904,6 @@ type ComplexityRoot struct {
 		File          func(childComplexity int) int
 		FileID        func(childComplexity int) int
 		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
 		TrustCenter   func(childComplexity int) int
@@ -4921,7 +4944,6 @@ type ComplexityRoot struct {
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
 		Ref           func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
@@ -4979,6 +5001,14 @@ type ComplexityRoot struct {
 	TrustCenterHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	TrustCenterNDACreatePayload struct {
+		Template func(childComplexity int) int
+	}
+
+	TrustCenterNDAUpdatePayload struct {
+		Template func(childComplexity int) int
 	}
 
 	TrustCenterSetting struct {
@@ -18429,7 +18459,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput)), true
+		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createTrustCenter":
 		if e.complexity.Mutation.CreateTrustCenter == nil {
@@ -18478,6 +18508,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterDomain(childComplexity, args["input"].(model.CreateTrustCenterDomainInput)), true
+
+	case "Mutation.createTrustCenterNDA":
+		if e.complexity.Mutation.CreateTrustCenterNda == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterNDA_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterNda(childComplexity, args["input"].(model.CreateTrustCenterNDAInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createTrustCenterSetting":
 		if e.complexity.Mutation.CreateTrustCenterSetting == nil {
@@ -19223,6 +19265,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWebauthn(childComplexity, args["id"].(string)), true
 
+	case "Mutation.sendTrustCenterNDAEmail":
+		if e.complexity.Mutation.SendTrustCenterNDAEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendTrustCenterNDAEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendTrustCenterNDAEmail(childComplexity, args["input"].(model.SendTrustCenterNDAInput)), true
+
+	case "Mutation.submitTrustCenterNDAResponse":
+		if e.complexity.Mutation.SubmitTrustCenterNDAResponse == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_submitTrustCenterNDAResponse_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SubmitTrustCenterNDAResponse(childComplexity, args["input"].(model.SubmitTrustCenterNDAResponseInput)), true
+
 	case "Mutation.updateAPIToken":
 		if e.complexity.Mutation.UpdateAPIToken == nil {
 			break
@@ -19881,7 +19947,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput)), true
+		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenter":
 		if e.complexity.Mutation.UpdateTrustCenter == nil {
@@ -19918,6 +19984,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+
+	case "Mutation.updateTrustCenterNDA":
+		if e.complexity.Mutation.UpdateTrustCenterNda == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterNDA_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterNda(childComplexity, args["id"].(string), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
@@ -22085,18 +22163,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
-	case "Organization.trustCenterDocs":
-		if e.complexity.Organization.TrustCenterDocs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_trustCenterDocs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Organization.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
-
 	case "Organization.trustCenters":
 		if e.complexity.Organization.TrustCenters == nil {
 			break
@@ -22352,6 +22418,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationHistoryEdge.Node(childComplexity), true
 
+	case "OrganizationSetting.allowMatchingDomainsAutojoin":
+		if e.complexity.OrganizationSetting.AllowMatchingDomainsAutojoin == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.AllowMatchingDomainsAutojoin(childComplexity), true
+
 	case "OrganizationSetting.allowedEmailDomains":
 		if e.complexity.OrganizationSetting.AllowedEmailDomains == nil {
 			break
@@ -22497,6 +22570,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.IdentityProviderMetadataEndpoint(childComplexity), true
 
+	case "OrganizationSetting.multifactorAuthEnforced":
+		if e.complexity.OrganizationSetting.MultifactorAuthEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.MultifactorAuthEnforced(childComplexity), true
+
 	case "OrganizationSetting.oidcDiscoveryEndpoint":
 		if e.complexity.OrganizationSetting.OidcDiscoveryEndpoint == nil {
 			break
@@ -22524,6 +22604,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSetting.PaymentMethodAdded(childComplexity), true
+
+	case "OrganizationSetting.samlCert":
+		if e.complexity.OrganizationSetting.SamlCert == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlCert(childComplexity), true
+
+	case "OrganizationSetting.samlIssuer":
+		if e.complexity.OrganizationSetting.SamlIssuer == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlIssuer(childComplexity), true
+
+	case "OrganizationSetting.samlSigninURL":
+		if e.complexity.OrganizationSetting.SamlSigninURL == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlSigninURL(childComplexity), true
 
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
@@ -22608,6 +22709,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingEdge.Node(childComplexity), true
+
+	case "OrganizationSettingHistory.allowMatchingDomainsAutojoin":
+		if e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin(childComplexity), true
 
 	case "OrganizationSettingHistory.allowedEmailDomains":
 		if e.complexity.OrganizationSettingHistory.AllowedEmailDomains == nil {
@@ -22749,6 +22857,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
 
+	case "OrganizationSettingHistory.multifactorAuthEnforced":
+		if e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced(childComplexity), true
+
 	case "OrganizationSettingHistory.oidcDiscoveryEndpoint":
 		if e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint == nil {
 			break
@@ -22783,6 +22898,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.Ref(childComplexity), true
+
+	case "OrganizationSettingHistory.samlCert":
+		if e.complexity.OrganizationSettingHistory.SamlCert == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlCert(childComplexity), true
+
+	case "OrganizationSettingHistory.samlIssuer":
+		if e.complexity.OrganizationSettingHistory.SamlIssuer == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlIssuer(childComplexity), true
+
+	case "OrganizationSettingHistory.samlSigninURL":
+		if e.complexity.OrganizationSettingHistory.SamlSigninURL == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlSigninURL(childComplexity), true
 
 	case "OrganizationSettingHistory.tags":
 		if e.complexity.OrganizationSettingHistory.Tags == nil {
@@ -29603,6 +29739,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Webauthns(childComplexity), true
 
+	case "SendTrustCenterNDAEmailPayload.success":
+		if e.complexity.SendTrustCenterNDAEmailPayload.Success == nil {
+			break
+		}
+
+		return e.complexity.SendTrustCenterNDAEmailPayload.Success(childComplexity), true
+
 	case "Standard.controls":
 		if e.complexity.Standard.Controls == nil {
 			break
@@ -30803,6 +30946,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolUpdatePayload.Subcontrol(childComplexity), true
+
+	case "SubmitTrustCenterNDAResponsePayload.documentData":
+		if e.complexity.SubmitTrustCenterNDAResponsePayload.DocumentData == nil {
+			break
+		}
+
+		return e.complexity.SubmitTrustCenterNDAResponsePayload.DocumentData(childComplexity), true
 
 	case "Subprocessor.createdAt":
 		if e.complexity.Subprocessor.CreatedAt == nil {
@@ -32109,6 +32259,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.TemplateType(childComplexity), true
 
+	case "Template.trustCenter":
+		if e.complexity.Template.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenter(childComplexity), true
+
+	case "Template.trustCenterID":
+		if e.complexity.Template.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenterID(childComplexity), true
+
 	case "Template.uischema":
 		if e.complexity.Template.Uischema == nil {
 			break
@@ -32298,6 +32462,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistory.TemplateType(childComplexity), true
 
+	case "TemplateHistory.trustCenterID":
+		if e.complexity.TemplateHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.TrustCenterID(childComplexity), true
+
 	case "TemplateHistory.uischema":
 		if e.complexity.TemplateHistory.Uischema == nil {
 			break
@@ -32430,6 +32601,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenter.Tags(childComplexity), true
+
+	case "TrustCenter.templates":
+		if e.complexity.TrustCenter.Templates == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_templates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
 	case "TrustCenter.trustCenterCompliances":
 		if e.complexity.TrustCenter.TrustCenterCompliances == nil {
@@ -32803,20 +32986,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.ID(childComplexity), true
 
-	case "TrustCenterDoc.owner":
-		if e.complexity.TrustCenterDoc.Owner == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDoc.Owner(childComplexity), true
-
-	case "TrustCenterDoc.ownerID":
-		if e.complexity.TrustCenterDoc.OwnerID == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDoc.OwnerID(childComplexity), true
-
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -32970,13 +33139,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
-
-	case "TrustCenterDocHistory.ownerID":
-		if e.complexity.TrustCenterDocHistory.OwnerID == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDocHistory.OwnerID(childComplexity), true
 
 	case "TrustCenterDocHistory.ref":
 		if e.complexity.TrustCenterDocHistory.Ref == nil {
@@ -33208,6 +33370,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterHistoryEdge.Node(childComplexity), true
+
+	case "TrustCenterNDACreatePayload.template":
+		if e.complexity.TrustCenterNDACreatePayload.Template == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDACreatePayload.Template(childComplexity), true
+
+	case "TrustCenterNDAUpdatePayload.template":
+		if e.complexity.TrustCenterNDAUpdatePayload.Template == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDAUpdatePayload.Template(childComplexity), true
 
 	case "TrustCenterSetting.accentColor":
 		if e.complexity.TrustCenterSetting.AccentColor == nil {
@@ -35001,6 +35177,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterDocInput,
 		ec.unmarshalInputCreateTrustCenterDomainInput,
 		ec.unmarshalInputCreateTrustCenterInput,
+		ec.unmarshalInputCreateTrustCenterNDAInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
 		ec.unmarshalInputCreateUserInput,
@@ -35140,6 +35317,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputScheduledJobRunOrder,
 		ec.unmarshalInputScheduledJobRunWhereInput,
 		ec.unmarshalInputScheduledJobWhereInput,
+		ec.unmarshalInputSendTrustCenterNDAInput,
 		ec.unmarshalInputStandardHistoryOrder,
 		ec.unmarshalInputStandardHistoryWhereInput,
 		ec.unmarshalInputStandardOrder,
@@ -35148,6 +35326,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubcontrolHistoryWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
 		ec.unmarshalInputSubcontrolWhereInput,
+		ec.unmarshalInputSubmitTrustCenterNDAResponseInput,
 		ec.unmarshalInputSubprocessorHistoryOrder,
 		ec.unmarshalInputSubprocessorHistoryWhereInput,
 		ec.unmarshalInputSubprocessorOrder,
@@ -37714,7 +37893,7 @@ can retrieve the value
 """
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 """
-Indicates is the input field is read-only by non-system admin users. 
+Indicates is the input field is read-only by non-system admin users.
 If an input is marked as @readOnly, only system-admin users
 can set the field
 """
@@ -46703,7 +46882,6 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
-  trustCenterDocIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -46751,6 +46929,10 @@ input CreateOrganizationSettingInput {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -46775,9 +46957,25 @@ input CreateOrganizationSettingInput {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -47478,6 +47676,7 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+  trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -47512,7 +47711,6 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-  ownerID: ID
   trustCenterID: ID
   fileID: ID
 }
@@ -47531,6 +47729,7 @@ input CreateTrustCenterInput {
   trustCenterSubprocessorIDs: [ID!]
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  templateIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -68716,37 +68915,6 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
-  trustCenterDocs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TrustCenterDocs returned from the connection.
-    """
-    orderBy: [TrustCenterDocOrder!]
-
-    """
-    Filtering options for TrustCenterDocs returned from the connection.
-    """
-    where: TrustCenterDocWhereInput
-  ): TrustCenterDocConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -69203,6 +69371,10 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -69231,9 +69403,25 @@ type OrganizationSetting implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -69359,6 +69547,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -69387,9 +69579,25 @@ type OrganizationSettingHistory implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -69701,6 +69909,13 @@ input OrganizationSettingHistoryWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -69805,10 +70020,71 @@ input OrganizationSettingHistoryWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -70055,6 +70331,13 @@ input OrganizationSettingWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -70159,10 +70442,71 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -70680,11 +71024,6 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
-  """
-  trust_center_docs edge predicates
-  """
-  hasTrustCenterDocs: Boolean
-  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
   """
   members edge predicates
   """
@@ -85874,7 +86213,7 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -85913,6 +86252,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: ID
   owner: Organization
   documents(
     """
@@ -85976,6 +86319,7 @@ type Template implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  trustCenter: TrustCenter
 }
 """
 A connection to a list of items.
@@ -86028,7 +86372,7 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -86067,6 +86411,10 @@ type TemplateHistory implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -86142,6 +86490,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -86373,6 +86722,24 @@ input TemplateHistoryWhereInput {
   kindNotIn: [TemplateHistoryTemplateKind!]
   kindIsNil: Boolean
   kindNotNil: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -86402,6 +86769,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -86598,6 +86966,24 @@ input TemplateWhereInput {
   kindIsNil: Boolean
   kindNotNil: Boolean
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -86612,6 +86998,11 @@ input TemplateWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -86735,6 +87126,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -87198,10 +87620,6 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -87221,7 +87639,6 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-  owner: Organization
   trustCenter: TrustCenter
   """
   the file containing the document content
@@ -87271,10 +87688,6 @@ type TrustCenterDocHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
   """
   ID of the trust center
   """
@@ -87483,24 +87896,6 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -87690,24 +88085,6 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -87784,11 +88161,6 @@ input TrustCenterDocWhereInput {
   visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
   """
   trust_center edge predicates
   """
@@ -89685,6 +90057,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -91773,9 +92150,6 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
-  addTrustCenterDocIDs: [ID!]
-  removeTrustCenterDocIDs: [ID!]
-  clearTrustCenterDocs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -91835,6 +92209,11 @@ input UpdateOrganizationSettingInput {
   appendAllowedEmailDomains: [String!]
   clearAllowedEmailDomains: Boolean
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  clearAllowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -91865,9 +92244,29 @@ input UpdateOrganizationSettingInput {
   oidcDiscoveryEndpoint: String
   clearOidcDiscoveryEndpoint: Boolean
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  clearSamlSigninURL: Boolean
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  clearSamlIssuer: Boolean
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  clearSamlCert: Boolean
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
+  clearMultifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -92842,14 +93241,14 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -92921,6 +93320,9 @@ input UpdateTrustCenterInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -95825,7 +96227,7 @@ type ExportBulkDeletePayload {
     Deleted export IDs
     """
     deletedIDs: [ID!]!
-} 
+}
 `, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {
     """
@@ -100814,6 +101216,7 @@ extend type Mutation{
         values of the template
         """
         input: CreateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateCreatePayload!
     """
     Create multiple new templates
@@ -100845,6 +101248,7 @@ extend type Mutation{
         New values for the template
         """
         input: UpdateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateUpdatePayload!
     """
     Delete an existing template
@@ -101287,6 +101691,94 @@ input CreateTrustCenterDomainInput {
 
 extend input CreateTrustCenterInput {
   createTrustCenterSetting: CreateTrustCenterSettingInput
+}
+`, BuiltIn: false},
+	{Name: "../schema/trustcenternda.graphql", Input: `extend type Mutation{
+    """
+    Create a Trust Center NDA Template
+    """
+    createTrustCenterNDA(
+        """
+        values of the trustCenterNDA
+        """
+        input: CreateTrustCenterNDAInput!
+        """
+        NDA file
+        """
+        templateFiles: [Upload!]
+    ): TrustCenterNDACreatePayload!
+
+    updateTrustCenterNDA(
+        """
+        ID of the trust center
+        """
+        id: ID!
+        """
+        NDA file
+        """
+        templateFiles: [Upload!]
+    ): TrustCenterNDAUpdatePayload!
+
+    sendTrustCenterNDAEmail(
+        """
+        values of the trustCenterNDA
+        """
+        input: SendTrustCenterNDAInput!
+    ): SendTrustCenterNDAEmailPayload!
+    """
+    Submit a response to a Trust Center NDA
+    """
+    submitTrustCenterNDAResponse(
+        """
+        values of the trustCenterNDA submission
+        """
+        input: SubmitTrustCenterNDAResponseInput!
+    ): SubmitTrustCenterNDAResponsePayload!
+}
+
+type TrustCenterNDACreatePayload {
+    template: Template!
+}
+
+input CreateTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+}
+
+type TrustCenterNDAUpdatePayload {
+    template: Template!
+}
+
+type SendTrustCenterNDAEmailPayload {
+    success: Boolean!
+}
+
+input SendTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+    """
+    email address
+    """
+    email: String!
+}
+
+input SubmitTrustCenterNDAResponseInput {
+    """
+    template id
+    """
+    templateID: ID!
+    """
+    json response
+    """
+    response: Map!
+}
+
+type SubmitTrustCenterNDAResponsePayload {
+    documentData: DocumentData!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {

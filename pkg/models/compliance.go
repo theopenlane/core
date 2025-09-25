@@ -2,6 +2,22 @@ package models
 
 import (
 	"io"
+	"slices"
+	"strconv"
+	"strings"
+)
+
+type Sortable interface {
+	GetSortField() string
+}
+
+// ensure the types implement the Sortable interface
+var (
+	_ Sortable = (*ImplementationGuidance)(nil)
+	_ Sortable = (*AssessmentMethod)(nil)
+	_ Sortable = (*ExampleEvidence)(nil)
+	_ Sortable = (*AssessmentObjective)(nil)
+	_ Sortable = (*Reference)(nil)
 )
 
 // AssessmentObjective are objectives that are validated during the audit to ensure the control is implemented
@@ -99,4 +115,74 @@ func (r Reference) MarshalGQL(w io.Writer) {
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (r *Reference) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, r)
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (i ImplementationGuidance) GetSortField() string {
+	return i.ReferenceID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (a AssessmentMethod) GetSortField() string {
+	return a.ID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (e ExampleEvidence) GetSortField() string {
+	return e.DocumentationType + " " + e.Description
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (a AssessmentObjective) GetSortField() string {
+	return a.ID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (r Reference) GetSortField() string {
+	return r.Name
+}
+
+// Sort a slice of Sortable items by their sort field
+func Sort[T Sortable](items []T) []T {
+	slices.SortFunc(items, func(a, b T) int {
+		return compareStrings(a.GetSortField(), b.GetSortField())
+	})
+
+	return items
+}
+
+func compareStrings(a, b string) int {
+	as := strings.Split(a, ".")
+	bs := strings.Split(b, ".")
+
+	n := len(as)
+	if len(bs) < n {
+		n = len(bs)
+	}
+
+	for i := range n {
+		aInt, aErr := strconv.Atoi(as[i])
+		bInt, bErr := strconv.Atoi(bs[i])
+
+		if aErr == nil && bErr == nil {
+			if aInt != bInt {
+				return aInt - bInt
+			}
+		} else {
+			cmp := strings.Compare(as[i], bs[i])
+			if cmp != 0 {
+				return cmp
+			}
+		}
+	}
+
+	// all equal up to min length => shorter wins
+	switch {
+	case len(as) < len(bs):
+		return -1
+	case len(as) > len(bs):
+		return 1
+	default:
+		return 0
+	}
 }

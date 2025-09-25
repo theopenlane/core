@@ -7072,7 +7072,6 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string
 	SubprocessorIDs                 []string
 	ExportIDs                       []string
-	TrustCenterDocIDs               []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -7282,9 +7281,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExportIDs; len(v) > 0 {
 		m.AddExportIDs(v...)
 	}
-	if v := i.TrustCenterDocIDs; len(v) > 0 {
-		m.AddTrustCenterDocIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7484,9 +7480,6 @@ type UpdateOrganizationInput struct {
 	ClearExports                          bool
 	AddExportIDs                          []string
 	RemoveExportIDs                       []string
-	ClearTrustCenterDocs                  bool
-	AddTrustCenterDocIDs                  []string
-	RemoveTrustCenterDocIDs               []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8058,15 +8051,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveExportIDs; len(v) > 0 {
 		m.RemoveExportIDs(v...)
 	}
-	if i.ClearTrustCenterDocs {
-		m.ClearTrustCenterDocs()
-	}
-	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
-		m.AddTrustCenterDocIDs(v...)
-	}
-	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
-		m.RemoveTrustCenterDocIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -8093,13 +8077,18 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation                      *enums.Region
 	BillingNotificationsEnabled      *bool
 	AllowedEmailDomains              []string
+	AllowMatchingDomainsAutojoin     *bool
 	IdentityProvider                 *enums.SSOProvider
 	IdentityProviderClientID         *string
 	IdentityProviderClientSecret     *string
 	IdentityProviderMetadataEndpoint *string
 	IdentityProviderEntityID         *string
 	OidcDiscoveryEndpoint            *string
+	SamlSigninURL                    *string
+	SamlIssuer                       *string
+	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
+	MultifactorAuthEnforced          *bool
 	ComplianceWebhookToken           *string
 	OrganizationID                   *string
 	FileIDs                          []string
@@ -8137,6 +8126,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.AllowedEmailDomains; v != nil {
 		m.SetAllowedEmailDomains(v)
 	}
+	if v := i.AllowMatchingDomainsAutojoin; v != nil {
+		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
 	if v := i.IdentityProvider; v != nil {
 		m.SetIdentityProvider(*v)
 	}
@@ -8155,8 +8147,20 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.OidcDiscoveryEndpoint; v != nil {
 		m.SetOidcDiscoveryEndpoint(*v)
 	}
+	if v := i.SamlSigninURL; v != nil {
+		m.SetSamlSigninURL(*v)
+	}
+	if v := i.SamlIssuer; v != nil {
+		m.SetSamlIssuer(*v)
+	}
+	if v := i.SamlCert; v != nil {
+		m.SetSamlCert(*v)
+	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if v := i.MultifactorAuthEnforced; v != nil {
+		m.SetMultifactorAuthEnforced(*v)
 	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)
@@ -8199,6 +8203,8 @@ type UpdateOrganizationSettingInput struct {
 	ClearAllowedEmailDomains              bool
 	AllowedEmailDomains                   []string
 	AppendAllowedEmailDomains             []string
+	ClearAllowMatchingDomainsAutojoin     bool
+	AllowMatchingDomainsAutojoin          *bool
 	ClearIdentityProvider                 bool
 	IdentityProvider                      *enums.SSOProvider
 	ClearIdentityProviderClientID         bool
@@ -8211,7 +8217,15 @@ type UpdateOrganizationSettingInput struct {
 	IdentityProviderEntityID              *string
 	ClearOidcDiscoveryEndpoint            bool
 	OidcDiscoveryEndpoint                 *string
+	ClearSamlSigninURL                    bool
+	SamlSigninURL                         *string
+	ClearSamlIssuer                       bool
+	SamlIssuer                            *string
+	ClearSamlCert                         bool
+	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
+	ClearMultifactorAuthEnforced          bool
+	MultifactorAuthEnforced               *bool
 	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
 	ClearOrganization                     bool
@@ -8289,6 +8303,12 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if i.AppendAllowedEmailDomains != nil {
 		m.AppendAllowedEmailDomains(i.AllowedEmailDomains)
 	}
+	if i.ClearAllowMatchingDomainsAutojoin {
+		m.ClearAllowMatchingDomainsAutojoin()
+	}
+	if v := i.AllowMatchingDomainsAutojoin; v != nil {
+		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
 	if i.ClearIdentityProvider {
 		m.ClearIdentityProvider()
 	}
@@ -8325,8 +8345,32 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.OidcDiscoveryEndpoint; v != nil {
 		m.SetOidcDiscoveryEndpoint(*v)
 	}
+	if i.ClearSamlSigninURL {
+		m.ClearSamlSigninURL()
+	}
+	if v := i.SamlSigninURL; v != nil {
+		m.SetSamlSigninURL(*v)
+	}
+	if i.ClearSamlIssuer {
+		m.ClearSamlIssuer()
+	}
+	if v := i.SamlIssuer; v != nil {
+		m.SetSamlIssuer(*v)
+	}
+	if i.ClearSamlCert {
+		m.ClearSamlCert()
+	}
+	if v := i.SamlCert; v != nil {
+		m.SetSamlCert(*v)
+	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if i.ClearMultifactorAuthEnforced {
+		m.ClearMultifactorAuthEnforced()
+	}
+	if v := i.MultifactorAuthEnforced; v != nil {
+		m.SetMultifactorAuthEnforced(*v)
 	}
 	if i.ClearComplianceWebhookToken {
 		m.ClearComplianceWebhookToken()
@@ -11653,6 +11697,7 @@ type CreateTemplateInput struct {
 	OwnerID          *string
 	DocumentIDs      []string
 	FileIDs          []string
+	TrustCenterID    *string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -11691,6 +11736,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -11717,14 +11765,14 @@ type UpdateTemplateInput struct {
 	Jsonconfig            map[string]interface{}
 	ClearUischema         bool
 	Uischema              map[string]interface{}
-	ClearOwner            bool
-	OwnerID               *string
 	ClearDocuments        bool
 	AddDocumentIDs        []string
 	RemoveDocumentIDs     []string
 	ClearFiles            bool
 	AddFileIDs            []string
 	RemoveFileIDs         []string
+	ClearTrustCenter      bool
+	TrustCenterID         *string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -11777,12 +11825,6 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if i.ClearDocuments {
 		m.ClearDocuments()
 	}
@@ -11800,6 +11842,12 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 }
 
@@ -11824,6 +11872,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterSubprocessorIDs []string
 	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
+	TemplateIDs                []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11848,6 +11897,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
 	}
 }
 
@@ -11877,6 +11929,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterCompliances      bool
 	AddTrustCenterComplianceIDs      []string
 	RemoveTrustCenterComplianceIDs   []string
+	ClearTemplates                   bool
+	AddTemplateIDs                   []string
+	RemoveTemplateIDs                []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -11934,6 +11989,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
 		m.RemoveTrustCenterComplianceIDs(v...)
+	}
+	if i.ClearTemplates {
+		m.ClearTemplates()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
 	}
 }
 
@@ -12023,7 +12087,6 @@ type CreateTrustCenterDocInput struct {
 	Title         string
 	Category      string
 	Visibility    *enums.TrustCenterDocumentVisibility
-	OwnerID       *string
 	TrustCenterID *string
 	FileID        *string
 }
@@ -12037,9 +12100,6 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	m.SetCategory(i.Category)
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)

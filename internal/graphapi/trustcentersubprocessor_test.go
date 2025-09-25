@@ -441,7 +441,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
-			expectedErr: couldNotFindUser,
+			expectedErr: "could not identify authenticated user",
 		},
 		{
 			name: "not authorized - different org user cannot update",

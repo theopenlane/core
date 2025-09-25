@@ -16057,25 +16057,6 @@ func (c *OrganizationClient) QueryExports(_m *Organization) *ExportQuery {
 	return query
 }
 
-// QueryTrustCenterDocs queries the trust_center_docs edge of a Organization.
-func (c *OrganizationClient) QueryTrustCenterDocs(_m *Organization) *TrustCenterDocQuery {
-	query := (&TrustCenterDocClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterDocsTable, organization.TrustCenterDocsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterDoc
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -22157,6 +22138,25 @@ func (c *TemplateClient) QueryFiles(_m *Template) *FileQuery {
 	return query
 }
 
+// QueryTrustCenter queries the trust_center edge of a Template.
+func (c *TemplateClient) QueryTrustCenter(_m *Template) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, template.TrustCenterTable, template.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TemplateClient) Hooks() []Hook {
 	hooks := c.hooks.Template
@@ -22535,6 +22535,25 @@ func (c *TrustCenterClient) QueryTrustCenterCompliances(_m *TrustCenter) *TrustC
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterCompliance
 		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplates queries the templates edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTemplates(_m *TrustCenter) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TemplatesTable, trustcenter.TemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -22982,25 +23001,6 @@ func (c *TrustCenterDocClient) GetX(ctx context.Context, id string) *TrustCenter
 		panic(err)
 	}
 	return obj
-}
-
-// QueryOwner queries the owner edge of a TrustCenterDoc.
-func (c *TrustCenterDocClient) QueryOwner(_m *TrustCenterDoc) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.OwnerTable, trustcenterdoc.OwnerColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // QueryTrustCenter queries the trust_center edge of a TrustCenterDoc.

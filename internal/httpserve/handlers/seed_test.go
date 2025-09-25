@@ -46,6 +46,7 @@ type userInput struct {
 	email         string
 	password      string
 	confirmedUser bool
+	tfaEnabled    bool
 	features      []models.OrgModule
 }
 
@@ -63,7 +64,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	if input != nil && input.confirmedUser {
 		userSetting, err = suite.db.UserSetting.Create().
 			SetEmailConfirmed(true).
-			SetIsTfaEnabled(true).
+			SetIsTfaEnabled(input.tfaEnabled).
 			Save(ctx)
 		require.NoError(t, err)
 	}
@@ -137,7 +138,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	return testUser
 }
 
-func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID string, features []models.OrgModule) {
+func (suite *HandlerTestSuite) enableModules(_ context.Context, userID, orgID string, features []models.OrgModule) {
 	// default to all modules if none provided
 	if len(features) == 0 {
 		features = models.AllOrgModules

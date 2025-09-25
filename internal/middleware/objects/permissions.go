@@ -31,12 +31,18 @@ func AddFilePermissions(ctx context.Context) error {
 				return ErrMissingParent
 			}
 
+			// trust center doc has special parent relation
+			parentRelation := fgax.ParentRelation
+			if f.Parent.Type == "trust_center_doc" {
+				parentRelation = "tc_doc_parent"
+			}
+
 			req := fgax.GetTupleKey(fgax.TupleRequest{
 				SubjectID:   f.Parent.ID,
 				SubjectType: f.Parent.Type,
-				ObjectID:    f.ID,                // this is the object id (file id in this case) being created
-				ObjectType:  generated.TypeFile,  // this is the object type (file in this case) being created
-				Relation:    fgax.ParentRelation, // this will always be parent in an object owned permission setup
+				ObjectID:    f.ID,               // this is the object id (file id in this case) being created
+				ObjectType:  generated.TypeFile, // this is the object type (file in this case) being created
+				Relation:    parentRelation,     // this will always be parent in an object owned permission setup
 			})
 
 			tuples := []fgax.TupleKey{req}

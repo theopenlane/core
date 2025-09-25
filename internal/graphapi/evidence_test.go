@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -101,7 +102,7 @@ func TestQueryEvidence(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  evidence.ID,
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -469,6 +470,12 @@ func TestMutationCreateEvidence(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.IsAutomated, *resp.CreateEvidence.Evidence.IsAutomated))
 			} else {
 				assert.Check(t, !*resp.CreateEvidence.Evidence.IsAutomated)
+			}
+
+			if tc.request.Status == nil {
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceSubmitted))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, *tc.request.Status))
 			}
 
 			if tc.request.URL != nil {

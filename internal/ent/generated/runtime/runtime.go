@@ -682,13 +682,15 @@ func init() {
 	control.Hooks[12] = controlHooks[0]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters2 := controlMixin[2].Interceptors()
+	controlMixinInters6 := controlMixin[6].Interceptors()
 	controlMixinInters7 := controlMixin[7].Interceptors()
 	controlMixinInters9 := controlMixin[9].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters2[0]
-	control.Interceptors[2] = controlMixinInters7[0]
-	control.Interceptors[3] = controlMixinInters7[1]
-	control.Interceptors[4] = controlMixinInters9[0]
+	control.Interceptors[2] = controlMixinInters6[0]
+	control.Interceptors[3] = controlMixinInters7[0]
+	control.Interceptors[4] = controlMixinInters7[1]
+	control.Interceptors[5] = controlMixinInters9[0]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields3 := controlMixin[3].Fields()
@@ -1344,6 +1346,7 @@ func init() {
 	documentdataMixinHooks1 := documentdataMixin[1].Hooks()
 	documentdataMixinHooks2 := documentdataMixin[2].Hooks()
 	documentdataMixinHooks6 := documentdataMixin[6].Hooks()
+	documentdataHooks := schema.DocumentData{}.Hooks()
 
 	documentdata.Hooks[1] = documentdataMixinHooks0[0]
 
@@ -1354,6 +1357,8 @@ func init() {
 	documentdata.Hooks[4] = documentdataMixinHooks6[0]
 
 	documentdata.Hooks[5] = documentdataMixinHooks6[1]
+
+	documentdata.Hooks[6] = documentdataHooks[0]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters2 := documentdataMixin[2].Interceptors()
 	documentdataMixinInters6 := documentdataMixin[6].Interceptors()
@@ -4464,20 +4469,32 @@ func init() {
 	organizationsettingDescAllowedEmailDomains := organizationsettingFields[9].Descriptor()
 	// organizationsetting.AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
 	organizationsetting.AllowedEmailDomainsValidator = organizationsettingDescAllowedEmailDomains.Validators[0].(func([]string) error)
+	// organizationsettingDescAllowMatchingDomainsAutojoin is the schema descriptor for allow_matching_domains_autojoin field.
+	organizationsettingDescAllowMatchingDomainsAutojoin := organizationsettingFields[10].Descriptor()
+	// organizationsetting.DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the allow_matching_domains_autojoin field.
+	organizationsetting.DefaultAllowMatchingDomainsAutojoin = organizationsettingDescAllowMatchingDomainsAutojoin.Default.(bool)
 	// organizationsettingDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
-	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[14].Descriptor()
+	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[15].Descriptor()
 	// organizationsetting.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
 	organizationsetting.DefaultIdentityProviderAuthTested = organizationsettingDescIdentityProviderAuthTested.Default.(bool)
+	// organizationsettingDescSamlSigninURL is the schema descriptor for saml_signin_url field.
+	organizationsettingDescSamlSigninURL := organizationsettingFields[18].Descriptor()
+	// organizationsetting.SamlSigninURLValidator is a validator for the "saml_signin_url" field. It is called by the builders before save.
+	organizationsetting.SamlSigninURLValidator = organizationsettingDescSamlSigninURL.Validators[0].(func(string) error)
 	// organizationsettingDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[17].Descriptor()
+	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[21].Descriptor()
 	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsetting.DefaultIdentityProviderLoginEnforced = organizationsettingDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettingDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
+	organizationsettingDescMultifactorAuthEnforced := organizationsettingFields[22].Descriptor()
+	// organizationsetting.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
+	organizationsetting.DefaultMultifactorAuthEnforced = organizationsettingDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettingDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettingDescComplianceWebhookToken := organizationsettingFields[18].Descriptor()
+	organizationsettingDescComplianceWebhookToken := organizationsettingFields[23].Descriptor()
 	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettingDescPaymentMethodAdded := organizationsettingFields[19].Descriptor()
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[24].Descriptor()
 	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.
@@ -4519,20 +4536,28 @@ func init() {
 	organizationsettinghistoryDescBillingNotificationsEnabled := organizationsettinghistoryFields[19].Descriptor()
 	// organizationsettinghistory.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
 	organizationsettinghistory.DefaultBillingNotificationsEnabled = organizationsettinghistoryDescBillingNotificationsEnabled.Default.(bool)
+	// organizationsettinghistoryDescAllowMatchingDomainsAutojoin is the schema descriptor for allow_matching_domains_autojoin field.
+	organizationsettinghistoryDescAllowMatchingDomainsAutojoin := organizationsettinghistoryFields[21].Descriptor()
+	// organizationsettinghistory.DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the allow_matching_domains_autojoin field.
+	organizationsettinghistory.DefaultAllowMatchingDomainsAutojoin = organizationsettinghistoryDescAllowMatchingDomainsAutojoin.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
-	organizationsettinghistoryDescIdentityProviderAuthTested := organizationsettinghistoryFields[25].Descriptor()
+	organizationsettinghistoryDescIdentityProviderAuthTested := organizationsettinghistoryFields[26].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
 	organizationsettinghistory.DefaultIdentityProviderAuthTested = organizationsettinghistoryDescIdentityProviderAuthTested.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[28].Descriptor()
+	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[32].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettinghistoryDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
+	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[33].Descriptor()
+	// organizationsettinghistory.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
+	organizationsettinghistory.DefaultMultifactorAuthEnforced = organizationsettinghistoryDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettinghistoryDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[29].Descriptor()
+	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[34].Descriptor()
 	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[30].Descriptor()
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[35].Descriptor()
 	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.
@@ -5742,11 +5767,13 @@ func init() {
 	subcontrol.Hooks[11] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters2 := subcontrolMixin[2].Interceptors()
+	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
 	subcontrolMixinInters7 := subcontrolMixin[7].Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
 	subcontrol.Interceptors[1] = subcontrolMixinInters2[0]
-	subcontrol.Interceptors[2] = subcontrolMixinInters7[0]
-	subcontrol.Interceptors[3] = subcontrolMixinInters7[1]
+	subcontrol.Interceptors[2] = subcontrolMixinInters6[0]
+	subcontrol.Interceptors[3] = subcontrolMixinInters7[0]
+	subcontrol.Interceptors[4] = subcontrolMixinInters7[1]
 	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
 	_ = subcontrolMixinFields0
 	subcontrolMixinFields3 := subcontrolMixin[3].Fields()
@@ -6268,21 +6295,30 @@ func init() {
 
 	template.Hooks[4] = templateMixinHooks6[0]
 
-	template.Hooks[5] = templateMixinHooks7[0]
+	template.Hooks[5] = templateMixinHooks6[1]
 
-	template.Hooks[6] = templateHooks[0]
+	template.Hooks[6] = templateMixinHooks7[0]
+
+	template.Hooks[7] = templateHooks[0]
+
+	template.Hooks[8] = templateHooks[1]
+
+	template.Hooks[9] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters2 := templateMixin[2].Interceptors()
 	templateMixinInters6 := templateMixin[6].Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
 	template.Interceptors[1] = templateMixinInters2[0]
 	template.Interceptors[2] = templateMixinInters6[0]
+	template.Interceptors[3] = templateMixinInters6[1]
 	templateMixinFields0 := templateMixin[0].Fields()
 	_ = templateMixinFields0
 	templateMixinFields3 := templateMixin[3].Fields()
 	_ = templateMixinFields3
 	templateMixinFields4 := templateMixin[4].Fields()
 	_ = templateMixinFields4
+	templateMixinFields6 := templateMixin[6].Fields()
+	_ = templateMixinFields6
 	templateMixinFields7 := templateMixin[7].Fields()
 	_ = templateMixinFields7
 	templateFields := schema.Template{}.Fields()
@@ -6301,6 +6337,10 @@ func init() {
 	templateDescTags := templateMixinFields4[0].Descriptor()
 	// template.DefaultTags holds the default value on creation for the tags field.
 	template.DefaultTags = templateDescTags.Default.([]string)
+	// templateDescOwnerID is the schema descriptor for owner_id field.
+	templateDescOwnerID := templateMixinFields6[0].Descriptor()
+	// template.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	template.OwnerIDValidator = templateDescOwnerID.Validators[0].(func(string) error)
 	// templateDescSystemOwned is the schema descriptor for system_owned field.
 	templateDescSystemOwned := templateMixinFields7[0].Descriptor()
 	// template.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -6393,8 +6433,6 @@ func init() {
 	_ = trustcenterMixinFields3
 	trustcenterMixinFields4 := trustcenterMixin[4].Fields()
 	_ = trustcenterMixinFields4
-	trustcenterMixinFields6 := trustcenterMixin[6].Fields()
-	_ = trustcenterMixinFields6
 	trustcenterFields := schema.TrustCenter{}.Fields()
 	_ = trustcenterFields
 	// trustcenterDescCreatedAt is the schema descriptor for created_at field.
@@ -6411,10 +6449,6 @@ func init() {
 	trustcenterDescTags := trustcenterMixinFields4[0].Descriptor()
 	// trustcenter.DefaultTags holds the default value on creation for the tags field.
 	trustcenter.DefaultTags = trustcenterDescTags.Default.([]string)
-	// trustcenterDescOwnerID is the schema descriptor for owner_id field.
-	trustcenterDescOwnerID := trustcenterMixinFields6[0].Descriptor()
-	// trustcenter.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	trustcenter.OwnerIDValidator = trustcenterDescOwnerID.Validators[0].(func(string) error)
 	// trustcenterDescSlug is the schema descriptor for slug field.
 	trustcenterDescSlug := trustcenterFields[0].Descriptor()
 	// trustcenter.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
@@ -6436,6 +6470,7 @@ func init() {
 	trustcentercomplianceMixinHooks0 := trustcentercomplianceMixin[0].Hooks()
 	trustcentercomplianceMixinHooks1 := trustcentercomplianceMixin[1].Hooks()
 	trustcentercomplianceMixinHooks2 := trustcentercomplianceMixin[2].Hooks()
+	trustcentercomplianceMixinHooks6 := trustcentercomplianceMixin[6].Hooks()
 	trustcentercomplianceHooks := schema.TrustCenterCompliance{}.Hooks()
 
 	trustcentercompliance.Hooks[1] = trustcentercomplianceMixinHooks0[0]
@@ -6444,13 +6479,17 @@ func init() {
 
 	trustcentercompliance.Hooks[3] = trustcentercomplianceMixinHooks2[0]
 
-	trustcentercompliance.Hooks[4] = trustcentercomplianceHooks[0]
+	trustcentercompliance.Hooks[4] = trustcentercomplianceMixinHooks6[0]
+
+	trustcentercompliance.Hooks[5] = trustcentercomplianceHooks[0]
 	trustcentercomplianceMixinInters1 := trustcentercomplianceMixin[1].Interceptors()
 	trustcentercomplianceMixinInters2 := trustcentercomplianceMixin[2].Interceptors()
+	trustcentercomplianceMixinInters6 := trustcentercomplianceMixin[6].Interceptors()
 	trustcentercomplianceInters := schema.TrustCenterCompliance{}.Interceptors()
 	trustcentercompliance.Interceptors[0] = trustcentercomplianceMixinInters1[0]
 	trustcentercompliance.Interceptors[1] = trustcentercomplianceMixinInters2[0]
-	trustcentercompliance.Interceptors[2] = trustcentercomplianceInters[0]
+	trustcentercompliance.Interceptors[2] = trustcentercomplianceMixinInters6[0]
+	trustcentercompliance.Interceptors[3] = trustcentercomplianceInters[0]
 	trustcentercomplianceMixinFields0 := trustcentercomplianceMixin[0].Fields()
 	_ = trustcentercomplianceMixinFields0
 	trustcentercomplianceMixinFields3 := trustcentercomplianceMixin[3].Fields()
@@ -6544,9 +6583,7 @@ func init() {
 
 	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks6[0]
 
-	trustcenterdoc.Hooks[5] = trustcenterdocMixinHooks6[1]
-
-	trustcenterdoc.Hooks[6] = trustcenterdocHooks[0]
+	trustcenterdoc.Hooks[5] = trustcenterdocHooks[0]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
 	trustcenterdocMixinInters6 := trustcenterdocMixin[6].Interceptors()
@@ -6554,16 +6591,13 @@ func init() {
 	trustcenterdoc.Interceptors[0] = trustcenterdocMixinInters1[0]
 	trustcenterdoc.Interceptors[1] = trustcenterdocMixinInters2[0]
 	trustcenterdoc.Interceptors[2] = trustcenterdocMixinInters6[0]
-	trustcenterdoc.Interceptors[3] = trustcenterdocMixinInters6[1]
-	trustcenterdoc.Interceptors[4] = trustcenterdocInters[0]
+	trustcenterdoc.Interceptors[3] = trustcenterdocInters[0]
 	trustcenterdocMixinFields0 := trustcenterdocMixin[0].Fields()
 	_ = trustcenterdocMixinFields0
 	trustcenterdocMixinFields3 := trustcenterdocMixin[3].Fields()
 	_ = trustcenterdocMixinFields3
 	trustcenterdocMixinFields4 := trustcenterdocMixin[4].Fields()
 	_ = trustcenterdocMixinFields4
-	trustcenterdocMixinFields6 := trustcenterdocMixin[6].Fields()
-	_ = trustcenterdocMixinFields6
 	trustcenterdocFields := schema.TrustCenterDoc{}.Fields()
 	_ = trustcenterdocFields
 	// trustcenterdocDescCreatedAt is the schema descriptor for created_at field.
@@ -6580,10 +6614,6 @@ func init() {
 	trustcenterdocDescTags := trustcenterdocMixinFields4[0].Descriptor()
 	// trustcenterdoc.DefaultTags holds the default value on creation for the tags field.
 	trustcenterdoc.DefaultTags = trustcenterdocDescTags.Default.([]string)
-	// trustcenterdocDescOwnerID is the schema descriptor for owner_id field.
-	trustcenterdocDescOwnerID := trustcenterdocMixinFields6[0].Descriptor()
-	// trustcenterdoc.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	trustcenterdoc.OwnerIDValidator = trustcenterdocDescOwnerID.Validators[0].(func(string) error)
 	// trustcenterdocDescTrustCenterID is the schema descriptor for trust_center_id field.
 	trustcenterdocDescTrustCenterID := trustcenterdocFields[0].Descriptor()
 	// trustcenterdoc.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
@@ -6683,6 +6713,7 @@ func init() {
 	trustcentersettingMixinHooks0 := trustcentersettingMixin[0].Hooks()
 	trustcentersettingMixinHooks1 := trustcentersettingMixin[1].Hooks()
 	trustcentersettingMixinHooks2 := trustcentersettingMixin[2].Hooks()
+	trustcentersettingMixinHooks5 := trustcentersettingMixin[5].Hooks()
 	trustcentersettingHooks := schema.TrustCenterSetting{}.Hooks()
 
 	trustcentersetting.Hooks[1] = trustcentersettingMixinHooks0[0]
@@ -6691,15 +6722,17 @@ func init() {
 
 	trustcentersetting.Hooks[3] = trustcentersettingMixinHooks2[0]
 
-	trustcentersetting.Hooks[4] = trustcentersettingHooks[0]
+	trustcentersetting.Hooks[4] = trustcentersettingMixinHooks5[0]
 
-	trustcentersetting.Hooks[5] = trustcentersettingHooks[1]
+	trustcentersetting.Hooks[5] = trustcentersettingHooks[0]
 	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
 	trustcentersettingMixinInters2 := trustcentersettingMixin[2].Interceptors()
+	trustcentersettingMixinInters5 := trustcentersettingMixin[5].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
 	trustcentersetting.Interceptors[0] = trustcentersettingMixinInters1[0]
 	trustcentersetting.Interceptors[1] = trustcentersettingMixinInters2[0]
-	trustcentersetting.Interceptors[2] = trustcentersettingInters[0]
+	trustcentersetting.Interceptors[2] = trustcentersettingMixinInters5[0]
+	trustcentersetting.Interceptors[3] = trustcentersettingInters[0]
 	trustcentersettingMixinFields0 := trustcentersettingMixin[0].Fields()
 	_ = trustcentersettingMixinFields0
 	trustcentersettingMixinFields3 := trustcentersettingMixin[3].Fields()
@@ -6812,18 +6845,23 @@ func init() {
 	trustcentersubprocessorMixinHooks0 := trustcentersubprocessorMixin[0].Hooks()
 	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
 	trustcentersubprocessorMixinHooks2 := trustcentersubprocessorMixin[2].Hooks()
+	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
 	trustcentersubprocessor.Hooks[2] = trustcentersubprocessorMixinHooks1[0]
 
 	trustcentersubprocessor.Hooks[3] = trustcentersubprocessorMixinHooks2[0]
+
+	trustcentersubprocessor.Hooks[4] = trustcentersubprocessorMixinHooks5[0]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters2 := trustcentersubprocessorMixin[2].Interceptors()
+	trustcentersubprocessorMixinInters5 := trustcentersubprocessorMixin[5].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
 	trustcentersubprocessor.Interceptors[0] = trustcentersubprocessorMixinInters1[0]
 	trustcentersubprocessor.Interceptors[1] = trustcentersubprocessorMixinInters2[0]
-	trustcentersubprocessor.Interceptors[2] = trustcentersubprocessorInters[0]
+	trustcentersubprocessor.Interceptors[2] = trustcentersubprocessorMixinInters5[0]
+	trustcentersubprocessor.Interceptors[3] = trustcentersubprocessorInters[0]
 	trustcentersubprocessorMixinFields0 := trustcentersubprocessorMixin[0].Fields()
 	_ = trustcentersubprocessorMixinFields0
 	trustcentersubprocessorMixinFields3 := trustcentersubprocessorMixin[3].Fields()

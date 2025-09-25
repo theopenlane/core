@@ -301,6 +301,11 @@ type CreateTrustCenterDomainInput struct {
 	TrustCenterID string `json:"trustCenterID"`
 }
 
+type CreateTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+}
+
 // Return response for createBulkCustomDomain mutation
 type CustomDomainBulkCreatePayload struct {
 	// Created customDomains
@@ -1291,6 +1296,17 @@ type SearchResults struct {
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
 }
 
+type SendTrustCenterNDAEmailPayload struct {
+	Success bool `json:"success"`
+}
+
+type SendTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+	// email address
+	Email string `json:"email"`
+}
+
 // Return response for createBulkStandard mutation
 type StandardBulkCreatePayload struct {
 	// Created standards
@@ -1337,6 +1353,17 @@ type SubcontrolDeletePayload struct {
 type SubcontrolUpdatePayload struct {
 	// Updated subcontrol
 	Subcontrol *generated.Subcontrol `json:"subcontrol"`
+}
+
+type SubmitTrustCenterNDAResponseInput struct {
+	// template id
+	TemplateID string `json:"templateID"`
+	// json response
+	Response map[string]any `json:"response"`
+}
+
+type SubmitTrustCenterNDAResponsePayload struct {
+	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
 // Return response for createBulkSubprocessor mutation
@@ -1523,6 +1550,14 @@ type TrustCenterDocUpdatePayload struct {
 // Return response for createTrustCenterDomain mutation
 type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
+type TrustCenterNDACreatePayload struct {
+	Template *generated.Template `json:"template"`
+}
+
+type TrustCenterNDAUpdatePayload struct {
+	Template *generated.Template `json:"template"`
 }
 
 // Return response for createBulkTrustCenterSetting mutation

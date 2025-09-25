@@ -14,30 +14,51 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 )
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(testUser1.UserCtx, t)
 
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	req := fgax.TupleRequest{
+		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectType: "user",
+		ObjectID:    trustCenter.ID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *testclient.TestClient
-		ctx      context.Context
-		errorMsg string
+		name                  string
+		queryID               string
+		client                *testclient.TestClient
+		ctx                   context.Context
+		errorMsg              string
+		shouldShowFileDetails bool
 	}{
 		{
-			name:    "happy path",
-			queryID: trustCenterDoc.ID,
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			name:                  "happy path",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			shouldShowFileDetails: true,
 		},
 		{
-			name:    "happy path, view only user",
-			queryID: trustCenterDoc.ID,
-			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			name:                  "happy path, view only user",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   viewOnlyUser.UserCtx,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:     "trust center doc not found",
@@ -48,19 +69,59 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 		},
 		{
 			name:     "not authorized to query org",
-			queryID:  trustCenterDoc.ID,
+			queryID:  trustCenterDocProtected.ID,
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			// Intentionally not implementing anonymous access to trust center docs at the moment.
-			// TODO(acookin): configure correct trust center document access
-			name:     "anonymous user cannot query trust center doc (yet)",
-			queryID:  trustCenterDoc.ID,
+			name:                  "anonymous user can query trust center doc, but can't see files",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			shouldShowFileDetails: false,
+		},
+		{
+			name:                  "anonymous user can query trust center doc and files with signed nda",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   signedNdaAnonCtx,
+			shouldShowFileDetails: true,
+		},
+		{
+			name:                  "anonymous user can query trust center doc, can see public files",
+			queryID:               trustCenterDocPublic.ID,
+			client:                suite.client.api,
+			ctx:                   createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			shouldShowFileDetails: true,
+		},
+		{
+			name:                  "nda anonymous user can query trust center doc, can see public files",
+			queryID:               trustCenterDocPublic.ID,
+			client:                suite.client.api,
+			ctx:                   signedNdaAnonCtx,
+			shouldShowFileDetails: true,
+		},
+		{
+			name:     "anonymous user can't see not visible docs",
+			queryID:  trustCenterDocNotVisible.ID,
 			client:   suite.client.api,
 			ctx:      createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
-			errorMsg: couldNotFindUser,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "nda anonymous user can't see not visible docs",
+			queryID:  trustCenterDocNotVisible.ID,
+			client:   suite.client.api,
+			ctx:      signedNdaAnonCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:                  "org user can see not visible docs",
+			queryID:               trustCenterDocNotVisible.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			shouldShowFileDetails: true,
 		},
 	}
 
@@ -80,10 +141,19 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			assert.Check(t, resp.TrustCenterDoc.Title != "")
 			assert.Check(t, resp.TrustCenterDoc.Category != "")
 			assert.Check(t, resp.TrustCenterDoc.TrustCenterID != nil)
+			assert.Check(t, resp.TrustCenterDoc.FileID != nil)
+			if tc.shouldShowFileDetails {
+				assert.Check(t, resp.TrustCenterDoc.File != nil)
+			} else {
+				assert.Check(t, resp.TrustCenterDoc.File == nil)
+			}
+
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -241,10 +311,8 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			if tc.expectedErr == "" {
+			if tc.file != nil {
 				expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.file})
-			} else {
-				expectUploadCheckOnly(t, suite.client.objectStore.Storage)
 			}
 
 			resp, err := tc.client.CreateTrustCenterDoc(tc.ctx, tc.input, *tc.file)
@@ -304,28 +372,45 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID}).MustNew(testUser1.UserCtx, t)
+	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc2 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(testUser2.UserCtx, t)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
+	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	req := fgax.TupleRequest{
+		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectType: "user",
+		ObjectID:    trustCenter1.ID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
 
 	testCases := []struct {
-		name            string
-		client          *testclient.TestClient
-		ctx             context.Context
-		expectedResults int64
-		where           *testclient.TrustCenterDocWhereInput
-		errorMsg        string
+		name                  string
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectedResults       int64
+		where                 *testclient.TrustCenterDocWhereInput
+		errorMsg              string
+		shouldShowFileDetails bool
 	}{
 		{
-			name:            "return all for user1",
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			expectedResults: 1,
+			name:                  "return all for user1",
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
-			name:            "return all, ro user",
-			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 1,
+			name:                  "return all, ro user",
+			client:                suite.client.api,
+			ctx:                   viewOnlyUser.UserCtx,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by trust center ID",
@@ -334,7 +419,8 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			where: &testclient.TrustCenterDocWhereInput{
 				TrustCenterID: &trustCenter1.ID,
 			},
-			expectedResults: 1,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by title",
@@ -343,7 +429,8 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: &trustCenterDoc1.Title,
 			},
-			expectedResults: 1,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by category",
@@ -352,7 +439,8 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			where: &testclient.TrustCenterDocWhereInput{
 				Category: &trustCenterDoc1.Category,
 			},
-			expectedResults: 1,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by visibility",
@@ -361,7 +449,8 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			where: &testclient.TrustCenterDocWhereInput{
 				Visibility: &trustCenterDoc1.Visibility,
 			},
-			expectedResults: 1,
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by non-existent title",
@@ -373,13 +462,24 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:   "anonymous user cannot query trust center docs (yet)",
+			name:   "anonymous user can query trust center docs",
 			client: suite.client.api,
 			ctx:    createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: &trustCenterDoc1.Title,
 			},
-			errorMsg: couldNotFindUser,
+			expectedResults:       1,
+			shouldShowFileDetails: false,
+		},
+		{
+			name:   "anonymous user with signed can query trust center docs and view files",
+			client: suite.client.api,
+			ctx:    signedNdaAnonCtx,
+			where: &testclient.TrustCenterDocWhereInput{
+				Title: &trustCenterDoc1.Title,
+			},
+			expectedResults:       1,
+			shouldShowFileDetails: true,
 		},
 	}
 
@@ -401,6 +501,12 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 				assert.Check(t, node.Node.Title != "")
 				assert.Check(t, node.Node.Category != "")
 				assert.Check(t, node.Node.TrustCenterID != nil)
+				assert.Check(t, node.Node.FileID != nil)
+				if tc.shouldShowFileDetails {
+					assert.Check(t, node.Node.File != nil)
+				} else {
+					assert.Check(t, node.Node.File == nil)
+				}
 			}
 		})
 	}
@@ -490,7 +596,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:             "trust center doc not found",
@@ -570,7 +676,7 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			idToDelete:  trustCenterDoc2.ID,
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "trust center doc not found",
@@ -609,15 +715,29 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	trustCenterDoc1 := (&TrustCenterDocBuilder{
-		client:        suite.client,
-		TrustCenterID: trustCenter1.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(testUser1.UserCtx, t)
 
 	trustCenterDoc2 := (&TrustCenterDocBuilder{
 		client:        suite.client,
 		TrustCenterID: trustCenter2.ID,
 	}).MustNew(testUser2.UserCtx, t)
+
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
+	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	req := fgax.TupleRequest{
+		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectType: "user",
+		ObjectID:    trustCenter1.ID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
 
 	testCases := []struct {
 		name            string
@@ -630,25 +750,37 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 			name:            "happy path - regular user sees only their trust center docs",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 1, // Should see only trust center docs owned by testUser1
+			expectedResults: 3, // Should see only trust center docs owned by testUser1
 		},
 		{
 			name:            "happy path - admin user sees all trust center docs",
 			client:          suite.client.api,
 			ctx:             adminUser.UserCtx,
-			expectedResults: 1, // Should see all owned by testUser
+			expectedResults: 3, // Should see all owned by testUser
 		},
 		{
 			name:            "happy path - view only user",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 1, // Should see only trust center docs from their organization
+			expectedResults: 3, // Should see only trust center docs from their organization
 		},
 		{
 			name:            "happy path - different user sees only their trust center docs",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
 			expectedResults: 1, // Should see only trust center docs owned by testUser2
+		},
+		{
+			name:            "anonymous user can't see not visible docs",
+			client:          suite.client.api,
+			ctx:             createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
+			expectedResults: 2,
+		},
+		{
+			name:            "nda anonymous user can't see not visible docs",
+			client:          suite.client.api,
+			ctx:             signedNdaAnonCtx,
+			expectedResults: 2,
 		},
 	}
 
@@ -696,8 +828,10 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	}
 
 	// Clean up created trust center docs
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc1.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
 }

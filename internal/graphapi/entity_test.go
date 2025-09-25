@@ -55,7 +55,7 @@ func TestQueryEntity(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  entity.ID,
-			errorMsg: couldNotFindUser,
+			errorMsg: "entity not found",
 		},
 	}
 

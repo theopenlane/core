@@ -123,26 +123,6 @@ func (_u *TemplateHistoryUpdate) ClearTags() *TemplateHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateHistoryUpdate) SetOwnerID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableOwnerID(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateHistoryUpdate) ClearOwnerID() *TemplateHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *TemplateHistoryUpdate) SetInternalNotes(v string) *TemplateHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -266,6 +246,26 @@ func (_u *TemplateHistoryUpdate) SetUischema(v map[string]interface{}) *Template
 // ClearUischema clears the value of the "uischema" field.
 func (_u *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
 	_u.mutation.ClearUischema()
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) SetTrustCenterID(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -393,9 +393,6 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
@@ -440,6 +437,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -552,26 +555,6 @@ func (_u *TemplateHistoryUpdateOne) AppendTags(v []string) *TemplateHistoryUpdat
 // ClearTags clears the value of the "tags" field.
 func (_u *TemplateHistoryUpdateOne) ClearTags() *TemplateHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateHistoryUpdateOne) SetOwnerID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableOwnerID(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearOwnerID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -698,6 +681,26 @@ func (_u *TemplateHistoryUpdateOne) SetUischema(v map[string]interface{}) *Templ
 // ClearUischema clears the value of the "uischema" field.
 func (_u *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
 	_u.mutation.ClearUischema()
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) SetTrustCenterID(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -855,9 +858,6 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
@@ -902,6 +902,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

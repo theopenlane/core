@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
@@ -38,6 +39,7 @@ const (
 func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOLoginRequest, rout.Reply{}, openapi.Registry)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
@@ -62,6 +64,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 	authURL, err := h.generateSSOAuthURL(ctx, orgID)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, err, openapi)
 	}
 
@@ -80,28 +83,33 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOCallbackRequest, apimodels.LoginReply{}, openapi.Registry)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	if in.OrganizationID == "" {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	// Build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
 	if err != nil || in.State != stateCookie.Value {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, ErrStateMismatch, openapi)
 	}
 
 	// Validate nonce exists in the cookie
 	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, ErrNonceMissing, openapi)
 	}
 
@@ -110,6 +118,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	// exchange the code for OIDC tokens
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, err, openapi)
 	}
 
@@ -119,11 +128,18 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	// provision the user if they don't exist, or update if they do
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.Name, tokens.IDTokenClaims.Email, enums.AuthProviderOIDC, tokens.IDTokenClaims.Picture)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
+
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	if err != nil {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, err)
+	}
 
 	// build the OAuth session request
 	oauthReq := apimodels.OauthTokenRequest{
@@ -131,21 +147,18 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		ExternalUserName: tokens.IDTokenClaims.Name,
 		AuthProvider:     "oidc",
 		Image:            tokens.IDTokenClaims.Picture,
+		OrgID:            orgCookie.Value,
 	}
 
 	// generate the session and auth data for the user
 	authData, err := h.AuthManager.GenerateOauthAuthSession(userCtx, ctx.Response().Writer, entUser, oauthReq)
 	if err != nil {
+		metrics.RecordLogin(false)
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
 		tokenType, err := sessions.GetCookie(ctx.Request(), "token_type")
-		if err != nil {
-			return h.BadRequest(ctx, err)
-		}
-
-		orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
 		if err != nil {
 			return h.BadRequest(ctx, err)
 		}
@@ -162,6 +175,8 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
 			log.Error().Err(aErr).Msg("unable to authorize token for SSO")
+
+			return h.InternalServerError(ctx, aErr, openapi)
 		}
 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_id", sessions.CookieConfig{Path: "/"})
@@ -194,6 +209,8 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// clean up the org ID cookie after successful login
 	sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
+
+	metrics.RecordLogin(true)
 
 	return h.Success(ctx, out, openapi)
 }
@@ -304,33 +321,37 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 // ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended
 func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
-// ssoOrgForUser checks if the user's default org requires SSO login and the user is not an owner
-// Returns the org ID and true if SSO is enforced and the user must use SSO, otherwise false
-func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool) {
+// orgEnforcementsForUser checks the user's default org SSO and TFA requirements
+// Returns the org settings status which includes both SSO and TFA enforcement
+func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	user, err := h.getUserByEmail(allowCtx, email)
 	if err != nil {
-		return "", false
+		return nil
 	}
 
 	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
 	if err != nil {
-		return "", false
+		return nil
 	}
 
 	status, err := h.fetchSSOStatus(allowCtx, orgID)
-	if err != nil || !status.Enforced {
-		return "", false
+	if err != nil {
+		return nil
 	}
 
-	member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
-		Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
-	if mErr != nil || member.Role == enums.RoleOwner {
-		return "", false
+	// For SSO, check if user is an owner (owners bypass SSO)
+	if status.Enforced {
+		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
+			Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
+		if mErr == nil && member.Role == enums.RoleOwner {
+			// Owner bypasses SSO requirement
+			status.Enforced = false
+		}
 	}
 
-	return orgID, true
+	return &status
 }
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)

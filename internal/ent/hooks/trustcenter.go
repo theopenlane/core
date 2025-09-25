@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // HookTrustCenter runs on trust center create mutations
@@ -68,6 +69,11 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			trustCenter.Edges.Setting = setting
+
+			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
+			if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuples, nil); err != nil {
+				return ctx, fmt.Errorf("failed to create file access permissions: %w", err)
+			}
 
 			return trustCenter, nil
 		})

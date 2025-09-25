@@ -8775,7 +8775,6 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
-  trustCenterDocIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -8823,6 +8822,10 @@ input CreateOrganizationSettingInput {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -8847,9 +8850,25 @@ input CreateOrganizationSettingInput {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -9550,6 +9569,7 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+  trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -9584,7 +9604,6 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-  ownerID: ID
   trustCenterID: ID
   fileID: ID
 }
@@ -9603,6 +9622,7 @@ input CreateTrustCenterInput {
   trustCenterSubprocessorIDs: [ID!]
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  templateIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -30788,37 +30808,6 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
-  trustCenterDocs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TrustCenterDocs returned from the connection.
-    """
-    orderBy: [TrustCenterDocOrder!]
-
-    """
-    Filtering options for TrustCenterDocs returned from the connection.
-    """
-    where: TrustCenterDocWhereInput
-  ): TrustCenterDocConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -31275,6 +31264,10 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -31303,9 +31296,25 @@ type OrganizationSetting implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -31431,6 +31440,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -31459,9 +31472,25 @@ type OrganizationSettingHistory implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -31773,6 +31802,13 @@ input OrganizationSettingHistoryWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -31877,10 +31913,71 @@ input OrganizationSettingHistoryWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -32127,6 +32224,13 @@ input OrganizationSettingWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -32231,10 +32335,71 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -32752,11 +32917,6 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
-  """
-  trust_center_docs edge predicates
-  """
-  hasTrustCenterDocs: Boolean
-  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
   """
   members edge predicates
   """
@@ -47946,7 +48106,7 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -47985,6 +48145,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: ID
   owner: Organization
   documents(
     """
@@ -48048,6 +48212,7 @@ type Template implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  trustCenter: TrustCenter
 }
 """
 A connection to a list of items.
@@ -48100,7 +48265,7 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -48139,6 +48304,10 @@ type TemplateHistory implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -48214,6 +48383,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -48445,6 +48615,24 @@ input TemplateHistoryWhereInput {
   kindNotIn: [TemplateHistoryTemplateKind!]
   kindIsNil: Boolean
   kindNotNil: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -48474,6 +48662,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -48670,6 +48859,24 @@ input TemplateWhereInput {
   kindIsNil: Boolean
   kindNotNil: Boolean
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -48684,6 +48891,11 @@ input TemplateWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -48807,6 +49019,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -49270,10 +49513,6 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -49293,7 +49532,6 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-  owner: Organization
   trustCenter: TrustCenter
   """
   the file containing the document content
@@ -49343,10 +49581,6 @@ type TrustCenterDocHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
   """
   ID of the trust center
   """
@@ -49555,24 +49789,6 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -49762,24 +49978,6 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -49856,11 +50054,6 @@ input TrustCenterDocWhereInput {
   visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
   """
   trust_center edge predicates
   """
@@ -51757,6 +51950,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -53845,9 +54043,6 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
-  addTrustCenterDocIDs: [ID!]
-  removeTrustCenterDocIDs: [ID!]
-  clearTrustCenterDocs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -53907,6 +54102,11 @@ input UpdateOrganizationSettingInput {
   appendAllowedEmailDomains: [String!]
   clearAllowedEmailDomains: Boolean
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  clearAllowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -53937,9 +54137,29 @@ input UpdateOrganizationSettingInput {
   oidcDiscoveryEndpoint: String
   clearOidcDiscoveryEndpoint: Boolean
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  clearSamlSigninURL: Boolean
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  clearSamlIssuer: Boolean
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  clearSamlCert: Boolean
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
+  clearMultifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -54914,14 +55134,14 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -54993,6 +55213,9 @@ input UpdateTrustCenterInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

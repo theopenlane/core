@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -70,7 +71,7 @@ func (TrustCenter) Fields() []ent.Field {
 func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true)),
+			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true), withSkipForSystemAdmin(true)),
 		},
 	}.getMixins(t)
 }
@@ -120,6 +121,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterCompliance{},
 			cascadeDelete: "TrustCenter",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "templates",
+			edgeSchema:    Template{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 
@@ -137,6 +144,9 @@ func (TrustCenter) Hooks() []ent.Hook {
 // Policy of the TrustCenter
 func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowQueryIfSystemAdmin(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

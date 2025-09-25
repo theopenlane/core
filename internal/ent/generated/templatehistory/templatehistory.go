@@ -58,6 +58,8 @@ const (
 	FieldJsonconfig = "jsonconfig"
 	// FieldUischema holds the string denoting the uischema field in the database.
 	FieldUischema = "uischema"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the templatehistory in the database.
 	Table = "template_history"
 )
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldKind,
 	FieldJsonconfig,
 	FieldUischema,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -149,7 +152,7 @@ const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
 // KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
 func KindValidator(k enums.TemplateKind) error {
 	switch k.String() {
-	case "QUESTIONNAIRE":
+	case "QUESTIONNAIRE", "TRUSTCENTER_NDA":
 		return nil
 	default:
 		return fmt.Errorf("templatehistory: invalid enum value for kind field: %q", k)
@@ -247,6 +250,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByKind orders the results by the kind field.
 func ByKind(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKind, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

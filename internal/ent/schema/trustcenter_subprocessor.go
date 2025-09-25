@@ -69,6 +69,11 @@ func (TrustCenterSubprocessor) Fields() []ent.Field {
 func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.TrustCenterSubprocessor](t,
+				withParents(TrustCenter{}),
+			),
+		},
 	}.getMixins(t)
 }
 

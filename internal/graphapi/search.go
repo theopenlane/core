@@ -1339,6 +1339,9 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
 				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
 				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint
+				organizationsetting.SamlSigninURLContainsFold(query),                    // search by SamlSigninURL
+				organizationsetting.SamlIssuerContainsFold(query),                       // search by SamlIssuer
+				organizationsetting.SamlCertContainsFold(query),                         // search by SamlCert
 				organizationsetting.ComplianceWebhookTokenContainsFold(query),           // search by ComplianceWebhookToken
 			),
 		)
@@ -1890,6 +1893,7 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
 				},
+				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
 			),
 		)
 
@@ -1991,7 +1995,6 @@ func adminSearchTrustCenterDocs(ctx context.Context, query string, after *entgql
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				trustcenterdoc.OwnerIDContainsFold(query),       // search by OwnerID
 				trustcenterdoc.TrustCenterIDContainsFold(query), // search by TrustCenterID
 				trustcenterdoc.TitleContainsFold(query),         // search by Title
 				trustcenterdoc.CategoryContainsFold(query),      // search by Category

@@ -87,6 +87,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 		Reply:          rout.Reply{Success: true},
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
+		OrgTFAEnforced: setting.MultifactorAuthEnforced,
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {

@@ -1284,7 +1284,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "READY"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "SUBMITTED"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
@@ -1339,7 +1339,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "READY"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "SUBMITTED"},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -3267,6 +3267,7 @@ var (
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
+		{Name: "allow_matching_domains_autojoin", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
@@ -3274,7 +3275,11 @@ var (
 		{Name: "identity_provider_auth_tested", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "saml_signin_url", Type: field.TypeString, Nullable: true},
+		{Name: "saml_issuer", Type: field.TypeString, Nullable: true},
+		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
@@ -3287,7 +3292,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[27]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3316,6 +3321,7 @@ var (
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
+		{Name: "allow_matching_domains_autojoin", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
@@ -3323,7 +3329,11 @@ var (
 		{Name: "identity_provider_auth_tested", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "saml_signin_url", Type: field.TypeString, Nullable: true},
+		{Name: "saml_issuer", Type: field.TypeString, Nullable: true},
+		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
 	}
@@ -4649,10 +4659,11 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE"}, Default: "QUESTIONNAIRE"},
+		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
 	TemplatesTable = &schema.Table{
@@ -4664,6 +4675,12 @@ var (
 				Symbol:     "templates_organizations_templates",
 				Columns:    []*schema.Column{TemplatesColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_trust_centers_templates",
+				Columns:    []*schema.Column{TemplatesColumns[18]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4682,6 +4699,14 @@ var (
 				Columns: []*schema.Column{TemplatesColumns[11], TemplatesColumns[17], TemplatesColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "template_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TemplatesColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL and kind = 'TRUSTCENTER_NDA'",
 				},
 			},
 		},
@@ -4706,9 +4731,10 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE"}, Default: "QUESTIONNAIRE"},
+		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplateHistoryTable holds the schema information for the "template_history" table.
 	TemplateHistoryTable = &schema.Table{
@@ -4860,7 +4886,6 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -4871,32 +4896,16 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterDocsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_docs_organizations_trust_center_docs",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[11]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "trust_center_docs_trust_centers_trust_center_docs",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[12]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[11]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[13]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[12]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "trustcenterdoc_owner_id",
-				Unique:  false,
-				Columns: []*schema.Column{TrustCenterDocsColumns[11]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4913,7 +4922,6 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
@@ -8619,6 +8627,10 @@ func init() {
 		Table: "task_history",
 	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TemplatesTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TemplatesTable.Annotation = &entsql.Annotation{
+		Check: "trust_center_id IS NOT NULL OR kind != 'TRUSTCENTER_NDA'",
+	}
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
@@ -8629,9 +8641,8 @@ func init() {
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_compliance_history",
 	}
-	TrustCenterDocsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	TrustCenterDocsTable.ForeignKeys[1].RefTable = TrustCentersTable
-	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterDocsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterDocHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_doc_history",
 	}

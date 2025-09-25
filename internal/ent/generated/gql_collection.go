@@ -31076,95 +31076,6 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
-		case "trustCenterDocs":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&TrustCenterDocClient{config: _q.config}).Query()
-			)
-			args := newTrustCenterDocPaginateArgs(fieldArgs(ctx, new(TrustCenterDocWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newTrustCenterDocPager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
-				return err
-			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"owner_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.TrustCenterDocsColumn), ids...))
-						})
-						if err := query.GroupBy(organization.TrustCenterDocsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[63][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.TrustCenterDocs)
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[63][alias] = n
-						}
-						return nil
-					})
-				}
-			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterdocImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(organization.TrustCenterDocsColumn, limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedTrustCenterDocs(alias, func(wq *TrustCenterDocQuery) {
-				*wq = *query
-			})
-
 		case "members":
 			var (
 				alias = field.Alias
@@ -31208,10 +31119,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[64] == nil {
-								nodes[i].Edges.totalCount[64] = make(map[string]int)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[64][alias] = n
+							nodes[i].Edges.totalCount[63][alias] = n
 						}
 						return nil
 					})
@@ -31219,10 +31130,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[64] == nil {
-								nodes[i].Edges.totalCount[64] = make(map[string]int)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[64][alias] = n
+							nodes[i].Edges.totalCount[63][alias] = n
 						}
 						return nil
 					})
@@ -31765,6 +31676,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldAllowedEmailDomains)
 				fieldSeen[organizationsetting.FieldAllowedEmailDomains] = struct{}{}
 			}
+		case "allowMatchingDomainsAutojoin":
+			if _, ok := fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
+				fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin] = struct{}{}
+			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProvider)
@@ -31800,10 +31716,30 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldOidcDiscoveryEndpoint)
 				fieldSeen[organizationsetting.FieldOidcDiscoveryEndpoint] = struct{}{}
 			}
+		case "samlSigninURL":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlSigninURL]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlSigninURL)
+				fieldSeen[organizationsetting.FieldSamlSigninURL] = struct{}{}
+			}
+		case "samlIssuer":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlIssuer]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlIssuer)
+				fieldSeen[organizationsetting.FieldSamlIssuer] = struct{}{}
+			}
+		case "samlCert":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlCert]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlCert)
+				fieldSeen[organizationsetting.FieldSamlCert] = struct{}{}
+			}
 		case "identityProviderLoginEnforced":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced] = struct{}{}
+			}
+		case "multifactorAuthEnforced":
+			if _, ok := fieldSeen[organizationsetting.FieldMultifactorAuthEnforced]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldMultifactorAuthEnforced)
+				fieldSeen[organizationsetting.FieldMultifactorAuthEnforced] = struct{}{}
 			}
 		case "complianceWebhookToken":
 			if _, ok := fieldSeen[organizationsetting.FieldComplianceWebhookToken]; !ok {
@@ -31995,6 +31931,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowedEmailDomains)
 				fieldSeen[organizationsettinghistory.FieldAllowedEmailDomains] = struct{}{}
 			}
+		case "allowMatchingDomainsAutojoin":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldAllowMatchingDomainsAutojoin]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
+				fieldSeen[organizationsettinghistory.FieldAllowMatchingDomainsAutojoin] = struct{}{}
+			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProvider)
@@ -32030,10 +31971,30 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldOidcDiscoveryEndpoint)
 				fieldSeen[organizationsettinghistory.FieldOidcDiscoveryEndpoint] = struct{}{}
 			}
+		case "samlSigninURL":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlSigninURL]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlSigninURL)
+				fieldSeen[organizationsettinghistory.FieldSamlSigninURL] = struct{}{}
+			}
+		case "samlIssuer":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlIssuer]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlIssuer)
+				fieldSeen[organizationsettinghistory.FieldSamlIssuer] = struct{}{}
+			}
+		case "samlCert":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlCert]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlCert)
+				fieldSeen[organizationsettinghistory.FieldSamlCert] = struct{}{}
+			}
 		case "identityProviderLoginEnforced":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced] = struct{}{}
+			}
+		case "multifactorAuthEnforced":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldMultifactorAuthEnforced)
+				fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced] = struct{}{}
 			}
 		case "complianceWebhookToken":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken]; !ok {
@@ -43861,6 +43822,21 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			_q.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "trustCenter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenter = query
+			if _, ok := fieldSeen[template.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, template.FieldTrustCenterID)
+				fieldSeen[template.FieldTrustCenterID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[template.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, template.FieldCreatedAt)
@@ -43935,6 +43911,11 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[template.FieldUischema]; !ok {
 				selectedFields = append(selectedFields, template.FieldUischema)
 				fieldSeen[template.FieldUischema] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[template.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, template.FieldTrustCenterID)
+				fieldSeen[template.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -44115,6 +44096,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldUischema]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldUischema)
 				fieldSeen[templatehistory.FieldUischema] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[templatehistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldTrustCenterID)
+				fieldSeen[templatehistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -44506,6 +44492,95 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				query = pager.applyOrder(query)
 			}
 			_q.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+				*wq = *query
+			})
+
+		case "templates":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateClient{config: _q.config}).Query()
+			)
+			args := newTemplatePaginateArgs(fieldArgs(ctx, new(TemplateWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTemplatePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenter.TemplatesColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenter.TemplatesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Templates)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenter.TemplatesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTemplates(alias, func(wq *TemplateQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -44928,21 +45003,6 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "owner":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			_q.withOwner = query
-			if _, ok := fieldSeen[trustcenterdoc.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, trustcenterdoc.FieldOwnerID)
-				fieldSeen[trustcenterdoc.FieldOwnerID] = struct{}{}
-			}
-
 		case "trustCenter":
 			var (
 				alias = field.Alias
@@ -44996,11 +45056,6 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterdoc.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTags)
 				fieldSeen[trustcenterdoc.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[trustcenterdoc.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, trustcenterdoc.FieldOwnerID)
-				fieldSeen[trustcenterdoc.FieldOwnerID] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterID]; !ok {
@@ -45156,11 +45211,6 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTags)
 				fieldSeen[trustcenterdochistory.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[trustcenterdochistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, trustcenterdochistory.FieldOwnerID)
-				fieldSeen[trustcenterdochistory.FieldOwnerID] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterID]; !ok {

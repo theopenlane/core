@@ -92,8 +92,10 @@ func (h *Handler) GetGoogleLoginHandlers() (http.Handler, http.Handler) {
 	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		email := req.URL.Query().Get("email")
 		if email != "" {
-			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
-				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+			orgStatus := h.orgEnforcementsForUser(req.Context(), email)
+			if orgStatus != nil && orgStatus.Enforced {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgStatus.OrganizationID), http.StatusFound)
+
 				return
 			}
 		}
@@ -112,14 +114,13 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		redirectURI, err := h.getRedirectURI(req)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
 		googleUser, err := google.UserFromContext(ctx)
-
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -128,7 +129,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		// check if users exists and create if not
 		user, err := h.CheckAndCreateUser(ctxWithToken, googleUser.Name, googleUser.Email, enums.AuthProviderGoogle, googleUser.Picture)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -144,7 +145,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		if err != nil {
 			log.Error().Err(err).Msg("unable to create new auth session")
 
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 
 			return
 		}
@@ -166,8 +167,10 @@ func (h *Handler) GetGitHubLoginHandlers() (http.Handler, http.Handler) {
 	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		email := req.URL.Query().Get("email")
 		if email != "" {
-			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
-				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+			orgStatus := h.orgEnforcementsForUser(req.Context(), email)
+			if orgStatus != nil && orgStatus.Enforced {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgStatus.OrganizationID), http.StatusFound)
+
 				return
 			}
 		}
@@ -186,19 +189,19 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 		redirectURI, err := h.getRedirectURI(req)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
 		githubUser, err := github.UserFromContext(ctx)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
 		// we need the email to keep going, if its not there error the request
 		if githubUser.Email == nil {
-			http.Error(w, ErrNoEmailFound.Error(), http.StatusBadRequest)
+			oauthLoginErrorWrapper(w, ErrNoEmailFound, http.StatusBadRequest)
 			return
 		}
 
@@ -207,7 +210,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		// check if users exists and create if not, updates last seen of existing user
 		user, err := h.CheckAndCreateUser(ctxWithToken, *githubUser.Name, *githubUser.Email, enums.AuthProviderGitHub, *githubUser.AvatarURL)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -222,12 +225,12 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		if err != nil {
 			log.Error().Err(err).Msg("unable to create new auth session")
 
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 
 			return
 		}
 
-		metrics.Logins.WithLabelValues("true").Inc()
+		metrics.RecordLogin(true)
 
 		// remove cookie now that its in the context
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
@@ -265,4 +268,12 @@ func (h *Handler) getRedirectURI(req *http.Request) (string, error) {
 	}
 
 	return redirectURI, nil
+}
+
+// oauthLoginErrorWrapper is a helper to wrap oauth login errors and record the failed login attempt
+// in the metrics
+func oauthLoginErrorWrapper(w http.ResponseWriter, err error, code int) {
+	metrics.RecordLogin(false)
+
+	http.Error(w, err.Error(), code)
 }

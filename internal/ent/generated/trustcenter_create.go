@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -245,6 +246,21 @@ func (_c *TrustCenterCreate) AddTrustCenterCompliances(v ...*TrustCenterComplian
 	return _c.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
+func (_c *TrustCenterCreate) AddTemplateIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddTemplateIDs(ids...)
+	return _c
+}
+
+// AddTemplates adds the "templates" edges to the Template entity.
+func (_c *TrustCenterCreate) AddTemplates(v ...*Template) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTemplateIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_c *TrustCenterCreate) Mutation() *TrustCenterMutation {
 	return _c.mutation
@@ -312,11 +328,6 @@ func (_c *TrustCenterCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TrustCenterCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := trustcenter.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
@@ -489,6 +500,23 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
