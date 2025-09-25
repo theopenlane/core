@@ -275,7 +275,3 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	}
 }
 
-// GetActionRows returns the action rows for table output (identity function for compatibility)
-func (r *Reconciler) GetActionRows(rows []actionRow) []actionRow {
-	return rows
-}
