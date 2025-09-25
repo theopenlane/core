@@ -39,7 +39,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/procedure"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/program"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/programmembers"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/reconcile"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/register"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/reset"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/risk"

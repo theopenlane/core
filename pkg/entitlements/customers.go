@@ -3,6 +3,7 @@ package entitlements
 import (
 	"context"
 	"fmt"
+	"maps"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -17,6 +18,18 @@ func (sc *StripeClient) CreateCustomer(ctx context.Context, c *OrganizationCusto
 		return nil, err
 	}
 
+	// Build metadata with default fields
+	metadata := map[string]string{
+		"organization_id":              c.OrganizationID,
+		"organization_settings_id":     c.OrganizationSettingsID,
+		"organization_name":            c.OrganizationName,
+		"organization_subscription_id": c.OrganizationSubscriptionID,
+		"personal_org":                 "",
+	}
+
+	// Merge any additional metadata from the struct
+	maps.Copy(metadata, c.Metadata)
+
 	params := sc.CreateCustomerWithOptions(
 		&stripe.CustomerCreateParams{},
 		WithCustomerEmail(c.Email),
@@ -29,12 +42,7 @@ func (sc *StripeClient) CreateCustomer(ctx context.Context, c *OrganizationCusto
 			PostalCode: c.PostalCode,
 			Country:    c.Country,
 		}),
-		WithCustomerMetadata(map[string]string{
-			"organization_id":              c.OrganizationID,
-			"organization_settings_id":     c.OrganizationSettingsID,
-			"organization_name":            c.OrganizationName,
-			"organization_subscription_id": c.OrganizationSubscriptionID,
-		}),
+		WithCustomerMetadata(metadata),
 	)
 
 	start := time.Now()
