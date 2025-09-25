@@ -274,4 +274,3 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 		return "", nil
 	}
 }
-
