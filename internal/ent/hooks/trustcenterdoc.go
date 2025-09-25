@@ -49,7 +49,9 @@ func HookTrustCenterDoc() ent.Hook {
 			if !ok {
 				return v, nil
 			}
-			// this should never happen
+
+			// TODO: this will happen once watermarking is enabled, and we do this async.
+			// will need to re-write the file viewer logic once this happens
 			if trustCenterDoc.FileID == nil {
 				return nil, errMissingFileID
 			}
@@ -151,6 +153,10 @@ func checkTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMut
 		if len(docFile) > 1 {
 			return ctx, ErrNotSingularUpload
 		}
+		m.SetOriginalFileID(docFile[0].ID)
+
+		// TODO: once the watermarking job is implemented, we will not set the file ID here, and instead kick off a riverboat job to watermark the doc
+		// If watermarking is disabled, we will continue to just set this file ID
 		m.SetFileID(docFile[0].ID)
 
 		docFile[0].Parent.ID, _ = m.ID()

@@ -4892,9 +4892,12 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
+		{Name: "watermarking_enabled", Type: field.TypeBool, Default: true},
+		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterDocsTable holds the schema information for the "trust_center_docs" table.
 	TrustCenterDocsTable = &schema.Table{
@@ -4904,13 +4907,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_docs_trust_centers_trust_center_docs",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[11]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[13]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[12]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[14]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_docs_files_original_file",
+				Columns:    []*schema.Column{TrustCenterDocsColumns[15]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4933,6 +4942,9 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "watermarking_enabled", Type: field.TypeBool, Default: true},
+		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 	}
 	// TrustCenterDocHistoryTable holds the schema information for the "trust_center_doc_history" table.
@@ -8745,6 +8757,7 @@ func init() {
 	}
 	TrustCenterDocsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterDocsTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterDocHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_doc_history",
 	}

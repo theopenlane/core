@@ -118,6 +118,16 @@ func FileID(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldFileID, v))
 }
 
+// OriginalFileID applies equality check predicate on the "original_file_id" field. It's identical to OriginalFileIDEQ.
+func OriginalFileID(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldOriginalFileID, v))
+}
+
+// WatermarkingEnabled applies equality check predicate on the "watermarking_enabled" field. It's identical to WatermarkingEnabledEQ.
+func WatermarkingEnabled(v bool) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldWatermarkingEnabled, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldCreatedAt, v))
@@ -783,6 +793,131 @@ func FileIDContainsFold(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldFileID, v))
 }
 
+// OriginalFileIDEQ applies the EQ predicate on the "original_file_id" field.
+func OriginalFileIDEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDNEQ applies the NEQ predicate on the "original_file_id" field.
+func OriginalFileIDNEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDIn applies the In predicate on the "original_file_id" field.
+func OriginalFileIDIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIn(FieldOriginalFileID, vs...))
+}
+
+// OriginalFileIDNotIn applies the NotIn predicate on the "original_file_id" field.
+func OriginalFileIDNotIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldOriginalFileID, vs...))
+}
+
+// OriginalFileIDGT applies the GT predicate on the "original_file_id" field.
+func OriginalFileIDGT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGT(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDGTE applies the GTE predicate on the "original_file_id" field.
+func OriginalFileIDGTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGTE(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDLT applies the LT predicate on the "original_file_id" field.
+func OriginalFileIDLT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLT(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDLTE applies the LTE predicate on the "original_file_id" field.
+func OriginalFileIDLTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLTE(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDContains applies the Contains predicate on the "original_file_id" field.
+func OriginalFileIDContains(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContains(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDHasPrefix applies the HasPrefix predicate on the "original_file_id" field.
+func OriginalFileIDHasPrefix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasPrefix(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDHasSuffix applies the HasSuffix predicate on the "original_file_id" field.
+func OriginalFileIDHasSuffix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasSuffix(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDIsNil applies the IsNil predicate on the "original_file_id" field.
+func OriginalFileIDIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldOriginalFileID))
+}
+
+// OriginalFileIDNotNil applies the NotNil predicate on the "original_file_id" field.
+func OriginalFileIDNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldOriginalFileID))
+}
+
+// OriginalFileIDEqualFold applies the EqualFold predicate on the "original_file_id" field.
+func OriginalFileIDEqualFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEqualFold(FieldOriginalFileID, v))
+}
+
+// OriginalFileIDContainsFold applies the ContainsFold predicate on the "original_file_id" field.
+func OriginalFileIDContainsFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldOriginalFileID, v))
+}
+
+// WatermarkingEnabledEQ applies the EQ predicate on the "watermarking_enabled" field.
+func WatermarkingEnabledEQ(v bool) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldWatermarkingEnabled, v))
+}
+
+// WatermarkingEnabledNEQ applies the NEQ predicate on the "watermarking_enabled" field.
+func WatermarkingEnabledNEQ(v bool) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldWatermarkingEnabled, v))
+}
+
+// WatermarkStatusEQ applies the EQ predicate on the "watermark_status" field.
+func WatermarkStatusEQ(v enums.WatermarkStatus) predicate.TrustCenterDoc {
+	vc := v
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldWatermarkStatus, vc))
+}
+
+// WatermarkStatusNEQ applies the NEQ predicate on the "watermark_status" field.
+func WatermarkStatusNEQ(v enums.WatermarkStatus) predicate.TrustCenterDoc {
+	vc := v
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldWatermarkStatus, vc))
+}
+
+// WatermarkStatusIn applies the In predicate on the "watermark_status" field.
+func WatermarkStatusIn(vs ...enums.WatermarkStatus) predicate.TrustCenterDoc {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterDoc(sql.FieldIn(FieldWatermarkStatus, v...))
+}
+
+// WatermarkStatusNotIn applies the NotIn predicate on the "watermark_status" field.
+func WatermarkStatusNotIn(vs ...enums.WatermarkStatus) predicate.TrustCenterDoc {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldWatermarkStatus, v...))
+}
+
+// WatermarkStatusIsNil applies the IsNil predicate on the "watermark_status" field.
+func WatermarkStatusIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldWatermarkStatus))
+}
+
+// WatermarkStatusNotNil applies the NotNil predicate on the "watermark_status" field.
+func WatermarkStatusNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldWatermarkStatus))
+}
+
 // VisibilityEQ applies the EQ predicate on the "visibility" field.
 func VisibilityEQ(v enums.TrustCenterDocumentVisibility) predicate.TrustCenterDoc {
 	vc := v
@@ -870,6 +1005,35 @@ func HasFile() predicate.TrustCenterDoc {
 func HasFileWith(preds ...predicate.File) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOriginalFile applies the HasEdge predicate on the "original_file" edge.
+func HasOriginalFile() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, OriginalFileTable, OriginalFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOriginalFileWith applies the HasEdge predicate on the "original_file" edge with a given conditions (other predicates).
+func HasOriginalFileWith(preds ...predicate.File) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := newOriginalFileStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterDoc

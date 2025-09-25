@@ -7224,6 +7224,14 @@ func (_m *TrustCenterDoc) File(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterDoc) OriginalFile(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.OriginalFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOriginalFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {

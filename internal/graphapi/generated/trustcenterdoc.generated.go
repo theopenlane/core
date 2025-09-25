@@ -70,12 +70,20 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
+			case "originalFileID":
+				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
+			case "watermarkingEnabled":
+				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
+			case "watermarkStatus":
+				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
+			case "originalFile":
+				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
 		},
@@ -125,12 +133,20 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
+			case "originalFileID":
+				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
+			case "watermarkingEnabled":
+				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
+			case "watermarkStatus":
+				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
+			case "originalFile":
+				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
 		},
@@ -207,12 +223,20 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
+			case "originalFileID":
+				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
+			case "watermarkingEnabled":
+				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
+			case "watermarkStatus":
+				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
+			case "originalFile":
+				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
 		},

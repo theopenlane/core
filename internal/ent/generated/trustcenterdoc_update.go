@@ -193,6 +193,60 @@ func (_u *TrustCenterDocUpdate) ClearFileID() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetOriginalFileID sets the "original_file_id" field.
+func (_u *TrustCenterDocUpdate) SetOriginalFileID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetOriginalFileID(v)
+	return _u
+}
+
+// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableOriginalFileID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetOriginalFileID(*v)
+	}
+	return _u
+}
+
+// ClearOriginalFileID clears the value of the "original_file_id" field.
+func (_u *TrustCenterDocUpdate) ClearOriginalFileID() *TrustCenterDocUpdate {
+	_u.mutation.ClearOriginalFileID()
+	return _u
+}
+
+// SetWatermarkingEnabled sets the "watermarking_enabled" field.
+func (_u *TrustCenterDocUpdate) SetWatermarkingEnabled(v bool) *TrustCenterDocUpdate {
+	_u.mutation.SetWatermarkingEnabled(v)
+	return _u
+}
+
+// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetWatermarkingEnabled(*v)
+	}
+	return _u
+}
+
+// SetWatermarkStatus sets the "watermark_status" field.
+func (_u *TrustCenterDocUpdate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocUpdate {
+	_u.mutation.SetWatermarkStatus(v)
+	return _u
+}
+
+// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetWatermarkStatus(*v)
+	}
+	return _u
+}
+
+// ClearWatermarkStatus clears the value of the "watermark_status" field.
+func (_u *TrustCenterDocUpdate) ClearWatermarkStatus() *TrustCenterDocUpdate {
+	_u.mutation.ClearWatermarkStatus()
+	return _u
+}
+
 // SetVisibility sets the "visibility" field.
 func (_u *TrustCenterDocUpdate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdate {
 	_u.mutation.SetVisibility(v)
@@ -223,6 +277,11 @@ func (_u *TrustCenterDocUpdate) SetFile(v *File) *TrustCenterDocUpdate {
 	return _u.SetFileID(v.ID)
 }
 
+// SetOriginalFile sets the "original_file" edge to the File entity.
+func (_u *TrustCenterDocUpdate) SetOriginalFile(v *File) *TrustCenterDocUpdate {
+	return _u.SetOriginalFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdate) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
@@ -237,6 +296,12 @@ func (_u *TrustCenterDocUpdate) ClearTrustCenter() *TrustCenterDocUpdate {
 // ClearFile clears the "file" edge to the File entity.
 func (_u *TrustCenterDocUpdate) ClearFile() *TrustCenterDocUpdate {
 	_u.mutation.ClearFile()
+	return _u
+}
+
+// ClearOriginalFile clears the "original_file" edge to the File entity.
+func (_u *TrustCenterDocUpdate) ClearOriginalFile() *TrustCenterDocUpdate {
+	_u.mutation.ClearOriginalFile()
 	return _u
 }
 
@@ -297,6 +362,11 @@ func (_u *TrustCenterDocUpdate) check() error {
 	if v, ok := _u.mutation.Category(); ok {
 		if err := trustcenterdoc.CategoryValidator(v); err != nil {
 			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.WatermarkStatus(); ok {
+		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
+			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Visibility(); ok {
@@ -372,6 +442,15 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
+		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.WatermarkStatus(); ok {
+		_spec.SetField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.WatermarkStatusCleared() {
+		_spec.ClearField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
 	}
@@ -429,6 +508,37 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Inverse: false,
 			Table:   trustcenterdoc.FileTable,
 			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OriginalFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.OriginalFileTable,
+			Columns: []string{trustcenterdoc.OriginalFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OriginalFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.OriginalFileTable,
+			Columns: []string{trustcenterdoc.OriginalFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -622,6 +732,60 @@ func (_u *TrustCenterDocUpdateOne) ClearFileID() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetOriginalFileID sets the "original_file_id" field.
+func (_u *TrustCenterDocUpdateOne) SetOriginalFileID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetOriginalFileID(v)
+	return _u
+}
+
+// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableOriginalFileID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetOriginalFileID(*v)
+	}
+	return _u
+}
+
+// ClearOriginalFileID clears the value of the "original_file_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearOriginalFileID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearOriginalFileID()
+	return _u
+}
+
+// SetWatermarkingEnabled sets the "watermarking_enabled" field.
+func (_u *TrustCenterDocUpdateOne) SetWatermarkingEnabled(v bool) *TrustCenterDocUpdateOne {
+	_u.mutation.SetWatermarkingEnabled(v)
+	return _u
+}
+
+// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetWatermarkingEnabled(*v)
+	}
+	return _u
+}
+
+// SetWatermarkStatus sets the "watermark_status" field.
+func (_u *TrustCenterDocUpdateOne) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocUpdateOne {
+	_u.mutation.SetWatermarkStatus(v)
+	return _u
+}
+
+// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetWatermarkStatus(*v)
+	}
+	return _u
+}
+
+// ClearWatermarkStatus clears the value of the "watermark_status" field.
+func (_u *TrustCenterDocUpdateOne) ClearWatermarkStatus() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearWatermarkStatus()
+	return _u
+}
+
 // SetVisibility sets the "visibility" field.
 func (_u *TrustCenterDocUpdateOne) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdateOne {
 	_u.mutation.SetVisibility(v)
@@ -652,6 +816,11 @@ func (_u *TrustCenterDocUpdateOne) SetFile(v *File) *TrustCenterDocUpdateOne {
 	return _u.SetFileID(v.ID)
 }
 
+// SetOriginalFile sets the "original_file" edge to the File entity.
+func (_u *TrustCenterDocUpdateOne) SetOriginalFile(v *File) *TrustCenterDocUpdateOne {
+	return _u.SetOriginalFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdateOne) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
@@ -666,6 +835,12 @@ func (_u *TrustCenterDocUpdateOne) ClearTrustCenter() *TrustCenterDocUpdateOne {
 // ClearFile clears the "file" edge to the File entity.
 func (_u *TrustCenterDocUpdateOne) ClearFile() *TrustCenterDocUpdateOne {
 	_u.mutation.ClearFile()
+	return _u
+}
+
+// ClearOriginalFile clears the "original_file" edge to the File entity.
+func (_u *TrustCenterDocUpdateOne) ClearOriginalFile() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearOriginalFile()
 	return _u
 }
 
@@ -739,6 +914,11 @@ func (_u *TrustCenterDocUpdateOne) check() error {
 	if v, ok := _u.mutation.Category(); ok {
 		if err := trustcenterdoc.CategoryValidator(v); err != nil {
 			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.WatermarkStatus(); ok {
+		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
+			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Visibility(); ok {
@@ -831,6 +1011,15 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
+		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.WatermarkStatus(); ok {
+		_spec.SetField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.WatermarkStatusCleared() {
+		_spec.ClearField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
 	}
@@ -888,6 +1077,37 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 			Inverse: false,
 			Table:   trustcenterdoc.FileTable,
 			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OriginalFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.OriginalFileTable,
+			Columns: []string{trustcenterdoc.OriginalFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OriginalFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.OriginalFileTable,
+			Columns: []string{trustcenterdoc.OriginalFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),

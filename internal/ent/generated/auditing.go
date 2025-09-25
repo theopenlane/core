@@ -3533,6 +3533,15 @@ func (_m *TrustCenterDocHistory) changes(new *TrustCenterDocHistory) []Change {
 	if !reflect.DeepEqual(_m.FileID, new.FileID) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldFileID, _m.FileID, new.FileID))
 	}
+	if !reflect.DeepEqual(_m.OriginalFileID, new.OriginalFileID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldOriginalFileID, _m.OriginalFileID, new.OriginalFileID))
+	}
+	if !reflect.DeepEqual(_m.WatermarkingEnabled, new.WatermarkingEnabled) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldWatermarkingEnabled, _m.WatermarkingEnabled, new.WatermarkingEnabled))
+	}
+	if !reflect.DeepEqual(_m.WatermarkStatus, new.WatermarkStatus) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldWatermarkStatus, _m.WatermarkStatus, new.WatermarkStatus))
+	}
 	if !reflect.DeepEqual(_m.Visibility, new.Visibility) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldVisibility, _m.Visibility, new.Visibility))
 	}

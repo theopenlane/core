@@ -1995,10 +1995,11 @@ func adminSearchTrustCenterDocs(ctx context.Context, query string, after *entgql
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				trustcenterdoc.TrustCenterIDContainsFold(query), // search by TrustCenterID
-				trustcenterdoc.TitleContainsFold(query),         // search by Title
-				trustcenterdoc.CategoryContainsFold(query),      // search by Category
-				trustcenterdoc.FileIDContainsFold(query),        // search by FileID
+				trustcenterdoc.TrustCenterIDContainsFold(query),  // search by TrustCenterID
+				trustcenterdoc.TitleContainsFold(query),          // search by Title
+				trustcenterdoc.CategoryContainsFold(query),       // search by Category
+				trustcenterdoc.FileIDContainsFold(query),         // search by FileID
+				trustcenterdoc.OriginalFileIDContainsFold(query), // search by OriginalFileID
 			),
 		)
 

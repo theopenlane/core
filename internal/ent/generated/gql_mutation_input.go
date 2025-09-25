@@ -12111,12 +12111,15 @@ func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceI
 
 // CreateTrustCenterDocInput represents a mutation input for creating trustcenterdocs.
 type CreateTrustCenterDocInput struct {
-	Tags          []string
-	Title         string
-	Category      string
-	Visibility    *enums.TrustCenterDocumentVisibility
-	TrustCenterID *string
-	FileID        *string
+	Tags                []string
+	Title               string
+	Category            string
+	WatermarkingEnabled *bool
+	WatermarkStatus     *enums.WatermarkStatus
+	Visibility          *enums.TrustCenterDocumentVisibility
+	TrustCenterID       *string
+	FileID              *string
+	OriginalFileID      *string
 }
 
 // Mutate applies the CreateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -12126,6 +12129,12 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	m.SetTitle(i.Title)
 	m.SetCategory(i.Category)
+	if v := i.WatermarkingEnabled; v != nil {
+		m.SetWatermarkingEnabled(*v)
+	}
+	if v := i.WatermarkStatus; v != nil {
+		m.SetWatermarkStatus(*v)
+	}
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
 	}
@@ -12134,6 +12143,9 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if v := i.OriginalFileID; v != nil {
+		m.SetOriginalFileID(*v)
 	}
 }
 
@@ -12145,17 +12157,22 @@ func (c *TrustCenterDocCreate) SetInput(i CreateTrustCenterDocInput) *TrustCente
 
 // UpdateTrustCenterDocInput represents a mutation input for updating trustcenterdocs.
 type UpdateTrustCenterDocInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Title            *string
-	Category         *string
-	ClearVisibility  bool
-	Visibility       *enums.TrustCenterDocumentVisibility
-	ClearTrustCenter bool
-	TrustCenterID    *string
-	ClearFile        bool
-	FileID           *string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	Title                *string
+	Category             *string
+	WatermarkingEnabled  *bool
+	ClearWatermarkStatus bool
+	WatermarkStatus      *enums.WatermarkStatus
+	ClearVisibility      bool
+	Visibility           *enums.TrustCenterDocumentVisibility
+	ClearTrustCenter     bool
+	TrustCenterID        *string
+	ClearFile            bool
+	FileID               *string
+	ClearOriginalFile    bool
+	OriginalFileID       *string
 }
 
 // Mutate applies the UpdateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -12175,6 +12192,15 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
 	}
+	if v := i.WatermarkingEnabled; v != nil {
+		m.SetWatermarkingEnabled(*v)
+	}
+	if i.ClearWatermarkStatus {
+		m.ClearWatermarkStatus()
+	}
+	if v := i.WatermarkStatus; v != nil {
+		m.SetWatermarkStatus(*v)
+	}
 	if i.ClearVisibility {
 		m.ClearVisibility()
 	}
@@ -12192,6 +12218,12 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if i.ClearOriginalFile {
+		m.ClearOriginalFile()
+	}
+	if v := i.OriginalFileID; v != nil {
+		m.SetOriginalFileID(*v)
 	}
 }
 

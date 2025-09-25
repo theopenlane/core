@@ -46,6 +46,12 @@ const (
 	FieldCategory = "category"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldOriginalFileID holds the string denoting the original_file_id field in the database.
+	FieldOriginalFileID = "original_file_id"
+	// FieldWatermarkingEnabled holds the string denoting the watermarking_enabled field in the database.
+	FieldWatermarkingEnabled = "watermarking_enabled"
+	// FieldWatermarkStatus holds the string denoting the watermark_status field in the database.
+	FieldWatermarkStatus = "watermark_status"
 	// FieldVisibility holds the string denoting the visibility field in the database.
 	FieldVisibility = "visibility"
 	// Table holds the table name of the trustcenterdochistory in the database.
@@ -69,6 +75,9 @@ var Columns = []string{
 	FieldTitle,
 	FieldCategory,
 	FieldFileID,
+	FieldOriginalFileID,
+	FieldWatermarkingEnabled,
+	FieldWatermarkStatus,
 	FieldVisibility,
 }
 
@@ -101,6 +110,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultWatermarkingEnabled holds the default value on creation for the "watermarking_enabled" field.
+	DefaultWatermarkingEnabled bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -112,6 +123,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcenterdochistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultWatermarkStatus enums.WatermarkStatus = "DISABLED"
+
+// WatermarkStatusValidator is a validator for the "watermark_status" field enum values. It is called by the builders before save.
+func WatermarkStatusValidator(ws enums.WatermarkStatus) error {
+	switch ws.String() {
+	case "PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterdochistory: invalid enum value for watermark_status field: %q", ws)
 	}
 }
 
@@ -200,6 +223,21 @@ func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
+// ByOriginalFileID orders the results by the original_file_id field.
+func ByOriginalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOriginalFileID, opts...).ToFunc()
+}
+
+// ByWatermarkingEnabled orders the results by the watermarking_enabled field.
+func ByWatermarkingEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWatermarkingEnabled, opts...).ToFunc()
+}
+
+// ByWatermarkStatus orders the results by the watermark_status field.
+func ByWatermarkStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWatermarkStatus, opts...).ToFunc()
+}
+
 // ByVisibility orders the results by the visibility field.
 func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
@@ -210,6 +248,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.WatermarkStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.WatermarkStatus)(nil)
+	// enums.WatermarkStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.WatermarkStatus)(nil)
 )
 
 var (

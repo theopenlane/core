@@ -6129,10 +6129,15 @@ type CreateTrustCenterDocInput struct {
 	Title string `json:"title"`
 	// category of the document
 	Category string `json:"category"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled *bool `json:"watermarkingEnabled,omitempty"`
+	// status of the watermarking
+	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility    *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	TrustCenterID *string                              `json:"trustCenterID,omitempty"`
-	FileID        *string                              `json:"fileID,omitempty"`
+	Visibility     *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	TrustCenterID  *string                              `json:"trustCenterID,omitempty"`
+	FileID         *string                              `json:"fileID,omitempty"`
+	OriginalFileID *string                              `json:"originalFileID,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation
@@ -28798,11 +28803,19 @@ type TrustCenterDoc struct {
 	Category string `json:"category"`
 	// ID of the file containing the document
 	FileID *string `json:"fileID,omitempty"`
+	// ID of the file containing the document, before any watermarking
+	OriginalFileID *string `json:"originalFileID,omitempty"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled bool `json:"watermarkingEnabled"`
+	// status of the watermarking
+	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
 	Visibility  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	TrustCenter *TrustCenter                         `json:"trustCenter,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
+	// the file containing the document content, pre watermarking
+	OriginalFile *File `json:"originalFile,omitempty"`
 }
 
 func (TrustCenterDoc) IsNode() {}
@@ -28862,6 +28875,12 @@ type TrustCenterDocHistory struct {
 	Category string `json:"category"`
 	// ID of the file containing the document
 	FileID *string `json:"fileID,omitempty"`
+	// ID of the file containing the document, before any watermarking
+	OriginalFileID *string `json:"originalFileID,omitempty"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled bool `json:"watermarkingEnabled"`
+	// status of the watermarking
+	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
 	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 }
@@ -29055,6 +29074,32 @@ type TrustCenterDocHistoryWhereInput struct {
 	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// original_file_id field predicates
+	OriginalFileID             *string  `json:"originalFileID,omitempty"`
+	OriginalFileIdneq          *string  `json:"originalFileIDNEQ,omitempty"`
+	OriginalFileIDIn           []string `json:"originalFileIDIn,omitempty"`
+	OriginalFileIDNotIn        []string `json:"originalFileIDNotIn,omitempty"`
+	OriginalFileIdgt           *string  `json:"originalFileIDGT,omitempty"`
+	OriginalFileIdgte          *string  `json:"originalFileIDGTE,omitempty"`
+	OriginalFileIdlt           *string  `json:"originalFileIDLT,omitempty"`
+	OriginalFileIdlte          *string  `json:"originalFileIDLTE,omitempty"`
+	OriginalFileIDContains     *string  `json:"originalFileIDContains,omitempty"`
+	OriginalFileIDHasPrefix    *string  `json:"originalFileIDHasPrefix,omitempty"`
+	OriginalFileIDHasSuffix    *string  `json:"originalFileIDHasSuffix,omitempty"`
+	OriginalFileIDIsNil        *bool    `json:"originalFileIDIsNil,omitempty"`
+	OriginalFileIDNotNil       *bool    `json:"originalFileIDNotNil,omitempty"`
+	OriginalFileIDEqualFold    *string  `json:"originalFileIDEqualFold,omitempty"`
+	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
+	// watermarking_enabled field predicates
+	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNeq *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	// watermark_status field predicates
+	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
+	WatermarkStatusNeq    *enums.WatermarkStatus  `json:"watermarkStatusNEQ,omitempty"`
+	WatermarkStatusIn     []enums.WatermarkStatus `json:"watermarkStatusIn,omitempty"`
+	WatermarkStatusNotIn  []enums.WatermarkStatus `json:"watermarkStatusNotIn,omitempty"`
+	WatermarkStatusIsNil  *bool                   `json:"watermarkStatusIsNil,omitempty"`
+	WatermarkStatusNotNil *bool                   `json:"watermarkStatusNotNil,omitempty"`
 	// visibility field predicates
 	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
 	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
@@ -29209,6 +29254,32 @@ type TrustCenterDocWhereInput struct {
 	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// original_file_id field predicates
+	OriginalFileID             *string  `json:"originalFileID,omitempty"`
+	OriginalFileIdneq          *string  `json:"originalFileIDNEQ,omitempty"`
+	OriginalFileIDIn           []string `json:"originalFileIDIn,omitempty"`
+	OriginalFileIDNotIn        []string `json:"originalFileIDNotIn,omitempty"`
+	OriginalFileIdgt           *string  `json:"originalFileIDGT,omitempty"`
+	OriginalFileIdgte          *string  `json:"originalFileIDGTE,omitempty"`
+	OriginalFileIdlt           *string  `json:"originalFileIDLT,omitempty"`
+	OriginalFileIdlte          *string  `json:"originalFileIDLTE,omitempty"`
+	OriginalFileIDContains     *string  `json:"originalFileIDContains,omitempty"`
+	OriginalFileIDHasPrefix    *string  `json:"originalFileIDHasPrefix,omitempty"`
+	OriginalFileIDHasSuffix    *string  `json:"originalFileIDHasSuffix,omitempty"`
+	OriginalFileIDIsNil        *bool    `json:"originalFileIDIsNil,omitempty"`
+	OriginalFileIDNotNil       *bool    `json:"originalFileIDNotNil,omitempty"`
+	OriginalFileIDEqualFold    *string  `json:"originalFileIDEqualFold,omitempty"`
+	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
+	// watermarking_enabled field predicates
+	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNeq *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	// watermark_status field predicates
+	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
+	WatermarkStatusNeq    *enums.WatermarkStatus  `json:"watermarkStatusNEQ,omitempty"`
+	WatermarkStatusIn     []enums.WatermarkStatus `json:"watermarkStatusIn,omitempty"`
+	WatermarkStatusNotIn  []enums.WatermarkStatus `json:"watermarkStatusNotIn,omitempty"`
+	WatermarkStatusIsNil  *bool                   `json:"watermarkStatusIsNil,omitempty"`
+	WatermarkStatusNotNil *bool                   `json:"watermarkStatusNotNil,omitempty"`
 	// visibility field predicates
 	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
 	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
@@ -29222,6 +29293,9 @@ type TrustCenterDocWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// original_file edge predicates
+	HasOriginalFile     *bool             `json:"hasOriginalFile,omitempty"`
+	HasOriginalFileWith []*FileWhereInput `json:"hasOriginalFileWith,omitempty"`
 }
 
 // Return response for createTrustCenterDomain mutation
@@ -33741,13 +33815,20 @@ type UpdateTrustCenterDocInput struct {
 	Title *string `json:"title,omitempty"`
 	// category of the document
 	Category *string `json:"category,omitempty"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled *bool `json:"watermarkingEnabled,omitempty"`
+	// status of the watermarking
+	WatermarkStatus      *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
+	ClearWatermarkStatus *bool                  `json:"clearWatermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility       *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	ClearVisibility  *bool                                `json:"clearVisibility,omitempty"`
-	TrustCenterID    *string                              `json:"trustCenterID,omitempty"`
-	ClearTrustCenter *bool                                `json:"clearTrustCenter,omitempty"`
-	FileID           *string                              `json:"fileID,omitempty"`
-	ClearFile        *bool                                `json:"clearFile,omitempty"`
+	Visibility        *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	ClearVisibility   *bool                                `json:"clearVisibility,omitempty"`
+	TrustCenterID     *string                              `json:"trustCenterID,omitempty"`
+	ClearTrustCenter  *bool                                `json:"clearTrustCenter,omitempty"`
+	FileID            *string                              `json:"fileID,omitempty"`
+	ClearFile         *bool                                `json:"clearFile,omitempty"`
+	OriginalFileID    *string                              `json:"originalFileID,omitempty"`
+	ClearOriginalFile *bool                                `json:"clearOriginalFile,omitempty"`
 }
 
 // UpdateTrustCenterInput is used for update TrustCenter object.

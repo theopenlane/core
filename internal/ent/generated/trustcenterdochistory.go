@@ -48,6 +48,12 @@ type TrustCenterDocHistory struct {
 	Category string `json:"category,omitempty"`
 	// ID of the file containing the document
 	FileID *string `json:"file_id,omitempty"`
+	// ID of the file containing the document, before any watermarking
+	OriginalFileID *string `json:"original_file_id,omitempty"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled bool `json:"watermarking_enabled,omitempty"`
+	// status of the watermarking
+	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	// visibility of the document
 	Visibility   enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	selectValues sql.SelectValues
@@ -62,7 +68,9 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterdochistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldVisibility:
+		case trustcenterdochistory.FieldWatermarkingEnabled:
+			values[i] = new(sql.NullBool)
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,6 +182,25 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 				_m.FileID = new(string)
 				*_m.FileID = value.String
 			}
+		case trustcenterdochistory.FieldOriginalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field original_file_id", values[i])
+			} else if value.Valid {
+				_m.OriginalFileID = new(string)
+				*_m.OriginalFileID = value.String
+			}
+		case trustcenterdochistory.FieldWatermarkingEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field watermarking_enabled", values[i])
+			} else if value.Valid {
+				_m.WatermarkingEnabled = value.Bool
+			}
+		case trustcenterdochistory.FieldWatermarkStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field watermark_status", values[i])
+			} else if value.Valid {
+				_m.WatermarkStatus = enums.WatermarkStatus(value.String)
+			}
 		case trustcenterdochistory.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field visibility", values[i])
@@ -259,6 +286,17 @@ func (_m *TrustCenterDocHistory) String() string {
 		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	if v := _m.OriginalFileID; v != nil {
+		builder.WriteString("original_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("watermarking_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WatermarkingEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("watermark_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WatermarkStatus))
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))

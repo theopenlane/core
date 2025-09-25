@@ -191,6 +191,60 @@ func (_u *TrustCenterDocHistoryUpdate) ClearFileID() *TrustCenterDocHistoryUpdat
 	return _u
 }
 
+// SetOriginalFileID sets the "original_file_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetOriginalFileID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetOriginalFileID(v)
+	return _u
+}
+
+// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableOriginalFileID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetOriginalFileID(*v)
+	}
+	return _u
+}
+
+// ClearOriginalFileID clears the value of the "original_file_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearOriginalFileID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearOriginalFileID()
+	return _u
+}
+
+// SetWatermarkingEnabled sets the "watermarking_enabled" field.
+func (_u *TrustCenterDocHistoryUpdate) SetWatermarkingEnabled(v bool) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetWatermarkingEnabled(v)
+	return _u
+}
+
+// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetWatermarkingEnabled(*v)
+	}
+	return _u
+}
+
+// SetWatermarkStatus sets the "watermark_status" field.
+func (_u *TrustCenterDocHistoryUpdate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetWatermarkStatus(v)
+	return _u
+}
+
+// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetWatermarkStatus(*v)
+	}
+	return _u
+}
+
+// ClearWatermarkStatus clears the value of the "watermark_status" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearWatermarkStatus() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearWatermarkStatus()
+	return _u
+}
+
 // SetVisibility sets the "visibility" field.
 func (_u *TrustCenterDocHistoryUpdate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdate {
 	_u.mutation.SetVisibility(v)
@@ -260,6 +314,11 @@ func (_u *TrustCenterDocHistoryUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterDocHistoryUpdate) check() error {
+	if v, ok := _u.mutation.WatermarkStatus(); ok {
+		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
+			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Visibility(); ok {
 		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
@@ -347,6 +406,21 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OriginalFileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldOriginalFileID, field.TypeString, value)
+	}
+	if _u.mutation.OriginalFileIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldOriginalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.WatermarkStatus(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.WatermarkStatusCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
@@ -536,6 +610,60 @@ func (_u *TrustCenterDocHistoryUpdateOne) ClearFileID() *TrustCenterDocHistoryUp
 	return _u
 }
 
+// SetOriginalFileID sets the "original_file_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetOriginalFileID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetOriginalFileID(v)
+	return _u
+}
+
+// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableOriginalFileID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetOriginalFileID(*v)
+	}
+	return _u
+}
+
+// ClearOriginalFileID clears the value of the "original_file_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearOriginalFileID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearOriginalFileID()
+	return _u
+}
+
+// SetWatermarkingEnabled sets the "watermarking_enabled" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetWatermarkingEnabled(v bool) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetWatermarkingEnabled(v)
+	return _u
+}
+
+// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetWatermarkingEnabled(*v)
+	}
+	return _u
+}
+
+// SetWatermarkStatus sets the "watermark_status" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetWatermarkStatus(v)
+	return _u
+}
+
+// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetWatermarkStatus(*v)
+	}
+	return _u
+}
+
+// ClearWatermarkStatus clears the value of the "watermark_status" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearWatermarkStatus() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearWatermarkStatus()
+	return _u
+}
+
 // SetVisibility sets the "visibility" field.
 func (_u *TrustCenterDocHistoryUpdateOne) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdateOne {
 	_u.mutation.SetVisibility(v)
@@ -618,6 +746,11 @@ func (_u *TrustCenterDocHistoryUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterDocHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.WatermarkStatus(); ok {
+		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
+			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Visibility(); ok {
 		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
@@ -722,6 +855,21 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OriginalFileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldOriginalFileID, field.TypeString, value)
+	}
+	if _u.mutation.OriginalFileIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldOriginalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.WatermarkStatus(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.WatermarkStatusCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)

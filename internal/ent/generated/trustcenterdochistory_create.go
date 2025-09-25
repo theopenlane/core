@@ -186,6 +186,48 @@ func (_c *TrustCenterDocHistoryCreate) SetNillableFileID(v *string) *TrustCenter
 	return _c
 }
 
+// SetOriginalFileID sets the "original_file_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetOriginalFileID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetOriginalFileID(v)
+	return _c
+}
+
+// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableOriginalFileID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetOriginalFileID(*v)
+	}
+	return _c
+}
+
+// SetWatermarkingEnabled sets the "watermarking_enabled" field.
+func (_c *TrustCenterDocHistoryCreate) SetWatermarkingEnabled(v bool) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetWatermarkingEnabled(v)
+	return _c
+}
+
+// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetWatermarkingEnabled(*v)
+	}
+	return _c
+}
+
+// SetWatermarkStatus sets the "watermark_status" field.
+func (_c *TrustCenterDocHistoryCreate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetWatermarkStatus(v)
+	return _c
+}
+
+// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetWatermarkStatus(*v)
+	}
+	return _c
+}
+
 // SetVisibility sets the "visibility" field.
 func (_c *TrustCenterDocHistoryCreate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetVisibility(v)
@@ -276,6 +318,14 @@ func (_c *TrustCenterDocHistoryCreate) defaults() error {
 		v := trustcenterdochistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
+		v := trustcenterdochistory.DefaultWatermarkingEnabled
+		_c.mutation.SetWatermarkingEnabled(v)
+	}
+	if _, ok := _c.mutation.WatermarkStatus(); !ok {
+		v := trustcenterdochistory.DefaultWatermarkStatus
+		_c.mutation.SetWatermarkStatus(v)
+	}
 	if _, ok := _c.mutation.Visibility(); !ok {
 		v := trustcenterdochistory.DefaultVisibility
 		_c.mutation.SetVisibility(v)
@@ -308,6 +358,14 @@ func (_c *TrustCenterDocHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Category(); !ok {
 		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterDocHistory.category"`)}
+	}
+	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
+		return &ValidationError{Name: "watermarking_enabled", err: errors.New(`generated: missing required field "TrustCenterDocHistory.watermarking_enabled"`)}
+	}
+	if v, ok := _c.mutation.WatermarkStatus(); ok {
+		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
+			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
+		}
 	}
 	if v, ok := _c.mutation.Visibility(); ok {
 		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
@@ -405,6 +463,18 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
 		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.OriginalFileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldOriginalFileID, field.TypeString, value)
+		_node.OriginalFileID = &value
+	}
+	if value, ok := _c.mutation.WatermarkingEnabled(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
+		_node.WatermarkingEnabled = value
+	}
+	if value, ok := _c.mutation.WatermarkStatus(); ok {
+		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
+		_node.WatermarkStatus = value
 	}
 	if value, ok := _c.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
