@@ -58,7 +58,7 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 		existingModules = append(existingModules, mod.Module)
 	}
 
-	err = dropObsoleteModules(ctx, orgSub, existingModules)
+	err = reconcileModules(ctx, orgSub, existingModules)
 	if err != nil {
 		return err
 	}
@@ -178,7 +178,9 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	return builder.Save(allowCtx)
 }
 
-func dropObsoleteModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
+// reconcileModules makes sure to match the modules accessible to the org
+// with what is in stripe
+func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 	tx := transaction.FromContext(ctx)
 
@@ -189,5 +191,26 @@ func dropObsoleteModules(ctx context.Context, orgSub *ent.OrgSubscription, curre
 			orgmodule.ModuleNotIn(currentModules...),
 		),
 	).Exec(allowCtx)
+	return err
+}
+
+// removeAllModules drops all modules except the base one
+func (h *Handler) removeAllModules(ctx context.Context, subscriptionID string) error {
+	orgSub, err := getOrgSubscription(ctx, subscriptionID)
+	if err != nil {
+		return err
+	}
+
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	tx := transaction.FromContext(ctx)
+
+	_, err = tx.OrgModule.Delete().Where(
+		orgmodule.And(
+			orgmodule.OwnerID(orgSub.OwnerID),
+			orgmodule.SubscriptionID(orgSub.ID),
+			orgmodule.ModuleNEQ(models.CatalogBaseModule),
+		),
+	).Exec(allowCtx)
+
 	return err
 }
