@@ -1810,6 +1810,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "original_file": {
+	ObjectType:      "original_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_setting": {"trust_center": {
 	ObjectType:      "trust_center",

@@ -23097,6 +23097,25 @@ func (c *TrustCenterDocClient) QueryFile(_m *TrustCenterDoc) *FileQuery {
 	return query
 }
 
+// QueryOriginalFile queries the original_file edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryOriginalFile(_m *TrustCenterDoc) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.OriginalFileTable, trustcenterdoc.OriginalFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterDocClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenterDoc

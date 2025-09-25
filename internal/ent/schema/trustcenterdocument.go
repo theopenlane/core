@@ -61,6 +61,22 @@ func (TrustCenterDoc) Fields() []ent.Field {
 			).
 			Optional().
 			Nillable(),
+		field.String("original_file_id").
+			Comment("ID of the file containing the document, before any watermarking").
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
+		field.Bool("watermarking_enabled").
+			Default(true).
+			Comment("whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center"),
+		field.Enum("watermark_status").
+			GoType(enums.WatermarkStatus("")).
+			Default(enums.WatermarkStatusDisabled.String()).
+			Optional().
+			Comment("status of the watermarking"),
 		field.Enum("visibility").
 			GoType(enums.TrustCenterDocumentVisibility("")).
 			Default(enums.TrustCenterDocumentVisibilityNotVisible.String()).
@@ -93,6 +109,13 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 			edgeSchema: File{},
 			field:      "file_id",
 			comment:    "the file containing the document content",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			name:       "original_file",
+			fromSchema: t,
+			t:          File.Type,
+			field:      "original_file_id",
+			comment:    "the file containing the document content, pre watermarking",
 		}),
 	}
 }

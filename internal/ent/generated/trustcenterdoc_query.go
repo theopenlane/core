@@ -23,14 +23,15 @@ import (
 // TrustCenterDocQuery is the builder for querying TrustCenterDoc entities.
 type TrustCenterDocQuery struct {
 	config
-	ctx             *QueryContext
-	order           []trustcenterdoc.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.TrustCenterDoc
-	withTrustCenter *TrustCenterQuery
-	withFile        *FileQuery
-	loadTotal       []func(context.Context, []*TrustCenterDoc) error
-	modifiers       []func(*sql.Selector)
+	ctx              *QueryContext
+	order            []trustcenterdoc.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.TrustCenterDoc
+	withTrustCenter  *TrustCenterQuery
+	withFile         *FileQuery
+	withOriginalFile *FileQuery
+	loadTotal        []func(context.Context, []*TrustCenterDoc) error
+	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -107,6 +108,31 @@ func (_q *TrustCenterDocQuery) QueryFile() *FileQuery {
 			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.FileTable, trustcenterdoc.FileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOriginalFile chains the current query on the "original_file" edge.
+func (_q *TrustCenterDocQuery) QueryOriginalFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.OriginalFileTable, trustcenterdoc.OriginalFileColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
@@ -304,13 +330,14 @@ func (_q *TrustCenterDocQuery) Clone() *TrustCenterDocQuery {
 		return nil
 	}
 	return &TrustCenterDocQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]trustcenterdoc.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.TrustCenterDoc{}, _q.predicates...),
-		withTrustCenter: _q.withTrustCenter.Clone(),
-		withFile:        _q.withFile.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]trustcenterdoc.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.TrustCenterDoc{}, _q.predicates...),
+		withTrustCenter:  _q.withTrustCenter.Clone(),
+		withFile:         _q.withFile.Clone(),
+		withOriginalFile: _q.withOriginalFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -337,6 +364,17 @@ func (_q *TrustCenterDocQuery) WithFile(opts ...func(*FileQuery)) *TrustCenterDo
 		opt(query)
 	}
 	_q.withFile = query
+	return _q
+}
+
+// WithOriginalFile tells the query-builder to eager-load the nodes that are connected to
+// the "original_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithOriginalFile(opts ...func(*FileQuery)) *TrustCenterDocQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOriginalFile = query
 	return _q
 }
 
@@ -424,9 +462,10 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*TrustCenterDoc{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			_q.withTrustCenter != nil,
 			_q.withFile != nil,
+			_q.withOriginalFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -461,6 +500,12 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *TrustCenterDoc, e *File) { n.Edges.File = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withOriginalFile; query != nil {
+		if err := _q.loadOriginalFile(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *File) { n.Edges.OriginalFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -533,6 +578,38 @@ func (_q *TrustCenterDocQuery) loadFile(ctx context.Context, query *FileQuery, n
 	}
 	return nil
 }
+func (_q *TrustCenterDocQuery) loadOriginalFile(ctx context.Context, query *FileQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterDoc)
+	for i := range nodes {
+		if nodes[i].OriginalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].OriginalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "original_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *TrustCenterDocQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -569,6 +646,9 @@ func (_q *TrustCenterDocQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(trustcenterdoc.FieldFileID)
+		}
+		if _q.withOriginalFile != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldOriginalFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

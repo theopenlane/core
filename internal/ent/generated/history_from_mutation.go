@@ -11750,6 +11750,18 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableFileID(&fileID)
 	}
 
+	if originalFileID, exists := m.OriginalFileID(); exists {
+		create = create.SetNillableOriginalFileID(&originalFileID)
+	}
+
+	if watermarkingEnabled, exists := m.WatermarkingEnabled(); exists {
+		create = create.SetWatermarkingEnabled(watermarkingEnabled)
+	}
+
+	if watermarkStatus, exists := m.WatermarkStatus(); exists {
+		create = create.SetWatermarkStatus(watermarkStatus)
+	}
+
 	if visibility, exists := m.Visibility(); exists {
 		create = create.SetVisibility(visibility)
 	}
@@ -11851,6 +11863,24 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableFileID(trustcenterdoc.FileID)
 		}
 
+		if originalFileID, exists := m.OriginalFileID(); exists {
+			create = create.SetNillableOriginalFileID(&originalFileID)
+		} else {
+			create = create.SetNillableOriginalFileID(trustcenterdoc.OriginalFileID)
+		}
+
+		if watermarkingEnabled, exists := m.WatermarkingEnabled(); exists {
+			create = create.SetWatermarkingEnabled(watermarkingEnabled)
+		} else {
+			create = create.SetWatermarkingEnabled(trustcenterdoc.WatermarkingEnabled)
+		}
+
+		if watermarkStatus, exists := m.WatermarkStatus(); exists {
+			create = create.SetWatermarkStatus(watermarkStatus)
+		} else {
+			create = create.SetWatermarkStatus(trustcenterdoc.WatermarkStatus)
+		}
+
 		if visibility, exists := m.Visibility(); exists {
 			create = create.SetVisibility(visibility)
 		} else {
@@ -11903,6 +11933,9 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetTitle(trustcenterdoc.Title).
 			SetCategory(trustcenterdoc.Category).
 			SetNillableFileID(trustcenterdoc.FileID).
+			SetNillableOriginalFileID(trustcenterdoc.OriginalFileID).
+			SetWatermarkingEnabled(trustcenterdoc.WatermarkingEnabled).
+			SetWatermarkStatus(trustcenterdoc.WatermarkStatus).
 			SetVisibility(trustcenterdoc.Visibility).
 			Save(ctx)
 		if err != nil {

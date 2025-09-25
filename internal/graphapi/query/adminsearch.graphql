@@ -978,6 +978,7 @@ query AdminSearch($query: String!) {
           title
           category
           fileID
+          originalFileID
         }
       }
     }

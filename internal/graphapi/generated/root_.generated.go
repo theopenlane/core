@@ -4906,19 +4906,23 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDoc struct {
-		Category      func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		File          func(childComplexity int) int
-		FileID        func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		TrustCenter   func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Visibility    func(childComplexity int) int
+		Category            func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		File                func(childComplexity int) int
+		FileID              func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		OriginalFile        func(childComplexity int) int
+		OriginalFileID      func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		Title               func(childComplexity int) int
+		TrustCenter         func(childComplexity int) int
+		TrustCenterID       func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
+		Visibility          func(childComplexity int) int
+		WatermarkStatus     func(childComplexity int) int
+		WatermarkingEnabled func(childComplexity int) int
 	}
 
 	TrustCenterDocBulkCreatePayload struct {
@@ -4945,20 +4949,23 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDocHistory struct {
-		Category      func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		FileID        func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Visibility    func(childComplexity int) int
+		Category            func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		FileID              func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OriginalFileID      func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		Title               func(childComplexity int) int
+		TrustCenterID       func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
+		Visibility          func(childComplexity int) int
+		WatermarkStatus     func(childComplexity int) int
+		WatermarkingEnabled func(childComplexity int) int
 	}
 
 	TrustCenterDocHistoryConnection struct {
@@ -33163,6 +33170,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.ID(childComplexity), true
 
+	case "TrustCenterDoc.originalFile":
+		if e.complexity.TrustCenterDoc.OriginalFile == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.OriginalFile(childComplexity), true
+
+	case "TrustCenterDoc.originalFileID":
+		if e.complexity.TrustCenterDoc.OriginalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.OriginalFileID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -33211,6 +33232,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDoc.Visibility(childComplexity), true
+
+	case "TrustCenterDoc.watermarkStatus":
+		if e.complexity.TrustCenterDoc.WatermarkStatus == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.WatermarkStatus(childComplexity), true
+
+	case "TrustCenterDoc.watermarkingEnabled":
+		if e.complexity.TrustCenterDoc.WatermarkingEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.WatermarkingEnabled(childComplexity), true
 
 	case "TrustCenterDocBulkCreatePayload.trustCenterDocs":
 		if e.complexity.TrustCenterDocBulkCreatePayload.TrustCenterDocs == nil {
@@ -33317,6 +33352,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
 
+	case "TrustCenterDocHistory.originalFileID":
+		if e.complexity.TrustCenterDocHistory.OriginalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.OriginalFileID(childComplexity), true
+
 	case "TrustCenterDocHistory.ref":
 		if e.complexity.TrustCenterDocHistory.Ref == nil {
 			break
@@ -33365,6 +33407,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Visibility(childComplexity), true
+
+	case "TrustCenterDocHistory.watermarkStatus":
+		if e.complexity.TrustCenterDocHistory.WatermarkStatus == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.WatermarkStatus(childComplexity), true
+
+	case "TrustCenterDocHistory.watermarkingEnabled":
+		if e.complexity.TrustCenterDocHistory.WatermarkingEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.WatermarkingEnabled(childComplexity), true
 
 	case "TrustCenterDocHistoryConnection.edges":
 		if e.complexity.TrustCenterDocHistoryConnection.Edges == nil {
@@ -48228,11 +48284,20 @@ input CreateTrustCenterDocInput {
   """
   category: String!
   """
+  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+  """
+  watermarkingEnabled: Boolean
+  """
+  status of the watermarking
+  """
+  watermarkStatus: TrustCenterDocWatermarkStatus
+  """
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   trustCenterID: ID
   fileID: ID
+  originalFileID: ID
 }
 """
 CreateTrustCenterInput is used for create TrustCenter object.
@@ -88293,6 +88358,18 @@ type TrustCenterDoc implements Node {
   """
   fileID: ID
   """
+  ID of the file containing the document, before any watermarking
+  """
+  originalFileID: ID
+  """
+  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+  """
+  watermarkingEnabled: Boolean!
+  """
+  status of the watermarking
+  """
+  watermarkStatus: TrustCenterDocWatermarkStatus
+  """
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
@@ -88301,6 +88378,10 @@ type TrustCenterDoc implements Node {
   the file containing the document content
   """
   file: File
+  """
+  the file containing the document content, pre watermarking
+  """
+  originalFile: File
 }
 """
 A connection to a list of items.
@@ -88361,6 +88442,18 @@ type TrustCenterDocHistory implements Node {
   ID of the file containing the document
   """
   fileID: String
+  """
+  ID of the file containing the document, before any watermarking
+  """
+  originalFileID: String
+  """
+  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+  """
+  watermarkingEnabled: Boolean!
+  """
+  status of the watermarking
+  """
+  watermarkStatus: TrustCenterDocHistoryWatermarkStatus
   """
   visibility of the document
   """
@@ -88432,6 +88525,16 @@ enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
+}
+"""
+TrustCenterDocHistoryWatermarkStatus is enum for the field watermark_status
+"""
+enum TrustCenterDocHistoryWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+  DISABLED
 }
 """
 TrustCenterDocHistoryWhereInput is used for filtering TrustCenterDocHistory objects.
@@ -88621,6 +88724,38 @@ input TrustCenterDocHistoryWhereInput {
   fileIDEqualFold: String
   fileIDContainsFold: String
   """
+  original_file_id field predicates
+  """
+  originalFileID: String
+  originalFileIDNEQ: String
+  originalFileIDIn: [String!]
+  originalFileIDNotIn: [String!]
+  originalFileIDGT: String
+  originalFileIDGTE: String
+  originalFileIDLT: String
+  originalFileIDLTE: String
+  originalFileIDContains: String
+  originalFileIDHasPrefix: String
+  originalFileIDHasSuffix: String
+  originalFileIDIsNil: Boolean
+  originalFileIDNotNil: Boolean
+  originalFileIDEqualFold: String
+  originalFileIDContainsFold: String
+  """
+  watermarking_enabled field predicates
+  """
+  watermarkingEnabled: Boolean
+  watermarkingEnabledNEQ: Boolean
+  """
+  watermark_status field predicates
+  """
+  watermarkStatus: TrustCenterDocHistoryWatermarkStatus
+  watermarkStatusNEQ: TrustCenterDocHistoryWatermarkStatus
+  watermarkStatusIn: [TrustCenterDocHistoryWatermarkStatus!]
+  watermarkStatusNotIn: [TrustCenterDocHistoryWatermarkStatus!]
+  watermarkStatusIsNil: Boolean
+  watermarkStatusNotNil: Boolean
+  """
   visibility field predicates
   """
   visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
@@ -88657,6 +88792,16 @@ enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/the
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
+}
+"""
+TrustCenterDocWatermarkStatus is enum for the field watermark_status
+"""
+enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+  DISABLED
 }
 """
 TrustCenterDocWhereInput is used for filtering TrustCenterDoc objects.
@@ -88810,6 +88955,38 @@ input TrustCenterDocWhereInput {
   fileIDEqualFold: ID
   fileIDContainsFold: ID
   """
+  original_file_id field predicates
+  """
+  originalFileID: ID
+  originalFileIDNEQ: ID
+  originalFileIDIn: [ID!]
+  originalFileIDNotIn: [ID!]
+  originalFileIDGT: ID
+  originalFileIDGTE: ID
+  originalFileIDLT: ID
+  originalFileIDLTE: ID
+  originalFileIDContains: ID
+  originalFileIDHasPrefix: ID
+  originalFileIDHasSuffix: ID
+  originalFileIDIsNil: Boolean
+  originalFileIDNotNil: Boolean
+  originalFileIDEqualFold: ID
+  originalFileIDContainsFold: ID
+  """
+  watermarking_enabled field predicates
+  """
+  watermarkingEnabled: Boolean
+  watermarkingEnabledNEQ: Boolean
+  """
+  watermark_status field predicates
+  """
+  watermarkStatus: TrustCenterDocWatermarkStatus
+  watermarkStatusNEQ: TrustCenterDocWatermarkStatus
+  watermarkStatusIn: [TrustCenterDocWatermarkStatus!]
+  watermarkStatusNotIn: [TrustCenterDocWatermarkStatus!]
+  watermarkStatusIsNil: Boolean
+  watermarkStatusNotNil: Boolean
+  """
   visibility field predicates
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
@@ -88828,6 +89005,11 @@ input TrustCenterDocWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  original_file edge predicates
+  """
+  hasOriginalFile: Boolean
+  hasOriginalFileWith: [FileWhereInput!]
 }
 """
 An edge in a connection.
@@ -94689,6 +94871,15 @@ input UpdateTrustCenterDocInput {
   """
   category: String
   """
+  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+  """
+  watermarkingEnabled: Boolean
+  """
+  status of the watermarking
+  """
+  watermarkStatus: TrustCenterDocWatermarkStatus
+  clearWatermarkStatus: Boolean
+  """
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
@@ -94697,6 +94888,8 @@ input UpdateTrustCenterDocInput {
   clearTrustCenter: Boolean
   fileID: ID
   clearFile: Boolean
+  originalFileID: ID
+  clearOriginalFile: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.

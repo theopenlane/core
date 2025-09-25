@@ -43,6 +43,12 @@ type TrustCenterDoc struct {
 	Category string `json:"category,omitempty"`
 	// ID of the file containing the document
 	FileID *string `json:"file_id,omitempty"`
+	// ID of the file containing the document, before any watermarking
+	OriginalFileID *string `json:"original_file_id,omitempty"`
+	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	WatermarkingEnabled bool `json:"watermarking_enabled,omitempty"`
+	// status of the watermarking
+	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	// visibility of the document
 	Visibility enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -57,11 +63,13 @@ type TrustCenterDocEdges struct {
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
+	// the file containing the document content, pre watermarking
+	OriginalFile *File `json:"original_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -86,6 +94,17 @@ func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "file"}
 }
 
+// OriginalFileOrErr returns the OriginalFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterDocEdges) OriginalFileOrErr() (*File, error) {
+	if e.OriginalFile != nil {
+		return e.OriginalFile, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "original_file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -93,7 +112,9 @@ func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterdoc.FieldTags:
 			values[i] = new([]byte)
-		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldVisibility:
+		case trustcenterdoc.FieldWatermarkingEnabled:
+			values[i] = new(sql.NullBool)
+		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldOriginalFileID, trustcenterdoc.FieldWatermarkStatus, trustcenterdoc.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdoc.FieldCreatedAt, trustcenterdoc.FieldUpdatedAt, trustcenterdoc.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,6 +208,25 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 				_m.FileID = new(string)
 				*_m.FileID = value.String
 			}
+		case trustcenterdoc.FieldOriginalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field original_file_id", values[i])
+			} else if value.Valid {
+				_m.OriginalFileID = new(string)
+				*_m.OriginalFileID = value.String
+			}
+		case trustcenterdoc.FieldWatermarkingEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field watermarking_enabled", values[i])
+			} else if value.Valid {
+				_m.WatermarkingEnabled = value.Bool
+			}
+		case trustcenterdoc.FieldWatermarkStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field watermark_status", values[i])
+			} else if value.Valid {
+				_m.WatermarkStatus = enums.WatermarkStatus(value.String)
+			}
 		case trustcenterdoc.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field visibility", values[i])
@@ -214,6 +254,11 @@ func (_m *TrustCenterDoc) QueryTrustCenter() *TrustCenterQuery {
 // QueryFile queries the "file" edge of the TrustCenterDoc entity.
 func (_m *TrustCenterDoc) QueryFile() *FileQuery {
 	return NewTrustCenterDocClient(_m.config).QueryFile(_m)
+}
+
+// QueryOriginalFile queries the "original_file" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryOriginalFile() *FileQuery {
+	return NewTrustCenterDocClient(_m.config).QueryOriginalFile(_m)
 }
 
 // Update returns a builder for updating this TrustCenterDoc.
@@ -273,6 +318,17 @@ func (_m *TrustCenterDoc) String() string {
 		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	if v := _m.OriginalFileID; v != nil {
+		builder.WriteString("original_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("watermarking_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WatermarkingEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("watermark_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WatermarkStatus))
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))

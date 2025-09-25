@@ -86502,6 +86502,35 @@ type TrustCenterDocWhereInput struct {
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 
+	// "original_file_id" field predicates.
+	OriginalFileID             *string  `json:"originalFileID,omitempty"`
+	OriginalFileIDNEQ          *string  `json:"originalFileIDNEQ,omitempty"`
+	OriginalFileIDIn           []string `json:"originalFileIDIn,omitempty"`
+	OriginalFileIDNotIn        []string `json:"originalFileIDNotIn,omitempty"`
+	OriginalFileIDGT           *string  `json:"originalFileIDGT,omitempty"`
+	OriginalFileIDGTE          *string  `json:"originalFileIDGTE,omitempty"`
+	OriginalFileIDLT           *string  `json:"originalFileIDLT,omitempty"`
+	OriginalFileIDLTE          *string  `json:"originalFileIDLTE,omitempty"`
+	OriginalFileIDContains     *string  `json:"originalFileIDContains,omitempty"`
+	OriginalFileIDHasPrefix    *string  `json:"originalFileIDHasPrefix,omitempty"`
+	OriginalFileIDHasSuffix    *string  `json:"originalFileIDHasSuffix,omitempty"`
+	OriginalFileIDIsNil        bool     `json:"originalFileIDIsNil,omitempty"`
+	OriginalFileIDNotNil       bool     `json:"originalFileIDNotNil,omitempty"`
+	OriginalFileIDEqualFold    *string  `json:"originalFileIDEqualFold,omitempty"`
+	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
+
+	// "watermarking_enabled" field predicates.
+	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNEQ *bool `json:"watermarkingEnabledNEQ,omitempty"`
+
+	// "watermark_status" field predicates.
+	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
+	WatermarkStatusNEQ    *enums.WatermarkStatus  `json:"watermarkStatusNEQ,omitempty"`
+	WatermarkStatusIn     []enums.WatermarkStatus `json:"watermarkStatusIn,omitempty"`
+	WatermarkStatusNotIn  []enums.WatermarkStatus `json:"watermarkStatusNotIn,omitempty"`
+	WatermarkStatusIsNil  bool                    `json:"watermarkStatusIsNil,omitempty"`
+	WatermarkStatusNotNil bool                    `json:"watermarkStatusNotNil,omitempty"`
+
 	// "visibility" field predicates.
 	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
 	VisibilityNEQ    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
@@ -86517,6 +86546,10 @@ type TrustCenterDocWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "original_file" edge predicates.
+	HasOriginalFile     *bool             `json:"hasOriginalFile,omitempty"`
+	HasOriginalFileWith []*FileWhereInput `json:"hasOriginalFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -86938,6 +86971,75 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.FileIDContainsFold(*i.FileIDContainsFold))
 	}
+	if i.OriginalFileID != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDEQ(*i.OriginalFileID))
+	}
+	if i.OriginalFileIDNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDNEQ(*i.OriginalFileIDNEQ))
+	}
+	if len(i.OriginalFileIDIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDIn(i.OriginalFileIDIn...))
+	}
+	if len(i.OriginalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDNotIn(i.OriginalFileIDNotIn...))
+	}
+	if i.OriginalFileIDGT != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDGT(*i.OriginalFileIDGT))
+	}
+	if i.OriginalFileIDGTE != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDGTE(*i.OriginalFileIDGTE))
+	}
+	if i.OriginalFileIDLT != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDLT(*i.OriginalFileIDLT))
+	}
+	if i.OriginalFileIDLTE != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDLTE(*i.OriginalFileIDLTE))
+	}
+	if i.OriginalFileIDContains != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDContains(*i.OriginalFileIDContains))
+	}
+	if i.OriginalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDHasPrefix(*i.OriginalFileIDHasPrefix))
+	}
+	if i.OriginalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDHasSuffix(*i.OriginalFileIDHasSuffix))
+	}
+	if i.OriginalFileIDIsNil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDIsNil())
+	}
+	if i.OriginalFileIDNotNil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDNotNil())
+	}
+	if i.OriginalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDEqualFold(*i.OriginalFileIDEqualFold))
+	}
+	if i.OriginalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.OriginalFileIDContainsFold(*i.OriginalFileIDContainsFold))
+	}
+	if i.WatermarkingEnabled != nil {
+		predicates = append(predicates, trustcenterdoc.WatermarkingEnabledEQ(*i.WatermarkingEnabled))
+	}
+	if i.WatermarkingEnabledNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.WatermarkingEnabledNEQ(*i.WatermarkingEnabledNEQ))
+	}
+	if i.WatermarkStatus != nil {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusEQ(*i.WatermarkStatus))
+	}
+	if i.WatermarkStatusNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusNEQ(*i.WatermarkStatusNEQ))
+	}
+	if len(i.WatermarkStatusIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusIn(i.WatermarkStatusIn...))
+	}
+	if len(i.WatermarkStatusNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusNotIn(i.WatermarkStatusNotIn...))
+	}
+	if i.WatermarkStatusIsNil {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusIsNil())
+	}
+	if i.WatermarkStatusNotNil {
+		predicates = append(predicates, trustcenterdoc.WatermarkStatusNotNil())
+	}
 	if i.Visibility != nil {
 		predicates = append(predicates, trustcenterdoc.VisibilityEQ(*i.Visibility))
 	}
@@ -86992,6 +87094,24 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenterdoc.HasFileWith(with...))
+	}
+	if i.HasOriginalFile != nil {
+		p := trustcenterdoc.HasOriginalFile()
+		if !*i.HasOriginalFile {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOriginalFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasOriginalFileWith))
+		for _, w := range i.HasOriginalFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOriginalFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasOriginalFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -87176,6 +87296,35 @@ type TrustCenterDocHistoryWhereInput struct {
 	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "original_file_id" field predicates.
+	OriginalFileID             *string  `json:"originalFileID,omitempty"`
+	OriginalFileIDNEQ          *string  `json:"originalFileIDNEQ,omitempty"`
+	OriginalFileIDIn           []string `json:"originalFileIDIn,omitempty"`
+	OriginalFileIDNotIn        []string `json:"originalFileIDNotIn,omitempty"`
+	OriginalFileIDGT           *string  `json:"originalFileIDGT,omitempty"`
+	OriginalFileIDGTE          *string  `json:"originalFileIDGTE,omitempty"`
+	OriginalFileIDLT           *string  `json:"originalFileIDLT,omitempty"`
+	OriginalFileIDLTE          *string  `json:"originalFileIDLTE,omitempty"`
+	OriginalFileIDContains     *string  `json:"originalFileIDContains,omitempty"`
+	OriginalFileIDHasPrefix    *string  `json:"originalFileIDHasPrefix,omitempty"`
+	OriginalFileIDHasSuffix    *string  `json:"originalFileIDHasSuffix,omitempty"`
+	OriginalFileIDIsNil        bool     `json:"originalFileIDIsNil,omitempty"`
+	OriginalFileIDNotNil       bool     `json:"originalFileIDNotNil,omitempty"`
+	OriginalFileIDEqualFold    *string  `json:"originalFileIDEqualFold,omitempty"`
+	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
+
+	// "watermarking_enabled" field predicates.
+	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNEQ *bool `json:"watermarkingEnabledNEQ,omitempty"`
+
+	// "watermark_status" field predicates.
+	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
+	WatermarkStatusNEQ    *enums.WatermarkStatus  `json:"watermarkStatusNEQ,omitempty"`
+	WatermarkStatusIn     []enums.WatermarkStatus `json:"watermarkStatusIn,omitempty"`
+	WatermarkStatusNotIn  []enums.WatermarkStatus `json:"watermarkStatusNotIn,omitempty"`
+	WatermarkStatusIsNil  bool                    `json:"watermarkStatusIsNil,omitempty"`
+	WatermarkStatusNotNil bool                    `json:"watermarkStatusNotNil,omitempty"`
 
 	// "visibility" field predicates.
 	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
@@ -87685,6 +87834,75 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, trustcenterdochistory.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.OriginalFileID != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDEQ(*i.OriginalFileID))
+	}
+	if i.OriginalFileIDNEQ != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDNEQ(*i.OriginalFileIDNEQ))
+	}
+	if len(i.OriginalFileIDIn) > 0 {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDIn(i.OriginalFileIDIn...))
+	}
+	if len(i.OriginalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDNotIn(i.OriginalFileIDNotIn...))
+	}
+	if i.OriginalFileIDGT != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDGT(*i.OriginalFileIDGT))
+	}
+	if i.OriginalFileIDGTE != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDGTE(*i.OriginalFileIDGTE))
+	}
+	if i.OriginalFileIDLT != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDLT(*i.OriginalFileIDLT))
+	}
+	if i.OriginalFileIDLTE != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDLTE(*i.OriginalFileIDLTE))
+	}
+	if i.OriginalFileIDContains != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDContains(*i.OriginalFileIDContains))
+	}
+	if i.OriginalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDHasPrefix(*i.OriginalFileIDHasPrefix))
+	}
+	if i.OriginalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDHasSuffix(*i.OriginalFileIDHasSuffix))
+	}
+	if i.OriginalFileIDIsNil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDIsNil())
+	}
+	if i.OriginalFileIDNotNil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDNotNil())
+	}
+	if i.OriginalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDEqualFold(*i.OriginalFileIDEqualFold))
+	}
+	if i.OriginalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcenterdochistory.OriginalFileIDContainsFold(*i.OriginalFileIDContainsFold))
+	}
+	if i.WatermarkingEnabled != nil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkingEnabledEQ(*i.WatermarkingEnabled))
+	}
+	if i.WatermarkingEnabledNEQ != nil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkingEnabledNEQ(*i.WatermarkingEnabledNEQ))
+	}
+	if i.WatermarkStatus != nil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusEQ(*i.WatermarkStatus))
+	}
+	if i.WatermarkStatusNEQ != nil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusNEQ(*i.WatermarkStatusNEQ))
+	}
+	if len(i.WatermarkStatusIn) > 0 {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusIn(i.WatermarkStatusIn...))
+	}
+	if len(i.WatermarkStatusNotIn) > 0 {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusNotIn(i.WatermarkStatusNotIn...))
+	}
+	if i.WatermarkStatusIsNil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusIsNil())
+	}
+	if i.WatermarkStatusNotNil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkStatusNotNil())
 	}
 	if i.Visibility != nil {
 		predicates = append(predicates, trustcenterdochistory.VisibilityEQ(*i.Visibility))

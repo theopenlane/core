@@ -40,12 +40,20 @@ const (
 	FieldCategory = "category"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldOriginalFileID holds the string denoting the original_file_id field in the database.
+	FieldOriginalFileID = "original_file_id"
+	// FieldWatermarkingEnabled holds the string denoting the watermarking_enabled field in the database.
+	FieldWatermarkingEnabled = "watermarking_enabled"
+	// FieldWatermarkStatus holds the string denoting the watermark_status field in the database.
+	FieldWatermarkStatus = "watermark_status"
 	// FieldVisibility holds the string denoting the visibility field in the database.
 	FieldVisibility = "visibility"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeOriginalFile holds the string denoting the original_file edge name in mutations.
+	EdgeOriginalFile = "original_file"
 	// Table holds the table name of the trustcenterdoc in the database.
 	Table = "trust_center_docs"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
@@ -62,6 +70,13 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// OriginalFileTable is the table that holds the original_file relation/edge.
+	OriginalFileTable = "trust_center_docs"
+	// OriginalFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	OriginalFileInverseTable = "files"
+	// OriginalFileColumn is the table column denoting the original_file relation/edge.
+	OriginalFileColumn = "original_file_id"
 )
 
 // Columns holds all SQL columns for trustcenterdoc fields.
@@ -78,6 +93,9 @@ var Columns = []string{
 	FieldTitle,
 	FieldCategory,
 	FieldFileID,
+	FieldOriginalFileID,
+	FieldWatermarkingEnabled,
+	FieldWatermarkStatus,
 	FieldVisibility,
 }
 
@@ -114,9 +132,23 @@ var (
 	TitleValidator func(string) error
 	// CategoryValidator is a validator for the "category" field. It is called by the builders before save.
 	CategoryValidator func(string) error
+	// DefaultWatermarkingEnabled holds the default value on creation for the "watermarking_enabled" field.
+	DefaultWatermarkingEnabled bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultWatermarkStatus enums.WatermarkStatus = "DISABLED"
+
+// WatermarkStatusValidator is a validator for the "watermark_status" field enum values. It is called by the builders before save.
+func WatermarkStatusValidator(ws enums.WatermarkStatus) error {
+	switch ws.String() {
+	case "PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterdoc: invalid enum value for watermark_status field: %q", ws)
+	}
+}
 
 const DefaultVisibility enums.TrustCenterDocumentVisibility = "NOT_VISIBLE"
 
@@ -188,6 +220,21 @@ func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
+// ByOriginalFileID orders the results by the original_file_id field.
+func ByOriginalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOriginalFileID, opts...).ToFunc()
+}
+
+// ByWatermarkingEnabled orders the results by the watermarking_enabled field.
+func ByWatermarkingEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWatermarkingEnabled, opts...).ToFunc()
+}
+
+// ByWatermarkStatus orders the results by the watermark_status field.
+func ByWatermarkStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWatermarkStatus, opts...).ToFunc()
+}
+
 // ByVisibility orders the results by the visibility field.
 func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
@@ -206,6 +253,13 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByOriginalFileField orders the results by original_file field.
+func ByOriginalFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOriginalFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -220,6 +274,20 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
+func newOriginalFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OriginalFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, OriginalFileTable, OriginalFileColumn),
+	)
+}
+
+var (
+	// enums.WatermarkStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.WatermarkStatus)(nil)
+	// enums.WatermarkStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.WatermarkStatus)(nil)
+)
 
 var (
 	// enums.TrustCenterDocumentVisibility must implement graphql.Marshaler.

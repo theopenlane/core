@@ -45134,6 +45134,21 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, trustcenterdoc.FieldFileID)
 				fieldSeen[trustcenterdoc.FieldFileID] = struct{}{}
 			}
+
+		case "originalFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withOriginalFile = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldOriginalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldOriginalFileID)
+				fieldSeen[trustcenterdoc.FieldOriginalFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterdoc.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldCreatedAt)
@@ -45178,6 +45193,21 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterdoc.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldFileID)
 				fieldSeen[trustcenterdoc.FieldFileID] = struct{}{}
+			}
+		case "originalFileID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldOriginalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldOriginalFileID)
+				fieldSeen[trustcenterdoc.FieldOriginalFileID] = struct{}{}
+			}
+		case "watermarkingEnabled":
+			if _, ok := fieldSeen[trustcenterdoc.FieldWatermarkingEnabled]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldWatermarkingEnabled)
+				fieldSeen[trustcenterdoc.FieldWatermarkingEnabled] = struct{}{}
+			}
+		case "watermarkStatus":
+			if _, ok := fieldSeen[trustcenterdoc.FieldWatermarkStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldWatermarkStatus)
+				fieldSeen[trustcenterdoc.FieldWatermarkStatus] = struct{}{}
 			}
 		case "visibility":
 			if _, ok := fieldSeen[trustcenterdoc.FieldVisibility]; !ok {
@@ -45333,6 +45363,21 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterdochistory.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldFileID)
 				fieldSeen[trustcenterdochistory.FieldFileID] = struct{}{}
+			}
+		case "originalFileID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldOriginalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldOriginalFileID)
+				fieldSeen[trustcenterdochistory.FieldOriginalFileID] = struct{}{}
+			}
+		case "watermarkingEnabled":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldWatermarkingEnabled]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldWatermarkingEnabled)
+				fieldSeen[trustcenterdochistory.FieldWatermarkingEnabled] = struct{}{}
+			}
+		case "watermarkStatus":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldWatermarkStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldWatermarkStatus)
+				fieldSeen[trustcenterdochistory.FieldWatermarkStatus] = struct{}{}
 			}
 		case "visibility":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldVisibility]; !ok {
