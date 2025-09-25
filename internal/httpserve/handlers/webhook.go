@@ -253,7 +253,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return
 	}
 
-	if err = h.syncSubscriptionItemsWithStripe(ctx, s.ID, s.Items.Data, s.Status); err != nil {
+	if err = h.removeAllModules(ctx, s.ID); err != nil {
 		return
 	}
 
