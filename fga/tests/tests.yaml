@@ -1179,3 +1179,23 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+
+      - user: user:tc-owner-2
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-viewer-2
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+      - user: user:anon_cant-see-doc
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
