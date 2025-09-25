@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -21,6 +23,9 @@ const (
 	defaultWatermarkOpacity  = 0.3
 	defaultWatermarkRotation = 45.0
 	maxWatermarkRotation     = 360.0
+	watermarkTextMaxLen      = 255
+	// grey
+	defaultWatermarkColor = "#808080"
 )
 
 // TrustCenterWatermarkConfig holds the schema definition for the TrustCenterWatermarkConfig entity
@@ -65,6 +70,7 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 			Nillable(),
 		field.String("text").
 			Comment("text to watermark the document with").
+			MaxLen(watermarkTextMaxLen).
 			Optional(),
 		field.Float("font_size").
 			Comment("font size of the watermark text").
@@ -84,9 +90,13 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 			Optional(),
 		field.String("color").
 			Comment("color of the watermark text").
+			Validate(validator.HexColorValidator).
+			Default(defaultWatermarkColor).
 			Optional(),
-		field.String("font").
+		field.Enum("font").
 			Comment("font of the watermark text").
+			GoType(enums.Font("")).
+			Default(enums.FontArial.String()).
 			Optional(),
 	}
 }
@@ -98,6 +108,7 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
 				withParents(TrustCenter{}),
+				withOrganizationOwner(false),
 			),
 		},
 	}.getMixins(t)
