@@ -1126,3 +1126,76 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+
+  - name: "trust_center_docs"
+    description: "test trust center documents and their relationships"
+    tuple_file: tuples/trust_center_doc.yaml
+    check:
+      - user: user:tc-owner-1
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-owner-1
+        object: trust_center_doc:tcdoc-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:anon_signed-nda
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: file:file-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:anon_signed-nda
+        object: trust_center_doc:tcdoc-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: trust_center_doc:tcdoc-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:tc-viewer-1
+        object: trust_center_doc:tcdoc-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:tc-viewer-1
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+      - user: user:tc-owner-2
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:tc-viewer-2
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+      - user: user:anon_cant-see-doc
+        object: trust_center_doc:tcdoc-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
