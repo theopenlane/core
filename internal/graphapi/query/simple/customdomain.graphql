@@ -81,9 +81,19 @@ query GetAllCustomDomains {
           dnsTxtRecord
           dnsTxtValue
           dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengePath
+          expectedAcmeChallengeValue
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+          cloudflareHostnameID
         }
         id
-        mappableDomainID
+        mappableDomain {
+          id
+          name
+          zoneID
+        }
         ownerID
         tags
         updatedAt
@@ -104,6 +114,17 @@ query GetCustomDomainByID($customDomainId: ID!) {
       dnsTxtRecord
       dnsTxtValue
       dnsVerificationStatus
+      dnsVerificationStatusReason
+      acmeChallengePath
+      expectedAcmeChallengeValue
+      acmeChallengeStatus
+      acmeChallengeStatusReason
+      cloudflareHostnameID
+    }
+    mappableDomain {
+      id
+      name
+      zoneID
     }
     id
     mappableDomainID
