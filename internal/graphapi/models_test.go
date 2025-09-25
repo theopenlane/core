@@ -2055,7 +2055,7 @@ type TrustCenterWatermarkConfigBuilder struct {
 	Opacity       float64
 	Rotation      float64
 	Color         string
-	Font          string
+	Font          enums.Font
 }
 
 // TrustCenterDocBuilder is used to create trust center documents
@@ -2161,7 +2161,7 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 	}
 
 	if tcwcb.Font == "" {
-		tcwcb.Font = "Arial"
+		tcwcb.Font = enums.FontArial
 	}
 
 	mutation := tcwcb.client.db.TrustCenterWatermarkConfig.Create().

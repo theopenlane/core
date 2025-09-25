@@ -111,7 +111,7 @@ func tableOutput(out []openlaneclient.GetAllTrustCenterWatermarkConfigs_TrustCen
 		}
 		font := ""
 		if i.Font != nil {
-			font = *i.Font
+			font = i.Font.String()
 		}
 		writer.AddRow(i.ID, logoFile, text, fontSize, opacity, rotation, color, font)
 	}

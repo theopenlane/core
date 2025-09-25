@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -71,7 +72,7 @@ func updateValidation() (string, *openlaneclient.UpdateTrustCenterWatermarkConfi
 
 	font := cmd.Config.String("font")
 	if font != "" {
-		input.Font = &font
+		input.Font = enums.ToFont(font)
 	}
 
 	var fileUpload *graphql.Upload

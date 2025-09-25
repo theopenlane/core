@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -59,8 +60,8 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				FontSize:      lo.ToPtr(48.0),
 				Opacity:       lo.ToPtr(0.3),
 				Rotation:      lo.ToPtr(45.0),
-				Color:         lo.ToPtr("red"),
-				Font:          lo.ToPtr("Arial"),
+				Color:         lo.ToPtr("#808080"),
+				Font:          &enums.FontArial,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -227,7 +228,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				Opacity:  lo.ToPtr(0.3),
 				Rotation: lo.ToPtr(45.0),
 				Color:    lo.ToPtr("red"),
-				Font:     lo.ToPtr("Arial"),
+				Font:     &enums.FontArial,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,

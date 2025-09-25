@@ -564,6 +564,7 @@ type trust_center_watermark_config
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [trust_center, user, service]
+    define editor: [group#member, organization#owner] or can_edit from parent
 
 type export
   relations
