@@ -2933,7 +2933,6 @@ type ComplexityRoot struct {
 
 	OrgSubscription struct {
 		Active                   func(childComplexity int) int
-		Cancellation             func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
@@ -21135,13 +21134,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscription.Active(childComplexity), true
-
-	case "OrgSubscription.cancellation":
-		if e.complexity.OrgSubscription.Cancellation == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.Cancellation(childComplexity), true
 
 	case "OrgSubscription.createdAt":
 		if e.complexity.OrgSubscription.CreatedAt == nil {
@@ -99999,7 +99991,6 @@ extend input OrgMembershipWhereInput {
 `, BuiltIn: false},
 	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
     managePaymentMethods: String
-    cancellation: String
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
