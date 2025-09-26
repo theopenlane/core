@@ -110,8 +110,8 @@ query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInp
     }
   }
 }
-mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
-  updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
+mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!, $trustCenterDocFile: Upload, $watermarkedTrustCenterDocFile: Upload) {
+  updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input, trustCenterDocFile: $trustCenterDocFile, watermarkedTrustCenterDocFile: $watermarkedTrustCenterDocFile) {
     trustCenterDoc {
       id
       createdAt

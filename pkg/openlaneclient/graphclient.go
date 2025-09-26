@@ -482,7 +482,7 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
 	GetTrustCenterDocByID(ctx context.Context, trustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocByID, error)
 	GetTrustCenterDocs(ctx context.Context, first *int64, last *int64, where *TrustCenterDocWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocs, error)
-	UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error)
+	UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error)
 	GetAllTrustCenterDocHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocHistories, error)
 	GetTrustCenterDocHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterDocHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocHistories, error)
 	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
@@ -70707,9 +70707,10 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs) GetTotalCount() int64 {
 }
 
 type GetTrustCenterDocByID_TrustCenterDoc_File struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
-	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+	ID               string  "json:\"id\" graphql:\"id\""
+	Md5Hash          *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL     *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
 
 func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetID() string {
@@ -70730,20 +70731,59 @@ func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetPresignedURL() *string {
 	}
 	return t.PresignedURL
 }
+func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_File{}
+	}
+	return t.ProvidedFileName
+}
+
+type GetTrustCenterDocByID_TrustCenterDoc_OriginalFile struct {
+	ID               string  "json:\"id\" graphql:\"id\""
+	Md5Hash          *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL     *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
+}
+
+func (t *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{}
+	}
+	return t.Md5Hash
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{}
+	}
+	return t.PresignedURL
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{}
+	}
+	return t.ProvidedFileName
+}
 
 type GetTrustCenterDocByID_TrustCenterDoc struct {
-	Category      string                                     "json:\"category\" graphql:\"category\""
-	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	File          *GetTrustCenterDocByID_TrustCenterDoc_File "json:\"file,omitempty\" graphql:\"file\""
-	FileID        *string                                    "json:\"fileID,omitempty\" graphql:\"fileID\""
-	ID            string                                     "json:\"id\" graphql:\"id\""
-	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	Title         string                                     "json:\"title\" graphql:\"title\""
-	TrustCenterID *string                                    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Visibility    *enums.TrustCenterDocumentVisibility       "json:\"visibility,omitempty\" graphql:\"visibility\""
+	Category      string                                             "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetTrustCenterDocByID_TrustCenterDoc_File         "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                             "json:\"id\" graphql:\"id\""
+	OriginalFile  *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile "json:\"originalFile,omitempty\" graphql:\"originalFile\""
+	Tags          []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                             "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility               "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *GetTrustCenterDocByID_TrustCenterDoc) GetCategory() string {
@@ -70781,6 +70821,12 @@ func (t *GetTrustCenterDocByID_TrustCenterDoc) GetID() string {
 		t = &GetTrustCenterDocByID_TrustCenterDoc{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetOriginalFile() *GetTrustCenterDocByID_TrustCenterDoc_OriginalFile {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.OriginalFile
 }
 func (t *GetTrustCenterDocByID_TrustCenterDoc) GetTags() []string {
 	if t == nil {
@@ -105003,6 +105049,13 @@ const GetTrustCenterDocByIDDocument = `query GetTrustCenterDocByID ($trustCenter
 			id
 			md5Hash
 			presignedURL
+			providedFileName
+		}
+		originalFile {
+			id
+			md5Hash
+			presignedURL
+			providedFileName
 		}
 	}
 }
@@ -105077,8 +105130,8 @@ func (c *Client) GetTrustCenterDocs(ctx context.Context, first *int64, last *int
 	return &res, nil
 }
 
-const UpdateTrustCenterDocDocument = `mutation UpdateTrustCenterDoc ($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
-	updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
+const UpdateTrustCenterDocDocument = `mutation UpdateTrustCenterDoc ($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!, $trustCenterDocFile: Upload, $watermarkedTrustCenterDocFile: Upload) {
+	updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input, trustCenterDocFile: $trustCenterDocFile, watermarkedTrustCenterDocFile: $watermarkedTrustCenterDocFile) {
 		trustCenterDoc {
 			id
 			createdAt
@@ -105101,10 +105154,12 @@ const UpdateTrustCenterDocDocument = `mutation UpdateTrustCenterDoc ($updateTrus
 }
 `
 
-func (c *Client) UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error) {
+func (c *Client) UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error) {
 	vars := map[string]any{
-		"updateTrustCenterDocId": updateTrustCenterDocID,
-		"input":                  input,
+		"updateTrustCenterDocId":        updateTrustCenterDocID,
+		"input":                         input,
+		"trustCenterDocFile":            trustCenterDocFile,
+		"watermarkedTrustCenterDocFile": watermarkedTrustCenterDocFile,
 	}
 
 	var res UpdateTrustCenterDoc

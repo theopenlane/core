@@ -521,6 +521,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
+	// TODO: assert the correct FGA tuples are created based on the updates
 
 	testCases := []struct {
 		name             string
@@ -612,7 +613,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateTrustCenterDoc(tc.ctx, tc.trustCenterDocID, tc.request)
+			resp, err := tc.client.UpdateTrustCenterDoc(tc.ctx, tc.trustCenterDocID, tc.request, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

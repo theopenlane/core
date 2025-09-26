@@ -5,10 +5,12 @@ package trustcenterdoc
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -33,15 +35,16 @@ func init() {
 	updateCmd.Flags().StringP("visibility", "v", "", "visibility of the document (NOT_VISIBLE, PROTECTED, PUBLICLY_VISIBLE)")
 	updateCmd.Flags().StringSliceP("tags", "g", []string{}, "tags associated with the document")
 	updateCmd.Flags().StringSliceP("append-tags", "a", []string{}, "append tags to the document")
+	updateCmd.Flags().StringP("file", "f", "", "file to upload as the trust center document (required)")
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, error) {
+func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, *graphql.Upload, error) {
 	input := openlaneclient.UpdateTrustCenterDocInput{}
 
 	id := cmd.Config.String("id")
 	if id == "" {
-		return "", input, cmd.NewRequiredFieldMissingError("id")
+		return "", input, nil, cmd.NewRequiredFieldMissingError("id")
 	}
 
 	title := cmd.Config.String("title")
@@ -52,6 +55,24 @@ func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, error
 	category := cmd.Config.String("category")
 	if category != "" {
 		input.Category = &category
+	}
+
+	filePath := cmd.Config.String("file")
+	if filePath == "" {
+		return "", input, nil, cmd.NewRequiredFieldMissingError("file")
+	}
+
+	// Handle file upload
+	u, err := objects.NewUploadFile(filePath)
+	if err != nil {
+		return "", input, nil, err
+	}
+
+	fileUpload := &graphql.Upload{
+		File:        u.File,
+		Filename:    u.Filename,
+		Size:        u.Size,
+		ContentType: u.ContentType,
 	}
 
 	trustCenterID := cmd.Config.String("trust-center-id")
@@ -77,7 +98,7 @@ func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, error
 		input.AppendTags = appendTags
 	}
 
-	return id, input, nil
+	return id, input, fileUpload, nil
 }
 
 // update an existing trust center document in the platform
@@ -91,10 +112,10 @@ func update(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateValidation()
+	id, input, upload, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateTrustCenterDoc(ctx, id, input)
+	o, err := client.UpdateTrustCenterDoc(ctx, id, input, upload, nil)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

@@ -262,7 +262,7 @@ type MutationResolver interface {
 	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error)
 	CreateBulkTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error)
-	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocUpdatePayload, error)
+	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error)
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
 	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
@@ -3599,6 +3599,16 @@ func (ec *executionContext) field_Mutation_updateTrustCenterDoc_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "trustCenterDocFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["trustCenterDocFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkedTrustCenterDocFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["watermarkedTrustCenterDocFile"] = arg3
 	return args, nil
 }
 
@@ -15216,7 +15226,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput))
+			return ec.resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(*graphql.Upload), fc.Args["watermarkedTrustCenterDocFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload,

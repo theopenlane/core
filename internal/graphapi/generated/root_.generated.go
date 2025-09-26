@@ -2708,7 +2708,7 @@ type ComplexityRoot struct {
 		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
-		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
+		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
@@ -20100,7 +20100,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+		return e.complexity.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput), args["trustCenterDocFile"].(*graphql.Upload), args["watermarkedTrustCenterDocFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterNDA":
 		if e.complexity.Mutation.UpdateTrustCenterNda == nil {
@@ -103247,6 +103247,9 @@ extend type Mutation{
         New values for the trustCenterDoc
         """
         input: UpdateTrustCenterDocInput!
+        trustCenterDocFile: Upload
+        watermarkedTrustCenterDocFile: Upload
+
     ): TrustCenterDocUpdatePayload!
     """
     Delete an existing trustCenterDoc
