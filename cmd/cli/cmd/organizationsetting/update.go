@@ -39,6 +39,8 @@ func init() {
 	updateCmd.Flags().String("metadata-url", "", "SSO metadata URL")
 	updateCmd.Flags().String("discovery-url", "", "OIDC discovery URL")
 	updateCmd.Flags().Bool("enforce-sso", false, "enforce SSO login")
+	updateCmd.Flags().Bool("allow-matching-domains-autojoin", false, "allow users with matching email domains to automatically join the organization")
+	updateCmd.Flags().StringSlice("set-allowed-email-domains", []string{}, "set allowed email domains for auto-join (replaces existing list)")
 }
 
 // updateValidation validates the input flags provided by the user
@@ -112,6 +114,16 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationSetti
 	enforce := cmd.Config.Bool("enforce-sso")
 	if enforce {
 		input.IdentityProviderLoginEnforced = &enforce
+	}
+
+	allowAutoJoin := cmd.Config.Bool("allow-matching-domains-autojoin")
+	if allowAutoJoin {
+		input.AllowMatchingDomainsAutojoin = &allowAutoJoin
+	}
+
+	setAllowedEmailDomains := cmd.Config.Strings("set-allowed-email-domains")
+	if len(setAllowedEmailDomains) > 0 {
+		input.AllowedEmailDomains = setAllowedEmailDomains
 	}
 
 	return id, input, nil

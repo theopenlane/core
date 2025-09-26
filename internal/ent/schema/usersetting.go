@@ -119,6 +119,7 @@ func (u UserSetting) Edges() []ent.Edge {
 func (UserSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookUserSetting(),
+		hooks.HookUserSettingEmailConfirmation(),
 	}
 }
 
