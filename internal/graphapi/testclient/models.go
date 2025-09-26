@@ -18225,7 +18225,6 @@ type OrgSubscription struct {
 	Owner                *Organization    `json:"owner,omitempty"`
 	Events               *EventConnection `json:"events"`
 	ManagePaymentMethods *string          `json:"managePaymentMethods,omitempty"`
-	Cancellation         *string          `json:"cancellation,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}

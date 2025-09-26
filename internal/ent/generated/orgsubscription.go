@@ -61,8 +61,6 @@ type OrgSubscription struct {
 
 	// ManagePaymentMethods is the URL to manage payment methods for the subscription
 	ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
-	// Cancellation is the URL to cancel the subscription
-	Cancellation string `json:"cancellation,omitempty"`
 }
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.

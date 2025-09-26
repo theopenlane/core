@@ -23,7 +23,7 @@ func InterceptorBillingPortalURLs() ent.Interceptor {
 
 			hasField := false
 
-			urlFields := []string{"managePaymentMethods", "cancellation"}
+			urlFields := []string{"managePaymentMethods"}
 			for _, field := range urlFields {
 				if graphutils.CheckForRequestedField(ctx, field) {
 					hasField = true
@@ -94,13 +94,6 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 
 	customerID := *org.StripeCustomerID
 
-	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(ctx, orgSub.StripeSubscriptionID, customerID)
-	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create cancel subscription billing portal session type")
-
-		return err
-	}
-
 	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(ctx, customerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
@@ -108,7 +101,6 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 		return err
 	}
 
-	orgSub.Cancellation = cancelSubscription.Cancellation
 	orgSub.ManagePaymentMethods = updatePaymentMethod.PaymentMethods
 
 	return nil
