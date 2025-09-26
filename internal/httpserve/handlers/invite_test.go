@@ -72,20 +72,17 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		wantErr  bool
 		errMsg   string
 	}{
-		// check for missing token first
-		// else we would have accepted the invite since the
-		// first item in the test table will do that
+		{
+			name:     "happy path",
+			email:    groot,
+			tokenSet: true,
+		},
 		{
 			name:     "missing token",
 			email:    groot,
 			tokenSet: false,
 			wantErr:  true,
 			errMsg:   "token is required",
-		},
-		{
-			name:     "happy path",
-			email:    groot,
-			tokenSet: true,
 		},
 		{
 			name:     "emails do not match token",
@@ -102,14 +99,13 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			inv, err := suite.db.Invite.Create().
-				SetRecipient(tc.email).
-				AddGroupIDs(group.ID).
-				Save(ctx)
-			require.NoError(t, err)
-
 			target := "/invite"
 			if tc.tokenSet {
+				inv, err := suite.db.Invite.Create().
+					SetRecipient(tc.email).
+					AddGroupIDs(group.ID).
+					Save(ctx)
+				require.NoError(t, err)
 				target = fmt.Sprintf("/invite?token=%s", inv.Token)
 			}
 
