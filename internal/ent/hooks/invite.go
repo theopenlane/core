@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -278,7 +279,45 @@ func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) e
 	// check if the the email can be invited to the organization
 	email, _ := m.Recipient()
 
-	return checkAllowedEmailDomain(email, org.Edges.Setting)
+	if err := checkAllowedEmailDomain(email, org.Edges.Setting); err != nil {
+		return err
+	}
+
+	// make sure the user is not already a member of the org
+	return checkUserAlreadyMember(ctx, m, email, orgID)
+}
+
+func checkUserAlreadyMember(ctx context.Context, m *generated.InviteMutation, email, orgID string) error {
+	if email == "" {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	user, err := m.Client().User.Query().
+		Where(user.Email(email)).
+		Only(allowCtx)
+	if generated.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = m.Client().OrgMembership.Query().
+		Where(orgmembership.UserID(user.ID)).
+		Where(orgmembership.OrganizationID(orgID)).
+		Only(allowCtx)
+	if generated.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return ErrUserAlreadyOrgMember
 }
 
 // setRecipientAndToken function is responsible for generating a invite token based on the
