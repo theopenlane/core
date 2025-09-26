@@ -7,7 +7,6 @@ import (
 	"github.com/stripe/stripe-go/v82"
 )
 
-
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
 func (sc *StripeClient) CreateBillingPortalPaymentMethods(ctx context.Context, custID string) (*BillingPortalSession, error) {
 	returnURL := fmt.Sprintf("%s?%s", sc.Config.StripeBillingPortalSuccessURL, "paymentupdate=complete")
