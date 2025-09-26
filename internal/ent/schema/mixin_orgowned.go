@@ -240,7 +240,14 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if the context has a privacy token type, the interceptor is skipped
 // if the context has the managed group key, the interceptor is skipped
 // if the query is for a token and explicitly allowed, the interceptor is skipped
+// if the context has an internal request key, the interceptor is skipped
+// if the user is a system admin and AllowEmptyForSystemAdmin is true, the interceptor is skipped
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+	// allow for tests and internal requests to skip the interceptor
+	if rule.IsInternalRequest(ctx) {
+		return true
+	}
+
 	if o.AllowEmptyForSystemAdmin {
 		allow, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err == nil && allow {

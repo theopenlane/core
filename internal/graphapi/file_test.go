@@ -161,12 +161,12 @@ func TestQueryFile(t *testing.T) {
 }
 
 func TestQueryFiles(t *testing.T) {
-	t.Parallel()
-
 	// create users so we dont have conflicts with other tests
 	testUser := suite.userBuilder(context.Background(), t)
 	patClient := suite.setupPatClient(testUser, t)
 	tokenClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+
+	anotherTestUser := suite.userBuilder(context.Background(), t)
 
 	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	orgMemberCtx := auth.NewTestContextWithOrgID(orgMember.UserID, orgMember.OrganizationID)
@@ -250,7 +250,7 @@ func TestQueryFiles(t *testing.T) {
 		{
 			name:            "another user, no Files should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             anotherTestUser.UserCtx,
 			expectedResults: 0,
 		},
 	}
