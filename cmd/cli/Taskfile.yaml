@@ -295,11 +295,37 @@ tasks:
     cmds:
       - go run -tags cli main.go organization-setting update --id {{.SETTING_ID}} --client-id {{.CLIENT_ID}} --client-secret {{.CLIENT_SECRET}} --discovery-url {{.DISCOVERY_URL}} --identity-provider OKTA --enforce-sso
 
+  orgsetting:enable-autojoin:
+    desc: enable auto-join for users with matching email domains
+    vars:
+      AUTOJOIN_DOMAINS: '{{ .AUTOJOIN_DOMAINS | default "example.com,theopenlane.io" }}'
+      SETTING_ID:
+        sh: go run -tags cli main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
+    cmds:
+      - go run -tags cli main.go organization-setting update --id {{.SETTING_ID}} --allow-matching-domains-autojoin --append-allowed-domains {{.AUTOJOIN_DOMAINS}}
+
   user:all:sso:
     desc: run user:all and enforce SSO for the organization
     cmds:
       - task: user:all
       - task: orgsetting:enforce-sso
+
+  user:all:autojoin:
+    desc: setup user, enable auto-join, and test with matching domain user
+    vars:
+      TEST_USER_EMAIL: '{{ .TEST_USER_EMAIL | default "newuser@theopenlane.io" }}'
+      TEST_USER_DOMAIN: '{{ .TEST_USER_DOMAIN | default "theopenlane.io" }}'
+    cmds:
+      - task: user:all
+      - task: orgsetting:enable-autojoin
+        vars:
+          AUTOJOIN_DOMAINS: "{{.TEST_USER_DOMAIN}}"
+      - task: user:verify
+        vars:
+          EMAIL_ADDRESS: "{{.TEST_USER_EMAIL}}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{.TEST_USER_EMAIL}}"
 
   # === Programs ===
   program:create:

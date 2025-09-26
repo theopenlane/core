@@ -7299,6 +7299,8 @@ func init() {
 	usersetting.Hooks[3] = usersettingMixinHooks2[0]
 
 	usersetting.Hooks[4] = usersettingHooks[0]
+
+	usersetting.Hooks[5] = usersettingHooks[1]
 	usersettingMixinInters1 := usersettingMixin[1].Interceptors()
 	usersettingMixinInters2 := usersettingMixin[2].Interceptors()
 	usersettingInters := schema.UserSetting{}.Interceptors()
