@@ -58,6 +58,7 @@ func (sc *StripeClient) CreateBillingPortalPaymentMethods(ctx context.Context, c
 }
 
 // CancellationBillingPortalSession generates a session in stripe's billing portal which allows the customer to cancel their subscription
+// note: this does not work with subscription schedules
 func (sc *StripeClient) CancellationBillingPortalSession(ctx context.Context, subsID, custID string) (*BillingPortalSession, error) {
 	returnURL := fmt.Sprintf("%s?%s", sc.Config.StripeCancellationReturnURL, "cancelled=true")
 	params := &stripe.BillingPortalSessionCreateParams{

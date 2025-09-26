@@ -32797,7 +32797,6 @@ type OrgSubscription implements Node {
 		where: EventWhereInput
 	): EventConnection!
 	managePaymentMethods: String
-	cancellation: String
 }
 """
 A connection to a list of items.

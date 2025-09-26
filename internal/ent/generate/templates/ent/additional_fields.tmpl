@@ -2,8 +2,6 @@
     {{- if eq $.Name "OrgSubscription" }}
         // ManagePaymentMethods is the URL to manage payment methods for the subscription
         ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
-        // Cancellation is the URL to cancel the subscription
-        Cancellation string `json:"cancellation,omitempty"`
     {{- end }}
     {{- if eq $.Name "File" }}
         // PresignedURL is the presigned URL for the file when using s3 storage
