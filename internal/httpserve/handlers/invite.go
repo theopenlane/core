@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -91,6 +92,13 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 		Role:        string(invitedUser.Role),
 		Message:     "Welcome to your new organization!",
 		AuthData:    *auth,
+	}
+
+	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID)
+
+	if err == nil && status.Enforced {
+		out.NeedsSSO = true
 	}
 
 	return h.Created(ctx, out)

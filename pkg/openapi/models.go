@@ -890,6 +890,7 @@ type InviteReply struct {
 	Message     string `json:"message"`
 	JoinedOrgID string `json:"joined_org_id" description:"The ID of the organization the user joined" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
 	Role        string `json:"role" description:"The role the user has in the organization" example:"admin"`
+	NeedsSSO    bool   `json:"needs_sso,omitempty"`
 	AuthData
 }
 
