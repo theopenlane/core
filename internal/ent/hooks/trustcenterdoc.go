@@ -81,9 +81,6 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 				}
 			}
 
-			// if the visibility changed, need to update the tuples
-			// if the originalFile changes, need to add the appropriate tuples
-			// if file changes, need to add the appropriate tuples
 			if err := updateTrustCenterDocVisibility(ctx, m, []string{*trustCenterDoc.OriginalFileID}, trustCenterDoc.ID); err != nil {
 				return nil, err
 			}

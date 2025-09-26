@@ -521,7 +521,6 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
-	// TODO: assert the correct FGA tuples are created based on the updates
 
 	testCases := []struct {
 		name             string
@@ -642,6 +641,77 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 		})
 	}
 
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationUpdateTrustCenterDocFGATuples(t *testing.T) {
+	// Create trust center and document exactly like the existing working test
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
+
+	// Helper function to check if FGA tuples exist for wildcard viewer access
+	checkWildcardViewerTuples := func(ctx context.Context, objectID, objectType string, shouldExist bool) {
+		wildcardTuples := fgax.CreateWildcardViewerTuple(objectID, objectType)
+		for _, tuple := range wildcardTuples {
+			// Check if the tuple exists by performing an access check
+			ac := fgax.AccessCheck{
+				SubjectID:   tuple.Subject.Identifier,
+				SubjectType: string(tuple.Subject.Kind),
+				ObjectID:    tuple.Object.Identifier,
+				ObjectType:  tuple.Object.Kind,
+				Relation:    string(tuple.Relation),
+			}
+			exists, err := suite.client.db.Authz.CheckAccess(ctx, ac)
+			assert.NilError(t, err)
+			if shouldExist {
+				assert.Check(t, exists, "Expected wildcard viewer tuple to exist for %s:%s", objectType, objectID)
+			} else {
+				assert.Check(t, !exists, "Expected wildcard viewer tuple to NOT exist for %s:%s", objectType, objectID)
+			}
+		}
+	}
+
+	// Test 1: Change visibility from NOT_VISIBLE to PUBLICLY_VISIBLE
+	t.Run("visibility change to PUBLICLY_VISIBLE creates tuples", func(t *testing.T) {
+		// Update to publicly visible
+		resp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, trustCenterDoc.ID, testclient.UpdateTrustCenterDocInput{
+			Visibility: &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+		}, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		// Check that wildcard viewer tuples were created for the document
+		checkWildcardViewerTuples(testUser1.UserCtx, trustCenterDoc.ID, "trust_center_doc", true)
+	})
+
+	// Test 2: Change visibility from PUBLICLY_VISIBLE to PROTECTED
+	t.Run("visibility change to PROTECTED keeps document tuples", func(t *testing.T) {
+		// Update to protected
+		resp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, trustCenterDoc.ID, testclient.UpdateTrustCenterDocInput{
+			Visibility: &enums.TrustCenterDocumentVisibilityProtected,
+		}, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		// Check that wildcard viewer tuples are still there for the document (PROTECTED docs are visible to NDA signers)
+		checkWildcardViewerTuples(testUser1.UserCtx, trustCenterDoc.ID, "trust_center_doc", true)
+	})
+
+	// Test 3: Change visibility from PROTECTED to NOT_VISIBLE
+	t.Run("visibility change to NOT_VISIBLE removes all tuples", func(t *testing.T) {
+		// Update to not visible
+		resp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, trustCenterDoc.ID, testclient.UpdateTrustCenterDocInput{
+			Visibility: &enums.TrustCenterDocumentVisibilityNotVisible,
+		}, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		// Check that wildcard viewer tuples were removed for the document
+		checkWildcardViewerTuples(testUser1.UserCtx, trustCenterDoc.ID, "trust_center_doc", false)
+	})
+
+	// Clean up
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

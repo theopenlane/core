@@ -17,6 +17,13 @@ mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDo
         md5Hash
         presignedURL
       }
+      originalFileID
+      originalFile {
+        id
+        md5Hash
+        presignedURL
+        providedFileName
+      }
     }
   }
 }
@@ -54,6 +61,13 @@ query GetAllTrustCenterDocs {
           md5Hash
           presignedURL
         }
+        originalFileID
+        originalFile {
+          id
+          md5Hash
+          presignedURL
+          providedFileName
+        }
       }
     }
   }
@@ -75,6 +89,13 @@ query GetTrustCenterDocByID($trustCenterDocId: ID!) {
       id
       md5Hash
       presignedURL
+    }
+    originalFileID
+    originalFile {
+      id
+      md5Hash
+      presignedURL
+      providedFileName
     }
   }
 }
@@ -106,6 +127,13 @@ query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInp
           md5Hash
           presignedURL
         }
+        originalFileID
+        originalFile {
+          id
+          md5Hash
+          presignedURL
+          providedFileName
+        }
       }
     }
   }
@@ -128,6 +156,13 @@ mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustC
         id
         md5Hash
         presignedURL
+      }
+      originalFileID
+      originalFile {
+        id
+        md5Hash
+        presignedURL
+        providedFileName
       }
     }
   }
