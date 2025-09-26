@@ -9,7 +9,7 @@ permissions:
   contents: write
 jobs:
   ldflags_args:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       commit-date: ${{ steps.ldflags.outputs.commit-date }}
       commit: ${{ steps.ldflags.outputs.commit }}
@@ -35,7 +35,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: macos-15-xlarge
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -48,15 +48,6 @@ jobs:
           cache: true
           cache-dependency-path: |
             **/go.sum
-      - name: Cache Go build & mod
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - name: Download Go modules
         run: go mod download
       - name: Install Syft
@@ -83,12 +74,29 @@ jobs:
           ARTIFACTS: "${{ steps.run-goreleaser.outputs.artifacts }}"
         run: |
           set -euo pipefail
-          hashes=$(echo $ARTIFACTS | jq --raw-output '.[] | {name, "digest": (.extra.Digest // .extra.Checksum)} | select(.digest) | {digest} + {name} | join("  ") | sub("^sha256:";"")' | base64)
-          if test "$hashes" = ""; then # goreleaser < v1.13.0
-            checksum_file=$(echo "$ARTIFACTS" | jq -r '.[] | select (.type=="Checksum") | .path')
-            hashes=$(cat $checksum_file | base64)
+          hashes=$(
+            printf '%s' "$ARTIFACTS" \
+            | jq -r '
+                .[]
+                | {name, digest: (.extra.Digest // .extra.Checksum)}
+                | select(.digest)
+                | "\(.digest | sub("^sha256:";""))  \(.name)"
+              ' \
+            | base64 -w0
+          )
+
+          # Fallback for older GoReleaser that emits a checksum file instead
+          if [ -z "$hashes" ]; then
+            checksum_file=$(
+              printf '%s' "$ARTIFACTS" \
+              | jq -r '.[] | select(.type=="Checksum") | .path' | head -n1
+            )
+            if [ -n "${checksum_file:-}" ] && [ -f "$checksum_file" ]; then
+              hashes=$(base64 -w0 "$checksum_file")
+            fi
           fi
-          echo "hashes=$hashes" >> $GITHUB_OUTPUT
+
+          echo "hashes=$hashes" >> "$GITHUB_OUTPUT"
   provenance:
     name: Generate provenance (SLSA3)
     needs:
