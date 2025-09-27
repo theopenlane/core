@@ -86,7 +86,16 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+
 			_, mutationSetsOriginalFileID := m.OriginalFileID()
+
+			var watermarkFileUploaded bool
+			ctx, watermarkFileUploaded, err = checkWatermarkedTrustCenterDocFile(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			_, mutationSetFileID := m.FileID()
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -102,15 +111,30 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 				return nil, errMissingFileID
 			}
 
-			if !fileUploaded && !mutationSetsOriginalFileID {
-				err = updateTrustCenterDocVisibility(ctx, m, *trustCenterDoc.OriginalFileID, trustCenterDoc.ID)
-				return v, err
-			} else if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
-				tuples := fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)
-
-				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					return nil, err
+			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+				tuples := []fgax.TupleKey{}
+				if mutationSetFileID || watermarkFileUploaded {
+					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)...)
 				}
+
+				if mutationSetsOriginalFileID || fileUploaded {
+					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
+				}
+
+				if len(tuples) > 0 {
+					if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+						return nil, err
+					}
+				}
+			}
+
+			fileIDsToUpdate := []string{*trustCenterDoc.OriginalFileID}
+			if trustCenterDoc.FileID != nil {
+				fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
+			}
+
+			if err = updateTrustCenterDocVisibility(ctx, m, fileIDsToUpdate, trustCenterDoc.ID); err != nil {
+				return nil, err
 			}
 
 			return trustCenterDoc, nil
@@ -119,7 +143,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 }
 
 // updateTrustCenterDocVisibility updates fga tuples based on the visibility of the trust center doc
-func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCenterDocMutation, fileID string, docID string) error {
+func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCenterDocMutation, fileIDs []string, docID string) error {
 	// 1. Check if the visibility of the document has changed
 	visibility, visibilityChanged := m.Visibility()
 	if !visibilityChanged {
@@ -143,13 +167,17 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 
 	// 2. If the visibility has changed to public, add the wildcard tuples
 	if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
-		writes = append(writes, fgax.CreateWildcardViewerTuple(fileID, generated.TypeFile)...)
+		for _, fileID := range fileIDs {
+			writes = append(writes, fgax.CreateWildcardViewerTuple(fileID, generated.TypeFile)...)
+		}
 	}
 
 	// 3. If the visibility has changed from public to not visible or protected, remove the wildcard tuples
 	if oldVisibility == enums.TrustCenterDocumentVisibilityPubliclyVisible &&
 		(visibility == enums.TrustCenterDocumentVisibilityNotVisible || visibility == enums.TrustCenterDocumentVisibilityProtected) {
-		deletes = append(deletes, fgax.CreateWildcardViewerTuple(fileID, generated.TypeFile)...)
+		for _, fileID := range fileIDs {
+			deletes = append(deletes, fgax.CreateWildcardViewerTuple(fileID, generated.TypeFile)...)
+		}
 	}
 
 	// 4. If the visibility changed from not visible -> protected or public, add the wildcard viewer tuples
@@ -190,6 +218,35 @@ func checkTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMut
 			return ctx, uploadsFile, ErrNotSingularUpload
 		}
 		m.SetOriginalFileID(docFile[0].ID)
+
+		docFile[0].Parent.ID, _ = m.ID()
+		docFile[0].Parent.Type = "trust_center_doc"
+
+		ctx = objects.UpdateFileInContextByKey(ctx, dockey, docFile[0])
+		uploadsFile = true
+	}
+
+	return ctx, uploadsFile, nil
+}
+
+// checkWatermarkedTrustCenterDocFile checks if the doc file is uploaded, and sets the file ID
+func checkWatermarkedTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMutation) (context.Context, bool, error) {
+	dockey := "watermarkedTrustCenterDocFile"
+	uploadsFile := false
+
+	// get the file from the context, if it exists
+	docFile, _ := objects.FilesFromContextWithKey(ctx, dockey)
+	if docFile == nil {
+		return ctx, uploadsFile, nil
+	}
+
+	// this should always be true, but check just in case
+	if docFile[0].FieldName == dockey {
+		// we should only have one file
+		if len(docFile) > 1 {
+			return ctx, uploadsFile, ErrNotSingularUpload
+		}
+		m.SetFileID(docFile[0].ID)
 
 		docFile[0].Parent.ID, _ = m.ID()
 		docFile[0].Parent.Type = "trust_center_doc"
