@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -98,14 +99,13 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			inv, err := suite.db.Invite.Create().
-				SetRecipient(tc.email).
-				AddGroupIDs(group.ID).
-				Save(ctx)
-			require.NoError(t, err)
-
 			target := "/invite"
 			if tc.tokenSet {
+				inv, err := suite.db.Invite.Create().
+					SetRecipient(tc.email).
+					AddGroupIDs(group.ID).
+					Save(ctx)
+				require.NoError(t, err)
 				target = fmt.Sprintf("/invite?token=%s", inv.Token)
 			}
 
@@ -201,4 +201,61 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
+	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
+
+	// bypass auth
+	ctx := context.Background()
+	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	var groot = "groot2@theopenlane.io"
+
+	// recipient test data
+	recipient, err := suite.db.User.Create().
+		SetEmail(groot).
+		SetFirstName("Groot").
+		SetLastName("JustGroot Again").
+		SetAuthProvider(enums.AuthProviderGoogle).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		Save(ctx)
+	require.NoError(t, err)
+
+	userSetting, err := recipient.Setting(ctx)
+	require.NoError(t, err)
+
+	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
+
+	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
+
+	// invite user to org
+	inv, err := suite.db.Invite.Create().
+		SetRecipient(groot).
+		Save(ctx)
+	require.NoError(t, err)
+
+	target := fmt.Sprintf("/invite?token=%s", inv.Token)
+	req := httptest.NewRequest(http.MethodGet, target, nil)
+	recorder := httptest.NewRecorder()
+
+	// accept the invitation
+	suite.e.ServeHTTP(recorder, req.WithContext(recipientCtx))
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusCreated, recorder.Code)
+
+	// create another invite for the same user
+	_, err = suite.db.Invite.Create().
+		SetRecipient(groot).
+		Save(ctx)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), hooks.ErrUserAlreadyOrgMember.Error())
 }
