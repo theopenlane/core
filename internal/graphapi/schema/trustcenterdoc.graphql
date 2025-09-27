@@ -51,6 +51,8 @@ extend type Mutation{
         New values for the trustCenterDoc
         """
         input: UpdateTrustCenterDocInput!
+        trustCenterDocFile: Upload
+        watermarkedTrustCenterDocFile: Upload
     ): TrustCenterDocUpdatePayload!
     """
     Delete an existing trustCenterDoc

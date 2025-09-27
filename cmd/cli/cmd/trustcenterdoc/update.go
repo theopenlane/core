@@ -94,7 +94,7 @@ func update(ctx context.Context) error {
 	id, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateTrustCenterDoc(ctx, id, input)
+	o, err := client.UpdateTrustCenterDoc(ctx, id, input, nil, nil)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

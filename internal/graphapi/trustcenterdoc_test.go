@@ -141,11 +141,11 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			assert.Check(t, resp.TrustCenterDoc.Title != "")
 			assert.Check(t, resp.TrustCenterDoc.Category != "")
 			assert.Check(t, resp.TrustCenterDoc.TrustCenterID != nil)
-			assert.Check(t, resp.TrustCenterDoc.FileID != nil)
+			assert.Check(t, resp.TrustCenterDoc.OriginalFileID != nil)
 			if tc.shouldShowFileDetails {
-				assert.Check(t, resp.TrustCenterDoc.File != nil)
+				assert.Check(t, resp.TrustCenterDoc.OriginalFile != nil)
 			} else {
-				assert.Check(t, resp.TrustCenterDoc.File == nil)
+				assert.Check(t, resp.TrustCenterDoc.OriginalFile == nil)
 			}
 
 		})
@@ -169,17 +169,6 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			Filename:    pdfFile.Filename,
 			Size:        pdfFile.Size,
 			ContentType: pdfFile.ContentType,
-		}
-	}
-
-	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        pngFile.File,
-			Filename:    pngFile.Filename,
-			Size:        pngFile.Size,
-			ContentType: pngFile.ContentType,
 		}
 	}
 
@@ -212,19 +201,6 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				Visibility:    &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 			},
 			file:   createPDFUpload(),
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name: "happy path, create trust center doc with PNG file",
-			input: testclient.CreateTrustCenterDocInput{
-				Title:         "Test Image Document",
-				Category:      "Certificate",
-				TrustCenterID: &trustCenter.ID,
-				Tags:          []string{"test", "image"},
-				Visibility:    &enums.TrustCenterDocumentVisibilityProtected,
-			},
-			file:   createPNGUpload(),
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
@@ -350,9 +326,9 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			}
 
 			// Verify file was uploaded and associated
-			assert.Check(t, trustCenterDoc.FileID != nil)
-			assert.Check(t, trustCenterDoc.File != nil)
-			assert.Check(t, trustCenterDoc.File.ID != "")
+			assert.Check(t, trustCenterDoc.OriginalFileID != nil)
+			assert.Check(t, trustCenterDoc.OriginalFile != nil)
+			assert.Check(t, trustCenterDoc.OriginalFile.ID != "")
 
 			// Verify timestamps
 			assert.Check(t, trustCenterDoc.CreatedAt != nil)
@@ -501,11 +477,11 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 				assert.Check(t, node.Node.Title != "")
 				assert.Check(t, node.Node.Category != "")
 				assert.Check(t, node.Node.TrustCenterID != nil)
-				assert.Check(t, node.Node.FileID != nil)
+				assert.Check(t, node.Node.OriginalFileID != nil)
 				if tc.shouldShowFileDetails {
-					assert.Check(t, node.Node.File != nil)
+					assert.Check(t, node.Node.OriginalFile != nil)
 				} else {
-					assert.Check(t, node.Node.File == nil)
+					assert.Check(t, node.Node.OriginalFile == nil)
 				}
 			}
 		})
@@ -612,7 +588,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateTrustCenterDoc(tc.ctx, tc.trustCenterDocID, tc.request)
+			resp, err := tc.client.UpdateTrustCenterDoc(tc.ctx, tc.trustCenterDocID, tc.request, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

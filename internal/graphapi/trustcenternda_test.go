@@ -74,7 +74,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
 	require.Nil(t, err)
-	require.Nil(t, getTrustCenterDocResp.TrustCenterDoc.File)
+	require.Nil(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile)
 
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
@@ -84,7 +84,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
 	require.Nil(t, err)
-	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.File != nil)
+	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile != nil)
 
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)

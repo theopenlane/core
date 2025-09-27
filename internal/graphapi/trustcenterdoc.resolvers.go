@@ -53,7 +53,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, inpu
 }
 
 // UpdateTrustCenterDoc is the resolver for the updateTrustCenterDoc field.
-func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterDoc.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenterdoc"})
