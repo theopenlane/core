@@ -113,9 +113,9 @@ func (sc *StripeClient) CreateCustomerAndSubscription(ctx context.Context, o *Or
 
 	log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("subscription created")
 
-	if err := sc.retrieveFeatureLists(ctx, o); err != nil {
-		return ErrCustomerNotFound
-	}
+	// if err := sc.retrieveFeatureLists(ctx, o); err != nil {
+	// 	return ErrCustomerNotFound
+	// }
 
 	_, err = sc.Client.V1Customers.Update(ctx, customer.ID, sc.UpdateCustomerWithOptions(
 		&stripe.CustomerUpdateParams{}, WithUpdateCustomerMetadata(map[string]string{"subscription_schedule_id": subscription.StripeSubscriptionScheduleID})))
@@ -140,10 +140,15 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	case 0:
 		return sc.CreateCustomerAndSubscription(ctx, o)
 	case 1:
+		if customers[0].Subscriptions == nil || len(customers[0].Subscriptions.Data) == 0 {
+			return ErrNoSubscriptions
+		}
+		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("found existing customer for organization")
+
 		o.StripeCustomerID = customers[0].ID
 		o.StripeSubscriptionID = customers[0].Subscriptions.Data[0].ID
 
-		return sc.retrieveFeatureLists(ctx, o)
+		return nil
 	default:
 		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", o.OrganizationID).Interface("customers", customers).Msg("found multiple customers, skipping all updates")
 		return ErrFoundMultipleCustomers

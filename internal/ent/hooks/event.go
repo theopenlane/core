@@ -17,6 +17,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v82"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/slack"
@@ -149,7 +150,13 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					return
 				}
 
-				name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
+				// determine if this is a soft delete operation
+				op := mutation.Op().String()
+				if entx.CheckIsSoftDelete(ctx) {
+					op = SoftDeleteOne
+				}
+
+				name := fmt.Sprintf("%s.%s", mutation.Type(), op)
 				event := soiree.NewBaseEvent(name, mutation)
 
 				event.Properties().Set("ID", eventID.ID)
@@ -195,7 +202,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 // emitEventOn is a function that returns a function that checks if an event should be emitted
 // based on the mutation type and operation and fields that were updated
 func emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(_ context.Context, m entgen.Mutation) bool {
+	return func(ctx context.Context, m entgen.Mutation) bool {
 		switch m.Type() {
 		case entgen.TypeOrgSubscription:
 			if m.Op().Is(ent.OpCreate) {
@@ -215,6 +222,11 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 			switch m.Op() {
 			case ent.OpDelete, ent.OpDeleteOne, ent.OpCreate:
 				return true
+			case ent.OpUpdateOne:
+				// ensure we emit soft delete events, these do not come through as a delete operation
+				if entx.CheckIsSoftDelete(ctx) {
+					return true
+				}
 			}
 		case entgen.TypeSubscriber:
 			if m.Op().Is(ent.OpCreate) {
@@ -230,11 +242,16 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 	}
 }
 
+const (
+	SoftDeleteOne = "SoftDeleteOne"
+)
+
 // OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events; formatted as `type.operation`
 var OrganizationSettingUpdateOne = fmt.Sprintf("%s.%s", entgen.TypeOrganizationSetting, entgen.OpUpdateOne.String())
 var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, entgen.OpCreate.String())
 var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
 var OrganizationCreate = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpCreate.String())
+var OrganizationSoftDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, SoftDeleteOne)
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
@@ -271,6 +288,12 @@ func RegisterListeners(e *Eventer) error {
 	}
 
 	_, err = e.Emitter.On(OrganizationDeleteOne, handleOrganizationDelete)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	_, err = e.Emitter.On(OrganizationSoftDeleteOne, handleOrganizationDelete)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
 		return err

@@ -82,6 +82,10 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 		}
 	}
 
+	if len(items) == 0 {
+		return nil, ErrNoSubscriptionItems
+	}
+
 	params := &stripe.SubscriptionCreateParams{
 		Customer:        stripe.String(cust.ID),
 		Items:           items,

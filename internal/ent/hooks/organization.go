@@ -24,11 +24,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/catalog"
-	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -322,7 +320,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 			return err
 		}
 
-		_, err = createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
+		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, reconciler.WithTrial())
 		if err != nil {
 			return err
 		}
@@ -588,110 +586,4 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 	}
 
 	return nil
-}
-
-// orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
-type orgModuleConfig struct {
-	trial bool
-}
-
-// orgModuleOption sets fields on orgModuleConfig
-type orgModuleOption func(*orgModuleConfig)
-
-// withTrial sets the trial flag to true, allowing trial modules to be included
-func withTrial() orgModuleOption {
-	return func(c *orgModuleConfig) {
-		c.trial = true
-	}
-}
-
-// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
-func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation, orgSubs *generated.OrgSubscription, opts ...orgModuleOption) ([]string, error) {
-	cfg := orgModuleConfig{}
-
-	for _, opt := range opts {
-		opt(&cfg)
-	}
-
-	modulesCreated := make([]string, 0)
-
-	// the catalog contains config for which things should be in a trial
-	for moduleName, mod := range cataloggen.GetModules(m.Client().EntConfig.Modules.UseSandbox) {
-		if !cfg.trial || !mod.IncludeWithTrial {
-			continue
-		}
-
-		// Find the first price with "month" interval
-		// we want to create, by default, a monthly recurring price rather than a one-time or annual
-		var monthlyPrice *catalog.Price
-		for _, price := range mod.Billing.Prices {
-			if price.Interval == "month" {
-				monthlyPrice = &price
-				break
-			}
-		}
-
-		if monthlyPrice == nil {
-			continue // skip if no monthly price
-		}
-
-		newCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
-		newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
-
-		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
-		orgMod, err := m.Client().OrgModule.Create().
-			SetModule(models.OrgModule(moduleName)).
-			SetSubscriptionID(orgSubs.ID).
-			SetStatus(string(stripe.SubscriptionStatusTrialing)).
-			SetOwnerID(orgCreated.ID).
-			SetModuleLookupKey(mod.LookupKey).
-			SetStripePriceID(monthlyPrice.PriceID).
-			SetActive(true).
-			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
-			Save(newCtx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
-		}
-
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgModule for %s with ID %s", moduleName, orgMod.ID)
-
-		// the product and price entries are somewhat redundant but creating them for reference and future extensibility
-		orgProduct, err := m.Client().OrgProduct.Create().
-			SetModule(moduleName).
-			SetOwnerID(orgCreated.ID).
-			SetModule(orgMod.ID).
-			SetSubscriptionID(orgSubs.ID).
-			SetActive(true).
-			Save(newCtx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
-		}
-
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgProduct for %s with ID %s", moduleName, orgProduct.ID)
-
-		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
-		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
-		orgPrice, err := m.Client().OrgPrice.Create().
-			SetProductID(orgProduct.ID).
-			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
-			SetOwnerID(orgCreated.ID).
-			SetSubscriptionID(orgSubs.ID).
-			SetStripePriceID(monthlyPrice.PriceID).
-			SetActive(true).
-			Save(newCtx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
-		}
-
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
-
-		// update the org modules with the price ID
-		if _, err := m.Client().OrgModule.UpdateOne(orgMod).SetPriceID(orgPrice.ID).Save(newCtx); err != nil {
-			return nil, fmt.Errorf("failed to update OrgModule with price ID for module %s: %w", moduleName, err)
-		}
-
-		modulesCreated = append(modulesCreated, moduleName)
-	}
-
-	return modulesCreated, nil
 }

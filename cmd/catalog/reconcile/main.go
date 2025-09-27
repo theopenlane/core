@@ -11,6 +11,7 @@ import (
 	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/config"
+	"github.com/theopenlane/core/internal/ent/generated"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
@@ -121,6 +122,10 @@ Examples:
 				Name:  "debug",
 				Usage: "enable debug logging",
 			},
+			&cli.StringSliceFlag{
+				Name:  "org-ids",
+				Usage: "specific organization IDs to reconcile (only valid with 'orgs' command)",
+			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
 			return cli.ShowCommandHelp(ctx, c, "")
@@ -176,17 +181,23 @@ func createReconcilerWithDB(c *cli.Command) (*reconciler.Reconciler, error) {
 	// Create basic context for database client creation
 	ctx := context.Background()
 
-	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts)
-	if err != nil {
-		return nil, fmt.Errorf("database client: %w", err)
-	}
-
 	stripeClient, err := entitlements.NewStripeClient(
 		entitlements.WithAPIKey(cfg.Entitlements.PrivateStripeKey),
 		entitlements.WithConfig(cfg.Entitlements),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("stripe client: %w", err)
+	}
+
+	// add the ent config options
+	entOpts := []generated.Option{
+		generated.EntConfig(&cfg.EntConfig),
+		generated.EntitlementManager(stripeClient),
+	}
+
+	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, entOpts...)
+	if err != nil {
+		return nil, fmt.Errorf("database client: %w", err)
 	}
 
 	options := []reconciler.Option{
@@ -208,7 +219,9 @@ func run(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 
-	result, err := recon.Reconcile(ctx)
+	orgIDs := c.Root().StringSlice("org-ids")
+
+	result, err := recon.Reconcile(ctx, orgIDs)
 	if err != nil {
 		return err
 	}
@@ -221,11 +234,12 @@ func run(ctx context.Context, c *cli.Command) error {
 	fmt.Printf("Found %d organizations requiring reconciliation\n", len(result.Actions))
 
 	// Output as table
-	printOrgsTable([]string{"ORGANIZATION_ID", "ACTION"}, func() {
+	printOrgsTable([]string{"ORGANIZATION_ID", "ORGANIZATION_NAME", "ACTION"}, func() {
 		for _, action := range result.Actions {
-			fmt.Printf("%-30s %-50s\n",
+			fmt.Printf("%-30s %-30s %-70s\n",
 				truncate(action.OrgID, 30),
-				truncate(action.Action, 50))
+				truncate(action.OrgName, 30),
+				truncate(action.Action, 70))
 		}
 	})
 
@@ -239,7 +253,9 @@ func updateCancelBehavior(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 
-	result, err := recon.UpdateSubscriptionsCancelBehavior(ctx)
+	orgIDs := c.Root().StringSlice("org-ids")
+
+	result, err := recon.UpdateSubscriptionsCancelBehavior(ctx, orgIDs)
 	if err != nil {
 		return err
 	}
@@ -251,11 +267,12 @@ func updateCancelBehavior(ctx context.Context, c *cli.Command) error {
 
 	fmt.Printf("Found %d subscriptions requiring cancel behavior updates\n", len(result.Actions))
 
-	printOrgsTable([]string{"SUBSCRIPTION_ID", "ACTION"}, func() {
+	printOrgsTable([]string{"SUBSCRIPTION_ID", "ORGANIZATION_NAME", "ACTION"}, func() {
 		for _, action := range result.Actions {
-			fmt.Printf("%-30s %-50s\n",
+			fmt.Printf("%-30s %-30s %-70s\n",
 				truncate(action.OrgID, 30),
-				truncate(action.Action, 50))
+				truncate(action.OrgName, 30),
+				truncate(action.Action, 70))
 		}
 	})
 
@@ -269,7 +286,9 @@ func createSchedules(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 
-	result, err := recon.CreateMissingSubscriptionSchedules(ctx)
+	orgIDs := c.Root().StringSlice("org-ids")
+
+	result, err := recon.CreateMissingSubscriptionSchedules(ctx, orgIDs)
 	if err != nil {
 		return err
 	}
@@ -281,11 +300,12 @@ func createSchedules(ctx context.Context, c *cli.Command) error {
 
 	fmt.Printf("Found %d subscriptions requiring schedule creation\n", len(result.Actions))
 
-	printOrgsTable([]string{"SUBSCRIPTION_ID", "ACTION"}, func() {
+	printOrgsTable([]string{"SUBSCRIPTION_ID", "ORGANIZATION_NAME", "ACTION"}, func() {
 		for _, action := range result.Actions {
-			fmt.Printf("%-30s %-50s\n",
+			fmt.Printf("%-30s %-30s %-70s\n",
 				truncate(action.OrgID, 30),
-				truncate(action.Action, 50))
+				truncate(action.OrgName, 30),
+				truncate(action.Action, 70))
 		}
 	})
 
@@ -357,11 +377,12 @@ func updatePersonalOrgMetadata(ctx context.Context, c *cli.Command) error {
 
 	fmt.Printf("Found %d personal organizations requiring metadata updates\n", len(result.Actions))
 
-	printOrgsTable([]string{"ORGANIZATION_ID", "ACTION"}, func() {
+	printOrgsTable([]string{"ORGANIZATION_ID", "ORGANIZATION_NAME", "ACTION"}, func() {
 		for _, action := range result.Actions {
-			fmt.Printf("%-30s %-50s\n",
+			fmt.Printf("%-30s %-30s %-70s\n",
 				truncate(action.OrgID, 30),
-				truncate(action.Action, 50))
+				truncate(action.OrgName, 30),
+				truncate(action.Action, 70))
 		}
 	})
 
@@ -398,8 +419,8 @@ func analyzeStripeMismatches(ctx context.Context, c *cli.Command) error {
 	case "json":
 		// Output as JSON
 		for _, item := range report {
-			jsonData := fmt.Sprintf(`{"customer_id":"%s","organization_id":"%s","mismatch_type":"%s","description":"%s","stripe_data":"%s","internal_data":"%s"`,
-				item.CustomerID, item.OrganizationID, item.MismatchType, item.Description, item.StripeData, item.InternalData)
+			jsonData := fmt.Sprintf(`{"customer_id":"%s","organization_id":"%s", "organization_name":"%s", "mismatch_type":"%s","description":"%s","stripe_data":"%s","internal_data":"%s"`,
+				item.CustomerID, item.OrganizationID, item.OrganizationName, item.MismatchType, item.Description, item.StripeData, item.InternalData)
 			if len(item.SubscriptionIssues) > 0 {
 				jsonData += `,"subscription_issues_count":` + fmt.Sprintf("%d", len(item.SubscriptionIssues))
 			}
@@ -408,12 +429,13 @@ func analyzeStripeMismatches(ctx context.Context, c *cli.Command) error {
 		}
 	default:
 		// Output as table
-		printTable([]string{"CUSTOMER_ID", "ORGANIZATION_ID", "MISMATCH_TYPE", "DESCRIPTION", "SUBSCRIPTION_ISSUES"}, func() {
+		printTable([]string{"CUSTOMER_ID", "ORGANIZATION_ID", "ORGANIZATION_NAME", "MISMATCH_TYPE", "DESCRIPTION", "SUBSCRIPTION_ISSUES"}, func() {
 			for _, item := range report {
 				subscriptionIssueCount := len(item.SubscriptionIssues)
-				fmt.Printf("%-20s %-30s %-25s %-50s %-18s\n",
+				fmt.Printf("%-20s %-30s %-25s %-25s %-50s %-18s\n",
 					truncate(item.CustomerID, 20),
 					truncate(item.OrganizationID, 30),
+					truncate(item.OrganizationName, 25),
 					truncate(item.MismatchType, 25),
 					truncate(item.Description, 50),
 					fmt.Sprintf("%d", subscriptionIssueCount))
@@ -496,7 +518,7 @@ func printProductTable(headers []string, printRows func()) {
 // printOrgsTable prints a simple table for organization reports
 func printOrgsTable(headers []string, printRows func()) {
 	// Print header
-	widths := []int{30, 50}
+	widths := []int{30, 30, 70}
 	for i, header := range headers {
 		width := widths[i]
 		fmt.Printf("%-*s ", width, header)
