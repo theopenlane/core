@@ -123,7 +123,8 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 // Hooks of the TrustCenterDoc
 func (TrustCenterDoc) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookTrustCenterDoc(),
+		hooks.HookCreateTrustCenterDoc(),
+		hooks.HookUpdateTrustCenterDoc(),
 	}
 }
 
