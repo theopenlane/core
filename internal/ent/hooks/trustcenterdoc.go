@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/fgax"
@@ -55,6 +56,19 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.OriginalFileID == nil {
 				return nil, errMissingFileID
+			}
+
+			if trustCenterDoc.WatermarkingEnabled {
+				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+					TrustCenterDocumentID: trustCenterDoc.ID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			} else {
+				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(ctx)
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityNotVisible {
@@ -135,6 +149,21 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 			if err = updateTrustCenterDocVisibility(ctx, m, fileIDsToUpdate, trustCenterDoc.ID); err != nil {
 				return nil, err
+			}
+
+			if mutationSetsOriginalFileID || fileUploaded {
+				if trustCenterDoc.WatermarkingEnabled {
+					if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+						TrustCenterDocumentID: trustCenterDoc.ID,
+					}, nil); err != nil {
+						return nil, err
+					}
+				} else {
+					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(ctx)
+					if err != nil {
+						return nil, err
+					}
+				}
 			}
 
 			return trustCenterDoc, nil

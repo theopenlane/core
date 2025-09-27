@@ -33,6 +33,7 @@ func init() {
 	createCmd.Flags().StringP("visibility", "v", "NOT_VISIBLE", "visibility of the document (NOT_VISIBLE, PROTECTED, PUBLICLY_VISIBLE)")
 	createCmd.Flags().StringSliceP("tags", "g", []string{}, "tags associated with the document")
 	createCmd.Flags().StringP("file", "f", "", "file to upload as the trust center document (required)")
+	createCmd.Flags().BoolP("watermarking-enabled", "w", false, "whether watermarking is enabled for the document")
 }
 
 // createValidation validates the required fields for the command
@@ -73,6 +74,11 @@ func createValidation() (openlaneclient.CreateTrustCenterDocInput, *graphql.Uplo
 	tags := cmd.Config.Strings("tags")
 	if len(tags) > 0 {
 		input.Tags = tags
+	}
+
+	watermarkingEnabled := cmd.Config.Bool("watermarking-enabled")
+	if watermarkingEnabled {
+		input.WatermarkingEnabled = &watermarkingEnabled
 	}
 
 	// Handle file upload

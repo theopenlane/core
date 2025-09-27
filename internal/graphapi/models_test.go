@@ -2124,8 +2124,17 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 		Relation:    "tc_doc_parent",
 	}
 
-	tuple := fgax.GetTupleKey(req)
-	if _, err := tcdb.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+	// Create the parent relationship to the trust center
+	parentReq := fgax.TupleRequest{
+		SubjectID:   tcdb.TrustCenterID,
+		SubjectType: "trust_center",
+		ObjectID:    trustCenterDoc.ID,
+		ObjectType:  "trust_center_doc",
+		Relation:    "parent",
+	}
+
+	tuples := []fgax.TupleKey{fgax.GetTupleKey(req), fgax.GetTupleKey(parentReq)}
+	if _, err := tcdb.client.db.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 		requireNoError(err)
 	}
 
