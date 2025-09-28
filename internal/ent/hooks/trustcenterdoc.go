@@ -8,16 +8,21 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 )
 
 var (
 	errMissingFileID         = errors.New("missing file id")
 	errCannotSetFileOnCreate = errors.New("cannot set file id on create")
 )
+
+// internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
+type internalTrustCenterDocUpdateKey struct{}
 
 func HookCreateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -58,30 +63,35 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				return nil, errMissingFileID
 			}
 
+			if trustCenterDoc.Visibility != enums.TrustCenterDocumentVisibilityNotVisible {
+				tuples := fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")
+
+				if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
+				}
+
+				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+					return nil, err
+				}
+			}
+
 			if trustCenterDoc.WatermarkingEnabled {
+				zerolog.Ctx(ctx).Debug().Msg("watermarking enabled, queuing job")
 				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
 					return nil, err
 				}
 			} else {
-				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(ctx)
+				zerolog.Ctx(ctx).Debug().Msg("watermarking disabled, setting file id")
+				// Use privacy allow context for internal update operation to bypass authorization checks
+				// and mark as internal operation to avoid triggering the update hook logic
+				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+				internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
+				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 				if err != nil {
 					return nil, err
 				}
-			}
-
-			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityNotVisible {
-				return v, nil
-			}
-			tuples := fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")
-
-			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
-				tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
-			}
-
-			if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-				return nil, err
 			}
 
 			return trustCenterDoc, nil
@@ -92,6 +102,12 @@ func HookCreateTrustCenterDoc() ent.Hook {
 func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
+			// Skip hook logic if this is an internal operation from the create hook
+			if _, isInternal := contextx.From[internalTrustCenterDocUpdateKey](ctx); isInternal {
+				zerolog.Ctx(ctx).Debug().Msg("skipping update hook for internal operation")
+				return next.Mutate(ctx, m)
+			}
+
 			zerolog.Ctx(ctx).Debug().Msg("trust center doc hook")
 
 			var err error
@@ -111,6 +127,8 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 			_, mutationSetFileID := m.FileID()
 
+			zerolog.Ctx(ctx).Debug().Bool("file_uploaded", fileUploaded).Bool("watermark_file_uploaded", watermarkFileUploaded).Bool("mutation_sets_original_file_id", mutationSetsOriginalFileID).Bool("mutation_set_file_id", mutationSetFileID).Msg("trust center doc hook")
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -127,7 +145,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
 				tuples := []fgax.TupleKey{}
-				if mutationSetFileID || watermarkFileUploaded {
+				if (mutationSetFileID || watermarkFileUploaded) && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
 					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)...)
 				}
 
@@ -143,7 +161,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 			}
 
 			fileIDsToUpdate := []string{*trustCenterDoc.OriginalFileID}
-			if trustCenterDoc.FileID != nil {
+			if trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
 				fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
 			}
 
@@ -159,7 +177,11 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 						return nil, err
 					}
 				} else {
-					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(ctx)
+					// Use privacy allow context for internal update operation to bypass authorization checks
+					// and mark as internal operation to avoid triggering the update hook logic
+					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+					internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
+					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 					if err != nil {
 						return nil, err
 					}

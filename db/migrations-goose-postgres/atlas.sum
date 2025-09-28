@@ -1,4 +1,4 @@
-h1:SCSdBPieDmmjXKL3kydPsruAF8DpiJRX0BAH0lNua4k=
+h1:ujg4CVw1yAZLSXjElyK7q3Ium51crd/2YiE/6OaP4+I=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -58,4 +58,4 @@ h1:SCSdBPieDmmjXKL3kydPsruAF8DpiJRX0BAH0lNua4k=
 20250923202813_organizationenforced2fa.sql h1:6PqVCA5DKxoxu/UoFVWSQMVTl/3Z8qXbmaGYo1tEIdU=
 20250923220618_normalize_trustcenter_ownership.sql h1:WCgsRcpXsb4/EpYuQ31uV0shlTIqNy2b4doKaQ99Rbs=
 20250925151020_trustcenter_watermark_config.sql h1:BufLlPOLBE/DHV/SS15YpHqr1aUuPwVoUu7aEsbX1Ko=
-20250927174256_trust_center_doc_watermarking.sql h1:qdo1YIGW6Yfils3eLnZuFjNaYRZ6e/+OS3fd4qAtJlQ=
+20250927225315_trust_center_doc_watermarking.sql h1:9W3/O8HW4b5MrM2dLmU9uCzgmLE+J+t9S/LUUPZGL78=

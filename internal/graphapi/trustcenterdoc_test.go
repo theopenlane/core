@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
@@ -14,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
@@ -222,6 +219,60 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, protected, create trust center doc with PDF file",
+			input: testclient.CreateTrustCenterDocInput{
+				Title:         "Test Document",
+				Category:      "Policy",
+				TrustCenterID: &trustCenter.ID,
+				Tags:          []string{"test", "document"},
+				Visibility:    &enums.TrustCenterDocumentVisibilityProtected,
+			},
+			file:   createPDFUpload(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, protected, create trust center doc with watermarking",
+			input: testclient.CreateTrustCenterDocInput{
+				Title:               "Test Document",
+				Category:            "Policy",
+				TrustCenterID:       &trustCenter.ID,
+				Tags:                []string{"test", "document"},
+				Visibility:          &enums.TrustCenterDocumentVisibilityProtected,
+				WatermarkingEnabled: lo.ToPtr(true),
+			},
+			file:   createPDFUpload(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, not visible, create trust center doc with PDF file",
+			input: testclient.CreateTrustCenterDocInput{
+				Title:         "Test Document",
+				Category:      "Policy",
+				TrustCenterID: &trustCenter.ID,
+				Tags:          []string{"test", "document"},
+				Visibility:    &enums.TrustCenterDocumentVisibilityNotVisible,
+			},
+			file:   createPDFUpload(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, not visible, create trust center doc with watermarking",
+			input: testclient.CreateTrustCenterDocInput{
+				Title:               "Test Document",
+				Category:            "Policy",
+				TrustCenterID:       &trustCenter.ID,
+				Tags:                []string{"test", "document"},
+				Visibility:          &enums.TrustCenterDocumentVisibilityNotVisible,
+				WatermarkingEnabled: lo.ToPtr(true),
+			},
+			file:   createPDFUpload(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "happy path, minimal required fields",
 			input: testclient.CreateTrustCenterDocInput{
 				Title:         "Minimal Document",
@@ -353,11 +404,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			assert.Check(t, trustCenterDoc.CreatedBy != nil)
 			if tc.input.WatermarkingEnabled != nil && *tc.input.WatermarkingEnabled {
 				assert.Check(t, trustCenterDoc.File == nil)
-				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.WatermarkDocArgs{}, nil)
-				require.NotNil(t, job)
-				assert.Equal(t, "", job.Args.TrustCenterDocumentID)
 			} else {
 				assert.Check(t, trustCenterDoc.File != nil)
+				assert.Check(t, trustCenterDoc.File.ID != "")
+				assert.Check(t, trustCenterDoc.FileID != nil)
+				assert.Check(t, is.Equal(*trustCenterDoc.FileID, trustCenterDoc.File.ID))
 			}
 
 			// Clean up the created trust center doc
