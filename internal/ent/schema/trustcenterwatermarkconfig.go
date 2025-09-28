@@ -96,7 +96,7 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 		field.Enum("font").
 			Comment("font of the watermark text").
 			GoType(enums.Font("")).
-			Default(enums.FontArial.String()).
+			Default(enums.FontHelvetica.String()).
 			Optional(),
 	}
 }
@@ -108,7 +108,7 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
 				withParents(TrustCenter{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins(t)

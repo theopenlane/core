@@ -130,12 +130,12 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultFont enums.Font = "arial"
+const DefaultFont enums.Font = "HELVETICA"
 
 // FontValidator is a validator for the "font" field enum values. It is called by the builders before save.
 func FontValidator(f enums.Font) error {
 	switch f.String() {
-	case "arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde":
+	case "COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN":
 		return nil
 	default:
 		return fmt.Errorf("trustcenterwatermarkconfighistory: invalid enum value for font field: %q", f)
