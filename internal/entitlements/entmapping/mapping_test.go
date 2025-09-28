@@ -193,11 +193,8 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		StripeSubscriptionID:     "sub_123",
 		StripeSubscriptionStatus: "active",
 		Active:                   true,
-		ProductPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
 		TrialExpiresAt:           timePtr(time.Unix(1700000000, 0)),
 		DaysUntilDue:             int64ToStringPtr(7),
-		Features:                 []string{"f1"},
-		FeatureLookupKeys:        []string{"Feature1"},
 	}
 
 	require.Equal(t, want, got)
@@ -317,8 +314,6 @@ func TestApplyStripeSubscription(t *testing.T) {
 		productPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
 		trialExpiresAt:           time.Unix(1700000000, 0),
 		daysUntilDue:             "7",
-		features:                 []string{"f1"},
-		featureLookupKeys:        []string{"Feature1"},
 	}
 
 	require.Equal(t, b, got)

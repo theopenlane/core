@@ -138,29 +138,6 @@ func (sc *StripeClient) CreateSubscriptionScheduleFromSubs(ctx context.Context, 
 	return schedule, nil
 }
 
-// retrieveActiveEntitlements retrieves active entitlements for a customer
-func (sc *StripeClient) retrieveActiveEntitlements(ctx context.Context, customerID string) (feat []string, featNames []string, err error) {
-	params := &stripe.EntitlementsActiveEntitlementListParams{
-		Customer: stripe.String(customerID),
-		Expand:   []*string{stripe.String("data.feature")},
-	}
-
-	result := sc.Client.V1EntitlementsActiveEntitlements.List(ctx, params)
-
-	for feature, err := range result {
-		if err != nil {
-			log.Err(err).Msg("failed to list active entitlements")
-
-			return nil, nil, err
-		}
-
-		feat = append(feat, feature.LookupKey)
-		featNames = append(featNames, feature.Feature.Name)
-	}
-
-	return feat, featNames, nil
-}
-
 // MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
 func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription, sched *stripe.SubscriptionSchedule) *Subscription {
 	prices := []Price{}

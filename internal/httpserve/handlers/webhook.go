@@ -376,20 +376,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
 	}
 
-	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
-		productPriceCopy := stripeOrgSubscription.ProductPrice
-
-		productPriceCopy.Amount /= 100 // convert to dollars from cents
-
-		mutation.SetProductPrice(productPriceCopy)
-
-		mutation.SetProductPrice(stripeOrgSubscription.ProductPrice)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("price", orgSubscription.ProductPrice.String()).Msgf("product price changed")
-	}
-
 	if stripeOrgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
 		mutation.SetTrialExpiresAt(*stripeOrgSubscription.TrialExpiresAt)
 

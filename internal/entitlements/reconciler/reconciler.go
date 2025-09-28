@@ -71,6 +71,9 @@ var (
 	ErrMissingDBClient       = fmt.Errorf("missing database client")
 	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
 	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
+	ErrMissingPrice          = fmt.Errorf("missing price for customer")
+	ErrMultipleCustomers     = fmt.Errorf("multiple customers found for organization")
+	ErrMissingCustomer       = fmt.Errorf("missing customer for organization")
 )
 
 // New creates a new Reconciler instance with the provided options
@@ -229,8 +232,12 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 		return err
 	}
 
+	if len(customers) == 0 {
+		return ErrMissingCustomer
+	}
+
 	if len(customers) != 1 {
-		return fmt.Errorf("expected 1 customer for org %s, found %d", cust.OrganizationID, len(customers))
+		return ErrMultipleCustomers
 	}
 
 	cust.Prices, err = GetDefaultPrices(ctx, r.db)
@@ -239,7 +246,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 	}
 
 	if len(cust.Prices) == 0 {
-		return fmt.Errorf("no prices found for to add for organization %s", cust.OrganizationID)
+		return ErrMissingPrice
 	}
 
 	cust.Status = string(stripe.SubscriptionStatusTrialing)
@@ -335,8 +342,9 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 			return "", fmt.Errorf("get default prices: %w", err)
 		}
 		if len(prices) == 0 {
-			return "", fmt.Errorf("no prices found for to add for organization %s", org.ID)
+			return "", ErrMissingPrice
 		}
+
 		return fmt.Sprintf("set stripe customer ID on organization and create stripe subscription with prices %v", prices), nil
 	case !customerMissing && org.StripeCustomerID == nil && !subscriptionMissing:
 		return "set stripe customer ID on organization", nil
@@ -373,7 +381,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 
 	// the catalog contains config for which things should be in a trial
 	if db.EntConfig == nil {
-		return nil, fmt.Errorf("ent config is nil")
+		return nil, fmt.Errorf("ent config is nil") // nolint:err113
 	}
 
 	for moduleName, mod := range gencatalog.GetModules(db.EntConfig.Modules.UseSandbox) {

@@ -667,16 +667,6 @@ func StripeSubscriptionIDContainsFold(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldContainsFold(FieldStripeSubscriptionID, v))
 }
 
-// ProductPriceIsNil applies the IsNil predicate on the "product_price" field.
-func ProductPriceIsNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIsNull(FieldProductPrice))
-}
-
-// ProductPriceNotNil applies the NotNil predicate on the "product_price" field.
-func ProductPriceNotNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotNull(FieldProductPrice))
-}
-
 // StripeSubscriptionStatusEQ applies the EQ predicate on the "stripe_subscription_status" field.
 func StripeSubscriptionStatusEQ(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldEQ(FieldStripeSubscriptionStatus, v))
@@ -935,26 +925,6 @@ func DaysUntilDueEqualFold(v string) predicate.OrgSubscription {
 // DaysUntilDueContainsFold applies the ContainsFold predicate on the "days_until_due" field.
 func DaysUntilDueContainsFold(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldContainsFold(FieldDaysUntilDue, v))
-}
-
-// FeaturesIsNil applies the IsNil predicate on the "features" field.
-func FeaturesIsNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIsNull(FieldFeatures))
-}
-
-// FeaturesNotNil applies the NotNil predicate on the "features" field.
-func FeaturesNotNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotNull(FieldFeatures))
-}
-
-// FeatureLookupKeysIsNil applies the IsNil predicate on the "feature_lookup_keys" field.
-func FeatureLookupKeysIsNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIsNull(FieldFeatureLookupKeys))
-}
-
-// FeatureLookupKeysNotNil applies the NotNil predicate on the "feature_lookup_keys" field.
-func FeatureLookupKeysNotNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotNull(FieldFeatureLookupKeys))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -89,39 +89,14 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 		return nil
 	}
 
-	var price models.Price
-
-	if sub.Items != nil && len(sub.Items.Data) > 0 {
-		item := sub.Items.Data[0]
-		if item.Price != nil {
-
-			interval := ""
-			if item.Price.Recurring != nil {
-				interval = string(item.Price.Recurring.Interval)
-			}
-
-			price = models.Price{
-				Amount:   float64(item.Price.UnitAmount) / 100.0, //nolint:mnd
-				Interval: interval,
-				Currency: string(item.Price.Currency),
-			}
-		}
-	}
-
 	status := string(sub.Status)
 
 	orgSub := &ent.OrgSubscription{
 		StripeSubscriptionID:     sub.ID,
 		StripeSubscriptionStatus: status,
 		Active:                   entitlements.IsSubscriptionActive(sub.Status),
-		ProductPrice:             price,
 		TrialExpiresAt:           timePtr(time.Unix(sub.TrialEnd, 0)),
 		DaysUntilDue:             int64ToStringPtr(sub.DaysUntilDue),
-	}
-
-	if cust != nil {
-		orgSub.Features = cust.Features
-		orgSub.FeatureLookupKeys = cust.FeatureNames
 	}
 
 	return orgSub
@@ -310,11 +285,6 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	b.SetProductPrice(price)
 	b.SetTrialExpiresAt(time.Unix(sub.TrialEnd, 0))
 	b.SetDaysUntilDue(fmt.Sprintf("%d", sub.DaysUntilDue))
-
-	if cust != nil {
-		b.SetFeatures(cust.Features)
-		b.SetFeatureLookupKeys(cust.FeatureNames)
-	}
 
 	return b
 }

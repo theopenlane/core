@@ -18206,8 +18206,6 @@ type OrgSubscription struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
-	// the price of the product tier
-	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
@@ -18217,11 +18215,7 @@ type OrgSubscription struct {
 	// the time the trial is set to expire
 	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
-	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
-	// the features associated with the subscription
-	Features []string `json:"features,omitempty"`
-	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys    []string         `json:"featureLookupKeys,omitempty"`
+	DaysUntilDue         *string          `json:"daysUntilDue,omitempty"`
 	Owner                *Organization    `json:"owner,omitempty"`
 	Events               *EventConnection `json:"events"`
 	ManagePaymentMethods *string          `json:"managePaymentMethods,omitempty"`
@@ -18262,8 +18256,6 @@ type OrgSubscriptionHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
-	// the price of the product tier
-	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
@@ -18274,10 +18266,6 @@ type OrgSubscriptionHistory struct {
 	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
 	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
-	// the features associated with the subscription
-	Features []string `json:"features,omitempty"`
-	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys []string `json:"featureLookupKeys,omitempty"`
 }
 
 func (OrgSubscriptionHistory) IsNode() {}

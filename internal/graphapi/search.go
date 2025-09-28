@@ -1231,22 +1231,10 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string, after *entgq
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				orgsubscription.OwnerIDContainsFold(query),              // search by OwnerID
-				orgsubscription.StripeSubscriptionIDContainsFold(query), // search by StripeSubscriptionID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(product_price)::text LIKE $5", likeQuery)) // search by ProductPrice
-				},
+				orgsubscription.OwnerIDContainsFold(query),                  // search by OwnerID
+				orgsubscription.StripeSubscriptionIDContainsFold(query),     // search by StripeSubscriptionID
 				orgsubscription.StripeSubscriptionStatusContainsFold(query), // search by StripeSubscriptionStatus
 				orgsubscription.DaysUntilDueContainsFold(query),             // search by DaysUntilDue
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(features)::text LIKE $8", likeQuery)) // search by Features
-				},
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(feature_lookup_keys)::text LIKE $9", likeQuery)) // search by FeatureLookupKeys
-				},
 			),
 		)
 

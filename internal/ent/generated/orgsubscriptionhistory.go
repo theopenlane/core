@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -44,8 +43,6 @@ type OrgSubscriptionHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID string `json:"stripe_subscription_id,omitempty"`
-	// the price of the product tier
-	ProductPrice models.Price `json:"product_price,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus string `json:"stripe_subscription_status,omitempty"`
 	// indicates if the subscription is active
@@ -56,11 +53,7 @@ type OrgSubscriptionHistory struct {
 	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
 	// number of days until there is a due payment
 	DaysUntilDue *string `json:"days_until_due,omitempty"`
-	// the features associated with the subscription
-	Features []string `json:"features,omitempty"`
-	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys []string `json:"feature_lookup_keys,omitempty"`
-	selectValues      sql.SelectValues
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,7 +61,7 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgsubscriptionhistory.FieldTags, orgsubscriptionhistory.FieldProductPrice, orgsubscriptionhistory.FieldFeatures, orgsubscriptionhistory.FieldFeatureLookupKeys:
+		case orgsubscriptionhistory.FieldTags:
 			values[i] = new([]byte)
 		case orgsubscriptionhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -173,14 +166,6 @@ func (_m *OrgSubscriptionHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				_m.StripeSubscriptionID = value.String
 			}
-		case orgsubscriptionhistory.FieldProductPrice:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field product_price", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProductPrice); err != nil {
-					return fmt.Errorf("unmarshal field product_price: %w", err)
-				}
-			}
 		case orgsubscriptionhistory.FieldStripeSubscriptionStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_subscription_status", values[i])
@@ -213,22 +198,6 @@ func (_m *OrgSubscriptionHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				_m.DaysUntilDue = new(string)
 				*_m.DaysUntilDue = value.String
-			}
-		case orgsubscriptionhistory.FieldFeatures:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field features", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Features); err != nil {
-					return fmt.Errorf("unmarshal field features: %w", err)
-				}
-			}
-		case orgsubscriptionhistory.FieldFeatureLookupKeys:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field feature_lookup_keys", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.FeatureLookupKeys); err != nil {
-					return fmt.Errorf("unmarshal field feature_lookup_keys: %w", err)
-				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -302,9 +271,6 @@ func (_m *OrgSubscriptionHistory) String() string {
 	builder.WriteString("stripe_subscription_id=")
 	builder.WriteString(_m.StripeSubscriptionID)
 	builder.WriteString(", ")
-	builder.WriteString("product_price=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProductPrice))
-	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_status=")
 	builder.WriteString(_m.StripeSubscriptionStatus)
 	builder.WriteString(", ")
@@ -325,12 +291,6 @@ func (_m *OrgSubscriptionHistory) String() string {
 		builder.WriteString("days_until_due=")
 		builder.WriteString(*v)
 	}
-	builder.WriteString(", ")
-	builder.WriteString("features=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Features))
-	builder.WriteString(", ")
-	builder.WriteString("feature_lookup_keys=")
-	builder.WriteString(fmt.Sprintf("%v", _m.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
 }
