@@ -10,10 +10,13 @@ import (
 	"html/template"
 	"net/url"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -243,6 +246,62 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 	} else {
 		trustCenterURL.Host = r.defaultTrustCenterDomain
 		trustCenterURL.Path = "/" + trustCenter.Slug
+	}
+
+	// Check if the user has already signed the NDA.
+	// If they have, we'll send them an email with a new auth token
+	ndaTemplate, err := txnCtx.Template.Query().Where(
+		gentemplate.And(
+			gentemplate.TrustCenterIDEQ(trustCenter.ID),
+			gentemplate.KindEQ(enums.TemplateKindTrustCenterNda),
+		),
+	).Only(allowCtx)
+	if err != nil && !generated.IsNotFound(err) {
+		return nil, err
+	}
+
+	if ndaTemplate != nil {
+		// Check if there's a document_data record for this user and template
+		count, err := txnCtx.DocumentData.Query().Where(
+			documentdata.And(
+				documentdata.TemplateIDEQ(ndaTemplate.ID),
+				func(s *sql.Selector) {
+					s.Where(
+						sqljson.ValueEQ(documentdata.FieldData, anonymousUser.SubjectEmail, sqljson.DotPath("signatory_info.email")),
+					)
+				},
+				func(s *sql.Selector) {
+					s.Where(
+						sqljson.ValueEQ(documentdata.FieldData, anonymousUser.SubjectID, sqljson.DotPath("signature_metadata.user_id")),
+					)
+				},
+			),
+		).Count(allowCtx)
+		if err != nil {
+			return nil, err
+		}
+
+		if count > 0 {
+			// send the new link email
+			email, err := txnCtx.Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
+				Email: input.Email,
+			}, access, emailtemplates.TrustCenterAuthData{
+				OrganizationName: orgName,
+				TrustCenterURL:   trustCenterURL.String(),
+			})
+			if err != nil {
+				return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterndaemail"})
+			}
+			// Send the email via job queue
+			if _, err := r.db.Job.Insert(ctx, jobs.EmailArgs{
+				Message: *email,
+			}, nil); err != nil {
+				return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterndaemail"})
+			}
+			return &model.SendTrustCenterNDAEmailPayload{
+				Success: true,
+			}, nil
+		}
 	}
 
 	trustCenterURL.Path += "/sign-nda"
