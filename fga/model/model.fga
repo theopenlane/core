@@ -502,7 +502,7 @@ type scheduled_job
 type trust_center
   relations
     define can_view: [user:*, service:*] or parent_viewer
-    define can_edit: [user, service] or parent_editor
+    define can_edit: [user, service] or parent_editor or system_admin from system
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
@@ -510,6 +510,7 @@ type trust_center
     define parent: [organization]
     define nda_signed: [user]
     define member: member from parent
+    define system: [system]
 
 type trust_center_setting
   relations

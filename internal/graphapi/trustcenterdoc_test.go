@@ -697,6 +697,63 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
+func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+
+	// Helper function to create fresh file uploads
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.File,
+			Filename:    pdfFile.Filename,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	req := fgax.TupleRequest{
+		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectType: "user",
+		ObjectID:    trustCenter.ID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
+
+	t.Run("sysadmin can update protected document", func(t *testing.T) {
+		input := testclient.UpdateTrustCenterDocInput{}
+
+		resp, err := suite.client.api.UpdateTrustCenterDoc(systemAdminUser.UserCtx, trustCenterDocProtected.ID, input, nil, createPDFUpload())
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, trustCenterDocProtected.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp.TrustCenterDoc.File != nil)
+
+		// Verify the anonymous user can access the file as well
+		getResp, err = suite.client.api.GetTrustCenterDocByID(signedNdaAnonCtx, trustCenterDocProtected.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp.TrustCenterDoc.File != nil)
+
+		// Verify that anonymous user can't access the file if the doc is set to protected
+		getResp, err = suite.client.api.GetTrustCenterDocByID(createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID), trustCenterDocProtected.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp.TrustCenterDoc.File == nil)
+	})
+
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
 func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -788,7 +845,8 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 		updatedDoc := resp.UpdateTrustCenterDoc.TrustCenterDoc
 
 		// Get the updated document from database to check FileID
-		dbDoc, err := suite.client.db.TrustCenterDoc.Get(testUser1.UserCtx, updatedDoc.ID)
+		dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, updatedDoc.ID)
 		assert.NilError(t, err)
 
 		// Check that wildcard viewer tuples exist for the document

@@ -63,13 +63,17 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				return nil, errMissingFileID
 			}
 
+			tuples := []fgax.TupleKey{}
+
 			if trustCenterDoc.Visibility != enums.TrustCenterDocumentVisibilityNotVisible {
-				tuples := fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")
+				tuples = append(tuples, fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")...)
 
 				if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
 					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
 				}
+			}
 
+			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					return nil, err
 				}

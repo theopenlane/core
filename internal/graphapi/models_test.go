@@ -24,9 +24,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
@@ -1773,6 +1775,26 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(err)
 
+	// Create the organization parent tuple for the trust center
+	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		requireNoError(err)
+	}
+
+	parentReq := fgax.TupleRequest{
+		SubjectID:   orgID,
+		SubjectType: "organization",
+		ObjectID:    trustCenter.ID,
+		ObjectType:  "trust_center",
+		Relation:    "parent",
+	}
+
+	tuple := fgax.GetTupleKey(parentReq)
+	if _, err := tc.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
+
 	return trustCenter
 }
 
@@ -2071,10 +2093,8 @@ type TrustCenterDocBuilder struct {
 	Tags          []string
 }
 
-// MustNew trust center doc builder is used to create, without authz checks, trust center docs in the database
+// MustNew trust center doc builder is used to create trust center docs using the GraphQL API
 func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterDoc {
-	ctx = setContext(ctx, tcdb.client.db)
-
 	if tcdb.Title == "" {
 		tcdb.Title = gofakeit.Sentence(3)
 	}
@@ -2093,50 +2113,41 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 		tcdb.Tags = []string{"test", "document"}
 	}
 
-	var fileID string
-	if tcdb.FileID != "" {
-		fileID = tcdb.FileID
-	} else {
-		file := (&FileBuilder{client: tcdb.client, Name: tcdb.Title}).MustNew(ctx, t)
-		fileID = file.ID
-	}
-
-	mutation := tcdb.client.db.TrustCenterDoc.Create().
-		SetTitle(tcdb.Title).
-		SetCategory(tcdb.Category).
-		SetTrustCenterID(tcdb.TrustCenterID).
-		SetTags(tcdb.Tags).
-		SetOriginalFileID(fileID)
-
-	if tcdb.Visibility != "" {
-		mutation.SetVisibility(tcdb.Visibility)
-	}
-
-	trustCenterDoc, err := mutation.Save(ctx)
+	// Create a test PDF file for upload
+	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
 	requireNoError(err)
 
-	// Create the tc_doc_parent tuple to allow access to the file through the trust center document
-	req := fgax.TupleRequest{
-		SubjectID:   trustCenterDoc.ID,
-		SubjectType: "trust_center_doc",
-		ObjectID:    fileID,
-		ObjectType:  "file",
-		Relation:    "tc_doc_parent",
+	fileUpload := graphql.Upload{
+		File:        pdfFile.File,
+		Filename:    pdfFile.Filename,
+		Size:        pdfFile.Size,
+		ContentType: pdfFile.ContentType,
 	}
 
-	// Create the parent relationship to the trust center
-	parentReq := fgax.TupleRequest{
-		SubjectID:   tcdb.TrustCenterID,
-		SubjectType: "trust_center",
-		ObjectID:    trustCenterDoc.ID,
-		ObjectType:  "trust_center_doc",
-		Relation:    "parent",
+	// Prepare the GraphQL input
+	input := testclient.CreateTrustCenterDocInput{
+		Title:         tcdb.Title,
+		Category:      tcdb.Category,
+		TrustCenterID: &tcdb.TrustCenterID,
+		Tags:          tcdb.Tags,
 	}
 
-	tuples := []fgax.TupleKey{fgax.GetTupleKey(req), fgax.GetTupleKey(parentReq)}
-	if _, err := tcdb.client.db.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-		requireNoError(err)
+	if tcdb.Visibility != "" {
+		input.Visibility = &tcdb.Visibility
 	}
+
+	// Expect the file upload in the object store
+	expectUpload(t, tcdb.client.objectStore.Storage, []graphql.Upload{fileUpload})
+
+	// Create the trust center document using the GraphQL API
+	resp, err := tcdb.client.api.CreateTrustCenterDoc(ctx, input, fileUpload)
+	requireNoError(err)
+
+	// Convert the GraphQL response to an ent entity
+	// We need to fetch it from the database to get the full ent.TrustCenterDoc
+	dbCtx := setContext(ctx, tcdb.client.db)
+	trustCenterDoc, err := tcdb.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
+	requireNoError(err)
 
 	return trustCenterDoc
 }
