@@ -2106,7 +2106,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 		SetCategory(tcdb.Category).
 		SetTrustCenterID(tcdb.TrustCenterID).
 		SetTags(tcdb.Tags).
-		SetFileID(fileID)
+		SetOriginalFileID(fileID)
 
 	if tcdb.Visibility != "" {
 		mutation.SetVisibility(tcdb.Visibility)
