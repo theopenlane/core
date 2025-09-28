@@ -2203,7 +2203,7 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 	}
 
 	if tcwcb.Font == "" {
-		tcwcb.Font = enums.FontArial
+		tcwcb.Font = enums.FontHelvetica
 	}
 
 	mutation := tcwcb.client.db.TrustCenterWatermarkConfig.Create().
