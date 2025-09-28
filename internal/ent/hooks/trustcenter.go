@@ -81,8 +81,7 @@ func HookTrustCenter() ent.Hook {
 				Relation:    "system",
 			})
 
-			allTuples := append(wildcardTuples, systemTuple)
-			if _, err := m.Authz.WriteTupleKeys(ctx, allTuples, nil); err != nil {
+			if _, err := m.Authz.WriteTupleKeys(ctx, append(wildcardTuples, systemTuple), nil); err != nil {
 				return ctx, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
