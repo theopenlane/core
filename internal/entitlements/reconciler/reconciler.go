@@ -225,6 +225,7 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 
 var trialdays int64 = 30
 
+// createSubscription creates a new subscription in Stripe for the organization customer with the trial settings
 func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.OrganizationCustomer) error {
 	customers, err := r.stripe.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", cust.OrganizationID))
 	if err != nil {

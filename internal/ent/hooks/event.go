@@ -129,6 +129,7 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 	return &event, nil
 }
 
+// parseSoftDeleteEventID parses the event ID from a soft delete organization mutation by casting the mutation to an organization mutation
 func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
 	m, ok := mutation.(*entgen.OrganizationMutation)
 	if !ok {
