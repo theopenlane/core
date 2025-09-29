@@ -3107,6 +3107,72 @@ func (r *queryResolver) TrustCenterComplianceHistories(ctx context.Context, afte
 	return res, err
 }
 
+// TrustCenterControls is the resolver for the trustCenterControls field.
+func (r *queryResolver) TrustCenterControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterControlOrder, where *generated.TrustCenterControlWhereInput) (*generated.TrustCenterControlConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterControlOrder{
+			{
+				Field:     generated.TrustCenterControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterControl.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercontrol"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterControlOrder(orderBy),
+		generated.WithTrustCenterControlFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercontrol"})
+	}
+
+	return res, err
+}
+
+// TrustCenterControlHistories is the resolver for the trustCenterControlHistories field.
+func (r *queryResolver) TrustCenterControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterControlHistoryOrder, where *generated.TrustCenterControlHistoryWhereInput) (*generated.TrustCenterControlHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustCenterControlHistoryOrder{
+			Field:     generated.TrustCenterControlHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterControlHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercontrolhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterControlHistoryOrder(orderBy),
+		generated.WithTrustCenterControlHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercontrolhistory"})
+	}
+
+	return res, err
+}
+
 // TrustCenterDocs is the resolver for the trustCenterDocs field.
 func (r *queryResolver) TrustCenterDocs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) (*generated.TrustCenterDocConnection, error) {
 	// set page limit if nothing was set

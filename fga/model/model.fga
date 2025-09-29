@@ -210,7 +210,7 @@ type program
 # TODO (sfunk): require approval for control edits
 type control
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked) or public_via_trust_center
     define can_edit: [user, service] or owner or delegate or system_admin from system or (editor but not blocked)
     define can_delete: [user, service] or owner or (editor but not blocked) or system_admin from system
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
@@ -226,6 +226,10 @@ type control
     # delegate is a group of users that are given temporary access to the control, they will have edit but not delete access
     define delegate: [group#member]
     define system: [system]
+    # relation to check if control is publicly viewable via trust center association
+    define public_via_trust_center: can_view from trust_center_association
+    # relation to the trust center control association
+    define trust_center_association: [trust_center_control]
 # subcontrols are associated with an organization but do not inherit access from the organization
 # subcontrols inherit access from the their parent control(s)
 type subcontrol
@@ -524,6 +528,16 @@ type trust_center_setting
 type trust_center_compliance
   relations
     define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
+    define can_delete: [user, service] or parent_deleter
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center, user, service]
+
+type trust_center_control
+  relations
+    define can_view: [user:*, service:*] or parent_viewer
     define can_edit: [user, service] or parent_editor
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent

@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -14,6 +15,7 @@ import (
 func InterceptorControlFieldSort() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, q ent.Query) (ent.Value, error) {
+			zerolog.Ctx(ctx).Debug().Msg("InterceptorControlFieldSort")
 			v, err := next.Query(ctx, q)
 			if err != nil {
 				return nil, err

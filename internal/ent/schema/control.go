@@ -113,6 +113,10 @@ func (c Control) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: TrustCenterControl{},
+		}),
 	}
 }
 
@@ -155,11 +159,13 @@ func (c Control) Mixin() []ent.Mixin {
 				// exceptions are based on group based access so we can safely
 				// skip the interceptor
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
+				// allow anonymous trust center users to access controls when they are associated with trust center controls
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.NewSystemOwnedMixin(),
 			// add groups permissions with editor, and blocked groups
 			// skip view because controls are automatically viewable by all users in the organization
-			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withAllowAnonymousTrustCenterAccessForGroup()),
 		},
 	}.getMixins(c)
 }

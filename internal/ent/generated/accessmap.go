@@ -171,6 +171,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "mapped_from_control",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_controls": {
+	ObjectType:      "trust_center_control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "control_implementation": {"owner": {
 	ObjectType:      "owner",
@@ -1792,6 +1796,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_controls": {
+	ObjectType:      "trust_center_control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_compliance": {"trust_center": {
 	ObjectType:      "trust_center",
@@ -1799,6 +1807,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "standard": {
 	ObjectType:      "standard",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+},
+}, "trust_center_control": {"trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "control": {
+	ObjectType:      "control",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 },

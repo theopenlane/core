@@ -962,6 +962,23 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    trustCenterControls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          controlID
+          trustCenterID
+        }
+      }
+    }
     trustCenterDocs {
       totalCount
       pageInfo {

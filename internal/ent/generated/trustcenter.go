@@ -67,16 +67,19 @@ type TrustCenterEdges struct {
 	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
 	// Templates holds the value of the templates edge.
 	Templates []*Template `json:"templates,omitempty"`
+	// TrustCenterControls holds the value of the trust_center_controls edge.
+	TrustCenterControls []*TrustCenterControl `json:"trust_center_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 	namedTrustCenterDocs          map[string][]*TrustCenterDoc
 	namedTrustCenterCompliances   map[string][]*TrustCenterCompliance
 	namedTemplates                map[string][]*Template
+	namedTrustCenterControls      map[string][]*TrustCenterControl
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -157,6 +160,15 @@ func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
+}
+
+// TrustCenterControlsOrErr returns the TrustCenterControls value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) TrustCenterControlsOrErr() ([]*TrustCenterControl, error) {
+	if e.loadedTypes[8] {
+		return e.TrustCenterControls, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_controls"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -315,6 +327,11 @@ func (_m *TrustCenter) QueryTemplates() *TemplateQuery {
 	return NewTrustCenterClient(_m.config).QueryTemplates(_m)
 }
 
+// QueryTrustCenterControls queries the "trust_center_controls" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterControls() *TrustCenterControlQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterControls(_m)
+}
+
 // Update returns a builder for updating this TrustCenter.
 // Note that you need to call TrustCenter.Unwrap() before calling this method if this TrustCenter
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -464,6 +481,30 @@ func (_m *TrustCenter) appendNamedTemplates(name string, edges ...*Template) {
 		_m.Edges.namedTemplates[name] = []*Template{}
 	} else {
 		_m.Edges.namedTemplates[name] = append(_m.Edges.namedTemplates[name], edges...)
+	}
+}
+
+// NamedTrustCenterControls returns the TrustCenterControls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedTrustCenterControls(name string) ([]*TrustCenterControl, error) {
+	if _m.Edges.namedTrustCenterControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedTrustCenterControls(name string, edges ...*TrustCenterControl) {
+	if _m.Edges.namedTrustCenterControls == nil {
+		_m.Edges.namedTrustCenterControls = make(map[string][]*TrustCenterControl)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterControls[name] = []*TrustCenterControl{}
+	} else {
+		_m.Edges.namedTrustCenterControls[name] = append(_m.Edges.namedTrustCenterControls[name], edges...)
 	}
 }
 

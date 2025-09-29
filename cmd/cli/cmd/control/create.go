@@ -47,7 +47,7 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 	// output the input struct with the required fields and optional fields based on the command line flags
 	input.RefCode = cmd.Config.String("ref-code")
 	if input.RefCode == "" {
-		return input, cmd.NewRequiredFieldMissingError("name")
+		return input, cmd.NewRequiredFieldMissingError("ref-code")
 	}
 
 	description := cmd.Config.String("description")

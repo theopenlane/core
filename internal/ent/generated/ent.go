@@ -111,6 +111,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrol"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
@@ -284,6 +286,8 @@ func checkColumn(t, c string) error {
 			trustcenter.Table:                       trustcenter.ValidColumn,
 			trustcentercompliance.Table:             trustcentercompliance.ValidColumn,
 			trustcentercompliancehistory.Table:      trustcentercompliancehistory.ValidColumn,
+			trustcentercontrol.Table:                trustcentercontrol.ValidColumn,
+			trustcentercontrolhistory.Table:         trustcentercontrolhistory.ValidColumn,
 			trustcenterdoc.Table:                    trustcenterdoc.ValidColumn,
 			trustcenterdochistory.Table:             trustcenterdochistory.ValidColumn,
 			trustcenterhistory.Table:                trustcenterhistory.ValidColumn,

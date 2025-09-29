@@ -214,6 +214,8 @@ type SchemaConfig struct {
 	TrustCenter                        string // TrustCenter table.
 	TrustCenterCompliance              string // TrustCenterCompliance table.
 	TrustCenterComplianceHistory       string // TrustCenterComplianceHistory table.
+	TrustCenterControl                 string // TrustCenterControl table.
+	TrustCenterControlHistory          string // TrustCenterControlHistory table.
 	TrustCenterDoc                     string // TrustCenterDoc table.
 	TrustCenterDocHistory              string // TrustCenterDocHistory table.
 	TrustCenterHistory                 string // TrustCenterHistory table.

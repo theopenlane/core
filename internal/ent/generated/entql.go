@@ -103,6 +103,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrol"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
@@ -126,7 +128,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 113)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 115)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -3221,6 +3223,53 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentercontrol.Table,
+			Columns: trustcentercontrol.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentercontrol.FieldID,
+			},
+		},
+		Type: "TrustCenterControl",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentercontrol.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentercontrol.FieldCreatedAt},
+			trustcentercontrol.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentercontrol.FieldUpdatedAt},
+			trustcentercontrol.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentercontrol.FieldCreatedBy},
+			trustcentercontrol.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentercontrol.FieldUpdatedBy},
+			trustcentercontrol.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentercontrol.FieldDeletedAt},
+			trustcentercontrol.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentercontrol.FieldDeletedBy},
+			trustcentercontrol.FieldTags:          {Type: field.TypeJSON, Column: trustcentercontrol.FieldTags},
+			trustcentercontrol.FieldControlID:     {Type: field.TypeString, Column: trustcentercontrol.FieldControlID},
+			trustcentercontrol.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercontrol.FieldTrustCenterID},
+		},
+	}
+	graph.Nodes[100] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentercontrolhistory.Table,
+			Columns: trustcentercontrolhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentercontrolhistory.FieldID,
+			},
+		},
+		Type: "TrustCenterControlHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentercontrolhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcentercontrolhistory.FieldHistoryTime},
+			trustcentercontrolhistory.FieldRef:           {Type: field.TypeString, Column: trustcentercontrolhistory.FieldRef},
+			trustcentercontrolhistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcentercontrolhistory.FieldOperation},
+			trustcentercontrolhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentercontrolhistory.FieldCreatedAt},
+			trustcentercontrolhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentercontrolhistory.FieldUpdatedAt},
+			trustcentercontrolhistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentercontrolhistory.FieldCreatedBy},
+			trustcentercontrolhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentercontrolhistory.FieldUpdatedBy},
+			trustcentercontrolhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentercontrolhistory.FieldDeletedAt},
+			trustcentercontrolhistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentercontrolhistory.FieldDeletedBy},
+			trustcentercontrolhistory.FieldTags:          {Type: field.TypeJSON, Column: trustcentercontrolhistory.FieldTags},
+			trustcentercontrolhistory.FieldControlID:     {Type: field.TypeString, Column: trustcentercontrolhistory.FieldControlID},
+			trustcentercontrolhistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercontrolhistory.FieldTrustCenterID},
+		},
+	}
+	graph.Nodes[101] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdoc.Table,
 			Columns: trustcenterdoc.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -3247,7 +3296,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdoc.FieldVisibility},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdochistory.Table,
 			Columns: trustcenterdochistory.Columns,
@@ -3278,7 +3327,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdochistory.FieldVisibility},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -3304,7 +3353,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[102] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -3336,7 +3385,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
 		},
 	}
-	graph.Nodes[103] = &sqlgraph.Node{
+	graph.Nodes[105] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -3371,7 +3420,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
 		},
 	}
-	graph.Nodes[104] = &sqlgraph.Node{
+	graph.Nodes[106] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -3394,7 +3443,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCategory},
 		},
 	}
-	graph.Nodes[105] = &sqlgraph.Node{
+	graph.Nodes[107] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessorhistory.Table,
 			Columns: trustcentersubprocessorhistory.Columns,
@@ -3420,7 +3469,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessorhistory.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCategory},
 		},
 	}
-	graph.Nodes[106] = &sqlgraph.Node{
+	graph.Nodes[108] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -3448,7 +3497,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
-	graph.Nodes[107] = &sqlgraph.Node{
+	graph.Nodes[109] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfighistory.Table,
 			Columns: trustcenterwatermarkconfighistory.Columns,
@@ -3479,7 +3528,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
 		},
 	}
-	graph.Nodes[108] = &sqlgraph.Node{
+	graph.Nodes[110] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3513,7 +3562,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[109] = &sqlgraph.Node{
+	graph.Nodes[111] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3550,7 +3599,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[110] = &sqlgraph.Node{
+	graph.Nodes[112] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3579,7 +3628,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[111] = &sqlgraph.Node{
+	graph.Nodes[113] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3611,7 +3660,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[112] = &sqlgraph.Node{
+	graph.Nodes[114] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -4107,6 +4156,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"MappedControl",
+	)
+	graph.MustAddE(
+		"trust_center_controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"TrustCenterControl",
 	)
 	graph.MustAddE(
 		"owner",
@@ -8813,6 +8874,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Template",
 	)
 	graph.MustAddE(
+		"trust_center_controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterControlsTable,
+			Columns: []string{trustcenter.TrustCenterControlsColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"TrustCenterControl",
+	)
+	graph.MustAddE(
 		"trust_center",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -8835,6 +8908,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterCompliance",
 		"Standard",
+	)
+	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercontrol.TrustCenterTable,
+			Columns: []string{trustcentercontrol.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"TrustCenterControl",
+		"TrustCenter",
+	)
+	graph.MustAddE(
+		"control",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercontrol.ControlTable,
+			Columns: []string{trustcentercontrol.ControlColumn},
+			Bidi:    false,
+		},
+		"TrustCenterControl",
+		"Control",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -11070,6 +11167,20 @@ func (f *ControlFilter) WhereHasMappedFromControls() {
 // WhereHasMappedFromControlsWith applies a predicate to check if query has an edge mapped_from_controls with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasMappedFromControlsWith(preds ...predicate.MappedControl) {
 	f.Where(entql.HasEdgeWith("mapped_from_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterControls applies a predicate to check if query has an edge trust_center_controls.
+func (f *ControlFilter) WhereHasTrustCenterControls() {
+	f.Where(entql.HasEdge("trust_center_controls"))
+}
+
+// WhereHasTrustCenterControlsWith applies a predicate to check if query has an edge trust_center_controls with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasTrustCenterControlsWith(preds ...predicate.TrustCenterControl) {
+	f.Where(entql.HasEdgeWith("trust_center_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -28099,6 +28210,20 @@ func (f *TrustCenterFilter) WhereHasTemplatesWith(preds ...predicate.Template) {
 	})))
 }
 
+// WhereHasTrustCenterControls applies a predicate to check if query has an edge trust_center_controls.
+func (f *TrustCenterFilter) WhereHasTrustCenterControls() {
+	f.Where(entql.HasEdge("trust_center_controls"))
+}
+
+// WhereHasTrustCenterControlsWith applies a predicate to check if query has an edge trust_center_controls with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasTrustCenterControlsWith(preds ...predicate.TrustCenterControl) {
+	f.Where(entql.HasEdgeWith("trust_center_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterComplianceQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -28313,6 +28438,219 @@ func (f *TrustCenterComplianceHistoryFilter) WhereTrustCenterID(p entql.StringP)
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterControlQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterControlQuery builder.
+func (_q *TrustCenterControlQuery) Filter() *TrustCenterControlFilter {
+	return &TrustCenterControlFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterControlMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterControlMutation builder.
+func (m *TrustCenterControlMutation) Filter() *TrustCenterControlFilter {
+	return &TrustCenterControlFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterControlFilter provides a generic filtering capability at runtime for TrustCenterControlQuery.
+type TrustCenterControlFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterControlFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterControlFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterControlFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrol.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterControlFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrol.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterControlFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterControlFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterControlFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrol.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterControlFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TrustCenterControlFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(trustcentercontrol.FieldTags))
+}
+
+// WhereControlID applies the entql string predicate on the control_id field.
+func (f *TrustCenterControlFilter) WhereControlID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldControlID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterControlFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrol.FieldTrustCenterID))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TrustCenterControlFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TrustCenterControlFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControl applies a predicate to check if query has an edge control.
+func (f *TrustCenterControlFilter) WhereHasControl() {
+	f.Where(entql.HasEdge("control"))
+}
+
+// WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
+func (f *TrustCenterControlFilter) WhereHasControlWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterControlHistoryQuery builder.
+func (_q *TrustCenterControlHistoryQuery) Filter() *TrustCenterControlHistoryFilter {
+	return &TrustCenterControlHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterControlHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterControlHistoryMutation builder.
+func (m *TrustCenterControlHistoryMutation) Filter() *TrustCenterControlHistoryFilter {
+	return &TrustCenterControlHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterControlHistoryFilter provides a generic filtering capability at runtime for TrustCenterControlHistoryQuery.
+type TrustCenterControlHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterControlHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterControlHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *TrustCenterControlHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *TrustCenterControlHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *TrustCenterControlHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterControlHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterControlHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterControlHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterControlHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterControlHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TrustCenterControlHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldTags))
+}
+
+// WhereControlID applies the entql string predicate on the control_id field.
+func (f *TrustCenterControlHistoryFilter) WhereControlID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldControlID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterControlHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentercontrolhistory.FieldTrustCenterID))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterDocQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -28341,7 +28679,7 @@ type TrustCenterDocFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28498,7 +28836,7 @@ type TrustCenterDocHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28628,7 +28966,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28733,7 +29071,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28924,7 +29262,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29074,7 +29412,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29192,7 +29530,7 @@ type TrustCenterSubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29297,7 +29635,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29454,7 +29792,7 @@ type TrustCenterWatermarkConfigHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29584,7 +29922,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29995,7 +30333,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[111].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30155,7 +30493,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[112].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30317,7 +30655,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[111].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[113].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30452,7 +30790,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[112].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[114].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

@@ -1032,6 +1032,7 @@ type CreateControlInput struct {
 	ControlImplementationIDs []string
 	SubcontrolIDs            []string
 	ScheduledJobIDs          []string
+	TrustCenterControlIDs    []string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -1157,6 +1158,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ScheduledJobIDs; len(v) > 0 {
 		m.AddScheduledJobIDs(v...)
 	}
+	if v := i.TrustCenterControlIDs; len(v) > 0 {
+		m.AddTrustCenterControlIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateControlInput on the ControlCreate builder.
@@ -1268,6 +1272,9 @@ type UpdateControlInput struct {
 	ClearScheduledJobs             bool
 	AddScheduledJobIDs             []string
 	RemoveScheduledJobIDs          []string
+	ClearTrustCenterControls       bool
+	AddTrustCenterControlIDs       []string
+	RemoveTrustCenterControlIDs    []string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -1574,6 +1581,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
 		m.RemoveScheduledJobIDs(v...)
+	}
+	if i.ClearTrustCenterControls {
+		m.ClearTrustCenterControls()
+	}
+	if v := i.AddTrustCenterControlIDs; len(v) > 0 {
+		m.AddTrustCenterControlIDs(v...)
+	}
+	if v := i.RemoveTrustCenterControlIDs; len(v) > 0 {
+		m.RemoveTrustCenterControlIDs(v...)
 	}
 }
 
@@ -11890,6 +11906,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
 	TemplateIDs                []string
+	TrustCenterControlIDs      []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11920,6 +11937,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TemplateIDs; len(v) > 0 {
 		m.AddTemplateIDs(v...)
+	}
+	if v := i.TrustCenterControlIDs; len(v) > 0 {
+		m.AddTrustCenterControlIDs(v...)
 	}
 }
 
@@ -11954,6 +11974,9 @@ type UpdateTrustCenterInput struct {
 	ClearTemplates                   bool
 	AddTemplateIDs                   []string
 	RemoveTemplateIDs                []string
+	ClearTrustCenterControls         bool
+	AddTrustCenterControlIDs         []string
+	RemoveTrustCenterControlIDs      []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -12026,6 +12049,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTemplateIDs; len(v) > 0 {
 		m.RemoveTemplateIDs(v...)
+	}
+	if i.ClearTrustCenterControls {
+		m.ClearTrustCenterControls()
+	}
+	if v := i.AddTrustCenterControlIDs; len(v) > 0 {
+		m.AddTrustCenterControlIDs(v...)
+	}
+	if v := i.RemoveTrustCenterControlIDs; len(v) > 0 {
+		m.RemoveTrustCenterControlIDs(v...)
 	}
 }
 
@@ -12105,6 +12137,74 @@ func (c *TrustCenterComplianceUpdate) SetInput(i UpdateTrustCenterComplianceInpu
 
 // SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdateOne builder.
 func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterControlInput represents a mutation input for creating trustcentercontrols.
+type CreateTrustCenterControlInput struct {
+	Tags          []string
+	TrustCenterID *string
+	ControlID     string
+}
+
+// Mutate applies the CreateTrustCenterControlInput on the TrustCenterControlMutation builder.
+func (i *CreateTrustCenterControlInput) Mutate(m *TrustCenterControlMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	m.SetControlID(i.ControlID)
+}
+
+// SetInput applies the change-set in the CreateTrustCenterControlInput on the TrustCenterControlCreate builder.
+func (c *TrustCenterControlCreate) SetInput(i CreateTrustCenterControlInput) *TrustCenterControlCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterControlInput represents a mutation input for updating trustcentercontrols.
+type UpdateTrustCenterControlInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	ControlID        *string
+}
+
+// Mutate applies the UpdateTrustCenterControlInput on the TrustCenterControlMutation builder.
+func (i *UpdateTrustCenterControlInput) Mutate(m *TrustCenterControlMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterControlInput on the TrustCenterControlUpdate builder.
+func (c *TrustCenterControlUpdate) SetInput(i UpdateTrustCenterControlInput) *TrustCenterControlUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterControlInput on the TrustCenterControlUpdateOne builder.
+func (c *TrustCenterControlUpdateOne) SetInput(i UpdateTrustCenterControlInput) *TrustCenterControlUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

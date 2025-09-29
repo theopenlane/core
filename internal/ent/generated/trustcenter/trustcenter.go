@@ -51,6 +51,8 @@ const (
 	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// EdgeTemplates holds the string denoting the templates edge name in mutations.
 	EdgeTemplates = "templates"
+	// EdgeTrustCenterControls holds the string denoting the trust_center_controls edge name in mutations.
+	EdgeTrustCenterControls = "trust_center_controls"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -109,6 +111,13 @@ const (
 	TemplatesInverseTable = "templates"
 	// TemplatesColumn is the table column denoting the templates relation/edge.
 	TemplatesColumn = "trust_center_id"
+	// TrustCenterControlsTable is the table that holds the trust_center_controls relation/edge.
+	TrustCenterControlsTable = "trust_center_controls"
+	// TrustCenterControlsInverseTable is the table name for the TrustCenterControl entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentercontrol" package.
+	TrustCenterControlsInverseTable = "trust_center_controls"
+	// TrustCenterControlsColumn is the table column denoting the trust_center_controls relation/edge.
+	TrustCenterControlsColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -306,6 +315,20 @@ func ByTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterControlsCount orders the results by trust_center_controls count.
+func ByTrustCenterControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterControlsStep(), opts...)
+	}
+}
+
+// ByTrustCenterControls orders the results by trust_center_controls terms.
+func ByTrustCenterControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -360,5 +383,12 @@ func newTemplatesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplatesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TemplatesTable, TemplatesColumn),
+	)
+}
+func newTrustCenterControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterControlsTable, TrustCenterControlsColumn),
 	)
 }

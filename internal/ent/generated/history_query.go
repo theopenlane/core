@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
@@ -1940,6 +1941,52 @@ func (tcchq *TrustCenterComplianceHistoryQuery) AsOf(ctx context.Context, time t
 	return tcchq.
 		Where(trustcentercompliancehistory.HistoryTimeLTE(time)).
 		Order(trustcentercompliancehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *TrustCenterControl) History() *TrustCenterControlHistoryQuery {
+	historyClient := NewTrustCenterControlHistoryClient(_m.config)
+	return historyClient.Query().Where(trustcentercontrolhistory.Ref(_m.ID))
+}
+
+func (_m *TrustCenterControlHistory) Next(ctx context.Context) (*TrustCenterControlHistory, error) {
+	client := NewTrustCenterControlHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcentercontrolhistory.Ref(_m.Ref),
+			trustcentercontrolhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(trustcentercontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *TrustCenterControlHistory) Prev(ctx context.Context) (*TrustCenterControlHistory, error) {
+	client := NewTrustCenterControlHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcentercontrolhistory.Ref(_m.Ref),
+			trustcentercontrolhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(trustcentercontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcchq *TrustCenterControlHistoryQuery) Earliest(ctx context.Context) (*TrustCenterControlHistory, error) {
+	return tcchq.
+		Order(trustcentercontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tcchq *TrustCenterControlHistoryQuery) Latest(ctx context.Context) (*TrustCenterControlHistory, error) {
+	return tcchq.
+		Order(trustcentercontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcchq *TrustCenterControlHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TrustCenterControlHistory, error) {
+	return tcchq.
+		Where(trustcentercontrolhistory.HistoryTimeLTE(time)).
+		Order(trustcentercontrolhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

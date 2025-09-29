@@ -128,6 +128,8 @@ const (
 	EdgeMappedToControls = "mapped_to_controls"
 	// EdgeMappedFromControls holds the string denoting the mapped_from_controls edge name in mutations.
 	EdgeMappedFromControls = "mapped_from_controls"
+	// EdgeTrustCenterControls holds the string denoting the trust_center_controls edge name in mutations.
+	EdgeTrustCenterControls = "trust_center_controls"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -252,6 +254,13 @@ const (
 	// MappedFromControlsInverseTable is the table name for the MappedControl entity.
 	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
 	MappedFromControlsInverseTable = "mapped_controls"
+	// TrustCenterControlsTable is the table that holds the trust_center_controls relation/edge.
+	TrustCenterControlsTable = "trust_center_controls"
+	// TrustCenterControlsInverseTable is the table name for the TrustCenterControl entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentercontrol" package.
+	TrustCenterControlsInverseTable = "trust_center_controls"
+	// TrustCenterControlsColumn is the table column denoting the trust_center_controls relation/edge.
+	TrustCenterControlsColumn = "control_id"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -830,6 +839,20 @@ func ByMappedFromControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newMappedFromControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterControlsCount orders the results by trust_center_controls count.
+func ByTrustCenterControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterControlsStep(), opts...)
+	}
+}
+
+// ByTrustCenterControls orders the results by trust_center_controls terms.
+func ByTrustCenterControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -982,6 +1005,13 @@ func newMappedFromControlsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappedFromControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromControlsTable, MappedFromControlsPrimaryKey...),
+	)
+}
+func newTrustCenterControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterControlsTable, TrustCenterControlsColumn),
 	)
 }
 

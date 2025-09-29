@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrol"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 
@@ -866,6 +867,21 @@ func (_u *ControlUpdate) AddMappedFromControls(v ...*MappedControl) *ControlUpda
 	return _u.AddMappedFromControlIDs(ids...)
 }
 
+// AddTrustCenterControlIDs adds the "trust_center_controls" edge to the TrustCenterControl entity by IDs.
+func (_u *ControlUpdate) AddTrustCenterControlIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddTrustCenterControlIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterControls adds the "trust_center_controls" edges to the TrustCenterControl entity.
+func (_u *ControlUpdate) AddTrustCenterControls(v ...*TrustCenterControl) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterControlIDs(ids...)
+}
+
 // Mutation returns the ControlMutation object of the builder.
 func (_u *ControlUpdate) Mutation() *ControlMutation {
 	return _u.mutation
@@ -1265,6 +1281,27 @@ func (_u *ControlUpdate) RemoveMappedFromControls(v ...*MappedControl) *ControlU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedFromControlIDs(ids...)
+}
+
+// ClearTrustCenterControls clears all "trust_center_controls" edges to the TrustCenterControl entity.
+func (_u *ControlUpdate) ClearTrustCenterControls() *ControlUpdate {
+	_u.mutation.ClearTrustCenterControls()
+	return _u
+}
+
+// RemoveTrustCenterControlIDs removes the "trust_center_controls" edge to TrustCenterControl entities by IDs.
+func (_u *ControlUpdate) RemoveTrustCenterControlIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveTrustCenterControlIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterControls removes "trust_center_controls" edges to TrustCenterControl entities.
+func (_u *ControlUpdate) RemoveTrustCenterControls(v ...*TrustCenterControl) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterControlIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2505,6 +2542,54 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterControlsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Control
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -3344,6 +3429,21 @@ func (_u *ControlUpdateOne) AddMappedFromControls(v ...*MappedControl) *ControlU
 	return _u.AddMappedFromControlIDs(ids...)
 }
 
+// AddTrustCenterControlIDs adds the "trust_center_controls" edge to the TrustCenterControl entity by IDs.
+func (_u *ControlUpdateOne) AddTrustCenterControlIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddTrustCenterControlIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterControls adds the "trust_center_controls" edges to the TrustCenterControl entity.
+func (_u *ControlUpdateOne) AddTrustCenterControls(v ...*TrustCenterControl) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterControlIDs(ids...)
+}
+
 // Mutation returns the ControlMutation object of the builder.
 func (_u *ControlUpdateOne) Mutation() *ControlMutation {
 	return _u.mutation
@@ -3743,6 +3843,27 @@ func (_u *ControlUpdateOne) RemoveMappedFromControls(v ...*MappedControl) *Contr
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedFromControlIDs(ids...)
+}
+
+// ClearTrustCenterControls clears all "trust_center_controls" edges to the TrustCenterControl entity.
+func (_u *ControlUpdateOne) ClearTrustCenterControls() *ControlUpdateOne {
+	_u.mutation.ClearTrustCenterControls()
+	return _u
+}
+
+// RemoveTrustCenterControlIDs removes the "trust_center_controls" edge to TrustCenterControl entities by IDs.
+func (_u *ControlUpdateOne) RemoveTrustCenterControlIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveTrustCenterControlIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterControls removes "trust_center_controls" edges to TrustCenterControl entities.
+func (_u *ControlUpdateOne) RemoveTrustCenterControls(v ...*TrustCenterControl) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterControlIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlUpdate builder.
@@ -5008,6 +5129,54 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.MappedControlFromControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterControlsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.TrustCenterControlsTable,
+			Columns: []string{control.TrustCenterControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

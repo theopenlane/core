@@ -243,6 +243,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if the context has an internal request key, the interceptor is skipped
 // if the user is a system admin and AllowEmptyForSystemAdmin is true, the interceptor is skipped
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+	zerolog.Ctx(ctx).Debug().Msg("orgInterceptorSkipper")
 	// allow for tests and internal requests to skip the interceptor
 	if rule.IsInternalRequest(ctx) {
 		return true

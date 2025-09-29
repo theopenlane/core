@@ -105,6 +105,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrol"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
@@ -6561,6 +6563,108 @@ func init() {
 	trustcentercompliancehistoryDescID := trustcentercompliancehistoryFields[9].Descriptor()
 	// trustcentercompliancehistory.DefaultID holds the default value on creation for the id field.
 	trustcentercompliancehistory.DefaultID = trustcentercompliancehistoryDescID.Default.(func() string)
+	trustcentercontrolMixin := schema.TrustCenterControl{}.Mixin()
+	trustcentercontrol.Policy = privacy.NewPolicies(schema.TrustCenterControl{})
+	trustcentercontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcentercontrol.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcentercontrolMixinHooks0 := trustcentercontrolMixin[0].Hooks()
+	trustcentercontrolMixinHooks1 := trustcentercontrolMixin[1].Hooks()
+	trustcentercontrolMixinHooks2 := trustcentercontrolMixin[2].Hooks()
+	trustcentercontrolMixinHooks6 := trustcentercontrolMixin[6].Hooks()
+	trustcentercontrolHooks := schema.TrustCenterControl{}.Hooks()
+
+	trustcentercontrol.Hooks[1] = trustcentercontrolMixinHooks0[0]
+
+	trustcentercontrol.Hooks[2] = trustcentercontrolMixinHooks1[0]
+
+	trustcentercontrol.Hooks[3] = trustcentercontrolMixinHooks2[0]
+
+	trustcentercontrol.Hooks[4] = trustcentercontrolMixinHooks6[0]
+
+	trustcentercontrol.Hooks[5] = trustcentercontrolHooks[0]
+	trustcentercontrolMixinInters1 := trustcentercontrolMixin[1].Interceptors()
+	trustcentercontrolMixinInters2 := trustcentercontrolMixin[2].Interceptors()
+	trustcentercontrolMixinInters6 := trustcentercontrolMixin[6].Interceptors()
+	trustcentercontrolInters := schema.TrustCenterControl{}.Interceptors()
+	trustcentercontrol.Interceptors[0] = trustcentercontrolMixinInters1[0]
+	trustcentercontrol.Interceptors[1] = trustcentercontrolMixinInters2[0]
+	trustcentercontrol.Interceptors[2] = trustcentercontrolMixinInters6[0]
+	trustcentercontrol.Interceptors[3] = trustcentercontrolInters[0]
+	trustcentercontrolMixinFields0 := trustcentercontrolMixin[0].Fields()
+	_ = trustcentercontrolMixinFields0
+	trustcentercontrolMixinFields3 := trustcentercontrolMixin[3].Fields()
+	_ = trustcentercontrolMixinFields3
+	trustcentercontrolMixinFields4 := trustcentercontrolMixin[4].Fields()
+	_ = trustcentercontrolMixinFields4
+	trustcentercontrolFields := schema.TrustCenterControl{}.Fields()
+	_ = trustcentercontrolFields
+	// trustcentercontrolDescCreatedAt is the schema descriptor for created_at field.
+	trustcentercontrolDescCreatedAt := trustcentercontrolMixinFields0[0].Descriptor()
+	// trustcentercontrol.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentercontrol.DefaultCreatedAt = trustcentercontrolDescCreatedAt.Default.(func() time.Time)
+	// trustcentercontrolDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentercontrolDescUpdatedAt := trustcentercontrolMixinFields0[1].Descriptor()
+	// trustcentercontrol.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentercontrol.DefaultUpdatedAt = trustcentercontrolDescUpdatedAt.Default.(func() time.Time)
+	// trustcentercontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentercontrol.UpdateDefaultUpdatedAt = trustcentercontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentercontrolDescTags is the schema descriptor for tags field.
+	trustcentercontrolDescTags := trustcentercontrolMixinFields4[0].Descriptor()
+	// trustcentercontrol.DefaultTags holds the default value on creation for the tags field.
+	trustcentercontrol.DefaultTags = trustcentercontrolDescTags.Default.([]string)
+	// trustcentercontrolDescControlID is the schema descriptor for control_id field.
+	trustcentercontrolDescControlID := trustcentercontrolFields[0].Descriptor()
+	// trustcentercontrol.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
+	trustcentercontrol.ControlIDValidator = trustcentercontrolDescControlID.Validators[0].(func(string) error)
+	// trustcentercontrolDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcentercontrolDescTrustCenterID := trustcentercontrolFields[1].Descriptor()
+	// trustcentercontrol.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcentercontrol.TrustCenterIDValidator = trustcentercontrolDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcentercontrolDescID is the schema descriptor for id field.
+	trustcentercontrolDescID := trustcentercontrolMixinFields3[0].Descriptor()
+	// trustcentercontrol.DefaultID holds the default value on creation for the id field.
+	trustcentercontrol.DefaultID = trustcentercontrolDescID.Default.(func() string)
+	trustcentercontrolhistory.Policy = privacy.NewPolicies(schema.TrustCenterControlHistory{})
+	trustcentercontrolhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcentercontrolhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcentercontrolhistoryInters := schema.TrustCenterControlHistory{}.Interceptors()
+	trustcentercontrolhistory.Interceptors[0] = trustcentercontrolhistoryInters[0]
+	trustcentercontrolhistoryFields := schema.TrustCenterControlHistory{}.Fields()
+	_ = trustcentercontrolhistoryFields
+	// trustcentercontrolhistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcentercontrolhistoryDescHistoryTime := trustcentercontrolhistoryFields[0].Descriptor()
+	// trustcentercontrolhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcentercontrolhistory.DefaultHistoryTime = trustcentercontrolhistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcentercontrolhistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcentercontrolhistoryDescCreatedAt := trustcentercontrolhistoryFields[3].Descriptor()
+	// trustcentercontrolhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentercontrolhistory.DefaultCreatedAt = trustcentercontrolhistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcentercontrolhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentercontrolhistoryDescUpdatedAt := trustcentercontrolhistoryFields[4].Descriptor()
+	// trustcentercontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentercontrolhistory.DefaultUpdatedAt = trustcentercontrolhistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcentercontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentercontrolhistory.UpdateDefaultUpdatedAt = trustcentercontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentercontrolhistoryDescTags is the schema descriptor for tags field.
+	trustcentercontrolhistoryDescTags := trustcentercontrolhistoryFields[10].Descriptor()
+	// trustcentercontrolhistory.DefaultTags holds the default value on creation for the tags field.
+	trustcentercontrolhistory.DefaultTags = trustcentercontrolhistoryDescTags.Default.([]string)
+	// trustcentercontrolhistoryDescID is the schema descriptor for id field.
+	trustcentercontrolhistoryDescID := trustcentercontrolhistoryFields[9].Descriptor()
+	// trustcentercontrolhistory.DefaultID holds the default value on creation for the id field.
+	trustcentercontrolhistory.DefaultID = trustcentercontrolhistoryDescID.Default.(func() string)
 	trustcenterdocMixin := schema.TrustCenterDoc{}.Mixin()
 	trustcenterdoc.Policy = privacy.NewPolicies(schema.TrustCenterDoc{})
 	trustcenterdoc.Hooks[0] = func(next ent.Mutator) ent.Mutator {

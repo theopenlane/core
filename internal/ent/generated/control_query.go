@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -66,6 +67,7 @@ type ControlQuery struct {
 	withScheduledJobs               *ScheduledJobQuery
 	withMappedToControls            *MappedControlQuery
 	withMappedFromControls          *MappedControlQuery
+	withTrustCenterControls         *TrustCenterControlQuery
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -86,6 +88,7 @@ type ControlQuery struct {
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToControls       map[string]*MappedControlQuery
 	withNamedMappedFromControls     map[string]*MappedControlQuery
+	withNamedTrustCenterControls    map[string]*TrustCenterControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -672,6 +675,31 @@ func (_q *ControlQuery) QueryMappedFromControls() *MappedControlQuery {
 	return query
 }
 
+// QueryTrustCenterControls chains the current query on the "trust_center_controls" edge.
+func (_q *ControlQuery) QueryTrustCenterControls() *TrustCenterControlQuery {
+	query := (&TrustCenterControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(trustcentercontrol.Table, trustcentercontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.TrustCenterControlsTable, control.TrustCenterControlsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterControl
+		step.Edge.Schema = schemaConfig.TrustCenterControl
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Control entity from the query.
 // Returns a *NotFoundError when no Control was found.
 func (_q *ControlQuery) First(ctx context.Context) (*Control, error) {
@@ -886,6 +914,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withScheduledJobs:          _q.withScheduledJobs.Clone(),
 		withMappedToControls:       _q.withMappedToControls.Clone(),
 		withMappedFromControls:     _q.withMappedFromControls.Clone(),
+		withTrustCenterControls:    _q.withTrustCenterControls.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1135,6 +1164,17 @@ func (_q *ControlQuery) WithMappedFromControls(opts ...func(*MappedControlQuery)
 	return _q
 }
 
+// WithTrustCenterControls tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithTrustCenterControls(opts ...func(*TrustCenterControlQuery)) *ControlQuery {
+	query := (&TrustCenterControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterControls = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1219,7 +1259,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Control{}
 		_spec       = _q.querySpec()
-		loadedTypes = [22]bool{
+		loadedTypes = [23]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1242,6 +1282,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withScheduledJobs != nil,
 			_q.withMappedToControls != nil,
 			_q.withMappedFromControls != nil,
+			_q.withTrustCenterControls != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1421,6 +1462,15 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withTrustCenterControls; query != nil {
+		if err := _q.loadTrustCenterControls(ctx, query, nodes,
+			func(n *Control) { n.Edges.TrustCenterControls = []*TrustCenterControl{} },
+			func(n *Control, e *TrustCenterControl) {
+				n.Edges.TrustCenterControls = append(n.Edges.TrustCenterControls, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEvidence {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Control) { n.appendNamedEvidence(name) },
@@ -1544,6 +1594,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadMappedFromControls(ctx, query, nodes,
 			func(n *Control) { n.appendNamedMappedFromControls(name) },
 			func(n *Control, e *MappedControl) { n.appendNamedMappedFromControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustCenterControls {
+		if err := _q.loadTrustCenterControls(ctx, query, nodes,
+			func(n *Control) { n.appendNamedTrustCenterControls(name) },
+			func(n *Control, e *TrustCenterControl) { n.appendNamedTrustCenterControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2728,6 +2785,36 @@ func (_q *ControlQuery) loadMappedFromControls(ctx context.Context, query *Mappe
 	}
 	return nil
 }
+func (_q *ControlQuery) loadTrustCenterControls(ctx context.Context, query *TrustCenterControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *TrustCenterControl)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Control)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcentercontrol.FieldControlID)
+	}
+	query.Where(predicate.TrustCenterControl(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(control.TrustCenterControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ControlID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3088,6 +3175,20 @@ func (_q *ControlQuery) WithNamedMappedFromControls(name string, opts ...func(*M
 		_q.withNamedMappedFromControls = make(map[string]*MappedControlQuery)
 	}
 	_q.withNamedMappedFromControls[name] = query
+	return _q
+}
+
+// WithNamedTrustCenterControls tells the query-builder to eager-load the nodes that are connected to the "trust_center_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedTrustCenterControls(name string, opts ...func(*TrustCenterControlQuery)) *ControlQuery {
+	query := (&TrustCenterControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustCenterControls == nil {
+		_q.withNamedTrustCenterControls = make(map[string]*TrustCenterControlQuery)
+	}
+	_q.withNamedTrustCenterControls[name] = query
 	return _q
 }
 

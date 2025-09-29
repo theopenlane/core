@@ -4880,6 +4880,78 @@ var (
 			},
 		},
 	}
+	// TrustCenterControlsColumns holds the columns for the "trust_center_controls" table.
+	TrustCenterControlsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterControlsTable holds the schema information for the "trust_center_controls" table.
+	TrustCenterControlsTable = &schema.Table{
+		Name:       "trust_center_controls",
+		Columns:    TrustCenterControlsColumns,
+		PrimaryKey: []*schema.Column{TrustCenterControlsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_controls_controls_trust_center_controls",
+				Columns:    []*schema.Column{TrustCenterControlsColumns[8]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_controls_trust_centers_trust_center_controls",
+				Columns:    []*schema.Column{TrustCenterControlsColumns[9]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercontrol_control_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterControlsColumns[8], TrustCenterControlsColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// TrustCenterControlHistoryColumns holds the columns for the "trust_center_control_history" table.
+	TrustCenterControlHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterControlHistoryTable holds the schema information for the "trust_center_control_history" table.
+	TrustCenterControlHistoryTable = &schema.Table{
+		Name:       "trust_center_control_history",
+		Columns:    TrustCenterControlHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterControlHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercontrolhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterControlHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterDocsColumns holds the columns for the "trust_center_docs" table.
 	TrustCenterDocsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -8356,6 +8428,8 @@ var (
 		TrustCentersTable,
 		TrustCenterCompliancesTable,
 		TrustCenterComplianceHistoryTable,
+		TrustCenterControlsTable,
+		TrustCenterControlHistoryTable,
 		TrustCenterDocsTable,
 		TrustCenterDocHistoryTable,
 		TrustCenterHistoryTable,
@@ -8754,6 +8828,11 @@ func init() {
 	TrustCenterCompliancesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_compliance_history",
+	}
+	TrustCenterControlsTable.ForeignKeys[0].RefTable = ControlsTable
+	TrustCenterControlsTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TrustCenterControlHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_control_history",
 	}
 	TrustCenterDocsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterDocsTable.ForeignKeys[1].RefTable = FilesTable

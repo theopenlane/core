@@ -303,6 +303,12 @@ type TrustCenterCompliance func(*sql.Selector)
 // TrustCenterComplianceHistory is the predicate function for trustcentercompliancehistory builders.
 type TrustCenterComplianceHistory func(*sql.Selector)
 
+// TrustCenterControl is the predicate function for trustcentercontrol builders.
+type TrustCenterControl func(*sql.Selector)
+
+// TrustCenterControlHistory is the predicate function for trustcentercontrolhistory builders.
+type TrustCenterControlHistory func(*sql.Selector)
+
 // TrustCenterDoc is the predicate function for trustcenterdoc builders.
 type TrustCenterDoc func(*sql.Selector)
 

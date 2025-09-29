@@ -1,0 +1,27 @@
+-- +goose Up
+-- modify "trust_center_doc_history" table
+ALTER TABLE "trust_center_doc_history" ADD COLUMN "original_file_id" character varying NULL, ADD COLUMN "watermarking_enabled" boolean NOT NULL DEFAULT true, ADD COLUMN "watermark_status" character varying NULL DEFAULT 'DISABLED';
+-- create "trust_center_control_history" table
+CREATE TABLE "trust_center_control_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "control_id" character varying NOT NULL, "trust_center_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "trustcentercontrolhistory_history_time" to table: "trust_center_control_history"
+CREATE INDEX "trustcentercontrolhistory_history_time" ON "trust_center_control_history" ("history_time");
+-- create "trust_center_controls" table
+CREATE TABLE "trust_center_controls" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "control_id" character varying NOT NULL, "trust_center_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "trust_center_controls_controls_trust_center_controls" FOREIGN KEY ("control_id") REFERENCES "controls" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION, CONSTRAINT "trust_center_controls_trust_centers_trust_center_controls" FOREIGN KEY ("trust_center_id") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
+-- create index "trustcentercontrol_control_id_trust_center_id" to table: "trust_center_controls"
+CREATE UNIQUE INDEX "trustcentercontrol_control_id_trust_center_id" ON "trust_center_controls" ("control_id", "trust_center_id") WHERE (deleted_at IS NULL);
+-- modify "trust_center_docs" table
+ALTER TABLE "trust_center_docs" ADD COLUMN "watermarking_enabled" boolean NOT NULL DEFAULT true, ADD COLUMN "watermark_status" character varying NULL DEFAULT 'DISABLED', ADD COLUMN "original_file_id" character varying NULL, ADD CONSTRAINT "trust_center_docs_files_original_file" FOREIGN KEY ("original_file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "trust_center_docs" table
+ALTER TABLE "trust_center_docs" DROP CONSTRAINT "trust_center_docs_files_original_file", DROP COLUMN "original_file_id", DROP COLUMN "watermark_status", DROP COLUMN "watermarking_enabled";
+-- reverse: create index "trustcentercontrol_control_id_trust_center_id" to table: "trust_center_controls"
+DROP INDEX "trustcentercontrol_control_id_trust_center_id";
+-- reverse: create "trust_center_controls" table
+DROP TABLE "trust_center_controls";
+-- reverse: create index "trustcentercontrolhistory_history_time" to table: "trust_center_control_history"
+DROP INDEX "trustcentercontrolhistory_history_time";
+-- reverse: create "trust_center_control_history" table
+DROP TABLE "trust_center_control_history";
+-- reverse: modify "trust_center_doc_history" table
+ALTER TABLE "trust_center_doc_history" DROP COLUMN "watermark_status", DROP COLUMN "watermarking_enabled", DROP COLUMN "original_file_id";

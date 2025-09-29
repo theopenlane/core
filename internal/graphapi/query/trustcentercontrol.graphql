@@ -1,0 +1,125 @@
+
+mutation CreateBulkCSVTrustCenterControl($input: Upload!) {
+  createBulkCSVTrustCenterControl(input: $input) {
+    trustCenterControls {
+      controlID
+      createdAt
+      createdBy
+      id
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTrustCenterControl($input: [CreateTrustCenterControlInput!]) {
+  createBulkTrustCenterControl(input: $input) {
+    trustCenterControls {
+      controlID
+      createdAt
+      createdBy
+      id
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTrustCenterControl($input: CreateTrustCenterControlInput!) {
+  createTrustCenterControl(input: $input) {
+    trustCenterControl {
+      controlID
+      createdAt
+      createdBy
+      id
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTrustCenterControl($deleteTrustCenterControlId: ID!) {
+  deleteTrustCenterControl(id: $deleteTrustCenterControlId) {
+    deletedID
+  }
+}
+
+query GetAllTrustCenterControls {
+  trustCenterControls {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        id
+        tags
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTrustCenterControlByID($trustCenterControlId: ID!) {
+  trustCenterControl(id: $trustCenterControlId) {
+    controlID
+    createdAt
+    createdBy
+    id
+    tags
+    trustCenterID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTrustCenterControls($first: Int, $last: Int, $where: TrustCenterControlWhereInput) {
+  trustCenterControls(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        id
+        tags
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterControl($updateTrustCenterControlId: ID!, $input: UpdateTrustCenterControlInput!) {
+  updateTrustCenterControl(id: $updateTrustCenterControlId, input: $input) {
+    trustCenterControl {
+      controlID
+      createdAt
+      createdBy
+      id
+      tags
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}

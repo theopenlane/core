@@ -655,6 +655,27 @@ func (_m *Control) ScheduledJobs(
 	return _m.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Control) TrustCenterControls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterControlOrder, where *TrustCenterControlWhereInput,
+) (*TrustCenterControlConnection, error) {
+	opts := []TrustCenterControlPaginateOption{
+		WithTrustCenterControlOrder(orderBy),
+		WithTrustCenterControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
+	if nodes, err := _m.NamedTrustCenterControls(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterControlConnection{Edges: []*TrustCenterControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *ControlImplementation) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -7192,6 +7213,27 @@ func (_m *TrustCenter) Templates(
 	return _m.QueryTemplates().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *TrustCenter) TrustCenterControls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterControlOrder, where *TrustCenterControlWhereInput,
+) (*TrustCenterControlConnection, error) {
+	opts := []TrustCenterControlPaginateOption{
+		WithTrustCenterControlOrder(orderBy),
+		WithTrustCenterControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedTrustCenterControls(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterControlConnection{Edges: []*TrustCenterControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *TrustCenterCompliance) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
@@ -7204,6 +7246,22 @@ func (_m *TrustCenterCompliance) Standard(ctx context.Context) (*Standard, error
 	result, err := _m.Edges.StandardOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryStandard().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *TrustCenterControl) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := _m.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *TrustCenterControl) Control(ctx context.Context) (*Control, error) {
+	result, err := _m.Edges.ControlOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryControl().Only(ctx)
 	}
 	return result, err
 }

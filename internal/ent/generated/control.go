@@ -141,11 +141,13 @@ type ControlEdges struct {
 	MappedToControls []*MappedControl `json:"mapped_to_controls,omitempty"`
 	// MappedFromControls holds the value of the mapped_from_controls edge.
 	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
+	// TrustCenterControls holds the value of the trust_center_controls edge.
+	TrustCenterControls []*TrustCenterControl `json:"trust_center_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [22]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -165,6 +167,7 @@ type ControlEdges struct {
 	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToControls       map[string][]*MappedControl
 	namedMappedFromControls     map[string][]*MappedControl
+	namedTrustCenterControls    map[string][]*TrustCenterControl
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -371,6 +374,15 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
+}
+
+// TrustCenterControlsOrErr returns the TrustCenterControls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) TrustCenterControlsOrErr() ([]*TrustCenterControl, error) {
+	if e.loadedTypes[22] {
+		return e.TrustCenterControls, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_controls"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -746,6 +758,11 @@ func (_m *Control) QueryMappedToControls() *MappedControlQuery {
 // QueryMappedFromControls queries the "mapped_from_controls" edge of the Control entity.
 func (_m *Control) QueryMappedFromControls() *MappedControlQuery {
 	return NewControlClient(_m.config).QueryMappedFromControls(_m)
+}
+
+// QueryTrustCenterControls queries the "trust_center_controls" edge of the Control entity.
+func (_m *Control) QueryTrustCenterControls() *TrustCenterControlQuery {
+	return NewControlClient(_m.config).QueryTrustCenterControls(_m)
 }
 
 // Update returns a builder for updating this Control.
@@ -1310,6 +1327,30 @@ func (_m *Control) appendNamedMappedFromControls(name string, edges ...*MappedCo
 		_m.Edges.namedMappedFromControls[name] = []*MappedControl{}
 	} else {
 		_m.Edges.namedMappedFromControls[name] = append(_m.Edges.namedMappedFromControls[name], edges...)
+	}
+}
+
+// NamedTrustCenterControls returns the TrustCenterControls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedTrustCenterControls(name string) ([]*TrustCenterControl, error) {
+	if _m.Edges.namedTrustCenterControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedTrustCenterControls(name string, edges ...*TrustCenterControl) {
+	if _m.Edges.namedTrustCenterControls == nil {
+		_m.Edges.namedTrustCenterControls = make(map[string][]*TrustCenterControl)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterControls[name] = []*TrustCenterControl{}
+	} else {
+		_m.Edges.namedTrustCenterControls[name] = append(_m.Edges.namedTrustCenterControls[name], edges...)
 	}
 }
 

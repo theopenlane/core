@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterControl by ID
+    """
+     trustCenterControl(
+        """
+        ID of the trustCenterControl
+        """
+        id: ID!
+    ):  TrustCenterControl!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterControl
+    """
+    createTrustCenterControl(
+        """
+        values of the trustCenterControl
+        """
+        input: CreateTrustCenterControlInput!
+    ): TrustCenterControlCreatePayload!
+    """
+    Create multiple new trustCenterControls
+    """
+    createBulkTrustCenterControl(
+        """
+        values of the trustCenterControl
+        """
+        input: [CreateTrustCenterControlInput!]
+    ): TrustCenterControlBulkCreatePayload!
+    """
+    Create multiple new trustCenterControls via file upload
+    """
+    createBulkCSVTrustCenterControl(
+        """
+        csv file containing values of the trustCenterControl
+        """
+        input: Upload!
+    ): TrustCenterControlBulkCreatePayload!
+    """
+    Update an existing trustCenterControl
+    """
+    updateTrustCenterControl(
+        """
+        ID of the trustCenterControl
+        """
+        id: ID!
+        """
+        New values for the trustCenterControl
+        """
+        input: UpdateTrustCenterControlInput!
+    ): TrustCenterControlUpdatePayload!
+    """
+    Delete an existing trustCenterControl
+    """
+    deleteTrustCenterControl(
+        """
+        ID of the trustCenterControl
+        """
+        id: ID!
+    ): TrustCenterControlDeletePayload!
+}
+
+"""
+Return response for createTrustCenterControl mutation
+"""
+type TrustCenterControlCreatePayload {
+    """
+    Created trustCenterControl
+    """
+    trustCenterControl: TrustCenterControl!
+}
+
+"""
+Return response for updateTrustCenterControl mutation
+"""
+type TrustCenterControlUpdatePayload {
+    """
+    Updated trustCenterControl
+    """
+    trustCenterControl: TrustCenterControl!
+}
+
+"""
+Return response for deleteTrustCenterControl mutation
+"""
+type TrustCenterControlDeletePayload {
+    """
+    Deleted trustCenterControl ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterControl mutation
+"""
+type TrustCenterControlBulkCreatePayload {
+    """
+    Created trustCenterControls
+    """
+    trustCenterControls: [TrustCenterControl!]
+}

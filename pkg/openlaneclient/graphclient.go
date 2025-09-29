@@ -477,6 +477,16 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
 	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
 	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
+	CreateBulkCSVTrustCenterControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterControl, error)
+	CreateBulkTrustCenterControl(ctx context.Context, input []*CreateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterControl, error)
+	CreateTrustCenterControl(ctx context.Context, input CreateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterControl, error)
+	DeleteTrustCenterControl(ctx context.Context, deleteTrustCenterControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterControl, error)
+	GetAllTrustCenterControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterControls, error)
+	GetTrustCenterControlByID(ctx context.Context, trustCenterControlID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControlByID, error)
+	GetTrustCenterControls(ctx context.Context, first *int64, last *int64, where *TrustCenterControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControls, error)
+	UpdateTrustCenterControl(ctx context.Context, updateTrustCenterControlID string, input UpdateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterControl, error)
+	GetAllTrustCenterControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterControlHistories, error)
+	GetTrustCenterControlHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControlHistories, error)
 	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
 	DeleteTrustCenterDoc(ctx context.Context, deleteTrustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterDoc, error)
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
@@ -70390,6 +70400,915 @@ func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTo
 	return t.TotalCount
 }
 
+type CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetControlID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.ControlID
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl struct {
+	TrustCenterControls []*CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls "json:\"trustCenterControls,omitempty\" graphql:\"trustCenterControls\""
+}
+
+func (t *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl) GetTrustCenterControls() []*CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl_TrustCenterControls {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl{}
+	}
+	return t.TrustCenterControls
+}
+
+type CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetControlID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.ControlID
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTrustCenterControl_CreateBulkTrustCenterControl struct {
+	TrustCenterControls []*CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls "json:\"trustCenterControls,omitempty\" graphql:\"trustCenterControls\""
+}
+
+func (t *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl) GetTrustCenterControls() []*CreateBulkTrustCenterControl_CreateBulkTrustCenterControl_TrustCenterControls {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl_CreateBulkTrustCenterControl{}
+	}
+	return t.TrustCenterControls
+}
+
+type CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetControlID() string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.ControlID
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterControl_CreateTrustCenterControl struct {
+	TrustCenterControl CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl "json:\"trustCenterControl\" graphql:\"trustCenterControl\""
+}
+
+func (t *CreateTrustCenterControl_CreateTrustCenterControl) GetTrustCenterControl() *CreateTrustCenterControl_CreateTrustCenterControl_TrustCenterControl {
+	if t == nil {
+		t = &CreateTrustCenterControl_CreateTrustCenterControl{}
+	}
+	return &t.TrustCenterControl
+}
+
+type DeleteTrustCenterControl_DeleteTrustCenterControl struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterControl_DeleteTrustCenterControl) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterControl_DeleteTrustCenterControl{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterControls_TrustCenterControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterControls_TrustCenterControls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterControls_TrustCenterControls_Edges_Node struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetControlID() string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.ControlID
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterControls_TrustCenterControls_Edges struct {
+	Node *GetAllTrustCenterControls_TrustCenterControls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterControls_TrustCenterControls_Edges) GetNode() *GetAllTrustCenterControls_TrustCenterControls_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterControls_TrustCenterControls struct {
+	Edges      []*GetAllTrustCenterControls_TrustCenterControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterControls_TrustCenterControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterControls_TrustCenterControls) GetEdges() []*GetAllTrustCenterControls_TrustCenterControls_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls) GetPageInfo() *GetAllTrustCenterControls_TrustCenterControls_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterControls_TrustCenterControls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterControls_TrustCenterControls{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterControlByID_TrustCenterControl struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetControlID() string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.ControlID
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterControlByID_TrustCenterControl) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControlByID_TrustCenterControl{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterControls_TrustCenterControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterControls_TrustCenterControls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterControls_TrustCenterControls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterControls_TrustCenterControls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterControls_TrustCenterControls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterControls_TrustCenterControls_Edges_Node struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetControlID() string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.ControlID
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterControls_TrustCenterControls_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterControls_TrustCenterControls_Edges struct {
+	Node *GetTrustCenterControls_TrustCenterControls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterControls_TrustCenterControls_Edges) GetNode() *GetTrustCenterControls_TrustCenterControls_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterControls_TrustCenterControls struct {
+	Edges      []*GetTrustCenterControls_TrustCenterControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterControls_TrustCenterControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterControls_TrustCenterControls) GetEdges() []*GetTrustCenterControls_TrustCenterControls_Edges {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterControls_TrustCenterControls) GetPageInfo() *GetTrustCenterControls_TrustCenterControls_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterControls_TrustCenterControls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterControls_TrustCenterControls{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl struct {
+	ControlID     string     "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetControlID() string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.ControlID
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetTags() []string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.Tags
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.TrustCenterID
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenterControl_UpdateTrustCenterControl struct {
+	TrustCenterControl UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl "json:\"trustCenterControl\" graphql:\"trustCenterControl\""
+}
+
+func (t *UpdateTrustCenterControl_UpdateTrustCenterControl) GetTrustCenterControl() *UpdateTrustCenterControl_UpdateTrustCenterControl_TrustCenterControl {
+	if t == nil {
+		t = &UpdateTrustCenterControl_UpdateTrustCenterControl{}
+	}
+	return &t.TrustCenterControl
+}
+
+type GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node struct {
+	ControlID     string         "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetControlID() string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.ControlID
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges struct {
+	Node *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges) GetNode() *GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterControlHistories_TrustCenterControlHistories struct {
+	Edges      []*GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories) GetEdges() []*GetAllTrustCenterControlHistories_TrustCenterControlHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories) GetPageInfo() *GetAllTrustCenterControlHistories_TrustCenterControlHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterControlHistories_TrustCenterControlHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node struct {
+	ControlID     string         "json:\"controlID\" graphql:\"controlID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetControlID() string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.ControlID
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterControlHistories_TrustCenterControlHistories_Edges struct {
+	Node *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges) GetNode() *GetTrustCenterControlHistories_TrustCenterControlHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterControlHistories_TrustCenterControlHistories struct {
+	Edges      []*GetTrustCenterControlHistories_TrustCenterControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories) GetEdges() []*GetTrustCenterControlHistories_TrustCenterControlHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories) GetPageInfo() *GetTrustCenterControlHistories_TrustCenterControlHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterControlHistories_TrustCenterControlHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterControlHistories_TrustCenterControlHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File struct {
 	ID           string  "json:\"id\" graphql:\"id\""
 	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
@@ -83275,6 +84194,116 @@ func (t *GetTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() 
 		t = &GetTrustCenterComplianceHistories{}
 	}
 	return &t.TrustCenterComplianceHistories
+}
+
+type CreateBulkCSVTrustCenterControl struct {
+	CreateBulkCSVTrustCenterControl CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl "json:\"createBulkCSVTrustCenterControl\" graphql:\"createBulkCSVTrustCenterControl\""
+}
+
+func (t *CreateBulkCSVTrustCenterControl) GetCreateBulkCSVTrustCenterControl() *CreateBulkCSVTrustCenterControl_CreateBulkCSVTrustCenterControl {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterControl{}
+	}
+	return &t.CreateBulkCSVTrustCenterControl
+}
+
+type CreateBulkTrustCenterControl struct {
+	CreateBulkTrustCenterControl CreateBulkTrustCenterControl_CreateBulkTrustCenterControl "json:\"createBulkTrustCenterControl\" graphql:\"createBulkTrustCenterControl\""
+}
+
+func (t *CreateBulkTrustCenterControl) GetCreateBulkTrustCenterControl() *CreateBulkTrustCenterControl_CreateBulkTrustCenterControl {
+	if t == nil {
+		t = &CreateBulkTrustCenterControl{}
+	}
+	return &t.CreateBulkTrustCenterControl
+}
+
+type CreateTrustCenterControl struct {
+	CreateTrustCenterControl CreateTrustCenterControl_CreateTrustCenterControl "json:\"createTrustCenterControl\" graphql:\"createTrustCenterControl\""
+}
+
+func (t *CreateTrustCenterControl) GetCreateTrustCenterControl() *CreateTrustCenterControl_CreateTrustCenterControl {
+	if t == nil {
+		t = &CreateTrustCenterControl{}
+	}
+	return &t.CreateTrustCenterControl
+}
+
+type DeleteTrustCenterControl struct {
+	DeleteTrustCenterControl DeleteTrustCenterControl_DeleteTrustCenterControl "json:\"deleteTrustCenterControl\" graphql:\"deleteTrustCenterControl\""
+}
+
+func (t *DeleteTrustCenterControl) GetDeleteTrustCenterControl() *DeleteTrustCenterControl_DeleteTrustCenterControl {
+	if t == nil {
+		t = &DeleteTrustCenterControl{}
+	}
+	return &t.DeleteTrustCenterControl
+}
+
+type GetAllTrustCenterControls struct {
+	TrustCenterControls GetAllTrustCenterControls_TrustCenterControls "json:\"trustCenterControls\" graphql:\"trustCenterControls\""
+}
+
+func (t *GetAllTrustCenterControls) GetTrustCenterControls() *GetAllTrustCenterControls_TrustCenterControls {
+	if t == nil {
+		t = &GetAllTrustCenterControls{}
+	}
+	return &t.TrustCenterControls
+}
+
+type GetTrustCenterControlByID struct {
+	TrustCenterControl GetTrustCenterControlByID_TrustCenterControl "json:\"trustCenterControl\" graphql:\"trustCenterControl\""
+}
+
+func (t *GetTrustCenterControlByID) GetTrustCenterControl() *GetTrustCenterControlByID_TrustCenterControl {
+	if t == nil {
+		t = &GetTrustCenterControlByID{}
+	}
+	return &t.TrustCenterControl
+}
+
+type GetTrustCenterControls struct {
+	TrustCenterControls GetTrustCenterControls_TrustCenterControls "json:\"trustCenterControls\" graphql:\"trustCenterControls\""
+}
+
+func (t *GetTrustCenterControls) GetTrustCenterControls() *GetTrustCenterControls_TrustCenterControls {
+	if t == nil {
+		t = &GetTrustCenterControls{}
+	}
+	return &t.TrustCenterControls
+}
+
+type UpdateTrustCenterControl struct {
+	UpdateTrustCenterControl UpdateTrustCenterControl_UpdateTrustCenterControl "json:\"updateTrustCenterControl\" graphql:\"updateTrustCenterControl\""
+}
+
+func (t *UpdateTrustCenterControl) GetUpdateTrustCenterControl() *UpdateTrustCenterControl_UpdateTrustCenterControl {
+	if t == nil {
+		t = &UpdateTrustCenterControl{}
+	}
+	return &t.UpdateTrustCenterControl
+}
+
+type GetAllTrustCenterControlHistories struct {
+	TrustCenterControlHistories GetAllTrustCenterControlHistories_TrustCenterControlHistories "json:\"trustCenterControlHistories\" graphql:\"trustCenterControlHistories\""
+}
+
+func (t *GetAllTrustCenterControlHistories) GetTrustCenterControlHistories() *GetAllTrustCenterControlHistories_TrustCenterControlHistories {
+	if t == nil {
+		t = &GetAllTrustCenterControlHistories{}
+	}
+	return &t.TrustCenterControlHistories
+}
+
+type GetTrustCenterControlHistories struct {
+	TrustCenterControlHistories GetTrustCenterControlHistories_TrustCenterControlHistories "json:\"trustCenterControlHistories\" graphql:\"trustCenterControlHistories\""
+}
+
+func (t *GetTrustCenterControlHistories) GetTrustCenterControlHistories() *GetTrustCenterControlHistories_TrustCenterControlHistories {
+	if t == nil {
+		t = &GetTrustCenterControlHistories{}
+	}
+	return &t.TrustCenterControlHistories
 }
 
 type CreateTrustCenterDoc struct {
@@ -104872,6 +105901,368 @@ func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *i
 	return &res, nil
 }
 
+const CreateBulkCSVTrustCenterControlDocument = `mutation CreateBulkCSVTrustCenterControl ($input: Upload!) {
+	createBulkCSVTrustCenterControl(input: $input) {
+		trustCenterControls {
+			controlID
+			createdAt
+			createdBy
+			id
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenterControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterControl, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenterControl
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterControl", CreateBulkCSVTrustCenterControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterControlDocument = `mutation CreateBulkTrustCenterControl ($input: [CreateTrustCenterControlInput!]) {
+	createBulkTrustCenterControl(input: $input) {
+		trustCenterControls {
+			controlID
+			createdAt
+			createdBy
+			id
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenterControl(ctx context.Context, input []*CreateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterControl, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenterControl
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenterControl", CreateBulkTrustCenterControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterControlDocument = `mutation CreateTrustCenterControl ($input: CreateTrustCenterControlInput!) {
+	createTrustCenterControl(input: $input) {
+		trustCenterControl {
+			controlID
+			createdAt
+			createdBy
+			id
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterControl(ctx context.Context, input CreateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterControl, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterControl
+	if err := c.Client.Post(ctx, "CreateTrustCenterControl", CreateTrustCenterControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterControlDocument = `mutation DeleteTrustCenterControl ($deleteTrustCenterControlId: ID!) {
+	deleteTrustCenterControl(id: $deleteTrustCenterControlId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterControl(ctx context.Context, deleteTrustCenterControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterControl, error) {
+	vars := map[string]any{
+		"deleteTrustCenterControlId": deleteTrustCenterControlID,
+	}
+
+	var res DeleteTrustCenterControl
+	if err := c.Client.Post(ctx, "DeleteTrustCenterControl", DeleteTrustCenterControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterControlsDocument = `query GetAllTrustCenterControls {
+	trustCenterControls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				id
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterControls, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterControls
+	if err := c.Client.Post(ctx, "GetAllTrustCenterControls", GetAllTrustCenterControlsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterControlByIDDocument = `query GetTrustCenterControlByID ($trustCenterControlId: ID!) {
+	trustCenterControl(id: $trustCenterControlId) {
+		controlID
+		createdAt
+		createdBy
+		id
+		tags
+		trustCenterID
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTrustCenterControlByID(ctx context.Context, trustCenterControlID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControlByID, error) {
+	vars := map[string]any{
+		"trustCenterControlId": trustCenterControlID,
+	}
+
+	var res GetTrustCenterControlByID
+	if err := c.Client.Post(ctx, "GetTrustCenterControlByID", GetTrustCenterControlByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterControlsDocument = `query GetTrustCenterControls ($first: Int, $last: Int, $where: TrustCenterControlWhereInput) {
+	trustCenterControls(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				id
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterControls(ctx context.Context, first *int64, last *int64, where *TrustCenterControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControls, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterControls
+	if err := c.Client.Post(ctx, "GetTrustCenterControls", GetTrustCenterControlsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterControlDocument = `mutation UpdateTrustCenterControl ($updateTrustCenterControlId: ID!, $input: UpdateTrustCenterControlInput!) {
+	updateTrustCenterControl(id: $updateTrustCenterControlId, input: $input) {
+		trustCenterControl {
+			controlID
+			createdAt
+			createdBy
+			id
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterControl(ctx context.Context, updateTrustCenterControlID string, input UpdateTrustCenterControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterControl, error) {
+	vars := map[string]any{
+		"updateTrustCenterControlId": updateTrustCenterControlID,
+		"input":                      input,
+	}
+
+	var res UpdateTrustCenterControl
+	if err := c.Client.Post(ctx, "UpdateTrustCenterControl", UpdateTrustCenterControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterControlHistoriesDocument = `query GetAllTrustCenterControlHistories {
+	trustCenterControlHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterControlHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterControlHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterControlHistories", GetAllTrustCenterControlHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterControlHistoriesDocument = `query GetTrustCenterControlHistories ($first: Int, $last: Int, $where: TrustCenterControlHistoryWhereInput) {
+	trustCenterControlHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterControlHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControlHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterControlHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterControlHistories", GetTrustCenterControlHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
 	createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
 		trustCenterDoc {
@@ -107838,6 +109229,16 @@ var DocumentOperationNames = map[string]string{
 	UpdateTrustCenterComplianceDocument:               "UpdateTrustCenterCompliance",
 	GetAllTrustCenterComplianceHistoriesDocument:      "GetAllTrustCenterComplianceHistories",
 	GetTrustCenterComplianceHistoriesDocument:         "GetTrustCenterComplianceHistories",
+	CreateBulkCSVTrustCenterControlDocument:           "CreateBulkCSVTrustCenterControl",
+	CreateBulkTrustCenterControlDocument:              "CreateBulkTrustCenterControl",
+	CreateTrustCenterControlDocument:                  "CreateTrustCenterControl",
+	DeleteTrustCenterControlDocument:                  "DeleteTrustCenterControl",
+	GetAllTrustCenterControlsDocument:                 "GetAllTrustCenterControls",
+	GetTrustCenterControlByIDDocument:                 "GetTrustCenterControlByID",
+	GetTrustCenterControlsDocument:                    "GetTrustCenterControls",
+	UpdateTrustCenterControlDocument:                  "UpdateTrustCenterControl",
+	GetAllTrustCenterControlHistoriesDocument:         "GetAllTrustCenterControlHistories",
+	GetTrustCenterControlHistoriesDocument:            "GetTrustCenterControlHistories",
 	CreateTrustCenterDocDocument:                      "CreateTrustCenterDoc",
 	DeleteTrustCenterDocDocument:                      "DeleteTrustCenterDoc",
 	GetAllTrustCenterDocsDocument:                     "GetAllTrustCenterDocs",

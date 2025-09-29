@@ -42,7 +42,8 @@ type GroupPermissionsMixin struct {
 	// IncludeInterceptorFilter is used to skip the interceptor filter
 	// this is used for more complex view permissions that are not solely based
 	// on the group membership
-	IncludeInterceptorFilter bool
+	IncludeInterceptorFilter        bool
+	AllowAnonymousTrustCenterAccess bool
 }
 
 // GroupPermissionsEdgesMixin is a mixin for the reverse edges on the group schema
@@ -113,6 +114,12 @@ func newGroupPermissionsMixin(opts ...groupPermissionsOption) GroupPermissionsMi
 	return g
 }
 
+func withAllowAnonymousTrustCenterAccessForGroup() groupPermissionsOption {
+	return func(g *GroupPermissionsMixin) {
+		g.AllowAnonymousTrustCenterAccess = true
+	}
+}
+
 // groupPermissionsOption is a function that can be used to modify the GroupPermissionsMixin
 type groupPermissionsOption func(*GroupPermissionsMixin)
 
@@ -180,6 +187,16 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// this can be used to prevent extra queries to fga for objects that are view by default
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		zerolog.Ctx(ctx).Debug().Msg("groupPermissionInterceptor")
+		_, hasAnonUser := auth.AnonymousTrustCenterUserFromContext(ctx)
+
+		if g.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			zerolog.Ctx(ctx).Debug().Msg("allowing query for anonymous trust center user")
+			return nil
+		} else if !g.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			zerolog.Ctx(ctx).Debug().Msg("denying query for anonymous trust center user")
+			return privacy.Deny
+		}
 		// add a filter to exclude results that have a blocked group that the user is a member of
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {

@@ -693,6 +693,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    trustCenterControls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     trustCenterDocs {
       totalCount
       pageInfo {
