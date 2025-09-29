@@ -129,7 +129,7 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 	return &event, nil
 }
 
-func parseSoftDeleteEventID(ctx context.Context, mutation ent.Mutation) (*EventID, error) {
+func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
 	m, ok := mutation.(*entgen.OrganizationMutation)
 	if !ok {
 		return nil, ErrUnableToDetermineEventID
@@ -166,7 +166,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			emit := func() {
 				eventID := &EventID{}
 				if op == SoftDeleteOne {
-					eventID, err = parseSoftDeleteEventID(ctx, mutation)
+					eventID, err = parseSoftDeleteEventID(mutation)
 					if err != nil {
 						log.Err(err).Msg("Failed to parse soft delete event ID")
 
