@@ -1540,6 +1540,7 @@ type SSOStatusReply struct {
 	OrganizationID string            `json:"organization_id,omitempty"`
 	OrgTFAEnforced bool              `json:"tfa_enforced"`
 	UserTFAEnabled bool              `json:"user_tfa_enabled,omitempty"`
+	IsOrgAdmin     bool              `json:"is_org_admin,omitempty"`
 }
 
 // ExampleResponse returns an example SSOStatusReply for OpenAPI documentation
