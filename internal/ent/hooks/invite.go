@@ -583,7 +583,7 @@ func createUserManagedGroup(ctx context.Context, m *generated.InviteMutation, us
 		var role = enums.RoleMember
 
 		if g.Name == dbUser.DisplayName {
-			role = enums.RoleOwner
+			role = enums.RoleAdmin
 		}
 
 		input := generated.CreateGroupMembershipInput{
