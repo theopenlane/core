@@ -188,8 +188,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.Groups.Edges != nil)
 
-		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
+		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 4 managed groups
+		assert.Check(t, is.Equal(7, len(resp.Groups.Edges)))
 
 		group1Found := false
 		group2Found := false
@@ -225,8 +225,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
+		// make sure only 6 groups are returned, group 1 and the seeded group, and the 4 managed groups
+		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
 
 		// check groups available to admin user (private group created by testUser1 should not be returned for org member)
 		resp, err = suite.client.api.GetAllGroups(viewOnlyUser.UserCtx)
@@ -234,8 +234,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
+		// make sure only 6 groups are returned, group 1 and the seeded group, and the 4 managed groups
+		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
 	})
 
 	// delete created groups
@@ -1217,8 +1217,9 @@ func TestManagedGroups(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
-	// there should be 3 managed groups created by the system on org creation
-	assert.Check(t, is.Len(resp.Groups.Edges, 3))
+	// there should be 4 managed groups created by the system on org creation
+	// one for the user doing the creation
+	assert.Check(t, is.Len(resp.Groups.Edges, 4))
 
 	// you should not be able to update a managed group
 	groupID := resp.Groups.Edges[0].Node.ID

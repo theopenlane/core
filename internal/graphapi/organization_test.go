@@ -514,7 +514,10 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			// while group is in the base module, this query includes programs and others
 			// which are in other modules
-			assert.Check(t, is.Len(managedGroups.Groups.Edges, 3))
+			//
+			// 4 groups because a system managed group is now created for each user
+			// in the organization
+			assert.Check(t, is.Len(managedGroups.Groups.Edges, 4))
 
 			// cleanup org
 			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.UserCtx, t)
