@@ -5,10 +5,12 @@ package trustcenterdoc
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -33,15 +35,17 @@ func init() {
 	updateCmd.Flags().StringP("visibility", "v", "", "visibility of the document (NOT_VISIBLE, PROTECTED, PUBLICLY_VISIBLE)")
 	updateCmd.Flags().StringSliceP("tags", "g", []string{}, "tags associated with the document")
 	updateCmd.Flags().StringSliceP("append-tags", "a", []string{}, "append tags to the document")
+	updateCmd.Flags().StringP("file", "f", "", "file to upload as the trust center document")
+	updateCmd.Flags().StringP("watermarked-file", "", "", "file to upload as the trust center document")
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, error) {
+func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, *graphql.Upload, *graphql.Upload, error) {
 	input := openlaneclient.UpdateTrustCenterDocInput{}
 
 	id := cmd.Config.String("id")
 	if id == "" {
-		return "", input, cmd.NewRequiredFieldMissingError("id")
+		return "", input, nil, nil, cmd.NewRequiredFieldMissingError("id")
 	}
 
 	title := cmd.Config.String("title")
@@ -77,7 +81,39 @@ func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, error
 		input.AppendTags = appendTags
 	}
 
-	return id, input, nil
+	var fileUpload *graphql.Upload
+	filePath := cmd.Config.String("file")
+	if filePath != "" {
+		u, err := objects.NewUploadFile(filePath)
+		if err != nil {
+			return "", input, nil, nil, err
+		}
+
+		fileUpload = &graphql.Upload{
+			File:        u.File,
+			Filename:    u.Filename,
+			Size:        u.Size,
+			ContentType: u.ContentType,
+		}
+	}
+
+	var watermarkedFileUpload *graphql.Upload
+	watermarkedFilePath := cmd.Config.String("watermarked-file")
+	if watermarkedFilePath != "" {
+		u, err := objects.NewUploadFile(watermarkedFilePath)
+		if err != nil {
+			return "", input, nil, nil, err
+		}
+
+		watermarkedFileUpload = &graphql.Upload{
+			File:        u.File,
+			Filename:    u.Filename,
+			Size:        u.Size,
+			ContentType: u.ContentType,
+		}
+	}
+
+	return id, input, fileUpload, watermarkedFileUpload, nil
 }
 
 // update an existing trust center document in the platform
@@ -91,10 +127,10 @@ func update(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateValidation()
+	id, input, fileUpload, watermarkedFileUpload, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateTrustCenterDoc(ctx, id, input)
+	o, err := client.UpdateTrustCenterDoc(ctx, id, input, fileUpload, watermarkedFileUpload)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

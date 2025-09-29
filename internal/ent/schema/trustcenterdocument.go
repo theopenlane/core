@@ -70,7 +70,7 @@ func (TrustCenterDoc) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 		field.Bool("watermarking_enabled").
-			Default(true).
+			Default(false).
 			Comment("whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center"),
 		field.Enum("watermark_status").
 			GoType(enums.WatermarkStatus("")).
@@ -123,7 +123,8 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 // Hooks of the TrustCenterDoc
 func (TrustCenterDoc) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookTrustCenterDoc(),
+		hooks.HookCreateTrustCenterDoc(),
+		hooks.HookUpdateTrustCenterDoc(),
 	}
 }
 

@@ -30402,7 +30402,7 @@ type Mutation {
 		New values for the trustCenterDoc
 		"""
 		input: UpdateTrustCenterDocInput!
-	): TrustCenterDocUpdatePayload!
+	trustCenterDocFile: Upload, watermarkedTrustCenterDocFile: Upload): TrustCenterDocUpdatePayload!
 	"""
 	Delete an existing trustCenterDoc
 	"""

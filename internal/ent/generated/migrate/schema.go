@@ -4892,7 +4892,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
-		{Name: "watermarking_enabled", Type: field.TypeBool, Default: true},
+		{Name: "watermarking_enabled", Type: field.TypeBool, Default: false},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
@@ -4943,7 +4943,7 @@ var (
 		{Name: "category", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "watermarking_enabled", Type: field.TypeBool, Default: true},
+		{Name: "watermarking_enabled", Type: field.TypeBool, Default: false},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 	}

@@ -6586,6 +6586,8 @@ func init() {
 	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks6[0]
 
 	trustcenterdoc.Hooks[5] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[6] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
 	trustcenterdocMixinInters6 := trustcenterdocMixin[6].Interceptors()

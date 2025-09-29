@@ -40,6 +40,10 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 			return nil
 		}
 
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
 				q.WhereP(sql.FieldEQ("trust_center_id", anon.TrustCenterID))
