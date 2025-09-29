@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -155,6 +156,11 @@ func HookOrgMembersDelete() ent.Hook {
 				return nil, err
 			}
 
+			if err := deleteSystemManagedUserGroup(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group from organization")
+				return nil, err
+			}
+
 			if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
 				req := fgax.TupleRequest{
 					SubjectID:   orgMembership.UserID,
@@ -192,4 +198,28 @@ func updateOrgMemberDefaultOrgOnCreate(ctx context.Context, m *generated.OrgMemb
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	return updateDefaultOrgIfPersonal(allowCtx, userID, orgID, m.Client())
+}
+
+func deleteSystemManagedUserGroup(ctx context.Context,
+	m *generated.OrgMembershipMutation, userID, orgID string) error {
+
+	user, err := m.Client().User.Get(ctx, userID)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user for managed group deletion")
+		return err
+	}
+
+	_, err = m.Client().Group.Delete().
+		Where(
+			group.CreatedBy(userID),
+			group.IsManaged(true),
+			group.OwnerID(orgID),
+			group.Name(user.DisplayName),
+		).Exec(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group")
+		return err
+	}
+
+	return nil
 }
