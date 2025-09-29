@@ -49,6 +49,15 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				return nil, objects.ErrNoFilesUploaded
 			}
 
+			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
+			if !watermarkingEnabledSet || !watermarkingEnabled {
+				origFileID, origFileIDSet := m.OriginalFileID()
+				if !origFileIDSet {
+					return nil, errMissingFileID
+				}
+				m.SetFileID(origFileID)
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -66,9 +75,11 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			tuples := []fgax.TupleKey{}
 
 			if trustCenterDoc.Visibility != enums.TrustCenterDocumentVisibilityNotVisible {
+				/// If the document is "visible", add the wildcard viewer tuple for the document
 				tuples = append(tuples, fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")...)
 
 				if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+					// Files are only globally viewable if the document is publicly visible
 					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
 				}
 			}
@@ -84,16 +95,6 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
-					return nil, err
-				}
-			} else {
-				zerolog.Ctx(ctx).Debug().Msg("watermarking disabled, setting file id")
-				// Use privacy allow context for internal update operation to bypass authorization checks
-				// and mark as internal operation to avoid triggering the update hook logic
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-				internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
-				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
-				if err != nil {
 					return nil, err
 				}
 			}
