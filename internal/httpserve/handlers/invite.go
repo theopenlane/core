@@ -95,7 +95,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID)
+	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, "")
 
 	if err == nil && status.Enforced {
 		out.NeedsSSO = true
