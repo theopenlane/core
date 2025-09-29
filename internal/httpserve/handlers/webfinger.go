@@ -6,6 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -28,7 +29,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 
 	reqCtx := ctx.Request().Context()
 
-	var orgID string
+	var orgID, userID string
 
 	switch {
 	case strings.HasPrefix(in.Resource, "org:"):
@@ -51,6 +52,9 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
+
+		userID = user.ID
+
 	default:
 		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
@@ -59,7 +63,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
-	out, err := h.fetchSSOStatus(reqCtx, orgID)
+	out, err := h.fetchSSOStatus(reqCtx, orgID, userID)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			log.Debug().Err(err).Msg("webfinger org setting not found")
@@ -77,7 +81,7 @@ type nonce string
 
 // fetchSSOStatus returns the SSO enforcement status for a given organization
 // it checks the organization's settings and returns whether SSO is enforced, the provider, and discovery URL
-func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOStatusReply, error) {
+func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return models.SSOStatusReply{}, err
@@ -88,6 +92,21 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,
+	}
+
+	if userID != "" {
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+		member, err := h.DBClient.OrgMembership.
+			Query().Where(
+			orgmembership.OrganizationID(orgID),
+			orgmembership.UserID(userID),
+		).Only(allowCtx)
+		if err != nil {
+			return models.SSOStatusReply{}, err
+		}
+
+		out.IsOrgOwner = member.Role == enums.RoleOwner
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {

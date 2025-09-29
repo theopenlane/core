@@ -336,7 +336,7 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 		return nil
 	}
 
-	status, err := h.fetchSSOStatus(allowCtx, orgID)
+	status, err := h.fetchSSOStatus(allowCtx, orgID, "")
 	if err != nil {
 		return nil
 	}

@@ -53,7 +53,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 	// check if SSO is enforced for the target organization. If so, redirect
 	// the user through the SSO login flow unless they are an owner.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID)
+	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID, user.ID)
 
 	if err == nil && status.Enforced {
 		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(
