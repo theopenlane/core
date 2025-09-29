@@ -579,8 +579,15 @@ func createUserManagedGroup(ctx context.Context, m *generated.InviteMutation, us
 
 	// add the user to the group
 	for _, g := range groups {
+
+		var role = enums.RoleMember
+
+		if g.Name == dbUser.DisplayName {
+			role = enums.RoleOwner
+		}
+
 		input := generated.CreateGroupMembershipInput{
-			Role:    &enums.RoleMember,
+			Role:    &role,
 			UserID:  userID,
 			GroupID: g.ID,
 		}

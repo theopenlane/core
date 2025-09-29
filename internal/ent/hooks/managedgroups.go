@@ -104,8 +104,14 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 			continue
 		}
 
+		var role = enums.RoleMember
+
+		if g.Name == dbUser.DisplayName {
+			role = enums.RoleOwner
+		}
+
 		input := generated.CreateGroupMembershipInput{
-			Role:    &enums.RoleMember,
+			Role:    &role,
 			UserID:  userID,
 			GroupID: g.ID,
 		}
