@@ -106,9 +106,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 			return models.SSOStatusReply{}, err
 		}
 
-		if member.Role == enums.RoleAdmin || member.Role == enums.RoleOwner {
-			out.IsOrgAdmin = true
-		}
+		out.IsOrgOwner =  member.Role == enums.RoleOwner 
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {
