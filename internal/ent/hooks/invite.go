@@ -247,7 +247,6 @@ func HookInviteAccepted() ent.Hook {
 			// delete the invite that has been accepted
 			if err := deleteInvite(ctx, m); err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to delete invite")
-
 				return retValue, err
 			}
 
