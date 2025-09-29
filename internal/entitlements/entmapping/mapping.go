@@ -84,7 +84,7 @@ func StripeProductToOrgProduct(p *stripe.Product) *ent.OrgProduct {
 
 // StripeSubscriptionToOrgSubscription converts a stripe.Subscription and
 // OrganizationCustomer info to an OrgSubscription.
-func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitlements.OrganizationCustomer) *ent.OrgSubscription {
+func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription) *ent.OrgSubscription {
 	if sub == nil {
 		return nil
 	}
@@ -252,7 +252,7 @@ type OrgSubscriptionSetter[T any] interface {
 }
 
 // ApplyStripeSubscription sets fields on the ent builder from the stripe.Subscription and customer info
-func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscription, cust *entitlements.OrganizationCustomer) T {
+func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscription) T {
 	if sub == nil {
 		return b
 	}

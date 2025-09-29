@@ -362,7 +362,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	}
 
 	// map stripe data to internal OrgSubscription
-	stripeOrgSubscription := em.StripeSubscriptionToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
+	stripeOrgSubscription := em.StripeSubscriptionToOrgSubscription(subscription)
 
 	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false

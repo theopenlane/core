@@ -12,7 +12,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v82"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -240,7 +239,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 		return ErrMultipleCustomers
 	}
 
-	cust.Prices, err = GetDefaultPrices(ctx, r.db)
+	cust.Prices, err = r.GetDefaultPrices()
 	if err != nil {
 		return fmt.Errorf("get default prices: %w", err)
 	}
@@ -337,7 +336,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	case customerMissing:
 		return "create stripe customer", nil
 	case !customerMissing && org.StripeCustomerID == nil && subscriptionMissing:
-		prices, err := GetDefaultPrices(ctx, r.db)
+		prices, err := r.GetDefaultPrices()
 		if err != nil {
 			return "", fmt.Errorf("get default prices: %w", err)
 		}
@@ -360,17 +359,17 @@ type orgModuleConfig struct {
 	trial bool
 }
 
-// orgModuleOption sets fields on orgModuleConfig
-type orgModuleOption func(*orgModuleConfig)
+// OrgModuleOption sets fields on orgModuleConfig
+type OrgModuleOption func(*orgModuleConfig)
 
 // WithTrial sets the trial flag to true, allowing trial modules to be included
-func WithTrial() orgModuleOption {
+func WithTrial() OrgModuleOption {
 	return func(c *orgModuleConfig) {
 		c.trial = true
 	}
 }
 
-func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, orgSubs *generated.OrgSubscription, orgID string, opts ...orgModuleOption) ([]string, error) {
+func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, orgSubs *ent.OrgSubscription, orgID string, opts ...OrgModuleOption) ([]string, error) {
 	cfg := orgModuleConfig{}
 
 	for _, opt := range opts {
@@ -464,9 +463,9 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 	return modulesCreated, nil
 }
 
-func GetDefaultPrices(ctx context.Context, db *ent.Client) ([]entitlements.Price, error) {
+func (r *Reconciler) GetDefaultPrices() ([]entitlements.Price, error) {
 	prices := []entitlements.Price{}
-	for moduleName, mod := range gencatalog.GetModules(db.EntConfig.Modules.UseSandbox) {
+	for moduleName, mod := range gencatalog.GetModules(r.db.EntConfig.Modules.UseSandbox) {
 		if !mod.IncludeWithTrial {
 			continue
 		}

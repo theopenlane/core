@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -182,12 +181,7 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		}},
 	}
 
-	cust := &entitlements.OrganizationCustomer{
-		Features:     []string{"f1"},
-		FeatureNames: []string{"Feature1"},
-	}
-
-	got := StripeSubscriptionToOrgSubscription(sub, cust)
+	got := StripeSubscriptionToOrgSubscription(sub)
 
 	want := &ent.OrgSubscription{
 		StripeSubscriptionID:     "sub_123",
@@ -298,13 +292,8 @@ func TestApplyStripeSubscription(t *testing.T) {
 		}},
 	}
 
-	cust := &entitlements.OrganizationCustomer{
-		Features:     []string{"f1"},
-		FeatureNames: []string{"Feature1"},
-	}
-
 	b := &subscriptionBuilder{}
-	got := ApplyStripeSubscription(b, sub, cust)
+	got := ApplyStripeSubscription(b, sub)
 
 	expected := &subscriptionBuilder{
 		stripeSubscriptionID:     "sub_123",
