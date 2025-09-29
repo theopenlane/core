@@ -5177,7 +5177,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
 	}
@@ -5239,7 +5239,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
 	}
 	// TrustCenterWatermarkConfigHistoryTable holds the schema information for the "trust_center_watermark_config_history" table.
 	TrustCenterWatermarkConfigHistoryTable = &schema.Table{

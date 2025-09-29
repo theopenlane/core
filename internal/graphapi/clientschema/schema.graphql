@@ -60872,25 +60872,18 @@ enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core
 	arial
 	helvetica
 	times
-	times
-	new
-	roman
+	times_new_roman
 	georgia
 	verdana
 	courier
-	courier
-	new
-	trebuchet
-	ms
-	comic
-	sans
-	ms
+	courier_new
+	trebuchet_ms
+	comic_sans_ms
 	impact
 	palatino
 	garamond
 	bookman
-	avant
-	garde
+	avant_garde
 }
 type TrustCenterWatermarkConfigHistory implements Node {
 	id: ID!
@@ -60975,25 +60968,18 @@ enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenla
 	arial
 	helvetica
 	times
-	times
-	new
-	roman
+	times_new_roman
 	georgia
 	verdana
 	courier
-	courier
-	new
-	trebuchet
-	ms
-	comic
-	sans
-	ms
+	courier_new
+	trebuchet_ms
+	comic_sans_ms
 	impact
 	palatino
 	garamond
 	bookman
-	avant
-	garde
+	avant_garde
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation

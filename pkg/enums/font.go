@@ -17,7 +17,7 @@ var (
 	// FontTimes represents the Times font
 	FontTimes Font = "times"
 	// FontTimesNewRoman represents the Times New Roman font
-	FontTimesNewRoman Font = "times new roman"
+	FontTimesNewRoman Font = "times_new_roman"
 	// FontGeorgia represents the Georgia font
 	FontGeorgia Font = "georgia"
 	// FontVerdana represents the Verdana font
@@ -25,11 +25,11 @@ var (
 	// FontCourier represents the Courier font
 	FontCourier Font = "courier"
 	// FontCourierNew represents the Courier New font
-	FontCourierNew Font = "courier new"
+	FontCourierNew Font = "courier_new"
 	// FontTrebuchetMS represents the Trebuchet MS font
-	FontTrebuchetMS Font = "trebuchet ms"
+	FontTrebuchetMS Font = "trebuchet_ms"
 	// FontComicSansMS represents the Comic Sans MS font
-	FontComicSansMS Font = "comic sans ms"
+	FontComicSansMS Font = "comic_sans_ms"
 	// FontImpact represents the Impact font
 	FontImpact Font = "impact"
 	// FontPalatino represents the Palatino font
@@ -39,7 +39,7 @@ var (
 	// FontBookman represents the Bookman font
 	FontBookman Font = "bookman"
 	// FontAvantGarde represents the Avant Garde font
-	FontAvantGarde Font = "avant garde"
+	FontAvantGarde Font = "avant_garde"
 	// FontInvalid indicates that the font is invalid
 	FontInvalid Font = "FONT_INVALID"
 )
