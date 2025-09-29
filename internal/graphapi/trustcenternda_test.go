@@ -112,6 +112,96 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 		return auth.WithAnonymousTrustCenterUser(ctx, anonUser)
 	}
 
+	// First, let's test the scenario where user has already signed NDA
+	t.Run("Test email scenarios with existing NDA", func(t *testing.T) {
+		// Create NDA template for trustCenter1
+		uploadFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+		require.Nil(t, err)
+		up := graphql.Upload{
+			File:        uploadFile.File,
+			Filename:    uploadFile.Filename,
+			Size:        uploadFile.Size,
+			ContentType: uploadFile.ContentType,
+		}
+		expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{up})
+
+		trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+			TrustCenterID: trustCenter1.ID,
+		}, []*graphql.Upload{&up})
+		require.Nil(t, err)
+		require.NotNil(t, trustCenterNDA)
+
+		// Create a user who has already signed the NDA
+		testEmail := gofakeit.Email()
+		anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+		anonUser := &auth.AnonymousTrustCenterUser{
+			SubjectID:          anonUserID,
+			SubjectName:        "Anonymous User",
+			OrganizationID:     trustCenter1.OwnerID,
+			AuthenticationType: auth.JWTAuthentication,
+			TrustCenterID:      trustCenter1.ID,
+			SubjectEmail:       testEmail,
+		}
+		anonCtx := auth.WithAnonymousTrustCenterUser(context.Background(), anonUser)
+
+		// Submit NDA response to simulate user having signed
+		input := testclient.SubmitTrustCenterNDAResponseInput{
+			TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+			Response: map[string]any{
+				"signatory_info": map[string]any{
+					"email": testEmail,
+				},
+				"acknowledgment": true,
+				"signature_metadata": map[string]any{
+					"ip_address": "192.168.1.100",
+					"timestamp":  "2025-09-22T19:37:59.988Z",
+					"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+					"user_id":    anonUserID,
+				},
+				"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+				"trust_center_id": trustCenter1.ID,
+			},
+		}
+
+		resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+
+		// Now test sending email to user who has already signed - should send auth email
+		t.Run("Send auth email to user who already signed NDA", func(t *testing.T) {
+			// Use system admin context since the anonymous user needs proper permissions
+			emailResp, err := suite.client.api.SendTrustCenterNDAEmail(
+				systemAdminUser.UserCtx,
+				testclient.SendTrustCenterNDAInput{
+					TrustCenterID: trustCenter1.ID,
+					Email:         testEmail,
+				},
+			)
+			assert.NilError(t, err)
+			assert.Assert(t, emailResp != nil)
+			assert.Check(t, emailResp.SendTrustCenterNDAEmail.Success)
+		})
+
+		// Test sending email to different user who hasn't signed - should send NDA request email
+		t.Run("Send NDA request email to user who hasn't signed", func(t *testing.T) {
+			newEmail := gofakeit.Email()
+			emailResp, err := suite.client.api.SendTrustCenterNDAEmail(
+				systemAdminUser.UserCtx,
+				testclient.SendTrustCenterNDAInput{
+					TrustCenterID: trustCenter1.ID,
+					Email:         newEmail,
+				},
+			)
+			assert.NilError(t, err)
+			assert.Assert(t, emailResp != nil)
+			assert.Check(t, emailResp.SendTrustCenterNDAEmail.Success)
+		})
+
+		// Clean up
+		(&Cleanup[*generated.DocumentDataDeleteOne]{client: suite.client.db.DocumentData, ID: resp.SubmitTrustCenterNDAResponse.DocumentData.ID}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
 	testCases := []struct {
 		name        string
 		input       testclient.SendTrustCenterNDAInput
@@ -136,6 +226,15 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
+		},
+		{
+			name: "happy path - send email when no NDA template exists yet",
+			input: testclient.SendTrustCenterNDAInput{
+				TrustCenterID: trustCenter2.ID, // trustCenter2 has no NDA template
+				Email:         gofakeit.Email(),
+			},
+			client: suite.client.api,
+			ctx:    createAnonymousTrustCenterContext(trustCenter2.ID, testUser2.OrganizationID),
 		},
 		{
 			name: "not authorized - anonymous user tries to send for different trust center",
@@ -198,6 +297,33 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 			expectedErr: "email is required",
 		},
 	}
+
+	// Test with trust center that has custom domain
+	t.Run("Test email with custom domain trust center", func(t *testing.T) {
+		// Create a separate user to avoid slug conflicts
+		testUserForDomain := suite.userBuilder(context.Background(), t)
+
+		// Create custom domain and trust center with custom domain
+		customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUserForDomain.UserCtx, t)
+		trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUserForDomain.UserCtx, t)
+
+		// Test sending email for trust center with custom domain
+		testEmail := gofakeit.Email()
+		emailResp, err := suite.client.api.SendTrustCenterNDAEmail(
+			systemAdminUser.UserCtx,
+			testclient.SendTrustCenterNDAInput{
+				TrustCenterID: trustCenterWithDomain.ID,
+				Email:         testEmail,
+			},
+		)
+		assert.NilError(t, err)
+		assert.Assert(t, emailResp != nil)
+		assert.Check(t, emailResp.SendTrustCenterNDAEmail.Success)
+
+		// Clean up
+		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithDomain.ID}).MustDelete(testUserForDomain.UserCtx, t)
+		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUserForDomain.UserCtx, t)
+	})
 
 	for _, tc := range testCases {
 		t.Run("Send "+tc.name, func(t *testing.T) {
