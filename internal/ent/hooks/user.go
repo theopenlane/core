@@ -92,7 +92,7 @@ func HookUser() ent.Hook {
 							// if we get a gravatar result, and the user did not provide an avatar, set the gravatar url
 							if m.EntConfig.EmailValidation.EnableGravatarCheck {
 								avatarURL, _ := m.AvatarRemoteURL()
-								if res.Gravatar != nil && res.Gravatar.HasGravatar && avatarURL == "" {
+								if res != nil && res.Gravatar != nil && res.Gravatar.HasGravatar && avatarURL == "" {
 									m.SetAvatarRemoteURL(res.Gravatar.GravatarUrl)
 								}
 							}
