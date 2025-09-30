@@ -203,7 +203,7 @@ coreConfiguration:
       enableGravatarCheck: true  # @schema type:boolean; default:true
       # -- EnableSMTPCheck indicates whether to check email by smtp
       enableSMTPCheck: false  # @schema type:boolean; default:false
-      # -- AllowedEmailTypes indicates which types of email addresses are allowed
+      # -- AllowedEmailTypes defines the allowed email types for verification
       allowedEmailTypes:
         # -- Disposable indicates whether disposable email addresses are allowed
         disposable: false  # @schema type:boolean; default:false

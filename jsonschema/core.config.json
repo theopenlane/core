@@ -1436,7 +1436,7 @@
         },
         "allowedEmailTypes": {
           "$ref": "#/$defs/validator.AllowedEmailTypes",
-          "description": "AllowedEmailTypes indicates which types of email addresses are allowed"
+          "description": "AllowedEmailTypes defines the allowed email types for verification"
         }
       },
       "additionalProperties": false,
