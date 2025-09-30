@@ -84,6 +84,13 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    emailValidation:
+        AllowedEmailTypes:
+            Disposable: false
+            Free: false
+            Role: false
+        EnableAutoUpdateDisposable: false
+        Enabled: false
     entityTypes: null
     maxPoolSize: 100
     maxSchemaImportSize: 262144

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"time"
 
@@ -12,6 +13,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/internal/ent/validator"
+
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -69,6 +72,10 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		if generated.IsValidationError(err) {
 			return h.InvalidInput(ctx, invalidInputError(err), openapi)
+		}
+
+		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			return h.InvalidInput(ctx, err, openapi)
 		}
 
 		return err

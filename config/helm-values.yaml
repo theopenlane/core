@@ -193,6 +193,8 @@ coreConfiguration:
       useSandbox: false  # @schema type:boolean; default:false
     # -- MaxSchemaImportSize is the maximum size allowed for schema imports in bytes
     maxSchemaImportSize: 262144  # @schema type:integer; default:262144
+    # -- EmailValidation contains configuration for email validation
+    emailValidation:
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable

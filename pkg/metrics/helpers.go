@@ -141,6 +141,15 @@ func RecordRegistration() {
 	Registrations.Inc()
 }
 
+func RecordEmailVerification(success bool, result string) {
+	successStr := LabelFailure
+	if success {
+		successStr = LabelSuccess
+	}
+
+	EmailVerifications.WithLabelValues(successStr, result).Inc()
+}
+
 // RecordRequestValidation records a request validation result
 func RecordRequestValidation(requestType string, success bool) {
 	successStr := LabelFailure
