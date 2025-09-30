@@ -52,7 +52,18 @@ func HookOrgMembers() ent.Hook {
 					OrgID:  orgID,
 				}
 
-				return val, createUserManagedGroup(privacy.DecisionContext(ctx, privacy.Allow), m, orgMember)
+				ctxWithAuth := ctx
+				if _, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil {
+					// set up authenticated user context for internal calls if not already present
+					// this is needed for clis and other test contexts that may not have proper auth context
+					ctxWithAuth = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+						SubjectID:       userID,
+						OrganizationID:  orgID,
+						OrganizationIDs: []string{orgID},
+					})
+				}
+
+				return val, createUserManagedGroup(ctxWithAuth, m, orgMember)
 			}
 
 			// get the organization
