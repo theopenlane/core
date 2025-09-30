@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/providers/env/v2"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
@@ -180,14 +180,17 @@ func loadConfigFile() {
 }
 
 func loadEnvVars() {
-	err := Config.Load(env.ProviderWithValue("CORE_", ".", func(s string, v string) (string, interface{}) {
-		key := strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(s, "CORE_")), "_", ".")
+	err := Config.Load(env.Provider(".", env.Opt{
+		Prefix: "CORE_",
+		TransformFunc: func(key, v string) (string, any) {
+			key = strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(key, "CORE_")), "_", ".")
 
-		if strings.Contains(v, ",") {
-			return key, strings.Split(v, ",")
-		}
+			if strings.Contains(v, ",") {
+				return key, strings.Split(v, ",")
+			}
 
-		return key, v
+			return key, v
+		},
 	}), nil)
 
 	cobra.CheckErr(err)
