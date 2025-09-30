@@ -511,6 +511,10 @@
         "maxSchemaImportSize": {
           "type": "integer",
           "description": "MaxSchemaImportSize is the maximum size allowed for schema imports in bytes"
+        },
+        "emailValidation": {
+          "$ref": "#/$defs/validator.EmailVerificationConfig",
+          "description": "EmailValidation contains configuration for email validation"
         }
       },
       "additionalProperties": false,
@@ -1392,6 +1396,52 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "validator.AllowedEmailTypes": {
+      "properties": {
+        "disposable": {
+          "type": "boolean",
+          "description": "Disposable indicates whether disposable email addresses are allowed"
+        },
+        "free": {
+          "type": "boolean",
+          "description": "Free indicates whether free email addresses are allowed"
+        },
+        "role": {
+          "type": "boolean",
+          "description": "Role indicates whether role-based email addresses are allowed"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "AllowedEmailTypes defines the allowed email types for verification"
+    },
+    "validator.EmailVerificationConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether email verification is enabled"
+        },
+        "enableAutoUpdateDisposable": {
+          "type": "boolean",
+          "description": "EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses"
+        },
+        "enableGravatarCheck": {
+          "type": "boolean",
+          "description": "EnableGravatarCheck indicates whether to check for Gravatar existence"
+        },
+        "enableSMTPCheck": {
+          "type": "boolean",
+          "description": "EnableSMTPCheck indicates whether to check email by smtp"
+        },
+        "allowedEmailTypes": {
+          "$ref": "#/$defs/validator.AllowedEmailTypes",
+          "description": "AllowedEmailTypes defines the allowed email types for verification"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "EmailVerificationConfig is the configuration for email verification"
     },
     "webauthn.ProviderConfig": {
       "properties": {

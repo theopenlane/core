@@ -58,7 +58,10 @@ Config contains the configuration for the core server
             }
         },
         "windmill": {},
-        "modules": {}
+        "modules": {},
+        "emailValidation": {
+            "allowedEmailTypes": {}
+        }
     },
     "auth": {
         "token": {
@@ -391,6 +394,7 @@ Config holds the configuration for the ent server
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxSchemaImportSize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
+|[**emailValidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -405,7 +409,10 @@ Config holds the configuration for the ent server
         }
     },
     "windmill": {},
-    "modules": {}
+    "modules": {},
+    "emailValidation": {
+        "allowedEmailTypes": {}
+    }
 }
 ```
 
@@ -549,6 +556,46 @@ Modules settings for features access
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
 |**useSandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
+
+**Additional Properties:** not allowed  
+<a name="entconfigemailvalidation"></a>
+### entConfig\.emailValidation: object
+
+EmailVerificationConfig is the configuration for email verification
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
+|**enableAutoUpdateDisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
+|**enableGravatarCheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
+|**enableSMTPCheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
+|[**allowedEmailTypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "allowedEmailTypes": {}
+}
+```
+
+<a name="entconfigemailvalidationallowedemailtypes"></a>
+#### entConfig\.emailValidation\.allowedEmailTypes: object
+
+AllowedEmailTypes defines the allowed email types for verification
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**disposable**|`boolean`|Disposable indicates whether disposable email addresses are allowed<br/>||
+|**free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
+|**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>
