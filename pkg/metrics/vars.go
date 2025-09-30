@@ -87,6 +87,7 @@ var (
 		WorkerExecutionErrors,
 		Logins,
 		Registrations,
+		EmailValidations,
 		QueueTasksPushed,
 		QueueTasksPushFailures,
 		GraphQLOperationTotal,
