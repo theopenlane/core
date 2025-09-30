@@ -49,6 +49,10 @@ const (
 	ResultRole = "role"
 	// ResultSyntax indicates the email has invalid syntax
 	ResultSyntax = "syntax"
+	// ResultUnknown indicates the email verification result is unknown, usually due to an error during verification
+	ResultUnknown = "unknown"
+	// ResultValid indicates the email is valid
+	ResultValid = "valid"
 )
 
 var (
@@ -90,6 +94,7 @@ func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.R
 	ret, err := c.Client.Verify(email)
 	if err != nil {
 		log.Error().Err(err).Msg("error verifying email address")
+		metrics.RecordEmailValidation(false, ResultUnknown)
 
 		return false, nil, err
 	}
@@ -122,5 +127,6 @@ func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.R
 		return false, nil, nil
 	}
 
+	metrics.RecordEmailValidation(true, ResultValid)
 	return true, ret, nil
 }
