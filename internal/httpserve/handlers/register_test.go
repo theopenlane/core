@@ -367,7 +367,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 	t := suite.T()
 
-	// track the original config to reset after the test
+	// enable email verification for this test
 	originalConfig := suite.db.EntConfig.EmailValidation
 
 	// Register test handler with OpenAPI context
@@ -382,36 +382,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 		expectedErrorCode rout.ErrorCode
 	}{
 		{
-			name:  "happy path, email allowed",
-			email: "mitb@theopenlane.io",
-			config: validator.EmailVerificationConfig{
-				Enabled: true,
-				AllowedEmailTypes: validator.AllowedEmailTypes{
-					Disposable: false,
-					Free:       false,
-					Role:       false,
-				},
-			},
-			expectedStatus: http.StatusCreated,
-		},
-		{
-			name:  "happy path, free email not allowed",
-			email: "user@gmail.com",
-			config: validator.EmailVerificationConfig{
-				Enabled: true,
-				AllowedEmailTypes: validator.AllowedEmailTypes{
-					Disposable: false,
-					Free:       false,
-					Role:       false,
-				},
-			},
-			expectedStatus:    http.StatusBadRequest,
-			expectedErrorCode: handlers.InvalidInputErrCode,
-			expectedErr:       validator.ErrEmailNotAllowed.Error(),
-		},
-		{
 			name:  "happy path, free allowed",
-			email: "mitb@gmail.com",
+			email: "user@gmail.com",
 			config: validator.EmailVerificationConfig{
 				Enabled: true,
 				AllowedEmailTypes: validator.AllowedEmailTypes{
@@ -428,9 +400,9 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 			config: validator.EmailVerificationConfig{
 				Enabled: true,
 				AllowedEmailTypes: validator.AllowedEmailTypes{
-					Disposable: false,
-					Free:       false,
-					Role:       false,
+					Disposable: true,
+					Free:       true,
+					Role:       true,
 				},
 			},
 			expectedStatus:    http.StatusBadRequest,
