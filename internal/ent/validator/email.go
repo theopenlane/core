@@ -18,8 +18,16 @@ type EmailVerificationConfig struct {
 	EnableGravatarCheck bool `json:"enableGravatarCheck" koanf:"enableGravatarCheck" default:"true" description:"check for Gravatar existence"`
 	// EnableSMTPCheck indicates whether to check email by smtp
 	EnableSMTPCheck bool `json:"enableSMTPCheck" koanf:"enableSMTPCheck" default:"false" description:"check email by smtp"`
-	// AllowedEmailTypes indicates which types of email addresses are allowed
+	// AllowedEmailTypes defines the allowed email types for verification
 	AllowedEmailTypes AllowedEmailTypes `json:"allowedEmailTypes" koanf:"allowedEmailTypes"`
+}
+
+// EmailVerifier is a wrapper around the emailverifier.Verifier with additional configuration
+type EmailVerifier struct {
+	// Client is the email verifier client
+	Client *emailverifier.Verifier
+	// AllowedEmailTypes defines the allowed email types for verification
+	AllowedEmailTypes AllowedEmailTypes
 }
 
 // AllowedEmailTypes defines the allowed email types for verification
@@ -47,20 +55,39 @@ var (
 	ErrEmailNotAllowed = errors.New("email address is not allowed, please use your corporate email address")
 )
 
-// VerifyEmailAddress verifies the given email address based on the configuration
-// and returns whether it is verified, the verification result, and any error encountered
-func (c *EmailVerificationConfig) VerifyEmailAddress(email string) (bool, *emailverifier.Result, error) {
-	verifier := emailverifier.NewVerifier()
-
-	if c.EnableSMTPCheck {
-		verifier.EnableSMTPCheck()
+func (c *EmailVerificationConfig) NewVerifier() *EmailVerifier {
+	if c == nil || !c.Enabled {
+		return nil
 	}
+
+	v := emailverifier.NewVerifier()
 
 	if c.EnableGravatarCheck {
-		verifier.EnableGravatarCheck()
+		v.EnableGravatarCheck()
 	}
 
-	ret, err := verifier.Verify(email)
+	if c.EnableSMTPCheck {
+		v.EnableSMTPCheck()
+	}
+
+	if c.EnableAutoUpdateDisposable {
+		v.EnableAutoUpdateDisposable()
+	}
+
+	return &EmailVerifier{
+		Client:            v,
+		AllowedEmailTypes: c.AllowedEmailTypes,
+	}
+}
+
+// VerifyEmailAddress verifies the given email address based on the configuration
+// and returns whether it is verified, the verification result, and any error encountered
+func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.Result, error) {
+	if c == nil || c.Client == nil {
+		return true, nil, nil
+	}
+
+	ret, err := c.Client.Verify(email)
 	if err != nil {
 		log.Error().Err(err).Msg("error verifying email address")
 

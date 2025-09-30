@@ -17,6 +17,7 @@ import (
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entitlements/genfeatures"
 	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/core/internal/graphapi/directives"
@@ -165,6 +166,10 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("PondPool"),
 			entc.DependencyType(&soiree.PondPool{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("EmailVerifier"),
+			entc.DependencyType(&validator.EmailVerifier{}),
 		),
 		entc.TemplateDir(templateDir),
 		entc.Extensions(

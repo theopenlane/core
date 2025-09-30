@@ -13,10 +13,12 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		email     string
 		wantValid bool
 		wantErr   bool
+		emptyVal  bool
 	}{
 		{
 			name: "valid corporate email",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: false,
 					Free:       false,
@@ -30,6 +32,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "invalid syntax",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: false,
 					Free:       false,
@@ -43,6 +46,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "disposable email not allowed",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: false,
 					Free:       true,
@@ -56,6 +60,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "disposable email allowed",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: true,
 					Free:       true,
@@ -69,6 +74,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "free email not allowed",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: true,
 					Free:       false,
@@ -82,6 +88,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "role email not allowed",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: true,
 					Free:       true,
@@ -95,6 +102,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 		{
 			name: "verification error on domain lookup",
 			config: EmailVerificationConfig{
+				Enabled: true,
 				AllowedEmailTypes: AllowedEmailTypes{
 					Disposable: true,
 					Free:       true,
@@ -105,11 +113,22 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 			wantValid: false,
 			wantErr:   true,
 		},
+		{
+			name: "not enabled",
+			config: EmailVerificationConfig{
+				Enabled: false,
+			},
+			email:     "user@company.com",
+			wantValid: true,
+			wantErr:   false,
+			emptyVal:  true,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, res, err := tt.config.VerifyEmailAddress(tt.email)
+			verifier := tt.config.NewVerifier()
+			got, res, err := verifier.VerifyEmailAddress(tt.email)
 
 			if tt.wantErr {
 				assert.Error(t, err)
@@ -119,7 +138,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 
 			assert.Equal(t, tt.wantValid, got)
 
-			if tt.wantValid {
+			if tt.wantValid && !tt.emptyVal {
 				assert.NotNil(t, res)
 			} else {
 				assert.Nil(t, res)

@@ -76,7 +76,7 @@ func HookUser() ent.Hook {
 
 						// if email validation is enabled, verify the email address
 						if m.EntConfig.EmailValidation.Enabled {
-							verified, res, err := m.EntConfig.EmailValidation.VerifyEmailAddress(email)
+							verified, res, err := m.EmailVerifier.VerifyEmailAddress(email)
 							if err != nil {
 								zerolog.Ctx(ctx).Error().Err(err).Msg("error verifying email address")
 

@@ -132,6 +132,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
@@ -542,6 +543,7 @@ type (
 		Summarizer         *summarizer.Client
 		Windmill           *windmill.Client
 		PondPool           *soiree.PondPool
+		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -671,6 +673,13 @@ func Windmill(v *windmill.Client) Option {
 func PondPool(v *soiree.PondPool) Option {
 	return func(c *config) {
 		c.PondPool = v
+	}
+}
+
+// EmailVerifier configures the EmailVerifier.
+func EmailVerifier(v *validator.EmailVerifier) Option {
+	return func(c *config) {
+		c.EmailVerifier = v
 	}
 }
 
