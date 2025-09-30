@@ -318,7 +318,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 			// try by the metadata field as a fallback if customer is provided
 			if subscription != nil && subscription.Metadata != nil {
 				// first try org_subscription_id
-				if orgSubID, ok := subscription.Metadata["org_subscription_id"]; ok && orgSubID != "" {
+				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
 						Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
 					if err == nil {
@@ -327,7 +327,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 				}
 
 				// fallback to organization_id
-				if orgID, ok := subscription.Metadata["organization_id"]; ok && orgID != "" {
+				if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
 						Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
 					if err == nil {
