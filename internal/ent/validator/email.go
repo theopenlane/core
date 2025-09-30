@@ -96,28 +96,28 @@ func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.R
 
 	if !ret.Syntax.Valid {
 		log.Warn().Str("email", email).Msg("email address failed syntax check")
-		metrics.RecordEmailVerification(false, ResultSyntax)
+		metrics.RecordEmailValidation(false, ResultSyntax)
 
 		return false, nil, nil
 	}
 
 	if ret.Disposable && !c.AllowedEmailTypes.Disposable {
 		log.Warn().Str("email", email).Msg("email address is disposable and disposable emails are not allowed")
-		metrics.RecordEmailVerification(false, ResultDisposable)
+		metrics.RecordEmailValidation(false, ResultDisposable)
 
 		return false, nil, nil
 	}
 
 	if ret.Free && !c.AllowedEmailTypes.Free {
 		log.Warn().Str("email", email).Msg("email address is free and free emails are not allowed")
-		metrics.RecordEmailVerification(false, ResultFree)
+		metrics.RecordEmailValidation(false, ResultFree)
 
 		return false, nil, nil
 	}
 
 	if ret.RoleAccount && !c.AllowedEmailTypes.Role {
 		log.Warn().Str("email", email).Msg("email address is role-based and role-based emails are not allowed")
-		metrics.RecordEmailVerification(false, ResultRole)
+		metrics.RecordEmailValidation(false, ResultRole)
 
 		return false, nil, nil
 	}

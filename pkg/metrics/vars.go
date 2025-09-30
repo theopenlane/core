@@ -41,9 +41,9 @@ var (
 		Help: "The total number of user registrations",
 	})
 
-	EmailVerifications = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "openlane_email_verifications_total",
-		Help: "The total number of email verifications by success and result type",
+	EmailValidations = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_email_validations_total",
+		Help: "The total number of email validations by success and result type",
 	}, []string{"success", "result"})
 
 	QueueTasksPushed = prometheus.NewCounterVec(prometheus.CounterOpts{
