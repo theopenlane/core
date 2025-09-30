@@ -368,7 +368,17 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 	t := suite.T()
 
 	// enable email verification for this test
-	originalConfig := suite.db.EntConfig.EmailValidation
+	config := &validator.EmailVerificationConfig{
+		Enabled: true,
+		AllowedEmailTypes: validator.AllowedEmailTypes{
+			Disposable: true,
+			Free:       true,
+			Role:       true,
+		},
+	}
+
+	original := suite.db.EmailVerifier
+	suite.db.EmailVerifier = config.NewVerifier()
 
 	// Register test handler with OpenAPI context
 	suite.registerTestHandler("POST", "register", suite.createImpersonationOperation("RegisterHandler", "Test register"), suite.h.RegisterHandler)
@@ -458,5 +468,5 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 	}
 
 	// reset back to original state
-	suite.db.EntConfig.EmailValidation = originalConfig
+	suite.db.EmailVerifier = original
 }
