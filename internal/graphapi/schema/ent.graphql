@@ -28320,10 +28320,6 @@ type OrgSubscription implements Node {
   """
   stripeSubscriptionID: String
   """
-  the price of the product tier
-  """
-  productPrice: Price
-  """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
   stripeSubscriptionStatus: String
@@ -28343,14 +28339,6 @@ type OrgSubscription implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  """
-  the feature lookup keys associated with the subscription
-  """
-  featureLookupKeys: [String!]
   owner: Organization
   events(
     """
@@ -28436,10 +28424,6 @@ type OrgSubscriptionHistory implements Node {
   """
   stripeSubscriptionID: String
   """
-  the price of the product tier
-  """
-  productPrice: Price
-  """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
   stripeSubscriptionStatus: String
@@ -28459,14 +28443,6 @@ type OrgSubscriptionHistory implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  """
-  the feature lookup keys associated with the subscription
-  """
-  featureLookupKeys: [String!]
 }
 """
 A connection to a list of items.

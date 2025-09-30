@@ -12,11 +12,13 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v82"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/slack"
@@ -127,6 +129,21 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 	return &event, nil
 }
 
+// parseSoftDeleteEventID parses the event ID from a soft delete organization mutation by casting the mutation to an organization mutation
+func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
+	m, ok := mutation.(*entgen.OrganizationMutation)
+	if !ok {
+		return nil, ErrUnableToDetermineEventID
+	}
+
+	id, ok := m.ID()
+	if !ok {
+		return nil, ErrUnableToDetermineEventID
+	}
+
+	return &EventID{ID: id}, nil
+}
+
 // EmitEventHook emits an event to the event pool when a mutation is performed
 func EmitEventHook(e *Eventer) ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
@@ -136,20 +153,41 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				return nil, err
 			}
 
-			if reflect.TypeOf(retVal).Kind() == reflect.Int {
-				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
+			// determine the operation type
+			op := getOperation(ctx, mutation)
+
+			// Delete operations return an int of the number of rows deleted
+			// so we do not want to skip emitting events for those operations
+			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
+				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
 				// TODO: determine if we need to emit events for mutations that return an int
 				return retVal, err
 			}
 
 			emit := func() {
-				eventID, err := parseEventID(retVal)
-				if err != nil {
-					log.Err(err).Msg("Failed to parse event ID")
+				eventID := &EventID{}
+				if op == SoftDeleteOne {
+					eventID, err = parseSoftDeleteEventID(mutation)
+					if err != nil {
+						log.Err(err).Msg("Failed to parse soft delete event ID")
+
+						return
+					}
+				} else {
+					eventID, err = parseEventID(retVal)
+					if err != nil {
+						log.Err(err).Msg("Failed to parse event ID")
+						return
+					}
+
+				}
+
+				if eventID == nil || eventID.ID == "" {
+					log.Err(ErrUnableToDetermineEventID).Msg("Event ID is nil or empty, cannot emit event")
 					return
 				}
 
-				name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
+				name := fmt.Sprintf("%s.%s", mutation.Type(), op)
 				event := soiree.NewBaseEvent(name, mutation)
 
 				event.Properties().Set("ID", eventID.ID)
@@ -192,10 +230,31 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	)
 }
 
+// getOperation gets the operation from the context or mutation
+func getOperation(ctx context.Context, mutation ent.Mutation) string {
+	// determine if this is a soft delete operation
+	// this isn't in the context when we reach here, but incase it is in the future, we check
+	if entx.CheckIsSoftDelete(ctx) {
+		return SoftDeleteOne
+	}
+
+	// check the graphql operation context for the operation name
+	if graphql.HasOperationContext(ctx) {
+		opCtx := graphql.GetOperationContext(ctx)
+		if opCtx != nil {
+			if opCtx.OperationName == "DeleteOrganization" && mutation.Type() == entgen.TypeOrganization {
+				return SoftDeleteOne
+			}
+		}
+	}
+
+	return mutation.Op().String()
+}
+
 // emitEventOn is a function that returns a function that checks if an event should be emitted
 // based on the mutation type and operation and fields that were updated
 func emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(_ context.Context, m entgen.Mutation) bool {
+	return func(ctx context.Context, m entgen.Mutation) bool {
 		switch m.Type() {
 		case entgen.TypeOrgSubscription:
 			if m.Op().Is(ent.OpCreate) {
@@ -215,6 +274,11 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 			switch m.Op() {
 			case ent.OpDelete, ent.OpDeleteOne, ent.OpCreate:
 				return true
+			case ent.OpUpdateOne:
+				// ensure we emit soft delete events, these do not come through as a delete operation
+				if entx.CheckIsSoftDelete(ctx) {
+					return true
+				}
 			}
 		case entgen.TypeSubscriber:
 			if m.Op().Is(ent.OpCreate) {
@@ -230,11 +294,16 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 	}
 }
 
+const (
+	SoftDeleteOne = "SoftDeleteOne"
+)
+
 // OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events; formatted as `type.operation`
 var OrganizationSettingUpdateOne = fmt.Sprintf("%s.%s", entgen.TypeOrganizationSetting, entgen.OpUpdateOne.String())
 var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, entgen.OpCreate.String())
 var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
 var OrganizationCreate = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpCreate.String())
+var OrganizationSoftDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, SoftDeleteOne)
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
@@ -271,6 +340,12 @@ func RegisterListeners(e *Eventer) error {
 	}
 
 	_, err = e.Emitter.On(OrganizationDeleteOne, handleOrganizationDelete)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	_, err = e.Emitter.On(OrganizationSoftDeleteOne, handleOrganizationDelete)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
 		return err
@@ -416,10 +491,16 @@ func handleOrganizationDelete(event soiree.Event) error {
 	// setup the context to allow the creation of a customer subscription without any restrictions
 	allowCtx := privacy.DecisionContext(event.Context(), privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
+	allowCtx = context.WithValue(allowCtx, entx.SoftDeleteSkipKey{}, true)
 
-	org, err := client.Organization.Get(allowCtx, lo.ValueOr(event.Properties(), "ID", "").(string))
+	org, err := client.Organization.Query().Where(
+		organization.And(
+			organization.ID(lo.ValueOr(event.Properties(), "ID", "").(string)),
+			organization.DeletedAtNotNil(),
+		)).
+		Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization")
+		zerolog.Ctx(event.Context()).Err(err).Msg("failed to fetch organization")
 
 		return err
 	}
@@ -429,7 +510,7 @@ func handleOrganizationDelete(event soiree.Event) error {
 	}
 
 	if err := entMgr.FindAndDeactivateCustomerSubscription(event.Context(), *org.StripeCustomerID); err != nil {
-		zerolog.Ctx(event.Context()).Error().Err(err).Msg("Failed to deactivate customer subscription")
+		zerolog.Ctx(event.Context()).Error().Err(err).Msg("failed to deactivate customer subscription")
 
 		return err
 	}

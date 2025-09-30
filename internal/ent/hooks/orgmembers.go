@@ -122,7 +122,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
-				zerolog.Ctx(ctx).Warn().Msg("skipping org membership delete hook")
+				zerolog.Ctx(ctx).Info().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
 			}

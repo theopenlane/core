@@ -45,7 +45,15 @@ func TestNew_MissingDeps(t *testing.T) {
 }
 
 func TestAnalyzeOrgNoSubscription(t *testing.T) {
-	r := &Reconciler{}
+	WithStripeClient(&entitlements.StripeClient{})
+	r, err := New(
+		WithDB(&ent.Client{}),
+		WithStripeClient(&entitlements.StripeClient{}),
+	)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
 	org := &ent.Organization{}
 	action, err := r.analyzeOrg(context.Background(), org)
 	if err != nil {

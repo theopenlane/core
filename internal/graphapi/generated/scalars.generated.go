@@ -470,16 +470,6 @@ func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlane�
 	return v
 }
 
-func (ec *executionContext) unmarshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐPrice(ctx context.Context, v any) (models.Price, error) {
-	var res models.Price
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOPrice2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐPrice(ctx context.Context, sel ast.SelectionSet, v models.Price) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
 	if v == nil {
 		return nil, nil

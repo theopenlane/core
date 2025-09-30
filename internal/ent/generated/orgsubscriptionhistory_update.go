@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -163,26 +162,6 @@ func (_u *OrgSubscriptionHistoryUpdate) ClearStripeSubscriptionID() *OrgSubscrip
 	return _u
 }
 
-// SetProductPrice sets the "product_price" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetProductPrice(v models.Price) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetProductPrice(v)
-	return _u
-}
-
-// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionHistoryUpdate {
-	if v != nil {
-		_u.SetProductPrice(*v)
-	}
-	return _u
-}
-
-// ClearProductPrice clears the value of the "product_price" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearProductPrice() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearProductPrice()
-	return _u
-}
-
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
 func (_u *OrgSubscriptionHistoryUpdate) SetStripeSubscriptionStatus(v string) *OrgSubscriptionHistoryUpdate {
 	_u.mutation.SetStripeSubscriptionStatus(v)
@@ -274,42 +253,6 @@ func (_u *OrgSubscriptionHistoryUpdate) SetNillableDaysUntilDue(v *string) *OrgS
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionHistoryUpdate) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdate {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetFeatures sets the "features" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetFeatures(v []string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetFeatures(v)
-	return _u
-}
-
-// AppendFeatures appends value to the "features" field.
-func (_u *OrgSubscriptionHistoryUpdate) AppendFeatures(v []string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.AppendFeatures(v)
-	return _u
-}
-
-// ClearFeatures clears the value of the "features" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearFeatures() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearFeatures()
-	return _u
-}
-
-// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetFeatureLookupKeys(v []string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetFeatureLookupKeys(v)
-	return _u
-}
-
-// AppendFeatureLookupKeys appends value to the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdate) AppendFeatureLookupKeys(v []string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.AppendFeatureLookupKeys(v)
-	return _u
-}
-
-// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearFeatureLookupKeys() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearFeatureLookupKeys()
 	return _u
 }
 
@@ -425,12 +368,6 @@ func (_u *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductPrice(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
-	}
-	if _u.mutation.ProductPriceCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
 	}
@@ -457,28 +394,6 @@ func (_u *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.Features(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFeatures(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldFeatures, value)
-		})
-	}
-	if _u.mutation.FeaturesCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.FeatureLookupKeys(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFeatureLookupKeys(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldFeatureLookupKeys, value)
-		})
-	}
-	if _u.mutation.FeatureLookupKeysCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgSubscriptionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -634,26 +549,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) ClearStripeSubscriptionID() *OrgSubsc
 	return _u
 }
 
-// SetProductPrice sets the "product_price" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetProductPrice(v models.Price) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetProductPrice(v)
-	return _u
-}
-
-// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableProductPrice(v *models.Price) *OrgSubscriptionHistoryUpdateOne {
-	if v != nil {
-		_u.SetProductPrice(*v)
-	}
-	return _u
-}
-
-// ClearProductPrice clears the value of the "product_price" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearProductPrice() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearProductPrice()
-	return _u
-}
-
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) SetStripeSubscriptionStatus(v string) *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.SetStripeSubscriptionStatus(v)
@@ -745,42 +640,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableDaysUntilDue(v *string) *O
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetFeatures sets the "features" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetFeatures(v []string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetFeatures(v)
-	return _u
-}
-
-// AppendFeatures appends value to the "features" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) AppendFeatures(v []string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.AppendFeatures(v)
-	return _u
-}
-
-// ClearFeatures clears the value of the "features" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearFeatures() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearFeatures()
-	return _u
-}
-
-// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetFeatureLookupKeys(v []string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetFeatureLookupKeys(v)
-	return _u
-}
-
-// AppendFeatureLookupKeys appends value to the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) AppendFeatureLookupKeys(v []string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.AppendFeatureLookupKeys(v)
-	return _u
-}
-
-// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearFeatureLookupKeys() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearFeatureLookupKeys()
 	return _u
 }
 
@@ -926,12 +785,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductPrice(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
-	}
-	if _u.mutation.ProductPriceCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
-	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
 	}
@@ -958,28 +811,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.Features(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFeatures(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldFeatures, value)
-		})
-	}
-	if _u.mutation.FeaturesCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.FeatureLookupKeys(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedFeatureLookupKeys(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldFeatureLookupKeys, value)
-		})
-	}
-	if _u.mutation.FeatureLookupKeysCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgSubscriptionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

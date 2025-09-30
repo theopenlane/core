@@ -16,13 +16,10 @@ query GetAllOrgSubscriptionHistories {
         createdBy
         daysUntilDue
         expiresAt
-        featureLookupKeys
-        features
         historyTime
         id
         operation
         ownerID
-        productPrice
         ref
         stripeSubscriptionID
         stripeSubscriptionStatus
@@ -51,13 +48,10 @@ query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscripti
         createdBy
         daysUntilDue
         expiresAt
-        featureLookupKeys
-        features
         historyTime
         id
         operation
         ownerID
-        productPrice
         ref
         stripeSubscriptionID
         stripeSubscriptionStatus

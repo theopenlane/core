@@ -16,11 +16,8 @@ query GetAllOrgSubscriptions {
         createdBy
         daysUntilDue
         expiresAt
-        featureLookupKeys
-        features
         id
         ownerID
-        productPrice
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -38,11 +35,8 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     createdBy
     daysUntilDue
     expiresAt
-    featureLookupKeys
-    features
     id
     ownerID
-    productPrice
     stripeSubscriptionID
     stripeSubscriptionStatus
     tags
@@ -68,11 +62,8 @@ query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereI
         createdBy
         daysUntilDue
         expiresAt
-        featureLookupKeys
-        features
         id
         ownerID
-        productPrice
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags

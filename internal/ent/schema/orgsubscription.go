@@ -10,7 +10,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
@@ -43,9 +42,6 @@ func (OrgSubscription) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("stripe_subscription_id").
 			Comment("the stripe subscription id").
-			Optional(),
-		field.JSON("product_price", models.Price{}).
-			Comment("the price of the product tier").
 			Optional(),
 		field.String("stripe_subscription_status").
 			Comment("the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status").
@@ -80,12 +76,6 @@ func (OrgSubscription) Fields() []ent.Field {
 			).
 			Nillable().
 			Optional(),
-		field.JSON("features", []string{}).
-			Comment("the features associated with the subscription").
-			Optional(),
-		field.JSON("feature_lookup_keys", []string{}).
-			Comment("the feature lookup keys associated with the subscription").
-			Optional(),
 	}
 }
 
@@ -107,7 +97,6 @@ func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
 	}
 }
 

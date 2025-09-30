@@ -2065,14 +2065,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscription.FieldTags},
 			orgsubscription.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscription.FieldOwnerID},
 			orgsubscription.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionID},
-			orgsubscription.FieldProductPrice:             {Type: field.TypeJSON, Column: orgsubscription.FieldProductPrice},
 			orgsubscription.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionStatus},
 			orgsubscription.FieldActive:                   {Type: field.TypeBool, Column: orgsubscription.FieldActive},
 			orgsubscription.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscription.FieldExpiresAt},
 			orgsubscription.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscription.FieldTrialExpiresAt},
 			orgsubscription.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscription.FieldDaysUntilDue},
-			orgsubscription.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscription.FieldFeatures},
-			orgsubscription.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscription.FieldFeatureLookupKeys},
 		},
 	}
 	graph.Nodes[64] = &sqlgraph.Node{
@@ -2098,14 +2095,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldTags},
 			orgsubscriptionhistory.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscriptionhistory.FieldOwnerID},
 			orgsubscriptionhistory.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionID},
-			orgsubscriptionhistory.FieldProductPrice:             {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldProductPrice},
 			orgsubscriptionhistory.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionStatus},
 			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
 			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
 			orgsubscriptionhistory.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldTrialExpiresAt},
 			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
-			orgsubscriptionhistory.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatures},
-			orgsubscriptionhistory.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatureLookupKeys},
 		},
 	}
 	graph.Nodes[65] = &sqlgraph.Node{
@@ -20669,11 +20663,6 @@ func (f *OrgSubscriptionFilter) WhereStripeSubscriptionID(p entql.StringP) {
 	f.Where(p.Field(orgsubscription.FieldStripeSubscriptionID))
 }
 
-// WhereProductPrice applies the entql json.RawMessage predicate on the product_price field.
-func (f *OrgSubscriptionFilter) WhereProductPrice(p entql.BytesP) {
-	f.Where(p.Field(orgsubscription.FieldProductPrice))
-}
-
 // WhereStripeSubscriptionStatus applies the entql string predicate on the stripe_subscription_status field.
 func (f *OrgSubscriptionFilter) WhereStripeSubscriptionStatus(p entql.StringP) {
 	f.Where(p.Field(orgsubscription.FieldStripeSubscriptionStatus))
@@ -20697,16 +20686,6 @@ func (f *OrgSubscriptionFilter) WhereTrialExpiresAt(p entql.TimeP) {
 // WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
 func (f *OrgSubscriptionFilter) WhereDaysUntilDue(p entql.StringP) {
 	f.Where(p.Field(orgsubscription.FieldDaysUntilDue))
-}
-
-// WhereFeatures applies the entql json.RawMessage predicate on the features field.
-func (f *OrgSubscriptionFilter) WhereFeatures(p entql.BytesP) {
-	f.Where(p.Field(orgsubscription.FieldFeatures))
-}
-
-// WhereFeatureLookupKeys applies the entql json.RawMessage predicate on the feature_lookup_keys field.
-func (f *OrgSubscriptionFilter) WhereFeatureLookupKeys(p entql.BytesP) {
-	f.Where(p.Field(orgsubscription.FieldFeatureLookupKeys))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -20879,11 +20858,6 @@ func (f *OrgSubscriptionHistoryFilter) WhereStripeSubscriptionID(p entql.StringP
 	f.Where(p.Field(orgsubscriptionhistory.FieldStripeSubscriptionID))
 }
 
-// WhereProductPrice applies the entql json.RawMessage predicate on the product_price field.
-func (f *OrgSubscriptionHistoryFilter) WhereProductPrice(p entql.BytesP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldProductPrice))
-}
-
 // WhereStripeSubscriptionStatus applies the entql string predicate on the stripe_subscription_status field.
 func (f *OrgSubscriptionHistoryFilter) WhereStripeSubscriptionStatus(p entql.StringP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldStripeSubscriptionStatus))
@@ -20907,16 +20881,6 @@ func (f *OrgSubscriptionHistoryFilter) WhereTrialExpiresAt(p entql.TimeP) {
 // WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
 func (f *OrgSubscriptionHistoryFilter) WhereDaysUntilDue(p entql.StringP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldDaysUntilDue))
-}
-
-// WhereFeatures applies the entql json.RawMessage predicate on the features field.
-func (f *OrgSubscriptionHistoryFilter) WhereFeatures(p entql.BytesP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldFeatures))
-}
-
-// WhereFeatureLookupKeys applies the entql json.RawMessage predicate on the feature_lookup_keys field.
-func (f *OrgSubscriptionHistoryFilter) WhereFeatureLookupKeys(p entql.BytesP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldFeatureLookupKeys))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -2,19 +2,27 @@ package reconciler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v82"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	internalentitlements "github.com/theopenlane/core/internal/entitlements"
+	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 )
 
 // Reconciler reconciles organization subscriptions with Stripe
@@ -28,8 +36,9 @@ type Reconciler struct {
 
 // actionRow represents a single reconciliation action to be performed
 type actionRow struct {
-	OrgID  string
-	Action string
+	OrgID   string
+	OrgName string
+	Action  string
 }
 
 // Option configures the Reconciler using the functional options pattern
@@ -62,6 +71,9 @@ var (
 	ErrMissingDBClient       = fmt.Errorf("missing database client")
 	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
 	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
+	ErrMissingPrice          = fmt.Errorf("missing price for customer")
+	ErrMultipleCustomers     = fmt.Errorf("multiple customers found for organization")
+	ErrMissingCustomer       = fmt.Errorf("missing customer for organization")
 )
 
 // New creates a new Reconciler instance with the provided options
@@ -88,9 +100,21 @@ type ReconcileResult struct {
 }
 
 // Reconcile iterates through all organizations and ensures customer records and subscriptions exist in Stripe
-func (r *Reconciler) Reconcile(ctx context.Context) (*ReconcileResult, error) {
+func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*ReconcileResult, error) {
 	if r.db == nil {
 		return nil, ErrMissingDBClient
+	}
+
+	where := []predicate.Organization{
+		organization.And(
+			organization.DeletedAtIsNil(),
+			organization.IDNEQ("01101101011010010111010001100010"),
+			organization.PersonalOrg(false),
+		),
+	}
+
+	if len(orgIDs) > 0 {
+		where = append(where, organization.IDIn(orgIDs...))
 	}
 
 	// Add internal context for administrative operations
@@ -99,10 +123,7 @@ func (r *Reconciler) Reconcile(ctx context.Context) (*ReconcileResult, error) {
 		WithOrgSubscriptions().
 		WithSetting().
 		Where(
-			organization.And(
-				organization.DeletedAtIsNil(),
-				organization.Not(organization.ID("01101101011010010111010001100010")),
-			),
+			where...,
 		).
 		All(internalCtx)
 	if err != nil {
@@ -118,7 +139,7 @@ func (r *Reconciler) Reconcile(ctx context.Context) (*ReconcileResult, error) {
 			}
 
 			if action != "" {
-				rows = append(rows, actionRow{OrgID: org.ID, Action: action})
+				rows = append(rows, actionRow{OrgID: org.ID, OrgName: org.DisplayName, Action: action})
 			}
 
 			continue
@@ -173,7 +194,25 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	}
 
 	if err := r.stripe.FindOrCreateCustomer(ctx, cust); err != nil {
-		return fmt.Errorf("stripe customer: %w", err)
+		if !errors.Is(err, entitlements.ErrNoSubscriptions) && !errors.Is(err, entitlements.ErrNoSubscriptionItems) {
+			return fmt.Errorf("stripe customer: %w", err)
+		}
+	}
+
+	// make sure the customer id is set on the org
+	if org.StripeCustomerID == nil && cust.StripeCustomerID != "" {
+		err := r.db.Organization.UpdateOneID(cust.OrganizationID).
+			SetStripeCustomerID(cust.StripeCustomerID).
+			Exec(internalCtx)
+		if err != nil {
+			return err
+		}
+	}
+
+	if cust.StripeSubscriptionID == "" {
+		if err := r.createSubscription(ctx, cust); err != nil {
+			return fmt.Errorf("create subscription: %w", err)
+		}
 	}
 
 	if sub.StripeSubscriptionID == "" {
@@ -185,25 +224,50 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	return nil
 }
 
+var trialdays int64 = 30
+
+// createSubscription creates a new subscription in Stripe for the organization customer with the trial settings
+func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.OrganizationCustomer) error {
+	customers, err := r.stripe.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", cust.OrganizationID))
+	if err != nil {
+		return err
+	}
+
+	if len(customers) == 0 {
+		return ErrMissingCustomer
+	}
+
+	if len(customers) != 1 {
+		return ErrMultipleCustomers
+	}
+
+	cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+	if len(cust.Prices) == 0 {
+		return ErrMissingPrice
+	}
+
+	cust.Status = string(stripe.SubscriptionStatusTrialing)
+	cust.TrialEnd = time.Now().AddDate(0, 0, int(trialdays)).Unix()
+
+	_, err = r.stripe.CreateSubscriptionWithPrices(ctx, customers[0], cust)
+	if err != nil {
+		return err
+	}
+
+	// update subscription in db
+	if err := r.updateSubscription(ctx, cust); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // updateSubscription updates the organization subscription in the database with current Stripe data
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
 	if c.OrganizationSubscriptionID == "" {
 		return ErrMissingSubscriptionID
-	}
-
-	if len(c.Prices) > 1 {
-		return ErrMultiplePrices
-	}
-
-	price := models.Price{}
-	if len(c.Prices) == 1 {
-		price = models.Price{
-			Amount:   c.Prices[0].Price,
-			Currency: c.Prices[0].Currency,
-			Interval: c.Prices[0].Interval,
-		}
 	}
 
 	trialExpiresAt := time.Unix(0, 0)
@@ -221,10 +285,7 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 	update := r.db.OrgSubscription.UpdateOneID(c.OrganizationSubscriptionID).
 		SetStripeSubscriptionID(c.StripeSubscriptionID).
 		SetStripeSubscriptionStatus(c.Subscription.Status).
-		SetActive(active).
-		SetFeatures(c.FeatureNames).
-		SetFeatureLookupKeys(c.Features).
-		SetProductPrice(price)
+		SetActive(active)
 
 	if c.Status == string(stripe.SubscriptionStatusTrialing) {
 		update.SetTrialExpiresAt(trialExpiresAt)
@@ -243,6 +304,10 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 
 // analyzeOrg checks the organization subscription status and returns a description of the action needed
 func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (string, error) {
+	if r.stripe == nil {
+		return "", ErrMissingStripeClient
+	}
+
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
 		sub = org.Edges.OrgSubscriptions[0]
@@ -251,7 +316,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	customerMissing := sub == nil
 	subscriptionMissing := sub == nil
 
-	if !customerMissing {
+	if !customerMissing && org != nil && org.StripeCustomerID != nil && *org.StripeCustomerID != "" {
 		if _, err := r.stripe.GetCustomerByStripeID(ctx, *org.StripeCustomerID); err != nil {
 			customerMissing = true
 		}
@@ -268,9 +333,127 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 		return "create stripe customer & subscription", nil
 	case customerMissing:
 		return "create stripe customer", nil
+	case !customerMissing && org.StripeCustomerID == nil && subscriptionMissing:
+		prices := internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+		if len(prices) == 0 {
+			return "", ErrMissingPrice
+		}
+
+		return fmt.Sprintf("set stripe customer ID on organization and create stripe subscription with prices %v", prices), nil
+	case !customerMissing && org.StripeCustomerID == nil && !subscriptionMissing:
+		return "set stripe customer ID on organization", nil
 	case subscriptionMissing:
 		return "create stripe subscription", nil
 	default:
 		return "", nil
 	}
+}
+
+// orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
+type orgModuleConfig struct {
+	trial bool
+}
+
+// OrgModuleOption sets fields on orgModuleConfig
+type OrgModuleOption func(*orgModuleConfig)
+
+// WithTrial sets the trial flag to true, allowing trial modules to be included
+func WithTrial() OrgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.trial = true
+	}
+}
+
+func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, orgSubs *ent.OrgSubscription, orgID string, opts ...OrgModuleOption) ([]string, error) {
+	cfg := orgModuleConfig{}
+
+	for _, opt := range opts {
+		opt(&cfg)
+	}
+
+	modulesCreated := make([]string, 0)
+
+	// the catalog contains config for which things should be in a trial
+	if db.EntConfig == nil {
+		return nil, fmt.Errorf("ent config is nil") // nolint:err113
+	}
+
+	for moduleName, mod := range gencatalog.GetModules(db.EntConfig.Modules.UseSandbox) {
+		if !cfg.trial || !mod.IncludeWithTrial {
+			continue
+		}
+
+		// Find the first price with "month" interval
+		// we want to create, by default, a monthly recurring price rather than a one-time or annual
+		var monthlyPrice *catalog.Price
+		for _, price := range mod.Billing.Prices {
+			if price.Interval == "month" {
+				monthlyPrice = &price
+				break
+			}
+		}
+
+		if monthlyPrice == nil {
+			continue // skip if no monthly price
+		}
+
+		newCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
+		newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+
+		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
+		orgMod, err := db.OrgModule.Create().
+			SetModule(models.OrgModule(moduleName)).
+			SetSubscriptionID(orgSubs.ID).
+			SetStatus(string(stripe.SubscriptionStatusTrialing)).
+			SetOwnerID(orgID).
+			SetModuleLookupKey(mod.LookupKey).
+			SetStripePriceID(monthlyPrice.PriceID).
+			SetActive(true).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			Save(newCtx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgModule for %s with ID %s", moduleName, orgMod.ID)
+
+		// the product and price entries are somewhat redundant but creating them for reference and future extensibility
+		orgProduct, err := db.OrgProduct.Create().
+			SetModule(moduleName).
+			SetOwnerID(orgID).
+			SetModule(orgMod.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetActive(true).
+			Save(newCtx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgProduct for %s with ID %s", moduleName, orgProduct.ID)
+
+		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
+		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
+		orgPrice, err := db.OrgPrice.Create().
+			SetProductID(orgProduct.ID).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			SetOwnerID(orgID).
+			SetSubscriptionID(orgSubs.ID).
+			SetStripePriceID(monthlyPrice.PriceID).
+			SetActive(true).
+			Save(newCtx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
+
+		// update the org modules with the price ID
+		if _, err := db.OrgModule.UpdateOne(orgMod).SetPriceID(orgPrice.ID).Save(newCtx); err != nil {
+			return nil, fmt.Errorf("failed to update OrgModule with price ID for module %s: %w", moduleName, err)
+		}
+
+		modulesCreated = append(modulesCreated, moduleName)
+	}
+
+	return modulesCreated, nil
 }

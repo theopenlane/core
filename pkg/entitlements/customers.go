@@ -113,10 +113,6 @@ func (sc *StripeClient) CreateCustomerAndSubscription(ctx context.Context, o *Or
 
 	log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("subscription created")
 
-	if err := sc.retrieveFeatureLists(ctx, o); err != nil {
-		return ErrCustomerNotFound
-	}
-
 	_, err = sc.Client.V1Customers.Update(ctx, customer.ID, sc.UpdateCustomerWithOptions(
 		&stripe.CustomerUpdateParams{}, WithUpdateCustomerMetadata(map[string]string{"subscription_schedule_id": subscription.StripeSubscriptionScheduleID})))
 	if err != nil {
@@ -140,52 +136,19 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	case 0:
 		return sc.CreateCustomerAndSubscription(ctx, o)
 	case 1:
+		if customers[0].Subscriptions == nil || len(customers[0].Subscriptions.Data) == 0 {
+			return ErrNoSubscriptions
+		}
+		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("found existing customer for organization")
+
 		o.StripeCustomerID = customers[0].ID
 		o.StripeSubscriptionID = customers[0].Subscriptions.Data[0].ID
 
-		return sc.retrieveFeatureLists(ctx, o)
+		return nil
 	default:
 		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", o.OrganizationID).Interface("customers", customers).Msg("found multiple customers, skipping all updates")
 		return ErrFoundMultipleCustomers
 	}
-}
-
-// retrieveFeatureLists retrieves the features for a customer
-func (sc *StripeClient) retrieveFeatureLists(ctx context.Context, o *OrganizationCustomer) error {
-	var feats, featNames []string
-
-	const maxRetries = 5
-
-	for i := range maxRetries {
-		var err error
-
-		feats, featNames, err = sc.retrieveActiveEntitlements(ctx, o.StripeCustomerID)
-		if err != nil {
-			return err
-		}
-
-		// if we have features, break out of the loop
-		if len(feats) > 0 {
-			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", o.StripeCustomerID).Msg("features found for customer")
-
-			break
-		}
-
-		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", o.StripeCustomerID).Msg("no features found for customer, retrying")
-
-		time.Sleep(time.Duration(i+1) * time.Second) // backoff retry
-	}
-
-	if len(feats) == 0 {
-		log.Warn().Str("customer_id", o.StripeCustomerID).Msg("no features found for customer")
-	}
-
-	log.Debug().Str("organization_id", o.OrganizationID).Strs("features", feats).Str("customer_id", o.StripeCustomerID).Msg("found features for customer")
-
-	o.Features = feats
-	o.FeatureNames = featNames
-
-	return nil
 }
 
 // GetCustomerByStripeID gets a customer by ID

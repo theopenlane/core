@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -174,20 +173,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionID(v *strin
 	return _c
 }
 
-// SetProductPrice sets the "product_price" field.
-func (_c *OrgSubscriptionHistoryCreate) SetProductPrice(v models.Price) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetProductPrice(v)
-	return _c
-}
-
-// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetProductPrice(*v)
-	}
-	return _c
-}
-
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
 func (_c *OrgSubscriptionHistoryCreate) SetStripeSubscriptionStatus(v string) *OrgSubscriptionHistoryCreate {
 	_c.mutation.SetStripeSubscriptionStatus(v)
@@ -255,18 +240,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(v *string) *OrgS
 	if v != nil {
 		_c.SetDaysUntilDue(*v)
 	}
-	return _c
-}
-
-// SetFeatures sets the "features" field.
-func (_c *OrgSubscriptionHistoryCreate) SetFeatures(v []string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetFeatures(v)
-	return _c
-}
-
-// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (_c *OrgSubscriptionHistoryCreate) SetFeatureLookupKeys(v []string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetFeatureLookupKeys(v)
 	return _c
 }
 
@@ -445,10 +418,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString, value)
 		_node.StripeSubscriptionID = value
 	}
-	if value, ok := _c.mutation.ProductPrice(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
-		_node.ProductPrice = value
-	}
 	if value, ok := _c.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
 		_node.StripeSubscriptionStatus = value
@@ -468,14 +437,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
-	}
-	if value, ok := _c.mutation.Features(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
-		_node.Features = value
-	}
-	if value, ok := _c.mutation.FeatureLookupKeys(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
-		_node.FeatureLookupKeys = value
 	}
 	return _node, _spec
 }

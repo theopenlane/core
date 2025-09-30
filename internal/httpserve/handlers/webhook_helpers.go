@@ -24,7 +24,7 @@ import (
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule
 // records exist and are updated based on the given Stripe subscription data.
 func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscriptionID string, items []*stripe.SubscriptionItem, subStatus stripe.SubscriptionStatus) error {
-	orgSub, err := getOrgSubscription(ctx, subscriptionID)
+	orgSub, err := getOrgSubscription(ctx, subscriptionID, nil)
 	if err != nil {
 		return err
 	}
@@ -196,7 +196,7 @@ func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentM
 
 // removeAllModules drops all modules except the base one
 func (h *Handler) removeAllModules(ctx context.Context, subscriptionID string) error {
-	orgSub, err := getOrgSubscription(ctx, subscriptionID)
+	orgSub, err := getOrgSubscription(ctx, subscriptionID, nil)
 	if err != nil {
 		return err
 	}

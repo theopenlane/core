@@ -316,12 +316,35 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 }
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
-func getOrgSubscription(ctx context.Context, subscriptionID string) (*ent.OrgSubscription, error) {
+func getOrgSubscription(ctx context.Context, subscriptionID string, customer *stripe.Customer) (*ent.OrgSubscription, error) {
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.StripeSubscriptionID(subscriptionID)).Only(allowCtx)
 	if err != nil {
+		if ent.IsNotFound(err) {
+			// try by the metadata field as a fallback if customer is provided
+			if customer != nil && customer.Metadata != nil {
+				// first try org_subscription_id
+				if orgSubID, ok := customer.Metadata["org_subscription_id"]; ok && orgSubID != "" {
+					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
+						Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+					if err == nil {
+						return orgSubscription, nil
+					}
+				}
+
+				// fallback to organization_id
+				if orgID, ok := customer.Metadata["organization_id"]; ok && orgID != "" {
+					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
+						Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+					if err == nil {
+						return orgSubscription, nil
+					}
+				}
+			}
+		}
+
 		log.Error().Err(err).Msg("failed to find org subscription")
 		return nil, err
 	}
@@ -332,13 +355,14 @@ func getOrgSubscription(ctx context.Context, subscriptionID string) (*ent.OrgSub
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
 func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
-	orgSubscription, err := getOrgSubscription(ctx, subscription.ID)
+
+	orgSubscription, err := getOrgSubscription(ctx, subscription.ID, customer)
 	if err != nil {
 		return nil, err
 	}
 
 	// map stripe data to internal OrgSubscription
-	stripeOrgSubscription := em.StripeSubscriptionToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
+	stripeOrgSubscription := em.StripeSubscriptionToOrgSubscription(subscription)
 
 	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false
@@ -350,20 +374,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		changed = true
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
-	}
-
-	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
-		productPriceCopy := stripeOrgSubscription.ProductPrice
-
-		productPriceCopy.Amount /= 100 // convert to dollars from cents
-
-		mutation.SetProductPrice(productPriceCopy)
-
-		mutation.SetProductPrice(stripeOrgSubscription.ProductPrice)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("price", orgSubscription.ProductPrice.String()).Msgf("product price changed")
 	}
 
 	if stripeOrgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
