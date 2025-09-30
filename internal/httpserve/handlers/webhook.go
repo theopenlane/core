@@ -320,7 +320,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 				// first try org_subscription_id
 				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-						Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
 					if err == nil {
 						return orgSubscription, nil
 					}
