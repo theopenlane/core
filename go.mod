@@ -104,7 +104,7 @@ require (
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.550.0
+	github.com/windmill-labs/windmill-go-client v1.552.1
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
