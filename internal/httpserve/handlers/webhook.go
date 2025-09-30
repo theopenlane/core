@@ -243,17 +243,12 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return ErrSubscriberNotFound
 	}
 
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s, customer)
+	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		return
 	}
 
-	if err = h.removeAllModules(ctx, s.ID); err != nil {
+	if err = h.removeAllModules(ctx, s); err != nil {
 		return
 	}
 
@@ -273,17 +268,14 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return ErrSubscriberNotFound
 	}
 
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
+	_, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to sync org subscription with stripe")
+
 		return err
 	}
 
-	_, err = h.syncOrgSubscriptionWithStripe(ctx, s, customer)
-	if err != nil {
-		return err
-	}
-
-	return h.syncSubscriptionItemsWithStripe(ctx, s.ID, s.Items.Data, s.Status)
+	return h.syncSubscriptionItemsWithStripe(ctx, s, s.Items.Data, s.Status)
 }
 
 // handleTrialWillEnd handles trial will end events, currently just calls handleSubscriptionUpdated
@@ -316,26 +308,26 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 }
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
-func getOrgSubscription(ctx context.Context, subscriptionID string, customer *stripe.Customer) (*ent.OrgSubscription, error) {
+func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
-		Where(orgsubscription.StripeSubscriptionID(subscriptionID)).Only(allowCtx)
+		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// try by the metadata field as a fallback if customer is provided
-			if customer != nil && customer.Metadata != nil {
+			if subscription != nil && subscription.Metadata != nil {
 				// first try org_subscription_id
-				if orgSubID, ok := customer.Metadata["org_subscription_id"]; ok && orgSubID != "" {
+				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-						Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
 					if err == nil {
 						return orgSubscription, nil
 					}
 				}
 
 				// fallback to organization_id
-				if orgID, ok := customer.Metadata["organization_id"]; ok && orgID != "" {
+				if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
 						Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
 					if err == nil {
@@ -343,6 +335,8 @@ func getOrgSubscription(ctx context.Context, subscriptionID string, customer *st
 					}
 				}
 			}
+
+			log.Warn().Str("subscription_id", subscription.ID).Msg("org subscription not found and no metadata to fallback on")
 		}
 
 		log.Error().Err(err).Msg("failed to find org subscription")
@@ -354,9 +348,9 @@ func getOrgSubscription(ctx context.Context, subscriptionID string, customer *st
 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
-func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
+func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription) (*string, error) {
 
-	orgSubscription, err := getOrgSubscription(ctx, subscription.ID, customer)
+	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err
 	}
