@@ -60,7 +60,7 @@ Config contains the configuration for the core server
         "windmill": {},
         "modules": {},
         "emailValidation": {
-            "AllowedEmailTypes": {}
+            "allowedEmailTypes": {}
         }
     },
     "auth": {
@@ -411,7 +411,7 @@ Config holds the configuration for the ent server
     "windmill": {},
     "modules": {},
     "emailValidation": {
-        "AllowedEmailTypes": {}
+        "allowedEmailTypes": {}
     }
 }
 ```
@@ -568,21 +568,21 @@ EmailVerificationConfig is the configuration for email verification
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**Enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
-|**EnableAutoUpdateDisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
-|[**AllowedEmailTypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+|**enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
+|**enableAutoUpdateDisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
+|[**allowedEmailTypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "AllowedEmailTypes": {}
+    "allowedEmailTypes": {}
 }
 ```
 
 <a name="entconfigemailvalidationallowedemailtypes"></a>
-#### entConfig\.emailValidation\.AllowedEmailTypes: object
+#### entConfig\.emailValidation\.allowedEmailTypes: object
 
 AllowedEmailTypes defines the allowed email types for verification
 
@@ -591,9 +591,9 @@ AllowedEmailTypes defines the allowed email types for verification
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**Disposable**|`boolean`|Disposable indicates whether disposable email addresses are allowed<br/>||
-|**Free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
-|**Role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
+|**disposable**|`boolean`|Disposable indicates whether disposable email addresses are allowed<br/>||
+|**free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
+|**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

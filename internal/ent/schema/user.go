@@ -79,7 +79,6 @@ func (User) Fields() []ent.Field {
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
 				return err
-
 			}),
 		field.String("first_name").
 			Optional().

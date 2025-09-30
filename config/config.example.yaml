@@ -85,12 +85,12 @@ email:
     year: 0
 entConfig:
     emailValidation:
-        AllowedEmailTypes:
-            Disposable: false
-            Free: false
-            Role: false
-        EnableAutoUpdateDisposable: false
-        Enabled: false
+        allowedEmailTypes:
+            disposable: false
+            free: false
+            role: false
+        enableAutoUpdateDisposable: true
+        enabled: false
     entityTypes: null
     maxPoolSize: 100
     maxSchemaImportSize: 262144

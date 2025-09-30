@@ -12,21 +12,21 @@ import (
 // EmailVerificationConfig is the configuration for email verification
 type EmailVerificationConfig struct {
 	// Enabled indicates whether email verification is enabled
-	Enabled bool
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false" description:"enable email verification"`
 	// EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses
-	EnableAutoUpdateDisposable bool
+	EnableAutoUpdateDisposable bool `json:"enableAutoUpdateDisposable" koanf:"enableAutoUpdateDisposable" default:"true" description:"automatically update disposable email addresses"`
 	// AllowedEmailTypes indicates which types of email addresses are allowed
-	AllowedEmailTypes AllowedEmailTypes
+	AllowedEmailTypes AllowedEmailTypes `json:"allowedEmailTypes" koanf:"allowedEmailTypes"`
 }
 
 // AllowedEmailTypes defines the allowed email types for verification
 type AllowedEmailTypes struct {
 	// Disposable indicates whether disposable email addresses are allowed
-	Disposable bool
+	Disposable bool `json:"disposable" koanf:"disposable" default:"false" description:"allow disposable email addresses"`
 	// Free indicates whether free email addresses are allowed
-	Free bool
+	Free bool `json:"free" koanf:"free" default:"false" description:"allow free email addresses"`
 	// Role indicates whether role-based email addresses are allowed
-	Role bool
+	Role bool `json:"role" koanf:"role" default:"false" description:"allow role-based email addresses such as info@, support@"`
 }
 
 const (

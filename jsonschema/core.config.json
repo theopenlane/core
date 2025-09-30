@@ -1399,15 +1399,15 @@
     },
     "validator.AllowedEmailTypes": {
       "properties": {
-        "Disposable": {
+        "disposable": {
           "type": "boolean",
           "description": "Disposable indicates whether disposable email addresses are allowed"
         },
-        "Free": {
+        "free": {
           "type": "boolean",
           "description": "Free indicates whether free email addresses are allowed"
         },
-        "Role": {
+        "role": {
           "type": "boolean",
           "description": "Role indicates whether role-based email addresses are allowed"
         }
@@ -1418,15 +1418,15 @@
     },
     "validator.EmailVerificationConfig": {
       "properties": {
-        "Enabled": {
+        "enabled": {
           "type": "boolean",
           "description": "Enabled indicates whether email verification is enabled"
         },
-        "EnableAutoUpdateDisposable": {
+        "enableAutoUpdateDisposable": {
           "type": "boolean",
           "description": "EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses"
         },
-        "AllowedEmailTypes": {
+        "allowedEmailTypes": {
           "$ref": "#/$defs/validator.AllowedEmailTypes",
           "description": "AllowedEmailTypes indicates which types of email addresses are allowed"
         }

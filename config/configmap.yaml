@@ -87,6 +87,11 @@ data:
   CORE_ENTCONFIG_MODULES_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.modules.enabled | quote | default "true" }}
   CORE_ENTCONFIG_MODULES_USESANDBOX: {{ .Values.openlane.coreConfiguration.entConfig.modules.useSandbox | quote | default "false" }}
   CORE_ENTCONFIG_MAXSCHEMAIMPORTSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxSchemaImportSize | quote | default "262144" }}
+  CORE_ENTCONFIG_EMAILVALIDATION_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.enabled | quote | default "false" }}
+  CORE_ENTCONFIG_EMAILVALIDATION_ENABLEAUTOUPDATEDISPOSABLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.enableAutoUpdateDisposable | quote | default "true" }}
+  CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_DISPOSABLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.disposable | quote | default "false" }}
+  CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_FREE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.free | quote | default "false" }}
+  CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_ROLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.role | quote | default "false" }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | quote | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid | quote }}
 {{- if .Values.openlane.coreConfiguration.auth.token.audience }}
