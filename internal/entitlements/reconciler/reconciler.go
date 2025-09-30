@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	internalentitlements "github.com/theopenlane/core/internal/entitlements"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -240,11 +241,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 		return ErrMultipleCustomers
 	}
 
-	cust.Prices, err = r.GetDefaultPrices()
-	if err != nil {
-		return fmt.Errorf("get default prices: %w", err)
-	}
-
+	cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
 	if len(cust.Prices) == 0 {
 		return ErrMissingPrice
 	}
@@ -337,10 +334,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	case customerMissing:
 		return "create stripe customer", nil
 	case !customerMissing && org.StripeCustomerID == nil && subscriptionMissing:
-		prices, err := r.GetDefaultPrices()
-		if err != nil {
-			return "", fmt.Errorf("get default prices: %w", err)
-		}
+		prices := internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
 		if len(prices) == 0 {
 			return "", ErrMissingPrice
 		}
@@ -462,37 +456,4 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 	}
 
 	return modulesCreated, nil
-}
-
-func (r *Reconciler) GetDefaultPrices() ([]entitlements.Price, error) {
-	prices := []entitlements.Price{}
-	for moduleName, mod := range gencatalog.GetModules(r.db.EntConfig.Modules.UseSandbox) {
-		if !mod.IncludeWithTrial {
-			continue
-		}
-
-		// Find the first price with "month" interval
-		// we want to create, by default, a monthly recurring price rather than a one-time or annual
-		var monthlyPrice *catalog.Price
-		for _, price := range mod.Billing.Prices {
-			if price.Interval == "month" {
-				monthlyPrice = &price
-				break
-			}
-		}
-
-		if monthlyPrice == nil {
-			continue // skip if no monthly price
-		}
-
-		prices = append(prices, entitlements.Price{
-			ID:          monthlyPrice.PriceID,
-			Price:       float64(monthlyPrice.UnitAmount),
-			Interval:    monthlyPrice.Interval,
-			ProductID:   mod.ProductID,
-			ProductName: moduleName,
-		})
-	}
-
-	return prices, nil
 }
