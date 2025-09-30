@@ -209,12 +209,6 @@ func HookInviteAccepted() ent.Hook {
 				return nil, err
 			}
 
-			if err := createUserManagedGroup(allowCtx, m, userID, ownerID); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to create user managed groups")
-
-				return nil, err
-			}
-
 			// add the user to the group as member if any were specified
 			builders := make([]*generated.GroupMembershipCreate, len(groupIDs))
 			for i, groupID := range groupIDs {
@@ -538,59 +532,4 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 	}
 
 	return ErrEmailDomainNotAllowed
-}
-
-// createUserManagedGroup creates a personal managed group for the user accepting the invite
-// this mirrors the behavior in organization creation where users get their own managed group
-func createUserManagedGroup(ctx context.Context, m *generated.InviteMutation, userID, orgID string) error {
-	dbUser, err := m.Client().User.Get(ctx, userID)
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error fetching user from the database")
-		return err
-	}
-
-	userGroups := map[string]string{
-		dbUser.DisplayName: dbUser.DisplayName,
-	}
-
-	builders := make([]*generated.GroupCreate, 0, len(userGroups))
-
-	for name, desc := range userGroups {
-		tags := []string{"managed", name}
-
-		groupInput := generated.CreateGroupInput{
-			Name:        name,
-			Description: &desc,
-			Tags:        tags,
-		}
-
-		builders = append(builders, m.Client().Group.Create().
-			SetInput(groupInput).
-			SetIsManaged(true).
-			SetOwnerID(orgID),
-		)
-	}
-
-	groups, err := m.Client().Group.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating user managed groups")
-		return err
-	}
-
-	// add the user to the group
-	for _, g := range groups {
-
-		input := generated.CreateGroupMembershipInput{
-			Role:    &enums.RoleMember,
-			UserID:  userID,
-			GroupID: g.ID,
-		}
-
-		if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error adding user to their managed group")
-			return err
-		}
-	}
-
-	return nil
 }

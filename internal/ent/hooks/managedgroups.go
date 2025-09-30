@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"maps"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -46,27 +45,9 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 		return nil
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user ID from context")
-		return err
-	}
-
-	dbUser, err := m.Client().User.Get(ctx, userID)
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error fetching user from the database")
-		return err
-	}
-
 	builders := make([]*generated.GroupCreate, 0, len(defaultGroups))
 
-	var newGroups = make(map[string]string, len(defaultGroups)+1)
-
-	maps.Copy(newGroups, defaultGroups)
-
-	newGroups[dbUser.DisplayName] = dbUser.DisplayName
-
-	for name, desc := range newGroups {
+	for name, desc := range defaultGroups {
 		tags := []string{"managed"}
 
 		switch name {
@@ -74,8 +55,6 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 			tags = append(tags, "admins")
 		case ViewersGroup:
 			tags = append(tags, "viewers")
-		default:
-			tags = append(tags, name)
 		}
 
 		groupInput := generated.CreateGroupInput{
@@ -102,6 +81,12 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 	for _, g := range groups {
 		if g.Name == ViewersGroup {
 			continue
+		}
+
+		userID, err := auth.GetSubjectIDFromContext(ctx)
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user ID from context")
+			return err
 		}
 
 		input := generated.CreateGroupMembershipInput{
@@ -176,6 +161,11 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 
 	switch op {
 	case ent.OpCreate:
+
+		if err := createUserManagedGroup(managedCtx, m, orgMember); err != nil {
+			return err
+		}
+
 		return addToManagedGroups(managedCtx, m, orgMember)
 	default:
 		// deletes are handled by the cascade delete hook

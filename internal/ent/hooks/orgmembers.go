@@ -22,11 +22,8 @@ import (
 func HookOrgMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			// check role, if its not set the default is member
-			role, _ := m.Role()
-			if role == enums.RoleOwner {
-				return next.Mutate(ctx, m)
-			}
+
+			userID, _ := m.UserID()
 
 			orgID, exists := m.OrganizationID()
 			if !exists || orgID == "" {
@@ -39,6 +36,23 @@ func HookOrgMembers() ent.Hook {
 
 				// set organization id in mutation
 				m.SetOrganizationID(orgID)
+			}
+
+			// check role, if its not set the default is member
+			role, _ := m.Role()
+			if role == enums.RoleOwner {
+
+				val, err := next.Mutate(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				orgMember := OrgMember{
+					UserID: userID,
+					OrgID:  orgID,
+				}
+
+				return val, createUserManagedGroup(privacy.DecisionContext(ctx, privacy.Allow), m, orgMember)
 			}
 
 			// get the organization
@@ -54,12 +68,10 @@ func HookOrgMembers() ent.Hook {
 				return nil, ErrPersonalOrgsNoMembers
 			}
 
-			// ensure user email can be added to the org
-			userID, _ := m.UserID()
-
 			// allow the request, which is for a user other than the authenticated user
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
+			// ensure user email can be added to the org
 			user, err := m.Client().User.Get(allowCtx, userID)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get user")
@@ -219,6 +231,64 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group")
 		return err
+	}
+
+	return nil
+}
+
+// createUserManagedGroup creates a personal managed group for the user accepting the invite
+// this mirrors the behavior in organization creation where users get their own managed group
+func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutation, member OrgMember) error {
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	dbUser, err := m.Client().User.Get(allowCtx, member.UserID)
+	if err != nil {
+		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error fetching user from the database")
+		return err
+	}
+
+	userGroups := map[string]string{
+		dbUser.DisplayName: dbUser.DisplayName,
+	}
+
+	builders := make([]*generated.GroupCreate, 0, len(userGroups))
+
+	for name, desc := range userGroups {
+		tags := []string{"managed", name}
+
+		groupInput := generated.CreateGroupInput{
+			Name:        name,
+			Description: &desc,
+			Tags:        tags,
+		}
+
+		builders = append(builders, m.Client().Group.Create().
+			SetInput(groupInput).
+			SetIsManaged(true).
+			SetOwnerID(member.OrgID),
+		)
+	}
+
+	groups, err := m.Client().Group.CreateBulk(builders...).Save(allowCtx)
+	if err != nil {
+		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error creating user managed groups")
+		return err
+	}
+
+	// add the user to the group
+	for _, g := range groups {
+
+		input := generated.CreateGroupMembershipInput{
+			Role:    &enums.RoleMember,
+			UserID:  member.UserID,
+			GroupID: g.ID,
+		}
+
+		if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+			zerolog.Ctx(allowCtx).Error().Err(err).Msg("error adding user to their managed group")
+			return err
+		}
 	}
 
 	return nil
