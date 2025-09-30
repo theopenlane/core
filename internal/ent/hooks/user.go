@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -73,30 +72,6 @@ func HookUser() ent.Hook {
 						}
 
 						m.SetDisplayName(displayName)
-
-						// if email validation is enabled, verify the email address
-						if m.EntConfig.EmailValidation.Enabled {
-							verified, res, err := m.EmailVerifier.VerifyEmailAddress(email)
-							if err != nil {
-								zerolog.Ctx(ctx).Error().Err(err).Msg("error verifying email address")
-
-								return nil, validator.ErrEmailNotAllowed
-							}
-
-							if !verified {
-								zerolog.Ctx(ctx).Error().Str("email", email).Interface("result", res).Msg("email address not allowed")
-
-								return nil, validator.ErrEmailNotAllowed
-							}
-
-							// if we get a gravatar result, and the user did not provide an avatar, set the gravatar url
-							if m.EntConfig.EmailValidation.EnableGravatarCheck {
-								avatarURL, _ := m.AvatarRemoteURL()
-								if res != nil && res.Gravatar != nil && res.Gravatar.HasGravatar && avatarURL == "" {
-									m.SetAvatarRemoteURL(res.Gravatar.GravatarUrl)
-								}
-							}
-						}
 					}
 
 					// set a default avatar if one is not provided

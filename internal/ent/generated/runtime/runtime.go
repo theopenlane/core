@@ -2903,6 +2903,8 @@ func init() {
 	invite.Hooks[6] = inviteHooks[1]
 
 	invite.Hooks[7] = inviteHooks[2]
+
+	invite.Hooks[8] = inviteHooks[3]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
 	inviteMixinInters2 := inviteMixin[2].Interceptors()
 	inviteMixinInters5 := inviteMixin[5].Interceptors()
@@ -7142,6 +7144,8 @@ func init() {
 	user.Hooks[5] = userHooks[1]
 
 	user.Hooks[6] = userHooks[2]
+
+	user.Hooks[7] = userHooks[3]
 	userMixinInters1 := userMixin[1].Interceptors()
 	userInters := schema.User{}.Interceptors()
 	user.Interceptors[0] = userMixinInters1[0]
