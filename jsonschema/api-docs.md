@@ -570,6 +570,8 @@ EmailVerificationConfig is the configuration for email verification
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
 |**enableAutoUpdateDisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
+|**enableGravatarCheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
+|**enableSMTPCheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
 |[**allowedEmailTypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
 
 **Additional Properties:** not allowed  

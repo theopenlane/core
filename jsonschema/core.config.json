@@ -1426,6 +1426,14 @@
           "type": "boolean",
           "description": "EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses"
         },
+        "enableGravatarCheck": {
+          "type": "boolean",
+          "description": "EnableGravatarCheck indicates whether to check for Gravatar existence"
+        },
+        "enableSMTPCheck": {
+          "type": "boolean",
+          "description": "EnableSMTPCheck indicates whether to check email by smtp"
+        },
         "allowedEmailTypes": {
           "$ref": "#/$defs/validator.AllowedEmailTypes",
           "description": "AllowedEmailTypes indicates which types of email addresses are allowed"

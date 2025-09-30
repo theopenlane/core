@@ -199,6 +199,10 @@ coreConfiguration:
       enabled: false  # @schema type:boolean; default:false
       # -- EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses
       enableAutoUpdateDisposable: true  # @schema type:boolean; default:true
+      # -- EnableGravatarCheck indicates whether to check for Gravatar existence
+      enableGravatarCheck: true  # @schema type:boolean; default:true
+      # -- EnableSMTPCheck indicates whether to check email by smtp
+      enableSMTPCheck: false  # @schema type:boolean; default:false
       # -- AllowedEmailTypes indicates which types of email addresses are allowed
       allowedEmailTypes:
         # -- Disposable indicates whether disposable email addresses are allowed

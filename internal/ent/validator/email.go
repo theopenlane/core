@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"context"
 	"errors"
 
 	emailverifier "github.com/AfterShip/email-verifier"
@@ -15,6 +14,10 @@ type EmailVerificationConfig struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false" description:"enable email verification"`
 	// EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses
 	EnableAutoUpdateDisposable bool `json:"enableAutoUpdateDisposable" koanf:"enableAutoUpdateDisposable" default:"true" description:"automatically update disposable email addresses"`
+	// EnableGravatarCheck indicates whether to check for Gravatar existence
+	EnableGravatarCheck bool `json:"enableGravatarCheck" koanf:"enableGravatarCheck" default:"true" description:"check for Gravatar existence"`
+	// EnableSMTPCheck indicates whether to check email by smtp
+	EnableSMTPCheck bool `json:"enableSMTPCheck" koanf:"enableSMTPCheck" default:"false" description:"check email by smtp"`
 	// AllowedEmailTypes indicates which types of email addresses are allowed
 	AllowedEmailTypes AllowedEmailTypes `json:"allowedEmailTypes" koanf:"allowedEmailTypes"`
 }
@@ -46,8 +49,16 @@ var (
 
 // VerifyEmailAddress verifies the given email address based on the configuration
 // and returns whether it is verified, the verification result, and any error encountered
-func (c *EmailVerificationConfig) VerifyEmailAddress(ctx context.Context, email string) (bool, *emailverifier.Result, error) {
+func (c *EmailVerificationConfig) VerifyEmailAddress(email string) (bool, *emailverifier.Result, error) {
 	verifier := emailverifier.NewVerifier()
+
+	if c.EnableSMTPCheck {
+		verifier.EnableSMTPCheck()
+	}
+
+	if c.EnableGravatarCheck {
+		verifier.EnableGravatarCheck()
+	}
 
 	ret, err := verifier.Verify(email)
 	if err != nil {

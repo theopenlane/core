@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -110,8 +109,7 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.Background()
-			got, res, err := tt.config.VerifyEmailAddress(ctx, tt.email)
+			got, res, err := tt.config.VerifyEmailAddress(tt.email)
 
 			if tt.wantErr {
 				assert.Error(t, err)

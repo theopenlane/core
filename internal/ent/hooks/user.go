@@ -76,7 +76,7 @@ func HookUser() ent.Hook {
 
 						// if email validation is enabled, verify the email address
 						if m.EntConfig.EmailValidation.Enabled {
-							verified, res, err := m.EntConfig.EmailValidation.VerifyEmailAddress(ctx, email)
+							verified, res, err := m.EntConfig.EmailValidation.VerifyEmailAddress(email)
 							if err != nil {
 								zerolog.Ctx(ctx).Error().Err(err).Msg("error verifying email address")
 
@@ -90,8 +90,11 @@ func HookUser() ent.Hook {
 							}
 
 							// if we get a gravatar result, and the user did not provide an avatar, set the gravatar url
-							if res.Gravatar != nil && res.Gravatar.HasGravatar && m.AvatarRemoteURL == nil {
-								m.SetAvatarRemoteURL(res.Gravatar.GravatarUrl)
+							if m.EntConfig.EmailValidation.EnableGravatarCheck {
+								avatarURL, _ := m.AvatarRemoteURL()
+								if res.Gravatar != nil && res.Gravatar.HasGravatar && avatarURL == "" {
+									m.SetAvatarRemoteURL(res.Gravatar.GravatarUrl)
+								}
 							}
 						}
 					}
