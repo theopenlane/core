@@ -317,25 +317,39 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 		if ent.IsNotFound(err) {
 			// try by the metadata field as a fallback if customer is provided
 			if subscription != nil && subscription.Metadata != nil {
+				orgSubscription := &ent.OrgSubscription{}
+
 				// first try org_subscription_id
 				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
-					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
+					orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
 						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
-					if err == nil {
-						return orgSubscription, nil
+					if orgSubscription == nil {
+						// fallback to organization_id
+						if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
+							orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
+								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+							if err == nil {
+								return orgSubscription, nil
+							}
+						}
 					}
 				}
 
-				// fallback to organization_id
-				if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
-					orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-						Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
-					if err == nil {
-						return orgSubscription, nil
+				// if we found an org subscription by metadata, first update the stripe_subscription_id field
+				if orgSubscription != nil {
+					err = transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription).
+						SetStripeSubscriptionID(subscription.ID).
+						Exec(allowCtx)
+					if err != nil {
+						log.Error().Err(err).Msg("failed to update org subscription with stripe subscription id")
 					}
+
+					// but still return the org subscription to update the rest of the fields
+					return orgSubscription, nil
 				}
 			}
 
+			// if we got here we could not find the org subscription, so just log and return the error
 			log.Warn().Str("subscription_id", subscription.ID).Msg("org subscription not found and no metadata to fallback on")
 		}
 
