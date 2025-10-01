@@ -1,5 +1,7 @@
 package entconfig
 
+import "github.com/theopenlane/core/internal/ent/validator"
+
 // Config holds the configuration for the ent server
 type Config struct {
 	// EntityTypes is the list of entity types to create by default for the organization
@@ -14,6 +16,8 @@ type Config struct {
 	Modules Modules `json:"modules" koanf:"modules"`
 	// MaxSchemaImportSize is the maximum size allowed for schema imports in bytes
 	MaxSchemaImportSize int `json:"maxSchemaImportSize" koanf:"maxSchemaImportSize" default:"262144" description:"maximum size allowed for schema imports (256KB)"`
+	// EmailValidation contains configuration for email validation
+	EmailValidation validator.EmailVerificationConfig `json:"emailValidation" koanf:"emailValidation"`
 }
 
 // Summarizer holds configuration for the text summarization functionality

@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"slices"
 
 	"entgo.io/ent"
@@ -32,8 +33,11 @@ func HookOrganizationCreatePolicy() ent.Hook {
 
 			allowedDomains := []string{}
 
+			var client *generated.Client
+
 			switch m := m.(type) {
 			case *generated.OrganizationSettingMutation:
+				client = m.Client()
 				allowedDomains, _ = m.AllowedEmailDomains()
 
 				orgID, err = getOrgIDFromSettingMutation(ctx, m, retVal)
@@ -57,7 +61,9 @@ func HookOrganizationCreatePolicy() ent.Hook {
 					return retVal, nil
 				}
 
-				setting, err := m.Client().OrganizationSetting.Query().
+				client = m.Client()
+
+				setting, err := client.OrganizationSetting.Query().
 					Where(organizationsetting.ID(settingID)).
 					Select("allowed_email_domains").Only(ctx)
 				if err != nil {
@@ -70,6 +76,12 @@ func HookOrganizationCreatePolicy() ent.Hook {
 			// ensure we didn't get a nil slice from the database, fga doesn't like that
 			if allowedDomains == nil {
 				allowedDomains = []string{}
+			}
+
+			if client.EmailVerifier.IncludesFreeDomain(allowedDomains) {
+				zerolog.Ctx(ctx).Warn().Strs("domains", allowedDomains).Msg("organization allowed email domains include free email domains")
+
+				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
 
 			if err := updateOrgConditionalTuples(ctx, m, orgID, allowedDomains); err != nil {
@@ -99,8 +111,21 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 			}
 
 			allowedEmailDomains, okSet := m.AllowedEmailDomains()
+			if m.EmailVerifier.IncludesFreeDomain(allowedEmailDomains) {
+				zerolog.Ctx(ctx).Warn().Strs("domains", allowedEmailDomains).Msg("organization allowed email domains include free email domains")
+
+				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
+			}
+
 			okClear := m.AllowedEmailDomainsCleared()
+
 			appendedDomains, okAppend := m.AppendedAllowedEmailDomains()
+
+			if m.EmailVerifier.IncludesFreeDomain(appendedDomains) {
+				zerolog.Ctx(ctx).Warn().Strs("domains", appendedDomains).Msg("organization allowed email domains include free email domains")
+
+				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
+			}
 
 			var domainUpdates []string
 

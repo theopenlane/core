@@ -91,6 +91,14 @@ func WithAWSConfig(cfg aws.Config) S3Option {
 	}
 }
 
+// WithPathStyle allows you set the path style. This is useful for
+// other compatible s3 storage systems
+func WithPathStyle(v bool) S3Option {
+	return func(o *S3Options) {
+		o.UsePathStyle = v
+	}
+}
+
 // NewS3Options creates a new S3Options instance with the provided options
 func NewS3Options(opts ...S3Option) *S3Options {
 	options := &S3Options{}

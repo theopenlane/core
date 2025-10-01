@@ -598,11 +598,8 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           stripeSubscriptionID
-          productPrice
           stripeSubscriptionStatus
           daysUntilDue
-          features
-          featureLookupKeys
         }
       }
     }

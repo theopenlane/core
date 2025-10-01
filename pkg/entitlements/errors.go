@@ -9,6 +9,8 @@ var (
 	ErrFoundMultipleCustomers = errors.New("found multiple customers with the same name")
 	// ErrMultipleSubscriptions = errors.New("multiple subscriptions found")
 	ErrMultipleSubscriptions = errors.New("multiple subscriptions found")
+	// ErrNoSubscriptions is returned when no subscriptions are found
+	ErrNoSubscriptions = errors.New("no subscriptions found")
 	// ErrCustomerNotFound is returned when a customer is not found
 	ErrCustomerNotFound = errors.New("customer not found")
 	// ErrCustomerLookupFailed is returned when a customer lookup fails
@@ -21,4 +23,6 @@ var (
 	ErrCustomerIDRequired = errors.New("customer ID is required")
 	// ErrMissingAPIKey is returned when the API key is missing
 	ErrMissingAPIKey = errors.New("missing API key")
+	// ErrNoSubscriptionItems is returned when no subscription items are found
+	ErrNoSubscriptionItems = errors.New("no subscription items found to create subscription")
 )

@@ -810,16 +810,6 @@ func StripeSubscriptionIDContainsFold(v string) predicate.OrgSubscriptionHistory
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldStripeSubscriptionID, v))
 }
 
-// ProductPriceIsNil applies the IsNil predicate on the "product_price" field.
-func ProductPriceIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldProductPrice))
-}
-
-// ProductPriceNotNil applies the NotNil predicate on the "product_price" field.
-func ProductPriceNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldProductPrice))
-}
-
 // StripeSubscriptionStatusEQ applies the EQ predicate on the "stripe_subscription_status" field.
 func StripeSubscriptionStatusEQ(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldStripeSubscriptionStatus, v))
@@ -1078,26 +1068,6 @@ func DaysUntilDueEqualFold(v string) predicate.OrgSubscriptionHistory {
 // DaysUntilDueContainsFold applies the ContainsFold predicate on the "days_until_due" field.
 func DaysUntilDueContainsFold(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldDaysUntilDue, v))
-}
-
-// FeaturesIsNil applies the IsNil predicate on the "features" field.
-func FeaturesIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldFeatures))
-}
-
-// FeaturesNotNil applies the NotNil predicate on the "features" field.
-func FeaturesNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldFeatures))
-}
-
-// FeatureLookupKeysIsNil applies the IsNil predicate on the "feature_lookup_keys" field.
-func FeatureLookupKeysIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldFeatureLookupKeys))
-}
-
-// FeatureLookupKeysNotNil applies the NotNil predicate on the "feature_lookup_keys" field.
-func FeatureLookupKeysNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldFeatureLookupKeys))
 }
 
 // And groups predicates with the AND operator between them.

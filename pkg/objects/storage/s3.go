@@ -60,6 +60,10 @@ func NewS3FromConfig(opts *S3Options) (*S3Store, error) {
 		o.Region = opts.Region
 		o.Credentials = creds
 
+		if opts.Endpoint != "" {
+			o.BaseEndpoint = aws.String(opts.Endpoint)
+		}
+
 		if opts.DebugMode {
 			o.ClientLogMode = aws.LogSigning | aws.LogRequest | aws.LogResponseWithBody
 		}
@@ -175,6 +179,9 @@ func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOption
 	// wrap with aws.WriteAtBuffer
 	w := manager.NewWriteAtBuffer(buf)
 	// download file into the memories
+	if opts.Bucket == "" {
+		opts.Bucket = s.Opts.Bucket
+	}
 	_, err = s.Downloader.Download(ctx, w, &s3.GetObjectInput{
 		Bucket: aws.String(opts.Bucket),
 		Key:    aws.String(opts.FileName),
@@ -208,6 +215,9 @@ func (s *S3Store) GetPresignedURL(key string, expires time.Duration) (string, er
 		opts.ClientOptions = []func(*s3.Options){
 			func(o *s3.Options) {
 				o.Region = s.Opts.Region
+				if s.Opts.Endpoint != "" {
+					o.BaseEndpoint = aws.String(s.Opts.Endpoint)
+				}
 			},
 		}
 	})

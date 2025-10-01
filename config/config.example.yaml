@@ -84,6 +84,15 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    emailValidation:
+        allowedEmailTypes:
+            disposable: false
+            free: false
+            role: false
+        enableAutoUpdateDisposable: true
+        enableGravatarCheck: true
+        enableSMTPCheck: false
+        enabled: false
     entityTypes: null
     maxPoolSize: 100
     maxSchemaImportSize: 262144
@@ -178,6 +187,7 @@ objectStorage:
     credentialsJSON: ""
     defaultBucket: file_uploads
     enabled: true
+    endpoint: ""
     keys:
         - uploadFile
     localURL: http://localhost:17608/files/
@@ -186,6 +196,7 @@ objectStorage:
     provider: ""
     region: ""
     secretKey: ""
+    usePathStyle: false
 ratelimit:
     burst: 30
     enabled: false

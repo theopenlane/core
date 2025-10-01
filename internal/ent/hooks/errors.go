@@ -81,6 +81,8 @@ var (
 	ErrNotSingularUpload = errors.New("multiple uploads not supported")
 	// ErrSSONotEnforceable makes sure the connection has been tested before it can be enforced for an org
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
+	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
+	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

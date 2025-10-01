@@ -2903,6 +2903,8 @@ func init() {
 	invite.Hooks[6] = inviteHooks[1]
 
 	invite.Hooks[7] = inviteHooks[2]
+
+	invite.Hooks[8] = inviteHooks[3]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
 	inviteMixinInters2 := inviteMixin[2].Interceptors()
 	inviteMixinInters5 := inviteMixin[5].Interceptors()
@@ -4165,7 +4167,7 @@ func init() {
 	// orgsubscription.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	orgsubscription.OwnerIDValidator = orgsubscriptionDescOwnerID.Validators[0].(func(string) error)
 	// orgsubscriptionDescActive is the schema descriptor for active field.
-	orgsubscriptionDescActive := orgsubscriptionFields[3].Descriptor()
+	orgsubscriptionDescActive := orgsubscriptionFields[2].Descriptor()
 	// orgsubscription.DefaultActive holds the default value on creation for the active field.
 	orgsubscription.DefaultActive = orgsubscriptionDescActive.Default.(bool)
 	// orgsubscriptionDescID is the schema descriptor for id field.
@@ -4193,7 +4195,7 @@ func init() {
 	// orgsubscriptionhistory.DefaultTags holds the default value on creation for the tags field.
 	orgsubscriptionhistory.DefaultTags = orgsubscriptionhistoryDescTags.Default.([]string)
 	// orgsubscriptionhistoryDescActive is the schema descriptor for active field.
-	orgsubscriptionhistoryDescActive := orgsubscriptionhistoryFields[15].Descriptor()
+	orgsubscriptionhistoryDescActive := orgsubscriptionhistoryFields[14].Descriptor()
 	// orgsubscriptionhistory.DefaultActive holds the default value on creation for the active field.
 	orgsubscriptionhistory.DefaultActive = orgsubscriptionhistoryDescActive.Default.(bool)
 	// orgsubscriptionhistoryDescID is the schema descriptor for id field.
@@ -7142,6 +7144,8 @@ func init() {
 	user.Hooks[5] = userHooks[1]
 
 	user.Hooks[6] = userHooks[2]
+
+	user.Hooks[7] = userHooks[3]
 	userMixinInters1 := userMixin[1].Interceptors()
 	userInters := schema.User{}.Interceptors()
 	user.Interceptors[0] = userMixinInters1[0]

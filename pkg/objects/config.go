@@ -37,6 +37,12 @@ type Config struct {
 	MaxUploadSizeMB int64 `json:"maxSizeMB" koanf:"maxSizeMB"`
 	// MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form
 	MaxUploadMemoryMB int64 `json:"maxMemoryMB" koanf:"maxMemoryMB"`
+	// Endpoint is used for other s3 compatible storage systems e.g minio, digital ocean spaces .
+	// they do not use the same s3 endpoint
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// UsePathStyle is useful for other s3 compatible systems that use path styles not bucket.host path
+	// minio is a popular example here
+	UsePathStyle bool `json:"usePathStyle" koanf:"usePathStyle"`
 }
 
 var (

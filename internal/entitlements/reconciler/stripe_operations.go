@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"maps"
+	"slices"
 
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v82"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/catalog"
@@ -43,7 +45,7 @@ type CancelBehaviorResult struct {
 }
 
 // UpdateSubscriptionsCancelBehavior updates all active/trialing subscriptions with pause trial end behavior to cancel behavior
-func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context) (*CancelBehaviorResult, error) {
+func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgIDs []string) (*CancelBehaviorResult, error) {
 	if r.dryRun {
 		log.Info().Msg("analyzing subscription cancel behavior from pause to cancel (DRY RUN)")
 	} else {
@@ -67,6 +69,11 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context) (*Ca
 				return nil, fmt.Errorf("listing subscriptions: %w", err)
 			}
 
+			// If orgIDs filter is provided, skip subscriptions not in the list
+			if len(orgIDs) > 0 && !slices.Contains(orgIDs, sub.ID) {
+				continue
+			}
+
 			// Additional safety check for subscription status
 			if !IsSubscriptionActiveOrTrialing(sub.Status) {
 				continue
@@ -77,7 +84,12 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context) (*Ca
 			}
 
 			if r.dryRun {
-				rows = append(rows, actionRow{OrgID: sub.ID, Action: "update cancel behavior from pause to cancel"})
+				orgName := ""
+				if sub.Metadata != nil {
+					orgName = sub.Metadata["organization_name"]
+				}
+
+				rows = append(rows, actionRow{OrgID: sub.ID, OrgName: orgName, Action: "update cancel behavior from pause to cancel"})
 				continue
 			}
 
@@ -129,7 +141,7 @@ type ScheduleResult struct {
 }
 
 // CreateMissingSubscriptionSchedules creates subscription schedules for active/trialing subscriptions that don't have them
-func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context) (*ScheduleResult, error) {
+func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, orgIDs []string) (*ScheduleResult, error) {
 	if r.dryRun {
 		log.Info().Msg("analyzing subscription schedules for subscriptions without schedules (DRY RUN)")
 	} else {
@@ -152,6 +164,11 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context) (*S
 				return nil, fmt.Errorf("listing subscriptions: %w", err)
 			}
 
+			// If orgIDs filter is provided, skip subscriptions not in the list
+			if len(orgIDs) > 0 && !slices.Contains(orgIDs, sub.ID) {
+				continue
+			}
+
 			// Additional safety check for subscription status
 			if !IsSubscriptionActiveOrTrialing(sub.Status) {
 				continue
@@ -164,7 +181,12 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context) (*S
 			action, customerID := GenerateScheduleActionDescription(sub)
 
 			if r.dryRun {
-				rows = append(rows, actionRow{OrgID: sub.ID, Action: action})
+				orgName := ""
+				if sub.Metadata != nil {
+					orgName = sub.Metadata["organization_name"]
+				}
+
+				rows = append(rows, actionRow{OrgID: sub.ID, OrgName: orgName, Action: action})
 				continue
 			}
 
@@ -350,6 +372,7 @@ func ShouldUpdateCustomerPersonalOrgMetadata(customer *stripe.Customer) bool {
 type StripeSystemMismatchReport struct {
 	CustomerID         string `json:"customer_id"`
 	OrganizationID     string `json:"organization_id"`
+	OrganizationName   string `json:"organization_name,omitempty"`
 	MismatchType       string `json:"mismatch_type"`
 	Description        string `json:"description"`
 	StripeData         string `json:"stripe_data,omitempty"`
@@ -387,6 +410,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 			organization.And(
 				organization.DeletedAtIsNil(),
 				organization.Not(organization.ID("01101101011010010111010001100010")),
+				organization.PersonalOrg(false),
 			),
 		).
 		All(internalCtx)
@@ -417,8 +441,10 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 
 		// Extract organization ID from metadata
 		orgID := ""
+		orgName := ""
 		if customer.Metadata != nil {
 			orgID = customer.Metadata["organization_id"]
+			orgName = customer.Metadata["organization_name"]
 		}
 
 		if orgID == "" {
@@ -432,14 +458,28 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 			continue
 		}
 
+		// check if it's a personal org customer
+		org, err := r.db.Organization.Query().Where(organization.ID(orgID)).Select(organization.FieldPersonalOrg).Only(internalCtx)
+		if err != nil {
+			if !generated.IsNotFound(err) {
+				log.Error().Err(err).Str("org_id", orgID).Msg("failed to check if organization is personal")
+				continue
+			}
+		}
+
+		if org != nil && org.PersonalOrg {
+			continue
+		}
+
 		// Check if organization exists in internal system
 		if !orgMap[orgID] {
 			report = append(report, StripeSystemMismatchReport{
-				CustomerID:     customer.ID,
-				OrganizationID: orgID,
-				MismatchType:   "organization_not_found",
-				Description:    "Organization ID from Stripe metadata not found in internal system",
-				StripeData:     fmt.Sprintf("Customer: %s, OrgID: %s", customer.ID, orgID),
+				CustomerID:       customer.ID,
+				OrganizationID:   orgID,
+				OrganizationName: orgName,
+				MismatchType:     "organization_not_found",
+				Description:      "Organization ID from Stripe metadata not found in internal system",
+				StripeData:       fmt.Sprintf("Customer: %s, OrgID: %s", customer.ID, orgID),
 			})
 			continue
 		}
@@ -447,12 +487,13 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 		// Check if internal organization points to this customer
 		if expectedOrgID, exists := customerIDMap[customer.ID]; !exists || expectedOrgID != orgID {
 			report = append(report, StripeSystemMismatchReport{
-				CustomerID:     customer.ID,
-				OrganizationID: orgID,
-				MismatchType:   "customer_id_mismatch",
-				Description:    "Internal organization points to different Stripe customer ID",
-				StripeData:     fmt.Sprintf("Customer: %s", customer.ID),
-				InternalData:   fmt.Sprintf("Expected OrgID: %s", expectedOrgID),
+				CustomerID:       customer.ID,
+				OrganizationID:   orgID,
+				OrganizationName: orgName,
+				MismatchType:     "customer_id_mismatch",
+				Description:      "Internal organization points to different Stripe customer ID",
+				StripeData:       fmt.Sprintf("Customer: %s", customer.ID),
+				InternalData:     fmt.Sprintf("Expected OrgID: %s", expectedOrgID),
 			})
 		}
 	}
@@ -522,8 +563,10 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 
 		// Check if customer has organization metadata
 		orgID := ""
+		orgName := ""
 		if customer.Metadata != nil {
 			orgID = customer.Metadata["organization_id"]
+			orgName = customer.Metadata["organization_name"]
 		}
 
 		switch {
@@ -545,7 +588,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		action := fmt.Sprintf("delete orphaned customer %s (%s)", customer.ID, deleteReason)
 
 		if r.dryRun {
-			rows = append(rows, actionRow{OrgID: orgID, Action: action})
+			rows = append(rows, actionRow{OrgID: orgID, OrgName: orgName, Action: action})
 			continue
 		}
 
@@ -646,7 +689,7 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 
 		if r.dryRun {
 			action := fmt.Sprintf("add personal_org metadata to customer %s", *org.StripeCustomerID)
-			rows = append(rows, actionRow{OrgID: org.ID, Action: action})
+			rows = append(rows, actionRow{OrgID: org.ID, OrgName: org.DisplayName, Action: action})
 			continue
 		}
 

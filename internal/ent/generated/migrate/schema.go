@@ -3089,14 +3089,11 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
-		{Name: "features", Type: field.TypeJSON, Nullable: true},
-		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrgSubscriptionsTable holds the schema information for the "org_subscriptions" table.
@@ -3107,7 +3104,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3116,7 +3113,7 @@ var (
 			{
 				Name:    "orgsubscription_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrgSubscriptionsColumns[17]},
+				Columns: []*schema.Column{OrgSubscriptionsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3138,14 +3135,11 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
-		{Name: "features", Type: field.TypeJSON, Nullable: true},
-		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 	}
 	// OrgSubscriptionHistoryTable holds the schema information for the "org_subscription_history" table.
 	OrgSubscriptionHistoryTable = &schema.Table{
@@ -5177,7 +5171,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
 	}
@@ -5239,7 +5233,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times new roman", "georgia", "verdana", "courier", "courier new", "trebuchet ms", "comic sans ms", "impact", "palatino", "garamond", "bookman", "avant garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
 	}
 	// TrustCenterWatermarkConfigHistoryTable holds the schema information for the "trust_center_watermark_config_history" table.
 	TrustCenterWatermarkConfigHistoryTable = &schema.Table{
