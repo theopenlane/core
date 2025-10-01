@@ -36,7 +36,7 @@ const (
 // genyamlApp creates a CLI application for generating Go source files
 // from a catalog YAML file - the thought process behind this is that
 // it's generally easier to work with Go code than YAML, especially at
-// runtime; contantly unmarshalling YAML within our app has performance
+// runtime; constantly unmarshalling YAML within our app has performance
 // and usability implications
 func genyamlApp() *cli.Command {
 	app := &cli.Command{

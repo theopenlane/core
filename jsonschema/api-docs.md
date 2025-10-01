@@ -1168,7 +1168,7 @@ Config is the configuration for the object store
 |[**keys**](#objectstoragekeys)|`string[]`|||
 |**maxSizeMB**|`integer`|MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes<br/>||
 |**maxMemoryMB**|`integer`|MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form<br/>||
-|**endpoint**|`string`|Endpoint is used for other s3 compatible storage systems e.g minio, digial ocean spaces .<br/>they do not use the same s3 endpoint<br/>||
+|**endpoint**|`string`|Endpoint is used for other s3 compatible storage systems e.g minio, digital ocean spaces .<br/>they do not use the same s3 endpoint<br/>||
 |**usePathStyle**|`boolean`|UsePathStyle is useful for other s3 compatible systems that use path styles not bucket.host path<br/>minio is a popular example here<br/>||
 
 **Additional Properties:** not allowed  

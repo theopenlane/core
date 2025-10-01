@@ -214,4 +214,4 @@ Current subscription: sub_1S8lrpJIzM4Pa2ZcKei6suR6 (status: trialing)
 Successfully added module 'Vulnerability Tracking and Management' to subscription
 ```
 
-While it's not difficult to add a module + price via stripe's UI, it be somewhat annoying to have to set folks up with access to a sandbox account and also isn't conducive for basic autmation with something like Taskfile.
+While it's not difficult to add a module + price via stripe's UI, it be somewhat annoying to have to set folks up with access to a sandbox account and also isn't conducive for basic automation with something like Taskfile.

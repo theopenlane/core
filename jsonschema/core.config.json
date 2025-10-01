@@ -1018,7 +1018,7 @@
         },
         "endpoint": {
           "type": "string",
-          "description": "Endpoint is used for other s3 compatible storage systems e.g minio, digial ocean spaces .\nthey do not use the same s3 endpoint"
+          "description": "Endpoint is used for other s3 compatible storage systems e.g minio, digital ocean spaces .\nthey do not use the same s3 endpoint"
         },
         "usePathStyle": {
           "type": "boolean",
