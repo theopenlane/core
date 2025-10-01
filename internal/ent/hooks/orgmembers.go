@@ -237,7 +237,7 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 			group.CreatedBy(userID),
 			group.IsManaged(true),
 			group.OwnerID(orgID),
-			group.Name(user.DisplayName),
+			group.Name(getUserGroupName(user.DisplayName, user.ID)),
 		).Exec(ctx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group")
@@ -245,6 +245,10 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 	}
 
 	return nil
+}
+
+func getUserGroupName(displayName, id string) string {
+	return fmt.Sprintf("%s (%s)", displayName, id)
 }
 
 // createUserManagedGroup creates a personal managed group for the user accepting the invite
@@ -260,16 +264,16 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 	}
 
 	userGroups := map[string]string{
-		dbUser.DisplayName: dbUser.DisplayName,
+		dbUser.ID: getUserGroupName(dbUser.DisplayName, dbUser.ID),
 	}
 
 	builders := make([]*generated.GroupCreate, 0, len(userGroups))
 
-	for name, desc := range userGroups {
-		tags := []string{"managed", name}
+	for id, desc := range userGroups {
+		tags := []string{"managed", id}
 
 		groupInput := generated.CreateGroupInput{
-			Name:        name,
+			Name:        desc,
 			Description: &desc,
 			Tags:        tags,
 		}

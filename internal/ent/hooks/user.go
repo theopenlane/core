@@ -418,7 +418,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		Where(
 			group.CreatedBy(user.ID),
 			group.IsManaged(true),
-			group.Name(oldDisplayName),
+			group.Name(getUserGroupName(oldDisplayName, user.ID)),
 		).All(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's system managed groups")
