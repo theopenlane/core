@@ -33,6 +33,16 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
+func detectMimeTypeFromContent(content []byte, fallbackMimeType string) string {
+	mimeType := http.DetectContentType(content)
+
+	if mimeType == "" {
+		return strings.ToLower(strings.TrimSpace(fallbackMimeType))
+	}
+
+	return mimeType
+}
+
 func importURLToSchema(m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
@@ -69,7 +79,8 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
 	}
 
-	mimeType := strings.ToLower(resp.Header.Get("Content-Type"))
+	fallbackMimeType := resp.Header.Get("Content-Type")
+	mimeType := detectMimeTypeFromContent(buf, fallbackMimeType)
 
 	switch mimeType {
 	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -88,7 +99,6 @@ func importURLToSchema(m importSchemaMutation) error {
 		return nil
 
 	default:
-
 		return fmt.Errorf("unspupported content-type ( %s)", mimeType) // nolint:err113
 	}
 }
