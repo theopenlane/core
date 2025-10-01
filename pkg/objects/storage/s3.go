@@ -179,8 +179,11 @@ func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOption
 	// wrap with aws.WriteAtBuffer
 	w := manager.NewWriteAtBuffer(buf)
 	// download file into the memories
+	if opts.Bucket == "" {
+		opts.Bucket = s.Opts.Bucket
+	}
 	_, err = s.Downloader.Download(ctx, w, &s3.GetObjectInput{
-		Bucket: aws.String(s.Opts.Bucket),
+		Bucket: aws.String(opts.Bucket),
 		Key:    aws.String(opts.FileName),
 	})
 
