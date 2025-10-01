@@ -130,3 +130,19 @@ func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.R
 	metrics.RecordEmailValidation(true, ResultValid)
 	return true, ret, nil
 }
+
+// IsFreeDomain checks if the domain of the given email is a free email domain
+// If there is no client configured, it returns false
+func (c *EmailVerifier) IncludesFreeDomain(domains []string) bool {
+	if c == nil || c.Client == nil {
+		return false
+	}
+
+	for _, domain := range domains {
+		if c.Client.IsFreeDomain(domain) {
+			return true
+		}
+	}
+
+	return false
+}

@@ -232,6 +232,19 @@ func TestMutationCreateOrganization(t *testing.T) {
 			ctx:         orgUser.UserCtx,
 		},
 		{
+			name:           "organization settings with free email domain not allowed",
+			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
+			displayName:    gofakeit.LetterN(50),
+			orgDescription: gofakeit.HipsterSentence(10),
+			settings: &testclient.CreateOrganizationSettingInput{
+				AllowedEmailDomains: []string{"gmail.com"},
+			},
+			parentOrgID: "", // root org
+			client:      suite.client.api,
+			ctx:         orgUser.UserCtx,
+			errorMsg:    invalidInputErrorMsg,
+		},
+		{
 			name:           "happy path organization with parent org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(10),
