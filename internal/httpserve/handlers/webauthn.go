@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/rs/zerolog"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -45,6 +47,10 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 	// user is created first, no credential method is set / they are unable to login until the credential flow is finished
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProviderCredentials, "")
 	if err != nil {
+		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			return h.InvalidInput(ctx, err, openapi)
+		}
+
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
