@@ -187,6 +187,7 @@ objectStorage:
     credentialsJSON: ""
     defaultBucket: file_uploads
     enabled: true
+    endpoint: ""
     keys:
         - uploadFile
     localURL: http://localhost:17608/files/
@@ -195,6 +196,7 @@ objectStorage:
     provider: ""
     region: ""
     secretKey: ""
+    usePathStyle: false
 ratelimit:
     burst: 30
     enabled: false
