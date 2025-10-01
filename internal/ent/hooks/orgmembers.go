@@ -269,21 +269,22 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 
 	builders := make([]*generated.GroupCreate, 0, len(userGroups))
 
-	for id, desc := range userGroups {
-		tags := []string{"managed", id}
-
-		groupInput := generated.CreateGroupInput{
-			Name:        desc,
-			Description: &desc,
-			Tags:        tags,
-		}
-
-		builders = append(builders, m.Client().Group.Create().
-			SetInput(groupInput).
-			SetIsManaged(true).
-			SetOwnerID(member.OrgID),
-		)
-	}
+      tags := []string{"managed", id}
+      
+      desc := fmt.Sprintf("Group for %s", dbUser.DisplayName)
+      
+      groupInput := generated.CreateGroupInput{
+	      Name:        getUserGroupName(dbUser.DisplayName, dbUser.ID),
+	      DisplayName: dbUser.DisplayName
+	      Description: &desc,
+	      Tags:        tags,
+      }
+      
+      builders = append(builders, m.Client().Group.Create().
+	      SetInput(groupInput).
+	      SetIsManaged(true).
+	      SetOwnerID(member.OrgID),
+      )
 
 	groups, err := m.Client().Group.CreateBulk(builders...).Save(allowCtx)
 	if err != nil {
