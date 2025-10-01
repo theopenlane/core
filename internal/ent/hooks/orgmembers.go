@@ -248,7 +248,7 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 }
 
 func getUserGroupName(displayName, id string) string {
-	return fmt.Sprintf("%s (%s)", displayName, id)
+	return fmt.Sprintf("%s - %s", displayName, id)
 }
 
 // createUserManagedGroup creates a personal managed group for the user accepting the invite

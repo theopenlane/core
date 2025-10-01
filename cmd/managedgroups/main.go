@@ -175,7 +175,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 					desc := user.DisplayName
 					g, err := db.Group.Create().
 						SetInput(generated.CreateGroupInput{
-							Name:        fmt.Sprintf("%s (%s)", user.DisplayName, user.ID),
+							Name:        fmt.Sprintf("%s - %s", user.DisplayName, user.ID),
 							Description: &desc,
 							Tags:        []string{"managed", user.DisplayName},
 						}).

@@ -428,8 +428,8 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 	for _, group := range groups {
 
 		err := m.Client().Group.UpdateOneID(group.ID).
-			SetName(displayName).
-			SetDescription(displayName).
+			SetName(getUserGroupName(displayName, user.ID)).
+			SetDescription(getUserGroupName(displayName, user.ID)).
 			Exec(allowCtx)
 
 		if err != nil {
