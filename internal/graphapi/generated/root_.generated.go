@@ -2938,13 +2938,10 @@ type ComplexityRoot struct {
 		DaysUntilDue             func(childComplexity int) int
 		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ExpiresAt                func(childComplexity int) int
-		FeatureLookupKeys        func(childComplexity int) int
-		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		ManagePaymentMethods     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		ProductPrice             func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -2970,13 +2967,10 @@ type ComplexityRoot struct {
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
-		FeatureLookupKeys        func(childComplexity int) int
-		Features                 func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		ProductPrice             func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
@@ -21175,20 +21169,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscription.ExpiresAt(childComplexity), true
 
-	case "OrgSubscription.featureLookupKeys":
-		if e.complexity.OrgSubscription.FeatureLookupKeys == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.FeatureLookupKeys(childComplexity), true
-
-	case "OrgSubscription.features":
-		if e.complexity.OrgSubscription.Features == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.Features(childComplexity), true
-
 	case "OrgSubscription.id":
 		if e.complexity.OrgSubscription.ID == nil {
 			break
@@ -21216,13 +21196,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
-
-	case "OrgSubscription.productPrice":
-		if e.complexity.OrgSubscription.ProductPrice == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.ProductPrice(childComplexity), true
 
 	case "OrgSubscription.stripeSubscriptionID":
 		if e.complexity.OrgSubscription.StripeSubscriptionID == nil {
@@ -21336,20 +21309,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscriptionHistory.ExpiresAt(childComplexity), true
 
-	case "OrgSubscriptionHistory.featureLookupKeys":
-		if e.complexity.OrgSubscriptionHistory.FeatureLookupKeys == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.FeatureLookupKeys(childComplexity), true
-
-	case "OrgSubscriptionHistory.features":
-		if e.complexity.OrgSubscriptionHistory.Features == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.Features(childComplexity), true
-
 	case "OrgSubscriptionHistory.historyTime":
 		if e.complexity.OrgSubscriptionHistory.HistoryTime == nil {
 			break
@@ -21377,13 +21336,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
-
-	case "OrgSubscriptionHistory.productPrice":
-		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.ProductPrice(childComplexity), true
 
 	case "OrgSubscriptionHistory.ref":
 		if e.complexity.OrgSubscriptionHistory.Ref == nil {
@@ -66994,10 +66946,6 @@ type OrgSubscription implements Node {
   """
   stripeSubscriptionID: String
   """
-  the price of the product tier
-  """
-  productPrice: Price
-  """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
   stripeSubscriptionStatus: String
@@ -67017,14 +66965,6 @@ type OrgSubscription implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  """
-  the feature lookup keys associated with the subscription
-  """
-  featureLookupKeys: [String!]
   owner: Organization
   events(
     """
@@ -67110,10 +67050,6 @@ type OrgSubscriptionHistory implements Node {
   """
   stripeSubscriptionID: String
   """
-  the price of the product tier
-  """
-  productPrice: Price
-  """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
   stripeSubscriptionStatus: String
@@ -67133,14 +67069,6 @@ type OrgSubscriptionHistory implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  """
-  the feature lookup keys associated with the subscription
-  """
-  featureLookupKeys: [String!]
 }
 """
 A connection to a list of items.
@@ -90807,18 +90735,18 @@ enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core
   arial
   helvetica
   times
-  times new roman
+  times_new_roman
   georgia
   verdana
   courier
-  courier new
-  trebuchet ms
-  comic sans ms
+  courier_new
+  trebuchet_ms
+  comic_sans_ms
   impact
   palatino
   garamond
   bookman
-  avant garde
+  avant_garde
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -90903,18 +90831,18 @@ enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenla
   arial
   helvetica
   times
-  times new roman
+  times_new_roman
   georgia
   verdana
   courier
-  courier new
-  trebuchet ms
-  comic sans ms
+  courier_new
+  trebuchet_ms
+  comic_sans_ms
   impact
   palatino
   garamond
   bookman
-  avant garde
+  avant_garde
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation

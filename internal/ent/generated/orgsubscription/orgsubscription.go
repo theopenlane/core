@@ -33,8 +33,6 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldStripeSubscriptionID holds the string denoting the stripe_subscription_id field in the database.
 	FieldStripeSubscriptionID = "stripe_subscription_id"
-	// FieldProductPrice holds the string denoting the product_price field in the database.
-	FieldProductPrice = "product_price"
 	// FieldStripeSubscriptionStatus holds the string denoting the stripe_subscription_status field in the database.
 	FieldStripeSubscriptionStatus = "stripe_subscription_status"
 	// FieldActive holds the string denoting the active field in the database.
@@ -45,10 +43,6 @@ const (
 	FieldTrialExpiresAt = "trial_expires_at"
 	// FieldDaysUntilDue holds the string denoting the days_until_due field in the database.
 	FieldDaysUntilDue = "days_until_due"
-	// FieldFeatures holds the string denoting the features field in the database.
-	FieldFeatures = "features"
-	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
-	FieldFeatureLookupKeys = "feature_lookup_keys"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -108,14 +102,11 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldStripeSubscriptionID,
-	FieldProductPrice,
 	FieldStripeSubscriptionStatus,
 	FieldActive,
 	FieldExpiresAt,
 	FieldTrialExpiresAt,
 	FieldDaysUntilDue,
-	FieldFeatures,
-	FieldFeatureLookupKeys,
 }
 
 var (

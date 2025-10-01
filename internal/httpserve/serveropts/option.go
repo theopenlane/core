@@ -447,12 +447,23 @@ func WithObjectStorage() ServerOption {
 
 			switch settings.Provider {
 			case storage.ProviderS3:
-				opts := storage.NewS3Options(
+
+				storageOptions := []storage.S3Option{
 					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
 					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
 					storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
 					storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
-				)
+				}
+
+				if endpoint := s.Config.Settings.ObjectStorage.Endpoint; endpoint != "" {
+					storageOptions = append(storageOptions, storage.WithEndpoint(endpoint))
+				}
+
+				if set := s.Config.Settings.ObjectStorage.UsePathStyle; set {
+					storageOptions = append(storageOptions, storage.WithPathStyle(set))
+				}
+
+				opts := storage.NewS3Options(storageOptions...)
 
 				store, err = storage.NewS3FromConfig(opts)
 				if err != nil {

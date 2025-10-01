@@ -25458,11 +25458,6 @@ func (_q *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, orgsubscription.FieldStripeSubscriptionID)
 				fieldSeen[orgsubscription.FieldStripeSubscriptionID] = struct{}{}
 			}
-		case "productPrice":
-			if _, ok := fieldSeen[orgsubscription.FieldProductPrice]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldProductPrice)
-				fieldSeen[orgsubscription.FieldProductPrice] = struct{}{}
-			}
 		case "stripeSubscriptionStatus":
 			if _, ok := fieldSeen[orgsubscription.FieldStripeSubscriptionStatus]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldStripeSubscriptionStatus)
@@ -25487,16 +25482,6 @@ func (_q *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[orgsubscription.FieldDaysUntilDue]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldDaysUntilDue)
 				fieldSeen[orgsubscription.FieldDaysUntilDue] = struct{}{}
-			}
-		case "features":
-			if _, ok := fieldSeen[orgsubscription.FieldFeatures]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldFeatures)
-				fieldSeen[orgsubscription.FieldFeatures] = struct{}{}
-			}
-		case "featureLookupKeys":
-			if _, ok := fieldSeen[orgsubscription.FieldFeatureLookupKeys]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldFeatureLookupKeys)
-				fieldSeen[orgsubscription.FieldFeatureLookupKeys] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -25632,11 +25617,6 @@ func (_q *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeSubscriptionID)
 				fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionID] = struct{}{}
 			}
-		case "productPrice":
-			if _, ok := fieldSeen[orgsubscriptionhistory.FieldProductPrice]; !ok {
-				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldProductPrice)
-				fieldSeen[orgsubscriptionhistory.FieldProductPrice] = struct{}{}
-			}
 		case "stripeSubscriptionStatus":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionStatus]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeSubscriptionStatus)
@@ -25661,16 +25641,6 @@ func (_q *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldDaysUntilDue)
 				fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue] = struct{}{}
-			}
-		case "features":
-			if _, ok := fieldSeen[orgsubscriptionhistory.FieldFeatures]; !ok {
-				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldFeatures)
-				fieldSeen[orgsubscriptionhistory.FieldFeatures] = struct{}{}
-			}
-		case "featureLookupKeys":
-			if _, ok := fieldSeen[orgsubscriptionhistory.FieldFeatureLookupKeys]; !ok {
-				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldFeatureLookupKeys)
-				fieldSeen[orgsubscriptionhistory.FieldFeatureLookupKeys] = struct{}{}
 			}
 		case "id":
 		case "__typename":

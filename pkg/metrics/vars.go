@@ -41,6 +41,11 @@ var (
 		Help: "The total number of user registrations",
 	})
 
+	EmailValidations = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_email_validations_total",
+		Help: "The total number of email validations by success and result type",
+	}, []string{"success", "result"})
+
 	QueueTasksPushed = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "openlane_queue_tasks_pushed_total",
 		Help: "The total number of tasks pushed to queue",
@@ -82,6 +87,7 @@ var (
 		WorkerExecutionErrors,
 		Logins,
 		Registrations,
+		EmailValidations,
 		QueueTasksPushed,
 		QueueTasksPushFailures,
 		GraphQLOperationTotal,

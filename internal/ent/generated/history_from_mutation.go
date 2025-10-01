@@ -6997,10 +6997,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetStripeSubscriptionID(stripeSubscriptionID)
 	}
 
-	if productPrice, exists := m.ProductPrice(); exists {
-		create = create.SetProductPrice(productPrice)
-	}
-
 	if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
 		create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
 	}
@@ -7019,14 +7015,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if daysUntilDue, exists := m.DaysUntilDue(); exists {
 		create = create.SetNillableDaysUntilDue(&daysUntilDue)
-	}
-
-	if features, exists := m.Features(); exists {
-		create = create.SetFeatures(features)
-	}
-
-	if featureLookupKeys, exists := m.FeatureLookupKeys(); exists {
-		create = create.SetFeatureLookupKeys(featureLookupKeys)
 	}
 
 	_, err := create.Save(ctx)
@@ -7114,12 +7102,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID)
 		}
 
-		if productPrice, exists := m.ProductPrice(); exists {
-			create = create.SetProductPrice(productPrice)
-		} else {
-			create = create.SetProductPrice(orgsubscription.ProductPrice)
-		}
-
 		if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
 			create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
 		} else {
@@ -7148,18 +7130,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetNillableDaysUntilDue(&daysUntilDue)
 		} else {
 			create = create.SetNillableDaysUntilDue(orgsubscription.DaysUntilDue)
-		}
-
-		if features, exists := m.Features(); exists {
-			create = create.SetFeatures(features)
-		} else {
-			create = create.SetFeatures(orgsubscription.Features)
-		}
-
-		if featureLookupKeys, exists := m.FeatureLookupKeys(); exists {
-			create = create.SetFeatureLookupKeys(featureLookupKeys)
-		} else {
-			create = create.SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7206,14 +7176,11 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetTags(orgsubscription.Tags).
 			SetOwnerID(orgsubscription.OwnerID).
 			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
-			SetProductPrice(orgsubscription.ProductPrice).
 			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
 			SetActive(orgsubscription.Active).
 			SetNillableExpiresAt(orgsubscription.ExpiresAt).
 			SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt).
 			SetNillableDaysUntilDue(orgsubscription.DaysUntilDue).
-			SetFeatures(orgsubscription.Features).
-			SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys).
 			Save(ctx)
 		if err != nil {
 			return err

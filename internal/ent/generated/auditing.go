@@ -2198,9 +2198,6 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	if !reflect.DeepEqual(_m.StripeSubscriptionID, new.StripeSubscriptionID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, _m.StripeSubscriptionID, new.StripeSubscriptionID))
 	}
-	if !reflect.DeepEqual(_m.ProductPrice, new.ProductPrice) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, _m.ProductPrice, new.ProductPrice))
-	}
 	if !reflect.DeepEqual(_m.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, _m.StripeSubscriptionStatus, new.StripeSubscriptionStatus))
 	}
@@ -2215,12 +2212,6 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	}
 	if !reflect.DeepEqual(_m.DaysUntilDue, new.DaysUntilDue) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, _m.DaysUntilDue, new.DaysUntilDue))
-	}
-	if !reflect.DeepEqual(_m.Features, new.Features) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, _m.Features, new.Features))
-	}
-	if !reflect.DeepEqual(_m.FeatureLookupKeys, new.FeatureLookupKeys) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatureLookupKeys, _m.FeatureLookupKeys, new.FeatureLookupKeys))
 	}
 	return changes
 }

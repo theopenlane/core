@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -20,6 +21,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -273,6 +275,10 @@ func (h *Handler) getRedirectURI(req *http.Request) (string, error) {
 // oauthLoginErrorWrapper is a helper to wrap oauth login errors and record the failed login attempt
 // in the metrics
 func oauthLoginErrorWrapper(w http.ResponseWriter, err error, code int) {
+	if errors.Is(err, entval.ErrEmailNotAllowed) {
+		code = http.StatusBadRequest
+	}
+
 	metrics.RecordLogin(false)
 
 	http.Error(w, err.Error(), code)

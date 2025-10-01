@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/iam/providers/google"
 
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -40,6 +42,10 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	// check if users exists and create if not, updates last seen of existing user
 	user, err := h.CheckAndCreateUser(ctxWithToken, in.Name, in.Email, enums.AuthProvider(strings.ToUpper(in.AuthProvider)), in.Image)
 	if err != nil {
+		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			return h.InvalidInput(ctx, err, openapi)
+		}
+
 		return h.InternalServerError(ctx, err, openapi)
 	}
 

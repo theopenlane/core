@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
@@ -22,6 +23,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
@@ -360,4 +362,111 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
+	t := suite.T()
+
+	// enable email verification for this test
+	config := &validator.EmailVerificationConfig{
+		Enabled: true,
+		AllowedEmailTypes: validator.AllowedEmailTypes{
+			Disposable: true,
+			Free:       true,
+			Role:       true,
+		},
+	}
+
+	original := suite.db.EmailVerifier
+	suite.db.EmailVerifier = config.NewVerifier()
+
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "register", suite.createImpersonationOperation("RegisterHandler", "Test register"), suite.h.RegisterHandler)
+
+	testCases := []struct {
+		name              string
+		email             string
+		config            validator.EmailVerificationConfig
+		expectedStatus    int
+		expectedErr       string
+		expectedErrorCode rout.ErrorCode
+	}{
+		{
+			name:  "happy path, free allowed",
+			email: "user@gmail.com",
+			config: validator.EmailVerificationConfig{
+				Enabled: true,
+				AllowedEmailTypes: validator.AllowedEmailTypes{
+					Disposable: true,
+					Free:       true,
+					Role:       true,
+				},
+			},
+			expectedStatus: http.StatusCreated,
+		},
+		{
+			name:  "invalid domain",
+			email: "test@company.com",
+			config: validator.EmailVerificationConfig{
+				Enabled: true,
+				AllowedEmailTypes: validator.AllowedEmailTypes{
+					Disposable: true,
+					Free:       true,
+					Role:       true,
+				},
+			},
+			expectedStatus:    http.StatusBadRequest,
+			expectedErrorCode: handlers.InvalidInputErrCode,
+			expectedErr:       validator.ErrEmailNotAllowed.Error(),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			suite.db.EntConfig.EmailValidation = tc.config
+
+			registerJSON := models.RegisterRequest{
+				Email:    tc.email,
+				Password: gofakeit.Password(true, true, true, true, false, 12),
+			}
+
+			body, err := json.Marshal(registerJSON)
+			if err != nil {
+				require.NoError(t, err)
+			}
+
+			req := httptest.NewRequest(http.MethodPost, "/register", strings.NewReader(string(body)))
+			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+			// Set writer for tests that write on the response
+			recorder := httptest.NewRecorder()
+
+			// Using the ServerHTTP on echo will trigger the router and middleware
+			suite.e.ServeHTTP(recorder, req)
+
+			res := recorder.Result()
+			defer res.Body.Close()
+
+			var out *models.RegisterReply
+
+			// parse request body
+			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
+				t.Error("error parsing response", err)
+			}
+
+			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
+
+			if tc.expectedStatus == http.StatusCreated {
+				assert.Equal(t, out.Email, tc.email)
+
+			} else {
+				assert.Contains(t, out.Error, tc.expectedErr)
+			}
+
+		})
+	}
+
+	// reset back to original state
+	suite.db.EmailVerifier = original
 }

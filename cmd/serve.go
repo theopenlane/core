@@ -129,6 +129,9 @@ func serve(ctx context.Context) error {
 		serveropts.WithOTP(),
 	)
 
+	// add email verifier
+	verifier := so.Config.Settings.EntConfig.EmailValidation.NewVerifier()
+
 	// add additional ent dependencies
 	entOpts = append(
 		entOpts,
@@ -143,6 +146,7 @@ func serve(ctx context.Context) error {
 		ent.Summarizer(so.Config.Handler.Summarizer),
 		ent.Windmill(so.Config.Handler.Windmill),
 		ent.PondPool(pool),
+		ent.EmailVerifier(verifier),
 	)
 
 	// Setup DB connection

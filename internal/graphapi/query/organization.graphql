@@ -153,7 +153,6 @@ query GetAllOrganizations {
         orgSubscriptions {
           stripeSubscriptionStatus
           active
-          features
           id
         }
         createdAt
@@ -220,7 +219,6 @@ query GetOrganizationByID($organizationId: ID!) {
     orgSubscriptions {
       stripeSubscriptionStatus
       active
-      features
       id
     }
     controlCreators {
@@ -358,7 +356,6 @@ query GetOrganizations($where: OrganizationWhereInput) {
         orgSubscriptions {
           stripeSubscriptionStatus
           active
-          features
           id
         }
         createdAt
@@ -415,7 +412,6 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       orgSubscriptions {
         stripeSubscriptionStatus
         active
-        features
         id
       }
       programCreators {

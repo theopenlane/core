@@ -757,7 +757,7 @@ func TestMutationCreateTask(t *testing.T) {
 		{
 			name: "missing title, but display name provided",
 			request: testclient.CreateTaskInput{
-				Details: lo.ToPtr("makin' a list, checkin' it twice"),
+				Details: lo.ToPtr("making a list, checking it twice"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
@@ -903,7 +903,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "happy path, update details",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				Details:    lo.ToPtr(("makin' a list, checkin' it twice")),
+				Details:    lo.ToPtr(("making a list, checking it twice")),
 				AssigneeID: &adminUser.ID,
 			},
 			client: suite.client.api,
