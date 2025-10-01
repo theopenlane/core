@@ -68,11 +68,11 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 	cfgLoc := c.Root().String("config")
 	cfg, err := config.Load(&cfgLoc)
 	if err != nil {
-		return nil, fmt.Errorf("load config: %w", err)
+		return nil, fmt.Errorf("load config: %w", err) //nolint:err113
 	}
 
 	if cfg.JobQueue.ConnectionURI == "" {
-		return nil, fmt.Errorf("missing required job queue connection URI in config")
+		return nil, fmt.Errorf("missing required job queue connection URI in config") //nolint:err113
 	}
 
 	jobOpts := []riverqueue.Option{
@@ -83,7 +83,7 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 
 	fgaClient, err := fgax.CreateFGAClientWithStore(ctx, cfg.Authz)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create FGA client: %w", err)
+		return nil, fmt.Errorf("failed to create FGA client: %w", err) //nolint:err113
 	}
 
 	entOpts := []generated.Option{
@@ -92,7 +92,7 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 
 	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, entOpts...)
 	if err != nil {
-		return nil, fmt.Errorf("database client: %w", err)
+		return nil, fmt.Errorf("database client: %w", err) //nolint:err113
 	}
 	return dbClient, nil
 }
