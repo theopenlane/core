@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVGroup($input: Upload!) {
   createBulkCSVGroup(input: $input) {
     groups {
@@ -117,6 +116,7 @@ query GetAllGroups {
     }
   }
 }
+
 query GetGroupByID($groupId: ID!) {
   group(id: $groupId) {
     createdAt
@@ -185,6 +185,7 @@ query GetGroups($first: Int, $last: Int, $where: GroupWhereInput) {
     }
   }
 }
+
 mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
   updateGroup(id: $updateGroupId, input: $input) {
     group {
