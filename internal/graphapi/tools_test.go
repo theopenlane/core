@@ -28,6 +28,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
@@ -53,7 +54,6 @@ const (
 	notFoundErrorMsg         = "not found"
 	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
 	invalidInputErrorMsg     = "invalid input"
-	couldNotFindUser         = "could not identify authenticated user in request"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 )
@@ -166,7 +166,18 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		Modules: entconfig.Modules{
 			Enabled: true,
 		},
+		EmailValidation: validator.EmailVerificationConfig{
+			Enabled:           true,
+			AllowedEmailTypes: validator.AllowedEmailTypes{Free: false},
+		},
 	}
+
+	// we want the email validator to error if a free email domain is used
+	// in org settings, but we don't want to error all user creations on email validation
+	ev := entCfg.EmailValidation.NewVerifier()
+
+	// now disable email validation for tests so that we don't have to make real email addresses
+	entCfg.EmailValidation.Enabled = false
 
 	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
 	requireNoError(err)
@@ -192,6 +203,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.Summarizer(summarizerClient),
 		ent.PondPool(pool),
 		ent.EntitlementManager(entitlements),
+		ent.EmailVerifier(ev),
 	}
 
 	// create database connection
