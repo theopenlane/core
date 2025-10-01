@@ -277,8 +277,6 @@ func (h *Handler) getRedirectURI(req *http.Request) (string, error) {
 func oauthLoginErrorWrapper(w http.ResponseWriter, err error, code int) {
 	if errors.Is(err, entval.ErrEmailNotAllowed) {
 		code = http.StatusBadRequest
-
-		return
 	}
 
 	metrics.RecordLogin(false)
