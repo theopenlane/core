@@ -429,7 +429,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 
 		err := m.Client().Group.UpdateOneID(group.ID).
 			SetName(getUserGroupName(displayName, user.ID)).
-            SetDisplayName(displayName).
+			SetDisplayName(displayName).
 			SetDescription(getUserGroupName(displayName, user.ID)).
 			Exec(allowCtx)
 

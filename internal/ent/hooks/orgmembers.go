@@ -267,44 +267,35 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		dbUser.ID: getUserGroupName(dbUser.DisplayName, dbUser.ID),
 	}
 
-	builders := make([]*generated.GroupCreate, 0, len(userGroups))
+	tags := []string{"managed", dbUser.ID}
 
-      tags := []string{"managed", id}
-      
-      desc := fmt.Sprintf("Group for %s", dbUser.DisplayName)
-      
-      groupInput := generated.CreateGroupInput{
-	      Name:        getUserGroupName(dbUser.DisplayName, dbUser.ID),
-	      DisplayName: dbUser.DisplayName
-	      Description: &desc,
-	      Tags:        tags,
-      }
-      
-      builders = append(builders, m.Client().Group.Create().
-	      SetInput(groupInput).
-	      SetIsManaged(true).
-	      SetOwnerID(member.OrgID),
-      )
+	desc := fmt.Sprintf("Group for %s", dbUser.DisplayName)
 
-	groups, err := m.Client().Group.CreateBulk(builders...).Save(allowCtx)
+	groupInput := generated.CreateGroupInput{
+		Name:        getUserGroupName(dbUser.DisplayName, dbUser.ID),
+		DisplayName: &dbUser.DisplayName,
+		Description: &desc,
+		Tags:        tags,
+	}
+
+	group, err := m.Client().Group.Create().
+		SetInput(groupInput).
+		SetIsManaged(true).
+		SetOwnerID(member.OrgID).Save(allowCtx)
 	if err != nil {
-		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error creating user managed groups")
+		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error creating user managed group")
 		return err
 	}
 
-	// add the user to the group
-	for _, g := range groups {
+	input := generated.CreateGroupMembershipInput{
+		Role:    &enums.RoleMember,
+		UserID:  member.UserID,
+		GroupID: group.ID,
+	}
 
-		input := generated.CreateGroupMembershipInput{
-			Role:    &enums.RoleMember,
-			UserID:  member.UserID,
-			GroupID: g.ID,
-		}
-
-		if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-			zerolog.Ctx(allowCtx).Error().Err(err).Msg("error adding user to their managed group")
-			return err
-		}
+	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error adding user to their managed group")
+		return err
 	}
 
 	return nil
