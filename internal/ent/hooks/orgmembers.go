@@ -263,10 +263,6 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		return err
 	}
 
-	userGroups := map[string]string{
-		dbUser.ID: getUserGroupName(dbUser.DisplayName, dbUser.ID),
-	}
-
 	tags := []string{"managed", dbUser.ID}
 
 	desc := fmt.Sprintf("Group for %s", dbUser.DisplayName)
