@@ -172,11 +172,12 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 				if dryRun {
 					fmt.Printf("[DRY-RUN] create managed group '%s' in org '%s' for user '%s'\n", user.DisplayName, org.ID, user.ID)
 				} else {
-					desc := user.DisplayName
+					groupName := fmt.Sprintf("%s - %s", user.DisplayName, user.ID)
+
 					g, err := db.Group.Create().
 						SetInput(generated.CreateGroupInput{
-							Name:        fmt.Sprintf("%s - %s", user.DisplayName, user.ID),
-							Description: &desc,
+							Name:        groupName,
+							Description: &groupName,
 							Tags:        []string{"managed", user.DisplayName},
 						}).
 						SetIsManaged(true).
