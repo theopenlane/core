@@ -102,6 +102,7 @@ require (
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/unidoc/unioffice v1.39.0
+	github.com/unidoc/unioffice/v2 v2.5.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/windmill-labs/windmill-go-client v1.554.0
