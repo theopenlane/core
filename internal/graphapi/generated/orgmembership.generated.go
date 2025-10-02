@@ -34,7 +34,9 @@ func (ec *executionContext) _OrgMembershipBulkCreatePayload_orgMemberships(ctx c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrgMembershipBulkCreatePayload_orgMemberships,
-		func(ctx context.Context) (any, error) { return obj.OrgMemberships, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrgMemberships, nil
+		},
 		nil,
 		ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembershipᚄ,
 		true,
@@ -85,7 +87,9 @@ func (ec *executionContext) _OrgMembershipCreatePayload_orgMembership(ctx contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrgMembershipCreatePayload_orgMembership,
-		func(ctx context.Context) (any, error) { return obj.OrgMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrgMembership, nil
+		},
 		nil,
 		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
 		true,
@@ -136,7 +140,9 @@ func (ec *executionContext) _OrgMembershipDeletePayload_deletedID(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrgMembershipDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -163,7 +169,9 @@ func (ec *executionContext) _OrgMembershipUpdatePayload_orgMembership(ctx contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrgMembershipUpdatePayload_orgMembership,
-		func(ctx context.Context) (any, error) { return obj.OrgMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrgMembership, nil
+		},
 		nil,
 		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
 		true,

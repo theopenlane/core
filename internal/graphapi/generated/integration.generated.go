@@ -33,7 +33,9 @@ func (ec *executionContext) _IntegrationDeletePayload_deletedID(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_IntegrationDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,

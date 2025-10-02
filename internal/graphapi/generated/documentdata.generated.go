@@ -34,7 +34,9 @@ func (ec *executionContext) _DocumentDataBulkCreatePayload_documentData(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DocumentDataBulkCreatePayload_documentData,
-		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentData, nil
+		},
 		nil,
 		ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ,
 		true,
@@ -89,7 +91,9 @@ func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DocumentDataCreatePayload_documentData,
-		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentData, nil
+		},
 		nil,
 		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
 		true,
@@ -144,7 +148,9 @@ func (ec *executionContext) _DocumentDataDeletePayload_deletedID(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DocumentDataDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -171,7 +177,9 @@ func (ec *executionContext) _DocumentDataUpdatePayload_documentData(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DocumentDataUpdatePayload_documentData,
-		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentData, nil
+		},
 		nil,
 		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
 		true,

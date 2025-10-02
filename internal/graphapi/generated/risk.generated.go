@@ -34,7 +34,9 @@ func (ec *executionContext) _RiskBulkCreatePayload_risks(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskBulkCreatePayload_risks,
-		func(ctx context.Context) (any, error) { return obj.Risks, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Risks, nil
+		},
 		nil,
 		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
 		true,
@@ -135,7 +137,9 @@ func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskBulkUpdatePayload_risks,
-		func(ctx context.Context) (any, error) { return obj.Risks, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Risks, nil
+		},
 		nil,
 		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
 		true,
@@ -236,7 +240,9 @@ func (ec *executionContext) _RiskBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -263,7 +269,9 @@ func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskCreatePayload_risk,
-		func(ctx context.Context) (any, error) { return obj.Risk, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Risk, nil
+		},
 		nil,
 		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
 		true,
@@ -364,7 +372,9 @@ func (ec *executionContext) _RiskDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -391,7 +401,9 @@ func (ec *executionContext) _RiskUpdatePayload_risk(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_RiskUpdatePayload_risk,
-		func(ctx context.Context) (any, error) { return obj.Risk, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Risk, nil
+		},
 		nil,
 		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
 		true,

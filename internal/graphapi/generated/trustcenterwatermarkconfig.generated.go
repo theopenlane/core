@@ -34,7 +34,9 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload_trustCe
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterWatermarkConfigs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterWatermarkConfigs, nil
+		},
 		nil,
 		ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ,
 		true,
@@ -97,7 +99,9 @@ func (ec *executionContext) _TrustCenterWatermarkConfigCreatePayload_trustCenter
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterWatermarkConfigCreatePayload_trustCenterWatermarkConfig,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterWatermarkConfig, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterWatermarkConfig, nil
+		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
 		true,
@@ -160,7 +164,9 @@ func (ec *executionContext) _TrustCenterWatermarkConfigDeletePayload_deletedID(c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterWatermarkConfigDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -187,7 +193,9 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload_trustCenter
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterWatermarkConfigUpdatePayload_trustCenterWatermarkConfig,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterWatermarkConfig, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterWatermarkConfig, nil
+		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
 		true,

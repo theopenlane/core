@@ -34,7 +34,9 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains,
-		func(ctx context.Context) (any, error) { return obj.MappableDomains, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappableDomains, nil
+		},
 		nil,
 		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
 		true,
@@ -81,7 +83,9 @@ func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappableDomainCreatePayload_mappableDomain,
-		func(ctx context.Context) (any, error) { return obj.MappableDomain, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappableDomain, nil
+		},
 		nil,
 		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
 		true,
@@ -128,7 +132,9 @@ func (ec *executionContext) _MappableDomainDeletePayload_deletedID(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappableDomainDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -155,7 +161,9 @@ func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappableDomainUpdatePayload_mappableDomain,
-		func(ctx context.Context) (any, error) { return obj.MappableDomain, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappableDomain, nil
+		},
 		nil,
 		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
 		true,

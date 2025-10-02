@@ -2,6 +2,7 @@ package entitlements_test
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,9 +19,17 @@ func setupPriceClient(prices []*stripe.Price, err error) (*entitlements.StripeCl
 	backends := &stripe.Backends{API: backend, Connect: backend, Uploads: backend}
 
 	backend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
-		if v, ok := args.Get(4).(*stripe.PriceList); ok && err == nil {
-			*v = stripe.PriceList{Data: prices, ListMeta: stripe.ListMeta{HasMore: false}}
+		out := args.Get(4) // this is *v1SearchPage[*stripe.Price] now, but unexported
+
+		// Build a payload that matches Stripe search response shape
+		payload := map[string]any{
+			"object":   "search_result",
+			"data":     prices, // prices := []*stripe.Price{...}
+			"has_more": false,
 		}
+
+		b, _ := json.Marshal(payload)
+		_ = json.Unmarshal(b, out)
 	}).Return(err)
 
 	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}

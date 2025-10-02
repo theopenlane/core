@@ -34,7 +34,9 @@ func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InviteBulkCreatePayload_invites,
-		func(ctx context.Context) (any, error) { return obj.Invites, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Invites, nil
+		},
 		nil,
 		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ,
 		true,
@@ -93,7 +95,9 @@ func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InviteCreatePayload_invite,
-		func(ctx context.Context) (any, error) { return obj.Invite, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Invite, nil
+		},
 		nil,
 		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
 		true,
@@ -152,7 +156,9 @@ func (ec *executionContext) _InviteDeletePayload_deletedID(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InviteDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -179,7 +185,9 @@ func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InviteUpdatePayload_invite,
-		func(ctx context.Context) (any, error) { return obj.Invite, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Invite, nil
+		},
 		nil,
 		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
 		true,

@@ -2,6 +2,7 @@ package entitlements_test
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,9 +19,18 @@ func setupFeatureClient(features []*stripe.EntitlementsFeature, err error) (*ent
 	backends := &stripe.Backends{API: backend, Connect: backend, Uploads: backend}
 
 	backend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
-		if v, ok := args.Get(4).(*stripe.EntitlementsFeatureList); ok && err == nil {
-			*v = stripe.EntitlementsFeatureList{Data: features, ListMeta: stripe.ListMeta{HasMore: false}}
+		// This is actually *v1Page[*stripe.EntitlementsFeature], but it's unexported.
+		out := args.Get(4)
+
+		// Minimal list-shaped payload Stripe expects
+		payload := map[string]any{
+			"object":   "list",
+			"data":     features, // []*stripe.EntitlementsFeature
+			"has_more": false,
 		}
+
+		b, _ := json.Marshal(payload)
+		_ = json.Unmarshal(b, out)
 	}).Return(err)
 
 	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}

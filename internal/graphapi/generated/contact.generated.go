@@ -34,7 +34,9 @@ func (ec *executionContext) _ContactBulkCreatePayload_contacts(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactBulkCreatePayload_contacts,
-		func(ctx context.Context) (any, error) { return obj.Contacts, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Contacts, nil
+		},
 		nil,
 		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
 		true,
@@ -97,7 +99,9 @@ func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactBulkUpdatePayload_contacts,
-		func(ctx context.Context) (any, error) { return obj.Contacts, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Contacts, nil
+		},
 		nil,
 		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
 		true,
@@ -160,7 +164,9 @@ func (ec *executionContext) _ContactBulkUpdatePayload_updatedIDs(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -187,7 +193,9 @@ func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactCreatePayload_contact,
-		func(ctx context.Context) (any, error) { return obj.Contact, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Contact, nil
+		},
 		nil,
 		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
 		true,
@@ -250,7 +258,9 @@ func (ec *executionContext) _ContactDeletePayload_deletedID(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -277,7 +287,9 @@ func (ec *executionContext) _ContactUpdatePayload_contact(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ContactUpdatePayload_contact,
-		func(ctx context.Context) (any, error) { return obj.Contact, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Contact, nil
+		},
 		nil,
 		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
 		true,

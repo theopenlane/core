@@ -35,7 +35,9 @@ func (ec *executionContext) _ControlCategory_name(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategory_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -62,7 +64,9 @@ func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategory_referenceFramework,
-		func(ctx context.Context) (any, error) { return obj.ReferenceFramework, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ReferenceFramework, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -89,7 +93,9 @@ func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategoryConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge,
 		true,
@@ -120,7 +126,9 @@ func (ec *executionContext) _ControlCategoryConnection_pageInfo(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategoryConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -157,7 +165,9 @@ func (ec *executionContext) _ControlCategoryConnection_totalCount(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategoryConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -184,7 +194,9 @@ func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCategoryEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
 		ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory,
 		true,
@@ -217,7 +229,9 @@ func (ec *executionContext) _ControlGroup_category(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlGroup_category,
-		func(ctx context.Context) (any, error) { return obj.Category, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Category, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -244,7 +258,9 @@ func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlGroup_controls,
-		func(ctx context.Context) (any, error) { return obj.Controls, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Controls, nil
+		},
 		nil,
 		ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
 		true,
@@ -279,7 +295,9 @@ func (ec *executionContext) _ControlGroupConnection_edges(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlGroupConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ,
 		true,
@@ -312,7 +330,9 @@ func (ec *executionContext) _ControlGroupEdge_pageInfo(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlGroupEdge_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -349,7 +369,9 @@ func (ec *executionContext) _ControlGroupEdge_node(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlGroupEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
 		ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup,
 		true,

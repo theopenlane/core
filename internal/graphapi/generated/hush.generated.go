@@ -34,7 +34,9 @@ func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushBulkCreatePayload_hushes,
-		func(ctx context.Context) (any, error) { return obj.Hushes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Hushes, nil
+		},
 		nil,
 		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
 		true,
@@ -105,7 +107,9 @@ func (ec *executionContext) _HushBulkUpdatePayload_hushes(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushBulkUpdatePayload_hushes,
-		func(ctx context.Context) (any, error) { return obj.Hushes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Hushes, nil
+		},
 		nil,
 		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
 		true,
@@ -176,7 +180,9 @@ func (ec *executionContext) _HushBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -203,7 +209,9 @@ func (ec *executionContext) _HushCreatePayload_hush(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushCreatePayload_hush,
-		func(ctx context.Context) (any, error) { return obj.Hush, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Hush, nil
+		},
 		nil,
 		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
 		true,
@@ -274,7 +282,9 @@ func (ec *executionContext) _HushDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -301,7 +311,9 @@ func (ec *executionContext) _HushUpdatePayload_hush(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_HushUpdatePayload_hush,
-		func(ctx context.Context) (any, error) { return obj.Hush, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Hush, nil
+		},
 		nil,
 		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
 		true,

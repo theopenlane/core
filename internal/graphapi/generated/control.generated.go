@@ -34,7 +34,9 @@ func (ec *executionContext) _ControlBulkCreatePayload_controls(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlBulkCreatePayload_controls,
-		func(ctx context.Context) (any, error) { return obj.Controls, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Controls, nil
+		},
 		nil,
 		ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ,
 		true,
@@ -167,7 +169,9 @@ func (ec *executionContext) _ControlBulkUpdatePayload_controls(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlBulkUpdatePayload_controls,
-		func(ctx context.Context) (any, error) { return obj.Controls, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Controls, nil
+		},
 		nil,
 		ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ,
 		true,
@@ -300,7 +304,9 @@ func (ec *executionContext) _ControlBulkUpdatePayload_updatedIDs(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -327,7 +333,9 @@ func (ec *executionContext) _ControlCreatePayload_control(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlCreatePayload_control,
-		func(ctx context.Context) (any, error) { return obj.Control, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Control, nil
+		},
 		nil,
 		ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl,
 		true,
@@ -460,7 +468,9 @@ func (ec *executionContext) _ControlDeletePayload_deletedID(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -487,7 +497,9 @@ func (ec *executionContext) _ControlUpdatePayload_control(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlUpdatePayload_control,
-		func(ctx context.Context) (any, error) { return obj.Control, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Control, nil
+		},
 		nil,
 		ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl,
 		true,

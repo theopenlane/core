@@ -34,7 +34,9 @@ func (ec *executionContext) _JobRunnerRegistrationTokenBulkCreatePayload_jobRunn
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens,
-		func(ctx context.Context) (any, error) { return obj.JobRunnerRegistrationTokens, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobRunnerRegistrationTokens, nil
+		},
 		nil,
 		ec.marshalOJobRunnerRegistrationToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenᚄ,
 		true,
@@ -89,7 +91,9 @@ func (ec *executionContext) _JobRunnerRegistrationTokenCreatePayload_jobRunnerRe
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken,
-		func(ctx context.Context) (any, error) { return obj.JobRunnerRegistrationToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobRunnerRegistrationToken, nil
+		},
 		nil,
 		ec.marshalNJobRunnerRegistrationToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationToken,
 		true,
@@ -144,7 +148,9 @@ func (ec *executionContext) _JobRunnerRegistrationTokenDeletePayload_deletedID(c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobRunnerRegistrationTokenDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,

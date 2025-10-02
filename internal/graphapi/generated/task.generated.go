@@ -34,7 +34,9 @@ func (ec *executionContext) _TaskBulkCreatePayload_tasks(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskBulkCreatePayload_tasks,
-		func(ctx context.Context) (any, error) { return obj.Tasks, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Tasks, nil
+		},
 		nil,
 		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
 		true,
@@ -123,7 +125,9 @@ func (ec *executionContext) _TaskBulkUpdatePayload_tasks(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskBulkUpdatePayload_tasks,
-		func(ctx context.Context) (any, error) { return obj.Tasks, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Tasks, nil
+		},
 		nil,
 		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
 		true,
@@ -212,7 +216,9 @@ func (ec *executionContext) _TaskBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -239,7 +245,9 @@ func (ec *executionContext) _TaskCreatePayload_task(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskCreatePayload_task,
-		func(ctx context.Context) (any, error) { return obj.Task, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Task, nil
+		},
 		nil,
 		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
 		true,
@@ -328,7 +336,9 @@ func (ec *executionContext) _TaskDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -355,7 +365,9 @@ func (ec *executionContext) _TaskUpdatePayload_task(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TaskUpdatePayload_task,
-		func(ctx context.Context) (any, error) { return obj.Task, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Task, nil
+		},
 		nil,
 		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
 		true,

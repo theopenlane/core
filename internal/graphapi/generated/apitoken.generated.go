@@ -34,7 +34,9 @@ func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_APITokenBulkCreatePayload_apiTokens,
-		func(ctx context.Context) (any, error) { return obj.APITokens, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.APITokens, nil
+		},
 		nil,
 		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ,
 		true,
@@ -101,7 +103,9 @@ func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_APITokenCreatePayload_apiToken,
-		func(ctx context.Context) (any, error) { return obj.APIToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.APIToken, nil
+		},
 		nil,
 		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
 		true,
@@ -168,7 +172,9 @@ func (ec *executionContext) _APITokenDeletePayload_deletedID(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_APITokenDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -195,7 +201,9 @@ func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_APITokenUpdatePayload_apiToken,
-		func(ctx context.Context) (any, error) { return obj.APIToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.APIToken, nil
+		},
 		nil,
 		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
 		true,
