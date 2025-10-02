@@ -412,8 +412,6 @@ coreConfiguration:
   subscription:
     # -- Enabled determines if the entitlements service is enabled
     enabled: false  # @schema type:boolean; default:false
-    # -- PublicStripeKey is the key for the stripe service
-    publicStripeKey: ""  # @schema type:string
     # -- StripeWebhookURL is the URL for the stripe webhook
     stripeWebhookURL: "https://api.openlane.com/v1/stripe/webhook"  # @schema type:string; default:https://api.openlane.com/v1/stripe/webhook
     # -- StripeBillingPortalSuccessURL

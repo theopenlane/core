@@ -3,8 +3,6 @@ package entitlements
 type Config struct {
 	// Enabled determines if the entitlements service is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// PublicStripeKey is the key for the stripe service
-	PublicStripeKey string `json:"publicStripeKey" koanf:"publicStripeKey" default:""`
 	// PrivateStripeKey is the key for the stripe service
 	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:"" sensitive:"true"`
 	// StripeWebhookSecret is the secret for the stripe service
@@ -25,13 +23,6 @@ type ConfigOpts func(*Config)
 func WithEnabled(enabled bool) ConfigOpts {
 	return func(c *Config) {
 		c.Enabled = enabled
-	}
-}
-
-// WithPublicStripeKey sets the public stripe key
-func WithPublicStripeKey(publicStripeKey string) ConfigOpts {
-	return func(c *Config) {
-		c.PublicStripeKey = publicStripeKey
 	}
 }
 

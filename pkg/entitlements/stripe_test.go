@@ -32,7 +32,6 @@ func TestNewErrMissingAPIKey(t *testing.T) {
 
 func TestWithConfig(t *testing.T) {
 	config := entitlements.Config{
-		PublicStripeKey:  "public_key",
 		PrivateStripeKey: "private_key",
 	}
 
@@ -41,8 +40,7 @@ func TestWithConfig(t *testing.T) {
 
 	option(client)
 
-	if client.Config.PublicStripeKey != config.PublicStripeKey ||
-		client.Config.PrivateStripeKey != config.PrivateStripeKey {
+	if client.Config.PrivateStripeKey != config.PrivateStripeKey {
 		t.Errorf("expected config %v, got %v", config, client.Config)
 	}
 }
@@ -57,7 +55,6 @@ func TestNewConfig(t *testing.T) {
 			name: "custom config",
 			opts: []entitlements.ConfigOpts{
 				entitlements.WithEnabled(true),
-				entitlements.WithPublicStripeKey("public_key"),
 				entitlements.WithPrivateStripeKey("private_key"),
 				entitlements.WithStripeWebhookSecret("webhook_secret"),
 				entitlements.WithStripeWebhookURL("https://custom.webhook.url"),
@@ -67,7 +64,6 @@ func TestNewConfig(t *testing.T) {
 			},
 			want: &entitlements.Config{
 				Enabled:                       true,
-				PublicStripeKey:               "public_key",
 				PrivateStripeKey:              "private_key",
 				StripeWebhookSecret:           "webhook_secret",
 				StripeWebhookURL:              "https://custom.webhook.url",
