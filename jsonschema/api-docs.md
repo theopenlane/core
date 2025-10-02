@@ -1186,7 +1186,6 @@ Config is the configuration for the object store
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled determines if the entitlements service is enabled<br/>||
-|**publicStripeKey**|`string`|PublicStripeKey is the key for the stripe service<br/>||
 |**privateStripeKey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
 |**stripeWebhookSecret**|`string`|StripeWebhookSecret is the secret for the stripe service<br/>||
 |**stripeWebhookURL**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||

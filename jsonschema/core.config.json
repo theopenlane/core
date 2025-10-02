@@ -646,10 +646,6 @@
           "type": "boolean",
           "description": "Enabled determines if the entitlements service is enabled"
         },
-        "publicStripeKey": {
-          "type": "string",
-          "description": "PublicStripeKey is the key for the stripe service"
-        },
         "privateStripeKey": {
           "type": "string",
           "description": "PrivateStripeKey is the key for the stripe service"

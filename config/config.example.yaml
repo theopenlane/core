@@ -294,7 +294,6 @@ slack:
 subscription:
     enabled: false
     privateStripeKey: ""
-    publicStripeKey: ""
     stripeBillingPortalSuccessURL: https://console.openlane.com/organization-settings/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
     stripeWebhookEvents: null

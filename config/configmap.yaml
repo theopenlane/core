@@ -321,7 +321,6 @@ data:
   CORE_OBJECTSTORAGE_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.endpoint | quote }}
   CORE_OBJECTSTORAGE_USEPATHSTYLE: {{ .Values.openlane.coreConfiguration.objectStorage.usePathStyle | quote }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.coreConfiguration.subscription.enabled | quote | default "false" }}
-  CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.coreConfiguration.subscription.publicStripeKey | quote }}
 {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
 {{- else if .Values.domain }}
