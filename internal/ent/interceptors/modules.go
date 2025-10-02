@@ -57,10 +57,11 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 		ctxWithKey := contextx.With(ctx, moduleInterceptorKey{})
 		ok, module, err := rule.HasAnyFeature(ctxWithKey, schemaFeatures...)
 		if err != nil || !ok {
-
 			if err == nil {
 				err = ErrFeatureNotEnabled
 			}
+
+			zerolog.Ctx(ctx).Error().Err(err).Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found
