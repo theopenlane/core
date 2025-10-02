@@ -541,7 +541,8 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	}
 
 	if u.Email == "" {
-		u.Email = gofakeit.Email()
+		// ensure email has a valid domain for email verification tests
+		u.Email = strings.ToLower(fmt.Sprintf("%s.%s.%s@%s", u.FirstName, u.LastName, ulids.New().String(), "theopenlane.io"))
 	}
 
 	if u.Password == "" {

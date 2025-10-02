@@ -17,6 +17,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
       setting {
         id
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         createdAt
         updatedAt
         createdBy
@@ -59,6 +60,7 @@ mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInp
       setting {
         id
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         createdAt
         updatedAt
         createdBy
@@ -137,6 +139,7 @@ query GetAllOrganizations {
         setting {
           id
           allowedEmailDomains
+          allowMatchingDomainsAutojoin
           createdAt
           updatedAt
           createdBy
@@ -203,6 +206,7 @@ query GetOrganizationByID($organizationId: ID!) {
     setting {
       id
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       createdAt
       updatedAt
       createdBy
@@ -345,6 +349,7 @@ query GetOrganizations($where: OrganizationWhereInput) {
         setting {
           id
           allowedEmailDomains
+          allowMatchingDomainsAutojoin
           domains
           billingContact
           billingEmail
@@ -396,6 +401,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       setting {
         id
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         createdAt
         updatedAt
         createdBy

@@ -3,6 +3,7 @@ mutation CreateBulkCSVOrganizationSetting($input: Upload!) {
   createBulkCSVOrganizationSetting(input: $input) {
     organizationSettings {
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       billingAddress
       billingContact
       billingEmail
@@ -35,6 +36,7 @@ mutation CreateBulkOrganizationSetting($input: [CreateOrganizationSettingInput!]
   createBulkOrganizationSetting(input: $input) {
     organizationSettings {
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       billingAddress
       billingContact
       billingEmail
@@ -67,6 +69,7 @@ mutation CreateOrganizationSetting($input: CreateOrganizationSettingInput!) {
   createOrganizationSetting(input: $input) {
     organizationSetting {
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       billingAddress
       billingContact
       billingEmail
@@ -113,6 +116,7 @@ query GetAllOrganizationSettings {
     edges {
       node {
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         billingAddress
         billingContact
         billingEmail
@@ -144,6 +148,7 @@ query GetAllOrganizationSettings {
 query GetOrganizationSettingByID($organizationSettingId: ID!) {
   organizationSetting(id: $organizationSettingId) {
     allowedEmailDomains
+    allowMatchingDomainsAutojoin
     billingAddress
     billingContact
     billingEmail
@@ -183,6 +188,7 @@ query GetOrganizationSettings($first: Int, $last: Int, $where: OrganizationSetti
     edges {
       node {
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         billingAddress
         billingContact
         billingEmail
@@ -215,6 +221,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
   updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
     organizationSetting {
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       billingAddress
       billingContact
       billingEmail

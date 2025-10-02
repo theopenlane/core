@@ -39823,6 +39823,7 @@ func (t *GetOrganizationHistories_OrganizationHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_OrganizationSettings struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -39850,6 +39851,12 @@ type CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_Organizat
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_OrganizationSettings) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_OrganizationSettings{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_OrganizationSettings) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting_OrganizationSettings{}
@@ -40013,6 +40020,7 @@ func (t *CreateBulkCSVOrganizationSetting_CreateBulkCSVOrganizationSetting) GetO
 }
 
 type CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSettings struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -40040,6 +40048,12 @@ type CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSet
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSettings) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSettings{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSettings) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &CreateBulkOrganizationSetting_CreateBulkOrganizationSetting_OrganizationSettings{}
@@ -40203,6 +40217,7 @@ func (t *CreateBulkOrganizationSetting_CreateBulkOrganizationSetting) GetOrganiz
 }
 
 type CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -40230,6 +40245,12 @@ type CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting str
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &CreateOrganizationSetting_CreateOrganizationSetting_OrganizationSetting{}
@@ -40436,6 +40457,7 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_PageInfo) GetStartCurso
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -40463,6 +40485,12 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -40651,6 +40679,7 @@ func (t *GetAllOrganizationSettings_OrganizationSettings) GetTotalCount() int64 
 }
 
 type GetOrganizationSettingByID_OrganizationSetting struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -40678,6 +40707,12 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -40862,6 +40897,7 @@ func (t *GetOrganizationSettings_OrganizationSettings_PageInfo) GetStartCursor()
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -40889,6 +40925,12 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -41077,6 +41119,7 @@ func (t *GetOrganizationSettings_OrganizationSettings) GetTotalCount() int64 {
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting struct {
+	AllowMatchingDomainsAutojoin     *bool              "json:\"allowMatchingDomainsAutojoin,omitempty\" graphql:\"allowMatchingDomainsAutojoin\""
 	AllowedEmailDomains              []string           "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress                   *models.Address    "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact                   *string            "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -41104,6 +41147,12 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	UpdatedBy                        *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetAllowMatchingDomainsAutojoin() *bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.AllowMatchingDomainsAutojoin
+}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetAllowedEmailDomains() []string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
@@ -96465,6 +96514,7 @@ const CreateBulkCSVOrganizationSettingDocument = `mutation CreateBulkCSVOrganiza
 	createBulkCSVOrganizationSetting(input: $input) {
 		organizationSettings {
 			allowedEmailDomains
+			allowMatchingDomainsAutojoin
 			billingAddress
 			billingContact
 			billingEmail
@@ -96515,6 +96565,7 @@ const CreateBulkOrganizationSettingDocument = `mutation CreateBulkOrganizationSe
 	createBulkOrganizationSetting(input: $input) {
 		organizationSettings {
 			allowedEmailDomains
+			allowMatchingDomainsAutojoin
 			billingAddress
 			billingContact
 			billingEmail
@@ -96565,6 +96616,7 @@ const CreateOrganizationSettingDocument = `mutation CreateOrganizationSetting ($
 	createOrganizationSetting(input: $input) {
 		organizationSetting {
 			allowedEmailDomains
+			allowMatchingDomainsAutojoin
 			billingAddress
 			billingContact
 			billingEmail
@@ -96647,6 +96699,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 		edges {
 			node {
 				allowedEmailDomains
+				allowMatchingDomainsAutojoin
 				billingAddress
 				billingContact
 				billingEmail
@@ -96695,6 +96748,7 @@ func (c *Client) GetAllOrganizationSettings(ctx context.Context, interceptors ..
 const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 	organizationSetting(id: $organizationSettingId) {
 		allowedEmailDomains
+		allowMatchingDomainsAutojoin
 		billingAddress
 		billingContact
 		billingEmail
@@ -96752,6 +96806,7 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($first: 
 		edges {
 			node {
 				allowedEmailDomains
+				allowMatchingDomainsAutojoin
 				billingAddress
 				billingContact
 				billingEmail
@@ -96805,6 +96860,7 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 	updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
 		organizationSetting {
 			allowedEmailDomains
+			allowMatchingDomainsAutojoin
 			billingAddress
 			billingContact
 			billingEmail
