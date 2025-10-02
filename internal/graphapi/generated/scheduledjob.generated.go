@@ -34,7 +34,9 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload_scheduledJobs(ctx con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs,
-		func(ctx context.Context) (any, error) { return obj.ScheduledJobs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ScheduledJobs, nil
+		},
 		nil,
 		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ,
 		true,
@@ -97,7 +99,9 @@ func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScheduledJobCreatePayload_scheduledJob,
-		func(ctx context.Context) (any, error) { return obj.ScheduledJob, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ScheduledJob, nil
+		},
 		nil,
 		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
 		true,
@@ -160,7 +164,9 @@ func (ec *executionContext) _ScheduledJobDeletePayload_deletedID(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScheduledJobDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -187,7 +193,9 @@ func (ec *executionContext) _ScheduledJobUpdatePayload_scheduledJob(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob,
-		func(ctx context.Context) (any, error) { return obj.ScheduledJob, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ScheduledJob, nil
+		},
 		nil,
 		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
 		true,

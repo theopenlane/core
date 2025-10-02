@@ -34,7 +34,9 @@ func (ec *executionContext) _UserBulkCreatePayload_users(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserBulkCreatePayload_users,
-		func(ctx context.Context) (any, error) { return obj.Users, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Users, nil
+		},
 		nil,
 		ec.marshalOUser2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserᚄ,
 		true,
@@ -135,7 +137,9 @@ func (ec *executionContext) _UserCreatePayload_user(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserCreatePayload_user,
-		func(ctx context.Context) (any, error) { return obj.User, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.User, nil
+		},
 		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
 		true,
@@ -236,7 +240,9 @@ func (ec *executionContext) _UserDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -263,7 +269,9 @@ func (ec *executionContext) _UserUpdatePayload_user(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserUpdatePayload_user,
-		func(ctx context.Context) (any, error) { return obj.User, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.User, nil
+		},
 		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
 		true,

@@ -34,7 +34,9 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications,
-		func(ctx context.Context) (any, error) { return obj.DNSVerifications, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DNSVerifications, nil
+		},
 		nil,
 		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ,
 		true,
@@ -99,7 +101,9 @@ func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DNSVerificationCreatePayload_dnsVerification,
-		func(ctx context.Context) (any, error) { return obj.DNSVerification, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DNSVerification, nil
+		},
 		nil,
 		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
 		true,
@@ -164,7 +168,9 @@ func (ec *executionContext) _DNSVerificationDeletePayload_deletedID(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DNSVerificationDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -191,7 +197,9 @@ func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_DNSVerificationUpdatePayload_dnsVerification,
-		func(ctx context.Context) (any, error) { return obj.DNSVerification, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DNSVerification, nil
+		},
 		nil,
 		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
 		true,

@@ -34,7 +34,9 @@ func (ec *executionContext) _TemplateBulkCreatePayload_templates(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TemplateBulkCreatePayload_templates,
-		func(ctx context.Context) (any, error) { return obj.Templates, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Templates, nil
+		},
 		nil,
 		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
 		true,
@@ -105,7 +107,9 @@ func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TemplateCreatePayload_template,
-		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Template, nil
+		},
 		nil,
 		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
 		true,
@@ -176,7 +180,9 @@ func (ec *executionContext) _TemplateDeletePayload_deletedID(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TemplateDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -203,7 +209,9 @@ func (ec *executionContext) _TemplateUpdatePayload_template(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TemplateUpdatePayload_template,
-		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Template, nil
+		},
 		nil,
 		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
 		true,

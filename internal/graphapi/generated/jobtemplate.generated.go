@@ -34,7 +34,9 @@ func (ec *executionContext) _JobTemplateBulkCreatePayload_jobTemplates(ctx conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobTemplateBulkCreatePayload_jobTemplates,
-		func(ctx context.Context) (any, error) { return obj.JobTemplates, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobTemplates, nil
+		},
 		nil,
 		ec.marshalOJobTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateᚄ,
 		true,
@@ -101,7 +103,9 @@ func (ec *executionContext) _JobTemplateCreatePayload_jobTemplate(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobTemplateCreatePayload_jobTemplate,
-		func(ctx context.Context) (any, error) { return obj.JobTemplate, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobTemplate, nil
+		},
 		nil,
 		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplate,
 		true,
@@ -168,7 +172,9 @@ func (ec *executionContext) _JobTemplateDeletePayload_deletedID(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobTemplateDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -195,7 +201,9 @@ func (ec *executionContext) _JobTemplateUpdatePayload_jobTemplate(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobTemplateUpdatePayload_jobTemplate,
-		func(ctx context.Context) (any, error) { return obj.JobTemplate, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobTemplate, nil
+		},
 		nil,
 		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplate,
 		true,

@@ -34,7 +34,9 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload_internalPolicies(ct
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyBulkCreatePayload_internalPolicies,
-		func(ctx context.Context) (any, error) { return obj.InternalPolicies, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicies, nil
+		},
 		nil,
 		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
 		true,
@@ -153,7 +155,9 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ct
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies,
-		func(ctx context.Context) (any, error) { return obj.InternalPolicies, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicies, nil
+		},
 		nil,
 		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
 		true,
@@ -272,7 +276,9 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload_updatedIDs(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -299,7 +305,9 @@ func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyCreatePayload_internalPolicy,
-		func(ctx context.Context) (any, error) { return obj.InternalPolicy, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicy, nil
+		},
 		nil,
 		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
 		true,
@@ -418,7 +426,9 @@ func (ec *executionContext) _InternalPolicyDeletePayload_deletedID(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -445,7 +455,9 @@ func (ec *executionContext) _InternalPolicyUpdatePayload_internalPolicy(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_InternalPolicyUpdatePayload_internalPolicy,
-		func(ctx context.Context) (any, error) { return obj.InternalPolicy, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicy, nil
+		},
 		nil,
 		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
 		true,

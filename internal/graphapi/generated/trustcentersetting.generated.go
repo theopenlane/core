@@ -34,7 +34,9 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload_trustCenterSett
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterSettingBulkCreatePayload_trustCenterSettings,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterSettings, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterSettings, nil
+		},
 		nil,
 		ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ,
 		true,
@@ -107,7 +109,9 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload_trustCenterSetting(
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterSettingCreatePayload_trustCenterSetting,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterSetting, nil
+		},
 		nil,
 		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
 		true,
@@ -180,7 +184,9 @@ func (ec *executionContext) _TrustCenterSettingDeletePayload_deletedID(ctx conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterSettingDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -207,7 +213,9 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload_trustCenterSetting(
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterSetting, nil
+		},
 		nil,
 		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
 		true,

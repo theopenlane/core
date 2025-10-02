@@ -34,7 +34,9 @@ func (ec *executionContext) _ControlImplementationBulkCreatePayload_controlImple
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlImplementationBulkCreatePayload_controlImplementations,
-		func(ctx context.Context) (any, error) { return obj.ControlImplementations, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlImplementations, nil
+		},
 		nil,
 		ec.marshalOControlImplementation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementationᚄ,
 		true,
@@ -107,7 +109,9 @@ func (ec *executionContext) _ControlImplementationCreatePayload_controlImplement
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlImplementationCreatePayload_controlImplementation,
-		func(ctx context.Context) (any, error) { return obj.ControlImplementation, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlImplementation, nil
+		},
 		nil,
 		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementation,
 		true,
@@ -180,7 +184,9 @@ func (ec *executionContext) _ControlImplementationDeletePayload_deletedID(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlImplementationDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -207,7 +213,9 @@ func (ec *executionContext) _ControlImplementationUpdatePayload_controlImplement
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlImplementationUpdatePayload_controlImplementation,
-		func(ctx context.Context) (any, error) { return obj.ControlImplementation, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlImplementation, nil
+		},
 		nil,
 		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementation,
 		true,

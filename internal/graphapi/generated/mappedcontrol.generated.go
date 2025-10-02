@@ -34,7 +34,9 @@ func (ec *executionContext) _MappedControlBulkCreatePayload_mappedControls(ctx c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappedControlBulkCreatePayload_mappedControls,
-		func(ctx context.Context) (any, error) { return obj.MappedControls, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappedControls, nil
+		},
 		nil,
 		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ,
 		true,
@@ -105,7 +107,9 @@ func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappedControlCreatePayload_mappedControl,
-		func(ctx context.Context) (any, error) { return obj.MappedControl, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappedControl, nil
+		},
 		nil,
 		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
 		true,
@@ -176,7 +180,9 @@ func (ec *executionContext) _MappedControlDeletePayload_deletedID(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappedControlDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -203,7 +209,9 @@ func (ec *executionContext) _MappedControlUpdatePayload_mappedControl(ctx contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_MappedControlUpdatePayload_mappedControl,
-		func(ctx context.Context) (any, error) { return obj.MappedControl, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MappedControl, nil
+		},
 		nil,
 		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
 		true,

@@ -34,7 +34,9 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload_programMembershi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramMembershipBulkCreatePayload_programMemberships,
-		func(ctx context.Context) (any, error) { return obj.ProgramMemberships, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ProgramMemberships, nil
+		},
 		nil,
 		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ,
 		true,
@@ -83,7 +85,9 @@ func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ct
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramMembershipCreatePayload_programMembership,
-		func(ctx context.Context) (any, error) { return obj.ProgramMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ProgramMembership, nil
+		},
 		nil,
 		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
 		true,
@@ -132,7 +136,9 @@ func (ec *executionContext) _ProgramMembershipDeletePayload_deletedID(ctx contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramMembershipDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -159,7 +165,9 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ct
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramMembershipUpdatePayload_programMembership,
-		func(ctx context.Context) (any, error) { return obj.ProgramMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ProgramMembership, nil
+		},
 		nil,
 		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
 		true,

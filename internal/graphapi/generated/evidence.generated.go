@@ -34,7 +34,9 @@ func (ec *executionContext) _EvidenceBulkCreatePayload_evidences(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EvidenceBulkCreatePayload_evidences,
-		func(ctx context.Context) (any, error) { return obj.Evidences, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Evidences, nil
+		},
 		nil,
 		ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ,
 		true,
@@ -113,7 +115,9 @@ func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EvidenceCreatePayload_evidence,
-		func(ctx context.Context) (any, error) { return obj.Evidence, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Evidence, nil
+		},
 		nil,
 		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
 		true,
@@ -192,7 +196,9 @@ func (ec *executionContext) _EvidenceDeletePayload_deletedID(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EvidenceDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -219,7 +225,9 @@ func (ec *executionContext) _EvidenceUpdatePayload_evidence(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EvidenceUpdatePayload_evidence,
-		func(ctx context.Context) (any, error) { return obj.Evidence, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Evidence, nil
+		},
 		nil,
 		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
 		true,

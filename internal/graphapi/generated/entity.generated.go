@@ -34,7 +34,9 @@ func (ec *executionContext) _EntityBulkCreatePayload_entities(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityBulkCreatePayload_entities,
-		func(ctx context.Context) (any, error) { return obj.Entities, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Entities, nil
+		},
 		nil,
 		ec.marshalOEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityᚄ,
 		true,
@@ -117,7 +119,9 @@ func (ec *executionContext) _EntityCreatePayload_entity(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityCreatePayload_entity,
-		func(ctx context.Context) (any, error) { return obj.Entity, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Entity, nil
+		},
 		nil,
 		ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity,
 		true,
@@ -200,7 +204,9 @@ func (ec *executionContext) _EntityDeletePayload_deletedID(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -227,7 +233,9 @@ func (ec *executionContext) _EntityUpdatePayload_entity(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityUpdatePayload_entity,
-		func(ctx context.Context) (any, error) { return obj.Entity, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Entity, nil
+		},
 		nil,
 		ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity,
 		true,

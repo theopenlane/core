@@ -33,7 +33,9 @@ func (ec *executionContext) _OnboardingCreatePayload_onboarding(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OnboardingCreatePayload_onboarding,
-		func(ctx context.Context) (any, error) { return obj.Onboarding, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Onboarding, nil
+		},
 		nil,
 		ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding,
 		true,

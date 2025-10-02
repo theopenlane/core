@@ -34,7 +34,9 @@ func (ec *executionContext) _ControlObjectiveBulkCreatePayload_controlObjectives
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlObjectiveBulkCreatePayload_controlObjectives,
-		func(ctx context.Context) (any, error) { return obj.ControlObjectives, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlObjectives, nil
+		},
 		nil,
 		ec.marshalOControlObjective2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveᚄ,
 		true,
@@ -127,7 +129,9 @@ func (ec *executionContext) _ControlObjectiveCreatePayload_controlObjective(ctx 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlObjectiveCreatePayload_controlObjective,
-		func(ctx context.Context) (any, error) { return obj.ControlObjective, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlObjective, nil
+		},
 		nil,
 		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjective,
 		true,
@@ -220,7 +224,9 @@ func (ec *executionContext) _ControlObjectiveDeletePayload_deletedID(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlObjectiveDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -247,7 +253,9 @@ func (ec *executionContext) _ControlObjectiveUpdatePayload_controlObjective(ctx 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ControlObjectiveUpdatePayload_controlObjective,
-		func(ctx context.Context) (any, error) { return obj.ControlObjective, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ControlObjective, nil
+		},
 		nil,
 		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjective,
 		true,

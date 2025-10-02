@@ -33,7 +33,9 @@ func (ec *executionContext) _FileDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_FileDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,

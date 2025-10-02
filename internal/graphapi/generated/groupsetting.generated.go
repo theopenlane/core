@@ -34,7 +34,9 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload_groupSettings(ctx con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupSettingBulkCreatePayload_groupSettings,
-		func(ctx context.Context) (any, error) { return obj.GroupSettings, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupSettings, nil
+		},
 		nil,
 		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ,
 		true,
@@ -85,7 +87,9 @@ func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupSettingCreatePayload_groupSetting,
-		func(ctx context.Context) (any, error) { return obj.GroupSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupSetting, nil
+		},
 		nil,
 		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
 		true,
@@ -136,7 +140,9 @@ func (ec *executionContext) _GroupSettingDeletePayload_deletedID(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupSettingDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -163,7 +169,9 @@ func (ec *executionContext) _GroupSettingUpdatePayload_groupSetting(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupSettingUpdatePayload_groupSetting,
-		func(ctx context.Context) (any, error) { return obj.GroupSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupSetting, nil
+		},
 		nil,
 		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
 		true,

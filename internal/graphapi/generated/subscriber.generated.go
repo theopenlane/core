@@ -34,7 +34,9 @@ func (ec *executionContext) _SubscriberBulkCreatePayload_subscribers(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubscriberBulkCreatePayload_subscribers,
-		func(ctx context.Context) (any, error) { return obj.Subscribers, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subscribers, nil
+		},
 		nil,
 		ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ,
 		true,
@@ -95,7 +97,9 @@ func (ec *executionContext) _SubscriberCreatePayload_subscriber(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubscriberCreatePayload_subscriber,
-		func(ctx context.Context) (any, error) { return obj.Subscriber, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subscriber, nil
+		},
 		nil,
 		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
 		true,
@@ -156,7 +160,9 @@ func (ec *executionContext) _SubscriberDeletePayload_email(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubscriberDeletePayload_email,
-		func(ctx context.Context) (any, error) { return obj.Email, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Email, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -183,7 +189,9 @@ func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubscriberUpdatePayload_subscriber,
-		func(ctx context.Context) (any, error) { return obj.Subscriber, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subscriber, nil
+		},
 		nil,
 		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
 		true,

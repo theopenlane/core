@@ -33,7 +33,9 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload_customDomain(ctx con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterDomainCreatePayload_customDomain,
-		func(ctx context.Context) (any, error) { return obj.CustomDomain, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomain, nil
+		},
 		nil,
 		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
 		true,
