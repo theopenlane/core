@@ -676,7 +676,7 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 	rec := i.Recipient
 
 	if rec == "" {
-		rec = gofakeit.Email()
+		rec = strings.ToLower(fmt.Sprintf("%s@%s", ulids.New().String(), "theopenlane.io"))
 	}
 
 	inviteQuery := i.client.db.Invite.Create().
