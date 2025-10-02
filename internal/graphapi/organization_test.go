@@ -217,8 +217,9 @@ func TestMutationCreateOrganization(t *testing.T) {
 				ContentType: avatarFile.ContentType,
 			},
 			settings: &testclient.CreateOrganizationSettingInput{
-				Domains:             []string{"meow.theopenlane.io"},
-				AllowedEmailDomains: []string{"theopenlane.io"},
+				Domains:                      []string{"meow.theopenlane.io"},
+				AllowedEmailDomains:          []string{"theopenlane.io"},
+				AllowMatchingDomainsAutojoin: lo.ToPtr(true),
 				BillingAddress: &models.Address{
 					Line1:      gofakeit.StreetNumber() + " " + gofakeit.Street(),
 					City:       gofakeit.City(),
@@ -498,6 +499,10 @@ func TestMutationCreateOrganization(t *testing.T) {
 					assert.Check(t, is.Equal(tc.settings.BillingAddress.PostalCode, resp.CreateOrganization.Organization.Setting.BillingAddress.PostalCode))
 					assert.Check(t, is.Equal(tc.settings.BillingAddress.Country, resp.CreateOrganization.Organization.Setting.BillingAddress.Country))
 				}
+
+				// ensure the allowed email domains is set properly
+				assert.Check(t, is.Contains(resp.CreateOrganization.Organization.Setting.AllowedEmailDomains, userResp.User.Email[strings.Index(userResp.User.Email, "@")+1:]))
+				assert.Check(t, is.Equal(true, *resp.CreateOrganization.Organization.Setting.AllowMatchingDomainsAutojoin))
 			}
 
 			// ensure entity types are created

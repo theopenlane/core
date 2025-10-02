@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/iam/auth"
@@ -454,6 +455,13 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 		billingContact := user.FirstName + " " + user.LastName
 		input.BillingEmail = &user.Email
 		input.BillingContact = &billingContact
+
+		// automatically add the user's email domain to the allowed email domains
+		// and enable auto-join for matching domains
+		emailDomain := strings.SplitAfter(user.Email, "@")[1]
+
+		input.AllowedEmailDomains = []string{emailDomain}
+		input.AllowMatchingDomainsAutojoin = lo.ToPtr(true)
 	}
 
 	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)

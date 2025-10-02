@@ -3,6 +3,7 @@ query GetAllOrganizationSettings {
     edges {
       node {
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         billingAddress
         billingContact
         billingEmail
@@ -36,6 +37,7 @@ query GetAllOrganizationSettings {
 query GetOrganizationSettingByID($organizationSettingId: ID!) {
   organizationSetting(id: $organizationSettingId) {
     allowedEmailDomains
+    allowMatchingDomainsAutojoin
     billingAddress
     billingContact
     billingEmail
@@ -69,6 +71,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
     edges {
       node {
         allowedEmailDomains
+        allowMatchingDomainsAutojoin
         billingAddress
         billingContact
         billingEmail
@@ -103,6 +106,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
   updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
     organizationSetting {
       allowedEmailDomains
+      allowMatchingDomainsAutojoin
       billingAddress
       billingContact
       billingEmail
