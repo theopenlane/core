@@ -34,7 +34,9 @@ func (ec *executionContext) _NarrativeBulkCreatePayload_narratives(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_NarrativeBulkCreatePayload_narratives,
-		func(ctx context.Context) (any, error) { return obj.Narratives, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Narratives, nil
+		},
 		nil,
 		ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeᚄ,
 		true,
@@ -107,7 +109,9 @@ func (ec *executionContext) _NarrativeCreatePayload_narrative(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_NarrativeCreatePayload_narrative,
-		func(ctx context.Context) (any, error) { return obj.Narrative, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Narrative, nil
+		},
 		nil,
 		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
 		true,
@@ -180,7 +184,9 @@ func (ec *executionContext) _NarrativeDeletePayload_deletedID(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_NarrativeDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -207,7 +213,9 @@ func (ec *executionContext) _NarrativeUpdatePayload_narrative(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_NarrativeUpdatePayload_narrative,
-		func(ctx context.Context) (any, error) { return obj.Narrative, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Narrative, nil
+		},
 		nil,
 		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
 		true,

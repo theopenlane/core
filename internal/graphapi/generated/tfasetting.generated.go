@@ -34,7 +34,9 @@ func (ec *executionContext) _TFASettingCreatePayload_tfaSetting(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingCreatePayload_tfaSetting,
-		func(ctx context.Context) (any, error) { return obj.TfaSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TfaSetting, nil
+		},
 		nil,
 		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting,
 		true,
@@ -79,7 +81,9 @@ func (ec *executionContext) _TFASettingCreatePayload_tfaSecret(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingCreatePayload_tfaSecret,
-		func(ctx context.Context) (any, error) { return obj.TfaSecret, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TfaSecret, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -106,7 +110,9 @@ func (ec *executionContext) _TFASettingCreatePayload_qrCode(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingCreatePayload_qrCode,
-		func(ctx context.Context) (any, error) { return obj.QRCode, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.QRCode, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -133,7 +139,9 @@ func (ec *executionContext) _TFASettingUpdatePayload_tfaSetting(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingUpdatePayload_tfaSetting,
-		func(ctx context.Context) (any, error) { return obj.TfaSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TfaSetting, nil
+		},
 		nil,
 		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting,
 		true,
@@ -178,7 +186,9 @@ func (ec *executionContext) _TFASettingUpdatePayload_tfaSecret(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingUpdatePayload_tfaSecret,
-		func(ctx context.Context) (any, error) { return obj.TfaSecret, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TfaSecret, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -205,7 +215,9 @@ func (ec *executionContext) _TFASettingUpdatePayload_qrCode(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingUpdatePayload_qrCode,
-		func(ctx context.Context) (any, error) { return obj.QRCode, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.QRCode, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -232,7 +244,9 @@ func (ec *executionContext) _TFASettingUpdatePayload_recoveryCodes(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TFASettingUpdatePayload_recoveryCodes,
-		func(ctx context.Context) (any, error) { return obj.RecoveryCodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.RecoveryCodes, nil
+		},
 		nil,
 		ec.marshalOString2ᚕstringᚄ,
 		true,

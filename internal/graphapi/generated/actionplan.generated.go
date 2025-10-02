@@ -3758,7 +3758,9 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload_actionPlans(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanBulkCreatePayload_actionPlans,
-		func(ctx context.Context) (any, error) { return obj.ActionPlans, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ActionPlans, nil
+		},
 		nil,
 		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanᚄ,
 		true,
@@ -3859,7 +3861,9 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_actionPlans(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanBulkUpdatePayload_actionPlans,
-		func(ctx context.Context) (any, error) { return obj.ActionPlans, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ActionPlans, nil
+		},
 		nil,
 		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanᚄ,
 		true,
@@ -3960,7 +3964,9 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_updatedIDs(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -3987,7 +3993,9 @@ func (ec *executionContext) _ActionPlanCreatePayload_actionPlan(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanCreatePayload_actionPlan,
-		func(ctx context.Context) (any, error) { return obj.ActionPlan, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ActionPlan, nil
+		},
 		nil,
 		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlan,
 		true,
@@ -4088,7 +4096,9 @@ func (ec *executionContext) _ActionPlanDeletePayload_deletedID(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -4115,7 +4125,9 @@ func (ec *executionContext) _ActionPlanUpdatePayload_actionPlan(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ActionPlanUpdatePayload_actionPlan,
-		func(ctx context.Context) (any, error) { return obj.ActionPlan, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ActionPlan, nil
+		},
 		nil,
 		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlan,
 		true,

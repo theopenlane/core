@@ -34,7 +34,9 @@ func (ec *executionContext) _TrustCenterComplianceBulkCreatePayload_trustCenterC
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterComplianceBulkCreatePayload_trustCenterCompliances,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliances, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterCompliances, nil
+		},
 		nil,
 		ec.marshalOTrustCenterCompliance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceᚄ,
 		true,
@@ -83,7 +85,9 @@ func (ec *executionContext) _TrustCenterComplianceCreatePayload_trustCenterCompl
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterComplianceCreatePayload_trustCenterCompliance,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliance, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterCompliance, nil
+		},
 		nil,
 		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
 		true,
@@ -132,7 +136,9 @@ func (ec *executionContext) _TrustCenterComplianceDeletePayload_deletedID(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterComplianceDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -159,7 +165,9 @@ func (ec *executionContext) _TrustCenterComplianceUpdatePayload_trustCenterCompl
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterComplianceUpdatePayload_trustCenterCompliance,
-		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliance, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TrustCenterCompliance, nil
+		},
 		nil,
 		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
 		true,

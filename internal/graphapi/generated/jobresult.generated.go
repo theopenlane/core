@@ -34,7 +34,9 @@ func (ec *executionContext) _JobResultCreatePayload_jobResult(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobResultCreatePayload_jobResult,
-		func(ctx context.Context) (any, error) { return obj.JobResult, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobResult, nil
+		},
 		nil,
 		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobResult,
 		true,
@@ -95,7 +97,9 @@ func (ec *executionContext) _JobResultDeletePayload_deletedID(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobResultDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -122,7 +126,9 @@ func (ec *executionContext) _JobResultUpdatePayload_jobResult(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_JobResultUpdatePayload_jobResult,
-		func(ctx context.Context) (any, error) { return obj.JobResult, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.JobResult, nil
+		},
 		nil,
 		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobResult,
 		true,

@@ -34,7 +34,9 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload_customDomains(ctx con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CustomDomainBulkCreatePayload_customDomains,
-		func(ctx context.Context) (any, error) { return obj.CustomDomains, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomains, nil
+		},
 		nil,
 		ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ,
 		true,
@@ -95,7 +97,9 @@ func (ec *executionContext) _CustomDomainCreatePayload_customDomain(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CustomDomainCreatePayload_customDomain,
-		func(ctx context.Context) (any, error) { return obj.CustomDomain, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomain, nil
+		},
 		nil,
 		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
 		true,
@@ -156,7 +160,9 @@ func (ec *executionContext) _CustomDomainDeletePayload_deletedID(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CustomDomainDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -183,7 +189,9 @@ func (ec *executionContext) _CustomDomainUpdatePayload_customDomain(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CustomDomainUpdatePayload_customDomain,
-		func(ctx context.Context) (any, error) { return obj.CustomDomain, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomain, nil
+		},
 		nil,
 		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
 		true,

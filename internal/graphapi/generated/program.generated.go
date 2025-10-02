@@ -34,7 +34,9 @@ func (ec *executionContext) _ProgramBulkCreatePayload_programs(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramBulkCreatePayload_programs,
-		func(ctx context.Context) (any, error) { return obj.Programs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Programs, nil
+		},
 		nil,
 		ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramᚄ,
 		true,
@@ -141,7 +143,9 @@ func (ec *executionContext) _ProgramCreatePayload_program(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramCreatePayload_program,
-		func(ctx context.Context) (any, error) { return obj.Program, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Program, nil
+		},
 		nil,
 		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
 		true,
@@ -248,7 +252,9 @@ func (ec *executionContext) _ProgramDeletePayload_deletedID(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -275,7 +281,9 @@ func (ec *executionContext) _ProgramUpdatePayload_program(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProgramUpdatePayload_program,
-		func(ctx context.Context) (any, error) { return obj.Program, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Program, nil
+		},
 		nil,
 		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
 		true,

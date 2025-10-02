@@ -34,7 +34,9 @@ func (ec *executionContext) _SubcontrolBulkCreatePayload_subcontrols(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubcontrolBulkCreatePayload_subcontrols,
-		func(ctx context.Context) (any, error) { return obj.Subcontrols, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subcontrols, nil
+		},
 		nil,
 		ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolᚄ,
 		true,
@@ -155,7 +157,9 @@ func (ec *executionContext) _SubcontrolCreatePayload_subcontrol(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubcontrolCreatePayload_subcontrol,
-		func(ctx context.Context) (any, error) { return obj.Subcontrol, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subcontrol, nil
+		},
 		nil,
 		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
 		true,
@@ -276,7 +280,9 @@ func (ec *executionContext) _SubcontrolDeletePayload_deletedID(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubcontrolDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -303,7 +309,9 @@ func (ec *executionContext) _SubcontrolUpdatePayload_subcontrol(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubcontrolUpdatePayload_subcontrol,
-		func(ctx context.Context) (any, error) { return obj.Subcontrol, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subcontrol, nil
+		},
 		nil,
 		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
 		true,

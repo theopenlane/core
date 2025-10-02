@@ -34,7 +34,9 @@ func (ec *executionContext) _AssetBulkCreatePayload_assets(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AssetBulkCreatePayload_assets,
-		func(ctx context.Context) (any, error) { return obj.Assets, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Assets, nil
+		},
 		nil,
 		ec.marshalOAsset2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetᚄ,
 		true,
@@ -111,7 +113,9 @@ func (ec *executionContext) _AssetCreatePayload_asset(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AssetCreatePayload_asset,
-		func(ctx context.Context) (any, error) { return obj.Asset, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Asset, nil
+		},
 		nil,
 		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAsset,
 		true,
@@ -188,7 +192,9 @@ func (ec *executionContext) _AssetDeletePayload_deletedID(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AssetDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -215,7 +221,9 @@ func (ec *executionContext) _AssetUpdatePayload_asset(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AssetUpdatePayload_asset,
-		func(ctx context.Context) (any, error) { return obj.Asset, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Asset, nil
+		},
 		nil,
 		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAsset,
 		true,

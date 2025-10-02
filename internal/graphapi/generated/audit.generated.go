@@ -40,7 +40,9 @@ func (ec *executionContext) _AuditLog_table(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLog_table,
-		func(ctx context.Context) (any, error) { return obj.Table, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Table, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -67,7 +69,9 @@ func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLog_time,
-		func(ctx context.Context) (any, error) { return obj.HistoryTime, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.HistoryTime, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -94,7 +98,9 @@ func (ec *executionContext) _AuditLog_id(ctx context.Context, field graphql.Coll
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLog_id,
-		func(ctx context.Context) (any, error) { return obj.RefID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.RefID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -121,7 +127,9 @@ func (ec *executionContext) _AuditLog_operation(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLog_operation,
-		func(ctx context.Context) (any, error) { return obj.Operation, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Operation, nil
+		},
 		nil,
 		ec.marshalOString2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType,
 		true,
@@ -177,7 +185,9 @@ func (ec *executionContext) _AuditLog_updatedBy(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLog_updatedBy,
-		func(ctx context.Context) (any, error) { return obj.UpdatedBy, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
 		nil,
 		ec.marshalOID2string,
 		true,
@@ -204,7 +214,9 @@ func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLogConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge,
 		true,
@@ -237,7 +249,9 @@ func (ec *executionContext) _AuditLogConnection_pageInfo(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLogConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -274,7 +288,9 @@ func (ec *executionContext) _AuditLogConnection_totalCount(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLogConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -301,7 +317,9 @@ func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLogEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
 		ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog,
 		true,
@@ -342,7 +360,9 @@ func (ec *executionContext) _AuditLogEdge_cursor(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_AuditLogEdge_cursor,
-		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
 		nil,
 		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,

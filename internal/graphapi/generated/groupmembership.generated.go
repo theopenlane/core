@@ -34,7 +34,9 @@ func (ec *executionContext) _GroupMembershipBulkCreatePayload_groupMemberships(c
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupMembershipBulkCreatePayload_groupMemberships,
-		func(ctx context.Context) (any, error) { return obj.GroupMemberships, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupMemberships, nil
+		},
 		nil,
 		ec.marshalOGroupMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembershipᚄ,
 		true,
@@ -85,7 +87,9 @@ func (ec *executionContext) _GroupMembershipCreatePayload_groupMembership(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupMembershipCreatePayload_groupMembership,
-		func(ctx context.Context) (any, error) { return obj.GroupMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupMembership, nil
+		},
 		nil,
 		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
 		true,
@@ -136,7 +140,9 @@ func (ec *executionContext) _GroupMembershipDeletePayload_deletedID(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupMembershipDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -163,7 +169,9 @@ func (ec *executionContext) _GroupMembershipUpdatePayload_groupMembership(ctx co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupMembershipUpdatePayload_groupMembership,
-		func(ctx context.Context) (any, error) { return obj.GroupMembership, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.GroupMembership, nil
+		},
 		nil,
 		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
 		true,

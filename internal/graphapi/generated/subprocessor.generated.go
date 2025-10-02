@@ -34,7 +34,9 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload_subprocessors(ctx con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubprocessorBulkCreatePayload_subprocessors,
-		func(ctx context.Context) (any, error) { return obj.Subprocessors, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subprocessors, nil
+		},
 		nil,
 		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ,
 		true,
@@ -99,7 +101,9 @@ func (ec *executionContext) _SubprocessorCreatePayload_subprocessor(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubprocessorCreatePayload_subprocessor,
-		func(ctx context.Context) (any, error) { return obj.Subprocessor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subprocessor, nil
+		},
 		nil,
 		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
 		true,
@@ -164,7 +168,9 @@ func (ec *executionContext) _SubprocessorDeletePayload_deletedID(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubprocessorDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -191,7 +197,9 @@ func (ec *executionContext) _SubprocessorUpdatePayload_subprocessor(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubprocessorUpdatePayload_subprocessor,
-		func(ctx context.Context) (any, error) { return obj.Subprocessor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Subprocessor, nil
+		},
 		nil,
 		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
 		true,

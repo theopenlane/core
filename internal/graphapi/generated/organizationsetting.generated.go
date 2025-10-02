@@ -34,7 +34,9 @@ func (ec *executionContext) _OrganizationSettingBulkCreatePayload_organizationSe
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings,
-		func(ctx context.Context) (any, error) { return obj.OrganizationSettings, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrganizationSettings, nil
+		},
 		nil,
 		ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ,
 		true,
@@ -129,7 +131,9 @@ func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSettin
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrganizationSettingCreatePayload_organizationSetting,
-		func(ctx context.Context) (any, error) { return obj.OrganizationSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrganizationSetting, nil
+		},
 		nil,
 		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
 		true,
@@ -224,7 +228,9 @@ func (ec *executionContext) _OrganizationSettingDeletePayload_deletedID(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrganizationSettingDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -251,7 +257,9 @@ func (ec *executionContext) _OrganizationSettingUpdatePayload_organizationSettin
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OrganizationSettingUpdatePayload_organizationSetting,
-		func(ctx context.Context) (any, error) { return obj.OrganizationSetting, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrganizationSetting, nil
+		},
 		nil,
 		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
 		true,

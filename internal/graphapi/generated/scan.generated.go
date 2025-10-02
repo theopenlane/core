@@ -34,7 +34,9 @@ func (ec *executionContext) _ScanBulkCreatePayload_scans(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanBulkCreatePayload_scans,
-		func(ctx context.Context) (any, error) { return obj.Scans, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Scans, nil
+		},
 		nil,
 		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
 		true,
@@ -97,7 +99,9 @@ func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanBulkUpdatePayload_scans,
-		func(ctx context.Context) (any, error) { return obj.Scans, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Scans, nil
+		},
 		nil,
 		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
 		true,
@@ -160,7 +164,9 @@ func (ec *executionContext) _ScanBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -187,7 +193,9 @@ func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanCreatePayload_scan,
-		func(ctx context.Context) (any, error) { return obj.Scan, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Scan, nil
+		},
 		nil,
 		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
 		true,
@@ -250,7 +258,9 @@ func (ec *executionContext) _ScanDeletePayload_deletedID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -277,7 +287,9 @@ func (ec *executionContext) _ScanUpdatePayload_scan(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ScanUpdatePayload_scan,
-		func(ctx context.Context) (any, error) { return obj.Scan, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Scan, nil
+		},
 		nil,
 		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
 		true,

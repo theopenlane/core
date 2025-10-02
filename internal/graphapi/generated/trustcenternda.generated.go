@@ -34,7 +34,9 @@ func (ec *executionContext) _SendTrustCenterNDAEmailPayload_success(ctx context.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SendTrustCenterNDAEmailPayload_success,
-		func(ctx context.Context) (any, error) { return obj.Success, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -61,7 +63,9 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ct
 		ec.OperationContext,
 		field,
 		ec.fieldContext_SubmitTrustCenterNDAResponsePayload_documentData,
-		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentData, nil
+		},
 		nil,
 		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
 		true,
@@ -116,7 +120,9 @@ func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterNDACreatePayload_template,
-		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Template, nil
+		},
 		nil,
 		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
 		true,
@@ -187,7 +193,9 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload_template(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TrustCenterNDAUpdatePayload_template,
-		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Template, nil
+		},
 		nil,
 		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
 		true,

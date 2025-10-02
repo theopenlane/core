@@ -34,7 +34,9 @@ func (ec *executionContext) _EventBulkCreatePayload_events(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EventBulkCreatePayload_events,
-		func(ctx context.Context) (any, error) { return obj.Events, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Events, nil
+		},
 		nil,
 		ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ,
 		true,
@@ -107,7 +109,9 @@ func (ec *executionContext) _EventCreatePayload_event(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EventCreatePayload_event,
-		func(ctx context.Context) (any, error) { return obj.Event, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Event, nil
+		},
 		nil,
 		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
 		true,
@@ -180,7 +184,9 @@ func (ec *executionContext) _EventDeletePayload_deletedID(ctx context.Context, f
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EventDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -207,7 +213,9 @@ func (ec *executionContext) _EventUpdatePayload_event(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EventUpdatePayload_event,
-		func(ctx context.Context) (any, error) { return obj.Event, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Event, nil
+		},
 		nil,
 		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
 		true,

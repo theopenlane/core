@@ -34,7 +34,9 @@ func (ec *executionContext) _PersonalAccessTokenBulkCreatePayload_personalAccess
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PersonalAccessTokenBulkCreatePayload_personalAccessTokens,
-		func(ctx context.Context) (any, error) { return obj.PersonalAccessTokens, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PersonalAccessTokens, nil
+		},
 		nil,
 		ec.marshalOPersonalAccessToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenᚄ,
 		true,
@@ -103,7 +105,9 @@ func (ec *executionContext) _PersonalAccessTokenCreatePayload_personalAccessToke
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PersonalAccessTokenCreatePayload_personalAccessToken,
-		func(ctx context.Context) (any, error) { return obj.PersonalAccessToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PersonalAccessToken, nil
+		},
 		nil,
 		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
 		true,
@@ -172,7 +176,9 @@ func (ec *executionContext) _PersonalAccessTokenDeletePayload_deletedID(ctx cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PersonalAccessTokenDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -199,7 +205,9 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload_personalAccessToke
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PersonalAccessTokenUpdatePayload_personalAccessToken,
-		func(ctx context.Context) (any, error) { return obj.PersonalAccessToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PersonalAccessToken, nil
+		},
 		nil,
 		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
 		true,

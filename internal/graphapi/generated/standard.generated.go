@@ -34,7 +34,9 @@ func (ec *executionContext) _StandardBulkCreatePayload_standards(ctx context.Con
 		ec.OperationContext,
 		field,
 		ec.fieldContext_StandardBulkCreatePayload_standards,
-		func(ctx context.Context) (any, error) { return obj.Standards, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Standards, nil
+		},
 		nil,
 		ec.marshalOStandard2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardᚄ,
 		true,
@@ -117,7 +119,9 @@ func (ec *executionContext) _StandardCreatePayload_standard(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_StandardCreatePayload_standard,
-		func(ctx context.Context) (any, error) { return obj.Standard, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Standard, nil
+		},
 		nil,
 		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
 		true,
@@ -200,7 +204,9 @@ func (ec *executionContext) _StandardDeletePayload_deletedID(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_StandardDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -227,7 +233,9 @@ func (ec *executionContext) _StandardUpdatePayload_standard(ctx context.Context,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_StandardUpdatePayload_standard,
-		func(ctx context.Context) (any, error) { return obj.Standard, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Standard, nil
+		},
 		nil,
 		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
 		true,

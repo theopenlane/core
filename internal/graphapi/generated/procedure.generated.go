@@ -34,7 +34,9 @@ func (ec *executionContext) _ProcedureBulkCreatePayload_procedures(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureBulkCreatePayload_procedures,
-		func(ctx context.Context) (any, error) { return obj.Procedures, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Procedures, nil
+		},
 		nil,
 		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
 		true,
@@ -149,7 +151,9 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload_procedures(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureBulkUpdatePayload_procedures,
-		func(ctx context.Context) (any, error) { return obj.Procedures, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Procedures, nil
+		},
 		nil,
 		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
 		true,
@@ -264,7 +268,9 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload_updatedIDs(ctx context.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs,
-		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
 		nil,
 		ec.marshalOID2ᚕstringᚄ,
 		true,
@@ -291,7 +297,9 @@ func (ec *executionContext) _ProcedureCreatePayload_procedure(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureCreatePayload_procedure,
-		func(ctx context.Context) (any, error) { return obj.Procedure, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Procedure, nil
+		},
 		nil,
 		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
 		true,
@@ -406,7 +414,9 @@ func (ec *executionContext) _ProcedureDeletePayload_deletedID(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -433,7 +443,9 @@ func (ec *executionContext) _ProcedureUpdatePayload_procedure(ctx context.Contex
 		ec.OperationContext,
 		field,
 		ec.fieldContext_ProcedureUpdatePayload_procedure,
-		func(ctx context.Context) (any, error) { return obj.Procedure, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Procedure, nil
+		},
 		nil,
 		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
 		true,

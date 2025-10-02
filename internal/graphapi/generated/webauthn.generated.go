@@ -33,7 +33,9 @@ func (ec *executionContext) _WebauthnDeletePayload_deletedID(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_WebauthnDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,

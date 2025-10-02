@@ -34,7 +34,9 @@ func (ec *executionContext) _EntityTypeBulkCreatePayload_entityTypes(ctx context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityTypeBulkCreatePayload_entityTypes,
-		func(ctx context.Context) (any, error) { return obj.EntityTypes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.EntityTypes, nil
+		},
 		nil,
 		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ,
 		true,
@@ -89,7 +91,9 @@ func (ec *executionContext) _EntityTypeCreatePayload_entityType(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityTypeCreatePayload_entityType,
-		func(ctx context.Context) (any, error) { return obj.EntityType, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.EntityType, nil
+		},
 		nil,
 		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
 		true,
@@ -144,7 +148,9 @@ func (ec *executionContext) _EntityTypeDeletePayload_deletedID(ctx context.Conte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityTypeDeletePayload_deletedID,
-		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -171,7 +177,9 @@ func (ec *executionContext) _EntityTypeUpdatePayload_entityType(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_EntityTypeUpdatePayload_entityType,
-		func(ctx context.Context) (any, error) { return obj.EntityType, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.EntityType, nil
+		},
 		nil,
 		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
 		true,

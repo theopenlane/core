@@ -36,7 +36,9 @@ func (ec *executionContext) _GroupPermission_objectType(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermission_objectType,
-		func(ctx context.Context) (any, error) { return obj.ObjectType, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectType, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -63,7 +65,9 @@ func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermission_permissions,
-		func(ctx context.Context) (any, error) { return obj.Permissions, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Permissions, nil
+		},
 		nil,
 		ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission,
 		true,
@@ -90,7 +94,9 @@ func (ec *executionContext) _GroupPermission_id(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermission_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2string,
 		true,
@@ -117,7 +123,9 @@ func (ec *executionContext) _GroupPermission_displayID(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermission_displayID,
-		func(ctx context.Context) (any, error) { return obj.DisplayID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayID, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -144,7 +152,9 @@ func (ec *executionContext) _GroupPermission_name(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermission_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -171,7 +181,9 @@ func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermissionConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge,
 		true,
@@ -204,7 +216,9 @@ func (ec *executionContext) _GroupPermissionConnection_pageInfo(ctx context.Cont
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermissionConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -241,7 +255,9 @@ func (ec *executionContext) _GroupPermissionConnection_totalCount(ctx context.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermissionConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -268,7 +284,9 @@ func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermissionEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
 		ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission,
 		true,
@@ -307,7 +325,9 @@ func (ec *executionContext) _GroupPermissionEdge_cursor(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_GroupPermissionEdge_cursor,
-		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
 		nil,
 		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
