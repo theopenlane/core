@@ -398,7 +398,7 @@ steps:
               step: lint
       - label: ":graphql: lint graphql schema"
         key: "apollo-lint-schema"
-        skip: "true" # skip until plugin is fixed
+        skip: "false" # skip until plugin is fixed
         soft_fail:
           - exit_status: 1
         cancel_on_build_failing: true
