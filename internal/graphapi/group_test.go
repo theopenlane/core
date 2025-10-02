@@ -225,8 +225,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 6 groups are returned, group 1 and the seeded group, and the 4 managed groups
-		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
+		// make sure only 5 groups are returned, group 1 and the seeded group, and the 4 managed groups
+		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
 
 		// check groups available to admin user (private group created by testUser1 should not be returned for org member)
 		resp, err = suite.client.api.GetAllGroups(viewOnlyUser.UserCtx)
@@ -234,8 +234,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 6 groups are returned, group 1 and the seeded group, and the 4 managed groups
-		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
+		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
+		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
 	})
 
 	// delete created groups

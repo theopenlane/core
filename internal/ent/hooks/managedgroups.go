@@ -161,11 +161,6 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 
 	switch op {
 	case ent.OpCreate:
-
-		if err := createUserManagedGroup(managedCtx, m, orgMember); err != nil {
-			return err
-		}
-
 		return addToManagedGroups(managedCtx, m, orgMember)
 	default:
 		// deletes are handled by the cascade delete hook

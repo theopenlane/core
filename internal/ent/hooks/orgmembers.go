@@ -38,6 +38,11 @@ func HookOrgMembers() ent.Hook {
 				m.SetOrganizationID(orgID)
 			}
 
+			orgMember := OrgMember{
+				UserID: userID,
+				OrgID:  orgID,
+			}
+
 			// check role, if its not set the default is member
 			role, _ := m.Role()
 			if role == enums.RoleOwner {
@@ -45,11 +50,6 @@ func HookOrgMembers() ent.Hook {
 				val, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
-				}
-
-				orgMember := OrgMember{
-					UserID: userID,
-					OrgID:  orgID,
 				}
 
 				ctxWithAuth := ctx
@@ -108,6 +108,10 @@ func HookOrgMembers() ent.Hook {
 			// update the managed group members when members are added
 			// after the mutation has been executed
 			if err := updateManagedGroupMembers(ctx, m); err != nil {
+				return nil, err
+			}
+
+			if err := createUserManagedGroup(ctx, m, orgMember); err != nil {
 				return nil, err
 			}
 
@@ -261,6 +265,15 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 	if err != nil {
 		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error fetching user from the database")
 		return err
+	}
+
+	org, err := m.Client().Organization.Get(allowCtx, member.OrgID)
+	if err != nil {
+		return err
+	}
+
+	if org.PersonalOrg {
+		return nil
 	}
 
 	tags := []string{"managed", dbUser.ID}

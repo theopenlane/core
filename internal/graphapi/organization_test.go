@@ -530,7 +530,12 @@ func TestMutationCreateOrganization(t *testing.T) {
 			//
 			// 4 groups because a system managed group is now created for each user
 			// in the organization
-			assert.Check(t, is.Len(managedGroups.Groups.Edges, 4))
+			num := 4
+			if tc.parentOrgID != "" {
+				num = 3
+			}
+
+			assert.Check(t, is.Len(managedGroups.Groups.Edges, num))
 
 			// cleanup org
 			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.UserCtx, t)

@@ -207,9 +207,11 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
 	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
 
+	testUser := suite.userBuilder(context.Background())
+
 	// bypass auth
 	ctx := context.Background()
-	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
 
 	var groot = "groot2@theopenlane.io"
 
