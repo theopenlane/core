@@ -8,7 +8,4 @@ metadata:
   labels:
     app: openlane
     component: config
-  annotations:
-    # This checksum will trigger deployment restarts when the ConfigMap changes
-    checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
