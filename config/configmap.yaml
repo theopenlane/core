@@ -8,9 +8,6 @@ metadata:
   labels:
     app: openlane
     component: config
-  annotations:
-    # This checksum will trigger deployment restarts when the ConfigMap changes
-    checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
   CORE_REFRESHINTERVAL: {{ .Values.openlane.coreConfiguration.refreshInterval | quote | default "10m" }}
   CORE_SERVER_DEV: {{ .Values.openlane.coreConfiguration.server.dev | quote | default "false" }}
