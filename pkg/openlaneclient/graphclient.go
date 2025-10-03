@@ -214,6 +214,7 @@ type OpenlaneGraphClient interface {
 	GetIntegrationHistories(ctx context.Context, first *int64, last *int64, where *IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationHistories, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
+	CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
@@ -28190,6 +28191,196 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy{}
 	}
 	return t.InternalPolicies
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy struct {
+	ApprovalRequired                *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproverID                      *string               "json:\"approverID,omitempty\" graphql:\"approverID\""
+	ControlSuggestions              []string              "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
+	CreatedAt                       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DelegateID                      *string               "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Details                         *string               "json:\"details,omitempty\" graphql:\"details\""
+	DismissedControlSuggestions     []string              "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
+	DismissedImprovementSuggestions []string              "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
+	DismissedTagSuggestions         []string              "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
+	DisplayID                       string                "json:\"displayID\" graphql:\"displayID\""
+	ID                              string                "json:\"id\" graphql:\"id\""
+	ImprovementSuggestions          []string              "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	Name                            string                "json:\"name\" graphql:\"name\""
+	OwnerID                         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType                      *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue                       *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency                 *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision                        *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status                          *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                         *string               "json:\"summary,omitempty\" graphql:\"summary\""
+	TagSuggestions                  []string              "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
+	Tags                            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetApproverID() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ApproverID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetControlSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ControlSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDelegateID() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DelegateID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDetails() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Details
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDismissedControlSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DismissedControlSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDismissedImprovementSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DismissedImprovementSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDismissedTagSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DismissedTagSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDisplayID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DisplayID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetImprovementSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ImprovementSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Name
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.OwnerID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetPolicyType() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.PolicyType
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetRevision() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Revision
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Status
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetSummary() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Summary
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetTagSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.TagSuggestions
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetTags() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Tags
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy struct {
+	InternalPolicy CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy) GetInternalPolicy() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy{}
+	}
+	return &t.InternalPolicy
 }
 
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
@@ -80558,6 +80749,17 @@ func (t *CreateBulkInternalPolicy) GetCreateBulkInternalPolicy() *CreateBulkInte
 	return &t.CreateBulkInternalPolicy
 }
 
+type CreateUploadInternalPolicy struct {
+	CreateUploadInternalPolicy CreateUploadInternalPolicy_CreateUploadInternalPolicy "json:\"createUploadInternalPolicy\" graphql:\"createUploadInternalPolicy\""
+}
+
+func (t *CreateUploadInternalPolicy) GetCreateUploadInternalPolicy() *CreateUploadInternalPolicy_CreateUploadInternalPolicy {
+	if t == nil {
+		t = &CreateUploadInternalPolicy{}
+	}
+	return &t.CreateUploadInternalPolicy
+}
+
 type CreateInternalPolicy struct {
 	CreateInternalPolicy CreateInternalPolicy_CreateInternalPolicy "json:\"createInternalPolicy\" graphql:\"createInternalPolicy\""
 }
@@ -92739,6 +92941,57 @@ func (c *Client) CreateBulkInternalPolicy(ctx context.Context, input []*CreateIn
 
 	var res CreateBulkInternalPolicy
 	if err := c.Client.Post(ctx, "CreateBulkInternalPolicy", CreateBulkInternalPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($policyFile: Upload!, $ownerID: ID) {
+	createUploadInternalPolicy(policyFile: $policyFile, ownerID: $ownerID) {
+		internalPolicy {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			id
+			improvementSuggestions
+			name
+			ownerID
+			policyType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
+	vars := map[string]any{
+		"policyFile": policyFile,
+		"ownerID":    ownerID,
+	}
+
+	var res CreateUploadInternalPolicy
+	if err := c.Client.Post(ctx, "CreateUploadInternalPolicy", CreateUploadInternalPolicyDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -107778,6 +108031,7 @@ var DocumentOperationNames = map[string]string{
 	GetIntegrationHistoriesDocument:                   "GetIntegrationHistories",
 	CreateBulkCSVInternalPolicyDocument:               "CreateBulkCSVInternalPolicy",
 	CreateBulkInternalPolicyDocument:                  "CreateBulkInternalPolicy",
+	CreateUploadInternalPolicyDocument:                "CreateUploadInternalPolicy",
 	CreateInternalPolicyDocument:                      "CreateInternalPolicy",
 	DeleteInternalPolicyDocument:                      "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:                    "GetAllInternalPolicies",

@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVInternalPolicy($input: Upload!) {
   createBulkCSVInternalPolicy(input: $input) {
     internalPolicies {
@@ -95,6 +94,38 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   }
 }
 
+mutation CreateUploadInternalPolicy($policyFile: Upload!, $ownerID: ID) {
+  createUploadInternalPolicy(policyFile: $policyFile, ownerID: $ownerID) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
 mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
   deleteInternalPolicy(id: $deleteInternalPolicyId) {
     deletedID
@@ -141,35 +172,6 @@ query GetAllInternalPolicies {
     }
   }
 }
-query GetInternalPolicyByID($internalPolicyId: ID!) {
-  internalPolicy(id: $internalPolicyId) {
-    approvalRequired
-    approverID
-    controlSuggestions
-    createdAt
-    createdBy
-    delegateID
-    details
-    dismissedControlSuggestions
-    dismissedImprovementSuggestions
-    dismissedTagSuggestions
-    displayID
-    id
-    improvementSuggestions
-    name
-    ownerID
-    policyType
-    reviewDue
-    reviewFrequency
-    revision
-    status
-    summary
-    tagSuggestions
-    tags
-    updatedAt
-    updatedBy
-  }
-}
 
 query GetInternalPolicies($first: Int, $last: Int, $where: InternalPolicyWhereInput) {
   internalPolicies(first: $first, last: $last, where: $where) {
@@ -211,6 +213,37 @@ query GetInternalPolicies($first: Int, $last: Int, $where: InternalPolicyWhereIn
     }
   }
 }
+
+query GetInternalPolicyByID($internalPolicyId: ID!) {
+  internalPolicy(id: $internalPolicyId) {
+    approvalRequired
+    approverID
+    controlSuggestions
+    createdAt
+    createdBy
+    delegateID
+    details
+    dismissedControlSuggestions
+    dismissedImprovementSuggestions
+    dismissedTagSuggestions
+    displayID
+    id
+    improvementSuggestions
+    name
+    ownerID
+    policyType
+    reviewDue
+    reviewFrequency
+    revision
+    status
+    summary
+    tagSuggestions
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
 mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
   updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
     internalPolicy {

@@ -53,6 +53,8 @@ func consoleOutput(e any) error {
 		e = v.Procedure
 	case *openlaneclient.CreateProcedure:
 		e = v.CreateProcedure.Procedure
+	case *openlaneclient.CreateUploadProcedure:
+		e = v.CreateUploadProcedure.Procedure
 	case *openlaneclient.UpdateProcedure:
 		e = v.UpdateProcedure.Procedure
 	case *openlaneclient.DeleteProcedure:
