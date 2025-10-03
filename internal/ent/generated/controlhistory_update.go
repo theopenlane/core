@@ -124,6 +124,26 @@ func (_u *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ControlHistoryUpdate) SetTitle(v string) *ControlHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableTitle(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ControlHistoryUpdate) ClearTitle() *ControlHistoryUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *ControlHistoryUpdate) SetDescription(v string) *ControlHistoryUpdate {
 	_u.mutation.SetDescription(v)
@@ -693,6 +713,12 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(controlhistory.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 	}
@@ -980,6 +1006,26 @@ func (_u *ControlHistoryUpdateOne) AppendTags(v []string) *ControlHistoryUpdateO
 // ClearTags clears the value of the "tags" field.
 func (_u *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *ControlHistoryUpdateOne) SetTitle(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableTitle(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ControlHistoryUpdateOne) ClearTitle() *ControlHistoryUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -1581,6 +1627,12 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(controlhistory.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)

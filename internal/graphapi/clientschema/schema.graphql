@@ -3571,6 +3571,10 @@ type Control implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -4355,6 +4359,10 @@ type ControlHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -4542,6 +4550,7 @@ enum ControlHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -4685,6 +4694,24 @@ input ControlHistoryWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -7293,6 +7320,7 @@ Properties by which Control connections can be ordered.
 enum ControlOrderField {
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -7411,6 +7439,24 @@ input ControlWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -8078,6 +8124,10 @@ input CreateControlInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
 	"""
 	description of what the control is supposed to accomplish
 	"""
@@ -9842,6 +9892,10 @@ input CreateSubcontrolInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
 	"""
 	description of what the control is supposed to accomplish
 	"""
@@ -52531,6 +52585,10 @@ type Subcontrol implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -53055,6 +53113,10 @@ type SubcontrolHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -53242,6 +53304,7 @@ enum SubcontrolHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -53385,6 +53448,24 @@ input SubcontrolHistoryWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -53687,6 +53768,7 @@ Properties by which Subcontrol connections can be ordered.
 enum SubcontrolOrderField {
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -53805,6 +53887,24 @@ input SubcontrolWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -62072,6 +62172,11 @@ input UpdateControlInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	clearTitle: Boolean
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -64535,6 +64640,11 @@ input UpdateSubcontrolInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	clearTitle: Boolean
 	"""
 	description of what the control is supposed to accomplish
 	"""

@@ -992,6 +992,7 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
 	Tags                     []string
+	Title                    *string
 	Description              *string
 	ReferenceID              *string
 	AuditorReferenceID       *string
@@ -1038,6 +1039,9 @@ type CreateControlInput struct {
 func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -1170,6 +1174,8 @@ type UpdateControlInput struct {
 	ClearTags                      bool
 	Tags                           []string
 	AppendTags                     []string
+	ClearTitle                     bool
+	Title                          *string
 	ClearDescription               bool
 	Description                    *string
 	ClearReferenceID               bool
@@ -1280,6 +1286,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearTitle {
+		m.ClearTitle()
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -10578,6 +10590,7 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 // CreateSubcontrolInput represents a mutation input for creating subcontrols.
 type CreateSubcontrolInput struct {
 	Tags                     []string
+	Title                    *string
 	Description              *string
 	ReferenceID              *string
 	AuditorReferenceID       *string
@@ -10618,6 +10631,9 @@ type CreateSubcontrolInput struct {
 func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -10730,6 +10746,8 @@ type UpdateSubcontrolInput struct {
 	ClearTags                      bool
 	Tags                           []string
 	AppendTags                     []string
+	ClearTitle                     bool
+	Title                          *string
 	ClearDescription               bool
 	Description                    *string
 	ClearReferenceID               bool
@@ -10821,6 +10839,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearTitle {
+		m.ClearTitle()
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()

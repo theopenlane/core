@@ -4134,6 +4134,11 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldTags)
 				fieldSeen[control.FieldTags] = struct{}{}
 			}
+		case "title":
+			if _, ok := fieldSeen[control.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, control.FieldTitle)
+				fieldSeen[control.FieldTitle] = struct{}{}
+			}
 		case "description":
 			if _, ok := fieldSeen[control.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, control.FieldDescription)
@@ -4393,6 +4398,11 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldTags)
 				fieldSeen[controlhistory.FieldTags] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[controlhistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldTitle)
+				fieldSeen[controlhistory.FieldTitle] = struct{}{}
 			}
 		case "description":
 			if _, ok := fieldSeen[controlhistory.FieldDescription]; !ok {
@@ -40885,6 +40895,11 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldTags)
 				fieldSeen[subcontrol.FieldTags] = struct{}{}
 			}
+		case "title":
+			if _, ok := fieldSeen[subcontrol.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldTitle)
+				fieldSeen[subcontrol.FieldTitle] = struct{}{}
+			}
 		case "description":
 			if _, ok := fieldSeen[subcontrol.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldDescription)
@@ -41144,6 +41159,11 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldTags)
 				fieldSeen[subcontrolhistory.FieldTags] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[subcontrolhistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldTitle)
+				fieldSeen[subcontrolhistory.FieldTitle] = struct{}{}
 			}
 		case "description":
 			if _, ok := fieldSeen[subcontrolhistory.FieldDescription]; !ok {

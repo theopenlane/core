@@ -1053,6 +1053,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
@@ -1230,6 +1234,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(control.Tags)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(control.Title)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -1425,6 +1435,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(control.DeletedBy).
 			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
+			SetTitle(control.Title).
 			SetDescription(control.Description).
 			SetReferenceID(control.ReferenceID).
 			SetAuditorReferenceID(control.AuditorReferenceID).
@@ -10037,6 +10048,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTags(tags)
 	}
 
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
@@ -10214,6 +10229,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(subcontrol.Tags)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(subcontrol.Title)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -10409,6 +10430,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(subcontrol.DeletedBy).
 			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
+			SetTitle(subcontrol.Title).
 			SetDescription(subcontrol.Description).
 			SetReferenceID(subcontrol.ReferenceID).
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).

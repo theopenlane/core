@@ -3543,6 +3543,20 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldTitle orders Control by title.
+	ControlOrderFieldTitle = &ControlOrderField{
+		Value: func(_m *Control) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: control.FieldTitle,
+		toTerm: control.ByTitle,
+		toCursor: func(_m *Control) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
 	// ControlOrderFieldStatus orders Control by status.
 	ControlOrderFieldStatus = &ControlOrderField{
 		Value: func(_m *Control) (ent.Value, error) {
@@ -3704,6 +3718,8 @@ func (f ControlOrderField) String() string {
 		str = "created_at"
 	case ControlOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlOrderFieldTitle.column:
+		str = "title"
 	case ControlOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlOrderFieldSource.column:
@@ -3742,6 +3758,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlOrderFieldUpdatedAt
+	case "title":
+		*f = *ControlOrderFieldTitle
 	case "STATUS":
 		*f = *ControlOrderFieldStatus
 	case "SOURCE":
@@ -4058,6 +4076,20 @@ var (
 			}
 		},
 	}
+	// ControlHistoryOrderFieldTitle orders ControlHistory by title.
+	ControlHistoryOrderFieldTitle = &ControlHistoryOrderField{
+		Value: func(_m *ControlHistory) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: controlhistory.FieldTitle,
+		toTerm: controlhistory.ByTitle,
+		toCursor: func(_m *ControlHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
 	// ControlHistoryOrderFieldStatus orders ControlHistory by status.
 	ControlHistoryOrderFieldStatus = &ControlHistoryOrderField{
 		Value: func(_m *ControlHistory) (ent.Value, error) {
@@ -4181,6 +4213,8 @@ func (f ControlHistoryOrderField) String() string {
 		str = "created_at"
 	case ControlHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlHistoryOrderFieldTitle.column:
+		str = "title"
 	case ControlHistoryOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlHistoryOrderFieldSource.column:
@@ -4217,6 +4251,8 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlHistoryOrderFieldUpdatedAt
+	case "title":
+		*f = *ControlHistoryOrderFieldTitle
 	case "STATUS":
 		*f = *ControlHistoryOrderFieldStatus
 	case "SOURCE":
@@ -32591,6 +32627,20 @@ var (
 			}
 		},
 	}
+	// SubcontrolOrderFieldTitle orders Subcontrol by title.
+	SubcontrolOrderFieldTitle = &SubcontrolOrderField{
+		Value: func(_m *Subcontrol) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: subcontrol.FieldTitle,
+		toTerm: subcontrol.ByTitle,
+		toCursor: func(_m *Subcontrol) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
 	// SubcontrolOrderFieldStatus orders Subcontrol by status.
 	SubcontrolOrderFieldStatus = &SubcontrolOrderField{
 		Value: func(_m *Subcontrol) (ent.Value, error) {
@@ -32752,6 +32802,8 @@ func (f SubcontrolOrderField) String() string {
 		str = "created_at"
 	case SubcontrolOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubcontrolOrderFieldTitle.column:
+		str = "title"
 	case SubcontrolOrderFieldStatus.column:
 		str = "STATUS"
 	case SubcontrolOrderFieldSource.column:
@@ -32790,6 +32842,8 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolOrderFieldUpdatedAt
+	case "title":
+		*f = *SubcontrolOrderFieldTitle
 	case "STATUS":
 		*f = *SubcontrolOrderFieldStatus
 	case "SOURCE":
@@ -33106,6 +33160,20 @@ var (
 			}
 		},
 	}
+	// SubcontrolHistoryOrderFieldTitle orders SubcontrolHistory by title.
+	SubcontrolHistoryOrderFieldTitle = &SubcontrolHistoryOrderField{
+		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: subcontrolhistory.FieldTitle,
+		toTerm: subcontrolhistory.ByTitle,
+		toCursor: func(_m *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
 	// SubcontrolHistoryOrderFieldStatus orders SubcontrolHistory by status.
 	SubcontrolHistoryOrderFieldStatus = &SubcontrolHistoryOrderField{
 		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
@@ -33229,6 +33297,8 @@ func (f SubcontrolHistoryOrderField) String() string {
 		str = "created_at"
 	case SubcontrolHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubcontrolHistoryOrderFieldTitle.column:
+		str = "title"
 	case SubcontrolHistoryOrderFieldStatus.column:
 		str = "STATUS"
 	case SubcontrolHistoryOrderFieldSource.column:
@@ -33265,6 +33335,8 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolHistoryOrderFieldUpdatedAt
+	case "title":
+		*f = *SubcontrolHistoryOrderFieldTitle
 	case "STATUS":
 		*f = *SubcontrolHistoryOrderFieldStatus
 	case "SOURCE":

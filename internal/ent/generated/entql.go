@@ -393,6 +393,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldDeletedBy:              {Type: field.TypeString, Column: control.FieldDeletedBy},
 			control.FieldDisplayID:              {Type: field.TypeString, Column: control.FieldDisplayID},
 			control.FieldTags:                   {Type: field.TypeJSON, Column: control.FieldTags},
+			control.FieldTitle:                  {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:            {Type: field.TypeString, Column: control.FieldDescription},
 			control.FieldReferenceID:            {Type: field.TypeString, Column: control.FieldReferenceID},
 			control.FieldAuditorReferenceID:     {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
@@ -442,6 +443,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldDeletedBy:              {Type: field.TypeString, Column: controlhistory.FieldDeletedBy},
 			controlhistory.FieldDisplayID:              {Type: field.TypeString, Column: controlhistory.FieldDisplayID},
 			controlhistory.FieldTags:                   {Type: field.TypeJSON, Column: controlhistory.FieldTags},
+			controlhistory.FieldTitle:                  {Type: field.TypeString, Column: controlhistory.FieldTitle},
 			controlhistory.FieldDescription:            {Type: field.TypeString, Column: controlhistory.FieldDescription},
 			controlhistory.FieldReferenceID:            {Type: field.TypeString, Column: controlhistory.FieldReferenceID},
 			controlhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
@@ -2823,6 +2825,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldDeletedBy:              {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
 			subcontrol.FieldDisplayID:              {Type: field.TypeString, Column: subcontrol.FieldDisplayID},
 			subcontrol.FieldTags:                   {Type: field.TypeJSON, Column: subcontrol.FieldTags},
+			subcontrol.FieldTitle:                  {Type: field.TypeString, Column: subcontrol.FieldTitle},
 			subcontrol.FieldDescription:            {Type: field.TypeString, Column: subcontrol.FieldDescription},
 			subcontrol.FieldReferenceID:            {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
 			subcontrol.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
@@ -2872,6 +2875,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldDeletedBy:              {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
 			subcontrolhistory.FieldDisplayID:              {Type: field.TypeString, Column: subcontrolhistory.FieldDisplayID},
 			subcontrolhistory.FieldTags:                   {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
+			subcontrolhistory.FieldTitle:                  {Type: field.TypeString, Column: subcontrolhistory.FieldTitle},
 			subcontrolhistory.FieldDescription:            {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
 			subcontrolhistory.FieldReferenceID:            {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceID},
 			subcontrolhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
@@ -10637,6 +10641,11 @@ func (f *ControlFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(control.FieldTags))
 }
 
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ControlFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(control.FieldTitle))
+}
+
 // WhereDescription applies the entql string predicate on the description field.
 func (f *ControlFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldDescription))
@@ -11163,6 +11172,11 @@ func (f *ControlHistoryFilter) WhereDisplayID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *ControlHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(controlhistory.FieldTags))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ControlHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldTitle))
 }
 
 // WhereDescription applies the entql string predicate on the description field.
@@ -25922,6 +25936,11 @@ func (f *SubcontrolFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldTags))
 }
 
+// WhereTitle applies the entql string predicate on the title field.
+func (f *SubcontrolFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldTitle))
+}
+
 // WhereDescription applies the entql string predicate on the description field.
 func (f *SubcontrolFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDescription))
@@ -26364,6 +26383,11 @@ func (f *SubcontrolHistoryFilter) WhereDisplayID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *SubcontrolHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrolhistory.FieldTags))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *SubcontrolHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldTitle))
 }
 
 // WhereDescription applies the entql string predicate on the description field.

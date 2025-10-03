@@ -111,6 +111,7 @@ query AdminSearch($query: String!) {
           id
           displayID
           tags
+          title
           description
           referenceID
           auditorReferenceID
@@ -815,6 +816,7 @@ query AdminSearch($query: String!) {
           id
           displayID
           tags
+          title
           description
           referenceID
           auditorReferenceID

@@ -472,6 +472,7 @@ type ComplexityRoot struct {
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 	}
@@ -567,6 +568,7 @@ type ComplexityRoot struct {
 		SystemInternalID       func(childComplexity int) int
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 	}
@@ -4372,6 +4374,7 @@ type ComplexityRoot struct {
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 	}
@@ -4433,6 +4436,7 @@ type ComplexityRoot struct {
 		SystemInternalID       func(childComplexity int) int
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 	}
@@ -7588,6 +7592,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "Control.title":
+		if e.complexity.Control.Title == nil {
+			break
+		}
+
+		return e.complexity.Control.Title(childComplexity), true
+
 	case "Control.updatedAt":
 		if e.complexity.Control.UpdatedAt == nil {
 			break
@@ -7979,6 +7990,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.Tags(childComplexity), true
+
+	case "ControlHistory.title":
+		if e.complexity.ControlHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.Title(childComplexity), true
 
 	case "ControlHistory.updatedAt":
 		if e.complexity.ControlHistory.UpdatedAt == nil {
@@ -30711,6 +30729,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "Subcontrol.title":
+		if e.complexity.Subcontrol.Title == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Title(childComplexity), true
+
 	case "Subcontrol.updatedAt":
 		if e.complexity.Subcontrol.UpdatedAt == nil {
 			break
@@ -31011,6 +31036,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.Tags(childComplexity), true
+
+	case "SubcontrolHistory.title":
+		if e.complexity.SubcontrolHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.Title(childComplexity), true
 
 	case "SubcontrolHistory.updatedAt":
 		if e.complexity.SubcontrolHistory.UpdatedAt == nil {
@@ -41881,6 +41913,10 @@ type Control implements Node {
   """
   tags: [String!]
   """
+  human readable title of the control for quick identification
+  """
+  title: String
+  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -42564,6 +42600,10 @@ type ControlHistory implements Node {
   """
   tags: [String!]
   """
+  human readable title of the control for quick identification
+  """
+  title: String
+  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -42751,6 +42791,7 @@ enum ControlHistoryOrderField {
   history_time
   created_at
   updated_at
+  title
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
@@ -42894,6 +42935,24 @@ input ControlHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   description field predicates
   """
@@ -45430,6 +45489,7 @@ Properties by which Control connections can be ordered.
 enum ControlOrderField {
   created_at
   updated_at
+  title
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
@@ -45539,6 +45599,24 @@ input ControlWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   description field predicates
   """
@@ -46206,6 +46284,10 @@ input CreateControlInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  human readable title of the control for quick identification
+  """
+  title: String
   """
   description of what the control is supposed to accomplish
   """
@@ -47945,6 +48027,10 @@ input CreateSubcontrolInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  human readable title of the control for quick identification
+  """
+  title: String
   """
   description of what the control is supposed to accomplish
   """
@@ -82857,6 +82943,10 @@ type Subcontrol implements Node {
   """
   tags: [String!]
   """
+  human readable title of the control for quick identification
+  """
+  title: String
+  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -83354,6 +83444,10 @@ type SubcontrolHistory implements Node {
   """
   tags: [String!]
   """
+  human readable title of the control for quick identification
+  """
+  title: String
+  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -83541,6 +83635,7 @@ enum SubcontrolHistoryOrderField {
   history_time
   created_at
   updated_at
+  title
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
@@ -83684,6 +83779,24 @@ input SubcontrolHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   description field predicates
   """
@@ -83986,6 +84099,7 @@ Properties by which Subcontrol connections can be ordered.
 enum SubcontrolOrderField {
   created_at
   updated_at
+  title
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
@@ -84095,6 +84209,24 @@ input SubcontrolWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   description field predicates
   """
@@ -91949,6 +92081,11 @@ input UpdateControlInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  human readable title of the control for quick identification
+  """
+  title: String
+  clearTitle: Boolean
+  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -94394,6 +94531,11 @@ input UpdateSubcontrolInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  human readable title of the control for quick identification
+  """
+  title: String
+  clearTitle: Boolean
   """
   description of what the control is supposed to accomplish
   """

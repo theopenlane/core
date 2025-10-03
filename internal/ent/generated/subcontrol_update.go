@@ -137,6 +137,26 @@ func (_u *SubcontrolUpdate) ClearTags() *SubcontrolUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *SubcontrolUpdate) SetTitle(v string) *SubcontrolUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableTitle(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *SubcontrolUpdate) ClearTitle() *SubcontrolUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *SubcontrolUpdate) SetDescription(v string) *SubcontrolUpdate {
 	_u.mutation.SetDescription(v)
@@ -1175,6 +1195,12 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrol.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(subcontrol.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)
 	}
@@ -2110,6 +2136,26 @@ func (_u *SubcontrolUpdateOne) AppendTags(v []string) *SubcontrolUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *SubcontrolUpdateOne) ClearTags() *SubcontrolUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *SubcontrolUpdateOne) SetTitle(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableTitle(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *SubcontrolUpdateOne) ClearTitle() *SubcontrolUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -3180,6 +3226,12 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrol.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(subcontrol.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)

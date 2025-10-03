@@ -132,6 +132,20 @@ func (_c *SubcontrolCreate) SetTags(v []string) *SubcontrolCreate {
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *SubcontrolCreate) SetTitle(v string) *SubcontrolCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableTitle(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetTitle(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *SubcontrolCreate) SetDescription(v string) *SubcontrolCreate {
 	_c.mutation.SetDescription(v)
@@ -821,6 +835,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
+		_node.Title = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)

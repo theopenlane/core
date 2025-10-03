@@ -84,6 +84,7 @@ query GlobalSearch($query: String!) {
           refCode
           subcategory
           tags
+          title
         }
       }
     }
@@ -594,6 +595,7 @@ query GlobalSearch($query: String!) {
           refCode
           subcategory
           tags
+          title
         }
       }
     }

@@ -34,6 +34,8 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldReferenceID holds the string denoting the reference_id field in the database.
@@ -223,6 +225,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldTitle,
 	FieldDescription,
 	FieldReferenceID,
 	FieldAuditorReferenceID,
@@ -413,6 +416,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayID orders the results by the display_id field.
 func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

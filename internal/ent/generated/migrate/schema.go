@@ -385,6 +385,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "reference_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Unique: true, Nullable: true},
@@ -419,25 +420,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_groups_control_owner",
-				Columns:    []*schema.Column{ControlsColumns[30]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[31]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_organizations_controls",
+				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[32]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[33]},
+				Columns:    []*schema.Column{ControlsColumns[34]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -446,12 +447,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[32]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[33]},
 			},
 			{
 				Name:    "control_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[32]},
+				Columns: []*schema.Column{ControlsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -459,7 +460,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[33], ControlsColumns[29]},
+				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[30]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -467,7 +468,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[33], ControlsColumns[29], ControlsColumns[32]},
+				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[30], ControlsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
 				},
@@ -475,7 +476,7 @@ var (
 			{
 				Name:    "control_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[29], ControlsColumns[32]},
+				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
 				},
@@ -483,7 +484,7 @@ var (
 			{
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[33], ControlsColumns[5], ControlsColumns[32]},
+				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[5], ControlsColumns[33]},
 			},
 		},
 	}
@@ -501,6 +502,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
@@ -4195,6 +4197,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
@@ -4231,37 +4234,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_controls_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[30]},
+				Columns:    []*schema.Column{SubcontrolsColumns[31]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[31]},
+				Columns:    []*schema.Column{SubcontrolsColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_programs_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[32]},
+				Columns:    []*schema.Column{SubcontrolsColumns[33]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_control_owner",
-				Columns:    []*schema.Column{SubcontrolsColumns[33]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[34]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_users_subcontrols",
+				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[35]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_users_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[36]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4270,12 +4273,12 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[31]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[32]},
 			},
 			{
 				Name:    "subcontrol_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[31]},
+				Columns: []*schema.Column{SubcontrolsColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4283,7 +4286,7 @@ var (
 			{
 				Name:    "subcontrol_control_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[30], SubcontrolsColumns[29]},
+				Columns: []*schema.Column{SubcontrolsColumns[31], SubcontrolsColumns[30]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4291,7 +4294,7 @@ var (
 			{
 				Name:    "subcontrol_control_id_ref_code_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[30], SubcontrolsColumns[29], SubcontrolsColumns[31]},
+				Columns: []*schema.Column{SubcontrolsColumns[31], SubcontrolsColumns[30], SubcontrolsColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4312,6 +4315,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
