@@ -773,7 +773,7 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[32].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[33].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -5862,7 +5862,7 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[32].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[33].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.

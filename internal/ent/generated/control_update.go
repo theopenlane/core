@@ -141,6 +141,26 @@ func (_u *ControlUpdate) ClearTags() *ControlUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ControlUpdate) SetTitle(v string) *ControlUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableTitle(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ControlUpdate) ClearTitle() *ControlUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *ControlUpdate) SetDescription(v string) *ControlUpdate {
 	_u.mutation.SetDescription(v)
@@ -1393,6 +1413,12 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(control.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(control.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(control.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(control.FieldDescription, field.TypeString, value)
 	}
@@ -2616,6 +2642,26 @@ func (_u *ControlUpdateOne) AppendTags(v []string) *ControlUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *ControlUpdateOne) ClearTags() *ControlUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *ControlUpdateOne) SetTitle(v string) *ControlUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableTitle(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ControlUpdateOne) ClearTitle() *ControlUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -3900,6 +3946,12 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(control.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(control.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(control.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(control.FieldDescription, field.TypeString, value)

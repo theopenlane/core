@@ -2334,6 +2334,8 @@ type Control struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -2510,6 +2512,8 @@ type ControlHistory struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -2705,6 +2709,22 @@ type ControlHistoryWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 	// description field predicates
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
@@ -4336,6 +4356,22 @@ type ControlWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 	// description field predicates
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
@@ -4811,6 +4847,8 @@ type CreateControlImplementationInput struct {
 type CreateControlInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -5954,6 +5992,8 @@ type CreateStandardInput struct {
 type CreateSubcontrolInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -25270,6 +25310,8 @@ type Subcontrol struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -25389,6 +25431,8 @@ type SubcontrolHistory struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -25584,6 +25628,22 @@ type SubcontrolHistoryWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 	// description field predicates
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
@@ -25931,6 +25991,22 @@ type SubcontrolWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 	// description field predicates
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
@@ -31623,6 +31699,9 @@ type UpdateControlInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// human readable title of the control for quick identification
+	Title      *string `json:"title,omitempty"`
+	ClearTitle *bool   `json:"clearTitle,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
@@ -33511,6 +33590,9 @@ type UpdateSubcontrolInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// human readable title of the control for quick identification
+	Title      *string `json:"title,omitempty"`
+	ClearTitle *bool   `json:"clearTitle,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
@@ -35845,6 +35927,7 @@ const (
 	ControlHistoryOrderFieldHistoryTime        ControlHistoryOrderField = "history_time"
 	ControlHistoryOrderFieldCreatedAt          ControlHistoryOrderField = "created_at"
 	ControlHistoryOrderFieldUpdatedAt          ControlHistoryOrderField = "updated_at"
+	ControlHistoryOrderFieldTitle              ControlHistoryOrderField = "title"
 	ControlHistoryOrderFieldStatus             ControlHistoryOrderField = "STATUS"
 	ControlHistoryOrderFieldSource             ControlHistoryOrderField = "SOURCE"
 	ControlHistoryOrderFieldReferenceFramework ControlHistoryOrderField = "REFERENCE_FRAMEWORK"
@@ -35858,6 +35941,7 @@ var AllControlHistoryOrderField = []ControlHistoryOrderField{
 	ControlHistoryOrderFieldHistoryTime,
 	ControlHistoryOrderFieldCreatedAt,
 	ControlHistoryOrderFieldUpdatedAt,
+	ControlHistoryOrderFieldTitle,
 	ControlHistoryOrderFieldStatus,
 	ControlHistoryOrderFieldSource,
 	ControlHistoryOrderFieldReferenceFramework,
@@ -35869,7 +35953,7 @@ var AllControlHistoryOrderField = []ControlHistoryOrderField{
 
 func (e ControlHistoryOrderField) IsValid() bool {
 	switch e {
-	case ControlHistoryOrderFieldHistoryTime, ControlHistoryOrderFieldCreatedAt, ControlHistoryOrderFieldUpdatedAt, ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldReferenceFramework, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory, ControlHistoryOrderFieldRefCode:
+	case ControlHistoryOrderFieldHistoryTime, ControlHistoryOrderFieldCreatedAt, ControlHistoryOrderFieldUpdatedAt, ControlHistoryOrderFieldTitle, ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldReferenceFramework, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory, ControlHistoryOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -36188,6 +36272,7 @@ type ControlOrderField string
 const (
 	ControlOrderFieldCreatedAt          ControlOrderField = "created_at"
 	ControlOrderFieldUpdatedAt          ControlOrderField = "updated_at"
+	ControlOrderFieldTitle              ControlOrderField = "title"
 	ControlOrderFieldStatus             ControlOrderField = "STATUS"
 	ControlOrderFieldSource             ControlOrderField = "SOURCE"
 	ControlOrderFieldReferenceFramework ControlOrderField = "REFERENCE_FRAMEWORK"
@@ -36202,6 +36287,7 @@ const (
 var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldCreatedAt,
 	ControlOrderFieldUpdatedAt,
+	ControlOrderFieldTitle,
 	ControlOrderFieldStatus,
 	ControlOrderFieldSource,
 	ControlOrderFieldReferenceFramework,
@@ -36215,7 +36301,7 @@ var AllControlOrderField = []ControlOrderField{
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldTitle, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName:
 		return true
 	}
 	return false
@@ -40497,6 +40583,7 @@ const (
 	SubcontrolHistoryOrderFieldHistoryTime        SubcontrolHistoryOrderField = "history_time"
 	SubcontrolHistoryOrderFieldCreatedAt          SubcontrolHistoryOrderField = "created_at"
 	SubcontrolHistoryOrderFieldUpdatedAt          SubcontrolHistoryOrderField = "updated_at"
+	SubcontrolHistoryOrderFieldTitle              SubcontrolHistoryOrderField = "title"
 	SubcontrolHistoryOrderFieldStatus             SubcontrolHistoryOrderField = "STATUS"
 	SubcontrolHistoryOrderFieldSource             SubcontrolHistoryOrderField = "SOURCE"
 	SubcontrolHistoryOrderFieldReferenceFramework SubcontrolHistoryOrderField = "REFERENCE_FRAMEWORK"
@@ -40510,6 +40597,7 @@ var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
 	SubcontrolHistoryOrderFieldHistoryTime,
 	SubcontrolHistoryOrderFieldCreatedAt,
 	SubcontrolHistoryOrderFieldUpdatedAt,
+	SubcontrolHistoryOrderFieldTitle,
 	SubcontrolHistoryOrderFieldStatus,
 	SubcontrolHistoryOrderFieldSource,
 	SubcontrolHistoryOrderFieldReferenceFramework,
@@ -40521,7 +40609,7 @@ var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
 
 func (e SubcontrolHistoryOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolHistoryOrderFieldHistoryTime, SubcontrolHistoryOrderFieldCreatedAt, SubcontrolHistoryOrderFieldUpdatedAt, SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldReferenceFramework, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
+	case SubcontrolHistoryOrderFieldHistoryTime, SubcontrolHistoryOrderFieldCreatedAt, SubcontrolHistoryOrderFieldUpdatedAt, SubcontrolHistoryOrderFieldTitle, SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldReferenceFramework, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -40568,6 +40656,7 @@ type SubcontrolOrderField string
 const (
 	SubcontrolOrderFieldCreatedAt          SubcontrolOrderField = "created_at"
 	SubcontrolOrderFieldUpdatedAt          SubcontrolOrderField = "updated_at"
+	SubcontrolOrderFieldTitle              SubcontrolOrderField = "title"
 	SubcontrolOrderFieldStatus             SubcontrolOrderField = "STATUS"
 	SubcontrolOrderFieldSource             SubcontrolOrderField = "SOURCE"
 	SubcontrolOrderFieldReferenceFramework SubcontrolOrderField = "REFERENCE_FRAMEWORK"
@@ -40582,6 +40671,7 @@ const (
 var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldCreatedAt,
 	SubcontrolOrderFieldUpdatedAt,
+	SubcontrolOrderFieldTitle,
 	SubcontrolOrderFieldStatus,
 	SubcontrolOrderFieldSource,
 	SubcontrolOrderFieldReferenceFramework,
@@ -40595,7 +40685,7 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldTitle, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName:
 		return true
 	}
 	return false

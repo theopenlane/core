@@ -43,6 +43,8 @@ type SubcontrolHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// human readable title of the control for quick identification
+	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -107,7 +109,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -199,6 +201,12 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case subcontrolhistory.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
 			}
 		case subcontrolhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -436,6 +444,9 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)

@@ -124,6 +124,26 @@ func (_u *SubcontrolHistoryUpdate) ClearTags() *SubcontrolHistoryUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *SubcontrolHistoryUpdate) SetTitle(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableTitle(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *SubcontrolHistoryUpdate) ClearTitle() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *SubcontrolHistoryUpdate) SetDescription(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetDescription(v)
@@ -687,6 +707,12 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(subcontrolhistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(subcontrolhistory.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)
 	}
@@ -971,6 +997,26 @@ func (_u *SubcontrolHistoryUpdateOne) AppendTags(v []string) *SubcontrolHistoryU
 // ClearTags clears the value of the "tags" field.
 func (_u *SubcontrolHistoryUpdateOne) ClearTags() *SubcontrolHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *SubcontrolHistoryUpdateOne) SetTitle(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableTitle(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearTitle() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -1566,6 +1612,12 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(subcontrolhistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(subcontrolhistory.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)

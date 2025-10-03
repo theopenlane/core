@@ -153,6 +153,20 @@ func (_c *ControlHistoryCreate) SetTags(v []string) *ControlHistoryCreate {
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *ControlHistoryCreate) SetTitle(v string) *ControlHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableTitle(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetTitle(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *ControlHistoryCreate) SetDescription(v string) *ControlHistoryCreate {
 	_c.mutation.SetDescription(v)
@@ -654,6 +668,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
+		_node.Title = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)

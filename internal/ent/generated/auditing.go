@@ -527,6 +527,9 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlhistory.FieldTags, _m.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(controlhistory.FieldTitle, _m.Title, new.Title))
+	}
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, _m.Description, new.Description))
 	}
@@ -3046,6 +3049,9 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldTitle, _m.Title, new.Title))
 	}
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, _m.Description, new.Description))
