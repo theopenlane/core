@@ -97,7 +97,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.17.3
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.4.0
+	github.com/theopenlane/riverboat v0.4.1
 	github.com/theopenlane/utils v0.5.1
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
