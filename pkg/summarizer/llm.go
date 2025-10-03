@@ -9,8 +9,6 @@ import (
 	"github.com/tmc/langchaingo/llms/anthropic"
 	"github.com/tmc/langchaingo/llms/cloudflare"
 	"github.com/tmc/langchaingo/llms/openai"
-
-	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
 // maybe make a config value too?
@@ -24,7 +22,7 @@ type llmSummarizer struct {
 	llmClient llms.Model
 }
 
-func newLLMSummarizer(cfg entconfig.Config) (*llmSummarizer, error) {
+func newLLMSummarizer(cfg Config) (*llmSummarizer, error) {
 	client, err := getClient(cfg)
 	if err != nil {
 		return nil, err
@@ -40,48 +38,49 @@ func (l *llmSummarizer) Summarize(ctx context.Context, s string) (string, error)
 	return llms.GenerateFromSinglePrompt(ctx, l.llmClient, fmt.Sprintf(prompt, s))
 }
 
-func getClient(cfg entconfig.Config) (llms.Model, error) {
-	switch cfg.Summarizer.LLM.Provider {
-	case entconfig.LLMProviderAnthropic:
+func getClient(cfg Config) (llms.Model, error) {
+	switch cfg.LLM.Provider {
+	case LLMProviderAnthropic:
 		return newAnthropicClient(cfg)
-	case entconfig.LLMProviderCloudflare:
+	case LLMProviderCloudflare:
 		return newCloudflareClient(cfg)
-	case entconfig.LLMProviderOpenai:
+	case LLMProviderOpenai:
 		return newOpenAIClient(cfg)
 	default:
 		return nil, errors.New("unsupported llm model selected") // nolint:err113
 	}
 }
 
-func newAnthropicClient(cfg entconfig.Config) (llms.Model, error) {
+func newAnthropicClient(cfg Config) (llms.Model, error) {
 	opts := []anthropic.Option{}
+	aCfg := cfg.LLM.Anthropic
 
-	if cfg.Summarizer.LLM.Anthropic.APIKey != "" {
-		opts = append(opts, anthropic.WithToken(cfg.Summarizer.LLM.Anthropic.APIKey))
+	if aCfg.APIKey != "" {
+		opts = append(opts, anthropic.WithToken(aCfg.APIKey))
 	}
 
-	if cfg.Summarizer.LLM.Anthropic.Model != "" {
-		opts = append(opts, anthropic.WithModel(cfg.Summarizer.LLM.Anthropic.Model))
+	if aCfg.Model != "" {
+		opts = append(opts, anthropic.WithModel(aCfg.Model))
 	}
 
-	if cfg.Summarizer.LLM.Anthropic.BaseURL != "" {
-		opts = append(opts, anthropic.WithBaseURL(cfg.Summarizer.LLM.Anthropic.BaseURL))
+	if aCfg.BaseURL != "" {
+		opts = append(opts, anthropic.WithBaseURL(aCfg.BaseURL))
 	}
 
-	if cfg.Summarizer.LLM.Anthropic.BetaHeader != "" {
-		opts = append(opts, anthropic.WithAnthropicBetaHeader(cfg.Summarizer.LLM.Anthropic.BetaHeader))
+	if aCfg.BetaHeader != "" {
+		opts = append(opts, anthropic.WithAnthropicBetaHeader(aCfg.BetaHeader))
 	}
 
-	if cfg.Summarizer.LLM.Anthropic.LegacyTextCompletion {
+	if aCfg.LegacyTextCompletion {
 		opts = append(opts, anthropic.WithLegacyTextCompletionsAPI())
 	}
 
 	return anthropic.New(opts...)
 }
 
-func newCloudflareClient(cfg entconfig.Config) (llms.Model, error) {
+func newCloudflareClient(cfg Config) (llms.Model, error) {
 	opts := []cloudflare.Option{}
-	cfCfg := cfg.Summarizer.LLM.Cloudflare
+	cfCfg := cfg.LLM.Cloudflare
 
 	if cfCfg.APIKey != "" {
 		opts = append(opts, cloudflare.WithToken(cfCfg.APIKey))
@@ -102,9 +101,9 @@ func newCloudflareClient(cfg entconfig.Config) (llms.Model, error) {
 	return cloudflare.New(opts...)
 }
 
-func newOpenAIClient(cfg entconfig.Config) (llms.Model, error) {
+func newOpenAIClient(cfg Config) (llms.Model, error) {
 	opts := []openai.Option{}
-	oaiCfg := cfg.Summarizer.LLM.OpenAI
+	oaiCfg := cfg.LLM.OpenAI
 
 	if oaiCfg.APIKey != "" {
 		opts = append(opts, openai.WithToken(oaiCfg.APIKey))

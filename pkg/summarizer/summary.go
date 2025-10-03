@@ -4,8 +4,6 @@ import (
 	"context"
 
 	"github.com/microcosm-cc/bluemonday"
-
-	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
 type summarizer interface {
@@ -22,17 +20,17 @@ type Client struct {
 }
 
 // NewSummarizer returns a configured client based on the provided configuration
-func NewSummarizer(cfg entconfig.Config) (*Client, error) {
+func NewSummarizer(cfg Config) (*Client, error) {
 	sanitizer := bluemonday.StrictPolicy()
 
-	switch cfg.Summarizer.Type {
-	case entconfig.SummarizerTypeLexrank:
+	switch cfg.Type {
+	case TypeLexrank:
 		return &Client{
-			impl:      newLexRankSummarizer(cfg.Summarizer.MaximumSentences),
+			impl:      newLexRankSummarizer(cfg.MaximumSentences),
 			sanitizer: sanitizer,
 		}, nil
 
-	case entconfig.SummarizerTypeLlm:
+	case TypeLlm:
 		impl, err := newLLMSummarizer(cfg)
 		if err != nil {
 			return nil, err

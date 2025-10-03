@@ -12,7 +12,7 @@ var (
 	// ErrSentenceEmpty is used to denote required sentences that needs to be summarized
 	ErrSentenceEmpty = errors.New("you cannot summarize an empty string")
 
-	// ErrUnsupportedSummarizerType is used to denote an summarization algorithm we do not support at the momnent
+	// ErrUnsupportedSummarizerType is used to denote an summarization algorithm we do not support at the moment
 	ErrUnsupportedSummarizerType = errors.New("unsupported summarizer type")
 )
 
