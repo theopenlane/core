@@ -71,19 +71,3 @@ func mdToHTML(md []byte) []byte {
 
 	return markdown.Render(doc, renderer)
 }
-
-// func htmlToText(htmlContent []byte) string {
-
-// 	txt, err := html2text.FromString(string(htmlContent), html2text.Options{
-// 		PrettyTables:      false, // tables often garble summarization; flatten them
-// 		OmitLinks:         false, // keep link text; urls become [link]
-// 		WordWrap:          0,     // don’t wrap; let your sentence splitter handle it
-// 		BodyWidth:         0,
-// 		PrettyTablesASCII: false,
-// 	})
-// 	if err != nil {
-// 		return "", fmt.Errorf("html->text: %w", err)
-// 	}
-
-// 	return txt, nil
-// }
