@@ -86,6 +86,7 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
@@ -94,6 +95,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_action_plans", Type: field.TypeString, Nullable: true},
 		{Name: "user_action_plans", Type: field.TypeString, Nullable: true},
@@ -106,31 +108,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "action_plans_groups_approver",
-				Columns:    []*schema.Column{ActionPlansColumns[29]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "action_plans_groups_delegate",
 				Columns:    []*schema.Column{ActionPlansColumns[30]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "action_plans_organizations_action_plans",
+				Symbol:     "action_plans_groups_delegate",
 				Columns:    []*schema.Column{ActionPlansColumns[31]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_files_file",
+				Columns:    []*schema.Column{ActionPlansColumns[32]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_organizations_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[32]},
+				Columns:    []*schema.Column{ActionPlansColumns[34]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_users_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[33]},
+				Columns:    []*schema.Column{ActionPlansColumns[35]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -139,7 +147,7 @@ var (
 			{
 				Name:    "actionplan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[31]},
+				Columns: []*schema.Column{ActionPlansColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -176,6 +184,8 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
@@ -2146,8 +2156,8 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
-		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -3455,10 +3465,10 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
@@ -3550,11 +3560,11 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "file_id", Type: field.TypeString, Nullable: true},
-		{Name: "url", Type: field.TypeString, Nullable: true},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -8487,9 +8497,10 @@ func init() {
 	APITokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ActionPlansTable.ForeignKeys[0].RefTable = GroupsTable
 	ActionPlansTable.ForeignKeys[1].RefTable = GroupsTable
-	ActionPlansTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ActionPlansTable.ForeignKeys[3].RefTable = SubcontrolsTable
-	ActionPlansTable.ForeignKeys[4].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[2].RefTable = FilesTable
+	ActionPlansTable.ForeignKeys[3].RefTable = OrganizationsTable
+	ActionPlansTable.ForeignKeys[4].RefTable = SubcontrolsTable
+	ActionPlansTable.ForeignKeys[5].RefTable = UsersTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}

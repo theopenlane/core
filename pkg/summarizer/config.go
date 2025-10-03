@@ -7,7 +7,7 @@ type Config struct {
 	// LLM contains configuration for large language model based summarization
 	LLM LLM `json:"llm" koanf:"llm"`
 	// MaximumSentences specifies the maximum number of sentences in the summary
-	MaximumSentences int `json:"maximumSentences" koanf:"maximumSentences" default:"60"`
+	MaximumSentences int `json:"maximumSentences" koanf:"maximumSentences" default:"10"`
 }
 
 // Type defines the type of summarization algorithm

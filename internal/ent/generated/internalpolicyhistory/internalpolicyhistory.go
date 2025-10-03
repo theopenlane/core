@@ -82,10 +82,10 @@ const (
 	FieldImprovementSuggestions = "improvement_suggestions"
 	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
-	// FieldFileID holds the string denoting the file_id field in the database.
-	FieldFileID = "file_id"
 	// FieldURL holds the string denoting the url field in the database.
 	FieldURL = "url"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// Table holds the table name of the internalpolicyhistory in the database.
 	Table = "internal_policy_history"
 )
@@ -125,8 +125,8 @@ var Columns = []string{
 	FieldDismissedControlSuggestions,
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
-	FieldFileID,
 	FieldURL,
+	FieldFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -349,14 +349,14 @@ func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
-// ByFileID orders the results by the file_id field.
-func ByFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileID, opts...).ToFunc()
-}
-
 // ByURL orders the results by the url field.
 func ByURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldURL, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
 var (

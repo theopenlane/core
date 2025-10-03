@@ -198,6 +198,7 @@ type CreateActionPlanInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	URL                             *string
 	InternalNotes                   *string
 	SystemInternalID                *string
 	DueDate                         *time.Time
@@ -209,6 +210,7 @@ type CreateActionPlanInput struct {
 	RiskIDs                         []string
 	ControlIDs                      []string
 	ProgramIDs                      []string
+	FileID                          *string
 }
 
 // Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
@@ -256,6 +258,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
 	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -288,6 +293,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -335,6 +343,8 @@ type UpdateActionPlanInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearURL                              bool
+	URL                                   *string
 	ClearInternalNotes                    bool
 	InternalNotes                         *string
 	ClearSystemInternalID                 bool
@@ -360,6 +370,8 @@ type UpdateActionPlanInput struct {
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
+	ClearFile                             bool
+	FileID                                *string
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -472,6 +484,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -546,6 +564,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -8608,9 +8632,9 @@ type CreateProcedureInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	URL                             *string
 	InternalNotes                   *string
 	SystemInternalID                *string
-	URL                             *string
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -8671,14 +8695,14 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
 	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
-	}
-	if v := i.URL; v != nil {
-		m.SetURL(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8765,12 +8789,12 @@ type UpdateProcedureInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearURL                              bool
+	URL                                   *string
 	ClearInternalNotes                    bool
 	InternalNotes                         *string
 	ClearSystemInternalID                 bool
 	SystemInternalID                      *string
-	ClearURL                              bool
-	URL                                   *string
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -8918,6 +8942,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -8929,12 +8959,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
-	}
-	if i.ClearURL {
-		m.ClearURL()
-	}
-	if v := i.URL; v != nil {
-		m.SetURL(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

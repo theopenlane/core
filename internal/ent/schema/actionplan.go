@@ -15,32 +15,32 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// ActionPlan defines the actionplan schema.
+// ActionPlan defines the action plan schema.
 type ActionPlan struct {
 	SchemaFuncs
 
 	ent.Schema
 }
 
-// SchemaActionPlan is the name of the actionplan schema.
+// SchemaActionPlan is the name of the action plan schema.
 const SchemaActionPlan = "action_plan"
 
-// Name returns the name of the actionplan schema.
+// Name returns the name of the action plan schema.
 func (ActionPlan) Name() string {
 	return SchemaActionPlan
 }
 
-// GetType returns the type of the actionplan schema.
+// GetType returns the type of the action plan schema.
 func (ActionPlan) GetType() any {
 	return ActionPlan.Type
 }
 
-// PluralName returns the plural name of the actionplan schema.
+// PluralName returns the plural name of the action plan schema.
 func (ActionPlan) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaActionPlan)
 }
 
-// Fields returns actionplan fields.
+// Fields returns action plan fields.
 func (ActionPlan) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("due_date").
@@ -71,6 +71,12 @@ func (a ActionPlan) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, Risk{}),
 		defaultEdgeFromWithPagination(a, Control{}),
 		defaultEdgeFromWithPagination(a, Program{}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: File{},
+			field:      "file_id",
+		}),
 	}
 }
 

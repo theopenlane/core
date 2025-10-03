@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/JesusIslam/tldr"
+	"github.com/didasy/tldr"
 )
 
 var (

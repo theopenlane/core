@@ -302,6 +302,12 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
+	if !reflect.DeepEqual(_m.URL, new.URL) {
+		changes = append(changes, NewChange(actionplanhistory.FieldURL, _m.URL, new.URL))
+	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldFileID, _m.FileID, new.FileID))
+	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
@@ -1757,11 +1763,11 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
-	if !reflect.DeepEqual(_m.FileID, new.FileID) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldFileID, _m.FileID, new.FileID))
-	}
 	if !reflect.DeepEqual(_m.URL, new.URL) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldURL, _m.URL, new.URL))
+	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldFileID, _m.FileID, new.FileID))
 	}
 	return changes
 }
@@ -2522,6 +2528,12 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(procedurehistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
+	if !reflect.DeepEqual(_m.URL, new.URL) {
+		changes = append(changes, NewChange(procedurehistory.FieldURL, _m.URL, new.URL))
+	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(procedurehistory.FieldFileID, _m.FileID, new.FileID))
+	}
 	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
 		changes = append(changes, NewChange(procedurehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
@@ -2530,12 +2542,6 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(procedurehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
-	}
-	if !reflect.DeepEqual(_m.FileID, new.FileID) {
-		changes = append(changes, NewChange(procedurehistory.FieldFileID, _m.FileID, new.FileID))
-	}
-	if !reflect.DeepEqual(_m.URL, new.URL) {
-		changes = append(changes, NewChange(procedurehistory.FieldURL, _m.URL, new.URL))
 	}
 	return changes
 }

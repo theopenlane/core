@@ -78,17 +78,17 @@ type ProcedureHistory struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// This will contain the url used to create or update the procedure
+	URL *string `json:"url,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"file_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
-	// This will contain the most recent file id if this procedure was created from a file
-	FileID *string `json:"file_id,omitempty"`
-	// This will contain the url used to create/update the procedure
-	URL          *string `json:"url,omitempty"`
-	selectValues sql.SelectValues
+	selectValues     sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -102,7 +102,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired, procedurehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldFileID, procedurehistory.FieldURL:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -315,6 +315,20 @@ func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
+		case procedurehistory.FieldURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field url", values[i])
+			} else if value.Valid {
+				_m.URL = new(string)
+				*_m.URL = value.String
+			}
+		case procedurehistory.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
 		case procedurehistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -334,20 +348,6 @@ func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
-			}
-		case procedurehistory.FieldFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_id", values[i])
-			} else if value.Valid {
-				_m.FileID = new(string)
-				*_m.FileID = value.String
-			}
-		case procedurehistory.FieldURL:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field url", values[i])
-			} else if value.Valid {
-				_m.URL = new(string)
-				*_m.URL = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -472,6 +472,16 @@ func (_m *ProcedureHistory) String() string {
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -482,16 +492,6 @@ func (_m *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.SystemInternalID; v != nil {
 		builder.WriteString("system_internal_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.FileID; v != nil {
-		builder.WriteString("file_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.URL; v != nil {
-		builder.WriteString("url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

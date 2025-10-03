@@ -84,10 +84,10 @@ type InternalPolicyHistory struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// This will contain the url used to create or update the policy
+	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
-	FileID *string `json:"file_id,omitempty"`
-	// This will contain the url used to create/update the policy
-	URL          *string `json:"url,omitempty"`
+	FileID       *string `json:"file_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -102,7 +102,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldURL:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -335,19 +335,19 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
-		case internalpolicyhistory.FieldFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_id", values[i])
-			} else if value.Valid {
-				_m.FileID = new(string)
-				*_m.FileID = value.String
-			}
 		case internalpolicyhistory.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
 				_m.URL = new(string)
 				*_m.URL = value.String
+			}
+		case internalpolicyhistory.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -485,13 +485,13 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
-	if v := _m.FileID; v != nil {
-		builder.WriteString("file_id=")
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.URL; v != nil {
-		builder.WriteString("url=")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

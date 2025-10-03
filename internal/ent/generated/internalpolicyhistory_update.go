@@ -505,26 +505,6 @@ func (_u *InternalPolicyHistoryUpdate) ClearDismissedImprovementSuggestions() *I
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *InternalPolicyHistoryUpdate) SetFileID(v string) *InternalPolicyHistoryUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *InternalPolicyHistoryUpdate) SetNillableFileID(v *string) *InternalPolicyHistoryUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *InternalPolicyHistoryUpdate) ClearFileID() *InternalPolicyHistoryUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
 // SetURL sets the "url" field.
 func (_u *InternalPolicyHistoryUpdate) SetURL(v string) *InternalPolicyHistoryUpdate {
 	_u.mutation.SetURL(v)
@@ -542,6 +522,26 @@ func (_u *InternalPolicyHistoryUpdate) SetNillableURL(v *string) *InternalPolicy
 // ClearURL clears the value of the "url" field.
 func (_u *InternalPolicyHistoryUpdate) ClearURL() *InternalPolicyHistoryUpdate {
 	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetFileID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableFileID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearFileID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearFileID()
 	return _u
 }
 
@@ -819,17 +819,17 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
-	}
-	if _u.mutation.FileIDCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
-	}
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(internalpolicyhistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1327,26 +1327,6 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearDismissedImprovementSuggestions()
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *InternalPolicyHistoryUpdateOne) SetFileID(v string) *InternalPolicyHistoryUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *InternalPolicyHistoryUpdateOne) SetNillableFileID(v *string) *InternalPolicyHistoryUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *InternalPolicyHistoryUpdateOne) ClearFileID() *InternalPolicyHistoryUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
 // SetURL sets the "url" field.
 func (_u *InternalPolicyHistoryUpdateOne) SetURL(v string) *InternalPolicyHistoryUpdateOne {
 	_u.mutation.SetURL(v)
@@ -1364,6 +1344,26 @@ func (_u *InternalPolicyHistoryUpdateOne) SetNillableURL(v *string) *InternalPol
 // ClearURL clears the value of the "url" field.
 func (_u *InternalPolicyHistoryUpdateOne) ClearURL() *InternalPolicyHistoryUpdateOne {
 	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetFileID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableFileID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearFileID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearFileID()
 	return _u
 }
 
@@ -1671,17 +1671,17 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
-	}
-	if _u.mutation.FileIDCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
-	}
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(internalpolicyhistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

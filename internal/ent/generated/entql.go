@@ -194,6 +194,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: actionplan.FieldDismissedControlSuggestions},
 			actionplan.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: actionplan.FieldImprovementSuggestions},
 			actionplan.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: actionplan.FieldDismissedImprovementSuggestions},
+			actionplan.FieldURL:                             {Type: field.TypeString, Column: actionplan.FieldURL},
+			actionplan.FieldFileID:                          {Type: field.TypeString, Column: actionplan.FieldFileID},
 			actionplan.FieldOwnerID:                         {Type: field.TypeString, Column: actionplan.FieldOwnerID},
 			actionplan.FieldSystemOwned:                     {Type: field.TypeBool, Column: actionplan.FieldSystemOwned},
 			actionplan.FieldInternalNotes:                   {Type: field.TypeString, Column: actionplan.FieldInternalNotes},
@@ -241,6 +243,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: actionplanhistory.FieldDismissedControlSuggestions},
 			actionplanhistory.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: actionplanhistory.FieldImprovementSuggestions},
 			actionplanhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: actionplanhistory.FieldDismissedImprovementSuggestions},
+			actionplanhistory.FieldURL:                             {Type: field.TypeString, Column: actionplanhistory.FieldURL},
+			actionplanhistory.FieldFileID:                          {Type: field.TypeString, Column: actionplanhistory.FieldFileID},
 			actionplanhistory.FieldOwnerID:                         {Type: field.TypeString, Column: actionplanhistory.FieldOwnerID},
 			actionplanhistory.FieldSystemOwned:                     {Type: field.TypeBool, Column: actionplanhistory.FieldSystemOwned},
 			actionplanhistory.FieldInternalNotes:                   {Type: field.TypeString, Column: actionplanhistory.FieldInternalNotes},
@@ -1430,8 +1434,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedControlSuggestions},
 			internalpolicy.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: internalpolicy.FieldImprovementSuggestions},
 			internalpolicy.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedImprovementSuggestions},
-			internalpolicy.FieldFileID:                          {Type: field.TypeString, Column: internalpolicy.FieldFileID},
 			internalpolicy.FieldURL:                             {Type: field.TypeString, Column: internalpolicy.FieldURL},
+			internalpolicy.FieldFileID:                          {Type: field.TypeString, Column: internalpolicy.FieldFileID},
 		},
 	}
 	graph.Nodes[41] = &sqlgraph.Node{
@@ -1477,8 +1481,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedControlSuggestions},
 			internalpolicyhistory.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: internalpolicyhistory.FieldImprovementSuggestions},
 			internalpolicyhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedImprovementSuggestions},
-			internalpolicyhistory.FieldFileID:                          {Type: field.TypeString, Column: internalpolicyhistory.FieldFileID},
 			internalpolicyhistory.FieldURL:                             {Type: field.TypeString, Column: internalpolicyhistory.FieldURL},
+			internalpolicyhistory.FieldFileID:                          {Type: field.TypeString, Column: internalpolicyhistory.FieldFileID},
 		},
 	}
 	graph.Nodes[42] = &sqlgraph.Node{
@@ -2353,11 +2357,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: procedure.FieldDismissedControlSuggestions},
 			procedure.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: procedure.FieldImprovementSuggestions},
 			procedure.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedure.FieldDismissedImprovementSuggestions},
+			procedure.FieldURL:                             {Type: field.TypeString, Column: procedure.FieldURL},
+			procedure.FieldFileID:                          {Type: field.TypeString, Column: procedure.FieldFileID},
 			procedure.FieldSystemOwned:                     {Type: field.TypeBool, Column: procedure.FieldSystemOwned},
 			procedure.FieldInternalNotes:                   {Type: field.TypeString, Column: procedure.FieldInternalNotes},
 			procedure.FieldSystemInternalID:                {Type: field.TypeString, Column: procedure.FieldSystemInternalID},
-			procedure.FieldFileID:                          {Type: field.TypeString, Column: procedure.FieldFileID},
-			procedure.FieldURL:                             {Type: field.TypeString, Column: procedure.FieldURL},
 		},
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
@@ -2400,11 +2404,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedControlSuggestions},
 			procedurehistory.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: procedurehistory.FieldImprovementSuggestions},
 			procedurehistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedImprovementSuggestions},
+			procedurehistory.FieldURL:                             {Type: field.TypeString, Column: procedurehistory.FieldURL},
+			procedurehistory.FieldFileID:                          {Type: field.TypeString, Column: procedurehistory.FieldFileID},
 			procedurehistory.FieldSystemOwned:                     {Type: field.TypeBool, Column: procedurehistory.FieldSystemOwned},
 			procedurehistory.FieldInternalNotes:                   {Type: field.TypeString, Column: procedurehistory.FieldInternalNotes},
 			procedurehistory.FieldSystemInternalID:                {Type: field.TypeString, Column: procedurehistory.FieldSystemInternalID},
-			procedurehistory.FieldFileID:                          {Type: field.TypeString, Column: procedurehistory.FieldFileID},
-			procedurehistory.FieldURL:                             {Type: field.TypeString, Column: procedurehistory.FieldURL},
 		},
 	}
 	graph.Nodes[73] = &sqlgraph.Node{
@@ -3721,6 +3725,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ActionPlan",
 		"Program",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -9572,6 +9588,16 @@ func (f *ActionPlanFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) 
 	f.Where(p.Field(actionplan.FieldDismissedImprovementSuggestions))
 }
 
+// WhereURL applies the entql string predicate on the url field.
+func (f *ActionPlanFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ActionPlanFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldFileID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ActionPlanFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldOwnerID))
@@ -9685,6 +9711,20 @@ func (f *ActionPlanFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *ActionPlanFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -9864,6 +9904,16 @@ func (f *ActionPlanHistoryFilter) WhereImprovementSuggestions(p entql.BytesP) {
 // WhereDismissedImprovementSuggestions applies the entql json.RawMessage predicate on the dismissed_improvement_suggestions field.
 func (f *ActionPlanHistoryFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) {
 	f.Where(p.Field(actionplanhistory.FieldDismissedImprovementSuggestions))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *ActionPlanHistoryFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ActionPlanHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldFileID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -17171,14 +17221,14 @@ func (f *InternalPolicyFilter) WhereDismissedImprovementSuggestions(p entql.Byte
 	f.Where(p.Field(internalpolicy.FieldDismissedImprovementSuggestions))
 }
 
-// WhereFileID applies the entql string predicate on the file_id field.
-func (f *InternalPolicyFilter) WhereFileID(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldFileID))
-}
-
 // WhereURL applies the entql string predicate on the url field.
 func (f *InternalPolicyFilter) WhereURL(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *InternalPolicyFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldFileID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -17591,14 +17641,14 @@ func (f *InternalPolicyHistoryFilter) WhereDismissedImprovementSuggestions(p ent
 	f.Where(p.Field(internalpolicyhistory.FieldDismissedImprovementSuggestions))
 }
 
-// WhereFileID applies the entql string predicate on the file_id field.
-func (f *InternalPolicyHistoryFilter) WhereFileID(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldFileID))
-}
-
 // WhereURL applies the entql string predicate on the url field.
 func (f *InternalPolicyHistoryFilter) WhereURL(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *InternalPolicyHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldFileID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23013,6 +23063,16 @@ func (f *ProcedureFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) {
 	f.Where(p.Field(procedure.FieldDismissedImprovementSuggestions))
 }
 
+// WhereURL applies the entql string predicate on the url field.
+func (f *ProcedureFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ProcedureFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldFileID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *ProcedureFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(procedure.FieldSystemOwned))
@@ -23026,16 +23086,6 @@ func (f *ProcedureFilter) WhereInternalNotes(p entql.StringP) {
 // WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
 func (f *ProcedureFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldSystemInternalID))
-}
-
-// WhereFileID applies the entql string predicate on the file_id field.
-func (f *ProcedureFilter) WhereFileID(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldFileID))
-}
-
-// WhereURL applies the entql string predicate on the url field.
-func (f *ProcedureFilter) WhereURL(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldURL))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -23405,6 +23455,16 @@ func (f *ProcedureHistoryFilter) WhereDismissedImprovementSuggestions(p entql.By
 	f.Where(p.Field(procedurehistory.FieldDismissedImprovementSuggestions))
 }
 
+// WhereURL applies the entql string predicate on the url field.
+func (f *ProcedureHistoryFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldURL))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ProcedureHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldFileID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *ProcedureHistoryFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(procedurehistory.FieldSystemOwned))
@@ -23418,16 +23478,6 @@ func (f *ProcedureHistoryFilter) WhereInternalNotes(p entql.StringP) {
 // WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
 func (f *ProcedureHistoryFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldSystemInternalID))
-}
-
-// WhereFileID applies the entql string predicate on the file_id field.
-func (f *ProcedureHistoryFilter) WhereFileID(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldFileID))
-}
-
-// WhereURL applies the entql string predicate on the url field.
-func (f *ProcedureHistoryFilter) WhereURL(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldURL))
 }
 
 // addPredicate implements the predicateAdder interface.

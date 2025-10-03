@@ -80,10 +80,10 @@ type InternalPolicy struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// This will contain the url used to create or update the policy
+	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
 	FileID *string `json:"file_id,omitempty"`
-	// This will contain the url used to create/update the policy
-	URL *string `json:"url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
@@ -293,7 +293,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldFileID, internalpolicy.FieldURL:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -508,19 +508,19 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
-		case internalpolicy.FieldFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_id", values[i])
-			} else if value.Valid {
-				_m.FileID = new(string)
-				*_m.FileID = value.String
-			}
 		case internalpolicy.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
 				_m.URL = new(string)
 				*_m.URL = value.String
+			}
+		case internalpolicy.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -724,13 +724,13 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
-	if v := _m.FileID; v != nil {
-		builder.WriteString("file_id=")
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.URL; v != nil {
-		builder.WriteString("url=")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

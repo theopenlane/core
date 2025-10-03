@@ -60,6 +60,7 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 			}, "delegate"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+		hooks.HookImportDocument(),
 		hooks.HookSummarizeDetails(),
 	}
 }
@@ -148,6 +149,17 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Default([]string{}).
 			Comment(fmt.Sprintf("improvement suggestions dismissed by the user for the %s", documentType)),
+		field.String("url").
+			Comment(fmt.Sprintf("This will contain the url used to create or update the %s", documentType)).
+			Optional().
+			Nillable(),
+		field.String("file_id").
+			Comment(fmt.Sprintf("This will contain the most recent file id if this %s was created from a file", documentType)).
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 	}
 }
 

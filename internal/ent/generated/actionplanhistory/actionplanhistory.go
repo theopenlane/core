@@ -72,6 +72,10 @@ const (
 	FieldImprovementSuggestions = "improvement_suggestions"
 	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
+	// FieldURL holds the string denoting the url field in the database.
+	FieldURL = "url"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -120,6 +124,8 @@ var Columns = []string{
 	FieldDismissedControlSuggestions,
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
+	FieldURL,
+	FieldFileID,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -332,6 +338,16 @@ func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 // BySummary orders the results by the summary field.
 func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
+}
+
+// ByURL orders the results by the url field.
+func ByURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURL, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

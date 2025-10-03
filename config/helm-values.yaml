@@ -166,7 +166,7 @@ coreConfiguration:
           # -- OrganizationID specifies the OpenAI organization ID
           organizationID: ""  # @schema type:string
       # -- MaximumSentences specifies the maximum number of sentences in the summary
-      maximumSentences: 60  # @schema type:integer; default:60
+      maximumSentences: 10  # @schema type:integer; default:10
     # -- Windmill contains configuration for Windmill workflow automation
     windmill:
       # -- Enabled specifies whether Windmill integration is enabled

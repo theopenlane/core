@@ -72,7 +72,7 @@ data:
   CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.serverURL | quote }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.url | quote }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.organizationID | quote }}
-  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.maximumSentences | quote | default "60" }}
+  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.maximumSentences | quote | default "10" }}
   CORE_ENTCONFIG_WINDMILL_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.windmill.enabled | quote | default "false" }}
   CORE_ENTCONFIG_WINDMILL_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.windmill.baseURL | quote | default "https://app.windmill.dev" }}
   CORE_ENTCONFIG_WINDMILL_WORKSPACE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.workspace | quote }}

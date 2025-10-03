@@ -445,6 +445,46 @@ func (_u *ActionPlanHistoryUpdate) ClearDismissedImprovementSuggestions() *Actio
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ActionPlanHistoryUpdate) SetURL(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableURL(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ActionPlanHistoryUpdate) ClearURL() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ActionPlanHistoryUpdate) SetFileID(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableFileID(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ActionPlanHistoryUpdate) ClearFileID() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ActionPlanHistoryUpdate) SetOwnerID(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -822,6 +862,18 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(actionplanhistory.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(actionplanhistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(actionplanhistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
 	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
@@ -1298,6 +1350,46 @@ func (_u *ActionPlanHistoryUpdateOne) ClearDismissedImprovementSuggestions() *Ac
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ActionPlanHistoryUpdateOne) SetURL(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableURL(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearURL() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ActionPlanHistoryUpdateOne) SetFileID(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableFileID(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearFileID() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ActionPlanHistoryUpdateOne) SetOwnerID(v string) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1705,6 +1797,18 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(actionplanhistory.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(actionplanhistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(actionplanhistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
 	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 func TestQuerySubprocessorByID(t *testing.T) {
@@ -91,8 +92,12 @@ func TestQuerySubprocessorByID(t *testing.T) {
 }
 
 func TestQuerySubprocessors(t *testing.T) {
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	viewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
+
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	subprocessor4 := (&SubprocessorBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
@@ -108,19 +113,19 @@ func TestQuerySubprocessors(t *testing.T) {
 		{
 			name:            "return all",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "return all, ro user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewUser.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:   "query by name",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 			where: &testclient.SubprocessorWhereInput{
 				Name: &subprocessor1.Name,
 			},
@@ -129,7 +134,7 @@ func TestQuerySubprocessors(t *testing.T) {
 		{
 			name:   "query by name, not found",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 			where: &testclient.SubprocessorWhereInput{
 				Name: &nonExistentName,
 			},
@@ -149,7 +154,7 @@ func TestQuerySubprocessors(t *testing.T) {
 			for _, subprocessor := range resp.Subprocessors.Edges {
 				if subprocessor.Node.Name != subprocessor4.Name {
 					assert.Check(t, subprocessor.Node.Owner != nil)
-					assert.Check(t, is.Equal(subprocessor.Node.Owner.ID, testUser1.OrganizationID))
+					assert.Check(t, is.Equal(subprocessor.Node.Owner.ID, testUser.OrganizationID))
 				} else {
 					assert.Check(t, subprocessor.Node.Owner == nil)
 				}
@@ -157,7 +162,7 @@ func TestQuerySubprocessors(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID}}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor3.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor4.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

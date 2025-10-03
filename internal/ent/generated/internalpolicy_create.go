@@ -367,20 +367,6 @@ func (_c *InternalPolicyCreate) SetDismissedImprovementSuggestions(v []string) *
 	return _c
 }
 
-// SetFileID sets the "file_id" field.
-func (_c *InternalPolicyCreate) SetFileID(v string) *InternalPolicyCreate {
-	_c.mutation.SetFileID(v)
-	return _c
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCreate {
-	if v != nil {
-		_c.SetFileID(*v)
-	}
-	return _c
-}
-
 // SetURL sets the "url" field.
 func (_c *InternalPolicyCreate) SetURL(v string) *InternalPolicyCreate {
 	_c.mutation.SetURL(v)
@@ -391,6 +377,20 @@ func (_c *InternalPolicyCreate) SetURL(v string) *InternalPolicyCreate {
 func (_c *InternalPolicyCreate) SetNillableURL(v *string) *InternalPolicyCreate {
 	if v != nil {
 		_c.SetURL(*v)
+	}
+	return _c
+}
+
+// SetFileID sets the "file_id" field.
+func (_c *InternalPolicyCreate) SetFileID(v string) *InternalPolicyCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetFileID(*v)
 	}
 	return _c
 }

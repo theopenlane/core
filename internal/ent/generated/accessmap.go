@@ -40,6 +40,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "program",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "asset": {"owner": {
 	ObjectType:      "owner",
