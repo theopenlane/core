@@ -5,11 +5,13 @@ package procedure
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -31,15 +33,32 @@ func init() {
 	createCmd.Flags().StringP("status", "s", "", "status of the procedure e.g. draft, published, archived, etc.")
 	createCmd.Flags().StringP("type", "t", "", "type of the procedure")
 	createCmd.Flags().StringP("revision", "v", models.DefaultRevision, "revision of the procedure")
+	createCmd.Flags().StringP("file", "f", "", "local path to file to upload as the procedure details")
+	createCmd.Flags().StringP("url", "u", "", "url to use as the procedure details")
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.CreateProcedureInput, err error) {
+func createValidation() (input openlaneclient.CreateProcedureInput, detailsFile *graphql.Upload, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
+	detailsFileLoc := cmd.Config.String("file")
+	if detailsFileLoc != "" {
+		file, err := objects.NewUploadFile(detailsFileLoc)
+		if err != nil {
+			return input, nil, err
+		}
+
+		detailsFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
 	input.Name = cmd.Config.String("name")
-	if input.Name == "" {
-		return input, cmd.NewRequiredFieldMissingError("name")
+	if input.Name == "" && detailsFile == nil {
+		return input, detailsFile, cmd.NewRequiredFieldMissingError("name")
 	}
 
 	details := cmd.Config.String("details")
@@ -62,7 +81,12 @@ func createValidation() (input openlaneclient.CreateProcedureInput, err error) {
 		input.Revision = &revision
 	}
 
-	return input, nil
+	url := cmd.Config.String("url")
+	if url != "" {
+		input.URL = &url
+	}
+
+	return input, detailsFile, nil
 }
 
 // create a new procedure
@@ -76,8 +100,16 @@ func create(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	input, err := createValidation()
+	input, detailsFile, err := createValidation()
 	cobra.CheckErr(err)
+
+	if detailsFile != nil {
+		o, err := client.CreateUploadProcedure(ctx, *detailsFile, nil)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+
+	}
 
 	o, err := client.CreateProcedure(ctx, input)
 	cobra.CheckErr(err)
