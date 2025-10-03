@@ -53,6 +53,8 @@ func consoleOutput(e any) error {
 		e = v.InternalPolicy
 	case *openlaneclient.CreateInternalPolicy:
 		e = v.CreateInternalPolicy.InternalPolicy
+	case *openlaneclient.CreateUploadInternalPolicy:
+		e = v.CreateUploadInternalPolicy.InternalPolicy
 	case *openlaneclient.UpdateInternalPolicy:
 		e = v.UpdateInternalPolicy.InternalPolicy
 	case *openlaneclient.DeleteInternalPolicy:
