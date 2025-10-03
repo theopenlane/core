@@ -315,6 +315,10 @@ type ActionPlan struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the action_plan
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the action_plan
+	URL *string `json:"url,omitempty"`
+	// This will contain the most recent file id if this action_plan was created from a file
+	FileID *string `json:"fileID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -337,6 +341,7 @@ type ActionPlan struct {
 	Risks    *RiskConnection    `json:"risks"`
 	Controls *ControlConnection `json:"controls"`
 	Programs *ProgramConnection `json:"programs"`
+	File     *File              `json:"file,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -429,6 +434,10 @@ type ActionPlanHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the action_plan
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the action_plan
+	URL *string `json:"url,omitempty"`
+	// This will contain the most recent file id if this action_plan was created from a file
+	FileID *string `json:"fileID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -698,6 +707,38 @@ type ActionPlanHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -996,6 +1037,38 @@ type ActionPlanWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1101,6 +1174,9 @@ type ActionPlanWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddProgramMembershipInput is used for create ProgramMembership object under an existing program
@@ -4741,6 +4817,8 @@ type CreateActionPlanInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the action_plan
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the action_plan
+	URL *string `json:"url,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -4757,6 +4835,7 @@ type CreateActionPlanInput struct {
 	RiskIDs    []string `json:"riskIDs,omitempty"`
 	ControlIDs []string `json:"controlIDs,omitempty"`
 	ProgramIDs []string `json:"programIDs,omitempty"`
+	FileID     *string  `json:"fileID,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -5338,7 +5417,7 @@ type CreateInternalPolicyInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
-	// This will contain the url used to create/update the policy
+	// This will contain the url used to create or update the policy
 	URL                      *string  `json:"url,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
@@ -5765,12 +5844,12 @@ type CreateProcedureInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the procedure
+	URL *string `json:"url,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
-	SystemInternalID *string `json:"systemInternalID,omitempty"`
-	// This will contain the url used to create/update the procedure
-	URL               *string  `json:"url,omitempty"`
+	SystemInternalID  *string  `json:"systemInternalID,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string `json:"editorIDs,omitempty"`
@@ -13439,10 +13518,10 @@ type InternalPolicy struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the policy
+	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
-	FileID *string `json:"fileID,omitempty"`
-	// This will contain the url used to create/update the policy
-	URL           *string          `json:"url,omitempty"`
+	FileID        *string          `json:"fileID,omitempty"`
 	Owner         *Organization    `json:"owner,omitempty"`
 	BlockedGroups *GroupConnection `json:"blockedGroups"`
 	Editors       *GroupConnection `json:"editors"`
@@ -13562,10 +13641,10 @@ type InternalPolicyHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the policy
+	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
 	FileID *string `json:"fileID,omitempty"`
-	// This will contain the url used to create/update the policy
-	URL *string `json:"url,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -13888,22 +13967,6 @@ type InternalPolicyHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
-	// file_id field predicates
-	FileID             *string  `json:"fileID,omitempty"`
-	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
-	FileIDIn           []string `json:"fileIDIn,omitempty"`
-	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
-	FileIdgt           *string  `json:"fileIDGT,omitempty"`
-	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
-	FileIdlt           *string  `json:"fileIDLT,omitempty"`
-	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
-	FileIDContains     *string  `json:"fileIDContains,omitempty"`
-	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
-	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
-	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
-	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
-	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
-	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// url field predicates
 	URL             *string  `json:"url,omitempty"`
 	URLNeq          *string  `json:"urlNEQ,omitempty"`
@@ -13920,6 +13983,22 @@ type InternalPolicyHistoryWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 }
 
 // Ordering options for InternalPolicy connections
@@ -14198,22 +14277,6 @@ type InternalPolicyWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
-	// file_id field predicates
-	FileID             *string  `json:"fileID,omitempty"`
-	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
-	FileIDIn           []string `json:"fileIDIn,omitempty"`
-	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
-	FileIdgt           *string  `json:"fileIDGT,omitempty"`
-	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
-	FileIdlt           *string  `json:"fileIDLT,omitempty"`
-	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
-	FileIDContains     *string  `json:"fileIDContains,omitempty"`
-	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
-	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
-	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
-	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
-	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
-	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// url field predicates
 	URL             *string  `json:"url,omitempty"`
 	URLNeq          *string  `json:"urlNEQ,omitempty"`
@@ -14230,6 +14293,22 @@ type InternalPolicyWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -20644,19 +20723,19 @@ type Procedure struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the procedure
+	URL *string `json:"url,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"fileID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
-	SystemInternalID *string `json:"systemInternalID,omitempty"`
-	// This will contain the most recent file id if this procedure was created from a file
-	FileID *string `json:"fileID,omitempty"`
-	// This will contain the url used to create/update the procedure
-	URL           *string          `json:"url,omitempty"`
-	Owner         *Organization    `json:"owner,omitempty"`
-	BlockedGroups *GroupConnection `json:"blockedGroups"`
-	Editors       *GroupConnection `json:"editors"`
+	SystemInternalID *string          `json:"systemInternalID,omitempty"`
+	Owner            *Organization    `json:"owner,omitempty"`
+	BlockedGroups    *GroupConnection `json:"blockedGroups"`
+	Editors          *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the procedure
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
@@ -20765,16 +20844,16 @@ type ProcedureHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the procedure
+	URL *string `json:"url,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"fileID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
-	// This will contain the most recent file id if this procedure was created from a file
-	FileID *string `json:"fileID,omitempty"`
-	// This will contain the url used to create/update the procedure
-	URL *string `json:"url,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -21060,6 +21139,38 @@ type ProcedureHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -21097,38 +21208,6 @@ type ProcedureHistoryWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
-	// file_id field predicates
-	FileID             *string  `json:"fileID,omitempty"`
-	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
-	FileIDIn           []string `json:"fileIDIn,omitempty"`
-	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
-	FileIdgt           *string  `json:"fileIDGT,omitempty"`
-	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
-	FileIdlt           *string  `json:"fileIDLT,omitempty"`
-	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
-	FileIDContains     *string  `json:"fileIDContains,omitempty"`
-	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
-	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
-	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
-	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
-	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
-	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
-	// url field predicates
-	URL             *string  `json:"url,omitempty"`
-	URLNeq          *string  `json:"urlNEQ,omitempty"`
-	URLIn           []string `json:"urlIn,omitempty"`
-	URLNotIn        []string `json:"urlNotIn,omitempty"`
-	URLGt           *string  `json:"urlGT,omitempty"`
-	URLGte          *string  `json:"urlGTE,omitempty"`
-	URLLt           *string  `json:"urlLT,omitempty"`
-	URLLte          *string  `json:"urlLTE,omitempty"`
-	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
-	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
-	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
-	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
-	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
-	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 }
 
 // Ordering options for Procedure connections
@@ -21370,6 +21449,38 @@ type ProcedureWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -21407,38 +21518,6 @@ type ProcedureWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
-	// file_id field predicates
-	FileID             *string  `json:"fileID,omitempty"`
-	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
-	FileIDIn           []string `json:"fileIDIn,omitempty"`
-	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
-	FileIdgt           *string  `json:"fileIDGT,omitempty"`
-	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
-	FileIdlt           *string  `json:"fileIDLT,omitempty"`
-	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
-	FileIDContains     *string  `json:"fileIDContains,omitempty"`
-	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
-	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
-	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
-	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
-	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
-	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
-	// url field predicates
-	URL             *string  `json:"url,omitempty"`
-	URLNeq          *string  `json:"urlNEQ,omitempty"`
-	URLIn           []string `json:"urlIn,omitempty"`
-	URLNotIn        []string `json:"urlNotIn,omitempty"`
-	URLGt           *string  `json:"urlGT,omitempty"`
-	URLGte          *string  `json:"urlGTE,omitempty"`
-	URLLt           *string  `json:"urlLT,omitempty"`
-	URLLte          *string  `json:"urlLTE,omitempty"`
-	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
-	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
-	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
-	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
-	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
-	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -31521,6 +31600,9 @@ type UpdateActionPlanInput struct {
 	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
 	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the action_plan
+	URL      *string `json:"url,omitempty"`
+	ClearURL *bool   `json:"clearURL,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -31551,6 +31633,8 @@ type UpdateActionPlanInput struct {
 	AddProgramIDs    []string            `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs []string            `json:"removeProgramIDs,omitempty"`
 	ClearPrograms    *bool               `json:"clearPrograms,omitempty"`
+	FileID           *string             `json:"fileID,omitempty"`
+	ClearFile        *bool               `json:"clearFile,omitempty"`
 	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -32535,7 +32619,7 @@ type UpdateInternalPolicyInput struct {
 	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
 	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
-	// This will contain the url used to create/update the policy
+	// This will contain the url used to create or update the policy
 	URL                            *string             `json:"url,omitempty"`
 	ClearURL                       *bool               `json:"clearURL,omitempty"`
 	OwnerID                        *string             `json:"ownerID,omitempty"`
@@ -33222,15 +33306,15 @@ type UpdateProcedureInput struct {
 	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
 	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create or update the procedure
+	URL      *string `json:"url,omitempty"`
+	ClearURL *bool   `json:"clearURL,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
-	SystemInternalID      *string `json:"systemInternalID,omitempty"`
-	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	// This will contain the url used to create/update the procedure
-	URL                     *string             `json:"url,omitempty"`
-	ClearURL                *bool               `json:"clearURL,omitempty"`
+	SystemInternalID        *string             `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID   *bool               `json:"clearSystemInternalID,omitempty"`
 	OwnerID                 *string             `json:"ownerID,omitempty"`
 	ClearOwner              *bool               `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs      []string            `json:"addBlockedGroupIDs,omitempty"`

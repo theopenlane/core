@@ -120,7 +120,7 @@ type MutationResolver interface {
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
-	CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
+	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
@@ -1950,11 +1950,11 @@ func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "policyFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "internalPolicyFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["policyFile"] = arg0
+	args["internalPolicyFile"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
@@ -3822,6 +3822,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
+			case "url":
+				return ec.fieldContext_ActionPlan_url(ctx, field)
+			case "fileID":
+				return ec.fieldContext_ActionPlan_fileID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "systemOwned":
@@ -3848,6 +3852,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_ActionPlan_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -3925,6 +3931,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
+			case "url":
+				return ec.fieldContext_ActionPlan_url(ctx, field)
+			case "fileID":
+				return ec.fieldContext_ActionPlan_fileID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "systemOwned":
@@ -3951,6 +3961,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_ActionPlan_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -4057,6 +4069,10 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
+			case "url":
+				return ec.fieldContext_ActionPlan_url(ctx, field)
+			case "fileID":
+				return ec.fieldContext_ActionPlan_fileID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "systemOwned":
@@ -4083,6 +4099,8 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_ActionPlan_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -4189,6 +4207,10 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
+			case "url":
+				return ec.fieldContext_ActionPlan_url(ctx, field)
+			case "fileID":
+				return ec.fieldContext_ActionPlan_fileID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "systemOwned":
@@ -4215,6 +4237,8 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_ActionPlan_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -8828,7 +8852,7 @@ func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Con
 		ec.fieldContext_Mutation_createUploadInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["policyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+			return ec.resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload,

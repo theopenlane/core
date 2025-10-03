@@ -168,14 +168,14 @@ func Summary(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldSummary, v))
 }
 
-// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
-func FileID(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
-}
-
 // URL applies equality check predicate on the "url" field. It's identical to URLEQ.
 func URL(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldURL, v))
+}
+
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1598,81 +1598,6 @@ func DismissedImprovementSuggestionsNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
 }
 
-// FileIDEQ applies the EQ predicate on the "file_id" field.
-func FileIDEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
-}
-
-// FileIDNEQ applies the NEQ predicate on the "file_id" field.
-func FileIDNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldFileID, v))
-}
-
-// FileIDIn applies the In predicate on the "file_id" field.
-func FileIDIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldFileID, vs...))
-}
-
-// FileIDNotIn applies the NotIn predicate on the "file_id" field.
-func FileIDNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldFileID, vs...))
-}
-
-// FileIDGT applies the GT predicate on the "file_id" field.
-func FileIDGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldFileID, v))
-}
-
-// FileIDGTE applies the GTE predicate on the "file_id" field.
-func FileIDGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldFileID, v))
-}
-
-// FileIDLT applies the LT predicate on the "file_id" field.
-func FileIDLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldFileID, v))
-}
-
-// FileIDLTE applies the LTE predicate on the "file_id" field.
-func FileIDLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldFileID, v))
-}
-
-// FileIDContains applies the Contains predicate on the "file_id" field.
-func FileIDContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldFileID, v))
-}
-
-// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
-func FileIDHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldFileID, v))
-}
-
-// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
-func FileIDHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldFileID, v))
-}
-
-// FileIDIsNil applies the IsNil predicate on the "file_id" field.
-func FileIDIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldFileID))
-}
-
-// FileIDNotNil applies the NotNil predicate on the "file_id" field.
-func FileIDNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldFileID))
-}
-
-// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
-func FileIDEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldFileID, v))
-}
-
-// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
-func FileIDContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldFileID, v))
-}
-
 // URLEQ applies the EQ predicate on the "url" field.
 func URLEQ(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldURL, v))
@@ -1746,6 +1671,81 @@ func URLEqualFold(v string) predicate.InternalPolicy {
 // URLContainsFold applies the ContainsFold predicate on the "url" field.
 func URLContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldURL, v))
+}
+
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldFileID, v))
+}
+
+// FileIDContains applies the Contains predicate on the "file_id" field.
+func FileIDContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldFileID, v))
+}
+
+// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
+func FileIDHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldFileID, v))
+}
+
+// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
+func FileIDHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldFileID, v))
+}
+
+// FileIDIsNil applies the IsNil predicate on the "file_id" field.
+func FileIDIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldFileID))
+}
+
+// FileIDNotNil applies the NotNil predicate on the "file_id" field.
+func FileIDNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldFileID))
+}
+
+// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
+func FileIDEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldFileID, v))
+}
+
+// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
+func FileIDContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldFileID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

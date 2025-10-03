@@ -581,7 +581,7 @@ func WithEntitlements() ServerOption {
 // WithSummarizer sets up the logic for summarizing long blurbs of texts
 func WithSummarizer() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		client, err := summarizer.NewSummarizer(s.Config.Settings.EntConfig)
+		client, err := summarizer.NewSummarizer(s.Config.Settings.EntConfig.Summarizer)
 		if err != nil {
 			log.Panic().Err(err).Msg("error creating Summarizer client")
 		}

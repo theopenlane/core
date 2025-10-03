@@ -517,26 +517,6 @@ func (_u *InternalPolicyUpdate) ClearDismissedImprovementSuggestions() *Internal
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *InternalPolicyUpdate) SetFileID(v string) *InternalPolicyUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *InternalPolicyUpdate) SetNillableFileID(v *string) *InternalPolicyUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *InternalPolicyUpdate) ClearFileID() *InternalPolicyUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
 // SetURL sets the "url" field.
 func (_u *InternalPolicyUpdate) SetURL(v string) *InternalPolicyUpdate {
 	_u.mutation.SetURL(v)
@@ -554,6 +534,26 @@ func (_u *InternalPolicyUpdate) SetNillableURL(v *string) *InternalPolicyUpdate 
 // ClearURL clears the value of the "url" field.
 func (_u *InternalPolicyUpdate) ClearURL() *InternalPolicyUpdate {
 	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyUpdate) SetFileID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableFileID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyUpdate) ClearFileID() *InternalPolicyUpdate {
+	_u.mutation.ClearFileID()
 	return _u
 }
 
@@ -2414,26 +2414,6 @@ func (_u *InternalPolicyUpdateOne) ClearDismissedImprovementSuggestions() *Inter
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *InternalPolicyUpdateOne) SetFileID(v string) *InternalPolicyUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *InternalPolicyUpdateOne) SetNillableFileID(v *string) *InternalPolicyUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *InternalPolicyUpdateOne) ClearFileID() *InternalPolicyUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
 // SetURL sets the "url" field.
 func (_u *InternalPolicyUpdateOne) SetURL(v string) *InternalPolicyUpdateOne {
 	_u.mutation.SetURL(v)
@@ -2451,6 +2431,26 @@ func (_u *InternalPolicyUpdateOne) SetNillableURL(v *string) *InternalPolicyUpda
 // ClearURL clears the value of the "url" field.
 func (_u *InternalPolicyUpdateOne) ClearURL() *InternalPolicyUpdateOne {
 	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyUpdateOne) SetFileID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableFileID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyUpdateOne) ClearFileID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearFileID()
 	return _u
 }
 

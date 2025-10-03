@@ -170,6 +170,8 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $14", likeQuery)) // search by DismissedImprovementSuggestions
 				},
+				actionplan.URLContainsFold(query),              // search by URL
+				actionplan.FileIDContainsFold(query),           // search by FileID
 				actionplan.OwnerIDContainsFold(query),          // search by OwnerID
 				actionplan.InternalNotesContainsFold(query),    // search by InternalNotes
 				actionplan.SystemInternalIDContainsFold(query), // search by SystemInternalID
@@ -907,8 +909,8 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $18", likeQuery)) // search by DismissedImprovementSuggestions
 				},
-				internalpolicy.FileIDContainsFold(query), // search by FileID
 				internalpolicy.URLContainsFold(query),    // search by URL
+				internalpolicy.FileIDContainsFold(query), // search by FileID
 			),
 		)
 
@@ -1443,10 +1445,10 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $16", likeQuery)) // search by DismissedImprovementSuggestions
 				},
+				procedure.URLContainsFold(query),              // search by URL
+				procedure.FileIDContainsFold(query),           // search by FileID
 				procedure.InternalNotesContainsFold(query),    // search by InternalNotes
 				procedure.SystemInternalIDContainsFold(query), // search by SystemInternalID
-				procedure.FileIDContainsFold(query),           // search by FileID
-				procedure.URLContainsFold(query),              // search by URL
 			),
 		)
 

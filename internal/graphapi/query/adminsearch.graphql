@@ -46,6 +46,8 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
+          url
+          fileID
           ownerID
           internalNotes
           systemInternalID
@@ -426,8 +428,8 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
-          fileID
           url
+          fileID
         }
       }
     }
@@ -701,10 +703,10 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
+          url
+          fileID
           internalNotes
           systemInternalID
-          fileID
-          url
         }
       }
     }

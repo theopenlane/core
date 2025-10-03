@@ -140,6 +140,14 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
+	if url, exists := m.URL(); exists {
+		create = create.SetNillableURL(&url)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -343,6 +351,18 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions)
 		}
 
+		if url, exists := m.URL(); exists {
+			create = create.SetNillableURL(&url)
+		} else {
+			create = create.SetNillableURL(actionplan.URL)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(actionplan.FileID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -444,6 +464,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDismissedControlSuggestions(actionplan.DismissedControlSuggestions).
 			SetImprovementSuggestions(actionplan.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions).
+			SetNillableURL(actionplan.URL).
+			SetNillableFileID(actionplan.FileID).
 			SetOwnerID(actionplan.OwnerID).
 			SetSystemOwned(actionplan.SystemOwned).
 			SetNillableInternalNotes(actionplan.InternalNotes).
@@ -5296,12 +5318,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
-	if fileID, exists := m.FileID(); exists {
-		create = create.SetNillableFileID(&fileID)
-	}
-
 	if url, exists := m.URL(); exists {
 		create = create.SetNillableURL(&url)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
 	}
 
 	_, err := create.Save(ctx)
@@ -5509,16 +5531,16 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions)
 		}
 
-		if fileID, exists := m.FileID(); exists {
-			create = create.SetNillableFileID(&fileID)
-		} else {
-			create = create.SetNillableFileID(internalpolicy.FileID)
-		}
-
 		if url, exists := m.URL(); exists {
 			create = create.SetNillableURL(&url)
 		} else {
 			create = create.SetNillableURL(internalpolicy.URL)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(internalpolicy.FileID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -5585,8 +5607,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDismissedControlSuggestions(internalpolicy.DismissedControlSuggestions).
 			SetImprovementSuggestions(internalpolicy.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
-			SetNillableFileID(internalpolicy.FileID).
 			SetNillableURL(internalpolicy.URL).
+			SetNillableFileID(internalpolicy.FileID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8042,6 +8064,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
+	if url, exists := m.URL(); exists {
+		create = create.SetNillableURL(&url)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -8052,14 +8082,6 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if systemInternalID, exists := m.SystemInternalID(); exists {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
-	}
-
-	if fileID, exists := m.FileID(); exists {
-		create = create.SetNillableFileID(&fileID)
-	}
-
-	if url, exists := m.URL(); exists {
-		create = create.SetNillableURL(&url)
 	}
 
 	_, err := create.Save(ctx)
@@ -8249,6 +8271,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions)
 		}
 
+		if url, exists := m.URL(); exists {
+			create = create.SetNillableURL(&url)
+		} else {
+			create = create.SetNillableURL(procedure.URL)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(procedure.FileID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -8265,18 +8299,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(&systemInternalID)
 		} else {
 			create = create.SetNillableSystemInternalID(procedure.SystemInternalID)
-		}
-
-		if fileID, exists := m.FileID(); exists {
-			create = create.SetNillableFileID(&fileID)
-		} else {
-			create = create.SetNillableFileID(procedure.FileID)
-		}
-
-		if url, exists := m.URL(); exists {
-			create = create.SetNillableURL(&url)
-		} else {
-			create = create.SetNillableURL(procedure.URL)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -8340,11 +8362,11 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDismissedControlSuggestions(procedure.DismissedControlSuggestions).
 			SetImprovementSuggestions(procedure.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions).
+			SetNillableURL(procedure.URL).
+			SetNillableFileID(procedure.FileID).
 			SetSystemOwned(procedure.SystemOwned).
 			SetNillableInternalNotes(procedure.InternalNotes).
 			SetNillableSystemInternalID(procedure.SystemInternalID).
-			SetNillableFileID(procedure.FileID).
-			SetNillableURL(procedure.URL).
 			Save(ctx)
 		if err != nil {
 			return err

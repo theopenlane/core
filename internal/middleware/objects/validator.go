@@ -39,7 +39,8 @@ var validMimeTypes = map[string][]string{
 	"noteFiles":          sharedMimeTypes,
 	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
 	"procedureFile":      importSchemaMimeTypes,
-	"policyFile":         importSchemaMimeTypes,
+	"internalPolicyFile": importSchemaMimeTypes,
+	"actionPlanFile":     importSchemaMimeTypes,
 	"trustCenterDocFile": {"application/pdf"},
 	"templateFiles":      sharedMimeTypes,
 }

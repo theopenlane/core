@@ -11045,12 +11045,12 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call) RunAndR
 }
 
 // CreateUploadInternalPolicy provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadInternalPolicy, error) {
+func (_mock *MockOpenlaneGraphClient) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadInternalPolicy, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, policyFile, ownerID, interceptors)
+		tmpRet = _mock.Called(ctx, internalPolicyFile, ownerID, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, policyFile, ownerID)
+		tmpRet = _mock.Called(ctx, internalPolicyFile, ownerID)
 	}
 	ret := tmpRet
 
@@ -11061,17 +11061,17 @@ func (_mock *MockOpenlaneGraphClient) CreateUploadInternalPolicy(ctx context.Con
 	var r0 *openlaneclient.CreateUploadInternalPolicy
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadInternalPolicy, error)); ok {
-		return returnFunc(ctx, policyFile, ownerID, interceptors...)
+		return returnFunc(ctx, internalPolicyFile, ownerID, interceptors...)
 	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) *openlaneclient.CreateUploadInternalPolicy); ok {
-		r0 = returnFunc(ctx, policyFile, ownerID, interceptors...)
+		r0 = returnFunc(ctx, internalPolicyFile, ownerID, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.CreateUploadInternalPolicy)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, policyFile, ownerID, interceptors...)
+		r1 = returnFunc(ctx, internalPolicyFile, ownerID, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -11085,15 +11085,15 @@ type MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call struct {
 
 // CreateUploadInternalPolicy is a helper method to define mock.On call
 //   - ctx context.Context
-//   - policyFile graphql.Upload
+//   - internalPolicyFile graphql.Upload
 //   - ownerID *string
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) CreateUploadInternalPolicy(ctx interface{}, policyFile interface{}, ownerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) CreateUploadInternalPolicy(ctx interface{}, internalPolicyFile interface{}, ownerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call{Call: _e.mock.On("CreateUploadInternalPolicy",
-		append([]interface{}{ctx, policyFile, ownerID}, interceptors...)...)}
+		append([]interface{}{ctx, internalPolicyFile, ownerID}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call) Run(run func(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
+func (_c *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call) Run(run func(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -11128,7 +11128,7 @@ func (_c *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call) Return(create
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call) RunAndReturn(run func(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadInternalPolicy, error)) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
+func (_c *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call) RunAndReturn(run func(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadInternalPolicy, error)) *MockOpenlaneGraphClient_CreateUploadInternalPolicy_Call {
 	_c.Call.Return(run)
 	return _c
 }

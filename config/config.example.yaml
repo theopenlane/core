@@ -118,7 +118,7 @@ entConfig:
                 organizationID: ""
                 url: ""
             provider: none
-        maximumSentences: 60
+        maximumSentences: 10
         type: lexrank
     windmill:
         baseURL: https://app.windmill.dev

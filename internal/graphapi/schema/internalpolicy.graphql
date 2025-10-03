@@ -29,7 +29,7 @@ extend type Mutation{
         """
         file containing values of the internalPolicy
         """
-        policyFile: Upload!
+        internalPolicyFile: Upload!
         """
         ID of the owner organization
         """

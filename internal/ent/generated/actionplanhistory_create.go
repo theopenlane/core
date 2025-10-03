@@ -328,6 +328,34 @@ func (_c *ActionPlanHistoryCreate) SetDismissedImprovementSuggestions(v []string
 	return _c
 }
 
+// SetURL sets the "url" field.
+func (_c *ActionPlanHistoryCreate) SetURL(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableURL(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
+// SetFileID sets the "file_id" field.
+func (_c *ActionPlanHistoryCreate) SetFileID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableFileID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ActionPlanHistoryCreate) SetOwnerID(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -734,6 +762,14 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
+	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(actionplanhistory.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(actionplanhistory.FieldFileID, field.TypeString, value)
+		_node.FileID = &value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

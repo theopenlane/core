@@ -128,6 +128,8 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DueDate                         func(childComplexity int) int
+		File                            func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -147,6 +149,7 @@ type ComplexityRoot struct {
 		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -192,6 +195,7 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DueDate                         func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
@@ -211,6 +215,7 @@ type ComplexityRoot struct {
 		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -2590,7 +2595,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
-		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
+		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
 		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
@@ -5789,6 +5794,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.DueDate(childComplexity), true
 
+	case "ActionPlan.file":
+		if e.complexity.ActionPlan.File == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.File(childComplexity), true
+
+	case "ActionPlan.fileID":
+		if e.complexity.ActionPlan.FileID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.FileID(childComplexity), true
+
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
 			break
@@ -5931,6 +5950,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Tags(childComplexity), true
+
+	case "ActionPlan.url":
+		if e.complexity.ActionPlan.URL == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.URL(childComplexity), true
 
 	case "ActionPlan.updatedAt":
 		if e.complexity.ActionPlan.UpdatedAt == nil {
@@ -6100,6 +6126,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.DueDate(childComplexity), true
 
+	case "ActionPlanHistory.fileID":
+		if e.complexity.ActionPlanHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.FileID(childComplexity), true
+
 	case "ActionPlanHistory.historyTime":
 		if e.complexity.ActionPlanHistory.HistoryTime == nil {
 			break
@@ -6232,6 +6265,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Tags(childComplexity), true
+
+	case "ActionPlanHistory.url":
+		if e.complexity.ActionPlanHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.URL(childComplexity), true
 
 	case "ActionPlanHistory.updatedAt":
 		if e.complexity.ActionPlanHistory.UpdatedAt == nil {
@@ -18671,7 +18711,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["policyFile"].(graphql.Upload), args["ownerID"].(*string)), true
+		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["internalPolicyFile"].(graphql.Upload), args["ownerID"].(*string)), true
 
 	case "Mutation.createUploadProcedure":
 		if e.complexity.Mutation.CreateUploadProcedure == nil {
@@ -39044,6 +39084,14 @@ type ActionPlan implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the action_plan
+  """
+  url: String
+  """
+  This will contain the most recent file id if this action_plan was created from a file
+  """
+  fileID: ID
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -39173,6 +39221,7 @@ type ActionPlan implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  file: File
 }
 """
 A connection to a list of items.
@@ -39301,6 +39350,14 @@ type ActionPlanHistory implements Node {
   improvement suggestions dismissed by the user for the action_plan
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the url used to create or update the action_plan
+  """
+  url: String
+  """
+  This will contain the most recent file id if this action_plan was created from a file
+  """
+  fileID: String
   """
   the organization id that owns the object
   """
@@ -39689,6 +39746,42 @@ input ActionPlanHistoryWhereInput {
   delegateIDEqualFold: String
   delegateIDContainsFold: String
   """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -40055,6 +40148,42 @@ input ActionPlanWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -40185,6 +40314,11 @@ input ActionPlanWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Asset implements Node {
   id: ID!
@@ -46113,6 +46247,10 @@ input CreateActionPlanInput {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the action_plan
+  """
+  url: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -46138,6 +46276,7 @@ input CreateActionPlanInput {
   riskIDs: [ID!]
   controlIDs: [ID!]
   programIDs: [ID!]
+  fileID: ID
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -47030,7 +47169,7 @@ input CreateInternalPolicyInput {
   """
   dismissedImprovementSuggestions: [String!]
   """
-  This will contain the url used to create/update the policy
+  This will contain the url used to create or update the policy
   """
   url: String
   ownerID: ID
@@ -47685,6 +47824,10 @@ input CreateProcedureInput {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the procedure
+  """
+  url: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -47692,10 +47835,6 @@ input CreateProcedureInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  """
-  This will contain the url used to create/update the procedure
-  """
-  url: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -59963,13 +60102,13 @@ type InternalPolicy implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the policy
+  """
+  url: String
+  """
   This will contain the most recent file id if this policy was created from a file
   """
   fileID: ID
-  """
-  This will contain the url used to create/update the policy
-  """
-  url: String
   owner: Organization
   blockedGroups(
     """
@@ -60470,13 +60609,13 @@ type InternalPolicyHistory implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the policy
+  """
+  url: String
+  """
   This will contain the most recent file id if this policy was created from a file
   """
   fileID: String
-  """
-  This will contain the url used to create/update the policy
-  """
-  url: String
 }
 """
 A connection to a list of items.
@@ -60902,24 +61041,6 @@ input InternalPolicyHistoryWhereInput {
   delegateIDEqualFold: String
   delegateIDContainsFold: String
   """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDGT: String
-  fileIDGTE: String
-  fileIDLT: String
-  fileIDLTE: String
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
   url field predicates
   """
   url: String
@@ -60937,6 +61058,24 @@ input InternalPolicyHistoryWhereInput {
   urlNotNil: Boolean
   urlEqualFold: String
   urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -61268,24 +61407,6 @@ input InternalPolicyWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
-  file_id field predicates
-  """
-  fileID: ID
-  fileIDNEQ: ID
-  fileIDIn: [ID!]
-  fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
-  fileIDContains: ID
-  fileIDHasPrefix: ID
-  fileIDHasSuffix: ID
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: ID
-  fileIDContainsFold: ID
-  """
   url field predicates
   """
   url: String
@@ -61303,6 +61424,24 @@ input InternalPolicyWhereInput {
   urlNotNil: Boolean
   urlEqualFold: String
   urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -72161,6 +72300,14 @@ type Procedure implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the procedure
+  """
+  url: String
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: ID
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -72172,14 +72319,6 @@ type Procedure implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
-  """
-  This will contain the most recent file id if this procedure was created from a file
-  """
-  fileID: ID
-  """
-  This will contain the url used to create/update the procedure
-  """
-  url: String
   owner: Organization
   blockedGroups(
     """
@@ -72606,6 +72745,14 @@ type ProcedureHistory implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  This will contain the url used to create or update the procedure
+  """
+  url: String
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -72617,14 +72764,6 @@ type ProcedureHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
-  """
-  This will contain the most recent file id if this procedure was created from a file
-  """
-  fileID: String
-  """
-  This will contain the url used to create/update the procedure
-  """
-  url: String
 }
 """
 A connection to a list of items.
@@ -73007,6 +73146,42 @@ input ProcedureHistoryWhereInput {
   delegateIDEqualFold: String
   delegateIDContainsFold: String
   """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -73049,42 +73224,6 @@ input ProcedureHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDGT: String
-  fileIDGTE: String
-  fileIDLT: String
-  fileIDLTE: String
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -73373,6 +73512,42 @@ input ProcedureWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -73415,42 +73590,6 @@ input ProcedureWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: ID
-  fileIDNEQ: ID
-  fileIDIn: [ID!]
-  fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
-  fileIDContains: ID
-  fileIDHasPrefix: ID
-  fileIDHasSuffix: ID
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: ID
-  fileIDContainsFold: ID
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
   """
   owner edge predicates
   """
@@ -91838,6 +91977,11 @@ input UpdateActionPlanInput {
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
   """
+  This will contain the url used to create or update the action_plan
+  """
+  url: String
+  clearURL: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -91877,6 +92021,8 @@ input UpdateActionPlanInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -93168,7 +93314,7 @@ input UpdateInternalPolicyInput {
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
   """
-  This will contain the url used to create/update the policy
+  This will contain the url used to create or update the policy
   """
   url: String
   clearURL: Boolean
@@ -94050,6 +94196,11 @@ input UpdateProcedureInput {
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
   """
+  This will contain the url used to create or update the procedure
+  """
+  url: String
+  clearURL: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -94059,11 +94210,6 @@ input UpdateProcedureInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
-  """
-  This will contain the url used to create/update the procedure
-  """
-  url: String
-  clearURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -98730,7 +98876,7 @@ extend type Mutation{
         """
         file containing values of the internalPolicy
         """
-        policyFile: Upload!
+        internalPolicyFile: Upload!
         """
         ID of the owner organization
         """
