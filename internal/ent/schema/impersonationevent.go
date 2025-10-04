@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
@@ -71,25 +72,20 @@ func (i ImpersonationEvent) Mixin() []ent.Mixin {
 // Edges of the ImpersonationEvent
 func (i ImpersonationEvent) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: i,
-			edgeSchema: User{},
-			name:       "impersonator",
-			field:      "user_id",
-		}),
-		// Event targets a user (single target per event)
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: i,
-			edgeSchema: User{},
-			name:       "target_user",
-			field:      "target_user_id",
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: i,
-			edgeSchema: Organization{},
-			name:       "organization",
-			field:      "organization_id",
-		}),
+		edge.From("user", User.Type).
+			Ref("impersonation_events").
+			Unique().
+			Required(),
+		edge.From("target_user", User.Type).
+			Ref("targeted_impersonations").
+			Field("target_user_id").
+			Unique().
+			Required(),
+		edge.From("organization", Organization.Type).
+			Ref("organization_impersonation_events").
+			Field("organization_id").
+			Unique().
+			Required(),
 	}
 }
 
@@ -127,7 +123,7 @@ func (ImpersonationEvent) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// add mutation rules here, the below is the recommended default
-			policy.CheckCreateAccess(),
+			policy.AllowCreate(),
 			// this needs to be commented out for the first run that had the entfga annotation
 			// the first run will generate the functions required based on the entfa annotation
 			// entfga.CheckEditAccess[*generated.ImpersonationEventMutation](),
