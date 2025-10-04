@@ -247,6 +247,8 @@ func (u User) Edges() []ent.Edge {
 				entgql.MultiOrder(),
 				accessmap.EdgeNoAuthCheck(), // membership edges are handled by the parent
 			),
+		edge.To("impersonation_events", ImpersonationEvent.Type),
+		edge.To("targeted_impersonations", ImpersonationEvent.Type),
 	}
 }
 
