@@ -3,9 +3,10 @@ package summarizer
 import (
 	"context"
 
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
-
-	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
 type summarizer interface {
@@ -22,17 +23,17 @@ type Client struct {
 }
 
 // NewSummarizer returns a configured client based on the provided configuration
-func NewSummarizer(cfg entconfig.Config) (*Client, error) {
+func NewSummarizer(cfg Config) (*Client, error) {
 	sanitizer := bluemonday.StrictPolicy()
 
-	switch cfg.Summarizer.Type {
-	case entconfig.SummarizerTypeLexrank:
+	switch cfg.Type {
+	case TypeLexrank:
 		return &Client{
-			impl:      newLexRankSummarizer(cfg.Summarizer.MaximumSentences),
+			impl:      newLexRankSummarizer(cfg.MaximumSentences),
 			sanitizer: sanitizer,
 		}, nil
 
-	case entconfig.SummarizerTypeLlm:
+	case TypeLlm:
 		impl, err := newLLMSummarizer(cfg)
 		if err != nil {
 			return nil, err
@@ -49,7 +50,24 @@ func NewSummarizer(cfg entconfig.Config) (*Client, error) {
 
 // Summarize returns a shortened version of the provided string using the lexrank algorithm
 func (s *Client) Summarize(ctx context.Context, sentence string) (string, error) {
-	sanitizedSentence := s.sanitizer.Sanitize(sentence)
+	// also convert markdown to HTML before sanitizing
+	sanitizedSentence := string(mdToHTML([]byte(sentence)))
+
+	sanitizedSentence = s.sanitizer.Sanitize(sanitizedSentence)
 
 	return s.impl.Summarize(ctx, sanitizedSentence)
+}
+
+func mdToHTML(md []byte) []byte {
+	// create markdown parser with extensions
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse(md)
+
+	// create HTML renderer with extensions
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.SkipImages | html.SkipLinks | html.SkipHTML
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return markdown.Render(doc, renderer)
 }

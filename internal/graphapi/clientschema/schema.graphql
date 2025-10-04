@@ -437,6 +437,14 @@ type ActionPlan implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the action_plan
+	"""
+	url: String
+	"""
+	This will contain the most recent file id if this action_plan was created from a file
+	"""
+	fileID: ID
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -566,6 +574,7 @@ type ActionPlan implements Node {
 		"""
 		where: ProgramWhereInput
 	): ProgramConnection!
+	file: File
 }
 """
 Return response for createBulkActionPlan mutation
@@ -734,6 +743,14 @@ type ActionPlanHistory implements Node {
 	improvement suggestions dismissed by the user for the action_plan
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the url used to create or update the action_plan
+	"""
+	url: String
+	"""
+	This will contain the most recent file id if this action_plan was created from a file
+	"""
+	fileID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -1122,6 +1139,42 @@ input ActionPlanHistoryWhereInput {
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
 	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -1497,6 +1550,42 @@ input ActionPlanWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -1627,6 +1716,11 @@ input ActionPlanWhereInput {
 	"""
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 """
 AddProgramMembershipInput is used for create ProgramMembership object under an existing program
@@ -3571,6 +3665,10 @@ type Control implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -4355,6 +4453,10 @@ type ControlHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -4542,6 +4644,7 @@ enum ControlHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -4685,6 +4788,24 @@ input ControlHistoryWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -7293,6 +7414,7 @@ Properties by which Control connections can be ordered.
 enum ControlOrderField {
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -7411,6 +7533,24 @@ input ControlWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -7907,6 +8047,10 @@ input CreateActionPlanInput {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the action_plan
+	"""
+	url: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -7932,6 +8076,7 @@ input CreateActionPlanInput {
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	programIDs: [ID!]
+	fileID: ID
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -8078,6 +8223,10 @@ input CreateControlInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
 	"""
 	description of what the control is supposed to accomplish
 	"""
@@ -8835,7 +8984,7 @@ input CreateInternalPolicyInput {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
-	This will contain the url used to create/update the policy
+	This will contain the url used to create or update the policy
 	"""
 	url: String
 	ownerID: ID
@@ -9495,6 +9644,10 @@ input CreateProcedureInput {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the procedure
+	"""
+	url: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -9502,10 +9655,6 @@ input CreateProcedureInput {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @readOnly
-	"""
-	This will contain the url used to create/update the procedure
-	"""
-	url: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -9842,6 +9991,10 @@ input CreateSubcontrolInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
 	"""
 	description of what the control is supposed to accomplish
 	"""
@@ -22455,13 +22608,13 @@ type InternalPolicy implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the policy
+	"""
+	url: String
+	"""
 	This will contain the most recent file id if this policy was created from a file
 	"""
 	fileID: ID
-	"""
-	This will contain the url used to create/update the policy
-	"""
-	url: String
 	owner: Organization
 	blockedGroups(
 		"""
@@ -23002,13 +23155,13 @@ type InternalPolicyHistory implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the policy
+	"""
+	url: String
+	"""
 	This will contain the most recent file id if this policy was created from a file
 	"""
 	fileID: String
-	"""
-	This will contain the url used to create/update the policy
-	"""
-	url: String
 }
 """
 A connection to a list of items.
@@ -23434,24 +23587,6 @@ input InternalPolicyHistoryWhereInput {
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
 	"""
-	file_id field predicates
-	"""
-	fileID: String
-	fileIDNEQ: String
-	fileIDIn: [String!]
-	fileIDNotIn: [String!]
-	fileIDGT: String
-	fileIDGTE: String
-	fileIDLT: String
-	fileIDLTE: String
-	fileIDContains: String
-	fileIDHasPrefix: String
-	fileIDHasSuffix: String
-	fileIDIsNil: Boolean
-	fileIDNotNil: Boolean
-	fileIDEqualFold: String
-	fileIDContainsFold: String
-	"""
 	url field predicates
 	"""
 	url: String
@@ -23469,6 +23604,24 @@ input InternalPolicyHistoryWhereInput {
 	urlNotNil: Boolean
 	urlEqualFold: String
 	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -23809,24 +23962,6 @@ input InternalPolicyWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
-	file_id field predicates
-	"""
-	fileID: ID
-	fileIDNEQ: ID
-	fileIDIn: [ID!]
-	fileIDNotIn: [ID!]
-	fileIDGT: ID
-	fileIDGTE: ID
-	fileIDLT: ID
-	fileIDLTE: ID
-	fileIDContains: ID
-	fileIDHasPrefix: ID
-	fileIDHasSuffix: ID
-	fileIDIsNil: Boolean
-	fileIDNotNil: Boolean
-	fileIDEqualFold: ID
-	fileIDContainsFold: ID
-	"""
 	url field predicates
 	"""
 	url: String
@@ -23844,6 +23979,24 @@ input InternalPolicyWhereInput {
 	urlNotNil: Boolean
 	urlEqualFold: String
 	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
 	"""
 	owner edge predicates
 	"""
@@ -28913,7 +29066,7 @@ type Mutation {
 		"""
 		file containing values of the internalPolicy
 		"""
-		policyFile: Upload!
+		internalPolicyFile: Upload!
 
 		"""
 		ID of the owner organization
@@ -37984,6 +38137,14 @@ type Procedure implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the procedure
+	"""
+	url: String
+	"""
+	This will contain the most recent file id if this procedure was created from a file
+	"""
+	fileID: ID
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -37995,14 +38156,6 @@ type Procedure implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
-	"""
-	This will contain the most recent file id if this procedure was created from a file
-	"""
-	fileID: ID
-	"""
-	This will contain the url used to create/update the procedure
-	"""
-	url: String
 	owner: Organization
 	blockedGroups(
 		"""
@@ -38469,6 +38622,14 @@ type ProcedureHistory implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	This will contain the url used to create or update the procedure
+	"""
+	url: String
+	"""
+	This will contain the most recent file id if this procedure was created from a file
+	"""
+	fileID: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -38480,14 +38641,6 @@ type ProcedureHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
-	"""
-	This will contain the most recent file id if this procedure was created from a file
-	"""
-	fileID: String
-	"""
-	This will contain the url used to create/update the procedure
-	"""
-	url: String
 }
 """
 A connection to a list of items.
@@ -38870,6 +39023,42 @@ input ProcedureHistoryWhereInput {
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
 	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -38912,42 +39101,6 @@ input ProcedureHistoryWhereInput {
 	systemInternalIDNotNil: Boolean
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
-	"""
-	file_id field predicates
-	"""
-	fileID: String
-	fileIDNEQ: String
-	fileIDIn: [String!]
-	fileIDNotIn: [String!]
-	fileIDGT: String
-	fileIDGTE: String
-	fileIDLT: String
-	fileIDLTE: String
-	fileIDContains: String
-	fileIDHasPrefix: String
-	fileIDHasSuffix: String
-	fileIDIsNil: Boolean
-	fileIDNotNil: Boolean
-	fileIDEqualFold: String
-	fileIDContainsFold: String
-	"""
-	url field predicates
-	"""
-	url: String
-	urlNEQ: String
-	urlIn: [String!]
-	urlNotIn: [String!]
-	urlGT: String
-	urlGTE: String
-	urlLT: String
-	urlLTE: String
-	urlContains: String
-	urlHasPrefix: String
-	urlHasSuffix: String
-	urlIsNil: Boolean
-	urlNotNil: Boolean
-	urlEqualFold: String
-	urlContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -39245,6 +39398,42 @@ input ProcedureWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -39287,42 +39476,6 @@ input ProcedureWhereInput {
 	systemInternalIDNotNil: Boolean
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
-	"""
-	file_id field predicates
-	"""
-	fileID: ID
-	fileIDNEQ: ID
-	fileIDIn: [ID!]
-	fileIDNotIn: [ID!]
-	fileIDGT: ID
-	fileIDGTE: ID
-	fileIDLT: ID
-	fileIDLTE: ID
-	fileIDContains: ID
-	fileIDHasPrefix: ID
-	fileIDHasSuffix: ID
-	fileIDIsNil: Boolean
-	fileIDNotNil: Boolean
-	fileIDEqualFold: ID
-	fileIDContainsFold: ID
-	"""
-	url field predicates
-	"""
-	url: String
-	urlNEQ: String
-	urlIn: [String!]
-	urlNotIn: [String!]
-	urlGT: String
-	urlGTE: String
-	urlLT: String
-	urlLTE: String
-	urlContains: String
-	urlHasPrefix: String
-	urlHasSuffix: String
-	urlIsNil: Boolean
-	urlNotNil: Boolean
-	urlEqualFold: String
-	urlContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -52531,6 +52684,10 @@ type Subcontrol implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -53055,6 +53212,10 @@ type SubcontrolHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	"""
 	description of what the control is supposed to accomplish
 	"""
 	description: String
@@ -53242,6 +53403,7 @@ enum SubcontrolHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -53385,6 +53547,24 @@ input SubcontrolHistoryWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -53687,6 +53867,7 @@ Properties by which Subcontrol connections can be ordered.
 enum SubcontrolOrderField {
 	created_at
 	updated_at
+	title
 	STATUS
 	SOURCE
 	REFERENCE_FRAMEWORK
@@ -53805,6 +53986,24 @@ input SubcontrolWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	description field predicates
 	"""
@@ -61828,6 +62027,11 @@ input UpdateActionPlanInput {
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
 	"""
+	This will contain the url used to create or update the action_plan
+	"""
+	url: String
+	clearURL: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -61867,6 +62071,8 @@ input UpdateActionPlanInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	fileID: ID
+	clearFile: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -62071,6 +62277,11 @@ input UpdateControlInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	clearTitle: Boolean
 	"""
 	description of what the control is supposed to accomplish
 	"""
@@ -63164,7 +63375,7 @@ input UpdateInternalPolicyInput {
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
 	"""
-	This will contain the url used to create/update the policy
+	This will contain the url used to create or update the policy
 	"""
 	url: String
 	clearURL: Boolean
@@ -64050,6 +64261,11 @@ input UpdateProcedureInput {
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
 	"""
+	This will contain the url used to create or update the procedure
+	"""
+	url: String
+	clearURL: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -64059,11 +64275,6 @@ input UpdateProcedureInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
-	"""
-	This will contain the url used to create/update the procedure
-	"""
-	url: String
-	clearURL: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -64535,6 +64746,11 @@ input UpdateSubcontrolInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String
+	clearTitle: Boolean
 	"""
 	description of what the control is supposed to accomplish
 	"""

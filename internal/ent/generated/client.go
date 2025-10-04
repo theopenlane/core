@@ -1747,6 +1747,25 @@ func (c *ActionPlanClient) QueryPrograms(_m *ActionPlan) *ProgramQuery {
 	return query
 }
 
+// QueryFile queries the file edge of a ActionPlan.
+func (c *ActionPlanClient) QueryFile(_m *ActionPlan) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.FileTable, actionplan.FileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ActionPlanClient) Hooks() []Hook {
 	hooks := c.hooks.ActionPlan

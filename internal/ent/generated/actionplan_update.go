@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -450,6 +451,46 @@ func (_u *ActionPlanUpdate) ClearDismissedImprovementSuggestions() *ActionPlanUp
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ActionPlanUpdate) SetURL(v string) *ActionPlanUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableURL(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ActionPlanUpdate) ClearURL() *ActionPlanUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ActionPlanUpdate) SetFileID(v string) *ActionPlanUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableFileID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ActionPlanUpdate) ClearFileID() *ActionPlanUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ActionPlanUpdate) SetOwnerID(v string) *ActionPlanUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -630,6 +671,11 @@ func (_u *ActionPlanUpdate) AddPrograms(v ...*Program) *ActionPlanUpdate {
 	return _u.AddProgramIDs(ids...)
 }
 
+// SetFile sets the "file" edge to the File entity.
+func (_u *ActionPlanUpdate) SetFile(v *File) *ActionPlanUpdate {
+	return _u.SetFileID(v.ID)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return _u.mutation
@@ -714,6 +760,12 @@ func (_u *ActionPlanUpdate) RemovePrograms(v ...*Program) *ActionPlanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *ActionPlanUpdate) ClearFile() *ActionPlanUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -963,6 +1015,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(actionplan.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(actionplan.FieldURL, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)
@@ -1229,6 +1287,37 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1670,6 +1759,46 @@ func (_u *ActionPlanUpdateOne) ClearDismissedImprovementSuggestions() *ActionPla
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ActionPlanUpdateOne) SetURL(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableURL(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ActionPlanUpdateOne) ClearURL() *ActionPlanUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ActionPlanUpdateOne) SetFileID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableFileID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ActionPlanUpdateOne) ClearFileID() *ActionPlanUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ActionPlanUpdateOne) SetOwnerID(v string) *ActionPlanUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1850,6 +1979,11 @@ func (_u *ActionPlanUpdateOne) AddPrograms(v ...*Program) *ActionPlanUpdateOne {
 	return _u.AddProgramIDs(ids...)
 }
 
+// SetFile sets the "file" edge to the File entity.
+func (_u *ActionPlanUpdateOne) SetFile(v *File) *ActionPlanUpdateOne {
+	return _u.SetFileID(v.ID)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return _u.mutation
@@ -1934,6 +2068,12 @@ func (_u *ActionPlanUpdateOne) RemovePrograms(v ...*Program) *ActionPlanUpdateOn
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *ActionPlanUpdateOne) ClearFile() *ActionPlanUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
@@ -2214,6 +2354,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(actionplan.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(actionplan.FieldURL, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)
 	}
@@ -2479,6 +2625,37 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

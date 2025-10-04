@@ -348,6 +348,34 @@ func (_c *ProcedureHistoryCreate) SetDismissedImprovementSuggestions(v []string)
 	return _c
 }
 
+// SetURL sets the "url" field.
+func (_c *ProcedureHistoryCreate) SetURL(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableURL(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
+// SetFileID sets the "file_id" field.
+func (_c *ProcedureHistoryCreate) SetFileID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableFileID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ProcedureHistoryCreate) SetSystemOwned(v bool) *ProcedureHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -386,34 +414,6 @@ func (_c *ProcedureHistoryCreate) SetSystemInternalID(v string) *ProcedureHistor
 func (_c *ProcedureHistoryCreate) SetNillableSystemInternalID(v *string) *ProcedureHistoryCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
-	}
-	return _c
-}
-
-// SetFileID sets the "file_id" field.
-func (_c *ProcedureHistoryCreate) SetFileID(v string) *ProcedureHistoryCreate {
-	_c.mutation.SetFileID(v)
-	return _c
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_c *ProcedureHistoryCreate) SetNillableFileID(v *string) *ProcedureHistoryCreate {
-	if v != nil {
-		_c.SetFileID(*v)
-	}
-	return _c
-}
-
-// SetURL sets the "url" field.
-func (_c *ProcedureHistoryCreate) SetURL(v string) *ProcedureHistoryCreate {
-	_c.mutation.SetURL(v)
-	return _c
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_c *ProcedureHistoryCreate) SetNillableURL(v *string) *ProcedureHistoryCreate {
-	if v != nil {
-		_c.SetURL(*v)
 	}
 	return _c
 }
@@ -733,6 +733,14 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
+		_node.FileID = &value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(procedurehistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -744,14 +752,6 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
-	}
-	if value, ok := _c.mutation.FileID(); ok {
-		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
-		_node.FileID = &value
-	}
-	if value, ok := _c.mutation.URL(); ok {
-		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
-		_node.URL = &value
 	}
 	return _node, _spec
 }

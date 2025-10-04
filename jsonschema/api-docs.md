@@ -389,7 +389,7 @@ Config holds the configuration for the ent server
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |[**entityTypes**](#entconfigentitytypes)|`string[]`|||
-|[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
+|[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
 |[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
@@ -425,7 +425,7 @@ Config holds the configuration for the ent server
 <a name="entconfigsummarizer"></a>
 ### entConfig\.summarizer: object
 
-Summarizer holds configuration for the text summarization functionality
+Config holds configuration for the text summarization functionality
 
 
 **Properties**
@@ -433,7 +433,7 @@ Summarizer holds configuration for the text summarization functionality
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**type**|`string`|Type specifies the summarization algorithm to use<br/>||
-|[**llm**](#entconfigsummarizerllm)|`object`|SummarizerLLM contains configuration for multiple LLM providers<br/>||
+|[**llm**](#entconfigsummarizerllm)|`object`|LLM contains configuration for multiple LLM providers<br/>||
 |**maximumSentences**|`integer`|MaximumSentences specifies the maximum number of sentences in the summary<br/>||
 
 **Additional Properties:** not allowed  
@@ -452,7 +452,7 @@ Summarizer holds configuration for the text summarization functionality
 <a name="entconfigsummarizerllm"></a>
 #### entConfig\.summarizer\.llm: object
 
-SummarizerLLM contains configuration for multiple LLM providers
+LLM contains configuration for multiple LLM providers
 
 
 **Properties**

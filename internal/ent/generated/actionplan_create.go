@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -298,6 +299,34 @@ func (_c *ActionPlanCreate) SetDismissedImprovementSuggestions(v []string) *Acti
 	return _c
 }
 
+// SetURL sets the "url" field.
+func (_c *ActionPlanCreate) SetURL(v string) *ActionPlanCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableURL(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
+// SetFileID sets the "file_id" field.
+func (_c *ActionPlanCreate) SetFileID(v string) *ActionPlanCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableFileID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ActionPlanCreate) SetOwnerID(v string) *ActionPlanCreate {
 	_c.mutation.SetOwnerID(v)
@@ -468,6 +497,11 @@ func (_c *ActionPlanCreate) AddPrograms(v ...*Program) *ActionPlanCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_c *ActionPlanCreate) SetFile(v *File) *ActionPlanCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
@@ -737,6 +771,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(actionplan.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(actionplan.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -864,6 +902,24 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.FileTable,
+			Columns: []string{actionplan.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

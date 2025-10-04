@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -189,6 +191,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -341,6 +345,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":

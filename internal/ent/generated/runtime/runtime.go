@@ -240,9 +240,11 @@ func init() {
 
 	actionplan.Hooks[7] = actionplanMixinHooks7[2]
 
-	actionplan.Hooks[8] = actionplanMixinHooks8[0]
+	actionplan.Hooks[8] = actionplanMixinHooks7[3]
 
-	actionplan.Hooks[9] = actionplanMixinHooks9[0]
+	actionplan.Hooks[9] = actionplanMixinHooks8[0]
+
+	actionplan.Hooks[10] = actionplanMixinHooks9[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
 	actionplanMixinInters2 := actionplanMixin[2].Interceptors()
 	actionplanMixinInters8 := actionplanMixin[8].Interceptors()
@@ -395,7 +397,7 @@ func init() {
 	// actionplanhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplanhistory.DefaultDismissedImprovementSuggestions = actionplanhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	actionplanhistoryDescSystemOwned := actionplanhistoryFields[29].Descriptor()
+	actionplanhistoryDescSystemOwned := actionplanhistoryFields[31].Descriptor()
 	// actionplanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplanhistory.DefaultSystemOwned = actionplanhistoryDescSystemOwned.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -773,7 +775,7 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[32].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[33].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -2704,9 +2706,9 @@ func init() {
 
 	internalpolicy.Hooks[12] = internalpolicyMixinHooks10[2]
 
-	internalpolicy.Hooks[13] = internalpolicyHooks[0]
+	internalpolicy.Hooks[13] = internalpolicyMixinHooks10[3]
 
-	internalpolicy.Hooks[14] = internalpolicyHooks[1]
+	internalpolicy.Hooks[14] = internalpolicyHooks[0]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters2 := internalpolicyMixin[2].Interceptors()
 	internalpolicyMixinInters7 := internalpolicyMixin[7].Interceptors()
@@ -4756,11 +4758,11 @@ func init() {
 
 	procedure.Hooks[11] = procedureMixinHooks9[2]
 
-	procedure.Hooks[12] = procedureMixinHooks10[0]
+	procedure.Hooks[12] = procedureMixinHooks9[3]
 
-	procedure.Hooks[13] = procedureHooks[0]
+	procedure.Hooks[13] = procedureMixinHooks10[0]
 
-	procedure.Hooks[14] = procedureHooks[1]
+	procedure.Hooks[14] = procedureHooks[0]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters2 := procedureMixin[2].Interceptors()
 	procedureMixinInters7 := procedureMixin[7].Interceptors()
@@ -4921,7 +4923,7 @@ func init() {
 	// procedurehistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	procedurehistory.DefaultDismissedImprovementSuggestions = procedurehistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// procedurehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	procedurehistoryDescSystemOwned := procedurehistoryFields[30].Descriptor()
+	procedurehistoryDescSystemOwned := procedurehistoryFields[32].Descriptor()
 	// procedurehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedurehistory.DefaultSystemOwned = procedurehistoryDescSystemOwned.Default.(bool)
 	// procedurehistoryDescID is the schema descriptor for id field.
@@ -5862,7 +5864,7 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[32].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[33].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.

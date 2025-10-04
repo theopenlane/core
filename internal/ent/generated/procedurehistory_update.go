@@ -465,6 +465,46 @@ func (_u *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *Proced
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ProcedureHistoryUpdate) SetURL(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableURL(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureHistoryUpdate) ClearURL() *ProcedureHistoryUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureHistoryUpdate) SetFileID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableFileID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureHistoryUpdate) ClearFileID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureHistoryUpdate) SetInternalNotes(v string) *ProcedureHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -502,46 +542,6 @@ func (_u *ProcedureHistoryUpdate) SetNillableSystemInternalID(v *string) *Proced
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ProcedureHistoryUpdate) ClearSystemInternalID() *ProcedureHistoryUpdate {
 	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureHistoryUpdate) SetFileID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableFileID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureHistoryUpdate) ClearFileID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureHistoryUpdate) SetURL(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableURL(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureHistoryUpdate) ClearURL() *ProcedureHistoryUpdate {
-	_u.mutation.ClearURL()
 	return _u
 }
 
@@ -804,6 +804,18 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -818,18 +830,6 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
-	}
-	if _u.mutation.FileIDCleared() {
-		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
-	}
-	if _u.mutation.URLCleared() {
-		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1287,6 +1287,46 @@ func (_u *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *Pro
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ProcedureHistoryUpdateOne) SetURL(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableURL(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureHistoryUpdateOne) ClearURL() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetFileID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableFileID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearFileID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureHistoryUpdateOne) SetInternalNotes(v string) *ProcedureHistoryUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1324,46 +1364,6 @@ func (_u *ProcedureHistoryUpdateOne) SetNillableSystemInternalID(v *string) *Pro
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ProcedureHistoryUpdateOne) ClearSystemInternalID() *ProcedureHistoryUpdateOne {
 	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetFileID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableFileID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearFileID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureHistoryUpdateOne) SetURL(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableURL(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureHistoryUpdateOne) ClearURL() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearURL()
 	return _u
 }
 
@@ -1656,6 +1656,18 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -1670,18 +1682,6 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
-	}
-	if _u.mutation.FileIDCleared() {
-		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
-	}
-	if _u.mutation.URLCleared() {
-		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

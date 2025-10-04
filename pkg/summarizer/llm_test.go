@@ -6,7 +6,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
 func TestLLM_Summarize(t *testing.T) {
@@ -40,16 +39,14 @@ func TestLLM_Summarize(t *testing.T) {
 		},
 	}
 
-	summarizer, err := newLLMSummarizer(entconfig.Config{
-		Summarizer: entconfig.Summarizer{
-			Type: entconfig.SummarizerTypeLlm,
-			LLM: entconfig.SummarizerLLM{
-				Provider: entconfig.LLMProviderOpenai,
-				OpenAI: entconfig.OpenAIConfig{
-					GenericLLMConfig: entconfig.GenericLLMConfig{
-						Model:  "gpt-4",
-						APIKey: apiKey,
-					},
+	summarizer, err := newLLMSummarizer(Config{
+		Type: TypeLlm,
+		LLM: LLM{
+			Provider: LLMProviderOpenai,
+			OpenAI: OpenAIConfig{
+				GenericLLMConfig: GenericLLMConfig{
+					Model:  "gpt-4",
+					APIKey: apiKey,
 				},
 			},
 		},
@@ -76,23 +73,21 @@ func TestLLM_Summarize(t *testing.T) {
 func TestNewLLMSummarizer(t *testing.T) {
 	tests := []struct {
 		name    string
-		cfg     entconfig.Config
+		cfg     Config
 		wantErr bool
 	}{
 		{
 			name: "anthropic with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderAnthropic,
-						Anthropic: entconfig.AnthropicConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "claude-2",
-								APIKey: "test-key",
-							},
-							BetaHeader:           "beta-header",
-							LegacyTextCompletion: true,
+			cfg: Config{
+				LLM: LLM{
+					Provider: LLMProviderAnthropic,
+					Anthropic: AnthropicConfig{
+						GenericLLMConfig: GenericLLMConfig{
+							Model:  "claude-2",
+							APIKey: "test-key",
 						},
+						BetaHeader:           "beta-header",
+						LegacyTextCompletion: true,
 					},
 				},
 			},
@@ -100,18 +95,16 @@ func TestNewLLMSummarizer(t *testing.T) {
 		},
 		{
 			name: "cloudflare with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderCloudflare,
-						Cloudflare: entconfig.CloudflareConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "@cf/meta/llama-2-7b-chat-int8",
-								APIKey: "test-key",
-							},
-							AccountID: "account-id",
-							ServerURL: "https://api.cloudflare.com",
+			cfg: Config{
+				LLM: LLM{
+					Provider: LLMProviderCloudflare,
+					Cloudflare: CloudflareConfig{
+						GenericLLMConfig: GenericLLMConfig{
+							Model:  "@cf/meta/llama-2-7b-chat-int8",
+							APIKey: "test-key",
 						},
+						AccountID: "account-id",
+						ServerURL: "https://api.cloudflare.com",
 					},
 				},
 			},
@@ -119,17 +112,15 @@ func TestNewLLMSummarizer(t *testing.T) {
 		},
 		{
 			name: "openai with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderOpenai,
-						OpenAI: entconfig.OpenAIConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "gpt-4",
-								APIKey: "test-key",
-							},
-							OrganizationID: "org-123",
+			cfg: Config{
+				LLM: LLM{
+					Provider: LLMProviderOpenai,
+					OpenAI: OpenAIConfig{
+						GenericLLMConfig: GenericLLMConfig{
+							Model:  "gpt-4",
+							APIKey: "test-key",
 						},
+						OrganizationID: "org-123",
 					},
 				},
 			},
@@ -137,25 +128,21 @@ func TestNewLLMSummarizer(t *testing.T) {
 		},
 		{
 			name: "unsupported provider",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: "unsupported",
-					},
+			cfg: Config{
+				LLM: LLM{
+					Provider: "unsupported",
 				},
 			},
 			wantErr: true,
 		},
 		{
 			name: "missing required api key for anthropic",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderAnthropic,
-						Anthropic: entconfig.AnthropicConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model: "claude-2",
-							},
+			cfg: Config{
+				LLM: LLM{
+					Provider: LLMProviderAnthropic,
+					Anthropic: AnthropicConfig{
+						GenericLLMConfig: GenericLLMConfig{
+							Model: "claude-2",
 						},
 					},
 				},

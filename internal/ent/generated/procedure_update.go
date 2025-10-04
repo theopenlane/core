@@ -475,6 +475,46 @@ func (_u *ProcedureUpdate) ClearDismissedImprovementSuggestions() *ProcedureUpda
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ProcedureUpdate) SetURL(v string) *ProcedureUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableURL(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureUpdate) ClearURL() *ProcedureUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureUpdate) SetFileID(v string) *ProcedureUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableFileID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureUpdate) ClearFileID() *ProcedureUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureUpdate) SetInternalNotes(v string) *ProcedureUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -512,46 +552,6 @@ func (_u *ProcedureUpdate) SetNillableSystemInternalID(v *string) *ProcedureUpda
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ProcedureUpdate) ClearSystemInternalID() *ProcedureUpdate {
 	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureUpdate) SetFileID(v string) *ProcedureUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureUpdate) SetNillableFileID(v *string) *ProcedureUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureUpdate) ClearFileID() *ProcedureUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureUpdate) SetURL(v string) *ProcedureUpdate {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureUpdate) SetNillableURL(v *string) *ProcedureUpdate {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureUpdate) ClearURL() *ProcedureUpdate {
-	_u.mutation.ClearURL()
 	return _u
 }
 
@@ -1171,6 +1171,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedure.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedure.FieldURL, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedure.FieldSystemOwned, field.TypeBool)
 	}
@@ -1185,12 +1191,6 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedure.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedure.FieldURL, field.TypeString, value)
-	}
-	if _u.mutation.URLCleared() {
-		_spec.ClearField(procedure.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2204,6 +2204,46 @@ func (_u *ProcedureUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureU
 	return _u
 }
 
+// SetURL sets the "url" field.
+func (_u *ProcedureUpdateOne) SetURL(v string) *ProcedureUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableURL(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureUpdateOne) ClearURL() *ProcedureUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureUpdateOne) SetFileID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableFileID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureUpdateOne) ClearFileID() *ProcedureUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureUpdateOne) SetInternalNotes(v string) *ProcedureUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -2241,46 +2281,6 @@ func (_u *ProcedureUpdateOne) SetNillableSystemInternalID(v *string) *ProcedureU
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ProcedureUpdateOne) ClearSystemInternalID() *ProcedureUpdateOne {
 	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureUpdateOne) SetFileID(v string) *ProcedureUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureUpdateOne) SetNillableFileID(v *string) *ProcedureUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureUpdateOne) ClearFileID() *ProcedureUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureUpdateOne) SetURL(v string) *ProcedureUpdateOne {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureUpdateOne) SetNillableURL(v *string) *ProcedureUpdateOne {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureUpdateOne) ClearURL() *ProcedureUpdateOne {
-	_u.mutation.ClearURL()
 	return _u
 }
 
@@ -2930,6 +2930,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedure.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedure.FieldURL, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedure.FieldSystemOwned, field.TypeBool)
 	}
@@ -2944,12 +2950,6 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedure.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedure.FieldURL, field.TypeString, value)
-	}
-	if _u.mutation.URLCleared() {
-		_spec.ClearField(procedure.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

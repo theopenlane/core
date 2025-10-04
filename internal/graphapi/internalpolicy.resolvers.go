@@ -35,7 +35,7 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 }
 
 // CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
-func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
 	var internalPolicyInput generated.CreateInternalPolicyInput
 
 	if ownerID != nil && *ownerID != "" {

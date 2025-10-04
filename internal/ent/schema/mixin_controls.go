@@ -111,6 +111,13 @@ func (ControlMixin) Annotations() []schema.Annotation {
 
 // controlFields are fields use by both Control and Subcontrol schemas
 var controlFields = []ent.Field{
+	field.String("title").
+		Optional().
+		Annotations(
+			entx.FieldSearchable(),
+			entgql.OrderField("title"),
+		).
+		Comment("human readable title of the control for quick identification"),
 	field.Text("description").
 		Optional().
 		Annotations(

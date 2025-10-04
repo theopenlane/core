@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -37,6 +38,7 @@ type ActionPlanQuery struct {
 	withRisks         *RiskQuery
 	withControls      *ControlQuery
 	withPrograms      *ProgramQuery
+	withFile          *FileQuery
 	withFKs           bool
 	loadTotal         []func(context.Context, []*ActionPlan) error
 	modifiers         []func(*sql.Selector)
@@ -223,6 +225,31 @@ func (_q *ActionPlanQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFile chains the current query on the "file" edge.
+func (_q *ActionPlanQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.FileTable, actionplan.FileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -427,6 +454,7 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		withRisks:    _q.withRisks.Clone(),
 		withControls: _q.withControls.Clone(),
 		withPrograms: _q.withPrograms.Clone(),
+		withFile:     _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -497,6 +525,17 @@ func (_q *ActionPlanQuery) WithPrograms(opts ...func(*ProgramQuery)) *ActionPlan
 		opt(query)
 	}
 	_q.withPrograms = query
+	return _q
+}
+
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithFile(opts ...func(*FileQuery)) *ActionPlanQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFile = query
 	return _q
 }
 
@@ -585,13 +624,14 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withOwner != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
 			_q.withPrograms != nil,
+			_q.withFile != nil,
 		}
 	)
 	if withFKs {
@@ -656,6 +696,12 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *ActionPlan) { n.Edges.Programs = []*Program{} },
 			func(n *ActionPlan, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -961,6 +1007,38 @@ func (_q *ActionPlanQuery) loadPrograms(ctx context.Context, query *ProgramQuery
 	}
 	return nil
 }
+func (_q *ActionPlanQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		if nodes[i].FileID == nil {
+			continue
+		}
+		fk := *nodes[i].FileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *ActionPlanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1000,6 +1078,9 @@ func (_q *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldOwnerID)
+		}
+		if _q.withFile != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

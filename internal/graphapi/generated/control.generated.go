@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "referenceID":
@@ -201,6 +203,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "referenceID":
@@ -365,6 +369,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "referenceID":
@@ -529,6 +535,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "title":
+				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "referenceID":

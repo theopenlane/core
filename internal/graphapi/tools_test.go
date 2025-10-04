@@ -159,8 +159,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	entCfg := &entconfig.Config{
 		EntityTypes: []string{"vendor"},
-		Summarizer: entconfig.Summarizer{
-			Type:             entconfig.SummarizerTypeLexrank,
+		Summarizer: summarizer.Config{
+			Type:             summarizer.TypeLexrank,
 			MaximumSentences: 60,
 		},
 		Modules: entconfig.Modules{
@@ -179,7 +179,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// now disable email validation for tests so that we don't have to make real email addresses
 	entCfg.EmailValidation.Enabled = false
 
-	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
+	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
 	requireNoError(err)
 
 	pool := soiree.NewPondPool(
