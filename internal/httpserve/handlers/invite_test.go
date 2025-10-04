@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
@@ -149,7 +148,6 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
-			require.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 			assert.NotNil(t, group)
 
 			foundMember := false

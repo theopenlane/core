@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -247,7 +248,6 @@ func HookInviteAccepted() ent.Hook {
 			// delete the invite that has been accepted
 			if err := deleteInvite(ctx, m); err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to delete invite")
-
 				return retValue, err
 			}
 
@@ -527,18 +527,9 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 
 	emailDomain := strings.SplitAfter(email, "@")[1]
 
-	allowed := false
-
-	for _, domain := range orgSetting.AllowedEmailDomains {
-		if domain == emailDomain {
-			allowed = true
-			break
-		}
+	if slices.Contains(orgSetting.AllowedEmailDomains, emailDomain) {
+		return nil
 	}
 
-	if !allowed {
-		return ErrEmailDomainNotAllowed
-	}
-
-	return nil
+	return ErrEmailDomainNotAllowed
 }
