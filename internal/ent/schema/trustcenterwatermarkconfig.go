@@ -108,7 +108,7 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
 				withParents(TrustCenter{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins(t)

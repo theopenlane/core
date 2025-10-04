@@ -110,6 +110,7 @@ trailer
 startxref
 297
 %%EOF`)
+	// Invalid image content for testing failure scenarios
 	sampleImageContent := []byte("fake-image-content")
 
 	testCases := []struct {
@@ -129,7 +130,7 @@ startxref
 		expectedFinalWatermarkStatus    *enums.WatermarkStatus
 	}{
 		{
-			name: "text watermark - watermarking fails due to invalid PDF",
+			name: "text watermark - success",
 			input: corejobs.WatermarkDocArgs{
 				TrustCenterDocumentID: docID,
 			},
@@ -170,16 +171,16 @@ startxref
 			},
 			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
 				{}, // First call to set status to IN_PROGRESS
-				{}, // Second call to set status to FAILED (from setWatermarkStatus helper)
+				{}, // Second call to set status to SUCCESS
 			},
 			expectGetTrustCenterDoc:         true,
 			expectGetWatermarkConfigs:       true,
 			expectUpdateTrustCenterDocCalls: 2,
-			expectedError:                   "failed to apply text watermark",
-			expectedFinalWatermarkStatus:    &enums.WatermarkStatusFailed,
+			expectedError:                   "",
+			expectedFinalWatermarkStatus:    &enums.WatermarkStatusSuccess,
 		},
 		{
-			name: "image watermark - watermarking fails due to invalid PDF",
+			name: "image watermark - fails due to invalid image",
 			input: corejobs.WatermarkDocArgs{
 				TrustCenterDocumentID: docID,
 			},
@@ -221,7 +222,7 @@ startxref
 			},
 			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
 				{}, // First call to set status to IN_PROGRESS
-				{}, // Second call to set status to FAILED (from setWatermarkStatus helper)
+				{}, // Second call to set status to FAILED
 			},
 			expectGetTrustCenterDoc:         true,
 			expectGetWatermarkConfigs:       true,

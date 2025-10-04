@@ -154,6 +154,11 @@ func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
 		return "", nil
 	}
 
+	// For trust center docs, we need to get the organization through the trust center
+	if strings.EqualFold(f.CorrelatedObjectType, "TrustCenterDoc") {
+		return getOrgIDFromTrustCenterDoc(ctx, f.CorrelatedObjectID)
+	}
+
 	// get the organization ID from the context, ignore the error if it is not set
 	// and instead check the parent object for the owner ID
 	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
@@ -186,6 +191,51 @@ func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
 	}
 
 	return orgID, nil
+}
+
+// isEntityWithoutOwnerID checks if the entity type doesn't have an owner_id column
+func isEntityWithoutOwnerID(entityType string) bool {
+	entitiesWithoutOwnerID := []string{
+		"TrustCenterDoc", // trust center docs don't have owner_id, they get ownership through trust center
+	}
+
+	for _, entity := range entitiesWithoutOwnerID {
+		if strings.EqualFold(entityType, entity) {
+			return true
+		}
+	}
+	return false
+}
+
+// getOrgIDFromTrustCenterDoc gets the organization ID for a trust center doc by querying through the trust center
+func getOrgIDFromTrustCenterDoc(ctx context.Context, trustCenterDocID string) (string, error) {
+	var rows sql.Rows
+	query := `
+		SELECT tc.owner_id
+		FROM trust_center_docs tcd
+		JOIN trust_centers tc ON tcd.trust_center_id = tc.id
+		WHERE tcd.id = $1
+	`
+
+	if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{trustCenterDocID}, &rows); err != nil {
+		return "", err
+	}
+
+	if rows.Err() != nil {
+		return "", rows.Err()
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+		var ownerID string
+		if err := rows.Scan(&ownerID); err != nil {
+			return "", err
+		}
+		return ownerID, nil
+	}
+
+	return "", nil
 }
 
 // txFileClientFromContext returns the file client from the context if it exists
