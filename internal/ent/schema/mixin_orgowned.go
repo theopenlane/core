@@ -248,13 +248,9 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
-	fmt.Println("ALLOW EMTPY")
-
 	if o.AllowEmptyForSystemAdmin {
-		fmt.Println("CHECKING")
 		allow, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err == nil && allow {
-			fmt.Println("ALLOWING")
 			return true
 		}
 	}

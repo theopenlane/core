@@ -25,7 +25,12 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 				}
 
 				m.SetFileID(fileIDs[0])
+				m.ClearText()
+			} else if text, textSet := m.Text(); textSet && text != "" {
+				m.ClearLogoID()
+				m.ClearFile()
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)

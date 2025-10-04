@@ -193,20 +193,6 @@ func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
 	return orgID, nil
 }
 
-// isEntityWithoutOwnerID checks if the entity type doesn't have an owner_id column
-func isEntityWithoutOwnerID(entityType string) bool {
-	entitiesWithoutOwnerID := []string{
-		"TrustCenterDoc", // trust center docs don't have owner_id, they get ownership through trust center
-	}
-
-	for _, entity := range entitiesWithoutOwnerID {
-		if strings.EqualFold(entityType, entity) {
-			return true
-		}
-	}
-	return false
-}
-
 // getOrgIDFromTrustCenterDoc gets the organization ID for a trust center doc by querying through the trust center
 func getOrgIDFromTrustCenterDoc(ctx context.Context, trustCenterDocID string) (string, error) {
 	var rows sql.Rows

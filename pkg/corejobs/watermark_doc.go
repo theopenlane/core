@@ -8,13 +8,13 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog"
 
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -69,7 +69,7 @@ func (w *WatermarkDocWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *Wat
 func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkDocArgs]) error {
 	logger := zerolog.Ctx(ctx).With().Str("trust_center_document_id", job.Args.TrustCenterDocumentID).Logger()
 	logger.Info().Msg("starting document watermarking")
-	// Initialize Openlane client if not already set
+
 	if w.olClient == nil {
 		olconfig := openlaneclient.NewDefaultConfig()
 
@@ -83,12 +83,10 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 			BearerToken: w.Config.OpenlaneAPIToken,
 		}))
 
-		cl, err := openlaneclient.New(olconfig, opts...)
+		w.olClient, err = openlaneclient.New(olconfig, opts...)
 		if err != nil {
 			return err
 		}
-
-		w.olClient = cl
 	}
 
 	// Set status to in progress
@@ -109,8 +107,6 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		return fmt.Errorf("failed to fetch trust center document: %w", err)
 	}
 
-	fmt.Printf("%+v\n", trustCenterDoc)
-
 	if trustCenterDoc.TrustCenterDoc.OriginalFile == nil || trustCenterDoc.TrustCenterDoc.OriginalFile.PresignedURL == nil || *trustCenterDoc.TrustCenterDoc.OriginalFile.PresignedURL == "" {
 		logger.Error().Msg("trust center document has no file or presigned URL")
 		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
@@ -122,8 +118,6 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
 		return ErrTrustCenterDocumentNoTrustCenterID
 	}
-
-	fmt.Println(*trustCenterDoc.TrustCenterDoc.TrustCenterID)
 
 	// Fetch the trust center watermark config
 	watermarkConfigs, err := w.olClient.GetTrustCenterWatermarkConfigs(ctx, nil, nil, &openlaneclient.TrustCenterWatermarkConfigWhereInput{
@@ -151,38 +145,9 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		return fmt.Errorf("failed to download original document: %w", err)
 	}
 
-	// Create temporary file for the original document
-	originalTempFile, err := os.CreateTemp("", "original-*.pdf")
-	if err != nil {
-		logger.Error().Err(err).Msg("failed to create temporary file for original document")
-		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-		return fmt.Errorf("failed to create temporary file for original document: %w", err)
-	}
-	defer func() {
-		originalTempFile.Close()
-		os.Remove(originalTempFile.Name())
-	}()
-
-	// Write original document to temporary file
-	if _, err := originalTempFile.Write(originalDocBytes); err != nil {
-		logger.Error().Err(err).Msg("failed to write original document to temporary file")
-		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-		return fmt.Errorf("failed to write original document to temporary file: %w", err)
-	}
-	originalTempFile.Close() // Close file so pdfcpu can read it
-
-	// Create temporary file for the watermarked document
-	watermarkedTempFile, err := os.CreateTemp("", "watermarked-*.pdf")
-	if err != nil {
-		logger.Error().Err(err).Msg("failed to create temporary file for watermarked document")
-		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-		return fmt.Errorf("failed to create temporary file for watermarked document: %w", err)
-	}
-	defer func() {
-		watermarkedTempFile.Close()
-		os.Remove(watermarkedTempFile.Name())
-	}()
-	watermarkedTempFile.Close() // Close file so pdfcpu can write to it
+	// Create a buffer for the watermarked document
+	var watermarkedDoc bytes.Buffer
+	originalReader := bytes.NewReader(originalDocBytes)
 
 	// Convert client config to generated config for watermarking functions
 	genConfig := w.convertWatermarkConfig(watermarkConfig)
@@ -191,7 +156,7 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 	switch {
 	case watermarkConfig.Text != nil && *watermarkConfig.Text != "":
 		// Text watermark
-		err = watermarkPDFWithText(originalTempFile.Name(), watermarkedTempFile.Name(), genConfig)
+		err = watermarkPDFWithText(originalReader, &watermarkedDoc, genConfig)
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to apply text watermark")
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
@@ -205,28 +170,8 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
 			return fmt.Errorf("failed to download watermark image: %w", err)
 		}
-
-		// Create temporary file for the watermark image with proper extension
-		imageTempFile, err := os.CreateTemp("", "watermark-image-*.png")
-		if err != nil {
-			logger.Error().Err(err).Msg("failed to create temporary file for watermark image")
-			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-			return fmt.Errorf("failed to create temporary file for watermark image: %w", err)
-		}
-		defer func() {
-			imageTempFile.Close()
-			os.Remove(imageTempFile.Name())
-		}()
-
-		// Write image to temporary file
-		if _, err := imageTempFile.Write(imageBytes); err != nil {
-			logger.Error().Err(err).Msg("failed to write watermark image to temporary file")
-			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-			return fmt.Errorf("failed to write watermark image to temporary file: %w", err)
-		}
-		imageTempFile.Close() // Close file so pdfcpu can read it
-
-		err = watermarkPDFWithImage(originalTempFile.Name(), watermarkedTempFile.Name(), imageTempFile.Name(), genConfig)
+		imageReader := bytes.NewReader(imageBytes)
+		err = watermarkPDFWithImage(originalReader, &watermarkedDoc, imageReader, genConfig)
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to apply image watermark")
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
@@ -238,26 +183,16 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		return ErrWatermarkConfigNoTextOrImage
 	}
 
-	// Read the watermarked document from the temporary file
-	watermarkedDocBytes, err := os.ReadFile(watermarkedTempFile.Name())
-	if err != nil {
-		logger.Error().Err(err).Msg("failed to read watermarked document from temporary file")
-		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
-		return fmt.Errorf("failed to read watermarked document from temporary file: %w", err)
-	}
-
 	uploadFile := &graphql.Upload{
-		File:        bytes.NewReader(watermarkedDocBytes),
-		Filename:    trustCenterDoc.TrustCenterDoc.OriginalFile.ProvidedFileName,
-		Size:        int64(len(watermarkedDocBytes)),
-		ContentType: http.DetectContentType(watermarkedDocBytes),
+		File:        bytes.NewReader(watermarkedDoc.Bytes()),
+		Filename:    fmt.Sprintf("watermarked_%s", trustCenterDoc.TrustCenterDoc.OriginalFile.ProvidedFileName),
+		Size:        int64(watermarkedDoc.Len()),
+		ContentType: http.DetectContentType(watermarkedDoc.Bytes()),
 	}
 	// Update the trust center document status to success
 	successStatus := enums.WatermarkStatusSuccess
-	originalFileID := trustCenterDoc.TrustCenterDoc.FileID
 	_, err = w.olClient.UpdateTrustCenterDoc(ctx, job.Args.TrustCenterDocumentID, openlaneclient.UpdateTrustCenterDocInput{
 		WatermarkStatus: &successStatus,
-		OriginalFileID:  originalFileID,
 	}, nil, uploadFile)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to update trust center document status")
@@ -269,46 +204,42 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 	return nil
 }
 
-func watermarkPDFWithText(inputFile, outputFile string, config *generated.TrustCenterWatermarkConfig) error {
+func watermarkPDFWithText(rs io.ReadSeeker, w io.Writer, config *generated.TrustCenterWatermarkConfig) error {
 	// Create watermark description string
 	// Format: "text:<text>, f:<font>, p:<points>, c:<color>, op:<opacity>, rot:<rotation>, pos:<position>"
-	wmDesc := fmt.Sprintf("fontname:Helvetica, points:%d, fillcolor:%s, op:%.2f, rot:%.0f, pos:c",
+	wmDesc := fmt.Sprintf("fontname:Helvetica, points:%d, fillcolor:%s, op:%.2f, rot:%.0f",
 		int(config.FontSize),
 		config.Color,
 		config.Opacity,
 		config.Rotation,
 	)
-
-	fmt.Printf("Watermark description: %s\n", wmDesc)
-
 	// Define watermark parameters
 	selectedPages := []string{"1-"} // Apply to all pages. Use `nil` for all pages.
 	onTop := true                   // true = watermark appears over content; false = under content
-
-	// Apply text watermark to PDF using file-based operation
-	if err := api.AddTextWatermarksFile(inputFile, outputFile, selectedPages, onTop, config.Text, wmDesc, nil); err != nil {
-		return fmt.Errorf("failed to apply watermark: %v", err)
+	wm, err := api.TextWatermark(config.Text, wmDesc, onTop, false, types.POINTS)
+	if err != nil {
+		return err
 	}
 
-	return nil
+	return api.AddWatermarks(rs, w, selectedPages, wm, nil)
 }
 
-func watermarkPDFWithImage(inputFile, outputFile, imageFile string, config *generated.TrustCenterWatermarkConfig) error {
+func watermarkPDFWithImage(rs io.ReadSeeker, w io.Writer, imgReader io.Reader, config *generated.TrustCenterWatermarkConfig) error {
 	// Create image watermark description
-	wmDesc := fmt.Sprintf("op:%.2f, rot:%.0f, pos:c",
+	wmDesc := fmt.Sprintf("op:%.2f, rot:%.0f",
 		config.Opacity,
 		config.Rotation,
 	)
 
-	fmt.Printf("Image watermark description: %s\n", wmDesc)
-
-	// Apply image watermark to PDF using file-based operation
-	err := api.AddImageWatermarksFile(inputFile, outputFile, nil, true, imageFile, wmDesc, nil)
+	selectedPages := []string{"1-"} // Apply to all pages. Use `nil` for all pages.
+	onTop := true                   // true = watermark appears over content; false = under content
+	unit := types.POINTS
+	wm, err := api.ImageWatermarkForReader(imgReader, wmDesc, onTop, false, unit)
 	if err != nil {
-		return fmt.Errorf("failed to apply image watermark: %v", err)
+		return err
 	}
 
-	return nil
+	return api.AddWatermarks(rs, w, selectedPages, wm, nil)
 }
 
 // setWatermarkStatus is a helper function to set the watermark status

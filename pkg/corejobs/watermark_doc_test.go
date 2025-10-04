@@ -110,7 +110,11 @@ trailer
 startxref
 297
 %%EOF`)
-	// Invalid image content for testing failure scenarios
+	// Invalid PDF content that will cause watermarking to fail
+	invalidPDFContent := []byte(`%PDF-1.4
+This is not a valid PDF file content.
+It lacks proper PDF structure and will cause parsing errors.
+%%EOF`)
 	sampleImageContent := []byte("fake-image-content")
 
 	testCases := []struct {
@@ -171,12 +175,11 @@ startxref
 			},
 			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
 				{}, // First call to set status to IN_PROGRESS
-				{}, // Second call to set status to SUCCESS
+				{}, // Second call to set status to SUCCESS with file upload
 			},
 			expectGetTrustCenterDoc:         true,
 			expectGetWatermarkConfigs:       true,
 			expectUpdateTrustCenterDocCalls: 2,
-			expectedError:                   "",
 			expectedFinalWatermarkStatus:    &enums.WatermarkStatusSuccess,
 		},
 		{
@@ -186,7 +189,7 @@ startxref
 			},
 			mockFileServerResponses: map[string][]byte{
 				"/original-file":   samplePDFContent,
-				"/watermark-image": sampleImageContent,
+				"/watermark-image": sampleImageContent, // This is not a valid image
 			},
 			getTrustCenterDocResponse: &openlaneclient.GetTrustCenterDocByID{
 				TrustCenterDoc: openlaneclient.GetTrustCenterDocByID_TrustCenterDoc{
@@ -223,6 +226,107 @@ startxref
 			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
 				{}, // First call to set status to IN_PROGRESS
 				{}, // Second call to set status to FAILED
+			},
+			expectGetTrustCenterDoc:         true,
+			expectGetWatermarkConfigs:       true,
+			expectUpdateTrustCenterDocCalls: 2,
+			expectedError:                   "failed to apply image watermark",
+			expectedFinalWatermarkStatus:    &enums.WatermarkStatusFailed,
+		},
+		{
+			name: "text watermark - watermarking fails due to invalid PDF",
+			input: corejobs.WatermarkDocArgs{
+				TrustCenterDocumentID: docID,
+			},
+			mockFileServerResponses: map[string][]byte{
+				"/original-file": invalidPDFContent,
+			},
+			getTrustCenterDocResponse: &openlaneclient.GetTrustCenterDocByID{
+				TrustCenterDoc: openlaneclient.GetTrustCenterDocByID_TrustCenterDoc{
+					ID:            docID,
+					FileID:        &fileID,
+					TrustCenterID: &trustCenterID,
+					OriginalFile: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{
+						ID:               originalFileID,
+						ProvidedFileName: "test.pdf",
+						PresignedURL:     stringPtr("/original-file"),
+					},
+					File: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_File{
+						PresignedURL: stringPtr("/original-file"),
+					},
+				},
+			},
+			getWatermarkConfigsResponse: &openlaneclient.GetTrustCenterWatermarkConfigs{
+				TrustCenterWatermarkConfigs: openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{
+					Edges: []*openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges{
+						{
+							Node: &openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{
+								ID:            watermarkConfigID,
+								TrustCenterID: &trustCenterID,
+								Text:          stringPtr("CONFIDENTIAL"),
+								FontSize:      float64Ptr(12.0),
+								Opacity:       float64Ptr(0.5),
+								Rotation:      float64Ptr(45.0),
+								Color:         stringPtr("red"),
+							},
+						},
+					},
+				},
+			},
+			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
+				{}, // First call to set status to IN_PROGRESS
+				{}, // Second call to set status to FAILED (from setWatermarkStatus helper)
+			},
+			expectGetTrustCenterDoc:         true,
+			expectGetWatermarkConfigs:       true,
+			expectUpdateTrustCenterDocCalls: 2,
+			expectedError:                   "failed to apply text watermark",
+			expectedFinalWatermarkStatus:    &enums.WatermarkStatusFailed,
+		},
+		{
+			name: "image watermark - watermarking fails due to invalid PDF",
+			input: corejobs.WatermarkDocArgs{
+				TrustCenterDocumentID: docID,
+			},
+			mockFileServerResponses: map[string][]byte{
+				"/original-file":   invalidPDFContent,
+				"/watermark-image": sampleImageContent,
+			},
+			getTrustCenterDocResponse: &openlaneclient.GetTrustCenterDocByID{
+				TrustCenterDoc: openlaneclient.GetTrustCenterDocByID_TrustCenterDoc{
+					ID:            docID,
+					FileID:        &fileID,
+					TrustCenterID: &trustCenterID,
+					OriginalFile: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{
+						ID:               originalFileID,
+						ProvidedFileName: "test.pdf",
+						PresignedURL:     stringPtr("/original-file"),
+					},
+					File: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_File{
+						PresignedURL: stringPtr("/original-file"),
+					},
+				},
+			},
+			getWatermarkConfigsResponse: &openlaneclient.GetTrustCenterWatermarkConfigs{
+				TrustCenterWatermarkConfigs: openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{
+					Edges: []*openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges{
+						{
+							Node: &openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{
+								ID:            watermarkConfigID,
+								TrustCenterID: &trustCenterID,
+								File: &openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node_File{
+									PresignedURL: stringPtr("/watermark-image"),
+								},
+								Opacity:  float64Ptr(0.3),
+								Rotation: float64Ptr(0.0),
+							},
+						},
+					},
+				},
+			},
+			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
+				{}, // First call to set status to IN_PROGRESS
+				{}, // Second call to set status to FAILED (from setWatermarkStatus helper)
 			},
 			expectGetTrustCenterDoc:         true,
 			expectGetWatermarkConfigs:       true,
