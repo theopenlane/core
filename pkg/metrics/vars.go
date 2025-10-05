@@ -82,6 +82,12 @@ var (
 		Buckets: prometheus.DefBuckets,
 	}, []string{"operation"})
 
+	// Impersonations counts impersonation events by action type (start/end)
+	Impersonations = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_impersonations_total",
+		Help: "The total number of impersonation events by action type",
+	}, []string{"type"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -92,6 +98,7 @@ var (
 		QueueTasksPushFailures,
 		GraphQLOperationTotal,
 		GraphQLOperationDuration,
+		Impersonations,
 		RequestValidations,
 		HandlerErrors,
 		HandlerResults,

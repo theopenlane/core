@@ -54,6 +54,7 @@ query GetAllJobRunnerTokens {
     }
   }
 }
+
 query GetJobRunnerTokenByID($jobRunnerTokenId: ID!) {
   jobRunnerToken(id: $jobRunnerTokenId) {
     createdAt

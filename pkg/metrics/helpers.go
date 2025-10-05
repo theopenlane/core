@@ -64,6 +64,12 @@ func (l LabelValues) ForGraphQLOperation() []string {
 	return []string{l.Operation, l.Success}
 }
 
+// RecordImpersonation records an impersonation event with type label (start/end)
+func RecordImpersonation(actionType string) {
+	// accepted values: "start" or "end" (but function is generic for any type)
+	Impersonations.WithLabelValues(actionType).Inc()
+}
+
 // MetricNameBuilder helps construct consistent metric names
 type MetricNameBuilder struct {
 	namespace string

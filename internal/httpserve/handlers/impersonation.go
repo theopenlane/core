@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
@@ -244,6 +245,8 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 // Currently logs to application logs only. Future enhancement will persist to database.
 func (h *Handler) logImpersonationEvent(action string, auditLog *auth.ImpersonationAuditLog) error {
 	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
+
+	metrics.RecordImpersonation(action)
 
 	//TODO: Add ent schema to persist impersonation events to database for audit trail
 	return nil
