@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTrustCenterSubprocessor($input: Upload!) {
   createBulkCSVTrustCenterSubprocessor(input: $input) {
     trustCenterSubprocessors {
@@ -83,6 +82,7 @@ query GetAllTrustCenterSubprocessors {
     }
   }
 }
+
 query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
   trustCenterSubprocessor(id: $trustCenterSubprocessorId) {
     createdAt
@@ -135,8 +135,12 @@ query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSu
     }
   }
 }
+
 mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
-  updateTrustCenterSubprocessor(id: $updateTrustCenterSubprocessorId, input: $input) {
+  updateTrustCenterSubprocessor(
+    id: $updateTrustCenterSubprocessorId
+    input: $input
+  ) {
     trustCenterSubprocessor {
       createdAt
       createdBy

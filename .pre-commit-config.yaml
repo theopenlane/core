@@ -8,16 +8,18 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: jsonschema/api-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql
+        exclude: jsonschema/api-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql|node_modules/.*|\.git/.*
       - id: detect-private-key
+        exclude: node_modules/.*|\.git/.*
   - repo: https://github.com/google/yamlfmt
     rev: v0.17.2
     hooks:
       - id: yamlfmt
   - repo: https://github.com/adhtruong/mirrors-typos
-    rev: v1.37.0
+    rev: v1.37.2
     hooks:
       - id: typos
+        exclude: node_modules/.*|\.git/.*
   - repo: local
     hooks:
       - id: format-graphql
@@ -26,11 +28,11 @@ repos:
         entry: npx format-graphql@1.5.0 --write=true
         language: node
         files: 'query/.*\.graphql$'
-  - repo: local
-    hooks:
-      - id: generate
-        name: Run Go Generate
-        description: This hook runs go generate on the project
-        entry: go-generate-fast ./...
-        language: golang
-        files: \.(go|graphql|tmpl)$
+# - repo: local
+#   hooks:
+#     - id: generate
+#       name: Run Go Generate
+#       description: This hook runs go generate on the project
+#       entry: bash -c 'find . -name "*.go" -exec grep -l "^//go:generate" {} \; | head -1 | xargs -I {} go generate {}'
+#       language: system
+#       files: \.(go|graphql|tmpl)$

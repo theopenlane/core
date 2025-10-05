@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -62,7 +63,8 @@ func (JobRunner) Fields() []ent.Field {
 			Comment("the status of this runner"),
 		field.String("ip_address").
 			Comment("the IP address of this runner").
-			Optional(),
+			Optional().
+			Validate(validator.ValidateIPAddress()),
 		field.Time("last_seen").
 			Comment("the last time this runner was seen").
 			Optional(),
