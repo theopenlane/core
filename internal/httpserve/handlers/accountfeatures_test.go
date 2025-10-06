@@ -31,7 +31,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 		featuresExpected = append(featuresExpected, m.String())
 	}
 
-	suite.enableModules(testUser1.UserCtx, testUser1.ID, testUser1.OrganizationID, modulesEnabled)
+	suite.enableModules(testUser1.ID, testUser1.OrganizationID, modulesEnabled)
 
 	testCases := []struct {
 		name             string

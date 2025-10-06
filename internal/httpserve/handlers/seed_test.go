@@ -138,7 +138,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	return testUser
 }
 
-func (suite *HandlerTestSuite) enableModules(_ context.Context, userID, orgID string, features []models.OrgModule) {
+func (suite *HandlerTestSuite) enableModules(userID, orgID string, features []models.OrgModule) {
 	// default to all modules if none provided
 	if len(features) == 0 {
 		features = models.AllOrgModules
