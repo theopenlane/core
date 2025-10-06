@@ -425,7 +425,7 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 		Role:           &om.Role,
 	})
 
-	assert.NilError(t, err)
+	assert.ErrorContains(t, err, "orgmembership already exists")
 
 	// cant remove self from org and owners cannot be removed
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &testclient.OrgMembershipWhereInput{

@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 
@@ -233,11 +232,6 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 		Role:           &enums.RoleMember,
 	}).Exec(testUserCtx)
 	assert.NoError(t, err)
-
-	fmt.Println(org.ID, "ORGINAL")
-	fmt.Println(testUser.ID, testUser.UserInfo.DisplayName)
-	fmt.Println(testUser1.ID, testUser1.UserInfo.DisplayName)
-	fmt.Println(ownerUser.ID, ownerUser.UserInfo.DisplayName)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
