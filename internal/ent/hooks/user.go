@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
@@ -414,29 +415,53 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	groups, err := m.Client().Group.Query().
-		Where(
-			group.CreatedBy(user.ID),
-			group.IsManaged(true),
-			group.Name(getUserGroupName(oldDisplayName, user.ID)),
-		).All(allowCtx)
+	memberships, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.UserID(user.ID)).
+		All(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's system managed groups")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's org memberships")
 		return err
 	}
 
-	for _, group := range groups {
+	for _, membership := range memberships {
+		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			SubjectID:       user.ID,
+			OrganizationID:  membership.OrganizationID,
+			OrganizationIDs: []string{membership.OrganizationID},
+		})
 
-		err := m.Client().Group.UpdateOneID(group.ID).
+		groups, err := m.Client().Group.Query().
+			Where(
+				group.OwnerID(membership.OrganizationID),
+				group.CreatedBy(user.ID),
+				group.IsManaged(true),
+				group.Name(getUserGroupName(oldDisplayName, user.ID)),
+			).
+			All(privacy.DecisionContext(newCtx, privacy.Allow))
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
+			return err
+		}
+
+		if len(groups) == 0 {
+			continue
+		}
+		groupIDs := make([]string, 0, len(groups))
+		for _, g := range groups {
+			groupIDs = append(groupIDs, g.ID)
+		}
+
+		err = m.Client().Group.Update().
+			Where(group.IDIn(groupIDs...)).
 			SetName(getUserGroupName(displayName, user.ID)).
 			SetDisplayName(displayName).
 			SetDescription(getUserGroupName(displayName, user.ID)).
-			Exec(allowCtx)
+			Exec(privacy.DecisionContext(newCtx, privacy.Allow))
 
 		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).
-				Str("group_id", group.ID).Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
-				Msg("error updating system managed group name")
+				Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
+				Msg("error updating system managed group names in bulk")
 			return err
 		}
 	}
