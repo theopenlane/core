@@ -77,6 +77,7 @@ func (i ImpersonationEvent) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user", User.Type).
 			Ref("impersonation_events").
+			Field("user_id").
 			Unique().
 			Required(),
 		edge.From("target_user", User.Type).
