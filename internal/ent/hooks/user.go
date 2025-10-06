@@ -8,24 +8,23 @@ import (
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/riverboat/pkg/jobs"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
-
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-
-	"github.com/theopenlane/utils/gravatar"
-	"github.com/theopenlane/utils/passwd"
-	"github.com/theopenlane/utils/ulids"
-
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/utils/gravatar"
+	"github.com/theopenlane/utils/passwd"
+	"github.com/theopenlane/utils/ulids"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -121,6 +120,14 @@ func HookUser() ent.Hook {
 			userCreated, ok := v.(*generated.User)
 			if !ok {
 				return nil, err
+			}
+
+			// handle display name updates for managed groups
+			if m.Op().Is(ent.OpUpdateOne) {
+				if err := updateSystemManagedGroupForUser(ctx, m, userCreated); err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("error updating system managed group name for the user")
+					return nil, err
+				}
 			}
 
 			if m.Op().Is(ent.OpCreate) {
@@ -387,4 +394,77 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 	}
 
 	return userSetting.ID, nil
+}
+
+func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutation, user *generated.User) error {
+	displayName, ok := m.DisplayName()
+	if !ok {
+		return nil
+	}
+
+	oldDisplayName, err := m.OldDisplayName(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting old display name")
+		return err
+	}
+
+	// if the display name is still the same, nothing to do really
+	if oldDisplayName == displayName {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	memberships, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.UserID(user.ID)).
+		All(allowCtx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's org memberships")
+		return err
+	}
+
+	for _, membership := range memberships {
+		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			SubjectID:       user.ID,
+			OrganizationID:  membership.OrganizationID,
+			OrganizationIDs: []string{membership.OrganizationID},
+		})
+
+		groups, err := m.Client().Group.Query().
+			Where(
+				group.OwnerID(membership.OrganizationID),
+				group.CreatedBy(user.ID),
+				group.IsManaged(true),
+				group.Name(getUserGroupName(oldDisplayName, user.ID)),
+			).
+			All(privacy.DecisionContext(newCtx, privacy.Allow))
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
+			return err
+		}
+
+		if len(groups) == 0 {
+			continue
+		}
+		groupIDs := make([]string, 0, len(groups))
+		for _, g := range groups {
+			groupIDs = append(groupIDs, g.ID)
+		}
+
+		err = m.Client().Group.Update().
+			Where(group.IDIn(groupIDs...)).
+			SetName(getUserGroupName(displayName, user.ID)).
+			SetDisplayName(displayName).
+			SetDescription(getUserGroupName(displayName, user.ID)).
+			Exec(privacy.DecisionContext(newCtx, privacy.Allow))
+
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).
+				Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
+				Msg("error updating system managed group names in bulk")
+			return err
+		}
+	}
+
+	return nil
 }

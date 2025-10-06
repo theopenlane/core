@@ -21,6 +21,10 @@ func HookGroupMembers() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			if _, ok := contextx.From[auth.ManagedGroupContextKey](ctx); ok {
+				return next.Mutate(ctx, m)
+			}
+
 			// check role, if its not set the default is member
 			userID, ok := m.UserID()
 			if !ok {

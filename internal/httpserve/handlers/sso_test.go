@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -334,11 +335,15 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		SetOrganizationID(org.ID).
 		ExecX(ctx)
 
+	ctxTargetOrg := auth.NewTestContextWithOrgID(ssoUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         ssoUser.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(ctx)
+	}).ExecX(testUserCtx)
 
 	suite.db.UserSetting.Update().Where(usersetting.UserID(ssoUser.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 

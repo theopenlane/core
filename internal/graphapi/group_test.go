@@ -167,6 +167,9 @@ func TestQueryGroupsByOwner(t *testing.T) {
 }
 
 func TestQueryGroups(t *testing.T) {
+	testUser1 := suite.userBuilder(context.Background(), t)
+	testUser2 := suite.userBuilder(context.Background(), t)
+
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	group3 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -189,7 +192,8 @@ func TestQueryGroups(t *testing.T) {
 		assert.Assert(t, resp.Groups.Edges != nil)
 
 		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
+		// and the system managed group for the user
+		assert.Check(t, is.Equal(7, len(resp.Groups.Edges)))
 
 		group1Found := false
 		group2Found := false
@@ -225,8 +229,9 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
+		for _, v := range resp.Groups.Edges {
+			assert.Assert(t, v.Node.ID != privateGroup.ID)
+		}
 
 		// check groups available to admin user (private group created by testUser1 should not be returned for org member)
 		resp, err = suite.client.api.GetAllGroups(viewOnlyUser.UserCtx)
@@ -234,8 +239,10 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
-		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
+		for _, v := range resp.Groups.Edges {
+			assert.Assert(t, v.Node.ID != privateGroup.ID)
+		}
+
 	})
 
 	// delete created groups
@@ -1213,12 +1220,15 @@ func TestManagedGroups(t *testing.T) {
 		IsManaged: lo.ToPtr(true),
 	}
 
-	resp, err := suite.client.api.GetGroupInfo(testUser1.UserCtx, whereInput)
+	testUser := suite.userBuilder(context.Background(), t)
+
+	resp, err := suite.client.api.GetGroupInfo(testUser.UserCtx, whereInput)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
-	// there should be 3 managed groups created by the system on org creation
-	assert.Check(t, is.Len(resp.Groups.Edges, 3))
+	// there should be 4 managed groups created by the system on org creation
+	// one for the user
+	assert.Check(t, is.Len(resp.Groups.Edges, 4))
 
 	// you should not be able to update a managed group
 	groupID := resp.Groups.Edges[0].Node.ID
@@ -1226,24 +1236,24 @@ func TestManagedGroups(t *testing.T) {
 		Tags: []string{"test"},
 	}
 
-	_, err = suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	_, err = suite.client.api.UpdateGroup(testUser.UserCtx, groupID, input)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should not be able to add group members to a managed group
-	_, err = suite.client.api.AddUserToGroupWithRole(testUser1.UserCtx, testclient.CreateGroupMembershipInput{
+	_, err = suite.client.api.AddUserToGroupWithRole(testUser.UserCtx, testclient.CreateGroupMembershipInput{
 		GroupID: groupID,
 		UserID:  testUser2.ID,
 	})
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should not be able to delete a managed group
-	_, err = suite.client.api.DeleteGroup(testUser1.UserCtx, groupID)
+	_, err = suite.client.api.DeleteGroup(testUser.UserCtx, groupID)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should, however, be able to update permissions edges on a managed group
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	input = testclient.UpdateGroupInput{
 		AddProgramViewerIDs:              []string{program.ID},
@@ -1251,7 +1261,7 @@ func TestManagedGroups(t *testing.T) {
 		AddInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 
-	updateResp, err := suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	updateResp, err := suite.client.api.UpdateGroup(testUser.UserCtx, groupID, input)
 	assert.NilError(t, err)
 
 	perms := updateResp.UpdateGroup.Group.GetPermissions()
@@ -1264,14 +1274,14 @@ func TestManagedGroups(t *testing.T) {
 		RemoveInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 
-	updateResp, err = suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	updateResp, err = suite.client.api.UpdateGroup(testUser.UserCtx, groupID, input)
 	assert.NilError(t, err)
 
 	perms = updateResp.UpdateGroup.Group.GetPermissions()
 	assert.Check(t, is.Len(perms.Edges, 0))
 
 	// cleanup objects created
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser.UserCtx, t)
 }

@@ -131,6 +131,19 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 		return nil, nil, nil, err
 	}
 
+	// check if we already have an authenticated user in the context (from registration flow)
+	au, err := auth.GetAuthenticatedUserFromContext(ctxWithToken)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	// update the authenticated user context with the organization ID
+	// since the hook requires the org id
+	au.OrganizationID = invitedUser.OwnerID
+	au.OrganizationIDs = []string{invitedUser.OwnerID}
+
+	ctxWithToken = auth.WithAuthenticatedUser(ctxWithToken, au)
+
 	// add email to the invite
 	inv.Email = invitedUser.Recipient
 
