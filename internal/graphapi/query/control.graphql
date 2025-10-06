@@ -1,6 +1,7 @@
 mutation CreateBulkControl($input: [CreateControlInput!]) {
   createBulkControl(input: $input) {
     controls {
+      aliases
       assessmentMethods
       assessmentObjectives
       category
@@ -33,6 +34,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
 mutation CreateBulkCSVControl($input: Upload!) {
   createBulkCSVControl(input: $input) {
     controls {
+      aliases
       assessmentMethods
       assessmentObjectives
       category
@@ -59,87 +61,13 @@ mutation CreateBulkCSVControl($input: Upload!) {
       updatedAt
       updatedBy
     }
-  }
-}
-
-mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
-  updateBulkControl(ids: $ids, input: $input) {
-    controls {
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlType
-      createdAt
-      createdBy
-      description
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      standardID
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      controlImplementations {
-        edges {
-          node {
-            id
-            details
-            status
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-    updatedIDs
   }
 }
 
 mutation CreateControl($input: CreateControlInput!) {
   createControl(input: $input) {
     control {
+      aliases
       assessmentMethods
       assessmentObjectives
       category
@@ -228,6 +156,7 @@ query GetAllControls {
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         category
@@ -317,6 +246,7 @@ query GetAllControls {
 
 query GetControlByID($controlId: ID!) {
   control(id: $controlId) {
+    aliases
     assessmentMethods
     assessmentObjectives
     category
@@ -403,7 +333,14 @@ query GetControlByID($controlId: ID!) {
 }
 
 query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!]) {
-  controls(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+  controls(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -413,6 +350,7 @@ query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $whe
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         category
@@ -500,9 +438,86 @@ query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $whe
   }
 }
 
+mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
+  updateBulkControl(ids: $ids, input: $input) {
+    controls {
+      aliases
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      source
+      standardID
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+      controlOwner {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+      programs {
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
+      }
+      controlImplementations {
+        edges {
+          node {
+            id
+            details
+            status
+          }
+        }
+      }
+      editors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      blockedGroups {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
   updateControl(id: $updateControlId, input: $input) {
     control {
+      aliases
       assessmentMethods
       assessmentObjectives
       category
