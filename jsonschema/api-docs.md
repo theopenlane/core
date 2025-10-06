@@ -86,7 +86,8 @@ Config contains the configuration for the core server
             "Queues": {},
             "Test": {},
             "Workers": {}
-        }
+        },
+        "metrics": {}
     },
     "redis": {},
     "tracer": {
@@ -832,6 +833,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**connectionURI**|`string`|||
 |**runMigrations**|`boolean`|||
 |[**riverConf**](#jobqueueriverconf)|`object`|||
+|[**metrics**](#jobqueuemetrics)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -846,7 +848,8 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
         "Queues": {},
         "Test": {},
         "Workers": {}
-    }
+    },
+    "metrics": {}
 }
 ```
 
@@ -979,6 +982,18 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 **Items**
 
+<a name="jobqueuemetrics"></a>
+### jobQueue\.metrics: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enableMetrics**|`boolean`|||
+|**metricsDurationUnit**|`string`|||
+|**enableSemanticMetrics**|`boolean`|||
+
+**Additional Properties:** not allowed  
 <a name="redis"></a>
 ## redis: object
 

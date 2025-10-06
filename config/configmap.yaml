@@ -190,6 +190,9 @@ data:
   CORE_DB_MAXCONNECTIONS: {{ .Values.openlane.coreConfiguration.db.maxConnections | quote | default "0" }}
   CORE_DB_MAXIDLECONNECTIONS: {{ .Values.openlane.coreConfiguration.db.maxIdleConnections | quote | default "0" }}
   CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.openlane.coreConfiguration.jobQueue.runMigrations | quote | default "false" }}
+  CORE_JOBQUEUE_METRICS_ENABLEMETRICS: {{ .Values.openlane.coreConfiguration.jobQueue.metrics.enableMetrics | quote | default "false" }}
+  CORE_JOBQUEUE_METRICS_METRICSDURATIONUNIT: {{ .Values.openlane.coreConfiguration.jobQueue.metrics.metricsDurationUnit | quote | default "ms" }}
+  CORE_JOBQUEUE_METRICS_ENABLESEMANTICMETRICS: {{ .Values.openlane.coreConfiguration.jobQueue.metrics.enableSemanticMetrics | quote | default "true" }}
   CORE_REDIS_ENABLED: {{ .Values.openlane.coreConfiguration.redis.enabled | quote | default "true" }}
   CORE_REDIS_ADDRESS: {{ .Values.openlane.coreConfiguration.redis.address | quote | default "localhost:6379" }}
   CORE_REDIS_NAME: {{ .Values.openlane.coreConfiguration.redis.name | quote }}

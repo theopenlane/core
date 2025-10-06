@@ -144,6 +144,10 @@ integrationOauthProvider:
     successRedirectUrl: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+    metrics:
+        enableMetrics: false
+        enableSemanticMetrics: true
+        metricsDurationUnit: ms
     riverConf:
         AdvisoryLockPrefix: 0
         CancelledJobRetentionPeriod: 0
