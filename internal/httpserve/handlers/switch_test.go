@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -52,8 +53,10 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 		password:      "0p3nl@n3rocks!",
 		confirmedUser: true,
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -111,8 +114,10 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 		confirmedUser: true,
 		tfaEnabled:    tfaenabled, // User does not have TFA
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -175,8 +180,10 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 		confirmedUser: true,
 		tfaEnabled:    tfaenabled, // User has TFA
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
 		OrganizationID: org.ID,

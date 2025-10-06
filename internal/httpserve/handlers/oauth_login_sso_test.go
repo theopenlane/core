@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -53,8 +55,10 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 		password:      "$uper$ecretP@ssword",
 		confirmedUser: true,
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -154,8 +158,10 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 		confirmedUser: true,
 		tfaEnabled:    tfaenabled, // User without TFA
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -216,8 +222,10 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 		confirmedUser: true,
 		tfaEnabled:    tfaenabled, // User without TFA
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -225,6 +233,11 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 		Role:           &enums.RoleMember,
 	}).Exec(testUserCtx)
 	assert.NoError(t, err)
+
+	fmt.Println(org.ID, "ORGINAL")
+	fmt.Println(testUser.ID, testUser.UserInfo.DisplayName)
+	fmt.Println(testUser1.ID, testUser1.UserInfo.DisplayName)
+	fmt.Println(ownerUser.ID, ownerUser.UserInfo.DisplayName)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
