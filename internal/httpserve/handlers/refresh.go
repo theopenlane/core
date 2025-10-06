@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -32,8 +33,10 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 		return h.BadRequest(ctx, err, openapi)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// check user in the database, sub == claims subject and ensure only one record is returned
-	user, err := h.getUserDetailsByID(ctx.Request().Context(), claims.Subject)
+	user, err := h.getUserDetailsByID(reqCtx, claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return h.NotFound(ctx, ErrNoAuthUser, openapi)
@@ -46,6 +49,14 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	if user.Edges.Setting.Status != "ACTIVE" {
 		return h.NotFound(ctx, ErrNoAuthUser, openapi)
 	}
+
+	// get modules on refresh
+	modules, err := rule.GetFeaturesForSpecificOrganization(reqCtx, claims.OrgID)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
+	}
+
+	claims.Modules = modules
 
 	// UserID is not on the refresh token, so we need to set it now
 	claims.UserID = user.ID
@@ -61,7 +72,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	auth.SetAuthCookies(ctx.Response().Writer, accessToken, refreshToken, *h.SessionConfig.CookieConfig)
 
 	// set sessions in response
-	if _, err = h.SessionConfig.CreateAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, user.ID); err != nil {
+	if _, err = h.SessionConfig.CreateAndStoreSession(reqCtx, ctx.Response().Writer, user.ID); err != nil {
 		log.Error().Err(err).Msg("error storing session")
 
 		return err
