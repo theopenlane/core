@@ -2934,6 +2934,25 @@ func (c *ControlClient) QueryInternalPolicies(_m *Control) *InternalPolicyQuery 
 	return query
 }
 
+// QueryComments queries the comments edge of a Control.
+func (c *ControlClient) QueryComments(_m *Control) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.CommentsTable, control.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlOwner queries the control_owner edge of a Control.
 func (c *ControlClient) QueryControlOwner(_m *Control) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -2965,6 +2984,25 @@ func (c *ControlClient) QueryDelegate(_m *Control) *GroupQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryResponsibleParty queries the responsible_party edge of a Control.
+func (c *ControlClient) QueryResponsibleParty(_m *Control) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ResponsiblePartyTable, control.ResponsiblePartyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20875,6 +20913,25 @@ func (c *SubcontrolClient) QueryInternalPolicies(_m *Subcontrol) *InternalPolicy
 	return query
 }
 
+// QueryComments queries the comments edge of a Subcontrol.
+func (c *SubcontrolClient) QueryComments(_m *Subcontrol) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.CommentsTable, subcontrol.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlOwner queries the control_owner edge of a Subcontrol.
 func (c *SubcontrolClient) QueryControlOwner(_m *Subcontrol) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20906,6 +20963,25 @@ func (c *SubcontrolClient) QueryDelegate(_m *Subcontrol) *GroupQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryResponsibleParty queries the responsible_party edge of a Subcontrol.
+func (c *SubcontrolClient) QueryResponsibleParty(_m *Subcontrol) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ResponsiblePartyTable, subcontrol.ResponsiblePartyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

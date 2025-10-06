@@ -39,11 +39,13 @@ type Note struct {
 	Text string `json:"text,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
-	Edges         NoteEdges `json:"edges"`
-	entity_notes  *string
-	program_notes *string
-	task_comments *string
-	selectValues  sql.SelectValues
+	Edges               NoteEdges `json:"edges"`
+	control_comments    *string
+	entity_notes        *string
+	program_notes       *string
+	subcontrol_comments *string
+	task_comments       *string
+	selectValues        sql.SelectValues
 }
 
 // NoteEdges holds the relations/edges for other nodes in the graph.
@@ -103,11 +105,15 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case note.ForeignKeys[0]: // entity_notes
+		case note.ForeignKeys[0]: // control_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[1]: // program_notes
+		case note.ForeignKeys[1]: // entity_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[2]: // task_comments
+		case note.ForeignKeys[2]: // program_notes
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[3]: // subcontrol_comments
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[4]: // task_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -186,19 +192,33 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			}
 		case note.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_comments", values[i])
+			} else if value.Valid {
+				_m.control_comments = new(string)
+				*_m.control_comments = value.String
+			}
+		case note.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_notes", values[i])
 			} else if value.Valid {
 				_m.entity_notes = new(string)
 				*_m.entity_notes = value.String
 			}
-		case note.ForeignKeys[1]:
+		case note.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
 			} else if value.Valid {
 				_m.program_notes = new(string)
 				*_m.program_notes = value.String
 			}
-		case note.ForeignKeys[2]:
+		case note.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_comments", values[i])
+			} else if value.Valid {
+				_m.subcontrol_comments = new(string)
+				*_m.subcontrol_comments = value.String
+			}
+		case note.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
 			} else if value.Valid {

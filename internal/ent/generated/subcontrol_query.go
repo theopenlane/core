@@ -17,11 +17,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -48,8 +50,10 @@ type SubcontrolQuery struct {
 	withActionPlans                 *ActionPlanQuery
 	withProcedures                  *ProcedureQuery
 	withInternalPolicies            *InternalPolicyQuery
+	withComments                    *NoteQuery
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
+	withResponsibleParty            *EntityQuery
 	withOwner                       *OrganizationQuery
 	withControl                     *ControlQuery
 	withControlImplementations      *ControlImplementationQuery
@@ -67,6 +71,7 @@ type SubcontrolQuery struct {
 	withNamedActionPlans            map[string]*ActionPlanQuery
 	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
+	withNamedComments               map[string]*NoteQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
@@ -307,6 +312,31 @@ func (_q *SubcontrolQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *SubcontrolQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.CommentsTable, subcontrol.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlOwner chains the current query on the "control_owner" edge.
 func (_q *SubcontrolQuery) QueryControlOwner() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -350,6 +380,31 @@ func (_q *SubcontrolQuery) QueryDelegate() *GroupQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryResponsibleParty chains the current query on the "responsible_party" edge.
+func (_q *SubcontrolQuery) QueryResponsibleParty() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ResponsiblePartyTable, subcontrol.ResponsiblePartyColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -707,8 +762,10 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withActionPlans:            _q.withActionPlans.Clone(),
 		withProcedures:             _q.withProcedures.Clone(),
 		withInternalPolicies:       _q.withInternalPolicies.Clone(),
+		withComments:               _q.withComments.Clone(),
 		withControlOwner:           _q.withControlOwner.Clone(),
 		withDelegate:               _q.withDelegate.Clone(),
+		withResponsibleParty:       _q.withResponsibleParty.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
 		withControl:                _q.withControl.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
@@ -810,6 +867,17 @@ func (_q *SubcontrolQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuer
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithComments(opts ...func(*NoteQuery)) *SubcontrolQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // WithControlOwner tells the query-builder to eager-load the nodes that are connected to
 // the "control_owner" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *SubcontrolQuery) WithControlOwner(opts ...func(*GroupQuery)) *SubcontrolQuery {
@@ -829,6 +897,17 @@ func (_q *SubcontrolQuery) WithDelegate(opts ...func(*GroupQuery)) *SubcontrolQu
 		opt(query)
 	}
 	_q.withDelegate = query
+	return _q
+}
+
+// WithResponsibleParty tells the query-builder to eager-load the nodes that are connected to
+// the "responsible_party" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithResponsibleParty(opts ...func(*EntityQuery)) *SubcontrolQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withResponsibleParty = query
 	return _q
 }
 
@@ -983,7 +1062,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [18]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -992,8 +1071,10 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withActionPlans != nil,
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
+			_q.withComments != nil,
 			_q.withControlOwner != nil,
 			_q.withDelegate != nil,
+			_q.withResponsibleParty != nil,
 			_q.withOwner != nil,
 			_q.withControl != nil,
 			_q.withControlImplementations != nil,
@@ -1086,6 +1167,13 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Comments = []*Note{} },
+			func(n *Subcontrol, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControlOwner; query != nil {
 		if err := _q.loadControlOwner(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *Group) { n.Edges.ControlOwner = e }); err != nil {
@@ -1095,6 +1183,12 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if query := _q.withDelegate; query != nil {
 		if err := _q.loadDelegate(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *Group) { n.Edges.Delegate = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withResponsibleParty; query != nil {
+		if err := _q.loadResponsibleParty(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *Entity) { n.Edges.ResponsibleParty = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1197,6 +1291,13 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedInternalPolicies(name) },
 			func(n *Subcontrol, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedComments(name) },
+			func(n *Subcontrol, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1670,6 +1771,37 @@ func (_q *SubcontrolQuery) loadInternalPolicies(ctx context.Context, query *Inte
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *SubcontrolQuery) loadControlOwner(ctx context.Context, query *GroupQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subcontrol)
@@ -1724,6 +1856,35 @@ func (_q *SubcontrolQuery) loadDelegate(ctx context.Context, query *GroupQuery, 
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadResponsibleParty(ctx context.Context, query *EntityQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Entity)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].ResponsiblePartyID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(entity.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "responsible_party_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2074,6 +2235,9 @@ func (_q *SubcontrolQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldDelegateID)
 		}
+		if _q.withResponsibleParty != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldResponsiblePartyID)
+		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldOwnerID)
 		}
@@ -2257,6 +2421,20 @@ func (_q *SubcontrolQuery) WithNamedInternalPolicies(name string, opts ...func(*
 		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
 	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *SubcontrolQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 

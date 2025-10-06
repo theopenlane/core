@@ -401,8 +401,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldTags:                   {Type: field.TypeJSON, Column: control.FieldTags},
 			control.FieldTitle:                  {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:            {Type: field.TypeString, Column: control.FieldDescription},
+			control.FieldAliases:                {Type: field.TypeJSON, Column: control.FieldAliases},
 			control.FieldReferenceID:            {Type: field.TypeString, Column: control.FieldReferenceID},
 			control.FieldAuditorReferenceID:     {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
+			control.FieldResponsiblePartyID:     {Type: field.TypeString, Column: control.FieldResponsiblePartyID},
 			control.FieldStatus:                 {Type: field.TypeEnum, Column: control.FieldStatus},
 			control.FieldSource:                 {Type: field.TypeEnum, Column: control.FieldSource},
 			control.FieldReferenceFramework:     {Type: field.TypeString, Column: control.FieldReferenceFramework},
@@ -451,8 +453,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldTags:                   {Type: field.TypeJSON, Column: controlhistory.FieldTags},
 			controlhistory.FieldTitle:                  {Type: field.TypeString, Column: controlhistory.FieldTitle},
 			controlhistory.FieldDescription:            {Type: field.TypeString, Column: controlhistory.FieldDescription},
+			controlhistory.FieldAliases:                {Type: field.TypeJSON, Column: controlhistory.FieldAliases},
 			controlhistory.FieldReferenceID:            {Type: field.TypeString, Column: controlhistory.FieldReferenceID},
 			controlhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
+			controlhistory.FieldResponsiblePartyID:     {Type: field.TypeString, Column: controlhistory.FieldResponsiblePartyID},
 			controlhistory.FieldStatus:                 {Type: field.TypeEnum, Column: controlhistory.FieldStatus},
 			controlhistory.FieldSource:                 {Type: field.TypeEnum, Column: controlhistory.FieldSource},
 			controlhistory.FieldReferenceFramework:     {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
@@ -2894,8 +2898,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldTags:                   {Type: field.TypeJSON, Column: subcontrol.FieldTags},
 			subcontrol.FieldTitle:                  {Type: field.TypeString, Column: subcontrol.FieldTitle},
 			subcontrol.FieldDescription:            {Type: field.TypeString, Column: subcontrol.FieldDescription},
+			subcontrol.FieldAliases:                {Type: field.TypeJSON, Column: subcontrol.FieldAliases},
 			subcontrol.FieldReferenceID:            {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
 			subcontrol.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
+			subcontrol.FieldResponsiblePartyID:     {Type: field.TypeString, Column: subcontrol.FieldResponsiblePartyID},
 			subcontrol.FieldStatus:                 {Type: field.TypeEnum, Column: subcontrol.FieldStatus},
 			subcontrol.FieldSource:                 {Type: field.TypeEnum, Column: subcontrol.FieldSource},
 			subcontrol.FieldReferenceFramework:     {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
@@ -2944,8 +2950,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldTags:                   {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
 			subcontrolhistory.FieldTitle:                  {Type: field.TypeString, Column: subcontrolhistory.FieldTitle},
 			subcontrolhistory.FieldDescription:            {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
+			subcontrolhistory.FieldAliases:                {Type: field.TypeJSON, Column: subcontrolhistory.FieldAliases},
 			subcontrolhistory.FieldReferenceID:            {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceID},
 			subcontrolhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
+			subcontrolhistory.FieldResponsiblePartyID:     {Type: field.TypeString, Column: subcontrolhistory.FieldResponsiblePartyID},
 			subcontrolhistory.FieldStatus:                 {Type: field.TypeEnum, Column: subcontrolhistory.FieldStatus},
 			subcontrolhistory.FieldSource:                 {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
 			subcontrolhistory.FieldReferenceFramework:     {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
@@ -4018,6 +4026,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"Note",
+	)
+	graph.MustAddE(
 		"control_owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4040,6 +4060,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"Group",
+	)
+	graph.MustAddE(
+		"responsible_party",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ResponsiblePartyTable,
+			Columns: []string{control.ResponsiblePartyColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"Entity",
 	)
 	graph.MustAddE(
 		"owner",
@@ -8446,6 +8478,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.CommentsTable,
+			Columns: []string{subcontrol.CommentsColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Note",
+	)
+	graph.MustAddE(
 		"control_owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -8468,6 +8512,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"Group",
+	)
+	graph.MustAddE(
+		"responsible_party",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ResponsiblePartyTable,
+			Columns: []string{subcontrol.ResponsiblePartyColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Entity",
 	)
 	graph.MustAddE(
 		"owner",
@@ -10836,6 +10892,11 @@ func (f *ControlFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldDescription))
 }
 
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *ControlFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(control.FieldAliases))
+}
+
 // WhereReferenceID applies the entql string predicate on the reference_id field.
 func (f *ControlFilter) WhereReferenceID(p entql.StringP) {
 	f.Where(p.Field(control.FieldReferenceID))
@@ -10844,6 +10905,11 @@ func (f *ControlFilter) WhereReferenceID(p entql.StringP) {
 // WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
 func (f *ControlFilter) WhereAuditorReferenceID(p entql.StringP) {
 	f.Where(p.Field(control.FieldAuditorReferenceID))
+}
+
+// WhereResponsiblePartyID applies the entql string predicate on the responsible_party_id field.
+func (f *ControlFilter) WhereResponsiblePartyID(p entql.StringP) {
+	f.Where(p.Field(control.FieldResponsiblePartyID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -11068,6 +11134,20 @@ func (f *ControlFilter) WhereHasInternalPoliciesWith(preds ...predicate.Internal
 	})))
 }
 
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *ControlFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasControlOwner applies a predicate to check if query has an edge control_owner.
 func (f *ControlFilter) WhereHasControlOwner() {
 	f.Where(entql.HasEdge("control_owner"))
@@ -11090,6 +11170,20 @@ func (f *ControlFilter) WhereHasDelegate() {
 // WhereHasDelegateWith applies a predicate to check if query has an edge delegate with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasDelegateWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("delegate", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasResponsibleParty applies a predicate to check if query has an edge responsible_party.
+func (f *ControlFilter) WhereHasResponsibleParty() {
+	f.Where(entql.HasEdge("responsible_party"))
+}
+
+// WhereHasResponsiblePartyWith applies a predicate to check if query has an edge responsible_party with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasResponsiblePartyWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("responsible_party", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11369,6 +11463,11 @@ func (f *ControlHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldDescription))
 }
 
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *ControlHistoryFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(controlhistory.FieldAliases))
+}
+
 // WhereReferenceID applies the entql string predicate on the reference_id field.
 func (f *ControlHistoryFilter) WhereReferenceID(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldReferenceID))
@@ -11377,6 +11476,11 @@ func (f *ControlHistoryFilter) WhereReferenceID(p entql.StringP) {
 // WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
 func (f *ControlHistoryFilter) WhereAuditorReferenceID(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldAuditorReferenceID))
+}
+
+// WhereResponsiblePartyID applies the entql string predicate on the responsible_party_id field.
+func (f *ControlHistoryFilter) WhereResponsiblePartyID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldResponsiblePartyID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -26442,6 +26546,11 @@ func (f *SubcontrolFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDescription))
 }
 
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *SubcontrolFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(subcontrol.FieldAliases))
+}
+
 // WhereReferenceID applies the entql string predicate on the reference_id field.
 func (f *SubcontrolFilter) WhereReferenceID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldReferenceID))
@@ -26450,6 +26559,11 @@ func (f *SubcontrolFilter) WhereReferenceID(p entql.StringP) {
 // WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
 func (f *SubcontrolFilter) WhereAuditorReferenceID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldAuditorReferenceID))
+}
+
+// WhereResponsiblePartyID applies the entql string predicate on the responsible_party_id field.
+func (f *SubcontrolFilter) WhereResponsiblePartyID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldResponsiblePartyID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -26674,6 +26788,20 @@ func (f *SubcontrolFilter) WhereHasInternalPoliciesWith(preds ...predicate.Inter
 	})))
 }
 
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *SubcontrolFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasControlOwner applies a predicate to check if query has an edge control_owner.
 func (f *SubcontrolFilter) WhereHasControlOwner() {
 	f.Where(entql.HasEdge("control_owner"))
@@ -26696,6 +26824,20 @@ func (f *SubcontrolFilter) WhereHasDelegate() {
 // WhereHasDelegateWith applies a predicate to check if query has an edge delegate with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasDelegateWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("delegate", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasResponsibleParty applies a predicate to check if query has an edge responsible_party.
+func (f *SubcontrolFilter) WhereHasResponsibleParty() {
+	f.Where(entql.HasEdge("responsible_party"))
+}
+
+// WhereHasResponsiblePartyWith applies a predicate to check if query has an edge responsible_party with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasResponsiblePartyWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("responsible_party", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -26891,6 +27033,11 @@ func (f *SubcontrolHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldDescription))
 }
 
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *SubcontrolHistoryFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(subcontrolhistory.FieldAliases))
+}
+
 // WhereReferenceID applies the entql string predicate on the reference_id field.
 func (f *SubcontrolHistoryFilter) WhereReferenceID(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldReferenceID))
@@ -26899,6 +27046,11 @@ func (f *SubcontrolHistoryFilter) WhereReferenceID(p entql.StringP) {
 // WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
 func (f *SubcontrolHistoryFilter) WhereAuditorReferenceID(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldAuditorReferenceID))
+}
+
+// WhereResponsiblePartyID applies the entql string predicate on the responsible_party_id field.
+func (f *SubcontrolHistoryFilter) WhereResponsiblePartyID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldResponsiblePartyID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.

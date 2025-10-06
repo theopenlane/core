@@ -14,11 +14,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -160,6 +162,12 @@ func (_c *SubcontrolCreate) SetNillableDescription(v *string) *SubcontrolCreate 
 	return _c
 }
 
+// SetAliases sets the "aliases" field.
+func (_c *SubcontrolCreate) SetAliases(v []string) *SubcontrolCreate {
+	_c.mutation.SetAliases(v)
+	return _c
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_c *SubcontrolCreate) SetReferenceID(v string) *SubcontrolCreate {
 	_c.mutation.SetReferenceID(v)
@@ -184,6 +192,20 @@ func (_c *SubcontrolCreate) SetAuditorReferenceID(v string) *SubcontrolCreate {
 func (_c *SubcontrolCreate) SetNillableAuditorReferenceID(v *string) *SubcontrolCreate {
 	if v != nil {
 		_c.SetAuditorReferenceID(*v)
+	}
+	return _c
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_c *SubcontrolCreate) SetResponsiblePartyID(v string) *SubcontrolCreate {
+	_c.mutation.SetResponsiblePartyID(v)
+	return _c
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableResponsiblePartyID(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetResponsiblePartyID(*v)
 	}
 	return _c
 }
@@ -558,6 +580,21 @@ func (_c *SubcontrolCreate) AddInternalPolicies(v ...*InternalPolicy) *Subcontro
 	return _c.AddInternalPolicyIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_c *SubcontrolCreate) AddCommentIDs(ids ...string) *SubcontrolCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_c *SubcontrolCreate) AddComments(v ...*Note) *SubcontrolCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCommentIDs(ids...)
+}
+
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (_c *SubcontrolCreate) SetControlOwner(v *Group) *SubcontrolCreate {
 	return _c.SetControlOwnerID(v.ID)
@@ -566,6 +603,11 @@ func (_c *SubcontrolCreate) SetControlOwner(v *Group) *SubcontrolCreate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_c *SubcontrolCreate) SetDelegate(v *Group) *SubcontrolCreate {
 	return _c.SetDelegateID(v.ID)
+}
+
+// SetResponsibleParty sets the "responsible_party" edge to the Entity entity.
+func (_c *SubcontrolCreate) SetResponsibleParty(v *Entity) *SubcontrolCreate {
+	return _c.SetResponsiblePartyID(v.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -844,6 +886,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := _c.mutation.Aliases(); ok {
+		_spec.SetField(subcontrol.FieldAliases, field.TypeJSON, value)
+		_node.Aliases = value
+	}
 	if value, ok := _c.mutation.ReferenceID(); ok {
 		_spec.SetField(subcontrol.FieldReferenceID, field.TypeString, value)
 		_node.ReferenceID = value
@@ -1060,6 +1106,23 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subcontrol.CommentsTable,
+			Columns: []string{subcontrol.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1094,6 +1157,24 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ResponsiblePartyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ResponsiblePartyTable,
+			Columns: []string{subcontrol.ResponsiblePartyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ResponsiblePartyID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {

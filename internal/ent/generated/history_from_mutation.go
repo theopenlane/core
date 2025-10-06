@@ -1083,12 +1083,20 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDescription(description)
 	}
 
+	if aliases, exists := m.Aliases(); exists {
+		create = create.SetAliases(aliases)
+	}
+
 	if referenceID, exists := m.ReferenceID(); exists {
 		create = create.SetReferenceID(referenceID)
 	}
 
 	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
 		create = create.SetAuditorReferenceID(auditorReferenceID)
+	}
+
+	if responsiblePartyID, exists := m.ResponsiblePartyID(); exists {
+		create = create.SetResponsiblePartyID(responsiblePartyID)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -1270,6 +1278,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(control.Description)
 		}
 
+		if aliases, exists := m.Aliases(); exists {
+			create = create.SetAliases(aliases)
+		} else {
+			create = create.SetAliases(control.Aliases)
+		}
+
 		if referenceID, exists := m.ReferenceID(); exists {
 			create = create.SetReferenceID(referenceID)
 		} else {
@@ -1280,6 +1294,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAuditorReferenceID(auditorReferenceID)
 		} else {
 			create = create.SetAuditorReferenceID(control.AuditorReferenceID)
+		}
+
+		if responsiblePartyID, exists := m.ResponsiblePartyID(); exists {
+			create = create.SetResponsiblePartyID(responsiblePartyID)
+		} else {
+			create = create.SetResponsiblePartyID(control.ResponsiblePartyID)
 		}
 
 		if status, exists := m.Status(); exists {
@@ -1459,8 +1479,10 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(control.Tags).
 			SetTitle(control.Title).
 			SetDescription(control.Description).
+			SetAliases(control.Aliases).
 			SetReferenceID(control.ReferenceID).
 			SetAuditorReferenceID(control.AuditorReferenceID).
+			SetResponsiblePartyID(control.ResponsiblePartyID).
 			SetStatus(control.Status).
 			SetSource(control.Source).
 			SetNillableReferenceFramework(control.ReferenceFramework).
@@ -10345,12 +10367,20 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDescription(description)
 	}
 
+	if aliases, exists := m.Aliases(); exists {
+		create = create.SetAliases(aliases)
+	}
+
 	if referenceID, exists := m.ReferenceID(); exists {
 		create = create.SetReferenceID(referenceID)
 	}
 
 	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
 		create = create.SetAuditorReferenceID(auditorReferenceID)
+	}
+
+	if responsiblePartyID, exists := m.ResponsiblePartyID(); exists {
+		create = create.SetResponsiblePartyID(responsiblePartyID)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -10532,6 +10562,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDescription(subcontrol.Description)
 		}
 
+		if aliases, exists := m.Aliases(); exists {
+			create = create.SetAliases(aliases)
+		} else {
+			create = create.SetAliases(subcontrol.Aliases)
+		}
+
 		if referenceID, exists := m.ReferenceID(); exists {
 			create = create.SetReferenceID(referenceID)
 		} else {
@@ -10542,6 +10578,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetAuditorReferenceID(auditorReferenceID)
 		} else {
 			create = create.SetAuditorReferenceID(subcontrol.AuditorReferenceID)
+		}
+
+		if responsiblePartyID, exists := m.ResponsiblePartyID(); exists {
+			create = create.SetResponsiblePartyID(responsiblePartyID)
+		} else {
+			create = create.SetResponsiblePartyID(subcontrol.ResponsiblePartyID)
 		}
 
 		if status, exists := m.Status(); exists {
@@ -10721,8 +10763,10 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetTags(subcontrol.Tags).
 			SetTitle(subcontrol.Title).
 			SetDescription(subcontrol.Description).
+			SetAliases(subcontrol.Aliases).
 			SetReferenceID(subcontrol.ReferenceID).
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
+			SetResponsiblePartyID(subcontrol.ResponsiblePartyID).
 			SetStatus(subcontrol.Status).
 			SetSource(subcontrol.Source).
 			SetNillableReferenceFramework(subcontrol.ReferenceFramework).

@@ -1018,6 +1018,7 @@ type CreateControlInput struct {
 	Tags                     []string
 	Title                    *string
 	Description              *string
+	Aliases                  []string
 	ReferenceID              *string
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
@@ -1045,8 +1046,10 @@ type CreateControlInput struct {
 	ActionPlanIDs            []string
 	ProcedureIDs             []string
 	InternalPolicyIDs        []string
+	CommentIDs               []string
 	ControlOwnerID           *string
 	DelegateID               *string
+	ResponsiblePartyID       *string
 	OwnerID                  *string
 	BlockedGroupIDs          []string
 	EditorIDs                []string
@@ -1069,6 +1072,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
 	}
 	if v := i.ReferenceID; v != nil {
 		m.SetReferenceID(*v)
@@ -1149,11 +1155,17 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
 	}
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
+	}
+	if v := i.ResponsiblePartyID; v != nil {
+		m.SetResponsiblePartyID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1202,6 +1214,9 @@ type UpdateControlInput struct {
 	Title                          *string
 	ClearDescription               bool
 	Description                    *string
+	ClearAliases                   bool
+	Aliases                        []string
+	AppendAliases                  []string
 	ClearReferenceID               bool
 	ReferenceID                    *string
 	ClearAuditorReferenceID        bool
@@ -1268,10 +1283,15 @@ type UpdateControlInput struct {
 	ClearInternalPolicies          bool
 	AddInternalPolicyIDs           []string
 	RemoveInternalPolicyIDs        []string
+	ClearComments                  bool
+	AddCommentIDs                  []string
+	RemoveCommentIDs               []string
 	ClearControlOwner              bool
 	ControlOwnerID                 *string
 	ClearDelegate                  bool
 	DelegateID                     *string
+	ClearResponsibleParty          bool
+	ResponsiblePartyID             *string
 	ClearBlockedGroups             bool
 	AddBlockedGroupIDs             []string
 	RemoveBlockedGroupIDs          []string
@@ -1322,6 +1342,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearAliases {
+		m.ClearAliases()
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
+	}
+	if i.AppendAliases != nil {
+		m.AppendAliases(i.Aliases)
 	}
 	if i.ClearReferenceID {
 		m.ClearReferenceID()
@@ -1521,6 +1550,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
 	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
 	}
@@ -1532,6 +1570,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
+	}
+	if i.ClearResponsibleParty {
+		m.ClearResponsibleParty()
+	}
+	if v := i.ResponsiblePartyID; v != nil {
+		m.SetResponsiblePartyID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -10632,6 +10676,7 @@ type CreateSubcontrolInput struct {
 	Tags                     []string
 	Title                    *string
 	Description              *string
+	Aliases                  []string
 	ReferenceID              *string
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
@@ -10659,8 +10704,10 @@ type CreateSubcontrolInput struct {
 	ActionPlanIDs            []string
 	ProcedureIDs             []string
 	InternalPolicyIDs        []string
+	CommentIDs               []string
 	ControlOwnerID           *string
 	DelegateID               *string
+	ResponsiblePartyID       *string
 	OwnerID                  *string
 	ControlID                string
 	ControlImplementationIDs []string
@@ -10677,6 +10724,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
 	}
 	if v := i.ReferenceID; v != nil {
 		m.SetReferenceID(*v)
@@ -10757,11 +10807,17 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
 	}
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
+	}
+	if v := i.ResponsiblePartyID; v != nil {
+		m.SetResponsiblePartyID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -10790,6 +10846,9 @@ type UpdateSubcontrolInput struct {
 	Title                          *string
 	ClearDescription               bool
 	Description                    *string
+	ClearAliases                   bool
+	Aliases                        []string
+	AppendAliases                  []string
 	ClearReferenceID               bool
 	ReferenceID                    *string
 	ClearAuditorReferenceID        bool
@@ -10856,10 +10915,15 @@ type UpdateSubcontrolInput struct {
 	ClearInternalPolicies          bool
 	AddInternalPolicyIDs           []string
 	RemoveInternalPolicyIDs        []string
+	ClearComments                  bool
+	AddCommentIDs                  []string
+	RemoveCommentIDs               []string
 	ClearControlOwner              bool
 	ControlOwnerID                 *string
 	ClearDelegate                  bool
 	DelegateID                     *string
+	ClearResponsibleParty          bool
+	ResponsiblePartyID             *string
 	ControlID                      *string
 	ClearControlImplementations    bool
 	AddControlImplementationIDs    []string
@@ -10891,6 +10955,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearAliases {
+		m.ClearAliases()
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
+	}
+	if i.AppendAliases != nil {
+		m.AppendAliases(i.Aliases)
 	}
 	if i.ClearReferenceID {
 		m.ClearReferenceID()
@@ -11090,6 +11163,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
 	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
 	}
@@ -11101,6 +11183,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
+	}
+	if i.ClearResponsibleParty {
+		m.ClearResponsibleParty()
+	}
+	if v := i.ResponsiblePartyID; v != nil {
+		m.SetResponsiblePartyID(*v)
 	}
 	if v := i.ControlID; v != nil {
 		m.SetControlID(*v)

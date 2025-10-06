@@ -6329,6 +6329,7 @@ func (t *GetContactHistories_ContactHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -6360,6 +6361,12 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Aliases
+}
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
@@ -6547,6 +6554,7 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkC
 }
 
 type CreateBulkControl_CreateBulkControl_Controls struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -6578,6 +6586,12 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.Aliases
+}
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
@@ -6765,6 +6779,7 @@ func (t *CreateBulkControl_CreateBulkControl) GetControls() []*CreateBulkControl
 }
 
 type CreateControl_CreateControl_Control struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -6796,6 +6811,12 @@ type CreateControl_CreateControl_Control struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateControl_CreateControl_Control) GetAliases() []string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Aliases
+}
 func (t *CreateControl_CreateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
@@ -7026,6 +7047,7 @@ func (t *GetAllControls_Controls_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllControls_Controls_Edges_Node struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -7057,6 +7079,12 @@ type GetAllControls_Controls_Edges_Node struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllControls_Controls_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Aliases
+}
 func (t *GetAllControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
@@ -7269,6 +7297,7 @@ func (t *GetAllControls_Controls) GetTotalCount() int64 {
 }
 
 type GetControlByID_Control struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -7300,6 +7329,12 @@ type GetControlByID_Control struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetControlByID_Control) GetAliases() []string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Aliases
+}
 func (t *GetControlByID_Control) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetControlByID_Control{}
@@ -7508,6 +7543,7 @@ func (t *GetControls_Controls_PageInfo) GetStartCursor() *string {
 }
 
 type GetControls_Controls_Edges_Node struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -7539,6 +7575,12 @@ type GetControls_Controls_Edges_Node struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetControls_Controls_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Aliases
+}
 func (t *GetControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
@@ -7751,6 +7793,7 @@ func (t *GetControls_Controls) GetTotalCount() int64 {
 }
 
 type UpdateControl_UpdateControl_Control struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -7782,6 +7825,12 @@ type UpdateControl_UpdateControl_Control struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateControl_UpdateControl_Control) GetAliases() []string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Aliases
+}
 func (t *UpdateControl_UpdateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
@@ -60539,6 +60588,7 @@ func (t *GetStandardHistories_StandardHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -60570,6 +60620,12 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.Aliases
+}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
@@ -60757,6 +60813,7 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol) GetSubcontrols() []*Cr
 }
 
 type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -60788,6 +60845,12 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.Aliases
+}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
@@ -60975,6 +61038,7 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol) GetSubcontrols() []*CreateBu
 }
 
 type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -61006,6 +61070,12 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetAliases() []string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Aliases
+}
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
@@ -61236,6 +61306,7 @@ func (t *GetAllSubcontrols_Subcontrols_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllSubcontrols_Subcontrols_Edges_Node struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -61267,6 +61338,12 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Aliases
+}
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
@@ -61479,6 +61556,7 @@ func (t *GetAllSubcontrols_Subcontrols) GetTotalCount() int64 {
 }
 
 type GetSubcontrolByID_Subcontrol struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -61510,6 +61588,12 @@ type GetSubcontrolByID_Subcontrol struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetSubcontrolByID_Subcontrol) GetAliases() []string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Aliases
+}
 func (t *GetSubcontrolByID_Subcontrol) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
@@ -61718,6 +61802,7 @@ func (t *GetSubcontrols_Subcontrols_PageInfo) GetStartCursor() *string {
 }
 
 type GetSubcontrols_Subcontrols_Edges_Node struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -61749,6 +61834,12 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Aliases
+}
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
@@ -61961,6 +62052,7 @@ func (t *GetSubcontrols_Subcontrols) GetTotalCount() int64 {
 }
 
 type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
+	Aliases                []string                         "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -61992,6 +62084,12 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetAliases() []string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Aliases
+}
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
@@ -86012,6 +86110,7 @@ func (c *Client) GetContactHistories(ctx context.Context, first *int64, last *in
 const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upload!) {
 	createBulkCSVControl(input: $input) {
 		controls {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -86066,6 +86165,7 @@ func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload,
 const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateControlInput!]) {
 	createBulkControl(input: $input) {
 		controls {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -86120,6 +86220,7 @@ func (c *Client) CreateBulkControl(ctx context.Context, input []*CreateControlIn
 const CreateControlDocument = `mutation CreateControl ($input: CreateControlInput!) {
 	createControl(input: $input) {
 		control {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -86206,6 +86307,7 @@ const GetAllControlsDocument = `query GetAllControls {
 		}
 		edges {
 			node {
+				aliases
 				assessmentMethods
 				assessmentObjectives
 				auditorReferenceID
@@ -86258,6 +86360,7 @@ func (c *Client) GetAllControls(ctx context.Context, interceptors ...clientv2.Re
 
 const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 	control(id: $controlId) {
+		aliases
 		assessmentMethods
 		assessmentObjectives
 		auditorReferenceID
@@ -86319,6 +86422,7 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 		}
 		edges {
 			node {
+				aliases
 				assessmentMethods
 				assessmentObjectives
 				auditorReferenceID
@@ -86376,6 +86480,7 @@ func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, whe
 const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 	updateControl(id: $updateControlId, input: $input) {
 		control {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -102272,6 +102377,7 @@ func (c *Client) GetStandardHistories(ctx context.Context, first *int64, last *i
 const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 	createBulkCSVSubcontrol(input: $input) {
 		subcontrols {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -102326,6 +102432,7 @@ func (c *Client) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Uplo
 const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 	createBulkSubcontrol(input: $input) {
 		subcontrols {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -102380,6 +102487,7 @@ func (c *Client) CreateBulkSubcontrol(ctx context.Context, input []*CreateSubcon
 const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 	createSubcontrol(input: $input) {
 		subcontrol {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID
@@ -102466,6 +102574,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 		}
 		edges {
 			node {
+				aliases
 				assessmentMethods
 				assessmentObjectives
 				auditorReferenceID
@@ -102518,6 +102627,7 @@ func (c *Client) GetAllSubcontrols(ctx context.Context, interceptors ...clientv2
 
 const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) {
 	subcontrol(id: $subcontrolId) {
+		aliases
 		assessmentMethods
 		assessmentObjectives
 		auditorReferenceID
@@ -102579,6 +102689,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($first: Int, $last: Int, $
 		}
 		edges {
 			node {
+				aliases
 				assessmentMethods
 				assessmentObjectives
 				auditorReferenceID
@@ -102636,6 +102747,7 @@ func (c *Client) GetSubcontrols(ctx context.Context, first *int64, last *int64, 
 const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
 	updateSubcontrol(id: $updateSubcontrolId, input: $input) {
 		subcontrol {
+			aliases
 			assessmentMethods
 			assessmentObjectives
 			auditorReferenceID

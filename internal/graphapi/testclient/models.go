@@ -2414,10 +2414,14 @@ type Control struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
+	// the id of the party responsible for the control, usually used when the control is implemented by a third party
+	ResponsiblePartyID *string `json:"responsiblePartyID,omitempty"`
 	// status of the control
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -2470,10 +2474,13 @@ type Control struct {
 	ActionPlans       *ActionPlanConnection       `json:"actionPlans"`
 	Procedures        *ProcedureConnection        `json:"procedures"`
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
+	Comments          *NoteConnection             `json:"comments"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate               *Group                           `json:"delegate,omitempty"`
+	Delegate *Group `json:"delegate,omitempty"`
+	// the entity who is responsible for the control implementation when it is a third party
+	ResponsibleParty       *Entity                          `json:"responsibleParty,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	BlockedGroups          *GroupConnection                 `json:"blockedGroups"`
 	Editors                *GroupConnection                 `json:"editors"`
@@ -2592,10 +2599,14 @@ type ControlHistory struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
+	// the id of the party responsible for the control, usually used when the control is implemented by a third party
+	ResponsiblePartyID *string `json:"responsiblePartyID,omitempty"`
 	// status of the control
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -2849,6 +2860,22 @@ type ControlHistoryWhereInput struct {
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+	// responsible_party_id field predicates
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIdneq          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIdgt           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIdgte          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIdlt           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIdlte          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        *bool    `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       *bool    `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -4496,6 +4523,22 @@ type ControlWhereInput struct {
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+	// responsible_party_id field predicates
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIdneq          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIdgt           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIdgte          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIdlt           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIdlte          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        *bool    `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       *bool    `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -4720,12 +4763,18 @@ type ControlWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 	// control_owner edge predicates
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
 	// delegate edge predicates
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+	// responsible_party edge predicates
+	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
+	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -4930,6 +4979,8 @@ type CreateControlInput struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
@@ -4976,8 +5027,10 @@ type CreateControlInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
 	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
+	CommentIDs               []string `json:"commentIDs,omitempty"`
 	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
 	DelegateID               *string  `json:"delegateID,omitempty"`
+	ResponsiblePartyID       *string  `json:"responsiblePartyID,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                []string `json:"editorIDs,omitempty"`
@@ -6075,6 +6128,8 @@ type CreateSubcontrolInput struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
@@ -6121,8 +6176,10 @@ type CreateSubcontrolInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
 	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
+	CommentIDs               []string `json:"commentIDs,omitempty"`
 	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
 	DelegateID               *string  `json:"delegateID,omitempty"`
+	ResponsiblePartyID       *string  `json:"responsiblePartyID,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	ControlID                string   `json:"controlID"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
@@ -25393,10 +25450,14 @@ type Subcontrol struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
+	// the id of the party responsible for the control, usually used when the control is implemented by a third party
+	ResponsiblePartyID *string `json:"responsiblePartyID,omitempty"`
 	// status of the control
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -25449,10 +25510,13 @@ type Subcontrol struct {
 	ActionPlans       *ActionPlanConnection       `json:"actionPlans"`
 	Procedures        *ProcedureConnection        `json:"procedures"`
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
+	Comments          *NoteConnection             `json:"comments"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate               *Group                           `json:"delegate,omitempty"`
+	Delegate *Group `json:"delegate,omitempty"`
+	// the entity who is responsible for the control implementation when it is a third party
+	ResponsibleParty       *Entity                          `json:"responsibleParty,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Control                *Control                         `json:"control"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
@@ -25514,10 +25578,14 @@ type SubcontrolHistory struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
+	// the id of the party responsible for the control, usually used when the control is implemented by a third party
+	ResponsiblePartyID *string `json:"responsiblePartyID,omitempty"`
 	// status of the control
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -25771,6 +25839,22 @@ type SubcontrolHistoryWhereInput struct {
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+	// responsible_party_id field predicates
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIdneq          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIdgt           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIdgte          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIdlt           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIdlte          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        *bool    `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       *bool    `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -26134,6 +26218,22 @@ type SubcontrolWhereInput struct {
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+	// responsible_party_id field predicates
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIdneq          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIdgt           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIdgte          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIdlt           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIdlte          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        *bool    `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       *bool    `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -26356,12 +26456,18 @@ type SubcontrolWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 	// control_owner edge predicates
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
 	// delegate edge predicates
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+	// responsible_party edge predicates
+	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
+	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -31789,6 +31895,10 @@ type UpdateControlInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases       []string `json:"aliases,omitempty"`
+	AppendAliases []string `json:"appendAliases,omitempty"`
+	ClearAliases  *bool    `json:"clearAliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID      *string `json:"referenceID,omitempty"`
 	ClearReferenceID *bool   `json:"clearReferenceID,omitempty"`
@@ -31873,10 +31983,15 @@ type UpdateControlInput struct {
 	AddInternalPolicyIDs           []string `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs        []string `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies          *bool    `json:"clearInternalPolicies,omitempty"`
+	AddCommentIDs                  []string `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs               []string `json:"removeCommentIDs,omitempty"`
+	ClearComments                  *bool    `json:"clearComments,omitempty"`
 	ControlOwnerID                 *string  `json:"controlOwnerID,omitempty"`
 	ClearControlOwner              *bool    `json:"clearControlOwner,omitempty"`
 	DelegateID                     *string  `json:"delegateID,omitempty"`
 	ClearDelegate                  *bool    `json:"clearDelegate,omitempty"`
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ClearResponsibleParty          *bool    `json:"clearResponsibleParty,omitempty"`
 	AddBlockedGroupIDs             []string `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs          []string `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups             *bool    `json:"clearBlockedGroups,omitempty"`
@@ -33680,6 +33795,10 @@ type UpdateSubcontrolInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases       []string `json:"aliases,omitempty"`
+	AppendAliases []string `json:"appendAliases,omitempty"`
+	ClearAliases  *bool    `json:"clearAliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID      *string `json:"referenceID,omitempty"`
 	ClearReferenceID *bool   `json:"clearReferenceID,omitempty"`
@@ -33764,10 +33883,15 @@ type UpdateSubcontrolInput struct {
 	AddInternalPolicyIDs           []string `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs        []string `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies          *bool    `json:"clearInternalPolicies,omitempty"`
+	AddCommentIDs                  []string `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs               []string `json:"removeCommentIDs,omitempty"`
+	ClearComments                  *bool    `json:"clearComments,omitempty"`
 	ControlOwnerID                 *string  `json:"controlOwnerID,omitempty"`
 	ClearControlOwner              *bool    `json:"clearControlOwner,omitempty"`
 	DelegateID                     *string  `json:"delegateID,omitempty"`
 	ClearDelegate                  *bool    `json:"clearDelegate,omitempty"`
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ClearResponsibleParty          *bool    `json:"clearResponsibleParty,omitempty"`
 	ControlID                      *string  `json:"controlID,omitempty"`
 	AddControlImplementationIDs    []string `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string `json:"removeControlImplementationIDs,omitempty"`
@@ -36354,18 +36478,19 @@ func (e ControlObjectiveOrderField) MarshalJSON() ([]byte, error) {
 type ControlOrderField string
 
 const (
-	ControlOrderFieldCreatedAt          ControlOrderField = "created_at"
-	ControlOrderFieldUpdatedAt          ControlOrderField = "updated_at"
-	ControlOrderFieldTitle              ControlOrderField = "title"
-	ControlOrderFieldStatus             ControlOrderField = "STATUS"
-	ControlOrderFieldSource             ControlOrderField = "SOURCE"
-	ControlOrderFieldReferenceFramework ControlOrderField = "REFERENCE_FRAMEWORK"
-	ControlOrderFieldControlType        ControlOrderField = "CONTROL_TYPE"
-	ControlOrderFieldCategory           ControlOrderField = "category"
-	ControlOrderFieldSubcategory        ControlOrderField = "subcategory"
-	ControlOrderFieldRefCode            ControlOrderField = "ref_code"
-	ControlOrderFieldControlOwnerName   ControlOrderField = "CONTROL_OWNER_name"
-	ControlOrderFieldDelegateName       ControlOrderField = "DELEGATE_name"
+	ControlOrderFieldCreatedAt            ControlOrderField = "created_at"
+	ControlOrderFieldUpdatedAt            ControlOrderField = "updated_at"
+	ControlOrderFieldTitle                ControlOrderField = "title"
+	ControlOrderFieldStatus               ControlOrderField = "STATUS"
+	ControlOrderFieldSource               ControlOrderField = "SOURCE"
+	ControlOrderFieldReferenceFramework   ControlOrderField = "REFERENCE_FRAMEWORK"
+	ControlOrderFieldControlType          ControlOrderField = "CONTROL_TYPE"
+	ControlOrderFieldCategory             ControlOrderField = "category"
+	ControlOrderFieldSubcategory          ControlOrderField = "subcategory"
+	ControlOrderFieldRefCode              ControlOrderField = "ref_code"
+	ControlOrderFieldControlOwnerName     ControlOrderField = "CONTROL_OWNER_name"
+	ControlOrderFieldDelegateName         ControlOrderField = "DELEGATE_name"
+	ControlOrderFieldResponsiblePartyName ControlOrderField = "RESPONSIBLE_PARTY_name"
 )
 
 var AllControlOrderField = []ControlOrderField{
@@ -36381,11 +36506,12 @@ var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldRefCode,
 	ControlOrderFieldControlOwnerName,
 	ControlOrderFieldDelegateName,
+	ControlOrderFieldResponsiblePartyName,
 }
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldTitle, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldTitle, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName, ControlOrderFieldResponsiblePartyName:
 		return true
 	}
 	return false
@@ -40738,18 +40864,19 @@ func (e SubcontrolHistoryOrderField) MarshalJSON() ([]byte, error) {
 type SubcontrolOrderField string
 
 const (
-	SubcontrolOrderFieldCreatedAt          SubcontrolOrderField = "created_at"
-	SubcontrolOrderFieldUpdatedAt          SubcontrolOrderField = "updated_at"
-	SubcontrolOrderFieldTitle              SubcontrolOrderField = "title"
-	SubcontrolOrderFieldStatus             SubcontrolOrderField = "STATUS"
-	SubcontrolOrderFieldSource             SubcontrolOrderField = "SOURCE"
-	SubcontrolOrderFieldReferenceFramework SubcontrolOrderField = "REFERENCE_FRAMEWORK"
-	SubcontrolOrderFieldControlType        SubcontrolOrderField = "CONTROL_TYPE"
-	SubcontrolOrderFieldCategory           SubcontrolOrderField = "category"
-	SubcontrolOrderFieldSubcategory        SubcontrolOrderField = "subcategory"
-	SubcontrolOrderFieldRefCode            SubcontrolOrderField = "ref_code"
-	SubcontrolOrderFieldControlOwnerName   SubcontrolOrderField = "CONTROL_OWNER_name"
-	SubcontrolOrderFieldDelegateName       SubcontrolOrderField = "DELEGATE_name"
+	SubcontrolOrderFieldCreatedAt            SubcontrolOrderField = "created_at"
+	SubcontrolOrderFieldUpdatedAt            SubcontrolOrderField = "updated_at"
+	SubcontrolOrderFieldTitle                SubcontrolOrderField = "title"
+	SubcontrolOrderFieldStatus               SubcontrolOrderField = "STATUS"
+	SubcontrolOrderFieldSource               SubcontrolOrderField = "SOURCE"
+	SubcontrolOrderFieldReferenceFramework   SubcontrolOrderField = "REFERENCE_FRAMEWORK"
+	SubcontrolOrderFieldControlType          SubcontrolOrderField = "CONTROL_TYPE"
+	SubcontrolOrderFieldCategory             SubcontrolOrderField = "category"
+	SubcontrolOrderFieldSubcategory          SubcontrolOrderField = "subcategory"
+	SubcontrolOrderFieldRefCode              SubcontrolOrderField = "ref_code"
+	SubcontrolOrderFieldControlOwnerName     SubcontrolOrderField = "CONTROL_OWNER_name"
+	SubcontrolOrderFieldDelegateName         SubcontrolOrderField = "DELEGATE_name"
+	SubcontrolOrderFieldResponsiblePartyName SubcontrolOrderField = "RESPONSIBLE_PARTY_name"
 )
 
 var AllSubcontrolOrderField = []SubcontrolOrderField{
@@ -40765,11 +40892,12 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldRefCode,
 	SubcontrolOrderFieldControlOwnerName,
 	SubcontrolOrderFieldDelegateName,
+	SubcontrolOrderFieldResponsiblePartyName,
 }
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldTitle, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldTitle, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName, SubcontrolOrderFieldResponsiblePartyName:
 		return true
 	}
 	return false

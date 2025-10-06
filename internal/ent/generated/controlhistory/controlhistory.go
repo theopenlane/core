@@ -44,10 +44,14 @@ const (
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldAliases holds the string denoting the aliases field in the database.
+	FieldAliases = "aliases"
 	// FieldReferenceID holds the string denoting the reference_id field in the database.
 	FieldReferenceID = "reference_id"
 	// FieldAuditorReferenceID holds the string denoting the auditor_reference_id field in the database.
 	FieldAuditorReferenceID = "auditor_reference_id"
+	// FieldResponsiblePartyID holds the string denoting the responsible_party_id field in the database.
+	FieldResponsiblePartyID = "responsible_party_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -112,8 +116,10 @@ var Columns = []string{
 	FieldTags,
 	FieldTitle,
 	FieldDescription,
+	FieldAliases,
 	FieldReferenceID,
 	FieldAuditorReferenceID,
+	FieldResponsiblePartyID,
 	FieldStatus,
 	FieldSource,
 	FieldReferenceFramework,
@@ -188,7 +194,7 @@ const DefaultStatus enums.ControlStatus = "NOT_IMPLEMENTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ControlStatus) error {
 	switch s.String() {
-	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED":
+	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
 		return nil
 	default:
 		return fmt.Errorf("controlhistory: invalid enum value for status field: %q", s)
@@ -295,6 +301,11 @@ func ByReferenceID(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorReferenceID orders the results by the auditor_reference_id field.
 func ByAuditorReferenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorReferenceID, opts...).ToFunc()
+}
+
+// ByResponsiblePartyID orders the results by the responsible_party_id field.
+func ByResponsiblePartyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponsiblePartyID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

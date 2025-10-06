@@ -70,10 +70,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Control_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -134,10 +138,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Control_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Control_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Control_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -207,10 +215,14 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Control_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -271,10 +283,14 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Control_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Control_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Control_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -373,10 +389,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Control_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -437,10 +457,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Control_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Control_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Control_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -539,10 +563,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Control_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -603,10 +631,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Control_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Control_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Control_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":

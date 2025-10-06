@@ -578,6 +578,8 @@ github.com/riverqueue/river/rivershared v0.25.0 h1:grjuTHJEVvi4srzcspQ2UXWjISxdq
 github.com/riverqueue/river/rivershared v0.25.0/go.mod h1:ZdVeOnT8X8PiAZRUfWHc+Ne6fNXqe1oYb2eioZb6URM=
 github.com/riverqueue/river/rivertype v0.25.0 h1:DPwd0DGqajLIv9zsB+BOwlum0D1/4Iiqz34+nwIZaZ0=
 github.com/riverqueue/river/rivertype v0.25.0/go.mod h1:9bbWVYkr1B/YzW43lUs/Vk/tEYqLrabrZWrtUWQ+Goo=
+github.com/riverqueue/rivercontrib/otelriver v0.5.0 h1:dZF4Fy7/3RaIRsyCPdpIJtzEip0pCvoJ44YpSDum8e4=
+github.com/riverqueue/rivercontrib/otelriver v0.5.0/go.mod h1:rXANcBrlgRvg+auD3/O6Xfs59AWeWNpa/kim62mkxGo=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
@@ -669,8 +671,8 @@ github.com/theopenlane/iam v0.17.3 h1:6z/RMpxtK7IGbeiz2Uplh/HisiD6WQ6fRR/lfS14kD
 github.com/theopenlane/iam v0.17.3/go.mod h1:DM/YPKv++iol2di6ZwJlM+ZqJ+E8MZO7G7yzFUbCHgw=
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
-github.com/theopenlane/riverboat v0.4.1 h1:zYYAjst4ysQxC/Va8aoFXbuBLnbFYf3R0L9gULDQLTc=
-github.com/theopenlane/riverboat v0.4.1/go.mod h1:NuVCW8UObnvjROa3KCIGUq7DHaoz3r3Fk5ZpYIKtDVo=
+github.com/theopenlane/riverboat v0.4.2 h1:2XYWMYLD7uU8ziKQWTW9kY65Y0Y3L11BsPHMVNTjZMw=
+github.com/theopenlane/riverboat v0.4.2/go.mod h1:rskBfcmJmgmfIdi5a3m7ODc0U0zyP/lSfk+kRNpkEHc=
 github.com/theopenlane/utils v0.5.1 h1:VY2+TbTVvcgBwfOhhVx/PbUBIpFZYW07bjprXpcPFcA=
 github.com/theopenlane/utils v0.5.1/go.mod h1:d7F811pRS817S9wo9SmsSghS5GDgN32BFn6meMM9PM0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
@@ -714,8 +716,8 @@ github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IU
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
 github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV6mEfg5OIWRZA9qds=
-github.com/windmill-labs/windmill-go-client v1.555.0 h1:8jLi44bD5HHujzaaDWrXaf4YcCBLrzSzs291AIViBhs=
-github.com/windmill-labs/windmill-go-client v1.555.0/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
+github.com/windmill-labs/windmill-go-client v1.555.2 h1:4IARkaiWOk1WjYhczUIe2jw0N04n3r4MBlG7Svk5I08=
+github.com/windmill-labs/windmill-go-client v1.555.2/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
 github.com/wk8/go-ordered-map/v2 v2.1.8 h1:5h/BUHu93oj4gIdvHHHGsScSTMijfx5PeYkE/fJgbpc=
 github.com/wk8/go-ordered-map/v2 v2.1.8/go.mod h1:5nJHM5DyteebpVlHnWMV0rPz6Zp7+xBAnxjb1X5vnTw=
 github.com/woodsbury/decimal128 v1.4.0 h1:xJATj7lLu4f2oObouMt2tgGiElE5gO6mSWUjQsBgUlc=
@@ -755,8 +757,8 @@ github.com/zitadel/oidc/v3 v3.45.0 h1:SaVJ2kdcJi/zdEWWlAns+81VxmfdYX4E+2mWFVIH7E
 github.com/zitadel/oidc/v3 v3.45.0/go.mod h1:UeK0iVOoqfMuDVgSfv56BqTz8YQC2M+tGRIXZ7Ii3VY=
 github.com/zitadel/schema v1.3.1 h1:QT3kwiRIRXXLVAs6gCK/u044WmUVh6IlbLXUsn6yRQU=
 github.com/zitadel/schema v1.3.1/go.mod h1:071u7D2LQacy1HAN+YnMd/mx1qVE2isb0Mjeqg46xnU=
-go.opentelemetry.io/auto/sdk v1.1.0 h1:cH53jehLUN6UFLY71z+NDOiNJqDdPRaXzTel0sJySYA=
-go.opentelemetry.io/auto/sdk v1.1.0/go.mod h1:3wSPjt5PWp2RhlCcmmOial7AvC4DQqZb7a7wCow3W8A=
+go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=
+go.opentelemetry.io/auto/sdk v1.2.1/go.mod h1:KRTj+aOaElaLi+wW1kO/DZRXwkF4C5xPbEe3ZiIhN7Y=
 go.opentelemetry.io/contrib v1.38.0 h1:msaHYZ13HfLIbqXsGwZZQBg5zgxwumlZ1mCkXn3E7LM=
 go.opentelemetry.io/contrib v1.38.0/go.mod h1:4Vp7Az5Dez02V1lCi9OqLvSmSz0lbZu/O2r4XZsqwB0=
 go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.63.0 h1:YH4g8lQroajqUwWbq/tr2QX1JFmEXaDLgG+ew9bLMWo=

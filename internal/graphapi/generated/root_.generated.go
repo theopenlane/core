@@ -428,6 +428,7 @@ type ComplexityRoot struct {
 
 	Control struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Aliases                func(childComplexity int) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		Assets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -435,6 +436,7 @@ type ComplexityRoot struct {
 		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
+		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner           func(childComplexity int) int
@@ -464,6 +466,8 @@ type ComplexityRoot struct {
 		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
+		ResponsibleParty       func(childComplexity int) int
+		ResponsiblePartyID     func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
@@ -540,6 +544,7 @@ type ComplexityRoot struct {
 	}
 
 	ControlHistory struct {
+		Aliases                func(childComplexity int) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		AuditorReferenceID     func(childComplexity int) int
@@ -566,6 +571,7 @@ type ComplexityRoot struct {
 		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
+		ResponsiblePartyID     func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		StandardID             func(childComplexity int) int
 		Status                 func(childComplexity int) int
@@ -4369,11 +4375,13 @@ type ComplexityRoot struct {
 
 	Subcontrol struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Aliases                func(childComplexity int) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		AuditorReferenceID     func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
+		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Control                func(childComplexity int) int
 		ControlID              func(childComplexity int) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -4403,6 +4411,8 @@ type ComplexityRoot struct {
 		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
+		ResponsibleParty       func(childComplexity int) int
+		ResponsiblePartyID     func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                 func(childComplexity int) int
@@ -4441,6 +4451,7 @@ type ComplexityRoot struct {
 	}
 
 	SubcontrolHistory struct {
+		Aliases                func(childComplexity int) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		AuditorReferenceID     func(childComplexity int) int
@@ -4468,6 +4479,7 @@ type ComplexityRoot struct {
 		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
+		ResponsiblePartyID     func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
@@ -7247,6 +7259,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Control.aliases":
+		if e.complexity.Control.Aliases == nil {
+			break
+		}
+
+		return e.complexity.Control.Aliases(childComplexity), true
+
 	case "Control.assessmentMethods":
 		if e.complexity.Control.AssessmentMethods == nil {
 			break
@@ -7305,6 +7324,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.CategoryID(childComplexity), true
+
+	case "Control.comments":
+		if e.complexity.Control.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Control_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Control.controlImplementations":
 		if e.complexity.Control.ControlImplementations == nil {
@@ -7548,6 +7579,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.References(childComplexity), true
+
+	case "Control.responsibleParty":
+		if e.complexity.Control.ResponsibleParty == nil {
+			break
+		}
+
+		return e.complexity.Control.ResponsibleParty(childComplexity), true
+
+	case "Control.responsiblePartyID":
+		if e.complexity.Control.ResponsiblePartyID == nil {
+			break
+		}
+
+		return e.complexity.Control.ResponsiblePartyID(childComplexity), true
 
 	case "Control.risks":
 		if e.complexity.Control.Risks == nil {
@@ -7833,6 +7878,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlGroupEdge.PageInfo(childComplexity), true
 
+	case "ControlHistory.aliases":
+		if e.complexity.ControlHistory.Aliases == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.Aliases(childComplexity), true
+
 	case "ControlHistory.assessmentMethods":
 		if e.complexity.ControlHistory.AssessmentMethods == nil {
 			break
@@ -8014,6 +8066,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.References(childComplexity), true
+
+	case "ControlHistory.responsiblePartyID":
+		if e.complexity.ControlHistory.ResponsiblePartyID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ResponsiblePartyID(childComplexity), true
 
 	case "ControlHistory.source":
 		if e.complexity.ControlHistory.Source == nil {
@@ -30629,6 +30688,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Subcontrol.aliases":
+		if e.complexity.Subcontrol.Aliases == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.Aliases(childComplexity), true
+
 	case "Subcontrol.assessmentMethods":
 		if e.complexity.Subcontrol.AssessmentMethods == nil {
 			break
@@ -30663,6 +30729,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.CategoryID(childComplexity), true
+
+	case "Subcontrol.comments":
+		if e.complexity.Subcontrol.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Subcontrol.control":
 		if e.complexity.Subcontrol.Control == nil {
@@ -30897,6 +30975,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.References(childComplexity), true
 
+	case "Subcontrol.responsibleParty":
+		if e.complexity.Subcontrol.ResponsibleParty == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ResponsibleParty(childComplexity), true
+
+	case "Subcontrol.responsiblePartyID":
+		if e.complexity.Subcontrol.ResponsiblePartyID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ResponsiblePartyID(childComplexity), true
+
 	case "Subcontrol.risks":
 		if e.complexity.Subcontrol.Risks == nil {
 			break
@@ -31051,6 +31143,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolEdge.Node(childComplexity), true
+
+	case "SubcontrolHistory.aliases":
+		if e.complexity.SubcontrolHistory.Aliases == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.Aliases(childComplexity), true
 
 	case "SubcontrolHistory.assessmentMethods":
 		if e.complexity.SubcontrolHistory.AssessmentMethods == nil {
@@ -31240,6 +31339,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.References(childComplexity), true
+
+	case "SubcontrolHistory.responsiblePartyID":
+		if e.complexity.SubcontrolHistory.ResponsiblePartyID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ResponsiblePartyID(childComplexity), true
 
 	case "SubcontrolHistory.source":
 		if e.complexity.SubcontrolHistory.Source == nil {
@@ -42263,6 +42369,10 @@ type Control implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -42270,6 +42380,10 @@ type Control implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: ID
   """
   status of the control
   """
@@ -42606,6 +42720,37 @@ type Control implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -42614,6 +42759,10 @@ type Control implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  """
+  the entity who is responsible for the control implementation when it is a third party
+  """
+  responsibleParty: Entity
   owner: Organization
   blockedGroups(
     """
@@ -42901,6 +43050,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 ControlControlType is enum for the field control_type
@@ -42950,6 +43100,10 @@ type ControlHistory implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -42957,6 +43111,10 @@ type ControlHistory implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: String
   """
   status of the control
   """
@@ -43082,6 +43240,7 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pk
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 ControlHistoryControlType is enum for the field control_type
@@ -43349,6 +43508,24 @@ input ControlHistoryWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: String
+  responsiblePartyIDNEQ: String
+  responsiblePartyIDIn: [String!]
+  responsiblePartyIDNotIn: [String!]
+  responsiblePartyIDGT: String
+  responsiblePartyIDGTE: String
+  responsiblePartyIDLT: String
+  responsiblePartyIDLTE: String
+  responsiblePartyIDContains: String
+  responsiblePartyIDHasPrefix: String
+  responsiblePartyIDHasSuffix: String
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: String
+  responsiblePartyIDContainsFold: String
   """
   status field predicates
   """
@@ -45841,6 +46018,7 @@ enum ControlOrderField {
   ref_code
   CONTROL_OWNER_name
   DELEGATE_name
+  RESPONSIBLE_PARTY_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -46013,6 +46191,24 @@ input ControlWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: ID
+  responsiblePartyIDNEQ: ID
+  responsiblePartyIDIn: [ID!]
+  responsiblePartyIDNotIn: [ID!]
+  responsiblePartyIDGT: ID
+  responsiblePartyIDGTE: ID
+  responsiblePartyIDLT: ID
+  responsiblePartyIDLTE: ID
+  responsiblePartyIDContains: ID
+  responsiblePartyIDHasPrefix: ID
+  responsiblePartyIDHasSuffix: ID
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: ID
+  responsiblePartyIDContainsFold: ID
   """
   status field predicates
   """
@@ -46284,6 +46480,11 @@ input ControlWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -46293,6 +46494,11 @@ input ControlWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  responsible_party edge predicates
+  """
+  hasResponsibleParty: Boolean
+  hasResponsiblePartyWith: [EntityWhereInput!]
   """
   owner edge predicates
   """
@@ -46640,6 +46846,10 @@ input CreateControlInput {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -46723,8 +46933,10 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  commentIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  responsiblePartyID: ID
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -48384,6 +48596,10 @@ input CreateSubcontrolInput {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -48467,8 +48683,10 @@ input CreateSubcontrolInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  commentIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  responsiblePartyID: ID
   ownerID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
@@ -83692,6 +83910,10 @@ type Subcontrol implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -83699,6 +83921,10 @@ type Subcontrol implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: ID
   """
   status of the control
   """
@@ -84035,6 +84261,37 @@ type Subcontrol implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -84043,6 +84300,10 @@ type Subcontrol implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  """
+  the entity who is responsible for the control implementation when it is a third party
+  """
+  responsibleParty: Entity
   owner: Organization
   control: Control!
   controlImplementations(
@@ -84144,6 +84405,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 SubcontrolControlType is enum for the field control_type
@@ -84193,6 +84455,10 @@ type SubcontrolHistory implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -84200,6 +84466,10 @@ type SubcontrolHistory implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: String
   """
   status of the control
   """
@@ -84325,6 +84595,7 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 SubcontrolHistoryControlType is enum for the field control_type
@@ -84593,6 +84864,24 @@ input SubcontrolHistoryWhereInput {
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
   """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: String
+  responsiblePartyIDNEQ: String
+  responsiblePartyIDIn: [String!]
+  responsiblePartyIDNotIn: [String!]
+  responsiblePartyIDGT: String
+  responsiblePartyIDGTE: String
+  responsiblePartyIDLT: String
+  responsiblePartyIDLTE: String
+  responsiblePartyIDContains: String
+  responsiblePartyIDHasPrefix: String
+  responsiblePartyIDHasSuffix: String
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: String
+  responsiblePartyIDContainsFold: String
+  """
   status field predicates
   """
   status: SubcontrolHistoryControlStatus
@@ -84850,6 +85139,7 @@ enum SubcontrolOrderField {
   ref_code
   CONTROL_OWNER_name
   DELEGATE_name
+  RESPONSIBLE_PARTY_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -85022,6 +85312,24 @@ input SubcontrolWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: ID
+  responsiblePartyIDNEQ: ID
+  responsiblePartyIDIn: [ID!]
+  responsiblePartyIDNotIn: [ID!]
+  responsiblePartyIDGT: ID
+  responsiblePartyIDGTE: ID
+  responsiblePartyIDLT: ID
+  responsiblePartyIDLTE: ID
+  responsiblePartyIDContains: ID
+  responsiblePartyIDHasPrefix: ID
+  responsiblePartyIDHasSuffix: ID
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: ID
+  responsiblePartyIDContainsFold: ID
   """
   status field predicates
   """
@@ -85291,6 +85599,11 @@ input SubcontrolWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -85300,6 +85613,11 @@ input SubcontrolWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  responsible_party edge predicates
+  """
+  hasResponsibleParty: Boolean
+  hasResponsiblePartyWith: [EntityWhereInput!]
   """
   owner edge predicates
   """
@@ -92839,6 +93157,12 @@ input UpdateControlInput {
   description: String
   clearDescription: Boolean
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  appendAliases: [String!]
+  clearAliases: Boolean
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -92958,10 +93282,15 @@ input UpdateControlInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  responsiblePartyID: ID
+  clearResponsibleParty: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -95293,6 +95622,12 @@ input UpdateSubcontrolInput {
   description: String
   clearDescription: Boolean
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  appendAliases: [String!]
+  clearAliases: Boolean
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -95412,10 +95747,15 @@ input UpdateSubcontrolInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  responsiblePartyID: ID
+  clearResponsibleParty: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]

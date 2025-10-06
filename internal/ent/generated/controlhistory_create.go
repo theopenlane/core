@@ -181,6 +181,12 @@ func (_c *ControlHistoryCreate) SetNillableDescription(v *string) *ControlHistor
 	return _c
 }
 
+// SetAliases sets the "aliases" field.
+func (_c *ControlHistoryCreate) SetAliases(v []string) *ControlHistoryCreate {
+	_c.mutation.SetAliases(v)
+	return _c
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_c *ControlHistoryCreate) SetReferenceID(v string) *ControlHistoryCreate {
 	_c.mutation.SetReferenceID(v)
@@ -205,6 +211,20 @@ func (_c *ControlHistoryCreate) SetAuditorReferenceID(v string) *ControlHistoryC
 func (_c *ControlHistoryCreate) SetNillableAuditorReferenceID(v *string) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetAuditorReferenceID(*v)
+	}
+	return _c
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_c *ControlHistoryCreate) SetResponsiblePartyID(v string) *ControlHistoryCreate {
+	_c.mutation.SetResponsiblePartyID(v)
+	return _c
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableResponsiblePartyID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetResponsiblePartyID(*v)
 	}
 	return _c
 }
@@ -677,6 +697,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := _c.mutation.Aliases(); ok {
+		_spec.SetField(controlhistory.FieldAliases, field.TypeJSON, value)
+		_node.Aliases = value
+	}
 	if value, ok := _c.mutation.ReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldReferenceID, field.TypeString, value)
 		_node.ReferenceID = value
@@ -684,6 +708,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AuditorReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldAuditorReferenceID, field.TypeString, value)
 		_node.AuditorReferenceID = value
+	}
+	if value, ok := _c.mutation.ResponsiblePartyID(); ok {
+		_spec.SetField(controlhistory.FieldResponsiblePartyID, field.TypeString, value)
+		_node.ResponsiblePartyID = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)

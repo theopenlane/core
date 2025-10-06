@@ -51,6 +51,15 @@ func (m ControlMixin) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, ActionPlan{}),
 		defaultEdgeToWithPagination(c, Procedure{}),
 		defaultEdgeFromWithPagination(c, InternalPolicy{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 		// owner is the user who is responsible for the control
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,
@@ -72,6 +81,17 @@ func (m ControlMixin) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entgql.OrderField("DELEGATE_name"),
 				accessmap.EdgeViewCheck(Group{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: c,
+			name:       "responsible_party",
+			t:          Entity.Type,
+			field:      "responsible_party_id",
+			comment:    "the entity who is responsible for the control implementation when it is a third party",
+			annotations: []schema.Annotation{
+				entgql.OrderField("RESPONSIBLE_PARTY_name"),
+				accessmap.EdgeViewCheck(Entity{}.Name()),
 			},
 		}),
 	}
@@ -124,6 +144,11 @@ var controlFields = []ent.Field{
 			entx.FieldSearchable(),
 		).
 		Comment("description of what the control is supposed to accomplish"),
+	field.Strings("aliases").Optional().
+		Annotations(
+			entx.FieldSearchable(),
+		).
+		Comment("additional names (ref_codes) for the control"),
 	field.String("reference_id").
 		Optional().
 		Unique().
@@ -132,6 +157,9 @@ var controlFields = []ent.Field{
 		Optional().
 		Unique().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
+	field.String("responsible_party_id").
+		Optional().
+		Comment("the id of the party responsible for the control, usually used when the control is implemented by a third party"),
 	field.Enum("status").
 		GoType(enums.ControlStatus("")).
 		Optional().

@@ -1137,6 +1137,24 @@
         },
         "riverConf": {
           "$ref": "#/$defs/river.Config"
+        },
+        "metrics": {
+          "$ref": "#/$defs/riverqueue.MetricsConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "riverqueue.MetricsConfig": {
+      "properties": {
+        "enableMetrics": {
+          "type": "boolean"
+        },
+        "metricsDurationUnit": {
+          "type": "string"
+        },
+        "enableSemanticMetrics": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,

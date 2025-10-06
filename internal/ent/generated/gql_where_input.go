@@ -7464,6 +7464,23 @@ type ControlWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
+	// "responsible_party_id" field predicates.
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIDNEQ          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIDGT           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIDGTE          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIDLT           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIDLTE          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        bool     `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       bool     `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -7711,6 +7728,10 @@ type ControlWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -7718,6 +7739,10 @@ type ControlWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "responsible_party" edge predicates.
+	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
+	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -8229,6 +8254,51 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.AuditorReferenceIDContainsFold != nil {
 		predicates = append(predicates, control.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
+	}
+	if i.ResponsiblePartyID != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDEQ(*i.ResponsiblePartyID))
+	}
+	if i.ResponsiblePartyIDNEQ != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDNEQ(*i.ResponsiblePartyIDNEQ))
+	}
+	if len(i.ResponsiblePartyIDIn) > 0 {
+		predicates = append(predicates, control.ResponsiblePartyIDIn(i.ResponsiblePartyIDIn...))
+	}
+	if len(i.ResponsiblePartyIDNotIn) > 0 {
+		predicates = append(predicates, control.ResponsiblePartyIDNotIn(i.ResponsiblePartyIDNotIn...))
+	}
+	if i.ResponsiblePartyIDGT != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDGT(*i.ResponsiblePartyIDGT))
+	}
+	if i.ResponsiblePartyIDGTE != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDGTE(*i.ResponsiblePartyIDGTE))
+	}
+	if i.ResponsiblePartyIDLT != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDLT(*i.ResponsiblePartyIDLT))
+	}
+	if i.ResponsiblePartyIDLTE != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDLTE(*i.ResponsiblePartyIDLTE))
+	}
+	if i.ResponsiblePartyIDContains != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDContains(*i.ResponsiblePartyIDContains))
+	}
+	if i.ResponsiblePartyIDHasPrefix != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDHasPrefix(*i.ResponsiblePartyIDHasPrefix))
+	}
+	if i.ResponsiblePartyIDHasSuffix != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDHasSuffix(*i.ResponsiblePartyIDHasSuffix))
+	}
+	if i.ResponsiblePartyIDIsNil {
+		predicates = append(predicates, control.ResponsiblePartyIDIsNil())
+	}
+	if i.ResponsiblePartyIDNotNil {
+		predicates = append(predicates, control.ResponsiblePartyIDNotNil())
+	}
+	if i.ResponsiblePartyIDEqualFold != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDEqualFold(*i.ResponsiblePartyIDEqualFold))
+	}
+	if i.ResponsiblePartyIDContainsFold != nil {
+		predicates = append(predicates, control.ResponsiblePartyIDContainsFold(*i.ResponsiblePartyIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, control.StatusEQ(*i.Status))
@@ -8930,6 +9000,24 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasInternalPoliciesWith(with...))
 	}
+	if i.HasComments != nil {
+		p := control.HasComments()
+		if !*i.HasComments {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasCommentsWith(with...))
+	}
 	if i.HasControlOwner != nil {
 		p := control.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -8965,6 +9053,24 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasDelegateWith(with...))
+	}
+	if i.HasResponsibleParty != nil {
+		p := control.HasResponsibleParty()
+		if !*i.HasResponsibleParty {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasResponsiblePartyWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasResponsiblePartyWith))
+		for _, w := range i.HasResponsiblePartyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasResponsiblePartyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasResponsiblePartyWith(with...))
 	}
 	if i.HasOwner != nil {
 		p := control.HasOwner()
@@ -9348,6 +9454,23 @@ type ControlHistoryWhereInput struct {
 	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
+	// "responsible_party_id" field predicates.
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIDNEQ          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIDGT           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIDGTE          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIDLT           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIDLTE          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        bool     `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       bool     `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 
 	// "status" field predicates.
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
@@ -10115,6 +10238,51 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.AuditorReferenceIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
+	}
+	if i.ResponsiblePartyID != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDEQ(*i.ResponsiblePartyID))
+	}
+	if i.ResponsiblePartyIDNEQ != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDNEQ(*i.ResponsiblePartyIDNEQ))
+	}
+	if len(i.ResponsiblePartyIDIn) > 0 {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDIn(i.ResponsiblePartyIDIn...))
+	}
+	if len(i.ResponsiblePartyIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDNotIn(i.ResponsiblePartyIDNotIn...))
+	}
+	if i.ResponsiblePartyIDGT != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDGT(*i.ResponsiblePartyIDGT))
+	}
+	if i.ResponsiblePartyIDGTE != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDGTE(*i.ResponsiblePartyIDGTE))
+	}
+	if i.ResponsiblePartyIDLT != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDLT(*i.ResponsiblePartyIDLT))
+	}
+	if i.ResponsiblePartyIDLTE != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDLTE(*i.ResponsiblePartyIDLTE))
+	}
+	if i.ResponsiblePartyIDContains != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDContains(*i.ResponsiblePartyIDContains))
+	}
+	if i.ResponsiblePartyIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDHasPrefix(*i.ResponsiblePartyIDHasPrefix))
+	}
+	if i.ResponsiblePartyIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDHasSuffix(*i.ResponsiblePartyIDHasSuffix))
+	}
+	if i.ResponsiblePartyIDIsNil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDIsNil())
+	}
+	if i.ResponsiblePartyIDNotNil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDNotNil())
+	}
+	if i.ResponsiblePartyIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDEqualFold(*i.ResponsiblePartyIDEqualFold))
+	}
+	if i.ResponsiblePartyIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.ResponsiblePartyIDContainsFold(*i.ResponsiblePartyIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, controlhistory.StatusEQ(*i.Status))
@@ -76204,6 +76372,23 @@ type SubcontrolWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
+	// "responsible_party_id" field predicates.
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIDNEQ          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIDGT           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIDGTE          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIDLT           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIDLTE          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        bool     `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       bool     `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
 	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
@@ -76449,6 +76634,10 @@ type SubcontrolWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -76456,6 +76645,10 @@ type SubcontrolWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "responsible_party" edge predicates.
+	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
+	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -76943,6 +77136,51 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.AuditorReferenceIDContainsFold != nil {
 		predicates = append(predicates, subcontrol.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
+	}
+	if i.ResponsiblePartyID != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDEQ(*i.ResponsiblePartyID))
+	}
+	if i.ResponsiblePartyIDNEQ != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDNEQ(*i.ResponsiblePartyIDNEQ))
+	}
+	if len(i.ResponsiblePartyIDIn) > 0 {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDIn(i.ResponsiblePartyIDIn...))
+	}
+	if len(i.ResponsiblePartyIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDNotIn(i.ResponsiblePartyIDNotIn...))
+	}
+	if i.ResponsiblePartyIDGT != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDGT(*i.ResponsiblePartyIDGT))
+	}
+	if i.ResponsiblePartyIDGTE != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDGTE(*i.ResponsiblePartyIDGTE))
+	}
+	if i.ResponsiblePartyIDLT != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDLT(*i.ResponsiblePartyIDLT))
+	}
+	if i.ResponsiblePartyIDLTE != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDLTE(*i.ResponsiblePartyIDLTE))
+	}
+	if i.ResponsiblePartyIDContains != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDContains(*i.ResponsiblePartyIDContains))
+	}
+	if i.ResponsiblePartyIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDHasPrefix(*i.ResponsiblePartyIDHasPrefix))
+	}
+	if i.ResponsiblePartyIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDHasSuffix(*i.ResponsiblePartyIDHasSuffix))
+	}
+	if i.ResponsiblePartyIDIsNil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDIsNil())
+	}
+	if i.ResponsiblePartyIDNotNil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDNotNil())
+	}
+	if i.ResponsiblePartyIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDEqualFold(*i.ResponsiblePartyIDEqualFold))
+	}
+	if i.ResponsiblePartyIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.ResponsiblePartyIDContainsFold(*i.ResponsiblePartyIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, subcontrol.StatusEQ(*i.Status))
@@ -77638,6 +77876,24 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		}
 		predicates = append(predicates, subcontrol.HasInternalPoliciesWith(with...))
 	}
+	if i.HasComments != nil {
+		p := subcontrol.HasComments()
+		if !*i.HasComments {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasCommentsWith(with...))
+	}
 	if i.HasControlOwner != nil {
 		p := subcontrol.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -77673,6 +77929,24 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasDelegateWith(with...))
+	}
+	if i.HasResponsibleParty != nil {
+		p := subcontrol.HasResponsibleParty()
+		if !*i.HasResponsibleParty {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasResponsiblePartyWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasResponsiblePartyWith))
+		for _, w := range i.HasResponsiblePartyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasResponsiblePartyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasResponsiblePartyWith(with...))
 	}
 	if i.HasOwner != nil {
 		p := subcontrol.HasOwner()
@@ -77948,6 +78222,23 @@ type SubcontrolHistoryWhereInput struct {
 	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
+	// "responsible_party_id" field predicates.
+	ResponsiblePartyID             *string  `json:"responsiblePartyID,omitempty"`
+	ResponsiblePartyIDNEQ          *string  `json:"responsiblePartyIDNEQ,omitempty"`
+	ResponsiblePartyIDIn           []string `json:"responsiblePartyIDIn,omitempty"`
+	ResponsiblePartyIDNotIn        []string `json:"responsiblePartyIDNotIn,omitempty"`
+	ResponsiblePartyIDGT           *string  `json:"responsiblePartyIDGT,omitempty"`
+	ResponsiblePartyIDGTE          *string  `json:"responsiblePartyIDGTE,omitempty"`
+	ResponsiblePartyIDLT           *string  `json:"responsiblePartyIDLT,omitempty"`
+	ResponsiblePartyIDLTE          *string  `json:"responsiblePartyIDLTE,omitempty"`
+	ResponsiblePartyIDContains     *string  `json:"responsiblePartyIDContains,omitempty"`
+	ResponsiblePartyIDHasPrefix    *string  `json:"responsiblePartyIDHasPrefix,omitempty"`
+	ResponsiblePartyIDHasSuffix    *string  `json:"responsiblePartyIDHasSuffix,omitempty"`
+	ResponsiblePartyIDIsNil        bool     `json:"responsiblePartyIDIsNil,omitempty"`
+	ResponsiblePartyIDNotNil       bool     `json:"responsiblePartyIDNotNil,omitempty"`
+	ResponsiblePartyIDEqualFold    *string  `json:"responsiblePartyIDEqualFold,omitempty"`
+	ResponsiblePartyIDContainsFold *string  `json:"responsiblePartyIDContainsFold,omitempty"`
 
 	// "status" field predicates.
 	Status       *enums.ControlStatus  `json:"status,omitempty"`
@@ -78713,6 +79004,51 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.AuditorReferenceIDContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
+	}
+	if i.ResponsiblePartyID != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDEQ(*i.ResponsiblePartyID))
+	}
+	if i.ResponsiblePartyIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDNEQ(*i.ResponsiblePartyIDNEQ))
+	}
+	if len(i.ResponsiblePartyIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDIn(i.ResponsiblePartyIDIn...))
+	}
+	if len(i.ResponsiblePartyIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDNotIn(i.ResponsiblePartyIDNotIn...))
+	}
+	if i.ResponsiblePartyIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDGT(*i.ResponsiblePartyIDGT))
+	}
+	if i.ResponsiblePartyIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDGTE(*i.ResponsiblePartyIDGTE))
+	}
+	if i.ResponsiblePartyIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDLT(*i.ResponsiblePartyIDLT))
+	}
+	if i.ResponsiblePartyIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDLTE(*i.ResponsiblePartyIDLTE))
+	}
+	if i.ResponsiblePartyIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDContains(*i.ResponsiblePartyIDContains))
+	}
+	if i.ResponsiblePartyIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDHasPrefix(*i.ResponsiblePartyIDHasPrefix))
+	}
+	if i.ResponsiblePartyIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDHasSuffix(*i.ResponsiblePartyIDHasSuffix))
+	}
+	if i.ResponsiblePartyIDIsNil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDIsNil())
+	}
+	if i.ResponsiblePartyIDNotNil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDNotNil())
+	}
+	if i.ResponsiblePartyIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDEqualFold(*i.ResponsiblePartyIDEqualFold))
+	}
+	if i.ResponsiblePartyIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.ResponsiblePartyIDContainsFold(*i.ResponsiblePartyIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, subcontrolhistory.StatusEQ(*i.Status))

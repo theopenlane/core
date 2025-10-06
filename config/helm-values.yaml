@@ -309,6 +309,10 @@ coreConfiguration:
   jobQueue:
     runMigrations: false  # @schema type:boolean; default:false
     riverConf:
+    metrics:
+      enableMetrics: false  # @schema type:boolean; default:false
+      metricsDurationUnit: "ms"  # @schema type:string; default:ms
+      enableSemanticMetrics: true  # @schema type:boolean; default:true
   # -- Redis contains the redis configuration for the key-value store
   redis:
     enabled: true  # @schema type:boolean; default:true
