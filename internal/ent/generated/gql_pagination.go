@@ -3412,7 +3412,7 @@ func (p *controlPager) applyOrder(query *ControlQuery) *ControlQuery {
 			defaultOrdered = true
 		}
 		switch o.Field.column {
-		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column:
+		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column, ControlOrderFieldResponsiblePartyName.column:
 		default:
 			if len(query.ctx.Fields) > 0 {
 				query.ctx.AppendFieldOnce(o.Field.column)
@@ -3432,7 +3432,7 @@ func (p *controlPager) applyOrder(query *ControlQuery) *ControlQuery {
 func (p *controlPager) orderExpr(query *ControlQuery) sql.Querier {
 	for _, o := range p.order {
 		switch o.Field.column {
-		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column:
+		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column, ControlOrderFieldResponsiblePartyName.column:
 			direction := o.Direction
 			if p.reverse {
 				direction = direction.Reverse()
@@ -3708,6 +3708,26 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldResponsiblePartyName orders by RESPONSIBLE_PARTY_name.
+	ControlOrderFieldResponsiblePartyName = &ControlOrderField{
+		Value: func(_m *Control) (ent.Value, error) {
+			return _m.Value("responsible_party_name")
+		},
+		column: "responsible_party_name",
+		toTerm: func(opts ...sql.OrderTermOption) control.OrderOption {
+			return control.ByResponsiblePartyField(
+				entity.FieldName,
+				append(opts, sql.OrderSelectAs("responsible_party_name"))...,
+			)
+		},
+		toCursor: func(_m *Control) Cursor {
+			cv, _ := _m.Value("responsible_party_name")
+			return Cursor{
+				ID:    _m.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3738,6 +3758,8 @@ func (f ControlOrderField) String() string {
 		str = "CONTROL_OWNER_name"
 	case ControlOrderFieldDelegateName.column:
 		str = "DELEGATE_name"
+	case ControlOrderFieldResponsiblePartyName.column:
+		str = "RESPONSIBLE_PARTY_name"
 	}
 	return str
 }
@@ -3778,6 +3800,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldControlOwnerName
 	case "DELEGATE_name":
 		*f = *ControlOrderFieldDelegateName
+	case "RESPONSIBLE_PARTY_name":
+		*f = *ControlOrderFieldResponsiblePartyName
 	default:
 		return fmt.Errorf("%s is not a valid ControlOrderField", str)
 	}
@@ -32496,7 +32520,7 @@ func (p *subcontrolPager) applyOrder(query *SubcontrolQuery) *SubcontrolQuery {
 			defaultOrdered = true
 		}
 		switch o.Field.column {
-		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column:
+		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column, SubcontrolOrderFieldResponsiblePartyName.column:
 		default:
 			if len(query.ctx.Fields) > 0 {
 				query.ctx.AppendFieldOnce(o.Field.column)
@@ -32516,7 +32540,7 @@ func (p *subcontrolPager) applyOrder(query *SubcontrolQuery) *SubcontrolQuery {
 func (p *subcontrolPager) orderExpr(query *SubcontrolQuery) sql.Querier {
 	for _, o := range p.order {
 		switch o.Field.column {
-		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column:
+		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column, SubcontrolOrderFieldResponsiblePartyName.column:
 			direction := o.Direction
 			if p.reverse {
 				direction = direction.Reverse()
@@ -32792,6 +32816,26 @@ var (
 			}
 		},
 	}
+	// SubcontrolOrderFieldResponsiblePartyName orders by RESPONSIBLE_PARTY_name.
+	SubcontrolOrderFieldResponsiblePartyName = &SubcontrolOrderField{
+		Value: func(_m *Subcontrol) (ent.Value, error) {
+			return _m.Value("responsible_party_name")
+		},
+		column: "responsible_party_name",
+		toTerm: func(opts ...sql.OrderTermOption) subcontrol.OrderOption {
+			return subcontrol.ByResponsiblePartyField(
+				entity.FieldName,
+				append(opts, sql.OrderSelectAs("responsible_party_name"))...,
+			)
+		},
+		toCursor: func(_m *Subcontrol) Cursor {
+			cv, _ := _m.Value("responsible_party_name")
+			return Cursor{
+				ID:    _m.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -32822,6 +32866,8 @@ func (f SubcontrolOrderField) String() string {
 		str = "CONTROL_OWNER_name"
 	case SubcontrolOrderFieldDelegateName.column:
 		str = "DELEGATE_name"
+	case SubcontrolOrderFieldResponsiblePartyName.column:
+		str = "RESPONSIBLE_PARTY_name"
 	}
 	return str
 }
@@ -32862,6 +32908,8 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldControlOwnerName
 	case "DELEGATE_name":
 		*f = *SubcontrolOrderFieldDelegateName
+	case "RESPONSIBLE_PARTY_name":
+		*f = *SubcontrolOrderFieldResponsiblePartyName
 	default:
 		return fmt.Errorf("%s is not a valid SubcontrolOrderField", str)
 	}

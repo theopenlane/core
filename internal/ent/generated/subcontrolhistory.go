@@ -47,10 +47,14 @@ type SubcontrolHistory struct {
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// additional names (ref_codes) for the control
+	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
 	ReferenceID string `json:"reference_id,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
+	// the id of the party responsible for the control, usually used when the control is implemented by a third party
+	ResponsiblePartyID string `json:"responsible_party_id,omitempty"`
 	// status of the control
 	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -103,13 +107,13 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case subcontrolhistory.FieldTags, subcontrolhistory.FieldMappedCategories, subcontrolhistory.FieldAssessmentObjectives, subcontrolhistory.FieldAssessmentMethods, subcontrolhistory.FieldControlQuestions, subcontrolhistory.FieldImplementationGuidance, subcontrolhistory.FieldExampleEvidence, subcontrolhistory.FieldReferences:
+		case subcontrolhistory.FieldTags, subcontrolhistory.FieldAliases, subcontrolhistory.FieldMappedCategories, subcontrolhistory.FieldAssessmentObjectives, subcontrolhistory.FieldAssessmentMethods, subcontrolhistory.FieldControlQuestions, subcontrolhistory.FieldImplementationGuidance, subcontrolhistory.FieldExampleEvidence, subcontrolhistory.FieldReferences:
 			values[i] = new([]byte)
 		case subcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,6 +218,14 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.Description = value.String
 			}
+		case subcontrolhistory.FieldAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Aliases); err != nil {
+					return fmt.Errorf("unmarshal field aliases: %w", err)
+				}
+			}
 		case subcontrolhistory.FieldReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
@@ -225,6 +237,12 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
 			} else if value.Valid {
 				_m.AuditorReferenceID = value.String
+			}
+		case subcontrolhistory.FieldResponsiblePartyID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field responsible_party_id", values[i])
+			} else if value.Valid {
+				_m.ResponsiblePartyID = value.String
 			}
 		case subcontrolhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -451,11 +469,17 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
+	builder.WriteString("aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))
+	builder.WriteString(", ")
 	builder.WriteString("reference_id=")
 	builder.WriteString(_m.ReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_reference_id=")
 	builder.WriteString(_m.AuditorReferenceID)
+	builder.WriteString(", ")
+	builder.WriteString("responsible_party_id=")
+	builder.WriteString(_m.ResponsiblePartyID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

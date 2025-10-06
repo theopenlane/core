@@ -70,10 +70,14 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
@@ -134,10 +138,14 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Subcontrol_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "control":
@@ -195,10 +203,14 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
@@ -259,10 +271,14 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Subcontrol_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "control":
@@ -349,10 +365,14 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "aliases":
+				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
 				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
 			case "auditorReferenceID":
 				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
+			case "responsiblePartyID":
+				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
@@ -413,10 +433,14 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "comments":
+				return ec.fieldContext_Subcontrol_comments(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "responsibleParty":
+				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "control":

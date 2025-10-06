@@ -21,6 +21,8 @@ var (
 	ControlStatusApproved ControlStatus = "APPROVED"
 	// ControlStatusArchived indicates the control is now archived
 	ControlStatusArchived ControlStatus = "ARCHIVED"
+	// ControlStatusNotApplicable indicates that this control does not apply to the organization
+	ControlStatusNotApplicable ControlStatus = "NOT_APPLICABLE"
 	// ControlStatusInvalid indicates the control is invalid or unknown
 	ControlStatusInvalid ControlStatus = "CONTROL_STATUS_INVALID"
 )
@@ -36,6 +38,7 @@ func (ControlStatus) Values() (kinds []string) {
 		ControlStatusApproved,
 		ControlStatusArchived,
 		ControlStatusNotImplemented,
+		ControlStatusNotApplicable,
 	} {
 		kinds = append(kinds, string(s))
 	}
@@ -61,6 +64,8 @@ func ToControlStatus(r string) *ControlStatus {
 		return &ControlStatusChangesRequested
 	case ControlStatusApproved.String():
 		return &ControlStatusApproved
+	case ControlStatusNotApplicable.String():
+		return &ControlStatusNotApplicable
 	case ControlStatusArchived.String():
 		return &ControlStatusArchived
 	default:

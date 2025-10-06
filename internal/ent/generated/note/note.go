@@ -81,8 +81,10 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "notes"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"control_comments",
 	"entity_notes",
 	"program_notes",
+	"subcontrol_comments",
 	"task_comments",
 }
 

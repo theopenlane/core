@@ -119,12 +119,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "internal_policy",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "delegate": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "responsible_party": {
+	ObjectType:      "entity",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "owner": {
@@ -1626,12 +1634,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "internal_policy",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "delegate": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "responsible_party": {
+	ObjectType:      "entity",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "owner": {

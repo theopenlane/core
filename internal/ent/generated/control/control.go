@@ -38,10 +38,14 @@ const (
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldAliases holds the string denoting the aliases field in the database.
+	FieldAliases = "aliases"
 	// FieldReferenceID holds the string denoting the reference_id field in the database.
 	FieldReferenceID = "reference_id"
 	// FieldAuditorReferenceID holds the string denoting the auditor_reference_id field in the database.
 	FieldAuditorReferenceID = "auditor_reference_id"
+	// FieldResponsiblePartyID holds the string denoting the responsible_party_id field in the database.
+	FieldResponsiblePartyID = "responsible_party_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -102,10 +106,14 @@ const (
 	EdgeProcedures = "procedures"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
 	EdgeDelegate = "delegate"
+	// EdgeResponsibleParty holds the string denoting the responsible_party edge name in mutations.
+	EdgeResponsibleParty = "responsible_party"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -172,6 +180,13 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "control_comments"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "controls"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -186,6 +201,13 @@ const (
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "delegate_id"
+	// ResponsiblePartyTable is the table that holds the responsible_party relation/edge.
+	ResponsiblePartyTable = "controls"
+	// ResponsiblePartyInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	ResponsiblePartyInverseTable = "entities"
+	// ResponsiblePartyColumn is the table column denoting the responsible_party relation/edge.
+	ResponsiblePartyColumn = "responsible_party_id"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "controls"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -269,8 +291,10 @@ var Columns = []string{
 	FieldTags,
 	FieldTitle,
 	FieldDescription,
+	FieldAliases,
 	FieldReferenceID,
 	FieldAuditorReferenceID,
+	FieldResponsiblePartyID,
 	FieldStatus,
 	FieldSource,
 	FieldReferenceFramework,
@@ -390,7 +414,7 @@ const DefaultStatus enums.ControlStatus = "NOT_IMPLEMENTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ControlStatus) error {
 	switch s.String() {
-	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED":
+	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
 		return nil
 	default:
 		return fmt.Errorf("control: invalid enum value for status field: %q", s)
@@ -482,6 +506,11 @@ func ByReferenceID(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorReferenceID orders the results by the auditor_reference_id field.
 func ByAuditorReferenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorReferenceID, opts...).ToFunc()
+}
+
+// ByResponsiblePartyID orders the results by the responsible_party_id field.
+func ByResponsiblePartyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponsiblePartyID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
@@ -671,6 +700,20 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlOwnerField orders the results by control_owner field.
 func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -682,6 +725,13 @@ func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption 
 func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByResponsiblePartyField orders the results by responsible_party field.
+func ByResponsiblePartyField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResponsiblePartyStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -894,6 +944,13 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+	)
+}
 func newControlOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -906,6 +963,13 @@ func newDelegateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DelegateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newResponsiblePartyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResponsiblePartyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ResponsiblePartyTable, ResponsiblePartyColumn),
 	)
 }
 func newOwnerStep() *sqlgraph.Step {
