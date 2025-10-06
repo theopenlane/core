@@ -16,6 +16,11 @@ import (
 	"github.com/theopenlane/iam/fgax"
 )
 
+var (
+	// compile this only once
+	reg = regexp.MustCompile(`[^a-zA-Z0-9]`)
+)
+
 // HookTrustCenter runs on trust center create mutations
 func HookTrustCenter() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -23,6 +28,15 @@ func HookTrustCenter() ent.Hook {
 			orgID, err := auth.GetOrganizationIDFromContext(ctx)
 			if err != nil {
 				return nil, err
+			}
+
+			exists, err := m.Client().TrustCenter.Query().Exist(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if exists {
+				return nil, ErrNotSingularTrustCenter
 			}
 
 			org, err := m.Client().Organization.Query().
@@ -33,7 +47,6 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 			// Remove all spaces and non-alphanumeric characters from org.Name, then lowercase
-			reg := regexp.MustCompile(`[^a-zA-Z0-9]`)
 			cleanedName := reg.ReplaceAllString(org.Name, "")
 			slug := strings.ToLower(cleanedName)
 
