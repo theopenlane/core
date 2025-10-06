@@ -17,11 +17,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -181,6 +183,24 @@ func (_u *ControlUpdate) ClearDescription() *ControlUpdate {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *ControlUpdate) SetAliases(v []string) *ControlUpdate {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *ControlUpdate) AppendAliases(v []string) *ControlUpdate {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *ControlUpdate) ClearAliases() *ControlUpdate {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_u *ControlUpdate) SetReferenceID(v string) *ControlUpdate {
 	_u.mutation.SetReferenceID(v)
@@ -218,6 +238,26 @@ func (_u *ControlUpdate) SetNillableAuditorReferenceID(v *string) *ControlUpdate
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
 func (_u *ControlUpdate) ClearAuditorReferenceID() *ControlUpdate {
 	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_u *ControlUpdate) SetResponsiblePartyID(v string) *ControlUpdate {
+	_u.mutation.SetResponsiblePartyID(v)
+	return _u
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableResponsiblePartyID(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetResponsiblePartyID(*v)
+	}
+	return _u
+}
+
+// ClearResponsiblePartyID clears the value of the "responsible_party_id" field.
+func (_u *ControlUpdate) ClearResponsiblePartyID() *ControlUpdate {
+	_u.mutation.ClearResponsiblePartyID()
 	return _u
 }
 
@@ -721,6 +761,21 @@ func (_u *ControlUpdate) AddInternalPolicies(v ...*InternalPolicy) *ControlUpdat
 	return _u.AddInternalPolicyIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *ControlUpdate) AddCommentIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *ControlUpdate) AddComments(v ...*Note) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (_u *ControlUpdate) SetControlOwner(v *Group) *ControlUpdate {
 	return _u.SetControlOwnerID(v.ID)
@@ -729,6 +784,11 @@ func (_u *ControlUpdate) SetControlOwner(v *Group) *ControlUpdate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_u *ControlUpdate) SetDelegate(v *Group) *ControlUpdate {
 	return _u.SetDelegateID(v.ID)
+}
+
+// SetResponsibleParty sets the "responsible_party" edge to the Entity entity.
+func (_u *ControlUpdate) SetResponsibleParty(v *Entity) *ControlUpdate {
+	return _u.SetResponsiblePartyID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -1059,6 +1119,27 @@ func (_u *ControlUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *ControlUp
 	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *ControlUpdate) ClearComments() *ControlUpdate {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *ControlUpdate) RemoveCommentIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *ControlUpdate) RemoveComments(v ...*Note) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
+}
+
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
 func (_u *ControlUpdate) ClearControlOwner() *ControlUpdate {
 	_u.mutation.ClearControlOwner()
@@ -1068,6 +1149,12 @@ func (_u *ControlUpdate) ClearControlOwner() *ControlUpdate {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ControlUpdate) ClearDelegate() *ControlUpdate {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
+func (_u *ControlUpdate) ClearResponsibleParty() *ControlUpdate {
+	_u.mutation.ClearResponsibleParty()
 	return _u
 }
 
@@ -1424,6 +1511,17 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(control.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(control.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(control.FieldAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(control.FieldReferenceID, field.TypeString, value)
@@ -1958,6 +2056,54 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2012,6 +2158,37 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ResponsiblePartyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ResponsiblePartyTable,
+			Columns: []string{control.ResponsiblePartyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResponsiblePartyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ResponsiblePartyTable,
+			Columns: []string{control.ResponsiblePartyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Control
@@ -2685,6 +2862,24 @@ func (_u *ControlUpdateOne) ClearDescription() *ControlUpdateOne {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *ControlUpdateOne) SetAliases(v []string) *ControlUpdateOne {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *ControlUpdateOne) AppendAliases(v []string) *ControlUpdateOne {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *ControlUpdateOne) ClearAliases() *ControlUpdateOne {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_u *ControlUpdateOne) SetReferenceID(v string) *ControlUpdateOne {
 	_u.mutation.SetReferenceID(v)
@@ -2722,6 +2917,26 @@ func (_u *ControlUpdateOne) SetNillableAuditorReferenceID(v *string) *ControlUpd
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
 func (_u *ControlUpdateOne) ClearAuditorReferenceID() *ControlUpdateOne {
 	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_u *ControlUpdateOne) SetResponsiblePartyID(v string) *ControlUpdateOne {
+	_u.mutation.SetResponsiblePartyID(v)
+	return _u
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableResponsiblePartyID(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetResponsiblePartyID(*v)
+	}
+	return _u
+}
+
+// ClearResponsiblePartyID clears the value of the "responsible_party_id" field.
+func (_u *ControlUpdateOne) ClearResponsiblePartyID() *ControlUpdateOne {
+	_u.mutation.ClearResponsiblePartyID()
 	return _u
 }
 
@@ -3225,6 +3440,21 @@ func (_u *ControlUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *ControlUp
 	return _u.AddInternalPolicyIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *ControlUpdateOne) AddCommentIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *ControlUpdateOne) AddComments(v ...*Note) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (_u *ControlUpdateOne) SetControlOwner(v *Group) *ControlUpdateOne {
 	return _u.SetControlOwnerID(v.ID)
@@ -3233,6 +3463,11 @@ func (_u *ControlUpdateOne) SetControlOwner(v *Group) *ControlUpdateOne {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_u *ControlUpdateOne) SetDelegate(v *Group) *ControlUpdateOne {
 	return _u.SetDelegateID(v.ID)
+}
+
+// SetResponsibleParty sets the "responsible_party" edge to the Entity entity.
+func (_u *ControlUpdateOne) SetResponsibleParty(v *Entity) *ControlUpdateOne {
+	return _u.SetResponsiblePartyID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -3563,6 +3798,27 @@ func (_u *ControlUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *Contro
 	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *ControlUpdateOne) ClearComments() *ControlUpdateOne {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *ControlUpdateOne) RemoveCommentIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *ControlUpdateOne) RemoveComments(v ...*Note) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
+}
+
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
 func (_u *ControlUpdateOne) ClearControlOwner() *ControlUpdateOne {
 	_u.mutation.ClearControlOwner()
@@ -3572,6 +3828,12 @@ func (_u *ControlUpdateOne) ClearControlOwner() *ControlUpdateOne {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ControlUpdateOne) ClearDelegate() *ControlUpdateOne {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
+func (_u *ControlUpdateOne) ClearResponsibleParty() *ControlUpdateOne {
+	_u.mutation.ClearResponsibleParty()
 	return _u
 }
 
@@ -3958,6 +4220,17 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(control.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(control.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(control.FieldAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(control.FieldReferenceID, field.TypeString, value)
@@ -4492,6 +4765,54 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.CommentsTable,
+			Columns: []string{control.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4546,6 +4867,37 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ResponsiblePartyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ResponsiblePartyTable,
+			Columns: []string{control.ResponsiblePartyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResponsiblePartyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ResponsiblePartyTable,
+			Columns: []string{control.ResponsiblePartyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Control

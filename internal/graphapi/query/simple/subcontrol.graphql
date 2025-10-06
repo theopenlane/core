@@ -2,6 +2,7 @@
 mutation CreateBulkCSVSubcontrol($input: Upload!) {
   createBulkCSVSubcontrol(input: $input) {
     subcontrols {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -38,6 +39,7 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
 mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
   createBulkSubcontrol(input: $input) {
     subcontrols {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -74,6 +76,7 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
 mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
   createSubcontrol(input: $input) {
     subcontrol {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -124,6 +127,7 @@ query GetAllSubcontrols {
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         auditorReferenceID
@@ -159,6 +163,7 @@ query GetAllSubcontrols {
 }
 query GetSubcontrolByID($subcontrolId: ID!) {
   subcontrol(id: $subcontrolId) {
+    aliases
     assessmentMethods
     assessmentObjectives
     auditorReferenceID
@@ -202,6 +207,7 @@ query GetSubcontrols($first: Int, $last: Int, $where: SubcontrolWhereInput) {
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         auditorReferenceID
@@ -238,6 +244,7 @@ query GetSubcontrols($first: Int, $last: Int, $where: SubcontrolWhereInput) {
 mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
   updateSubcontrol(id: $updateSubcontrolId, input: $input) {
     subcontrol {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID

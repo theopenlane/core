@@ -397,9 +397,10 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "reference_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
@@ -419,6 +420,7 @@ var (
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -430,25 +432,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_groups_control_owner",
-				Columns:    []*schema.Column{ControlsColumns[31]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[32]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_organizations_controls",
+				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[33]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_entities_responsible_party",
+				Columns:    []*schema.Column{ControlsColumns[34]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[35]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[34]},
+				Columns:    []*schema.Column{ControlsColumns[36]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -457,12 +465,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[35]},
 			},
 			{
 				Name:    "control_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -470,7 +478,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[30]},
+				Columns: []*schema.Column{ControlsColumns[36], ControlsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -478,7 +486,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[30], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[36], ControlsColumns[31], ControlsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
 				},
@@ -486,7 +494,7 @@ var (
 			{
 				Name:    "control_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[31], ControlsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
 				},
@@ -494,7 +502,7 @@ var (
 			{
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[34], ControlsColumns[5], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[36], ControlsColumns[5], ControlsColumns[35]},
 			},
 		},
 	}
@@ -514,9 +522,11 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
@@ -2757,9 +2767,11 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
+		{Name: "control_comments", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_notes", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -2769,26 +2781,38 @@ var (
 		PrimaryKey: []*schema.Column{NotesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "notes_entities_notes",
+				Symbol:     "notes_controls_comments",
 				Columns:    []*schema.Column{NotesColumns[9]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_entities_notes",
+				Columns:    []*schema.Column{NotesColumns[10]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[10]},
+				Columns:    []*schema.Column{NotesColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[11]},
+				Columns:    []*schema.Column{NotesColumns[12]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "notes_subcontrols_comments",
+				Columns:    []*schema.Column{NotesColumns[13]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[12]},
+				Columns:    []*schema.Column{NotesColumns[14]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2797,12 +2821,12 @@ var (
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[7], NotesColumns[10]},
+				Columns: []*schema.Column{NotesColumns[7], NotesColumns[11]},
 			},
 			{
 				Name:    "note_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[10]},
+				Columns: []*schema.Column{NotesColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4209,9 +4233,10 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
@@ -4234,6 +4259,7 @@ var (
 		{Name: "program_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_subcontrols", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
@@ -4244,37 +4270,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_controls_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[31]},
+				Columns:    []*schema.Column{SubcontrolsColumns[32]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[32]},
+				Columns:    []*schema.Column{SubcontrolsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_programs_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[33]},
+				Columns:    []*schema.Column{SubcontrolsColumns[34]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_control_owner",
-				Columns:    []*schema.Column{SubcontrolsColumns[34]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[35]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_users_subcontrols",
+				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[36]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_entities_responsible_party",
+				Columns:    []*schema.Column{SubcontrolsColumns[37]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_users_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[38]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4283,12 +4315,12 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[32]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[33]},
 			},
 			{
 				Name:    "subcontrol_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[32]},
+				Columns: []*schema.Column{SubcontrolsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4296,7 +4328,7 @@ var (
 			{
 				Name:    "subcontrol_control_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[31], SubcontrolsColumns[30]},
+				Columns: []*schema.Column{SubcontrolsColumns[32], SubcontrolsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4304,7 +4336,7 @@ var (
 			{
 				Name:    "subcontrol_control_id_ref_code_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[31], SubcontrolsColumns[30], SubcontrolsColumns[32]},
+				Columns: []*schema.Column{SubcontrolsColumns[32], SubcontrolsColumns[31], SubcontrolsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4327,9 +4359,11 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
@@ -8515,8 +8549,9 @@ func init() {
 	}
 	ControlsTable.ForeignKeys[0].RefTable = GroupsTable
 	ControlsTable.ForeignKeys[1].RefTable = GroupsTable
-	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[3].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[2].RefTable = EntitiesTable
+	ControlsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[4].RefTable = StandardsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -8645,10 +8680,12 @@ func init() {
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
-	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[1].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[2].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[3].RefTable = TasksTable
+	NotesTable.ForeignKeys[0].RefTable = ControlsTable
+	NotesTable.ForeignKeys[1].RefTable = EntitiesTable
+	NotesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[3].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[4].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[5].RefTable = TasksTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
@@ -8731,7 +8768,8 @@ func init() {
 	SubcontrolsTable.ForeignKeys[2].RefTable = ProgramsTable
 	SubcontrolsTable.ForeignKeys[3].RefTable = GroupsTable
 	SubcontrolsTable.ForeignKeys[4].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[5].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[5].RefTable = EntitiesTable
+	SubcontrolsTable.ForeignKeys[6].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}

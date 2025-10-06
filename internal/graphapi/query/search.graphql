@@ -76,6 +76,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          aliases
           category
           description
           displayID
@@ -587,6 +588,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          aliases
           category
           description
           displayID

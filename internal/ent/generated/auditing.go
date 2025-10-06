@@ -539,11 +539,17 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, _m.Description, new.Description))
 	}
+	if !reflect.DeepEqual(_m.Aliases, new.Aliases) {
+		changes = append(changes, NewChange(controlhistory.FieldAliases, _m.Aliases, new.Aliases))
+	}
 	if !reflect.DeepEqual(_m.ReferenceID, new.ReferenceID) {
 		changes = append(changes, NewChange(controlhistory.FieldReferenceID, _m.ReferenceID, new.ReferenceID))
 	}
 	if !reflect.DeepEqual(_m.AuditorReferenceID, new.AuditorReferenceID) {
 		changes = append(changes, NewChange(controlhistory.FieldAuditorReferenceID, _m.AuditorReferenceID, new.AuditorReferenceID))
+	}
+	if !reflect.DeepEqual(_m.ResponsiblePartyID, new.ResponsiblePartyID) {
+		changes = append(changes, NewChange(controlhistory.FieldResponsiblePartyID, _m.ResponsiblePartyID, new.ResponsiblePartyID))
 	}
 	if !reflect.DeepEqual(_m.Status, new.Status) {
 		changes = append(changes, NewChange(controlhistory.FieldStatus, _m.Status, new.Status))
@@ -3062,11 +3068,17 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, _m.Description, new.Description))
 	}
+	if !reflect.DeepEqual(_m.Aliases, new.Aliases) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAliases, _m.Aliases, new.Aliases))
+	}
 	if !reflect.DeepEqual(_m.ReferenceID, new.ReferenceID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceID, _m.ReferenceID, new.ReferenceID))
 	}
 	if !reflect.DeepEqual(_m.AuditorReferenceID, new.AuditorReferenceID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldAuditorReferenceID, _m.AuditorReferenceID, new.AuditorReferenceID))
+	}
+	if !reflect.DeepEqual(_m.ResponsiblePartyID, new.ResponsiblePartyID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldResponsiblePartyID, _m.ResponsiblePartyID, new.ResponsiblePartyID))
 	}
 	if !reflect.DeepEqual(_m.Status, new.Status) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldStatus, _m.Status, new.Status))

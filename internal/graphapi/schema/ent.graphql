@@ -3357,6 +3357,10 @@ type Control implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -3364,6 +3368,10 @@ type Control implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: ID
   """
   status of the control
   """
@@ -3700,6 +3708,37 @@ type Control implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -3708,6 +3747,10 @@ type Control implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  """
+  the entity who is responsible for the control implementation when it is a third party
+  """
+  responsibleParty: Entity
   owner: Organization
   blockedGroups(
     """
@@ -3995,6 +4038,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 ControlControlType is enum for the field control_type
@@ -4044,6 +4088,10 @@ type ControlHistory implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -4051,6 +4099,10 @@ type ControlHistory implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: String
   """
   status of the control
   """
@@ -4176,6 +4228,7 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pk
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 ControlHistoryControlType is enum for the field control_type
@@ -4443,6 +4496,24 @@ input ControlHistoryWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: String
+  responsiblePartyIDNEQ: String
+  responsiblePartyIDIn: [String!]
+  responsiblePartyIDNotIn: [String!]
+  responsiblePartyIDGT: String
+  responsiblePartyIDGTE: String
+  responsiblePartyIDLT: String
+  responsiblePartyIDLTE: String
+  responsiblePartyIDContains: String
+  responsiblePartyIDHasPrefix: String
+  responsiblePartyIDHasSuffix: String
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: String
+  responsiblePartyIDContainsFold: String
   """
   status field predicates
   """
@@ -6935,6 +7006,7 @@ enum ControlOrderField {
   ref_code
   CONTROL_OWNER_name
   DELEGATE_name
+  RESPONSIBLE_PARTY_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -7107,6 +7179,24 @@ input ControlWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: ID
+  responsiblePartyIDNEQ: ID
+  responsiblePartyIDIn: [ID!]
+  responsiblePartyIDNotIn: [ID!]
+  responsiblePartyIDGT: ID
+  responsiblePartyIDGTE: ID
+  responsiblePartyIDLT: ID
+  responsiblePartyIDLTE: ID
+  responsiblePartyIDContains: ID
+  responsiblePartyIDHasPrefix: ID
+  responsiblePartyIDHasSuffix: ID
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: ID
+  responsiblePartyIDContainsFold: ID
   """
   status field predicates
   """
@@ -7378,6 +7468,11 @@ input ControlWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -7387,6 +7482,11 @@ input ControlWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  responsible_party edge predicates
+  """
+  hasResponsibleParty: Boolean
+  hasResponsiblePartyWith: [EntityWhereInput!]
   """
   owner edge predicates
   """
@@ -7734,6 +7834,10 @@ input CreateControlInput {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -7817,8 +7921,10 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  commentIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  responsiblePartyID: ID
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -9477,6 +9583,10 @@ input CreateSubcontrolInput {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -9560,8 +9670,10 @@ input CreateSubcontrolInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  commentIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  responsiblePartyID: ID
   ownerID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
@@ -44392,6 +44504,10 @@ type Subcontrol implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -44399,6 +44515,10 @@ type Subcontrol implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: ID
   """
   status of the control
   """
@@ -44735,6 +44855,37 @@ type Subcontrol implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -44743,6 +44894,10 @@ type Subcontrol implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  """
+  the entity who is responsible for the control implementation when it is a third party
+  """
+  responsibleParty: Entity
   owner: Organization
   control: Control!
   controlImplementations(
@@ -44844,6 +44999,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 SubcontrolControlType is enum for the field control_type
@@ -44893,6 +45049,10 @@ type SubcontrolHistory implements Node {
   """
   description: String
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -44900,6 +45060,10 @@ type SubcontrolHistory implements Node {
   external auditor id of the control, can be used to map to external audit partner mappings
   """
   auditorReferenceID: String
+  """
+  the id of the party responsible for the control, usually used when the control is implemented by a third party
+  """
+  responsiblePartyID: String
   """
   status of the control
   """
@@ -45025,6 +45189,7 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
   APPROVED
   ARCHIVED
   NOT_IMPLEMENTED
+  NOT_APPLICABLE
 }
 """
 SubcontrolHistoryControlType is enum for the field control_type
@@ -45293,6 +45458,24 @@ input SubcontrolHistoryWhereInput {
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
   """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: String
+  responsiblePartyIDNEQ: String
+  responsiblePartyIDIn: [String!]
+  responsiblePartyIDNotIn: [String!]
+  responsiblePartyIDGT: String
+  responsiblePartyIDGTE: String
+  responsiblePartyIDLT: String
+  responsiblePartyIDLTE: String
+  responsiblePartyIDContains: String
+  responsiblePartyIDHasPrefix: String
+  responsiblePartyIDHasSuffix: String
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: String
+  responsiblePartyIDContainsFold: String
+  """
   status field predicates
   """
   status: SubcontrolHistoryControlStatus
@@ -45550,6 +45733,7 @@ enum SubcontrolOrderField {
   ref_code
   CONTROL_OWNER_name
   DELEGATE_name
+  RESPONSIBLE_PARTY_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -45722,6 +45906,24 @@ input SubcontrolWhereInput {
   auditorReferenceIDNotNil: Boolean
   auditorReferenceIDEqualFold: String
   auditorReferenceIDContainsFold: String
+  """
+  responsible_party_id field predicates
+  """
+  responsiblePartyID: ID
+  responsiblePartyIDNEQ: ID
+  responsiblePartyIDIn: [ID!]
+  responsiblePartyIDNotIn: [ID!]
+  responsiblePartyIDGT: ID
+  responsiblePartyIDGTE: ID
+  responsiblePartyIDLT: ID
+  responsiblePartyIDLTE: ID
+  responsiblePartyIDContains: ID
+  responsiblePartyIDHasPrefix: ID
+  responsiblePartyIDHasSuffix: ID
+  responsiblePartyIDIsNil: Boolean
+  responsiblePartyIDNotNil: Boolean
+  responsiblePartyIDEqualFold: ID
+  responsiblePartyIDContainsFold: ID
   """
   status field predicates
   """
@@ -45991,6 +46193,11 @@ input SubcontrolWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -46000,6 +46207,11 @@ input SubcontrolWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  responsible_party edge predicates
+  """
+  hasResponsibleParty: Boolean
+  hasResponsiblePartyWith: [EntityWhereInput!]
   """
   owner edge predicates
   """
@@ -53539,6 +53751,12 @@ input UpdateControlInput {
   description: String
   clearDescription: Boolean
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  appendAliases: [String!]
+  clearAliases: Boolean
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -53658,10 +53876,15 @@ input UpdateControlInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  responsiblePartyID: ID
+  clearResponsibleParty: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -55990,6 +56213,12 @@ input UpdateSubcontrolInput {
   description: String
   clearDescription: Boolean
   """
+  additional names (ref_codes) for the control
+  """
+  aliases: [String!]
+  appendAliases: [String!]
+  clearAliases: Boolean
+  """
   internal reference id of the control, can be used for internal tracking
   """
   referenceID: String
@@ -56109,10 +56338,15 @@ input UpdateSubcontrolInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  responsiblePartyID: ID
+  clearResponsibleParty: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]

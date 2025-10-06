@@ -164,6 +164,24 @@ func (_u *SubcontrolHistoryUpdate) ClearDescription() *SubcontrolHistoryUpdate {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *SubcontrolHistoryUpdate) SetAliases(v []string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *SubcontrolHistoryUpdate) AppendAliases(v []string) *SubcontrolHistoryUpdate {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *SubcontrolHistoryUpdate) ClearAliases() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_u *SubcontrolHistoryUpdate) SetReferenceID(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetReferenceID(v)
@@ -201,6 +219,26 @@ func (_u *SubcontrolHistoryUpdate) SetNillableAuditorReferenceID(v *string) *Sub
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
 func (_u *SubcontrolHistoryUpdate) ClearAuditorReferenceID() *SubcontrolHistoryUpdate {
 	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_u *SubcontrolHistoryUpdate) SetResponsiblePartyID(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetResponsiblePartyID(v)
+	return _u
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableResponsiblePartyID(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetResponsiblePartyID(*v)
+	}
+	return _u
+}
+
+// ClearResponsiblePartyID clears the value of the "responsible_party_id" field.
+func (_u *SubcontrolHistoryUpdate) ClearResponsiblePartyID() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearResponsiblePartyID()
 	return _u
 }
 
@@ -719,6 +757,17 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(subcontrolhistory.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrolhistory.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(subcontrolhistory.FieldAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceID, field.TypeString, value)
 	}
@@ -730,6 +779,12 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponsiblePartyID(); ok {
+		_spec.SetField(subcontrolhistory.FieldResponsiblePartyID, field.TypeString, value)
+	}
+	if _u.mutation.ResponsiblePartyIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldResponsiblePartyID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
@@ -1040,6 +1095,24 @@ func (_u *SubcontrolHistoryUpdateOne) ClearDescription() *SubcontrolHistoryUpdat
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *SubcontrolHistoryUpdateOne) SetAliases(v []string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *SubcontrolHistoryUpdateOne) AppendAliases(v []string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearAliases() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetReferenceID sets the "reference_id" field.
 func (_u *SubcontrolHistoryUpdateOne) SetReferenceID(v string) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetReferenceID(v)
@@ -1077,6 +1150,26 @@ func (_u *SubcontrolHistoryUpdateOne) SetNillableAuditorReferenceID(v *string) *
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
 func (_u *SubcontrolHistoryUpdateOne) ClearAuditorReferenceID() *SubcontrolHistoryUpdateOne {
 	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
+// SetResponsiblePartyID sets the "responsible_party_id" field.
+func (_u *SubcontrolHistoryUpdateOne) SetResponsiblePartyID(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetResponsiblePartyID(v)
+	return _u
+}
+
+// SetNillableResponsiblePartyID sets the "responsible_party_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableResponsiblePartyID(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetResponsiblePartyID(*v)
+	}
+	return _u
+}
+
+// ClearResponsiblePartyID clears the value of the "responsible_party_id" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearResponsiblePartyID() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearResponsiblePartyID()
 	return _u
 }
 
@@ -1625,6 +1718,17 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(subcontrolhistory.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrolhistory.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(subcontrolhistory.FieldAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceID, field.TypeString, value)
 	}
@@ -1636,6 +1740,12 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponsiblePartyID(); ok {
+		_spec.SetField(subcontrolhistory.FieldResponsiblePartyID, field.TypeString, value)
+	}
+	if _u.mutation.ResponsiblePartyIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldResponsiblePartyID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)

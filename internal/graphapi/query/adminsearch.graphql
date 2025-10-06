@@ -115,8 +115,10 @@ query AdminSearch($query: String!) {
           tags
           title
           description
+          aliases
           referenceID
           auditorReferenceID
+          responsiblePartyID
           referenceFramework
           category
           categoryID
@@ -820,8 +822,10 @@ query AdminSearch($query: String!) {
           tags
           title
           description
+          aliases
           referenceID
           auditorReferenceID
+          responsiblePartyID
           referenceFramework
           category
           categoryID

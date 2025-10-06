@@ -2,6 +2,7 @@
 mutation CreateBulkCSVControl($input: Upload!) {
   createBulkCSVControl(input: $input) {
     controls {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -38,6 +39,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
 mutation CreateBulkControl($input: [CreateControlInput!]) {
   createBulkControl(input: $input) {
     controls {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -74,6 +76,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
 mutation CreateControl($input: CreateControlInput!) {
   createControl(input: $input) {
     control {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID
@@ -124,6 +127,7 @@ query GetAllControls {
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         auditorReferenceID
@@ -159,6 +163,7 @@ query GetAllControls {
 }
 query GetControlByID($controlId: ID!) {
   control(id: $controlId) {
+    aliases
     assessmentMethods
     assessmentObjectives
     auditorReferenceID
@@ -202,6 +207,7 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
     }
     edges {
       node {
+        aliases
         assessmentMethods
         assessmentObjectives
         auditorReferenceID
@@ -238,6 +244,7 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
 mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
   updateControl(id: $updateControlId, input: $input) {
     control {
+      aliases
       assessmentMethods
       assessmentObjectives
       auditorReferenceID

@@ -131,6 +131,11 @@ func AuditorReferenceID(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
 }
 
+// ResponsiblePartyID applies equality check predicate on the "responsible_party_id" field. It's identical to ResponsiblePartyIDEQ.
+func ResponsiblePartyID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldResponsiblePartyID, v))
+}
+
 // ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
 func ReferenceFramework(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldReferenceFramework, v))
@@ -926,6 +931,16 @@ func DescriptionContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// AliasesIsNil applies the IsNil predicate on the "aliases" field.
+func AliasesIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldAliases))
+}
+
+// AliasesNotNil applies the NotNil predicate on the "aliases" field.
+func AliasesNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldAliases))
+}
+
 // ReferenceIDEQ applies the EQ predicate on the "reference_id" field.
 func ReferenceIDEQ(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldReferenceID, v))
@@ -1074,6 +1089,81 @@ func AuditorReferenceIDEqualFold(v string) predicate.SubcontrolHistory {
 // AuditorReferenceIDContainsFold applies the ContainsFold predicate on the "auditor_reference_id" field.
 func AuditorReferenceIDContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldAuditorReferenceID, v))
+}
+
+// ResponsiblePartyIDEQ applies the EQ predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDNEQ applies the NEQ predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDIn applies the In predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldResponsiblePartyID, vs...))
+}
+
+// ResponsiblePartyIDNotIn applies the NotIn predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldResponsiblePartyID, vs...))
+}
+
+// ResponsiblePartyIDGT applies the GT predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDGTE applies the GTE predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDLT applies the LT predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDLTE applies the LTE predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDContains applies the Contains predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDHasPrefix applies the HasPrefix predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDHasSuffix applies the HasSuffix predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDIsNil applies the IsNil predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldResponsiblePartyID))
+}
+
+// ResponsiblePartyIDNotNil applies the NotNil predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldResponsiblePartyID))
+}
+
+// ResponsiblePartyIDEqualFold applies the EqualFold predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDContainsFold applies the ContainsFold predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldResponsiblePartyID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

@@ -123,6 +123,11 @@ func AuditorReferenceID(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldAuditorReferenceID, v))
 }
 
+// ResponsiblePartyID applies equality check predicate on the "responsible_party_id" field. It's identical to ResponsiblePartyIDEQ.
+func ResponsiblePartyID(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldResponsiblePartyID, v))
+}
+
 // ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
 func ReferenceFramework(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFramework, v))
@@ -783,6 +788,16 @@ func DescriptionContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// AliasesIsNil applies the IsNil predicate on the "aliases" field.
+func AliasesIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldAliases))
+}
+
+// AliasesNotNil applies the NotNil predicate on the "aliases" field.
+func AliasesNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldAliases))
+}
+
 // ReferenceIDEQ applies the EQ predicate on the "reference_id" field.
 func ReferenceIDEQ(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceID, v))
@@ -931,6 +946,81 @@ func AuditorReferenceIDEqualFold(v string) predicate.Subcontrol {
 // AuditorReferenceIDContainsFold applies the ContainsFold predicate on the "auditor_reference_id" field.
 func AuditorReferenceIDContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldAuditorReferenceID, v))
+}
+
+// ResponsiblePartyIDEQ applies the EQ predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDNEQ applies the NEQ predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDIn applies the In predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldResponsiblePartyID, vs...))
+}
+
+// ResponsiblePartyIDNotIn applies the NotIn predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldResponsiblePartyID, vs...))
+}
+
+// ResponsiblePartyIDGT applies the GT predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDGTE applies the GTE predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDLT applies the LT predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDLTE applies the LTE predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDContains applies the Contains predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDHasPrefix applies the HasPrefix predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDHasSuffix applies the HasSuffix predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDIsNil applies the IsNil predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldResponsiblePartyID))
+}
+
+// ResponsiblePartyIDNotNil applies the NotNil predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldResponsiblePartyID))
+}
+
+// ResponsiblePartyIDEqualFold applies the EqualFold predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldResponsiblePartyID, v))
+}
+
+// ResponsiblePartyIDContainsFold applies the ContainsFold predicate on the "responsible_party_id" field.
+func ResponsiblePartyIDContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldResponsiblePartyID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
@@ -2180,6 +2270,35 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Subcon
 	})
 }
 
+// HasComments applies the HasEdge predicate on the "comments" edge.
+func HasComments() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCommentsWith applies the HasEdge predicate on the "comments" edge with a given conditions (other predicates).
+func HasCommentsWith(preds ...predicate.Note) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newCommentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControlOwner applies the HasEdge predicate on the "control_owner" edge.
 func HasControlOwner() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {
@@ -2229,6 +2348,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.Subcontrol {
 		step := newDelegateStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasResponsibleParty applies the HasEdge predicate on the "responsible_party" edge.
+func HasResponsibleParty() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ResponsiblePartyTable, ResponsiblePartyColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResponsiblePartyWith applies the HasEdge predicate on the "responsible_party" edge with a given conditions (other predicates).
+func HasResponsiblePartyWith(preds ...predicate.Entity) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newResponsiblePartyStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
