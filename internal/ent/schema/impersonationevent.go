@@ -8,8 +8,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
 )
 
 // ImpersonationEvent holds the schema definition for the ImpersonationEvent entity
@@ -39,10 +40,12 @@ func (ImpersonationEvent) PluralName() string {
 // Fields of the ImpersonationEvent
 func (ImpersonationEvent) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("impersonation_type").
-			Comment("Type of impersonation: support, admin, job, etc."),
-		field.Enum("action").Values("START", "STOP").
-			Comment("Action for the impersonation event"),
+		field.Enum("impersonation_type").
+			Comment("Type of impersonation: SUPPORT, ADMIN, JOB").
+			GoType(enums.ImpersonationType("")),
+		field.Enum("action").
+			Comment("Action for the impersonation event").
+			GoType(enums.ImpersonationAction("")),
 		field.String("reason").
 			Optional().
 			Comment("Reason for impersonation"),
@@ -58,9 +61,9 @@ func (ImpersonationEvent) Fields() []ent.Field {
 		field.String("user_id").
 			Comment("Impersonator user id"),
 		field.String("organization_id").
-			Comment("Impersonator organization id"),
+			Comment("id of the organization that is being impersonated"),
 		field.String("target_user_id").
-			Comment("Target user id"),
+			Comment("id of the user that is being impersonated"),
 	}
 }
 
@@ -98,6 +101,8 @@ func (ImpersonationEvent) Indexes() []ent.Index {
 func (ImpersonationEvent) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.Skip(entgql.SkipAll),
+		entx.SchemaGenSkip(true),
+		entx.QueryGenSkip(true),
 	}
 }
 
@@ -114,19 +119,4 @@ func (ImpersonationEvent) Interceptors() []ent.Interceptor {
 // Modules this schema has access to
 func (ImpersonationEvent) Modules() []models.OrgModule {
 	return []models.OrgModule{}
-}
-
-// Policy of the ImpersonationEvent
-func (ImpersonationEvent) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
-	return policy.NewPolicy(
-		policy.WithMutationRules(
-			// add mutation rules here, the below is the recommended default
-			policy.AllowCreate(),
-			// this needs to be commented out for the first run that had the entfga annotation
-			// the first run will generate the functions required based on the entfa annotation
-			// entfga.CheckEditAccess[*generated.ImpersonationEventMutation](),
-		),
-	)
 }
