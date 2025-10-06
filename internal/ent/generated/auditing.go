@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
@@ -1594,6 +1595,81 @@ func (_m *HushHistory) Diff(history *HushHistory) (*HistoryDiff[HushHistory], er
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[HushHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *ImpersonationEventHistory) changes(new *ImpersonationEventHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.ImpersonationType, new.ImpersonationType) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldImpersonationType, _m.ImpersonationType, new.ImpersonationType))
+	}
+	if !reflect.DeepEqual(_m.Action, new.Action) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldAction, _m.Action, new.Action))
+	}
+	if !reflect.DeepEqual(_m.Reason, new.Reason) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldReason, _m.Reason, new.Reason))
+	}
+	if !reflect.DeepEqual(_m.IPAddress, new.IPAddress) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldIPAddress, _m.IPAddress, new.IPAddress))
+	}
+	if !reflect.DeepEqual(_m.UserAgent, new.UserAgent) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldUserAgent, _m.UserAgent, new.UserAgent))
+	}
+	if !reflect.DeepEqual(_m.Scopes, new.Scopes) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldScopes, _m.Scopes, new.Scopes))
+	}
+	if !reflect.DeepEqual(_m.UserID, new.UserID) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldUserID, _m.UserID, new.UserID))
+	}
+	if !reflect.DeepEqual(_m.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldOrganizationID, _m.OrganizationID, new.OrganizationID))
+	}
+	if !reflect.DeepEqual(_m.TargetUserID, new.TargetUserID) {
+		changes = append(changes, NewChange(impersonationeventhistory.FieldTargetUserID, _m.TargetUserID, new.TargetUserID))
+	}
+	return changes
+}
+
+func (_m *ImpersonationEventHistory) Diff(history *ImpersonationEventHistory) (*HistoryDiff[ImpersonationEventHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[ImpersonationEventHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ImpersonationEventHistory]{
 			Old:     history,
 			New:     _m,
 			Changes: history.changes(_m),
@@ -4088,6 +4164,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditImpersonationEventHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditIntegrationHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -4963,6 +5045,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditHushHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("ImpersonationEventHistory", "History") {
+		// map AuditLogWhereInput to ImpersonationEventHistoryWhereInput
+		whereInput := &ImpersonationEventHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ImpersonationEventHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ImpersonationEventHistoryOrder{
+			Field:     ImpersonationEventHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditImpersonationEventHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -7444,6 +7567,79 @@ func auditHushHistory(ctx context.Context, config config, after *Cursor, first *
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &HushHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type impersonationeventhistoryref struct {
+	Ref string
+}
+
+func auditImpersonationEventHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ImpersonationEventHistoryOrder, where *ImpersonationEventHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []ImpersonationEventHistoryPaginateOption{
+		WithImpersonationEventHistoryOrder(orderBy),
+		WithImpersonationEventHistoryFilter(where.Filter),
+	}
+
+	client := NewImpersonationEventHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ImpersonationEventHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ImpersonationEventHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ImpersonationEventHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					impersonationeventhistory.Ref(curr.Node.Ref),
+					impersonationeventhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(impersonationeventhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ImpersonationEventHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

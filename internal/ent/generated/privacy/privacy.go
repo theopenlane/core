@@ -1023,6 +1023,54 @@ func (f HushHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.HushHistoryMutation", m)
 }
 
+// The ImpersonationEventQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ImpersonationEventQueryRuleFunc func(context.Context, *generated.ImpersonationEventQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ImpersonationEventQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ImpersonationEventQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ImpersonationEventQuery", q)
+}
+
+// The ImpersonationEventMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ImpersonationEventMutationRuleFunc func(context.Context, *generated.ImpersonationEventMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ImpersonationEventMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ImpersonationEventMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ImpersonationEventMutation", m)
+}
+
+// The ImpersonationEventHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ImpersonationEventHistoryQueryRuleFunc func(context.Context, *generated.ImpersonationEventHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ImpersonationEventHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ImpersonationEventHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ImpersonationEventHistoryQuery", q)
+}
+
+// The ImpersonationEventHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ImpersonationEventHistoryMutationRuleFunc func(context.Context, *generated.ImpersonationEventHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ImpersonationEventHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ImpersonationEventHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ImpersonationEventHistoryMutation", m)
+}
+
 // The IntegrationQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type IntegrationQueryRuleFunc func(context.Context, *generated.IntegrationQuery) error
@@ -2934,6 +2982,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.HushHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ImpersonationEventQuery:
+		return q.Filter(), nil
+	case *generated.ImpersonationEventHistoryQuery:
+		return q.Filter(), nil
 	case *generated.IntegrationQuery:
 		return q.Filter(), nil
 	case *generated.IntegrationHistoryQuery:
@@ -3166,6 +3218,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.HushMutation:
 		return m.Filter(), nil
 	case *generated.HushHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ImpersonationEventMutation:
+		return m.Filter(), nil
+	case *generated.ImpersonationEventHistoryMutation:
 		return m.Filter(), nil
 	case *generated.IntegrationMutation:
 		return m.Filter(), nil

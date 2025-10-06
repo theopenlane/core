@@ -4919,6 +4919,273 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ImpersonationEventMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ImpersonationEventHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if impersonationType, exists := m.ImpersonationType(); exists {
+		create = create.SetImpersonationType(impersonationType)
+	}
+
+	if action, exists := m.Action(); exists {
+		create = create.SetAction(action)
+	}
+
+	if reason, exists := m.Reason(); exists {
+		create = create.SetReason(reason)
+	}
+
+	if ipAddress, exists := m.IPAddress(); exists {
+		create = create.SetIPAddress(ipAddress)
+	}
+
+	if userAgent, exists := m.UserAgent(); exists {
+		create = create.SetUserAgent(userAgent)
+	}
+
+	if scopes, exists := m.Scopes(); exists {
+		create = create.SetScopes(scopes)
+	}
+
+	if userID, exists := m.UserID(); exists {
+		create = create.SetUserID(userID)
+	}
+
+	if organizationID, exists := m.OrganizationID(); exists {
+		create = create.SetOrganizationID(organizationID)
+	}
+
+	if targetUserID, exists := m.TargetUserID(); exists {
+		create = create.SetTargetUserID(targetUserID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ImpersonationEventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		impersonationevent, err := client.ImpersonationEvent.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ImpersonationEventHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(impersonationevent.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(impersonationevent.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(impersonationevent.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(impersonationevent.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(impersonationevent.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(impersonationevent.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(impersonationevent.Tags)
+		}
+
+		if impersonationType, exists := m.ImpersonationType(); exists {
+			create = create.SetImpersonationType(impersonationType)
+		} else {
+			create = create.SetImpersonationType(impersonationevent.ImpersonationType)
+		}
+
+		if action, exists := m.Action(); exists {
+			create = create.SetAction(action)
+		} else {
+			create = create.SetAction(impersonationevent.Action)
+		}
+
+		if reason, exists := m.Reason(); exists {
+			create = create.SetReason(reason)
+		} else {
+			create = create.SetReason(impersonationevent.Reason)
+		}
+
+		if ipAddress, exists := m.IPAddress(); exists {
+			create = create.SetIPAddress(ipAddress)
+		} else {
+			create = create.SetIPAddress(impersonationevent.IPAddress)
+		}
+
+		if userAgent, exists := m.UserAgent(); exists {
+			create = create.SetUserAgent(userAgent)
+		} else {
+			create = create.SetUserAgent(impersonationevent.UserAgent)
+		}
+
+		if scopes, exists := m.Scopes(); exists {
+			create = create.SetScopes(scopes)
+		} else {
+			create = create.SetScopes(impersonationevent.Scopes)
+		}
+
+		if userID, exists := m.UserID(); exists {
+			create = create.SetUserID(userID)
+		} else {
+			create = create.SetUserID(impersonationevent.UserID)
+		}
+
+		if organizationID, exists := m.OrganizationID(); exists {
+			create = create.SetOrganizationID(organizationID)
+		} else {
+			create = create.SetOrganizationID(impersonationevent.OrganizationID)
+		}
+
+		if targetUserID, exists := m.TargetUserID(); exists {
+			create = create.SetTargetUserID(targetUserID)
+		} else {
+			create = create.SetTargetUserID(impersonationevent.TargetUserID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ImpersonationEventMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		impersonationevent, err := client.ImpersonationEvent.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ImpersonationEventHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(impersonationevent.CreatedAt).
+			SetUpdatedAt(impersonationevent.UpdatedAt).
+			SetCreatedBy(impersonationevent.CreatedBy).
+			SetUpdatedBy(impersonationevent.UpdatedBy).
+			SetDeletedAt(impersonationevent.DeletedAt).
+			SetDeletedBy(impersonationevent.DeletedBy).
+			SetTags(impersonationevent.Tags).
+			SetImpersonationType(impersonationevent.ImpersonationType).
+			SetAction(impersonationevent.Action).
+			SetReason(impersonationevent.Reason).
+			SetIPAddress(impersonationevent.IPAddress).
+			SetUserAgent(impersonationevent.UserAgent).
+			SetScopes(impersonationevent.Scopes).
+			SetUserID(impersonationevent.UserID).
+			SetOrganizationID(impersonationevent.OrganizationID).
+			SetTargetUserID(impersonationevent.TargetUserID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()

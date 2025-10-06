@@ -196,79 +196,82 @@ type OrganizationEdges struct {
 	Exports []*Export `json:"exports,omitempty"`
 	// TrustCenterWatermarkConfigs holds the value of the trust_center_watermark_configs edge.
 	TrustCenterWatermarkConfigs []*TrustCenterWatermarkConfig `json:"trust_center_watermark_configs,omitempty"`
+	// OrganizationImpersonationEvents holds the value of the organization_impersonation_events edge.
+	OrganizationImpersonationEvents []*ImpersonationEvent `json:"organization_impersonation_events,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [68]bool
+	loadedTypes [69]bool
 	// totalCount holds the count of the edges above.
 	totalCount [65]map[string]int
 
-	namedControlCreators               map[string][]*Group
-	namedControlImplementationCreators map[string][]*Group
-	namedControlObjectiveCreators      map[string][]*Group
-	namedEvidenceCreators              map[string][]*Group
-	namedGroupCreators                 map[string][]*Group
-	namedInternalPolicyCreators        map[string][]*Group
-	namedMappedControlCreators         map[string][]*Group
-	namedNarrativeCreators             map[string][]*Group
-	namedProcedureCreators             map[string][]*Group
-	namedProgramCreators               map[string][]*Group
-	namedRiskCreators                  map[string][]*Group
-	namedScheduledJobCreators          map[string][]*Group
-	namedStandardCreators              map[string][]*Group
-	namedTemplateCreators              map[string][]*Group
-	namedChildren                      map[string][]*Organization
-	namedPersonalAccessTokens          map[string][]*PersonalAccessToken
-	namedAPITokens                     map[string][]*APIToken
-	namedUsers                         map[string][]*User
-	namedFiles                         map[string][]*File
-	namedEvents                        map[string][]*Event
-	namedSecrets                       map[string][]*Hush
-	namedGroups                        map[string][]*Group
-	namedTemplates                     map[string][]*Template
-	namedIntegrations                  map[string][]*Integration
-	namedDocuments                     map[string][]*DocumentData
-	namedOrgSubscriptions              map[string][]*OrgSubscription
-	namedOrgProducts                   map[string][]*OrgProduct
-	namedOrgPrices                     map[string][]*OrgPrice
-	namedOrgModules                    map[string][]*OrgModule
-	namedInvites                       map[string][]*Invite
-	namedSubscribers                   map[string][]*Subscriber
-	namedEntities                      map[string][]*Entity
-	namedEntityTypes                   map[string][]*EntityType
-	namedContacts                      map[string][]*Contact
-	namedNotes                         map[string][]*Note
-	namedTasks                         map[string][]*Task
-	namedPrograms                      map[string][]*Program
-	namedProcedures                    map[string][]*Procedure
-	namedInternalPolicies              map[string][]*InternalPolicy
-	namedRisks                         map[string][]*Risk
-	namedControlObjectives             map[string][]*ControlObjective
-	namedNarratives                    map[string][]*Narrative
-	namedControls                      map[string][]*Control
-	namedSubcontrols                   map[string][]*Subcontrol
-	namedControlImplementations        map[string][]*ControlImplementation
-	namedMappedControls                map[string][]*MappedControl
-	namedEvidence                      map[string][]*Evidence
-	namedStandards                     map[string][]*Standard
-	namedActionPlans                   map[string][]*ActionPlan
-	namedCustomDomains                 map[string][]*CustomDomain
-	namedJobRunners                    map[string][]*JobRunner
-	namedJobRunnerTokens               map[string][]*JobRunnerToken
-	namedJobRunnerRegistrationTokens   map[string][]*JobRunnerRegistrationToken
-	namedDNSVerifications              map[string][]*DNSVerification
-	namedJobTemplates                  map[string][]*JobTemplate
-	namedScheduledJobs                 map[string][]*ScheduledJob
-	namedJobResults                    map[string][]*JobResult
-	namedScheduledJobRuns              map[string][]*ScheduledJobRun
-	namedTrustCenters                  map[string][]*TrustCenter
-	namedAssets                        map[string][]*Asset
-	namedScans                         map[string][]*Scan
-	namedSubprocessors                 map[string][]*Subprocessor
-	namedExports                       map[string][]*Export
-	namedTrustCenterWatermarkConfigs   map[string][]*TrustCenterWatermarkConfig
-	namedMembers                       map[string][]*OrgMembership
+	namedControlCreators                 map[string][]*Group
+	namedControlImplementationCreators   map[string][]*Group
+	namedControlObjectiveCreators        map[string][]*Group
+	namedEvidenceCreators                map[string][]*Group
+	namedGroupCreators                   map[string][]*Group
+	namedInternalPolicyCreators          map[string][]*Group
+	namedMappedControlCreators           map[string][]*Group
+	namedNarrativeCreators               map[string][]*Group
+	namedProcedureCreators               map[string][]*Group
+	namedProgramCreators                 map[string][]*Group
+	namedRiskCreators                    map[string][]*Group
+	namedScheduledJobCreators            map[string][]*Group
+	namedStandardCreators                map[string][]*Group
+	namedTemplateCreators                map[string][]*Group
+	namedChildren                        map[string][]*Organization
+	namedPersonalAccessTokens            map[string][]*PersonalAccessToken
+	namedAPITokens                       map[string][]*APIToken
+	namedUsers                           map[string][]*User
+	namedFiles                           map[string][]*File
+	namedEvents                          map[string][]*Event
+	namedSecrets                         map[string][]*Hush
+	namedGroups                          map[string][]*Group
+	namedTemplates                       map[string][]*Template
+	namedIntegrations                    map[string][]*Integration
+	namedDocuments                       map[string][]*DocumentData
+	namedOrgSubscriptions                map[string][]*OrgSubscription
+	namedOrgProducts                     map[string][]*OrgProduct
+	namedOrgPrices                       map[string][]*OrgPrice
+	namedOrgModules                      map[string][]*OrgModule
+	namedInvites                         map[string][]*Invite
+	namedSubscribers                     map[string][]*Subscriber
+	namedEntities                        map[string][]*Entity
+	namedEntityTypes                     map[string][]*EntityType
+	namedContacts                        map[string][]*Contact
+	namedNotes                           map[string][]*Note
+	namedTasks                           map[string][]*Task
+	namedPrograms                        map[string][]*Program
+	namedProcedures                      map[string][]*Procedure
+	namedInternalPolicies                map[string][]*InternalPolicy
+	namedRisks                           map[string][]*Risk
+	namedControlObjectives               map[string][]*ControlObjective
+	namedNarratives                      map[string][]*Narrative
+	namedControls                        map[string][]*Control
+	namedSubcontrols                     map[string][]*Subcontrol
+	namedControlImplementations          map[string][]*ControlImplementation
+	namedMappedControls                  map[string][]*MappedControl
+	namedEvidence                        map[string][]*Evidence
+	namedStandards                       map[string][]*Standard
+	namedActionPlans                     map[string][]*ActionPlan
+	namedCustomDomains                   map[string][]*CustomDomain
+	namedJobRunners                      map[string][]*JobRunner
+	namedJobRunnerTokens                 map[string][]*JobRunnerToken
+	namedJobRunnerRegistrationTokens     map[string][]*JobRunnerRegistrationToken
+	namedDNSVerifications                map[string][]*DNSVerification
+	namedJobTemplates                    map[string][]*JobTemplate
+	namedScheduledJobs                   map[string][]*ScheduledJob
+	namedJobResults                      map[string][]*JobResult
+	namedScheduledJobRuns                map[string][]*ScheduledJobRun
+	namedTrustCenters                    map[string][]*TrustCenter
+	namedAssets                          map[string][]*Asset
+	namedScans                           map[string][]*Scan
+	namedSubprocessors                   map[string][]*Subprocessor
+	namedExports                         map[string][]*Export
+	namedTrustCenterWatermarkConfigs     map[string][]*TrustCenterWatermarkConfig
+	namedOrganizationImpersonationEvents map[string][]*ImpersonationEvent
+	namedMembers                         map[string][]*OrgMembership
 }
 
 // ControlCreatorsOrErr returns the ControlCreators value or an error if the edge
@@ -880,10 +883,19 @@ func (e OrganizationEdges) TrustCenterWatermarkConfigsOrErr() ([]*TrustCenterWat
 	return nil, &NotLoadedError{edge: "trust_center_watermark_configs"}
 }
 
+// OrganizationImpersonationEventsOrErr returns the OrganizationImpersonationEvents value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) OrganizationImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
+	if e.loadedTypes[67] {
+		return e.OrganizationImpersonationEvents, nil
+	}
+	return nil, &NotLoadedError{edge: "organization_impersonation_events"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[67] {
+	if e.loadedTypes[68] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1377,6 +1389,11 @@ func (_m *Organization) QueryExports() *ExportQuery {
 // QueryTrustCenterWatermarkConfigs queries the "trust_center_watermark_configs" edge of the Organization entity.
 func (_m *Organization) QueryTrustCenterWatermarkConfigs() *TrustCenterWatermarkConfigQuery {
 	return NewOrganizationClient(_m.config).QueryTrustCenterWatermarkConfigs(_m)
+}
+
+// QueryOrganizationImpersonationEvents queries the "organization_impersonation_events" edge of the Organization entity.
+func (_m *Organization) QueryOrganizationImpersonationEvents() *ImpersonationEventQuery {
+	return NewOrganizationClient(_m.config).QueryOrganizationImpersonationEvents(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3002,6 +3019,30 @@ func (_m *Organization) appendNamedTrustCenterWatermarkConfigs(name string, edge
 		_m.Edges.namedTrustCenterWatermarkConfigs[name] = []*TrustCenterWatermarkConfig{}
 	} else {
 		_m.Edges.namedTrustCenterWatermarkConfigs[name] = append(_m.Edges.namedTrustCenterWatermarkConfigs[name], edges...)
+	}
+}
+
+// NamedOrganizationImpersonationEvents returns the OrganizationImpersonationEvents named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedOrganizationImpersonationEvents(name string) ([]*ImpersonationEvent, error) {
+	if _m.Edges.namedOrganizationImpersonationEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedOrganizationImpersonationEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedOrganizationImpersonationEvents(name string, edges ...*ImpersonationEvent) {
+	if _m.Edges.namedOrganizationImpersonationEvents == nil {
+		_m.Edges.namedOrganizationImpersonationEvents = make(map[string][]*ImpersonationEvent)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedOrganizationImpersonationEvents[name] = []*ImpersonationEvent{}
+	} else {
+		_m.Edges.namedOrganizationImpersonationEvents[name] = append(_m.Edges.namedOrganizationImpersonationEvents[name], edges...)
 	}
 }
 

@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -73,145 +74,147 @@ import (
 // OrganizationQuery is the builder for querying Organization entities.
 type OrganizationQuery struct {
 	config
-	ctx                                    *QueryContext
-	order                                  []organization.OrderOption
-	inters                                 []Interceptor
-	predicates                             []predicate.Organization
-	withControlCreators                    *GroupQuery
-	withControlImplementationCreators      *GroupQuery
-	withControlObjectiveCreators           *GroupQuery
-	withEvidenceCreators                   *GroupQuery
-	withGroupCreators                      *GroupQuery
-	withInternalPolicyCreators             *GroupQuery
-	withMappedControlCreators              *GroupQuery
-	withNarrativeCreators                  *GroupQuery
-	withProcedureCreators                  *GroupQuery
-	withProgramCreators                    *GroupQuery
-	withRiskCreators                       *GroupQuery
-	withScheduledJobCreators               *GroupQuery
-	withStandardCreators                   *GroupQuery
-	withTemplateCreators                   *GroupQuery
-	withParent                             *OrganizationQuery
-	withChildren                           *OrganizationQuery
-	withSetting                            *OrganizationSettingQuery
-	withPersonalAccessTokens               *PersonalAccessTokenQuery
-	withAPITokens                          *APITokenQuery
-	withUsers                              *UserQuery
-	withFiles                              *FileQuery
-	withEvents                             *EventQuery
-	withSecrets                            *HushQuery
-	withAvatarFile                         *FileQuery
-	withGroups                             *GroupQuery
-	withTemplates                          *TemplateQuery
-	withIntegrations                       *IntegrationQuery
-	withDocuments                          *DocumentDataQuery
-	withOrgSubscriptions                   *OrgSubscriptionQuery
-	withOrgProducts                        *OrgProductQuery
-	withOrgPrices                          *OrgPriceQuery
-	withOrgModules                         *OrgModuleQuery
-	withInvites                            *InviteQuery
-	withSubscribers                        *SubscriberQuery
-	withEntities                           *EntityQuery
-	withEntityTypes                        *EntityTypeQuery
-	withContacts                           *ContactQuery
-	withNotes                              *NoteQuery
-	withTasks                              *TaskQuery
-	withPrograms                           *ProgramQuery
-	withProcedures                         *ProcedureQuery
-	withInternalPolicies                   *InternalPolicyQuery
-	withRisks                              *RiskQuery
-	withControlObjectives                  *ControlObjectiveQuery
-	withNarratives                         *NarrativeQuery
-	withControls                           *ControlQuery
-	withSubcontrols                        *SubcontrolQuery
-	withControlImplementations             *ControlImplementationQuery
-	withMappedControls                     *MappedControlQuery
-	withEvidence                           *EvidenceQuery
-	withStandards                          *StandardQuery
-	withActionPlans                        *ActionPlanQuery
-	withCustomDomains                      *CustomDomainQuery
-	withJobRunners                         *JobRunnerQuery
-	withJobRunnerTokens                    *JobRunnerTokenQuery
-	withJobRunnerRegistrationTokens        *JobRunnerRegistrationTokenQuery
-	withDNSVerifications                   *DNSVerificationQuery
-	withJobTemplates                       *JobTemplateQuery
-	withScheduledJobs                      *ScheduledJobQuery
-	withJobResults                         *JobResultQuery
-	withScheduledJobRuns                   *ScheduledJobRunQuery
-	withTrustCenters                       *TrustCenterQuery
-	withAssets                             *AssetQuery
-	withScans                              *ScanQuery
-	withSubprocessors                      *SubprocessorQuery
-	withExports                            *ExportQuery
-	withTrustCenterWatermarkConfigs        *TrustCenterWatermarkConfigQuery
-	withMembers                            *OrgMembershipQuery
-	loadTotal                              []func(context.Context, []*Organization) error
-	modifiers                              []func(*sql.Selector)
-	withNamedControlCreators               map[string]*GroupQuery
-	withNamedControlImplementationCreators map[string]*GroupQuery
-	withNamedControlObjectiveCreators      map[string]*GroupQuery
-	withNamedEvidenceCreators              map[string]*GroupQuery
-	withNamedGroupCreators                 map[string]*GroupQuery
-	withNamedInternalPolicyCreators        map[string]*GroupQuery
-	withNamedMappedControlCreators         map[string]*GroupQuery
-	withNamedNarrativeCreators             map[string]*GroupQuery
-	withNamedProcedureCreators             map[string]*GroupQuery
-	withNamedProgramCreators               map[string]*GroupQuery
-	withNamedRiskCreators                  map[string]*GroupQuery
-	withNamedScheduledJobCreators          map[string]*GroupQuery
-	withNamedStandardCreators              map[string]*GroupQuery
-	withNamedTemplateCreators              map[string]*GroupQuery
-	withNamedChildren                      map[string]*OrganizationQuery
-	withNamedPersonalAccessTokens          map[string]*PersonalAccessTokenQuery
-	withNamedAPITokens                     map[string]*APITokenQuery
-	withNamedUsers                         map[string]*UserQuery
-	withNamedFiles                         map[string]*FileQuery
-	withNamedEvents                        map[string]*EventQuery
-	withNamedSecrets                       map[string]*HushQuery
-	withNamedGroups                        map[string]*GroupQuery
-	withNamedTemplates                     map[string]*TemplateQuery
-	withNamedIntegrations                  map[string]*IntegrationQuery
-	withNamedDocuments                     map[string]*DocumentDataQuery
-	withNamedOrgSubscriptions              map[string]*OrgSubscriptionQuery
-	withNamedOrgProducts                   map[string]*OrgProductQuery
-	withNamedOrgPrices                     map[string]*OrgPriceQuery
-	withNamedOrgModules                    map[string]*OrgModuleQuery
-	withNamedInvites                       map[string]*InviteQuery
-	withNamedSubscribers                   map[string]*SubscriberQuery
-	withNamedEntities                      map[string]*EntityQuery
-	withNamedEntityTypes                   map[string]*EntityTypeQuery
-	withNamedContacts                      map[string]*ContactQuery
-	withNamedNotes                         map[string]*NoteQuery
-	withNamedTasks                         map[string]*TaskQuery
-	withNamedPrograms                      map[string]*ProgramQuery
-	withNamedProcedures                    map[string]*ProcedureQuery
-	withNamedInternalPolicies              map[string]*InternalPolicyQuery
-	withNamedRisks                         map[string]*RiskQuery
-	withNamedControlObjectives             map[string]*ControlObjectiveQuery
-	withNamedNarratives                    map[string]*NarrativeQuery
-	withNamedControls                      map[string]*ControlQuery
-	withNamedSubcontrols                   map[string]*SubcontrolQuery
-	withNamedControlImplementations        map[string]*ControlImplementationQuery
-	withNamedMappedControls                map[string]*MappedControlQuery
-	withNamedEvidence                      map[string]*EvidenceQuery
-	withNamedStandards                     map[string]*StandardQuery
-	withNamedActionPlans                   map[string]*ActionPlanQuery
-	withNamedCustomDomains                 map[string]*CustomDomainQuery
-	withNamedJobRunners                    map[string]*JobRunnerQuery
-	withNamedJobRunnerTokens               map[string]*JobRunnerTokenQuery
-	withNamedJobRunnerRegistrationTokens   map[string]*JobRunnerRegistrationTokenQuery
-	withNamedDNSVerifications              map[string]*DNSVerificationQuery
-	withNamedJobTemplates                  map[string]*JobTemplateQuery
-	withNamedScheduledJobs                 map[string]*ScheduledJobQuery
-	withNamedJobResults                    map[string]*JobResultQuery
-	withNamedScheduledJobRuns              map[string]*ScheduledJobRunQuery
-	withNamedTrustCenters                  map[string]*TrustCenterQuery
-	withNamedAssets                        map[string]*AssetQuery
-	withNamedScans                         map[string]*ScanQuery
-	withNamedSubprocessors                 map[string]*SubprocessorQuery
-	withNamedExports                       map[string]*ExportQuery
-	withNamedTrustCenterWatermarkConfigs   map[string]*TrustCenterWatermarkConfigQuery
-	withNamedMembers                       map[string]*OrgMembershipQuery
+	ctx                                      *QueryContext
+	order                                    []organization.OrderOption
+	inters                                   []Interceptor
+	predicates                               []predicate.Organization
+	withControlCreators                      *GroupQuery
+	withControlImplementationCreators        *GroupQuery
+	withControlObjectiveCreators             *GroupQuery
+	withEvidenceCreators                     *GroupQuery
+	withGroupCreators                        *GroupQuery
+	withInternalPolicyCreators               *GroupQuery
+	withMappedControlCreators                *GroupQuery
+	withNarrativeCreators                    *GroupQuery
+	withProcedureCreators                    *GroupQuery
+	withProgramCreators                      *GroupQuery
+	withRiskCreators                         *GroupQuery
+	withScheduledJobCreators                 *GroupQuery
+	withStandardCreators                     *GroupQuery
+	withTemplateCreators                     *GroupQuery
+	withParent                               *OrganizationQuery
+	withChildren                             *OrganizationQuery
+	withSetting                              *OrganizationSettingQuery
+	withPersonalAccessTokens                 *PersonalAccessTokenQuery
+	withAPITokens                            *APITokenQuery
+	withUsers                                *UserQuery
+	withFiles                                *FileQuery
+	withEvents                               *EventQuery
+	withSecrets                              *HushQuery
+	withAvatarFile                           *FileQuery
+	withGroups                               *GroupQuery
+	withTemplates                            *TemplateQuery
+	withIntegrations                         *IntegrationQuery
+	withDocuments                            *DocumentDataQuery
+	withOrgSubscriptions                     *OrgSubscriptionQuery
+	withOrgProducts                          *OrgProductQuery
+	withOrgPrices                            *OrgPriceQuery
+	withOrgModules                           *OrgModuleQuery
+	withInvites                              *InviteQuery
+	withSubscribers                          *SubscriberQuery
+	withEntities                             *EntityQuery
+	withEntityTypes                          *EntityTypeQuery
+	withContacts                             *ContactQuery
+	withNotes                                *NoteQuery
+	withTasks                                *TaskQuery
+	withPrograms                             *ProgramQuery
+	withProcedures                           *ProcedureQuery
+	withInternalPolicies                     *InternalPolicyQuery
+	withRisks                                *RiskQuery
+	withControlObjectives                    *ControlObjectiveQuery
+	withNarratives                           *NarrativeQuery
+	withControls                             *ControlQuery
+	withSubcontrols                          *SubcontrolQuery
+	withControlImplementations               *ControlImplementationQuery
+	withMappedControls                       *MappedControlQuery
+	withEvidence                             *EvidenceQuery
+	withStandards                            *StandardQuery
+	withActionPlans                          *ActionPlanQuery
+	withCustomDomains                        *CustomDomainQuery
+	withJobRunners                           *JobRunnerQuery
+	withJobRunnerTokens                      *JobRunnerTokenQuery
+	withJobRunnerRegistrationTokens          *JobRunnerRegistrationTokenQuery
+	withDNSVerifications                     *DNSVerificationQuery
+	withJobTemplates                         *JobTemplateQuery
+	withScheduledJobs                        *ScheduledJobQuery
+	withJobResults                           *JobResultQuery
+	withScheduledJobRuns                     *ScheduledJobRunQuery
+	withTrustCenters                         *TrustCenterQuery
+	withAssets                               *AssetQuery
+	withScans                                *ScanQuery
+	withSubprocessors                        *SubprocessorQuery
+	withExports                              *ExportQuery
+	withTrustCenterWatermarkConfigs          *TrustCenterWatermarkConfigQuery
+	withOrganizationImpersonationEvents      *ImpersonationEventQuery
+	withMembers                              *OrgMembershipQuery
+	loadTotal                                []func(context.Context, []*Organization) error
+	modifiers                                []func(*sql.Selector)
+	withNamedControlCreators                 map[string]*GroupQuery
+	withNamedControlImplementationCreators   map[string]*GroupQuery
+	withNamedControlObjectiveCreators        map[string]*GroupQuery
+	withNamedEvidenceCreators                map[string]*GroupQuery
+	withNamedGroupCreators                   map[string]*GroupQuery
+	withNamedInternalPolicyCreators          map[string]*GroupQuery
+	withNamedMappedControlCreators           map[string]*GroupQuery
+	withNamedNarrativeCreators               map[string]*GroupQuery
+	withNamedProcedureCreators               map[string]*GroupQuery
+	withNamedProgramCreators                 map[string]*GroupQuery
+	withNamedRiskCreators                    map[string]*GroupQuery
+	withNamedScheduledJobCreators            map[string]*GroupQuery
+	withNamedStandardCreators                map[string]*GroupQuery
+	withNamedTemplateCreators                map[string]*GroupQuery
+	withNamedChildren                        map[string]*OrganizationQuery
+	withNamedPersonalAccessTokens            map[string]*PersonalAccessTokenQuery
+	withNamedAPITokens                       map[string]*APITokenQuery
+	withNamedUsers                           map[string]*UserQuery
+	withNamedFiles                           map[string]*FileQuery
+	withNamedEvents                          map[string]*EventQuery
+	withNamedSecrets                         map[string]*HushQuery
+	withNamedGroups                          map[string]*GroupQuery
+	withNamedTemplates                       map[string]*TemplateQuery
+	withNamedIntegrations                    map[string]*IntegrationQuery
+	withNamedDocuments                       map[string]*DocumentDataQuery
+	withNamedOrgSubscriptions                map[string]*OrgSubscriptionQuery
+	withNamedOrgProducts                     map[string]*OrgProductQuery
+	withNamedOrgPrices                       map[string]*OrgPriceQuery
+	withNamedOrgModules                      map[string]*OrgModuleQuery
+	withNamedInvites                         map[string]*InviteQuery
+	withNamedSubscribers                     map[string]*SubscriberQuery
+	withNamedEntities                        map[string]*EntityQuery
+	withNamedEntityTypes                     map[string]*EntityTypeQuery
+	withNamedContacts                        map[string]*ContactQuery
+	withNamedNotes                           map[string]*NoteQuery
+	withNamedTasks                           map[string]*TaskQuery
+	withNamedPrograms                        map[string]*ProgramQuery
+	withNamedProcedures                      map[string]*ProcedureQuery
+	withNamedInternalPolicies                map[string]*InternalPolicyQuery
+	withNamedRisks                           map[string]*RiskQuery
+	withNamedControlObjectives               map[string]*ControlObjectiveQuery
+	withNamedNarratives                      map[string]*NarrativeQuery
+	withNamedControls                        map[string]*ControlQuery
+	withNamedSubcontrols                     map[string]*SubcontrolQuery
+	withNamedControlImplementations          map[string]*ControlImplementationQuery
+	withNamedMappedControls                  map[string]*MappedControlQuery
+	withNamedEvidence                        map[string]*EvidenceQuery
+	withNamedStandards                       map[string]*StandardQuery
+	withNamedActionPlans                     map[string]*ActionPlanQuery
+	withNamedCustomDomains                   map[string]*CustomDomainQuery
+	withNamedJobRunners                      map[string]*JobRunnerQuery
+	withNamedJobRunnerTokens                 map[string]*JobRunnerTokenQuery
+	withNamedJobRunnerRegistrationTokens     map[string]*JobRunnerRegistrationTokenQuery
+	withNamedDNSVerifications                map[string]*DNSVerificationQuery
+	withNamedJobTemplates                    map[string]*JobTemplateQuery
+	withNamedScheduledJobs                   map[string]*ScheduledJobQuery
+	withNamedJobResults                      map[string]*JobResultQuery
+	withNamedScheduledJobRuns                map[string]*ScheduledJobRunQuery
+	withNamedTrustCenters                    map[string]*TrustCenterQuery
+	withNamedAssets                          map[string]*AssetQuery
+	withNamedScans                           map[string]*ScanQuery
+	withNamedSubprocessors                   map[string]*SubprocessorQuery
+	withNamedExports                         map[string]*ExportQuery
+	withNamedTrustCenterWatermarkConfigs     map[string]*TrustCenterWatermarkConfigQuery
+	withNamedOrganizationImpersonationEvents map[string]*ImpersonationEventQuery
+	withNamedMembers                         map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -1923,6 +1926,31 @@ func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigs() *TrustCenterWate
 	return query
 }
 
+// QueryOrganizationImpersonationEvents chains the current query on the "organization_impersonation_events" edge.
+func (_q *OrganizationQuery) QueryOrganizationImpersonationEvents() *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrganizationImpersonationEventsTable, organization.OrganizationImpersonationEventsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2135,79 +2163,80 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		return nil
 	}
 	return &OrganizationQuery{
-		config:                            _q.config,
-		ctx:                               _q.ctx.Clone(),
-		order:                             append([]organization.OrderOption{}, _q.order...),
-		inters:                            append([]Interceptor{}, _q.inters...),
-		predicates:                        append([]predicate.Organization{}, _q.predicates...),
-		withControlCreators:               _q.withControlCreators.Clone(),
-		withControlImplementationCreators: _q.withControlImplementationCreators.Clone(),
-		withControlObjectiveCreators:      _q.withControlObjectiveCreators.Clone(),
-		withEvidenceCreators:              _q.withEvidenceCreators.Clone(),
-		withGroupCreators:                 _q.withGroupCreators.Clone(),
-		withInternalPolicyCreators:        _q.withInternalPolicyCreators.Clone(),
-		withMappedControlCreators:         _q.withMappedControlCreators.Clone(),
-		withNarrativeCreators:             _q.withNarrativeCreators.Clone(),
-		withProcedureCreators:             _q.withProcedureCreators.Clone(),
-		withProgramCreators:               _q.withProgramCreators.Clone(),
-		withRiskCreators:                  _q.withRiskCreators.Clone(),
-		withScheduledJobCreators:          _q.withScheduledJobCreators.Clone(),
-		withStandardCreators:              _q.withStandardCreators.Clone(),
-		withTemplateCreators:              _q.withTemplateCreators.Clone(),
-		withParent:                        _q.withParent.Clone(),
-		withChildren:                      _q.withChildren.Clone(),
-		withSetting:                       _q.withSetting.Clone(),
-		withPersonalAccessTokens:          _q.withPersonalAccessTokens.Clone(),
-		withAPITokens:                     _q.withAPITokens.Clone(),
-		withUsers:                         _q.withUsers.Clone(),
-		withFiles:                         _q.withFiles.Clone(),
-		withEvents:                        _q.withEvents.Clone(),
-		withSecrets:                       _q.withSecrets.Clone(),
-		withAvatarFile:                    _q.withAvatarFile.Clone(),
-		withGroups:                        _q.withGroups.Clone(),
-		withTemplates:                     _q.withTemplates.Clone(),
-		withIntegrations:                  _q.withIntegrations.Clone(),
-		withDocuments:                     _q.withDocuments.Clone(),
-		withOrgSubscriptions:              _q.withOrgSubscriptions.Clone(),
-		withOrgProducts:                   _q.withOrgProducts.Clone(),
-		withOrgPrices:                     _q.withOrgPrices.Clone(),
-		withOrgModules:                    _q.withOrgModules.Clone(),
-		withInvites:                       _q.withInvites.Clone(),
-		withSubscribers:                   _q.withSubscribers.Clone(),
-		withEntities:                      _q.withEntities.Clone(),
-		withEntityTypes:                   _q.withEntityTypes.Clone(),
-		withContacts:                      _q.withContacts.Clone(),
-		withNotes:                         _q.withNotes.Clone(),
-		withTasks:                         _q.withTasks.Clone(),
-		withPrograms:                      _q.withPrograms.Clone(),
-		withProcedures:                    _q.withProcedures.Clone(),
-		withInternalPolicies:              _q.withInternalPolicies.Clone(),
-		withRisks:                         _q.withRisks.Clone(),
-		withControlObjectives:             _q.withControlObjectives.Clone(),
-		withNarratives:                    _q.withNarratives.Clone(),
-		withControls:                      _q.withControls.Clone(),
-		withSubcontrols:                   _q.withSubcontrols.Clone(),
-		withControlImplementations:        _q.withControlImplementations.Clone(),
-		withMappedControls:                _q.withMappedControls.Clone(),
-		withEvidence:                      _q.withEvidence.Clone(),
-		withStandards:                     _q.withStandards.Clone(),
-		withActionPlans:                   _q.withActionPlans.Clone(),
-		withCustomDomains:                 _q.withCustomDomains.Clone(),
-		withJobRunners:                    _q.withJobRunners.Clone(),
-		withJobRunnerTokens:               _q.withJobRunnerTokens.Clone(),
-		withJobRunnerRegistrationTokens:   _q.withJobRunnerRegistrationTokens.Clone(),
-		withDNSVerifications:              _q.withDNSVerifications.Clone(),
-		withJobTemplates:                  _q.withJobTemplates.Clone(),
-		withScheduledJobs:                 _q.withScheduledJobs.Clone(),
-		withJobResults:                    _q.withJobResults.Clone(),
-		withScheduledJobRuns:              _q.withScheduledJobRuns.Clone(),
-		withTrustCenters:                  _q.withTrustCenters.Clone(),
-		withAssets:                        _q.withAssets.Clone(),
-		withScans:                         _q.withScans.Clone(),
-		withSubprocessors:                 _q.withSubprocessors.Clone(),
-		withExports:                       _q.withExports.Clone(),
-		withTrustCenterWatermarkConfigs:   _q.withTrustCenterWatermarkConfigs.Clone(),
-		withMembers:                       _q.withMembers.Clone(),
+		config:                              _q.config,
+		ctx:                                 _q.ctx.Clone(),
+		order:                               append([]organization.OrderOption{}, _q.order...),
+		inters:                              append([]Interceptor{}, _q.inters...),
+		predicates:                          append([]predicate.Organization{}, _q.predicates...),
+		withControlCreators:                 _q.withControlCreators.Clone(),
+		withControlImplementationCreators:   _q.withControlImplementationCreators.Clone(),
+		withControlObjectiveCreators:        _q.withControlObjectiveCreators.Clone(),
+		withEvidenceCreators:                _q.withEvidenceCreators.Clone(),
+		withGroupCreators:                   _q.withGroupCreators.Clone(),
+		withInternalPolicyCreators:          _q.withInternalPolicyCreators.Clone(),
+		withMappedControlCreators:           _q.withMappedControlCreators.Clone(),
+		withNarrativeCreators:               _q.withNarrativeCreators.Clone(),
+		withProcedureCreators:               _q.withProcedureCreators.Clone(),
+		withProgramCreators:                 _q.withProgramCreators.Clone(),
+		withRiskCreators:                    _q.withRiskCreators.Clone(),
+		withScheduledJobCreators:            _q.withScheduledJobCreators.Clone(),
+		withStandardCreators:                _q.withStandardCreators.Clone(),
+		withTemplateCreators:                _q.withTemplateCreators.Clone(),
+		withParent:                          _q.withParent.Clone(),
+		withChildren:                        _q.withChildren.Clone(),
+		withSetting:                         _q.withSetting.Clone(),
+		withPersonalAccessTokens:            _q.withPersonalAccessTokens.Clone(),
+		withAPITokens:                       _q.withAPITokens.Clone(),
+		withUsers:                           _q.withUsers.Clone(),
+		withFiles:                           _q.withFiles.Clone(),
+		withEvents:                          _q.withEvents.Clone(),
+		withSecrets:                         _q.withSecrets.Clone(),
+		withAvatarFile:                      _q.withAvatarFile.Clone(),
+		withGroups:                          _q.withGroups.Clone(),
+		withTemplates:                       _q.withTemplates.Clone(),
+		withIntegrations:                    _q.withIntegrations.Clone(),
+		withDocuments:                       _q.withDocuments.Clone(),
+		withOrgSubscriptions:                _q.withOrgSubscriptions.Clone(),
+		withOrgProducts:                     _q.withOrgProducts.Clone(),
+		withOrgPrices:                       _q.withOrgPrices.Clone(),
+		withOrgModules:                      _q.withOrgModules.Clone(),
+		withInvites:                         _q.withInvites.Clone(),
+		withSubscribers:                     _q.withSubscribers.Clone(),
+		withEntities:                        _q.withEntities.Clone(),
+		withEntityTypes:                     _q.withEntityTypes.Clone(),
+		withContacts:                        _q.withContacts.Clone(),
+		withNotes:                           _q.withNotes.Clone(),
+		withTasks:                           _q.withTasks.Clone(),
+		withPrograms:                        _q.withPrograms.Clone(),
+		withProcedures:                      _q.withProcedures.Clone(),
+		withInternalPolicies:                _q.withInternalPolicies.Clone(),
+		withRisks:                           _q.withRisks.Clone(),
+		withControlObjectives:               _q.withControlObjectives.Clone(),
+		withNarratives:                      _q.withNarratives.Clone(),
+		withControls:                        _q.withControls.Clone(),
+		withSubcontrols:                     _q.withSubcontrols.Clone(),
+		withControlImplementations:          _q.withControlImplementations.Clone(),
+		withMappedControls:                  _q.withMappedControls.Clone(),
+		withEvidence:                        _q.withEvidence.Clone(),
+		withStandards:                       _q.withStandards.Clone(),
+		withActionPlans:                     _q.withActionPlans.Clone(),
+		withCustomDomains:                   _q.withCustomDomains.Clone(),
+		withJobRunners:                      _q.withJobRunners.Clone(),
+		withJobRunnerTokens:                 _q.withJobRunnerTokens.Clone(),
+		withJobRunnerRegistrationTokens:     _q.withJobRunnerRegistrationTokens.Clone(),
+		withDNSVerifications:                _q.withDNSVerifications.Clone(),
+		withJobTemplates:                    _q.withJobTemplates.Clone(),
+		withScheduledJobs:                   _q.withScheduledJobs.Clone(),
+		withJobResults:                      _q.withJobResults.Clone(),
+		withScheduledJobRuns:                _q.withScheduledJobRuns.Clone(),
+		withTrustCenters:                    _q.withTrustCenters.Clone(),
+		withAssets:                          _q.withAssets.Clone(),
+		withScans:                           _q.withScans.Clone(),
+		withSubprocessors:                   _q.withSubprocessors.Clone(),
+		withExports:                         _q.withExports.Clone(),
+		withTrustCenterWatermarkConfigs:     _q.withTrustCenterWatermarkConfigs.Clone(),
+		withOrganizationImpersonationEvents: _q.withOrganizationImpersonationEvents.Clone(),
+		withMembers:                         _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -2952,6 +2981,17 @@ func (_q *OrganizationQuery) WithTrustCenterWatermarkConfigs(opts ...func(*Trust
 	return _q
 }
 
+// WithOrganizationImpersonationEvents tells the query-builder to eager-load the nodes that are connected to
+// the "organization_impersonation_events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithOrganizationImpersonationEvents(opts ...func(*ImpersonationEventQuery)) *OrganizationQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOrganizationImpersonationEvents = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3047,7 +3087,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [68]bool{
+		loadedTypes = [69]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3115,6 +3155,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
+			_q.withOrganizationImpersonationEvents != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3635,6 +3676,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withOrganizationImpersonationEvents; query != nil {
+		if err := _q.loadOrganizationImpersonationEvents(ctx, query, nodes,
+			func(n *Organization) { n.Edges.OrganizationImpersonationEvents = []*ImpersonationEvent{} },
+			func(n *Organization, e *ImpersonationEvent) {
+				n.Edges.OrganizationImpersonationEvents = append(n.Edges.OrganizationImpersonationEvents, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4091,6 +4141,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *TrustCenterWatermarkConfig) {
 				n.appendNamedTrustCenterWatermarkConfigs(name, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedOrganizationImpersonationEvents {
+		if err := _q.loadOrganizationImpersonationEvents(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedOrganizationImpersonationEvents(name) },
+			func(n *Organization, e *ImpersonationEvent) { n.appendNamedOrganizationImpersonationEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6275,6 +6332,36 @@ func (_q *OrganizationQuery) loadTrustCenterWatermarkConfigs(ctx context.Context
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadOrganizationImpersonationEvents(ctx context.Context, query *ImpersonationEventQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ImpersonationEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(impersonationevent.FieldOrganizationID)
+	}
+	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.OrganizationImpersonationEventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrganizationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7303,6 +7390,20 @@ func (_q *OrganizationQuery) WithNamedTrustCenterWatermarkConfigs(name string, o
 		_q.withNamedTrustCenterWatermarkConfigs = make(map[string]*TrustCenterWatermarkConfigQuery)
 	}
 	_q.withNamedTrustCenterWatermarkConfigs[name] = query
+	return _q
+}
+
+// WithNamedOrganizationImpersonationEvents tells the query-builder to eager-load the nodes that are connected to the "organization_impersonation_events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedOrganizationImpersonationEvents(name string, opts ...func(*ImpersonationEventQuery)) *OrganizationQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedOrganizationImpersonationEvents == nil {
+		_q.withNamedOrganizationImpersonationEvents = make(map[string]*ImpersonationEventQuery)
+	}
+	_q.withNamedOrganizationImpersonationEvents[name] = query
 	return _q
 }
 

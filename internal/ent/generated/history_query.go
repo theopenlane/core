@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
@@ -836,6 +837,52 @@ func (hhq *HushHistoryQuery) AsOf(ctx context.Context, time time.Time) (*HushHis
 	return hhq.
 		Where(hushhistory.HistoryTimeLTE(time)).
 		Order(hushhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *ImpersonationEvent) History() *ImpersonationEventHistoryQuery {
+	historyClient := NewImpersonationEventHistoryClient(_m.config)
+	return historyClient.Query().Where(impersonationeventhistory.Ref(_m.ID))
+}
+
+func (_m *ImpersonationEventHistory) Next(ctx context.Context) (*ImpersonationEventHistory, error) {
+	client := NewImpersonationEventHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			impersonationeventhistory.Ref(_m.Ref),
+			impersonationeventhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(impersonationeventhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *ImpersonationEventHistory) Prev(ctx context.Context) (*ImpersonationEventHistory, error) {
+	client := NewImpersonationEventHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			impersonationeventhistory.Ref(_m.Ref),
+			impersonationeventhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(impersonationeventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (iehq *ImpersonationEventHistoryQuery) Earliest(ctx context.Context) (*ImpersonationEventHistory, error) {
+	return iehq.
+		Order(impersonationeventhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (iehq *ImpersonationEventHistoryQuery) Latest(ctx context.Context) (*ImpersonationEventHistory, error) {
+	return iehq.
+		Order(impersonationeventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (iehq *ImpersonationEventHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ImpersonationEventHistory, error) {
+	return iehq.
+		Where(impersonationeventhistory.HistoryTimeLTE(time)).
+		Order(impersonationeventhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

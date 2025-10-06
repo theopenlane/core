@@ -465,6 +465,30 @@ func (f HushHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.HushHistoryMutation", m)
 }
 
+// The ImpersonationEventFunc type is an adapter to allow the use of ordinary
+// function as ImpersonationEvent mutator.
+type ImpersonationEventFunc func(context.Context, *generated.ImpersonationEventMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ImpersonationEventFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ImpersonationEventMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ImpersonationEventMutation", m)
+}
+
+// The ImpersonationEventHistoryFunc type is an adapter to allow the use of ordinary
+// function as ImpersonationEventHistory mutator.
+type ImpersonationEventHistoryFunc func(context.Context, *generated.ImpersonationEventHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ImpersonationEventHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ImpersonationEventHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ImpersonationEventHistoryMutation", m)
+}
+
 // The IntegrationFunc type is an adapter to allow the use of ordinary
 // function as Integration mutator.
 type IntegrationFunc func(context.Context, *generated.IntegrationMutation) (generated.Value, error)

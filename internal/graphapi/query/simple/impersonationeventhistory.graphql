@@ -1,0 +1,69 @@
+
+
+query GetAllImpersonationEventHistories {
+  impersonationEventHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        action
+        createdAt
+        createdBy
+        historyTime
+        id
+        impersonationType
+        ipAddress
+        operation
+        organizationID
+        reason
+        ref
+        scopes
+        tags
+        targetUserID
+        updatedAt
+        updatedBy
+        userAgent
+        userID
+      }
+    }
+  }
+}
+
+query GetImpersonationEventHistories($first: Int, $last: Int, $where: ImpersonationEventHistoryWhereInput) {
+  impersonationEventHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        action
+        createdAt
+        createdBy
+        historyTime
+        id
+        impersonationType
+        ipAddress
+        operation
+        organizationID
+        reason
+        ref
+        scopes
+        tags
+        targetUserID
+        updatedAt
+        updatedBy
+        userAgent
+        userID
+      }
+    }
+  }
+}

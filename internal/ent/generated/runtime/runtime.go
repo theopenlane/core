@@ -44,6 +44,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -2555,6 +2557,67 @@ func init() {
 	hushhistoryDescID := hushhistoryFields[9].Descriptor()
 	// hushhistory.DefaultID holds the default value on creation for the id field.
 	hushhistory.DefaultID = hushhistoryDescID.Default.(func() string)
+	impersonationeventMixin := schema.ImpersonationEvent{}.Mixin()
+	impersonationeventMixinHooks0 := impersonationeventMixin[0].Hooks()
+	impersonationeventMixinHooks1 := impersonationeventMixin[1].Hooks()
+	impersonationeventMixinHooks2 := impersonationeventMixin[2].Hooks()
+	impersonationevent.Hooks[0] = impersonationeventMixinHooks0[0]
+	impersonationevent.Hooks[1] = impersonationeventMixinHooks1[0]
+	impersonationevent.Hooks[2] = impersonationeventMixinHooks2[0]
+	impersonationeventMixinInters1 := impersonationeventMixin[1].Interceptors()
+	impersonationeventMixinInters2 := impersonationeventMixin[2].Interceptors()
+	impersonationevent.Interceptors[0] = impersonationeventMixinInters1[0]
+	impersonationevent.Interceptors[1] = impersonationeventMixinInters2[0]
+	impersonationeventMixinFields0 := impersonationeventMixin[0].Fields()
+	_ = impersonationeventMixinFields0
+	impersonationeventMixinFields3 := impersonationeventMixin[3].Fields()
+	_ = impersonationeventMixinFields3
+	impersonationeventMixinFields4 := impersonationeventMixin[4].Fields()
+	_ = impersonationeventMixinFields4
+	impersonationeventFields := schema.ImpersonationEvent{}.Fields()
+	_ = impersonationeventFields
+	// impersonationeventDescCreatedAt is the schema descriptor for created_at field.
+	impersonationeventDescCreatedAt := impersonationeventMixinFields0[0].Descriptor()
+	// impersonationevent.DefaultCreatedAt holds the default value on creation for the created_at field.
+	impersonationevent.DefaultCreatedAt = impersonationeventDescCreatedAt.Default.(func() time.Time)
+	// impersonationeventDescUpdatedAt is the schema descriptor for updated_at field.
+	impersonationeventDescUpdatedAt := impersonationeventMixinFields0[1].Descriptor()
+	// impersonationevent.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	impersonationevent.DefaultUpdatedAt = impersonationeventDescUpdatedAt.Default.(func() time.Time)
+	// impersonationevent.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	impersonationevent.UpdateDefaultUpdatedAt = impersonationeventDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// impersonationeventDescTags is the schema descriptor for tags field.
+	impersonationeventDescTags := impersonationeventMixinFields4[0].Descriptor()
+	// impersonationevent.DefaultTags holds the default value on creation for the tags field.
+	impersonationevent.DefaultTags = impersonationeventDescTags.Default.([]string)
+	// impersonationeventDescID is the schema descriptor for id field.
+	impersonationeventDescID := impersonationeventMixinFields3[0].Descriptor()
+	// impersonationevent.DefaultID holds the default value on creation for the id field.
+	impersonationevent.DefaultID = impersonationeventDescID.Default.(func() string)
+	impersonationeventhistoryFields := schema.ImpersonationEventHistory{}.Fields()
+	_ = impersonationeventhistoryFields
+	// impersonationeventhistoryDescHistoryTime is the schema descriptor for history_time field.
+	impersonationeventhistoryDescHistoryTime := impersonationeventhistoryFields[0].Descriptor()
+	// impersonationeventhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	impersonationeventhistory.DefaultHistoryTime = impersonationeventhistoryDescHistoryTime.Default.(func() time.Time)
+	// impersonationeventhistoryDescCreatedAt is the schema descriptor for created_at field.
+	impersonationeventhistoryDescCreatedAt := impersonationeventhistoryFields[3].Descriptor()
+	// impersonationeventhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	impersonationeventhistory.DefaultCreatedAt = impersonationeventhistoryDescCreatedAt.Default.(func() time.Time)
+	// impersonationeventhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	impersonationeventhistoryDescUpdatedAt := impersonationeventhistoryFields[4].Descriptor()
+	// impersonationeventhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	impersonationeventhistory.DefaultUpdatedAt = impersonationeventhistoryDescUpdatedAt.Default.(func() time.Time)
+	// impersonationeventhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	impersonationeventhistory.UpdateDefaultUpdatedAt = impersonationeventhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// impersonationeventhistoryDescTags is the schema descriptor for tags field.
+	impersonationeventhistoryDescTags := impersonationeventhistoryFields[10].Descriptor()
+	// impersonationeventhistory.DefaultTags holds the default value on creation for the tags field.
+	impersonationeventhistory.DefaultTags = impersonationeventhistoryDescTags.Default.([]string)
+	// impersonationeventhistoryDescID is the schema descriptor for id field.
+	impersonationeventhistoryDescID := impersonationeventhistoryFields[9].Descriptor()
+	// impersonationeventhistory.DefaultID holds the default value on creation for the id field.
+	impersonationeventhistory.DefaultID = impersonationeventhistoryDescID.Default.(func() string)
 	integrationMixin := schema.Integration{}.Mixin()
 	integration.Policy = privacy.NewPolicies(integrationMixin[7], schema.Integration{})
 	integration.Hooks[0] = func(next ent.Mutator) ent.Mutator {

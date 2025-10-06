@@ -46,6 +46,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -1204,6 +1206,60 @@ func (f TraverseHushHistory) Traverse(ctx context.Context, q generated.Query) er
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.HushHistoryQuery", q)
+}
+
+// The ImpersonationEventFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ImpersonationEventFunc func(context.Context, *generated.ImpersonationEventQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ImpersonationEventFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ImpersonationEventQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ImpersonationEventQuery", q)
+}
+
+// The TraverseImpersonationEvent type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseImpersonationEvent func(context.Context, *generated.ImpersonationEventQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseImpersonationEvent) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseImpersonationEvent) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ImpersonationEventQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ImpersonationEventQuery", q)
+}
+
+// The ImpersonationEventHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ImpersonationEventHistoryFunc func(context.Context, *generated.ImpersonationEventHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ImpersonationEventHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ImpersonationEventHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ImpersonationEventHistoryQuery", q)
+}
+
+// The TraverseImpersonationEventHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseImpersonationEventHistory func(context.Context, *generated.ImpersonationEventHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseImpersonationEventHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseImpersonationEventHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ImpersonationEventHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ImpersonationEventHistoryQuery", q)
 }
 
 // The IntegrationFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3310,6 +3366,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.HushQuery, predicate.Hush, hush.OrderOption]{typ: generated.TypeHush, tq: q}, nil
 	case *generated.HushHistoryQuery:
 		return &query[*generated.HushHistoryQuery, predicate.HushHistory, hushhistory.OrderOption]{typ: generated.TypeHushHistory, tq: q}, nil
+	case *generated.ImpersonationEventQuery:
+		return &query[*generated.ImpersonationEventQuery, predicate.ImpersonationEvent, impersonationevent.OrderOption]{typ: generated.TypeImpersonationEvent, tq: q}, nil
+	case *generated.ImpersonationEventHistoryQuery:
+		return &query[*generated.ImpersonationEventHistoryQuery, predicate.ImpersonationEventHistory, impersonationeventhistory.OrderOption]{typ: generated.TypeImpersonationEventHistory, tq: q}, nil
 	case *generated.IntegrationQuery:
 		return &query[*generated.IntegrationQuery, predicate.Integration, integration.OrderOption]{typ: generated.TypeIntegration, tq: q}, nil
 	case *generated.IntegrationHistoryQuery:

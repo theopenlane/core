@@ -1945,6 +1945,88 @@ var (
 			},
 		},
 	}
+	// ImpersonationEventsColumns holds the columns for the "impersonation_events" table.
+	ImpersonationEventsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "impersonation_type", Type: field.TypeEnum, Enums: []string{"SUPPORT", "ADMIN", "JOB"}},
+		{Name: "action", Type: field.TypeEnum, Enums: []string{"START", "STOP"}},
+		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "ip_address", Type: field.TypeString, Nullable: true},
+		{Name: "user_agent", Type: field.TypeString, Nullable: true},
+		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "target_user_id", Type: field.TypeString},
+	}
+	// ImpersonationEventsTable holds the schema information for the "impersonation_events" table.
+	ImpersonationEventsTable = &schema.Table{
+		Name:       "impersonation_events",
+		Columns:    ImpersonationEventsColumns,
+		PrimaryKey: []*schema.Column{ImpersonationEventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "impersonation_events_organizations_organization_impersonation_events",
+				Columns:    []*schema.Column{ImpersonationEventsColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "impersonation_events_users_impersonation_events",
+				Columns:    []*schema.Column{ImpersonationEventsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "impersonation_events_users_targeted_impersonations",
+				Columns:    []*schema.Column{ImpersonationEventsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// ImpersonationEventHistoryColumns holds the columns for the "impersonation_event_history" table.
+	ImpersonationEventHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "impersonation_type", Type: field.TypeEnum, Enums: []string{"SUPPORT", "ADMIN", "JOB"}},
+		{Name: "action", Type: field.TypeEnum, Enums: []string{"START", "STOP"}},
+		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "ip_address", Type: field.TypeString, Nullable: true},
+		{Name: "user_agent", Type: field.TypeString, Nullable: true},
+		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "target_user_id", Type: field.TypeString},
+	}
+	// ImpersonationEventHistoryTable holds the schema information for the "impersonation_event_history" table.
+	ImpersonationEventHistoryTable = &schema.Table{
+		Name:       "impersonation_event_history",
+		Columns:    ImpersonationEventHistoryColumns,
+		PrimaryKey: []*schema.Column{ImpersonationEventHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "impersonationeventhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ImpersonationEventHistoryColumns[1]},
+			},
+		},
+	}
 	// IntegrationsColumns holds the columns for the "integrations" table.
 	IntegrationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -8303,6 +8385,8 @@ var (
 		GroupSettingHistoryTable,
 		HushesTable,
 		HushHistoryTable,
+		ImpersonationEventsTable,
+		ImpersonationEventHistoryTable,
 		IntegrationsTable,
 		IntegrationHistoryTable,
 		InternalPoliciesTable,
@@ -8606,6 +8690,12 @@ func init() {
 	HushesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
+	}
+	ImpersonationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ImpersonationEventsTable.ForeignKeys[1].RefTable = UsersTable
+	ImpersonationEventsTable.ForeignKeys[2].RefTable = UsersTable
+	ImpersonationEventHistoryTable.Annotation = &entsql.Annotation{
+		Table: "impersonation_event_history",
 	}
 	IntegrationsTable.ForeignKeys[0].RefTable = FilesTable
 	IntegrationsTable.ForeignKeys[1].RefTable = GroupsTable

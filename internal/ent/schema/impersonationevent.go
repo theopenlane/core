@@ -69,7 +69,8 @@ func (ImpersonationEvent) Fields() []ent.Field {
 
 // Mixin of the ImpersonationEvent
 func (i ImpersonationEvent) Mixin() []ent.Mixin {
-	return getDefaultMixins(ImpersonationEvent{})
+	// graphql annotations are not required
+	return mixinConfig{excludeAnnotations: true}.getMixins(i)
 }
 
 // Edges of the ImpersonationEvent

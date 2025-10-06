@@ -323,6 +323,18 @@ func HushHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func ImpersonationEventEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup impersonationevent edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ImpersonationEventHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup impersonationeventhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func IntegrationEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")), entfga.DeleteTuplesFirstKey{})
 

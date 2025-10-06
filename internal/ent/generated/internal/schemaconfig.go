@@ -83,6 +83,8 @@ type SchemaConfig struct {
 	Hush                               string // Hush table.
 	HushEvents                         string // Hush-events->Event table.
 	HushHistory                        string // HushHistory table.
+	ImpersonationEvent                 string // ImpersonationEvent table.
+	ImpersonationEventHistory          string // ImpersonationEventHistory table.
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.
 	IntegrationEvents                  string // Integration-events->Event table.

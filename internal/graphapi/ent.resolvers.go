@@ -1242,6 +1242,38 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 	return res, err
 }
 
+// ImpersonationEventHistories is the resolver for the impersonationEventHistories field.
+func (r *queryResolver) ImpersonationEventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ImpersonationEventHistoryOrder, where *generated.ImpersonationEventHistoryWhereInput) (*generated.ImpersonationEventHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ImpersonationEventHistoryOrder{
+			Field:     generated.ImpersonationEventHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ImpersonationEventHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "impersonationeventhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithImpersonationEventHistoryOrder(orderBy),
+		generated.WithImpersonationEventHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "impersonationeventhistory"})
+	}
+
+	return res, err
+}
+
 // Integrations is the resolver for the integrations field.
 func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
 	// set page limit if nothing was set

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
@@ -117,7 +118,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		log.Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
-	if err := h.logImpersonationEvent("start", auditLog); err != nil {
+	if err := h.logImpersonationEvent("start", auditLog, ctx.Request().Context()); err != nil {
 		// Log the error but don't fail the request
 		log.Error().Err(err).Msg("failed to log impersonation event")
 	}
@@ -166,7 +167,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    impUser.OrganizationID,
 		Scopes:            impUser.ImpersonationContext.Scopes,
-	}); err != nil {
+	}, ctx.Request().Context()); err != nil {
 		log.Error().Err(err).Msg("failed to log impersonation end event")
 	}
 
@@ -241,12 +242,23 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 }
 
 // logImpersonationEvent logs impersonation events for audit purposes
-// Currently logs to application logs only. Future enhancement will persist to database.
-func (h *Handler) logImpersonationEvent(action string, auditLog *auth.ImpersonationAuditLog) error {
+// and persists it into the database
+func (h *Handler) logImpersonationEvent(action string, auditLog *auth.ImpersonationAuditLog, ctx context.Context) error {
 	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
-
-	//TODO: Add ent schema to persist impersonation events to database for audit trail
-	return nil
+	_, err := h.DBClient.ImpersonationEvent.Create().
+		SetAction(*enums.ToImpersonationAction(action)).
+		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
+		SetReason(auditLog.Reason).
+		SetIPAddress(auditLog.IPAddress).
+		SetScopes(auditLog.Scopes).
+		SetUserAgent(auditLog.UserAgent).
+		SetUserID(auditLog.ImpersonatorID).
+		SetTargetUserID(auditLog.TargetUserID).
+		SetOrganizationID(auditLog.OrganizationID).
+		SetCreatedBy(auditLog.ImpersonatorID).
+		SetCreatedAt(time.Now()).
+		Save(ctx)
+	return err
 }
 
 // extractSessionIDFromToken parses an impersonation token to extract the session ID

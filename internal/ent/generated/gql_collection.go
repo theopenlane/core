@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -18365,6 +18366,175 @@ func newHushHistoryPaginateArgs(rv map[string]any) *hushhistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*HushHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithHushHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *ImpersonationEventHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ImpersonationEventHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *ImpersonationEventHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(impersonationeventhistory.Columns))
+		selectedFields = []string{impersonationeventhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldHistoryTime)
+				fieldSeen[impersonationeventhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldRef)
+				fieldSeen[impersonationeventhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldOperation)
+				fieldSeen[impersonationeventhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldCreatedAt)
+				fieldSeen[impersonationeventhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldUpdatedAt)
+				fieldSeen[impersonationeventhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldCreatedBy)
+				fieldSeen[impersonationeventhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldUpdatedBy)
+				fieldSeen[impersonationeventhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldTags)
+				fieldSeen[impersonationeventhistory.FieldTags] = struct{}{}
+			}
+		case "impersonationType":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldImpersonationType]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldImpersonationType)
+				fieldSeen[impersonationeventhistory.FieldImpersonationType] = struct{}{}
+			}
+		case "action":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldAction]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldAction)
+				fieldSeen[impersonationeventhistory.FieldAction] = struct{}{}
+			}
+		case "reason":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldReason]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldReason)
+				fieldSeen[impersonationeventhistory.FieldReason] = struct{}{}
+			}
+		case "ipAddress":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldIPAddress]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldIPAddress)
+				fieldSeen[impersonationeventhistory.FieldIPAddress] = struct{}{}
+			}
+		case "userAgent":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldUserAgent]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldUserAgent)
+				fieldSeen[impersonationeventhistory.FieldUserAgent] = struct{}{}
+			}
+		case "scopes":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldScopes]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldScopes)
+				fieldSeen[impersonationeventhistory.FieldScopes] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldUserID)
+				fieldSeen[impersonationeventhistory.FieldUserID] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldOrganizationID)
+				fieldSeen[impersonationeventhistory.FieldOrganizationID] = struct{}{}
+			}
+		case "targetUserID":
+			if _, ok := fieldSeen[impersonationeventhistory.FieldTargetUserID]; !ok {
+				selectedFields = append(selectedFields, impersonationeventhistory.FieldTargetUserID)
+				fieldSeen[impersonationeventhistory.FieldTargetUserID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type impersonationeventhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ImpersonationEventHistoryPaginateOption
+}
+
+func newImpersonationEventHistoryPaginateArgs(rv map[string]any) *impersonationeventhistoryPaginateArgs {
+	args := &impersonationeventhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ImpersonationEventHistoryOrder{Field: &ImpersonationEventHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithImpersonationEventHistoryOrder(order))
+			}
+		case *ImpersonationEventHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithImpersonationEventHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ImpersonationEventHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithImpersonationEventHistoryFilter(v.Filter))
 	}
 	return args
 }

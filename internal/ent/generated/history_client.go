@@ -59,6 +59,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*HushMutation]() {
 		c.Hush.Use(hook)
 	}
+	for _, hook := range history.Hooks[*ImpersonationEventMutation]() {
+		c.ImpersonationEvent.Use(hook)
+	}
 	for _, hook := range history.Hooks[*IntegrationMutation]() {
 		c.Integration.Use(hook)
 	}

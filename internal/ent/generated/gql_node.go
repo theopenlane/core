@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationeventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -308,6 +309,11 @@ var hushhistoryImplementors = []string{"HushHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*HushHistory) IsNode() {}
+
+var impersonationeventhistoryImplementors = []string{"ImpersonationEventHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ImpersonationEventHistory) IsNode() {}
 
 var integrationImplementors = []string{"Integration", "Node"}
 
@@ -1051,6 +1057,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(hushhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, hushhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case impersonationeventhistory.Table:
+		query := c.ImpersonationEventHistory.Query().
+			Where(impersonationeventhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, impersonationeventhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2347,6 +2362,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.HushHistory.Query().
 			Where(hushhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, hushhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case impersonationeventhistory.Table:
+		query := c.ImpersonationEventHistory.Query().
+			Where(impersonationeventhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, impersonationeventhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -1813,6 +1813,38 @@ type ComplexityRoot struct {
 		Hush func(childComplexity int) int
 	}
 
+	ImpersonationEventHistory struct {
+		Action            func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IPAddress         func(childComplexity int) int
+		ImpersonationType func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OrganizationID    func(childComplexity int) int
+		Reason            func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		Scopes            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		TargetUserID      func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
+		UserAgent         func(childComplexity int) int
+		UserID            func(childComplexity int) int
+	}
+
+	ImpersonationEventHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ImpersonationEventHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	Integration struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
@@ -3732,6 +3764,7 @@ type ComplexityRoot struct {
 		Hush                                  func(childComplexity int, id string) int
 		HushHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
 		Hushes                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		ImpersonationEventHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ImpersonationEventHistoryOrder, where *generated.ImpersonationEventHistoryWhereInput) int
 		Integration                           func(childComplexity int, id string) int
 		IntegrationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
 		IntegrationSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -14047,6 +14080,167 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.HushUpdatePayload.Hush(childComplexity), true
+
+	case "ImpersonationEventHistory.action":
+		if e.complexity.ImpersonationEventHistory.Action == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Action(childComplexity), true
+
+	case "ImpersonationEventHistory.createdAt":
+		if e.complexity.ImpersonationEventHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.CreatedAt(childComplexity), true
+
+	case "ImpersonationEventHistory.createdBy":
+		if e.complexity.ImpersonationEventHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.CreatedBy(childComplexity), true
+
+	case "ImpersonationEventHistory.historyTime":
+		if e.complexity.ImpersonationEventHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.HistoryTime(childComplexity), true
+
+	case "ImpersonationEventHistory.id":
+		if e.complexity.ImpersonationEventHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.ID(childComplexity), true
+
+	case "ImpersonationEventHistory.ipAddress":
+		if e.complexity.ImpersonationEventHistory.IPAddress == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.IPAddress(childComplexity), true
+
+	case "ImpersonationEventHistory.impersonationType":
+		if e.complexity.ImpersonationEventHistory.ImpersonationType == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.ImpersonationType(childComplexity), true
+
+	case "ImpersonationEventHistory.operation":
+		if e.complexity.ImpersonationEventHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Operation(childComplexity), true
+
+	case "ImpersonationEventHistory.organizationID":
+		if e.complexity.ImpersonationEventHistory.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.OrganizationID(childComplexity), true
+
+	case "ImpersonationEventHistory.reason":
+		if e.complexity.ImpersonationEventHistory.Reason == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Reason(childComplexity), true
+
+	case "ImpersonationEventHistory.ref":
+		if e.complexity.ImpersonationEventHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Ref(childComplexity), true
+
+	case "ImpersonationEventHistory.scopes":
+		if e.complexity.ImpersonationEventHistory.Scopes == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Scopes(childComplexity), true
+
+	case "ImpersonationEventHistory.tags":
+		if e.complexity.ImpersonationEventHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.Tags(childComplexity), true
+
+	case "ImpersonationEventHistory.targetUserID":
+		if e.complexity.ImpersonationEventHistory.TargetUserID == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.TargetUserID(childComplexity), true
+
+	case "ImpersonationEventHistory.updatedAt":
+		if e.complexity.ImpersonationEventHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.UpdatedAt(childComplexity), true
+
+	case "ImpersonationEventHistory.updatedBy":
+		if e.complexity.ImpersonationEventHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.UpdatedBy(childComplexity), true
+
+	case "ImpersonationEventHistory.userAgent":
+		if e.complexity.ImpersonationEventHistory.UserAgent == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.UserAgent(childComplexity), true
+
+	case "ImpersonationEventHistory.userID":
+		if e.complexity.ImpersonationEventHistory.UserID == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistory.UserID(childComplexity), true
+
+	case "ImpersonationEventHistoryConnection.edges":
+		if e.complexity.ImpersonationEventHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistoryConnection.Edges(childComplexity), true
+
+	case "ImpersonationEventHistoryConnection.pageInfo":
+		if e.complexity.ImpersonationEventHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistoryConnection.PageInfo(childComplexity), true
+
+	case "ImpersonationEventHistoryConnection.totalCount":
+		if e.complexity.ImpersonationEventHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistoryConnection.TotalCount(childComplexity), true
+
+	case "ImpersonationEventHistoryEdge.cursor":
+		if e.complexity.ImpersonationEventHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistoryEdge.Cursor(childComplexity), true
+
+	case "ImpersonationEventHistoryEdge.node":
+		if e.complexity.ImpersonationEventHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ImpersonationEventHistoryEdge.Node(childComplexity), true
 
 	case "Integration.createdAt":
 		if e.complexity.Integration.CreatedAt == nil {
@@ -26441,6 +26635,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Hushes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
+	case "Query.impersonationEventHistories":
+		if e.complexity.Query.ImpersonationEventHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_impersonationEventHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ImpersonationEventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ImpersonationEventHistoryOrder), args["where"].(*generated.ImpersonationEventHistoryWhereInput)), true
+
 	case "Query.integration":
 		if e.complexity.Query.Integration == nil {
 			break
@@ -35819,6 +36025,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputHushHistoryWhereInput,
 		ec.unmarshalInputHushOrder,
 		ec.unmarshalInputHushWhereInput,
+		ec.unmarshalInputImpersonationEventHistoryOrder,
+		ec.unmarshalInputImpersonationEventHistoryWhereInput,
 		ec.unmarshalInputIntegrationHistoryOrder,
 		ec.unmarshalInputIntegrationHistoryWhereInput,
 		ec.unmarshalInputIntegrationOrder,
@@ -47623,6 +47831,7 @@ input CreateOrganizationInput {
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
+  organizationImpersonationEventIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -48651,6 +48860,8 @@ input CreateUserInput {
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
+  impersonationEventIDs: [ID!]
+  targetedImpersonationIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -59249,6 +59460,366 @@ input HushWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+}
+type ImpersonationEventHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ImpersonationEventHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Type of impersonation: SUPPORT, ADMIN, JOB
+  """
+  impersonationType: ImpersonationEventHistoryImpersonationType!
+  """
+  Action for the impersonation event
+  """
+  action: ImpersonationEventHistoryImpersonationAction!
+  """
+  Reason for impersonation
+  """
+  reason: String
+  """
+  IP address of the impersonator
+  """
+  ipAddress: String
+  """
+  User-Agent of the impersonator
+  """
+  userAgent: String
+  """
+  Granted scopes during impersonation
+  """
+  scopes: [String!]
+  """
+  Impersonator user id
+  """
+  userID: String!
+  """
+  id of the organization that is being impersonated
+  """
+  organizationID: String!
+  """
+  id of the user that is being impersonated
+  """
+  targetUserID: String!
+}
+"""
+A connection to a list of items.
+"""
+type ImpersonationEventHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ImpersonationEventHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ImpersonationEventHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ImpersonationEventHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ImpersonationEventHistoryImpersonationAction is enum for the field action
+"""
+enum ImpersonationEventHistoryImpersonationAction @goModel(model: "github.com/theopenlane/core/pkg/enums.ImpersonationAction") {
+  START
+  STOP
+}
+"""
+ImpersonationEventHistoryImpersonationType is enum for the field impersonation_type
+"""
+enum ImpersonationEventHistoryImpersonationType @goModel(model: "github.com/theopenlane/core/pkg/enums.ImpersonationType") {
+  SUPPORT
+  ADMIN
+  JOB
+}
+"""
+ImpersonationEventHistoryOpType is enum for the field operation
+"""
+enum ImpersonationEventHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ImpersonationEventHistory connections
+"""
+input ImpersonationEventHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ImpersonationEventHistories.
+  """
+  field: ImpersonationEventHistoryOrderField!
+}
+"""
+Properties by which ImpersonationEventHistory connections can be ordered.
+"""
+enum ImpersonationEventHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+ImpersonationEventHistoryWhereInput is used for filtering ImpersonationEventHistory objects.
+Input was generated by ent.
+"""
+input ImpersonationEventHistoryWhereInput {
+  not: ImpersonationEventHistoryWhereInput
+  and: [ImpersonationEventHistoryWhereInput!]
+  or: [ImpersonationEventHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ImpersonationEventHistoryOpType
+  operationNEQ: ImpersonationEventHistoryOpType
+  operationIn: [ImpersonationEventHistoryOpType!]
+  operationNotIn: [ImpersonationEventHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  impersonation_type field predicates
+  """
+  impersonationType: ImpersonationEventHistoryImpersonationType
+  impersonationTypeNEQ: ImpersonationEventHistoryImpersonationType
+  impersonationTypeIn: [ImpersonationEventHistoryImpersonationType!]
+  impersonationTypeNotIn: [ImpersonationEventHistoryImpersonationType!]
+  """
+  action field predicates
+  """
+  action: ImpersonationEventHistoryImpersonationAction
+  actionNEQ: ImpersonationEventHistoryImpersonationAction
+  actionIn: [ImpersonationEventHistoryImpersonationAction!]
+  actionNotIn: [ImpersonationEventHistoryImpersonationAction!]
+  """
+  reason field predicates
+  """
+  reason: String
+  reasonNEQ: String
+  reasonIn: [String!]
+  reasonNotIn: [String!]
+  reasonGT: String
+  reasonGTE: String
+  reasonLT: String
+  reasonLTE: String
+  reasonContains: String
+  reasonHasPrefix: String
+  reasonHasSuffix: String
+  reasonIsNil: Boolean
+  reasonNotNil: Boolean
+  reasonEqualFold: String
+  reasonContainsFold: String
+  """
+  ip_address field predicates
+  """
+  ipAddress: String
+  ipAddressNEQ: String
+  ipAddressIn: [String!]
+  ipAddressNotIn: [String!]
+  ipAddressGT: String
+  ipAddressGTE: String
+  ipAddressLT: String
+  ipAddressLTE: String
+  ipAddressContains: String
+  ipAddressHasPrefix: String
+  ipAddressHasSuffix: String
+  ipAddressIsNil: Boolean
+  ipAddressNotNil: Boolean
+  ipAddressEqualFold: String
+  ipAddressContainsFold: String
+  """
+  user_agent field predicates
+  """
+  userAgent: String
+  userAgentNEQ: String
+  userAgentIn: [String!]
+  userAgentNotIn: [String!]
+  userAgentGT: String
+  userAgentGTE: String
+  userAgentLT: String
+  userAgentLTE: String
+  userAgentContains: String
+  userAgentHasPrefix: String
+  userAgentHasSuffix: String
+  userAgentIsNil: Boolean
+  userAgentNotNil: Boolean
+  userAgentEqualFold: String
+  userAgentContainsFold: String
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDGT: String
+  userIDGTE: String
+  userIDLT: String
+  userIDLTE: String
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDEqualFold: String
+  userIDContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
+  """
+  target_user_id field predicates
+  """
+  targetUserID: String
+  targetUserIDNEQ: String
+  targetUserIDIn: [String!]
+  targetUserIDNotIn: [String!]
+  targetUserIDGT: String
+  targetUserIDGTE: String
+  targetUserIDLT: String
+  targetUserIDLTE: String
+  targetUserIDContains: String
+  targetUserIDHasPrefix: String
+  targetUserIDHasSuffix: String
+  targetUserIDEqualFold: String
+  targetUserIDContainsFold: String
 }
 type Integration implements Node {
   id: ID!
@@ -76740,6 +77311,37 @@ type Query {
     """
     where: HushHistoryWhereInput
   ): HushHistoryConnection!
+  impersonationEventHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ImpersonationEventHistories returned from the connection.
+    """
+    orderBy: ImpersonationEventHistoryOrder
+
+    """
+    Filtering options for ImpersonationEventHistories returned from the connection.
+    """
+    where: ImpersonationEventHistoryWhereInput
+  ): ImpersonationEventHistoryConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -93939,6 +94541,9 @@ input UpdateOrganizationInput {
   addTrustCenterWatermarkConfigIDs: [ID!]
   removeTrustCenterWatermarkConfigIDs: [ID!]
   clearTrustCenterWatermarkConfigs: Boolean
+  addOrganizationImpersonationEventIDs: [ID!]
+  removeOrganizationImpersonationEventIDs: [ID!]
+  clearOrganizationImpersonationEvents: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -95359,6 +95964,12 @@ input UpdateUserInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addImpersonationEventIDs: [ID!]
+  removeImpersonationEventIDs: [ID!]
+  clearImpersonationEvents: Boolean
+  addTargetedImpersonationIDs: [ID!]
+  removeTargetedImpersonationIDs: [ID!]
+  clearTargetedImpersonations: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
