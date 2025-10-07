@@ -924,6 +924,10 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				assert.Check(t, len(control.DisplayID) != 0)
 				assert.Check(t, len(control.RefCode) != 0)
 
+				// title isn't required, but checking if its set because we set it on the builder and
+				// want to ensure its cloned
+				assert.Check(t, len(*control.Title) != 0)
+
 				// all cloned controls should have an owner
 				assert.Check(t, control.OwnerID != nil)
 
@@ -1020,6 +1024,128 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	// create standard with controls to clone
+	numControls := int64(20)
+	controls := []*generated.Control{}
+	controlIDs := make([]string, 0, numControls)
+	subcontrols := []*generated.Subcontrol{}
+	subcontrolIDs := []string{}
+	controls2 := []*generated.Control{}
+	subcontrolID2s := []string{}
+	for range numControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		controls = append(controls, control)
+		controlIDs = append(controlIDs, control.ID)
+		// give them all a subcontrol
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrols = append(subcontrols, subcontrol)
+		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
+	}
+
+	// sort controls so they are consistent
+	slices.SortFunc(controls, func(a, b *generated.Control) int {
+		return cmp.Compare(a.RefCode, b.RefCode)
+	})
+	slices.SortFunc(controls2, func(a, b *generated.Control) int {
+		return cmp.Compare(a.RefCode, b.RefCode)
+	})
+
+	controlIDsToDelete := []string{}
+	subcontrolIDsToDelete := []string{}
+	testCases := []struct {
+		name                 string
+		request              testclient.CloneControlInput
+		expectedControlCount int
+		client               *testclient.TestClient
+		ctx                  context.Context
+		expectedStandard     *string
+		expectedNumProgram   int
+		expectedErr          string
+	}{
+		{
+			name: "happy path, filter by ref codes",
+			request: testclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+				RefCodes:   []string{controls[0].RefCode, controls[1].RefCode, controls[2].RefCode},
+			},
+			expectedStandard:     lo.ToPtr(publicStandard.ShortName),
+			expectedControlCount: 3,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+		},
+		{
+			name: "happy path, filter by ref codes and aliases",
+			request: testclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+				RefCodes:   []string{controls[0].RefCode, controls[1].Aliases[1]},
+			},
+			expectedStandard:     lo.ToPtr(publicStandard.ShortName),
+			expectedControlCount: 2,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+		},
+		{
+			name: "happy path, filter by aliases",
+			request: testclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+				RefCodes:   []string{controls[2].Aliases[1], controls[1].Aliases[0]},
+			},
+			expectedStandard:     lo.ToPtr(publicStandard.ShortName),
+			expectedControlCount: 2,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+		},
+		{
+			name: "happy path, filter by categories",
+			request: testclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+				Categories: []string{controls[0].Category, controls[1].Category, controls[2].Category},
+			},
+			expectedStandard:     lo.ToPtr(publicStandard.ShortName),
+			expectedControlCount: 3,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateControlsByClone(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					if tc.expectedErr == notAuthorizedErrorMsg {
+						assertErrorCode(t, e, gqlerrors.UnauthorizedErrorCode)
+					}
+				}
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, tc.expectedControlCount))
+
+			// sort controls so they are consistent
+			slices.SortFunc(resp.CreateControlsByClone.Controls, func(a, b *testclient.CreateControlsByClone_CreateControlsByClone_Controls) int {
+				return cmp.Compare(a.RefCode, b.RefCode)
+			})
+
+		})
+	}
+
+	// cleanup created controls and standards
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateControl(t *testing.T) {
