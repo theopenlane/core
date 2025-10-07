@@ -143,15 +143,21 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	moduleKey := strings.TrimSpace(productMetadata["module"])
 
 	if moduleKey == models.CatalogTrustCenterModule.String() {
-		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+		// use a fresh context to avoid inheriting the OrgSubscriptionContextKey bypass and others
+		newCtx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
 			SubjectID:          orgSub.CreatedBy,
 			OrganizationID:     orgSub.OwnerID,
 			OrganizationIDs:    []string{orgSub.OwnerID},
 			AuthenticationType: auth.JWTAuthentication,
 		})
 
+		// add tx back to the context
+		newCtx = transaction.NewContext(newCtx, tx)
+
+		newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
+
 		_, err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
-			Save(privacy.DecisionContext(newCtx, privacy.Allow))
+			Save(newCtx)
 		if err != nil && !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
 			return nil, err
 		}
