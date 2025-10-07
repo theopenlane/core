@@ -117,7 +117,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			continue
 		}
 
-		controlID, isSubControl := getControlIDFromRefCode(ctx, *c.RefCode, out.Controls)
+		controlID, isSubControl := getControlIDFromRefCode(*c.RefCode, out.Controls)
 		if controlID == nil {
 			log.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
 

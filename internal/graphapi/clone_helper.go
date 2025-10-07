@@ -222,7 +222,7 @@ func stripeAndCompare(a, b *string) bool {
 
 // getControlIDFromRefCode searches for a control ID by ref code or alias in the provided controls
 // returns the control ID and a boolean indicating if it is a subcontrol or not
-func getControlIDFromRefCode(ctx context.Context, refCode string, controls []*generated.Control) (*string, bool) {
+func getControlIDFromRefCode(refCode string, controls []*generated.Control) (*string, bool) {
 	for _, c := range controls {
 		if c.RefCode == refCode {
 			return &c.ID, false

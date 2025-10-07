@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
@@ -136,12 +137,14 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("title"),
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("human readable title of the control for quick identification"),
 	field.Text("description").
 		Optional().
 		Annotations(
 			entx.FieldSearchable(),
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("description of what the control is supposed to accomplish"),
 	field.Strings("aliases").Optional().
@@ -173,6 +176,7 @@ var controlFields = []ent.Field{
 		Optional().
 		Annotations(
 			entgql.OrderField("SOURCE"),
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
@@ -182,6 +186,14 @@ var controlFields = []ent.Field{
 		Annotations(
 			entgql.Skip(entgql.SkipMutationUpdateInput),
 			entgql.OrderField("REFERENCE_FRAMEWORK"),
+			directives.ExternalSourceDirectiveAnnotation,
+		).
+		Optional(),
+	field.String("reference_framework_revision").
+		Comment("the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated").
+		Nillable().
+		Annotations(
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Optional(),
 	field.Enum("control_type").
@@ -197,16 +209,21 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("category"),
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("category of the control"),
 	field.String("category_id").
 		Optional().
+		Annotations(
+			directives.ExternalSourceDirectiveAnnotation,
+		).
 		Comment("category id of the control"),
 	field.String("subcategory").
 		Optional().
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("subcategory"),
+			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("subcategory of the control"),
 	field.Strings("mapped_categories").

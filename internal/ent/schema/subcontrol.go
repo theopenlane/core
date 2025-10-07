@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 )
 
 // Subcontrol defines the file schema.
@@ -53,6 +54,7 @@ func (Subcontrol) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("ref_code"),
+				directives.ExternalSourceDirectiveAnnotation,
 			).
 			Comment("the unique reference code for the control"),
 		field.String("control_id").

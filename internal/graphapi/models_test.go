@@ -1196,7 +1196,6 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
-			SetSource(enums.ControlSourceUserDefined).
 			SetReferences([]models.Reference{
 				{
 					Name: gofakeit.HipsterSentence(5),

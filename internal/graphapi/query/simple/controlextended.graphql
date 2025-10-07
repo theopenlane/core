@@ -19,6 +19,7 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
       refCode
       references
       referenceFramework
+      referenceFrameworkRevision
       source
       standardID
       status

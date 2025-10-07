@@ -1874,6 +1874,9 @@ type CloneControlUploadInput struct {
 	Comment *string `json:"comment,omitempty"`
 	// internalPolicyIDs to associate with the created control
 	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
+	// controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+	// if the control is being clone from a system owned standard
+	ControlInput *CreateControlInput `json:"controlInput,omitempty"`
 }
 
 type Contact struct {
@@ -2465,6 +2468,8 @@ type Control struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -2650,6 +2655,8 @@ type ControlHistory struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -2943,6 +2950,22 @@ type ControlHistoryWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -4606,6 +4629,22 @@ type ControlWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -5028,6 +5067,8 @@ type CreateControlInput struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -6177,6 +6218,8 @@ type CreateSubcontrolInput struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -25501,6 +25544,8 @@ type Subcontrol struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -25629,6 +25674,8 @@ type SubcontrolHistory struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -25922,6 +25969,22 @@ type SubcontrolHistoryWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -26301,6 +26364,22 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -31948,6 +32027,9 @@ type UpdateControlInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
+	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -33848,6 +33930,9 @@ type UpdateSubcontrolInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
+	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`

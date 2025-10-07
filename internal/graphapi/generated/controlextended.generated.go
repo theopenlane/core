@@ -485,7 +485,7 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"controlID", "refCode", "standardID", "standardShortName", "standardVersion", "ownerID", "controlImplementation", "controlObjective", "status", "implementationGuidance", "comment", "internalPolicyID"}
+	fieldsInOrder := [...]string{"controlID", "refCode", "standardID", "standardShortName", "standardVersion", "ownerID", "controlImplementation", "controlObjective", "status", "implementationGuidance", "comment", "internalPolicyID", "controlInput"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -576,6 +576,13 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 				return it, err
 			}
 			it.InternalPolicyID = data
+		case "controlInput":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlInput"))
+			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlInput = data
 		}
 	}
 

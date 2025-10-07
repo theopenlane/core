@@ -90,6 +90,11 @@ input CloneControlUploadInput {
   internalPolicyIDs to associate with the created control
   """
   internalPolicyID: ID
+  """
+  controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+  if the control is being clone from a system owned standard
+  """
+  controlInput: CreateControlInput
 }
 
 extend type Mutation{
