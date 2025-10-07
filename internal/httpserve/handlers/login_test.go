@@ -114,11 +114,16 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	org := suite.db.Organization.Create().SetInput(input).SaveX(allowCtx)
 	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(allowCtx)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, createdssoOrg.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: createdssoOrg.ID,
 		UserID:         ssoMember.UserInfo.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(allowCtx)
+	}).ExecX(testUserCtx)
 
 	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(allowCtx)
 
@@ -306,8 +311,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 		password:      "$uper$ecretP@ssword",
 		confirmedUser: true,
 	})
-	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,

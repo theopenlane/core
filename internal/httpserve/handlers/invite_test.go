@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
@@ -62,7 +61,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
-	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
 	testCases := []struct {
@@ -149,7 +148,6 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
-			require.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 			assert.NotNil(t, group)
 
 			foundMember := false
@@ -209,9 +207,11 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
 	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
 
+	testUser := suite.userBuilder(context.Background())
+
 	// bypass auth
 	ctx := context.Background()
-	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
 
 	var groot = "groot2@theopenlane.io"
 
@@ -231,7 +231,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
-	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
 	// invite user to org
