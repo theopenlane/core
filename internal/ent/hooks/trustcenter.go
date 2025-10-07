@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -30,7 +31,9 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			exists, err := m.Client().TrustCenter.Query().Exist(ctx)
+			exists, err := m.Client().TrustCenter.Query().
+				Where(trustcenter.OwnerID(orgID)).
+				Exist(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -95,7 +98,7 @@ func HookTrustCenter() ent.Hook {
 			})
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, append(wildcardTuples, systemTuple), nil); err != nil {
-				return ctx, fmt.Errorf("failed to create file access permissions: %w", err)
+				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
 			return trustCenter, nil

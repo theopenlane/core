@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/rs/zerolog"
@@ -14,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -138,6 +141,21 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
 	moduleKey := strings.TrimSpace(productMetadata["module"])
+
+	if moduleKey == models.CatalogTrustCenterModule.String() {
+		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			SubjectID:          orgSub.CreatedBy,
+			OrganizationID:     orgSub.OwnerID,
+			OrganizationIDs:    []string{orgSub.OwnerID},
+			AuthenticationType: auth.JWTAuthentication,
+		})
+
+		_, err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
+			Save(privacy.DecisionContext(newCtx, privacy.Allow))
+		if err != nil && !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
+			return nil, err
+		}
+	}
 
 	// include softdeleted modules in the query
 	// if the module was previously marked as deleted, bring it back
