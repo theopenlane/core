@@ -350,6 +350,7 @@ func createCloneControlInput(c *generated.Control, programID *string, orgID stri
 	if c.Edges.Standard != nil {
 		// if the control has a standard, we will set the reference framework to the standard
 		controlInput.ReferenceFramework = &c.Edges.Standard.ShortName
+		controlInput.ReferenceFrameworkRevision = &c.Edges.Standard.Revision
 	}
 
 	// set the standard information
@@ -445,6 +446,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 
 				if c.refControl.Edges.Standard != nil {
 					toCloneSubcontrol.ReferenceFramework = &c.refControl.Edges.Standard.ShortName
+					toCloneSubcontrol.ReferenceFrameworkRevision = &c.refControl.Edges.Standard.Revision
 				}
 
 				subcontrolsToClone = append(subcontrolsToClone, toCloneSubcontrol)
@@ -456,26 +458,27 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 
 	for j, subcontrol := range subcontrolsToClone {
 		subcontrols[j] = &generated.CreateSubcontrolInput{
-			Tags:                   subcontrol.Tags,
-			RefCode:                subcontrol.RefCode,
-			Title:                  &subcontrol.Title,
-			Description:            &subcontrol.Description,
-			Source:                 &subcontrol.Source,
-			ControlID:              subcontrol.ControlID,
-			ControlType:            &subcontrol.ControlType,
-			Category:               &subcontrol.Category,
-			CategoryID:             &subcontrol.CategoryID,
-			Subcategory:            &subcontrol.Subcategory,
-			MappedCategories:       subcontrol.MappedCategories,
-			AssessmentObjectives:   subcontrol.AssessmentObjectives,
-			AssessmentMethods:      subcontrol.AssessmentMethods,
-			ControlQuestions:       subcontrol.ControlQuestions,
-			ImplementationGuidance: subcontrol.ImplementationGuidance,
-			ExampleEvidence:        subcontrol.ExampleEvidence,
-			References:             subcontrol.References,
-			Status:                 &enums.ControlStatusNotImplemented,
-			ReferenceFramework:     subcontrol.ReferenceFramework,
-			OwnerID:                &orgID,
+			Tags:                       subcontrol.Tags,
+			RefCode:                    subcontrol.RefCode,
+			Title:                      &subcontrol.Title,
+			Description:                &subcontrol.Description,
+			Source:                     &subcontrol.Source,
+			ControlID:                  subcontrol.ControlID,
+			ControlType:                &subcontrol.ControlType,
+			Category:                   &subcontrol.Category,
+			CategoryID:                 &subcontrol.CategoryID,
+			Subcategory:                &subcontrol.Subcategory,
+			MappedCategories:           subcontrol.MappedCategories,
+			AssessmentObjectives:       subcontrol.AssessmentObjectives,
+			AssessmentMethods:          subcontrol.AssessmentMethods,
+			ControlQuestions:           subcontrol.ControlQuestions,
+			ImplementationGuidance:     subcontrol.ImplementationGuidance,
+			ExampleEvidence:            subcontrol.ExampleEvidence,
+			References:                 subcontrol.References,
+			Status:                     &enums.ControlStatusNotImplemented,
+			ReferenceFramework:         subcontrol.ReferenceFramework,
+			ReferenceFrameworkRevision: subcontrol.ReferenceFrameworkRevision,
+			OwnerID:                    &orgID,
 			// set to empty string to avoid a second query, we know the control owner ID is not set
 			ControlOwnerID: lo.ToPtr(""),
 		}

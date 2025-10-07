@@ -133,6 +133,11 @@ func ReferenceFramework(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFramework, v))
 }
 
+// ReferenceFrameworkRevision applies equality check predicate on the "reference_framework_revision" field. It's identical to ReferenceFrameworkRevisionEQ.
+func ReferenceFrameworkRevision(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFrameworkRevision, v))
+}
+
 // Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
 func Category(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldCategory, v))
@@ -1176,6 +1181,81 @@ func ReferenceFrameworkEqualFold(v string) predicate.Subcontrol {
 // ReferenceFrameworkContainsFold applies the ContainsFold predicate on the "reference_framework" field.
 func ReferenceFrameworkContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkRevisionEQ applies the EQ predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionNEQ applies the NEQ predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionIn applies the In predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldReferenceFrameworkRevision, vs...))
+}
+
+// ReferenceFrameworkRevisionNotIn applies the NotIn predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldReferenceFrameworkRevision, vs...))
+}
+
+// ReferenceFrameworkRevisionGT applies the GT predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionGTE applies the GTE predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionLT applies the LT predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionLTE applies the LTE predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionContains applies the Contains predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionHasPrefix applies the HasPrefix predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionHasSuffix applies the HasSuffix predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionIsNil applies the IsNil predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldReferenceFrameworkRevision))
+}
+
+// ReferenceFrameworkRevisionNotNil applies the NotNil predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldReferenceFrameworkRevision))
+}
+
+// ReferenceFrameworkRevisionEqualFold applies the EqualFold predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldReferenceFrameworkRevision, v))
+}
+
+// ReferenceFrameworkRevisionContainsFold applies the ContainsFold predicate on the "reference_framework_revision" field.
+func ReferenceFrameworkRevisionContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldReferenceFrameworkRevision, v))
 }
 
 // ControlTypeEQ applies the EQ predicate on the "control_type" field.

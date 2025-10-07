@@ -61,6 +61,8 @@ type SubcontrolHistory struct {
 	Source enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"reference_framework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"reference_framework_revision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
@@ -113,7 +115,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -262,6 +264,13 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.ReferenceFramework = new(string)
 				*_m.ReferenceFramework = value.String
+			}
+		case subcontrolhistory.FieldReferenceFrameworkRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_framework_revision", values[i])
+			} else if value.Valid {
+				_m.ReferenceFrameworkRevision = new(string)
+				*_m.ReferenceFrameworkRevision = value.String
 			}
 		case subcontrolhistory.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -489,6 +498,11 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ReferenceFrameworkRevision; v != nil {
+		builder.WriteString("reference_framework_revision=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

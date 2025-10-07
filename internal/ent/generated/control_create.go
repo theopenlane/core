@@ -256,6 +256,20 @@ func (_c *ControlCreate) SetNillableReferenceFramework(v *string) *ControlCreate
 	return _c
 }
 
+// SetReferenceFrameworkRevision sets the "reference_framework_revision" field.
+func (_c *ControlCreate) SetReferenceFrameworkRevision(v string) *ControlCreate {
+	_c.mutation.SetReferenceFrameworkRevision(v)
+	return _c
+}
+
+// SetNillableReferenceFrameworkRevision sets the "reference_framework_revision" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableReferenceFrameworkRevision(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetReferenceFrameworkRevision(*v)
+	}
+	return _c
+}
+
 // SetControlType sets the "control_type" field.
 func (_c *ControlCreate) SetControlType(v enums.ControlType) *ControlCreate {
 	_c.mutation.SetControlType(v)
@@ -1000,6 +1014,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(control.FieldReferenceFramework, field.TypeString, value)
 		_node.ReferenceFramework = &value
+	}
+	if value, ok := _c.mutation.ReferenceFrameworkRevision(); ok {
+		_spec.SetField(control.FieldReferenceFrameworkRevision, field.TypeString, value)
+		_node.ReferenceFrameworkRevision = &value
 	}
 	if value, ok := _c.mutation.ControlType(); ok {
 		_spec.SetField(control.FieldControlType, field.TypeEnum, value)

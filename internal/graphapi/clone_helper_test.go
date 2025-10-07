@@ -1,7 +1,6 @@
 package graphapi
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,8 +8,6 @@ import (
 )
 
 func TestGetControlIDFromRefCode(t *testing.T) {
-	ctx := context.Background()
-
 	t.Run("match by control refCode", func(t *testing.T) {
 		controls := []*generated.Control{
 			{
@@ -25,7 +22,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode(ctx, "REF-1", controls)
+		id, isSubcontrol := getControlIDFromRefCode("REF-1", controls)
 
 		assert.NotNil(t, id)
 		assert.Equal(t, "control-1", *id)
@@ -41,10 +38,72 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode(ctx, "ALIAS-2", controls)
+		id, isSubcontrol := getControlIDFromRefCode("ALIAS-2", controls)
 
 		assert.NotNil(t, id)
 		assert.Equal(t, "control-1", *id)
+		assert.False(t, isSubcontrol)
+	})
+
+	t.Run("match by subcontrol refCode", func(t *testing.T) {
+		controls := []*generated.Control{
+			{
+				ID:      "control-1",
+				RefCode: "REF-1",
+				Edges: generated.ControlEdges{
+					Subcontrols: []*generated.Subcontrol{
+						{
+							ID:      "subcontrol-1",
+							RefCode: "SUBREF-1",
+							Aliases: []string{"SUBALIAS-1"},
+						},
+					},
+				},
+			},
+		}
+
+		id, isSubcontrol := getControlIDFromRefCode("SUBREF-1", controls)
+
+		assert.NotNil(t, id)
+		assert.Equal(t, "control-1", *id)
+		assert.True(t, isSubcontrol)
+	})
+
+	t.Run("match by subcontrol alias", func(t *testing.T) {
+		controls := []*generated.Control{
+			{
+				ID:      "control-1",
+				RefCode: "REF-1",
+				Edges: generated.ControlEdges{
+					Subcontrols: []*generated.Subcontrol{
+						{
+							ID:      "subcontrol-1",
+							RefCode: "SUBREF-1",
+							Aliases: []string{"SUBALIAS-1"},
+						},
+					},
+				},
+			},
+		}
+
+		id, isSubcontrol := getControlIDFromRefCode("SUBALIAS-1", controls)
+
+		assert.NotNil(t, id)
+		assert.Equal(t, "control-1", *id)
+		assert.True(t, isSubcontrol)
+	})
+
+	t.Run("no match found", func(t *testing.T) {
+		controls := []*generated.Control{
+			{
+				ID:      "control-1",
+				RefCode: "REF-1",
+			},
+		}
+
+		id, isSubcontrol := getControlIDFromRefCode("NON-EXIST	ENT", controls)
+
+		assert.Nil(t, id)
 		assert.False(t, isSubcontrol)
 	})
 }

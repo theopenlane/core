@@ -147,6 +147,9 @@ type CloneControlUploadInput struct {
 	Comment *string `json:"comment,omitempty"`
 	// internalPolicyIDs to associate with the created control
 	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
+	// controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+	// if the control is being clone from a system owned standard
+	ControlInput *generated.CreateControlInput `json:"controlInput,omitempty"`
 }
 
 // Return response for createBulkContact mutation

@@ -271,6 +271,20 @@ func (_c *SubcontrolHistoryCreate) SetNillableReferenceFramework(v *string) *Sub
 	return _c
 }
 
+// SetReferenceFrameworkRevision sets the "reference_framework_revision" field.
+func (_c *SubcontrolHistoryCreate) SetReferenceFrameworkRevision(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetReferenceFrameworkRevision(v)
+	return _c
+}
+
+// SetNillableReferenceFrameworkRevision sets the "reference_framework_revision" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableReferenceFrameworkRevision(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetReferenceFrameworkRevision(*v)
+	}
+	return _c
+}
+
 // SetControlType sets the "control_type" field.
 func (_c *SubcontrolHistoryCreate) SetControlType(v enums.ControlType) *SubcontrolHistoryCreate {
 	_c.mutation.SetControlType(v)
@@ -719,6 +733,10 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)
 		_node.ReferenceFramework = &value
+	}
+	if value, ok := _c.mutation.ReferenceFrameworkRevision(); ok {
+		_spec.SetField(subcontrolhistory.FieldReferenceFrameworkRevision, field.TypeString, value)
+		_node.ReferenceFrameworkRevision = &value
 	}
 	if value, ok := _c.mutation.ControlType(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)

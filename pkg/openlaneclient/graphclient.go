@@ -8065,33 +8065,34 @@ func (t *CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols) GetEd
 }
 
 type CreateControlsByClone_CreateControlsByClone_Controls struct {
-	AssessmentMethods      []*models.AssessmentMethod                                       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective                                    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	Category               *string                                                          "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlQuestions       []string                                                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                                               "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description            *string                                                          "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                                           "json:\"displayID\" graphql:\"displayID\""
-	ExampleEvidence        []*models.ExampleEvidence                                        "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                                           "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance                                 "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                                         "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RefCode                string                                                           "json:\"refCode\" graphql:\"refCode\""
-	ReferenceFramework     *string                                                          "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
-	References             []*models.Reference                                              "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                                             "json:\"source,omitempty\" graphql:\"source\""
-	StandardID             *string                                                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                                             "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Subcontrols            CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags                   []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                  *string                                                          "json:\"title,omitempty\" graphql:\"title\""
-	UpdatedAt              *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentMethods          []*models.AssessmentMethod                                       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives       []*models.AssessmentObjective                                    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	Category                   *string                                                          "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID                 *string                                                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlQuestions           []string                                                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType                *enums.ControlType                                               "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt                  *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                  *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                *string                                                          "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID                  string                                                           "json:\"displayID\" graphql:\"displayID\""
+	ExampleEvidence            []*models.ExampleEvidence                                        "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                         string                                                           "json:\"id\" graphql:\"id\""
+	ImplementationGuidance     []*models.ImplementationGuidance                                 "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories           []string                                                         "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                    *string                                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RefCode                    string                                                           "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework         *string                                                          "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+	ReferenceFrameworkRevision *string                                                          "json:\"referenceFrameworkRevision,omitempty\" graphql:\"referenceFrameworkRevision\""
+	References                 []*models.Reference                                              "json:\"references,omitempty\" graphql:\"references\""
+	Source                     *enums.ControlSource                                             "json:\"source,omitempty\" graphql:\"source\""
+	StandardID                 *string                                                          "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                     *enums.ControlStatus                                             "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory                *string                                                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols                CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags                       []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                      *string                                                          "json:\"title,omitempty\" graphql:\"title\""
+	UpdatedAt                  *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                  *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -8195,6 +8196,12 @@ func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetReferenceFrame
 		t = &CreateControlsByClone_CreateControlsByClone_Controls{}
 	}
 	return t.ReferenceFramework
+}
+func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetReferenceFrameworkRevision() *string {
+	if t == nil {
+		t = &CreateControlsByClone_CreateControlsByClone_Controls{}
+	}
+	return t.ReferenceFrameworkRevision
 }
 func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetReferences() []*models.Reference {
 	if t == nil {
@@ -86568,6 +86575,7 @@ const CreateControlsByCloneDocument = `mutation CreateControlsByClone ($input: C
 			refCode
 			references
 			referenceFramework
+			referenceFrameworkRevision
 			source
 			standardID
 			status
