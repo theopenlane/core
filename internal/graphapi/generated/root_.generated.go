@@ -38227,10 +38227,6 @@ input CloneControlUploadInput {
   """
   controlObjective: String
   """
-  status of the control
-  """
-  status: ControlControlStatus
-  """
   implementationGuidance is guidance details on the implementation of the control
   """
   implementationGuidance: String
@@ -38243,7 +38239,7 @@ input CloneControlUploadInput {
   """
   internalPolicyID: ID
   """
-  controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored 
+  controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
   if the control is being clone from a system owned standard
   """
   controlInput: CreateControlInput
@@ -38734,7 +38730,7 @@ Indicates is the input field is read-only by non-system admin users for system-o
 If an input is marked as @externalReadOnly, only system-admin users
 can set the field if the object is marked as source == ControlSourceFramework
 """
-directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINITION 
+directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINITION
 """
 Indicates that this field cannot be set on the input, and comes from an external source
 This does not prevent the viewing of the field

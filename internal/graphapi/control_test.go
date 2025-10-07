@@ -1260,9 +1260,6 @@ func TestMutationUpdateControl(t *testing.T) {
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardUpdate := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1283,12 +1280,11 @@ func TestMutationUpdateControl(t *testing.T) {
 	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
 	testCases := []struct {
-		name                 string
-		request              testclient.UpdateControlInput
-		client               *testclient.TestClient
-		ctx                  context.Context
-		expectedErr          string
-		expectedRefFramework string
+		name        string
+		request     testclient.UpdateControlInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
@@ -1299,17 +1295,14 @@ func TestMutationUpdateControl(t *testing.T) {
 				AddControlImplementationIDs: []string{
 					controlImplementation.ID,
 				},
-				StandardID: &standard.ID,
 			},
-			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
-			expectedRefFramework: standard.ShortName,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateControlInput{
 				Status:      &enums.ControlStatusPreparing,
-				StandardID:  &standardUpdate.ID,
 				Tags:        []string{"tag1", "tag2"},
 				ControlType: &enums.ControlTypeDetective,
 				Category:    lo.ToPtr("Availability"),
@@ -1356,9 +1349,8 @@ func TestMutationUpdateControl(t *testing.T) {
 				DelegateID:     &delegateGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 			},
-			client:               suite.client.apiWithPAT,
-			ctx:                  context.Background(),
-			expectedRefFramework: standardUpdate.ShortName,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, remove some things",
@@ -1501,12 +1493,6 @@ func TestMutationUpdateControl(t *testing.T) {
 				assert.Check(t, is.Len(resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs)))
 			}
 
-			if tc.request.StandardID != nil {
-				assert.Check(t, is.Equal(tc.expectedRefFramework, *resp.UpdateControl.Control.ReferenceFramework))
-				assert.Check(t, is.Equal(*tc.request.StandardID, *resp.UpdateControl.Control.StandardID))
-				assert.Check(t, is.Equal(tc.expectedRefFramework, *resp.UpdateControl.Control.Subcontrols.Edges[0].Node.ReferenceFramework))
-			}
-
 			if tc.request.ClearStandard != nil && *tc.request.ClearStandard {
 				assert.Check(t, resp.UpdateControl.Control.ReferenceFramework == nil)
 				assert.Check(t, resp.UpdateControl.Control.Subcontrols.Edges[0].Node.ReferenceFramework == nil)
@@ -1545,7 +1531,6 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID, standardUpdate.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteControl(t *testing.T) {
