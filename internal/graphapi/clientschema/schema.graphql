@@ -2894,10 +2894,6 @@ input CloneControlUploadInput {
 	"""
 	controlObjective: String
 	"""
-	status of the control
-	"""
-	status: ControlControlStatus
-	"""
 	implementationGuidance is guidance details on the implementation of the control
 	"""
 	implementationGuidance: String
@@ -2910,7 +2906,7 @@ input CloneControlUploadInput {
 	"""
 	internalPolicyID: ID
 	"""
-	controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored 
+	controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
 	if the control is being clone from a system owned standard
 	"""
 	controlInput: CreateControlInput

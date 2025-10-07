@@ -139,8 +139,6 @@ type CloneControlUploadInput struct {
 	ControlImplementation *string `json:"controlImplementation,omitempty"`
 	// controlObjective is the objective details of the control
 	ControlObjective *string `json:"controlObjective,omitempty"`
-	// status of the control
-	Status *enums.ControlStatus `json:"status,omitempty"`
 	// implementationGuidance is guidance details on the implementation of the control
 	ImplementationGuidance *string `json:"implementationGuidance,omitempty"`
 	// comment to associate with the control that was created

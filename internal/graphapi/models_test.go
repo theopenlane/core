@@ -1150,6 +1150,8 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	if c.StandardID != "" {
 		mutation.SetStandardID(c.StandardID)
 		mutation.SetSource(enums.ControlSourceFramework)
+	} else {
+		mutation.SetSource(enums.ControlSourceUserDefined)
 	}
 
 	if c.ControlOwnerID != "" {

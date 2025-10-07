@@ -149,9 +149,9 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		if isSubControl {
 			hasUpdate := false
 			scInput := generated.UpdateSubcontrolInput{}
-			if c.Status != nil {
+			if c.ControlInput != nil && c.ControlInput.Status != nil {
 				hasUpdate = true
-				scInput.Status = c.Status
+				scInput.Status = c.ControlInput.Status
 			}
 
 			if len(commentIDs) > 0 {
@@ -186,9 +186,9 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		} else {
 			hasUpdate := false
 			cInput := generated.UpdateControlInput{}
-			if c.Status != nil {
+			if c.ControlInput != nil && c.ControlInput.Status != nil {
 				hasUpdate = true
-				cInput.Status = c.Status
+				cInput.Status = c.ControlInput.Status
 			}
 
 			if c.ImplementationGuidance != nil {

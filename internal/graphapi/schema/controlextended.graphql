@@ -75,10 +75,6 @@ input CloneControlUploadInput {
   """
   controlObjective: String
   """
-  status of the control
-  """
-  status: ControlControlStatus
-  """
   implementationGuidance is guidance details on the implementation of the control
   """
   implementationGuidance: String

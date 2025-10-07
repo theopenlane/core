@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"strconv"
+	"strings"
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
@@ -119,7 +120,7 @@ var ExternalReadOnlyDirectiveAnnotation = entgql.Directives(
 
 // ExternalReadOnlyDirective is the implementation for the external read only directive that can be used to indicate a field cannot be set by users for objects that are system-owned because it is populated by an external source
 // only system admins can change this field on system-owned objects, on objects that are not system-owned, the field can be set by anyone with permission to update the object
-var ExternalReadOnlyDirective = func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
+var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
 	if admin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && admin {
 		// if the user is a system admin, always return the field
 		return next(ctx)
@@ -147,7 +148,7 @@ var ExternalSourceDirectiveAnnotation = entgql.Directives(
 
 // ExternalSourceDirective is used to mark fields or objects that are populated by an external source
 // that will prevent the ability to update the field if the object is framework sourced
-var ExternalSourceDirective = func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
+var ExternalSourceDirective = func(ctx context.Context, _ any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
 	// this is a no-op, this is only used for setting the annotations on the schema
 	// to affect the mutation inputs
 	return next(ctx)
@@ -175,12 +176,6 @@ func argsWithControlSource(value enums.ControlSource) *ast.Argument {
 	}
 }
 
-var (
-	skipOperations = map[string]bool{
-		"CreateControlsByClone": true,
-	}
-)
-
 func checkFieldSet(ctx context.Context) bool {
 	operationContext := graphql.GetOperationContext(ctx)
 	if operationContext == nil || operationContext.Operation == nil {
@@ -188,8 +183,9 @@ func checkFieldSet(ctx context.Context) bool {
 		return false
 	}
 
-	// if this is a mutation, check if the field is being set
-	if operationContext.Operation.Operation == ast.Mutation && skipOperations[operationContext.OperationName] != true {
+	// if this is a mutation, check if the field is being set on update operations
+	// we don't care about create operations s should not be set on create
+	if operationContext.Operation.Operation == ast.Mutation && !strings.Contains(operationContext.Operation.Name, "Create") {
 		input := graphutils.GetMapInputVariableByName(ctx, graphutils.GetInputFieldVariableName(ctx))
 		if input == nil {
 			return false
@@ -211,6 +207,10 @@ func checkFieldSet(ctx context.Context) bool {
 // this is used in the externalReadOnly directive to prevent non-system admin users
 // from setting fields that are populated by an external source on system-owned objects
 func checkSourceAllowed(ctx context.Context, source *enums.ControlSource) bool {
+	if source == nil {
+		return true
+	}
+
 	id := graphutils.GetStringInputVariableByName(ctx, "id")
 	if id == nil {
 		zerolog.Ctx(ctx).Error().Msg("no id found in context for externalReadOnly directive")
