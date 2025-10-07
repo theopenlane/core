@@ -46,7 +46,7 @@ func TestGlobalSearch(t *testing.T) {
 	numControls := 3
 	controlIDs := []string{}
 	for i := range numControls {
-		control := (&ControlBuilder{client: suite.client, Name: fmt.Sprintf("Test Control %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, RefCode: fmt.Sprintf("Test Control %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 

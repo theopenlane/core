@@ -5,16 +5,133 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 )
 
+// cloneFilterOptions holds the filter options for cloning controls
+type cloneFilterOptions struct {
+	// standardID of the standard to filter the controls by
+	standardID *string
+	// standardShortName is the short name of the standard to filter the controls by
+	standardShortName *string
+	// standardVersion is the revision of the standard to filter the controls by, this is optional, if more than one revision exists and this is not provided, the most recent revision will be used
+	standardVersion *string
+	// refCodes is a list of refCodes to filter the controls by
+	refCodes []string
+	// categories is a list of categories to filter the controls by
+	categories []string
+}
+
+// getCloneFilterOptions returns the filter options for cloning controls from the input based on the provided fields
+func getCloneFilterOptions(input *model.CloneControlInput) cloneFilterOptions {
+	filters := cloneFilterOptions{
+		categories: input.Categories,
+		refCodes:   input.RefCodes,
+	}
+
+	// if standardID is provided, used that, otherwise use the standardShortName
+	if input.StandardID != nil {
+		filters.standardID = input.StandardID
+	} else if input.StandardShortName != nil {
+		filters.standardShortName = input.StandardShortName
+	}
+
+	return filters
+}
+
+// standardFilter returns the predicate to filter by standard based on the filter options
+func standardFilter(opts cloneFilterOptions) []predicate.Standard {
+	// safety check to make sure at least the ID or shortName is set
+	if !filterByStandard(opts) {
+		return nil
+	}
+
+	stdWhereFilter := []predicate.Standard{}
+
+	if opts.standardID != nil {
+		stdWhereFilter = append(stdWhereFilter, standard.ID(*opts.standardID))
+	} else {
+		stdWhereFilter = append(stdWhereFilter, standard.ShortNameEqualFold(*opts.standardShortName))
+		if opts.standardVersion != nil {
+			stdWhereFilter = append(stdWhereFilter, standard.VersionEqualFold(*opts.standardVersion))
+		}
+	}
+
+	return stdWhereFilter
+}
+
+// controlRefCodeFilter returns the predicate to filter by control refCode or alias based on the filter options
+func controlRefCodeFilter(opts cloneFilterOptions) []predicate.Control {
+	if len(opts.refCodes) > 0 {
+		refOpts := []predicate.Control{control.RefCodeIn(opts.refCodes...)}
+		for _, refCode := range opts.refCodes {
+			refOpts = append(refOpts, func(s *sql.Selector) {
+				s.Where(sqljson.ValueContains(control.FieldAliases, refCode))
+			})
+		}
+
+		return []predicate.Control{
+			control.Or(
+				refOpts...,
+			),
+		}
+	}
+
+	return nil
+}
+
+// controlFilterByStandard returns the predicate to filter controls by standard and other filter options
+// to return the correct controls to clone
+func controlFilterByStandard(ctx context.Context, opts cloneFilterOptions, std *generated.Standard) ([]predicate.Control, error) {
+	where := []predicate.Control{
+		control.DeletedAtIsNil(),
+		control.StandardID(std.ID),
+	}
+
+	if std.IsPublic {
+		where = append(where, control.SystemOwned(true))
+	} else {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil || orgID == "" {
+			return nil, rout.NewMissingRequiredFieldError("owner_id")
+		}
+
+		where = append(where, control.OwnerID(orgID))
+	}
+
+	if len(opts.categories) > 0 {
+		where = append(where, control.CategoryIn(opts.categories...))
+	}
+
+	refCodeFilter := controlRefCodeFilter(opts)
+	if refCodeFilter != nil {
+		where = append(where, refCodeFilter...)
+	}
+
+	return where, nil
+}
+
+// filterByStandard returns true if the filter options contain a standardID or standardShortName
+func filterByStandard(opts cloneFilterOptions) bool {
+	return opts.standardID != nil || opts.standardShortName != nil
+}
+
+// convertToCloneControlInput converts a slice of CloneControlUploadInput to a slice of CloneControlInput
+// this is used to process a bulk CSV upload of controls to be cloned and group them by standard
 func convertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*model.CloneControlInput, error) {
 	out := []*model.CloneControlInput{}
 
 	// create a map of standards first
-	stds := sliceToMap(input)
+	stds := controlUploadSliceToMap(input)
 
 	for stdName, controlInputs := range stds {
 		// sanity check if there are no controls keep going
@@ -65,7 +182,8 @@ func convertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*mode
 	return out, nil
 }
 
-func sliceToMap(input []*model.CloneControlUploadInput) map[string][]*model.CloneControlUploadInput {
+// controlUploadSliceToMap converts a slice of CloneControlUploadInput to a map grouped by standard
+func controlUploadSliceToMap(input []*model.CloneControlUploadInput) map[string][]*model.CloneControlUploadInput {
 	out := map[string][]*model.CloneControlUploadInput{}
 
 	for _, i := range input {
@@ -84,6 +202,8 @@ func sliceToMap(input []*model.CloneControlUploadInput) map[string][]*model.Clon
 	return out
 }
 
+// stripeAndCompare trims leading and trailing spaces from two strings and compares them
+// returns true if they are equal, false otherwise
 func stripeAndCompare(a, b *string) bool {
 	if a == nil && b == nil {
 		return true
@@ -100,6 +220,8 @@ func stripeAndCompare(a, b *string) bool {
 	return strings.TrimSpace(*a) == strings.TrimSpace(*b)
 }
 
+// getControlIDFromRefCode searches for a control ID by ref code or alias in the provided controls
+// returns the control ID and a boolean indicating if it is a subcontrol or not
 func getControlIDFromRefCode(ctx context.Context, refCode string, controls []*generated.Control) (*string, bool) {
 	for _, c := range controls {
 		if c.RefCode == refCode {
@@ -116,17 +238,17 @@ func getControlIDFromRefCode(ctx context.Context, refCode string, controls []*ge
 	}
 
 	for _, c := range controls {
-		sc, err := c.Subcontrols(ctx, nil, nil, nil, nil, nil, nil)
-		if err != nil {
+		sc := c.Edges.Subcontrols
+		if sc == nil {
 			continue
 		}
 
-		for _, s := range sc.Edges {
-			if s.Node.RefCode == refCode {
+		for _, s := range sc {
+			if s.RefCode == refCode {
 				return &c.ID, true
 			}
 
-			for _, alias := range s.Node.Aliases {
+			for _, alias := range s.Aliases {
 				if alias == refCode {
 					return &c.ID, true
 				}

@@ -38125,7 +38125,7 @@ input CloneControlInput {
     """
     controlIDs: [ID!]
     """
-    refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from. 
+    refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
     """
     refCodes: [String!]
     """
@@ -38164,7 +38164,7 @@ input CloneControlUploadInput {
 	"""
 	controlID: ID
 	"""
-	refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from. 
+	refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
 	"""
 	refCode: String
 	"""
@@ -38184,7 +38184,7 @@ input CloneControlUploadInput {
 	"""
 	ownerID: ID
   """
-  controlImplementation is the implementation details of the control 
+  controlImplementation is the implementation details of the control
   """
   controlImplementation: String
   """

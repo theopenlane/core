@@ -8018,8 +8018,9 @@ func (t *UpdateControl_UpdateControl) GetControl() *UpdateControl_UpdateControl_
 }
 
 type CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_Node struct {
-	ID      string "json:\"id\" graphql:\"id\""
-	RefCode string "json:\"refCode\" graphql:\"refCode\""
+	ID      string  "json:\"id\" graphql:\"id\""
+	RefCode string  "json:\"refCode\" graphql:\"refCode\""
+	Title   *string "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_Node) GetID() string {
@@ -8033,6 +8034,12 @@ func (t *CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_
 		t = &CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_Node{}
 	}
 	return t.RefCode
+}
+func (t *CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_Node) GetTitle() *string {
+	if t == nil {
+		t = &CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges_Node{}
+	}
+	return t.Title
 }
 
 type CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols_Edges struct {
@@ -8082,6 +8089,7 @@ type CreateControlsByClone_CreateControlsByClone_Controls struct {
 	Subcategory            *string                                                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Subcontrols            CreateControlsByClone_CreateControlsByClone_Controls_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                   []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                                                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -8229,6 +8237,12 @@ func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetTags() []strin
 		t = &CreateControlsByClone_CreateControlsByClone_Controls{}
 	}
 	return t.Tags
+}
+func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetTitle() *string {
+	if t == nil {
+		t = &CreateControlsByClone_CreateControlsByClone_Controls{}
+	}
+	return t.Title
 }
 func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -86559,6 +86573,7 @@ const CreateControlsByCloneDocument = `mutation CreateControlsByClone ($input: C
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 			subcontrols {
@@ -86566,6 +86581,7 @@ const CreateControlsByCloneDocument = `mutation CreateControlsByClone ($input: C
 					node {
 						id
 						refCode
+						title
 					}
 				}
 			}

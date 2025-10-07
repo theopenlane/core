@@ -23,6 +23,7 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
       standardID
       status
       subcategory
+      title
       tags
       updatedAt
       updatedBy
@@ -31,6 +32,7 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
           node {
             id
             refCode
+            title
           }
         }
       }
