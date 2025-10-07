@@ -24,6 +24,7 @@ var (
 // internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
 type internalTrustCenterDocUpdateKey struct{}
 
+// HookCreateTrustCenterDoc runs on trust center doc create mutations
 func HookCreateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
@@ -104,6 +105,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 	}, ent.OpCreate)
 }
 
+// HookUpdateTrustCenterDoc runs on trust center doc update mutations
 func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
