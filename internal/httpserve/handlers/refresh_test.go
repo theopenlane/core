@@ -22,12 +22,18 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func (suite *HandlerTestSuite) TestRefreshHandler() {
 	t := suite.T()
+
+	// add modules for the user
+	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule}
+
+	suite.enableModules(testUser1.ID, testUser1.OrganizationID, modulesEnabled)
 
 	// add handler
 	// Create operation for RefreshHandler
@@ -75,6 +81,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			Subject: user.ID,
 		},
 		UserID: user.ID,
+		OrgID:  testUser1.OrganizationID,
 	}
 
 	_, refresh, err := tm.CreateTokenPair(claims)
@@ -103,7 +110,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			refreshJSON := models.RefreshRequest{
+			refreshJSON := apimodels.RefreshRequest{
 				RefreshToken: tc.refresh,
 			}
 
@@ -124,7 +131,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.RefreshReply
+			var out *apimodels.RefreshReply
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -135,6 +142,12 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
+
+				jwt, err := tokens.ParseUnverifiedTokenClaims(out.AccessToken)
+				assert.NoError(t, err)
+
+				// ensure the claims contain the modules
+				assert.NotEmpty(t, jwt.Modules)
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErrMessage)
 			}

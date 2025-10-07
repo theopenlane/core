@@ -61,7 +61,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
-	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
 	testCases := []struct {
@@ -231,7 +231,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
-	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
 	// invite user to org

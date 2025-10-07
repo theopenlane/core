@@ -55,6 +55,10 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 
 	sanitizedSentence = s.sanitizer.Sanitize(sanitizedSentence)
 
+	if sanitizedSentence == "" {
+		return "", nil
+	}
+
 	return s.impl.Summarize(ctx, sanitizedSentence)
 }
 
