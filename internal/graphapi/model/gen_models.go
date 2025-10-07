@@ -102,14 +102,51 @@ type AssetUpdatePayload struct {
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
-	// controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+	// controlIDs are the ids of the control to clone. If standardID or standardShortName are passed, this is ignored
 	ControlIDs []string `json:"controlIDs,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCodes []string `json:"refCodes,omitempty"`
 	// standardID to clone all controls from into the organization
 	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 	// organization ID that the controls will be under
 	OwnerID *string `json:"ownerID,omitempty"`
 	// optional program ID to associate to the controls
 	ProgramID *string `json:"programID,omitempty"`
+}
+
+// CloneControlUploadInput is used to clone controls and their subcontrols
+// under an organization using a csv upload
+type CloneControlUploadInput struct {
+	// controlID is the id of the control to clone. If standardID or standardShortName are passed, this is ignored
+	ControlID *string `json:"controlID,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCode *string `json:"refCode,omitempty"`
+	// standardID to clone all controls from into the organization
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// organization ID that the controls will be under
+	OwnerID *string `json:"ownerID,omitempty"`
+	// controlImplementation is the implementation details of the control
+	ControlImplementation *string `json:"controlImplementation,omitempty"`
+	// controlObjective is the objective details of the control
+	ControlObjective *string `json:"controlObjective,omitempty"`
+	// status of the control
+	Status *enums.ControlStatus `json:"status,omitempty"`
+	// implementationGuidance is guidance details on the implementation of the control
+	ImplementationGuidance *string `json:"implementationGuidance,omitempty"`
+	// comment to associate with the control that was created
+	Comment *string `json:"comment,omitempty"`
+	// internalPolicyIDs to associate with the created control
+	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
 }
 
 // Return response for createBulkContact mutation

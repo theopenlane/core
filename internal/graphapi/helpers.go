@@ -2,6 +2,7 @@ package graphapi
 
 import (
 	"context"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -190,8 +191,15 @@ func unmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 	if readErr != nil {
 		return nil, readErr
 	}
+	// Configure the CSV reader gocsv will use
+	gocsv.SetCSVReader(func(in io.Reader) gocsv.CSVReader {
+		r := csv.NewReader(in)
+		r.LazyQuotes = true    // tolerate odd quotes
+		r.FieldsPerRecord = -1 // allow variable field counts
+		r.TrimLeadingSpace = true
+		return r
+	})
 
-	// parse the csv
 	if err := gocsv.UnmarshalBytes(stream, &data); err != nil {
 		return nil, err
 	}
