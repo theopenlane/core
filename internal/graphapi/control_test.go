@@ -1357,7 +1357,6 @@ func TestMutationUpdateControl(t *testing.T) {
 			request: testclient.UpdateControlInput{
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
-				ClearStandard:         lo.ToPtr(true),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
