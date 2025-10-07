@@ -2,10 +2,14 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -40,25 +44,134 @@ func getStandardID[T createProgramRequest](value T) string {
 	return ""
 }
 
+// cloneFilterOptions holds the filter options for cloning controls
+type cloneFilterOptions struct {
+	// standardID of the standard to filter the controls by
+	standardID *string
+	// standardShortName is the short name of the standard to filter the controls by
+	standardShortName *string
+	// standardVersion is the revision of the standard to filter the controls by, this is optional, if more than one revision exists and this is not provided, the most recent revision will be used
+	standardVersion *string
+	// refCodes is a list of refCodes to filter the controls by
+	refCodes []string
+	// categories is a list of categories to filter the controls by
+	categories []string
+}
+
+func getCloneFilterOptions(input *model.CloneControlInput) cloneFilterOptions {
+	filters := cloneFilterOptions{
+		categories: input.Categories,
+		refCodes:   input.RefCodes,
+	}
+
+	// if standardID is provided, used that, otherwise use the standardShortName
+	if input.StandardID != nil {
+		filters.standardID = input.StandardID
+	} else if input.StandardShortName != nil {
+		filters.standardShortName = input.StandardShortName
+	}
+
+	return filters
+}
+
+func getUploadFilterOptions(input *model.CloneControlUploadInput) (cloneFilterOptions, bool) {
+	hasFilter := false
+
+	filters := cloneFilterOptions{}
+
+	if input.RefCode != nil {
+		filters.refCodes = []string{*input.RefCode}
+		hasFilter = true
+	}
+
+	// if standardID is provided, used that, otherwise use the standardShortName
+	if input.StandardID != nil {
+		filters.standardID = input.StandardID
+		hasFilter = true
+	} else if input.StandardShortName != nil {
+		filters.standardShortName = input.StandardShortName
+		hasFilter = true
+	}
+
+	return filters, hasFilter
+}
+
+// standardFilter returns the predicate to filter by standard based on the filter options
+func standardFilter(opts cloneFilterOptions) []predicate.Standard {
+	// safety check to make sure at least the ID or shortName is set
+	if !filterByStandard(opts) {
+		return nil
+	}
+
+	stdWhereFilter := []predicate.Standard{}
+
+	if opts.standardID != nil {
+		stdWhereFilter = append(stdWhereFilter, standard.ID(*opts.standardID))
+	} else {
+		stdWhereFilter = append(stdWhereFilter, standard.ShortNameEqualFold(*opts.standardShortName))
+		if opts.standardVersion != nil {
+			stdWhereFilter = append(stdWhereFilter, standard.VersionEqualFold(*opts.standardVersion))
+		}
+	}
+
+	return stdWhereFilter
+}
+
+func controlRefCodeFilter(opts cloneFilterOptions) []predicate.Control {
+	if len(opts.refCodes) > 0 {
+		refOpts := []predicate.Control{control.RefCodeIn(opts.refCodes...)}
+		for _, refCode := range opts.refCodes {
+			refOpts = append(refOpts, func(s *sql.Selector) {
+				s.Where(sqljson.ValueContains(control.FieldAliases, refCode))
+			})
+		}
+
+		return []predicate.Control{
+			control.Or(
+				refOpts...,
+			),
+		}
+	}
+
+	return nil
+}
+
+// filterByStandard returns true if the filter options contain a standardID or standardShortName
+func filterByStandard(opts cloneFilterOptions) bool {
+	return opts.standardID != nil || opts.standardShortName != nil
+}
+
 // cloneControlsFromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
-func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string, programID *string) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters cloneFilterOptions, programID *string) ([]*generated.Control, error) {
 	// first check if the standard exists
-	std, err := withTransactionalMutation(ctx).Standard.Query().
-		Where(standard.ID(standardID)).
+	stdWhereFilter := standardFilter(filters)
+	stds, err := withTransactionalMutation(ctx).Standard.Query().
+		Where(stdWhereFilter...).
 		Select(standard.FieldID, standard.FieldIsPublic).
-		Only(ctx)
-	if err != nil || std == nil {
-		log.Error().Err(err).Msgf("error getting standard with ID %s", standardID)
+		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
+		All(ctx)
+	if err != nil || stds == nil || len(stds) == 0 {
+		log.Error().Err(err).Msgf("error getting standard with ID %s", filters.standardID)
 
 		return nil, err
+	}
+
+	// get the first standard, this will be the most recent revision if multiple revisions exist
+	std := stds[0]
+
+	// if we have more than one standard, and the version was provided, return an error
+	// because we are unable to determine which standard to use
+	if len(stds) > 1 && (filters.standardShortName != nil && filters.standardVersion != nil) {
+		log.Error().Err(err).Msgf("error getting standard with ID %s", filters.standardID)
+		return nil, fmt.Errorf("%w: error getting standard, too many results", ErrInvalidInput)
 	}
 
 	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	where := []predicate.Control{
 		control.DeletedAtIsNil(),
-		control.StandardID(standardID),
+		control.StandardID(std.ID),
 	}
 
 	// if the standard is public, we can get the controls that do not have an owner (public controls)
@@ -74,6 +187,15 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 		where = append(where, control.OwnerID(orgID))
 	}
 
+	if len(filters.categories) > 0 {
+		where = append(where, control.CategoryIn(filters.categories...))
+	}
+
+	refCodeFilter := controlRefCodeFilter(filters)
+	if refCodeFilter != nil {
+		where = append(where, refCodeFilter...)
+	}
+
 	controls, err := r.db.Control.Query().
 		Where(
 			where...,
@@ -82,6 +204,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 		WithSubcontrols().
 		All(allowCtx)
 	if err != nil {
+		log.Error().Err(err).Msg("error getting controls to clone")
 		return nil, err
 	}
 
@@ -320,6 +443,8 @@ func createCloneControlInput(c *generated.Control, programID *string, orgID stri
 		// grab fields from the existing control
 		Tags:                   c.Tags,
 		RefCode:                c.RefCode,
+		Title:                  &c.Title,
+		Aliases:                c.Aliases,
 		Description:            &c.Description,
 		Source:                 &c.Source,
 		ControlType:            &c.ControlType,

@@ -2458,6 +2458,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
@@ -17043,6 +17044,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
+
+	case "Mutation.cloneBulkCSVControl":
+		if e.complexity.Mutation.CloneBulkCSVControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cloneBulkCSVControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CloneBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createAPIToken":
 		if e.complexity.Mutation.CreateAPIToken == nil {
@@ -35793,6 +35806,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
 		ec.unmarshalInputCloneControlInput,
+		ec.unmarshalInputCloneControlUploadInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputContactOrder,
@@ -38107,13 +38121,29 @@ under an organization (ownerID)
 """
 input CloneControlInput {
     """
-    controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+    controlIDs are the ids of the control to clone. If standardID or standardShortName are passed, this is ignored
     """
     controlIDs: [ID!]
+    """
+    refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from. 
+    """
+    refCodes: [String!]
     """
     standardID to clone all controls from into the organization
     """
     standardID: ID
+    """
+    standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+    """
+    standardShortName: String
+    """
+    standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+    """
+    standardVersion: String
+    """
+    categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+    """
+    categories: [String!]
     """
     organization ID that the controls will be under
     """
@@ -38124,12 +38154,76 @@ input CloneControlInput {
     programID: ID
 }
 
+"""
+CloneControlUploadInput is used to clone controls and their subcontrols
+under an organization using a csv upload
+"""
+input CloneControlUploadInput {
+	"""
+	controlID is the id of the control to clone. If standardID or standardShortName are passed, this is ignored
+	"""
+	controlID: ID
+	"""
+	refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from. 
+	"""
+	refCode: String
+	"""
+	standardID to clone all controls from into the organization
+	"""
+	standardID: ID
+	"""
+	standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	"""
+	standardShortName: String
+	"""
+	standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	"""
+	standardVersion: String
+	"""
+	organization ID that the controls will be under
+	"""
+	ownerID: ID
+  """
+  controlImplementation is the implementation details of the control 
+  """
+  controlImplementation: String
+  """
+  controlObjective is the objective details of the control
+  """
+  controlObjective: String
+  """
+  status of the control
+  """
+  status: ControlControlStatus
+  """
+  implementationGuidance is guidance details on the implementation of the control
+  """
+  implementationGuidance: String
+  """
+  comment to associate with the control that was created
+  """
+  comment: String
+  """
+  internalPolicyIDs to associate with the created control
+  """
+  internalPolicyID: ID
+}
+
 extend type Mutation{
   """
   Create a new controls based on existing control ID(s)
   """
   createControlsByClone(
       input: CloneControlInput
+  ): ControlBulkCreatePayload!
+  """
+  Create multiple new controls via a clone from a standard using a CSV
+  """
+  cloneBulkCSVControl(
+      """
+      csv file containing values of the control
+      """
+      input: Upload!
   ): ControlBulkCreatePayload!
 }
 

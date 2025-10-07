@@ -8,14 +8,19 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strings"
 
 	"entgo.io/contrib/entgql"
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
@@ -29,9 +34,11 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	filters := getCloneFilterOptions(input)
+
 	// if a standard is provided, clone those controls
-	if input.StandardID != nil {
-		res, err := r.cloneControlsFromStandard(ctx, *input.StandardID, input.ProgramID)
+	if filterByStandard(filters) {
+		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
 			return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
 		}
@@ -65,6 +72,287 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	return &model.ControlBulkCreatePayload{
 		Controls: createdControls,
 	}, nil
+}
+
+// CloneBulkCSVControl is the resolver for the cloneBulkCSVControl field.
+func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
+	data, err := unmarshalBulkData[model.CloneControlUploadInput](input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	convertedInput, err := convertToCloneControlInput(data)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to convert clone control input")
+
+		return nil, err
+	}
+
+	out := &model.ControlBulkCreatePayload{
+		Controls: []*generated.Control{},
+	}
+
+	for _, ci := range convertedInput {
+		res, err := r.CreateControlsByClone(ctx, ci)
+		if err != nil {
+			return nil, err
+		}
+
+		if res == nil || len(res.Controls) == 0 {
+			continue
+		}
+
+		out.Controls = append(out.Controls, res.Controls...)
+	}
+
+	// check to see if there are additional control objects or implementations to create
+	for _, c := range data {
+		if c.RefCode == nil || *c.RefCode == "" {
+			continue
+		}
+
+		controlID, isSubControl := getControlIDFromRefCode(ctx, *c.RefCode, out.Controls)
+		if controlID == nil {
+			log.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
+
+			continue
+		}
+
+		commentIDs := []string{}
+		if c.Comment != nil {
+			cleanComment := strings.Trim(*c.Comment, "\"")
+			cleanComment = strings.TrimSpace(cleanComment)
+
+			if cleanComment != "" {
+				// create comment
+				commentInput := generated.CreateNoteInput{
+					OwnerID: c.OwnerID,
+					Text:    cleanComment,
+				}
+
+				comment, err := r.db.Note.Create().SetInput(commentInput).Save(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				commentIDs = append(commentIDs, comment.ID)
+
+			}
+		}
+
+		if isSubControl {
+			hasUpdate := false
+			scInput := generated.UpdateSubcontrolInput{}
+			if c.Status != nil {
+				hasUpdate = true
+				scInput.Status = c.Status
+			}
+
+			if len(commentIDs) > 0 {
+				scInput.AddCommentIDs = commentIDs
+				hasUpdate = true
+			}
+
+			if c.InternalPolicyID != nil {
+				scInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
+				hasUpdate = true
+			}
+
+			if hasUpdate || c.ImplementationGuidance != nil {
+				base := r.db.Subcontrol.UpdateOneID(*controlID).SetInput(scInput)
+
+				if c.ImplementationGuidance != nil {
+					cleanG := strings.Trim(*c.ImplementationGuidance, "\"")
+					cleanG = strings.TrimSpace(cleanG)
+
+					guide := models.ImplementationGuidance{
+						Guidance: []string{cleanG},
+					}
+
+					base.AppendImplementationGuidance([]models.ImplementationGuidance{guide})
+				}
+
+				err := base.Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+		} else {
+			hasUpdate := false
+			cInput := generated.UpdateControlInput{}
+			if c.Status != nil {
+				hasUpdate = true
+				cInput.Status = c.Status
+			}
+
+			if c.ImplementationGuidance != nil {
+				parts := strings.Split(*c.ImplementationGuidance, "\n")
+				for i, p := range parts {
+					parts[i] = strings.TrimSpace(p)
+
+				}
+
+				guide := models.ImplementationGuidance{
+					Guidance: parts,
+				}
+
+				cInput.AppendImplementationGuidance = []models.ImplementationGuidance{guide}
+				hasUpdate = true
+			}
+
+			if len(commentIDs) > 0 {
+				cInput.AddCommentIDs = commentIDs
+				hasUpdate = true
+			}
+
+			if c.InternalPolicyID != nil {
+				cInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
+				hasUpdate = true
+			}
+
+			if hasUpdate || c.ImplementationGuidance != nil {
+				base := r.db.Control.UpdateOneID(*controlID).SetInput(cInput)
+
+				if c.ImplementationGuidance != nil {
+					parts := strings.Split(*c.ImplementationGuidance, "\n")
+					for i, p := range parts {
+						parts[i] = strings.TrimSpace(p)
+
+					}
+
+					guide := models.ImplementationGuidance{
+						Guidance: parts,
+					}
+
+					base.AppendImplementationGuidance([]models.ImplementationGuidance{guide})
+				}
+
+				err := base.Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		if c.ControlImplementation != nil && *c.ControlImplementation != "" {
+			// create control implementation
+			cleanImp := strings.Trim(*c.ControlImplementation, "\"")
+			cleanImp = strings.TrimSpace(cleanImp)
+
+			coInput := generated.CreateControlImplementationInput{
+				Status:     &enums.DocumentPublished,
+				Verified:   lo.ToPtr(true),
+				Details:    &cleanImp,
+				OwnerID:    c.OwnerID,
+				ControlIDs: []string{*controlID},
+			}
+
+			err := r.db.ControlImplementation.Create().SetInput(coInput).Exec(ctx)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if c.ControlObjective != nil && *c.ControlObjective != "" {
+			// create control implementation
+			co := strings.Trim(*c.ControlObjective, "\"")
+			co = strings.TrimSpace(co)
+
+			// create control objective
+			coInput := generated.CreateControlObjectiveInput{
+				DesiredOutcome: c.ControlObjective,
+				Status:         &enums.ObjectiveActiveStatus,
+				OwnerID:        c.OwnerID,
+				ControlIDs:     []string{*controlID},
+			}
+
+			err := r.db.ControlObjective.Create().SetInput(coInput).Exec(ctx)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if c.Comment != nil {
+			cleanComment := strings.Trim(*c.Comment, "\"")
+			cleanComment = strings.TrimSpace(cleanComment)
+
+			if cleanComment != "" {
+				// create comment
+				commentInput := generated.CreateNoteInput{
+					OwnerID: c.OwnerID,
+					Text:    cleanComment,
+				}
+
+				err := r.db.Note.Create().SetInput(commentInput).Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+	}
+
+	// find any subcontrols that were created but aren't in the list, and mark as NOT_APPLICABLE
+
+	// get all control IDs
+	controlIDs := []string{}
+	for _, c := range out.Controls {
+		controlIDs = append(controlIDs, c.ID)
+	}
+
+	// get the full control objects with implementations and objectives
+	out.Controls, err = withTransactionalMutation(ctx).Control.Query().
+		Where(control.IDIn(controlIDs...)).
+		WithSubcontrols().
+		WithControlImplementations().
+		WithControlObjectives().
+		All(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+	}
+
+	for _, c := range out.Controls {
+		for _, sc := range c.Edges.Subcontrols {
+			found := false
+			refCode := sc.RefCode
+			aliases := sc.Aliases
+
+			for _, c := range data {
+				if c.RefCode == &refCode {
+					found = true
+					break
+				}
+
+				for _, alias := range aliases {
+					if c.RefCode == &alias {
+						found = true
+						break
+					}
+				}
+
+				if found {
+					break
+				}
+			}
+
+			if !found {
+				// update status to NOT_APPLICABLE
+				err := r.db.Subcontrol.UpdateOneID(sc.ID).SetStatus(enums.ControlStatusNotApplicable).Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				log.Info().Str("ref_code", sc.RefCode).Msg("marking subcontrol as NOT_APPLICABLE since it was not in the upload list")
+			}
+		}
+	}
+
+	return out, nil
 }
 
 // ControlCategories is the resolver for the controlCategories field.
