@@ -326,9 +326,18 @@ type CreateMemberWithProgramInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program    *generated.CreateProgramInput   `json:"program"`
-	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
-	StandardID *string                         `json:"standardID,omitempty"`
+	// program input for the base program details
+	Program *generated.CreateProgramInput `json:"program"`
+	// members to add to the program
+	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	// standardID to clone all controls from into the organization and associated with the program
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation

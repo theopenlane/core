@@ -283,7 +283,6 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			cleanComment = strings.TrimSpace(cleanComment)
 
 			if cleanComment != "" {
-				// create comment
 				commentInput := generated.CreateNoteInput{
 					OwnerID: c.OwnerID,
 					Text:    cleanComment,
@@ -296,8 +295,6 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			}
 		}
 	}
-
-	// find any subcontrols that were created but aren't in the list, and mark as NOT_APPLICABLE
 
 	// get all control IDs
 	controlIDs := []string{}

@@ -32,9 +32,30 @@ input CreateFullProgramInput{
 }
 
 input CreateProgramWithMembersInput{
+  """
+  program input for the base program details
+  """
   program: CreateProgramInput!
+  """
+  members to add to the program
+  """
   members: [CreateMemberWithProgramInput!]
+  """
+  standardID to clone all controls from into the organization and associated with the program
+  """
   standardID: ID
+  """
+  standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+  """
+  standardShortName: String
+  """
+  standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+  """
+  standardVersion: String
+  """
+  categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+  """
+  categories: [String!]
 }
 
 input CreateMemberWithProgramInput {

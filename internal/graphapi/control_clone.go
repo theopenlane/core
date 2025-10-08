@@ -28,19 +28,21 @@ type createProgramRequest interface {
 	model.CreateFullProgramInput | model.CreateProgramWithMembersInput
 }
 
-func getStandardID[T createProgramRequest](value T) string {
+func hasStandardFilter[T createProgramRequest](value T) bool {
 	switch input := any(value).(type) {
 	case model.CreateProgramWithMembersInput:
 		if input.StandardID != nil {
-			return *input.StandardID
+			return true
+		} else if input.StandardShortName != nil {
+			return true
 		}
 	case model.CreateFullProgramInput:
 		if input.StandardID != nil {
-			return *input.StandardID
+			return true
 		}
 	}
 
-	return ""
+	return false
 }
 
 // cloneControlsFromStandard clones all controls from a standard into an organization
