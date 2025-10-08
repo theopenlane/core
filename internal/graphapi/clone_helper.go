@@ -331,9 +331,10 @@ func (r *mutationResolver) createControlObjective(ctx context.Context, ownerID *
 	return r.db.ControlObjective.Create().SetInput(coInput).Exec(ctx)
 }
 
-// createComment creates a comment for the given control ID and owner ID with the provided comment text
+// createComment creates a comment for the given owner ID with the provided comment text,  and returns
+// the created comment ID in a slice
 func (r *mutationResolver) createComment(ctx context.Context, ownerID *string, input *string) ([]string, error) {
-	if input == nil {
+	if input == nil || *input == "" {
 		return nil, nil
 	}
 
