@@ -29,6 +29,11 @@ func TraverseUser() ent.Interceptor {
 			return nil
 		}
 
+		// allow system admins to see all users
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
 		// allow users to be created without filtering
 		rootFieldCtx := graphql.GetRootFieldContext(ctx)
 		if rootFieldCtx != nil && rootFieldCtx.Object == "createUser" {

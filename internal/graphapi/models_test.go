@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -1760,7 +1761,11 @@ type TrustCenterComplianceBuilder struct {
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
-	ctx = setContext(ctx, tc.client.db)
+	// do not use internal ctx or skip the checks so
+	// the owner_id can be applied
+	ctx = ent.NewContext(ctx, tc.client.db)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 
 	if tc.Slug == "" {
 		tc.Slug = randomName(t)
@@ -1801,6 +1806,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 // MustNew trust center setting builder is used to create, without authz checks, trust center settings in the database
 func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterSetting {
+	userCtx := ctx
 	ctx = setContext(ctx, tcs.client.db)
 
 	if tcs.Title == "" {
@@ -1816,8 +1822,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	if tcs.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(userCtx, t)
 		tcs.TrustCenterID = trustCenter.ID
 	}
 
@@ -1838,11 +1843,11 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 }
 
 func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterCompliance {
+	userCtx := ctx
 	ctx = setContext(ctx, tccb.client.db)
 
 	if tccb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(userCtx, t)
 		tccb.TrustCenterID = trustCenter.ID
 	}
 
@@ -2096,6 +2101,9 @@ type TrustCenterDocBuilder struct {
 
 // MustNew trust center doc builder is used to create trust center docs using the GraphQL API
 func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterDoc {
+	// save original context for trust center creation to preserve org scoping
+	userCtx := ctx
+
 	if tcdb.Title == "" {
 		tcdb.Title = gofakeit.Sentence(3)
 	}
@@ -2105,8 +2113,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	if tcdb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(userCtx, t)
 		tcdb.TrustCenterID = trustCenter.ID
 	}
 

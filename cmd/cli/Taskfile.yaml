@@ -98,8 +98,8 @@ tasks:
   user:setup:
     desc: complete user setup with default privileges
     cmds:
-      - task: user:register
-      - task: user:login
+      - task: verifyuser
+      - task: login
       - task: org:create
       - task: token:create
 
@@ -210,19 +210,19 @@ tasks:
   impersonation:target:setup:
     desc: create target users for impersonation testing
     cmds:
-      - task: user:register
+      - task: verifyuser
         vars:
           EMAIL_ADDRESS: "target1@example.com"
-      - task: user:login
+      - task: login
         vars:
           EMAIL_ADDRESS: "target1@example.com"
       - task: org:create
         vars:
           ORG_NAME: "target1-org"
-      - task: user:register
+      - task: verifyuser
         vars:
           EMAIL_ADDRESS: "target2@example.com"
-      - task: user:login
+      - task: login
         vars:
           EMAIL_ADDRESS: "target2@example.com"
       - task: org:create
@@ -234,10 +234,10 @@ tasks:
     env:
       CORE_PASSWORD: mattisthebest1234
     cmds:
-      - task: user:login
+      - task: login
         vars:
           EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
-      - go run -tags cli main.go user get -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email
+      - go run -tags cli main.go user get -s=false -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email'
 
   # === Testing Utilities ===
   test:connection:
