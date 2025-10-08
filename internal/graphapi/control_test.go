@@ -1858,6 +1858,7 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 	customFramework := "Custom"
 
 	newUser := suite.userBuilder(context.Background(), t)
+	newUser2 := suite.userBuilder(context.Background(), t)
 
 	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(newUser.UserCtx, t)
@@ -1877,6 +1878,11 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 	// create one with with duplicate category
 	control7 := (&ControlBuilder{client: suite.client, Category: control5.Category, StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
 
+	// add default where to limit overlap between tests
+	defaultWhere := &testclient.ControlWhereInput{
+		OwnerIDIn: []string{newUser.OrganizationID},
+	}
+
 	testCases := []struct {
 		name           string
 		client         *testclient.TestClient
@@ -1887,6 +1893,7 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 	}{
 		{
 			name:   "happy path, get control categories",
+			where:  defaultWhere,
 			client: suite.client.api,
 			ctx:    newUser.UserCtx,
 			expectedResult: []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
@@ -1939,9 +1946,12 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 			},
 		},
 		{
-			name:           "no controls, no results",
+			name: "no controls, no results",
+			where: &testclient.ControlWhereInput{
+				OwnerIDIn: []string{newUser2.OrganizationID},
+			},
 			client:         suite.client.api,
-			ctx:            testUser2.UserCtx,
+			ctx:            newUser2.UserCtx,
 			expectedResult: []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{},
 		},
 	}
@@ -2065,7 +2075,10 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			},
 		},
 		{
-			name:           "no controls, no results",
+			name: "no controls, no results",
+			where: &testclient.ControlWhereInput{
+				OwnerIDIn: []string{testUserAnother.OrganizationID},
+			},
 			client:         suite.client.api,
 			ctx:            testUserAnother.UserCtx,
 			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
