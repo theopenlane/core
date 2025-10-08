@@ -98,7 +98,7 @@ var ReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver) 
 		return next(ctx)
 	}
 
-	if checkFieldSet(ctx) {
+	if checkFieldSet(ctx, noSkip) {
 		return nil, ErrReadOnlyField
 	}
 
@@ -126,7 +126,7 @@ var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Re
 		return next(ctx)
 	}
 
-	fieldSet := checkFieldSet(ctx)
+	fieldSet := checkFieldSet(ctx, skipCreateOperations)
 	allowed := checkSourceAllowed(ctx, source)
 
 	if fieldSet && !allowed {
@@ -179,7 +179,7 @@ func argsWithControlSource(value enums.ControlSource) *ast.Argument {
 	}
 }
 
-func checkFieldSet(ctx context.Context) bool {
+func checkFieldSet(ctx context.Context, skip func(*graphql.OperationContext) bool) bool {
 	operationContext := graphql.GetOperationContext(ctx)
 	if operationContext == nil || operationContext.Operation == nil {
 		// if we can't get the operation context, continue to the next resolver
@@ -188,7 +188,7 @@ func checkFieldSet(ctx context.Context) bool {
 
 	// if this is a mutation, check if the field is being set on update operations
 	// we don't care about create operations s should not be set on create
-	if operationContext.Operation.Operation == ast.Mutation && !strings.Contains(operationContext.Operation.Name, "Create") {
+	if operationContext.Operation.Operation == ast.Mutation && !skip(operationContext) {
 		input := graphutils.GetMapInputVariableByName(ctx, graphutils.GetInputFieldVariableName(ctx))
 		if input == nil {
 			return false
@@ -245,4 +245,16 @@ func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSour
 	// only allow if the source is different than the one on the object
 	// the specified source is not allowed to make changes
 	return *objSource != *restrictedSource
+}
+
+// skipCreateOperations is a helper function that can be used to skip create operations
+var skipCreateOperations = func(operationContext *graphql.OperationContext) bool {
+	// skip if the source is nil, this means the directive was applied to an object
+	// and not a field, so we don't need to check if the field is being set
+	return strings.Contains(operationContext.Operation.Name, "Create")
+}
+
+// noSkip is a helper function that can be used to never skip any operations
+var noSkip = func(_ *graphql.OperationContext) bool {
+	return false
 }

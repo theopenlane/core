@@ -32,6 +32,7 @@ mutation CloneBulkCSVControl($input: Upload!) {
       comments {
         edges {
           node {
+            id
             text
           }
         }
@@ -39,6 +40,7 @@ mutation CloneBulkCSVControl($input: Upload!) {
       controlImplementations {
         edges {
           node {
+            id
             details
           }
         }

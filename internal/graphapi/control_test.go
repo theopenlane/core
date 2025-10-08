@@ -1105,6 +1105,13 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				}
 
 				assert.Check(t, control.ImplementationGuidance != nil)
+				assert.Check(t, len(control.ControlImplementations.Edges) == 1)
+
+				// cleanup controls
+				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
+				// cleanup control implementation
+				(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: control.ControlImplementations.Edges[0].Node.ID}).MustDelete(tc.ctx, t)
+
 			}
 		})
 	}
@@ -1209,6 +1216,18 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 			assert.Check(t, resp != nil)
 
 			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, tc.expectedControlCount))
+
+			// delete the created controls
+			for _, control := range resp.CreateControlsByClone.Controls {
+				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
+			}
+
+			// delete the subcontrols
+			for _, control := range resp.CreateControlsByClone.Controls {
+				for _, sc := range control.Subcontrols.Edges {
+					(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: sc.Node.ID}).MustDelete(tc.ctx, t)
+				}
+			}
 		})
 	}
 
