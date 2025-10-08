@@ -98,8 +98,8 @@ tasks:
   user:setup:
     desc: complete user setup with default privileges
     cmds:
-      - task: user:register
-      - task: user:login
+      - task: verifyuser
+      - task: login
       - task: org:create
       - task: token:create
 
