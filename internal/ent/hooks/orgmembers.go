@@ -22,7 +22,6 @@ import (
 func HookOrgMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-
 			userID, _ := m.UserID()
 
 			orgID, exists := m.OrganizationID()
@@ -46,7 +45,6 @@ func HookOrgMembers() ent.Hook {
 			// check role, if its not set the default is member
 			role, _ := m.Role()
 			if role == enums.RoleOwner {
-
 				val, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
@@ -229,7 +227,6 @@ func updateOrgMemberDefaultOrgOnCreate(ctx context.Context, m *generated.OrgMemb
 
 func deleteSystemManagedUserGroup(ctx context.Context,
 	m *generated.OrgMembershipMutation, userID, orgID string) error {
-
 	user, err := m.Client().User.Get(ctx, userID)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user for managed group deletion")
@@ -258,7 +255,6 @@ func getUserGroupName(displayName, id string) string {
 // createUserManagedGroup creates a personal managed group for the user accepting the invite
 // this mirrors the behavior in organization creation where users get their own managed group
 func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutation, member OrgMember) error {
-
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	dbUser, err := m.Client().User.Get(allowCtx, member.UserID)

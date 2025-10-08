@@ -18,9 +18,11 @@ import (
 func InterceptorTrustCenter() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		zerolog.Ctx(ctx).Debug().Msg("InterceptorTrustCenter")
+
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
 		}
+
 		return nil
 	})
 }
@@ -58,10 +60,12 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 
 		q.WhereP(func(s *sql.Selector) {
 			t := sql.Table(trustcenter.Table)
+
 			anys := make([]any, len(orgIDs))
 			for i, s := range orgIDs {
 				anys[i] = s
 			}
+
 			s.Where(
 				sql.In(
 					s.C("trust_center_id"),

@@ -99,9 +99,9 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 						break
 					}
 				}
-
 			} else if prod != nil {
 				conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "product", LookupKey: name, ID: prod.ID})
+
 				if cfg.failFast {
 					return nil
 				}
@@ -117,6 +117,7 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 
 				if feat != nil {
 					conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "feature", LookupKey: f.LookupKey, ID: feat.ID})
+
 					if cfg.failFast {
 						return nil
 					}
@@ -135,18 +136,21 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 
 				if price != nil && p.PriceID != price.ID {
 					conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "price", LookupKey: p.LookupKey, ID: price.ID})
+
 					if cfg.failFast {
 						return nil
 					}
 				}
 			}
 		}
+
 		return nil
 	}
 
 	if err := check("module", c.Modules); err != nil {
 		return nil, err
 	}
+
 	if err := check("addon", c.Addons); err != nil {
 		return nil, err
 	}

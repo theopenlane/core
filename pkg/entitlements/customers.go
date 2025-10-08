@@ -139,6 +139,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		if customers[0].Subscriptions == nil || len(customers[0].Subscriptions.Data) == 0 {
 			return ErrNoSubscriptions
 		}
+
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("found existing customer for organization")
 
 		o.StripeCustomerID = customers[0].ID

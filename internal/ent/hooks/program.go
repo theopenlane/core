@@ -160,5 +160,6 @@ func checkArchivedProgram(ctx context.Context, m *generated.ProgramMutation) err
 	if status == enums.ProgramStatusArchived {
 		return ErrArchivedProgramUpdateNotAllowed
 	}
+
 	return nil
 }

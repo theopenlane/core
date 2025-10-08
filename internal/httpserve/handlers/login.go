@@ -87,6 +87,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	// check if orgStatus is enforced, but user has not yet configured
 	// if not yet configured we want to direct to the setup first
 	tfaSetupRequired := false
+
 	if orgStatus != nil && orgStatus.OrgTFAEnforced {
 		// Check if user has TFA enabled
 		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {

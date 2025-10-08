@@ -76,6 +76,7 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 
 	// we want 1 subscription, many prices, so we create items for each price ID
 	items := []*stripe.SubscriptionCreateItemParams{}
+
 	for _, price := range o.Prices {
 		if price.ID != "" {
 			items = append(items, &stripe.SubscriptionCreateItemParams{Price: stripe.String(price.ID)})

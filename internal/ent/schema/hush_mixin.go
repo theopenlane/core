@@ -44,6 +44,7 @@ func (m HushMixin) Hooks() []ent.Hook {
 	if m.schema == nil {
 		return []ent.Hook{}
 	}
+
 	return hush.AutoEncryptionHook(m.schema)
 }
 
@@ -52,6 +53,7 @@ func (m HushMixin) Interceptors() []ent.Interceptor {
 	if m.schema == nil {
 		return []ent.Interceptor{}
 	}
+
 	return hush.AutoDecryptionInterceptor(m.schema)
 }
 

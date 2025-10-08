@@ -262,7 +262,6 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	if sub.Items != nil && len(sub.Items.Data) > 0 {
 		item := sub.Items.Data[0]
 		if item.Price != nil {
-
 			interval := ""
 			if item.Price.Recurring != nil {
 				interval = string(item.Price.Recurring.Interval)

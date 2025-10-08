@@ -16,7 +16,6 @@ import (
 func HookValidateIdentityProviderConfig() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (generated.Value, error) {
-
 			if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
 				return nil, err
 			}
@@ -145,7 +144,6 @@ func fallbackString(primary func() (string, bool), fallback func() (*string, err
 // the enforcement is disabled. The "tested" value is turned off too so the user/org is forced
 // to test the connection before they can enable it again
 func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.OrganizationSettingMutation) error {
-
 	if m.Op() == ent.OpCreate || didSSOConfigChange(ctx, m) {
 		m.SetIdentityProviderLoginEnforced(false)
 		m.SetIdentityProviderAuthTested(false)
@@ -155,7 +153,6 @@ func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.Organiz
 }
 
 func didSSOConfigChange(ctx context.Context, m *generated.OrganizationSettingMutation) bool {
-
 	if enforced, ok := m.IdentityProviderLoginEnforced(); ok {
 		if oldEnforcement, err := m.OldIdentityProviderLoginEnforced(ctx); err == nil && oldEnforcement && !enforced {
 			return false

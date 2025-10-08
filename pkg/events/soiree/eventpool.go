@@ -113,6 +113,7 @@ func (m *EventPool) Emit(eventName string, payload any) <-chan error {
 	// Before starting new goroutine, check if Soiree is closed
 	if m.closed.Load().(bool) {
 		errChan <- ErrEmitterClosed
+
 		close(errChan)
 
 		return errChan
@@ -138,6 +139,7 @@ func (m *EventPool) Emit(eventName string, payload any) <-chan error {
 	if m.pool != nil {
 		m.pool.Submit(func() {
 			defer close(errChan)
+
 			m.handleEvents(eventName, event, func(err error) {
 				errChan <- err
 			})
@@ -145,6 +147,7 @@ func (m *EventPool) Emit(eventName string, payload any) <-chan error {
 	} else {
 		go func() {
 			defer close(errChan)
+
 			m.handleEvents(eventName, event, func(err error) {
 				errChan <- err
 			})
@@ -330,6 +333,7 @@ func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listen
 	}
 
 	backOff := m.backOffFactory()
+
 	var lastErr error
 
 	for i := 0; i < retries; i++ {
@@ -414,6 +418,7 @@ func (m *EventPool) consumeQueue(ctx context.Context, q EventQueue) {
 			}
 
 			time.Sleep(100 * time.Millisecond) //nolint:mnd
+
 			continue
 		}
 

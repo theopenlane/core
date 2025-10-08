@@ -71,25 +71,3 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 
 	return router.AddUnversionedHandlerRoute(config)
 }
-
-//go:embed applemerchant
-var applemerchant embed.FS
-
-// registerAppleMerchantHandler serves up the text output of the applemerchant file
-func registerAppleMerchantHandler(router *Router) (err error) {
-	config := Config{
-		Path:        "/.well-known/apple-developer-merchantid-domain-association",
-		Method:      http.MethodGet,
-		Name:        "AppleMerchant",
-		Description: "Apple Developer Merchant ID domain association file",
-		Tags:        []string{"well-known", "payments"},
-		OperationID: "AppleMerchant",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
-		SimpleHandler: func(ctx echo.Context) error {
-			return echo.StaticFileHandler("applemerchant", applemerchant)(ctx)
-		},
-	}
-
-	return router.AddUnversionedHandlerRoute(config)
-}

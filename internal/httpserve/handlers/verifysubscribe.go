@@ -100,8 +100,8 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 	}
 
 	var err error
-	t.ExpiresAt, err = user.GetVerificationExpires()
 
+	t.ExpiresAt, err = user.GetVerificationExpires()
 	if err != nil {
 		log.Error().Err(err).Msg("unable to parse expiration")
 

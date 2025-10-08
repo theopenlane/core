@@ -292,6 +292,7 @@ func (h *Handler) getSlackIntegrationConfig() *oauth2.Config {
 	}
 
 	helper := NewIntegrationHelper("slack", "")
+
 	return &oauth2.Config{
 		ClientID:     h.IntegrationOauthProvider.Slack.ClientID,
 		ClientSecret: h.IntegrationOauthProvider.Slack.ClientSecret,

@@ -68,6 +68,7 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 
 	// check for the existence of the organization with the given name
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	exists, err := m.Client().Organization.Query().Where(
 		organization.Name(input.Name),
 		organization.DeletedAtIsNil(),

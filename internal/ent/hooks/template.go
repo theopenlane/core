@@ -26,7 +26,6 @@ func HookTemplate() ent.Hook {
 				if !auth.IsSystemAdminFromContext(ctx) {
 					return nil, fmt.Errorf("%w: only system admins can create or update root templates", ErrInvalidInput)
 				}
-
 			}
 
 			return next.Mutate(ctx, m)

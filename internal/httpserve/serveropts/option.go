@@ -447,7 +447,6 @@ func WithObjectStorage() ServerOption {
 
 			switch settings.Provider {
 			case storage.ProviderS3:
-
 				storageOptions := []storage.S3Option{
 					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
 					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
@@ -565,13 +564,13 @@ func WithEntitlements() ServerOption {
 
 		if s.Config.Settings.Entitlements.Enabled {
 			var err error
+
 			client, err = entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
 				entitlements.WithConfig(s.Config.Settings.Entitlements))
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating entitlements client")
 			}
-
 		}
 
 		s.Config.Handler.Entitlements = client

@@ -215,6 +215,7 @@ func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentM
 			orgmodule.ModuleNotIn(currentModules...),
 		),
 	).Exec(allowCtx)
+
 	return err
 }
 

@@ -52,8 +52,10 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 		log.Info().Msg("updating subscription cancel behavior from pause to cancel")
 	}
 
-	var updateCount int
-	var rows []actionRow
+	var (
+		updateCount int
+		rows        []actionRow
+	)
 
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
@@ -90,6 +92,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 				}
 
 				rows = append(rows, actionRow{OrgID: sub.ID, OrgName: orgName, Action: "update cancel behavior from pause to cancel"})
+
 				continue
 			}
 
@@ -107,6 +110,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 			}
 
 			updateCount++
+
 			log.Info().Str("subscription_id", sub.ID).Msg("updated subscription cancel behavior")
 		}
 	}
@@ -116,6 +120,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 	} else {
 		log.Info().Int("updated_count", updateCount).Msg("completed updating subscription cancel behaviors")
 	}
+
 	return &CancelBehaviorResult{Actions: rows}, nil
 }
 
@@ -127,11 +132,13 @@ func ShouldCreateSchedule(sub *stripe.Subscription) bool {
 // GenerateScheduleActionDescription generates an action description for creating a subscription schedule and returns action text and customer ID
 func GenerateScheduleActionDescription(sub *stripe.Subscription) (string, string) {
 	customerID := ""
+
 	action := fmt.Sprintf("create subscription schedule for %s", sub.ID)
 	if sub.Customer != nil && sub.Customer.ID != "" {
 		customerID = sub.Customer.ID
 		action += fmt.Sprintf(" and update customer metadata for %s", customerID)
 	}
+
 	return action, customerID
 }
 
@@ -148,8 +155,10 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 		log.Info().Msg("creating subscription schedules for subscriptions without schedules")
 	}
 
-	var createCount int
-	var rows []actionRow
+	var (
+		createCount int
+		rows        []actionRow
+	)
 
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
@@ -187,6 +196,7 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 				}
 
 				rows = append(rows, actionRow{OrgID: sub.ID, OrgName: orgName, Action: action})
+
 				continue
 			}
 
@@ -198,6 +208,7 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 			}
 
 			createCount++
+
 			log.Info().Str("subscription_id", sub.ID).Str("schedule_id", schedule.ID).Msg("created subscription schedule")
 
 			// Update customer metadata with schedule ID
@@ -221,12 +232,14 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 	} else {
 		log.Info().Int("created_count", createCount).Msg("completed creating subscription schedules")
 	}
+
 	return &ScheduleResult{Actions: rows}, nil
 }
 
 // BuildValidProductsMap builds a map of valid product IDs from the provided catalog for lookup operations
 func BuildValidProductsMap(cat *catalog.Catalog) map[string]bool {
 	validProducts := make(map[string]bool)
+
 	for _, module := range cat.Modules {
 		if module.ProductID != "" {
 			validProducts[module.ProductID] = true
@@ -238,6 +251,7 @@ func BuildValidProductsMap(cat *catalog.Catalog) map[string]bool {
 			validProducts[addon.ProductID] = true
 		}
 	}
+
 	return validProducts
 }
 
@@ -350,6 +364,7 @@ func (r *Reconciler) ReportSubscriptionsWithMissingProducts(ctx context.Context,
 	}
 
 	log.Info().Int("missing_products_count", len(report)).Msg("completed product catalog report")
+
 	return report, nil
 }
 
@@ -393,6 +408,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 		}
 		// Convert to correct return type - action was performed so return empty report
 		var reports []StripeSystemMismatchReport
+
 		return reports, nil
 	}
 
@@ -403,6 +419,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 	// Get all organizations from internal system for lookup
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
+
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
 		WithSetting().
@@ -421,6 +438,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 	// Build lookup maps for internal data
 	orgMap := make(map[string]bool)
 	customerIDMap := make(map[string]string)
+
 	for _, org := range orgs {
 		orgMap[org.ID] = true
 		if org.StripeCustomerID != nil {
@@ -442,6 +460,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 		// Extract organization ID from metadata
 		orgID := ""
 		orgName := ""
+
 		if customer.Metadata != nil {
 			orgID = customer.Metadata["organization_id"]
 			orgName = customer.Metadata["organization_name"]
@@ -455,6 +474,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 				Description:  "Stripe customer has no organization_id in metadata",
 				StripeData:   fmt.Sprintf("Customer: %s, Email: %s", customer.ID, customer.Email),
 			})
+
 			continue
 		}
 
@@ -481,6 +501,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 				Description:      "Organization ID from Stripe metadata not found in internal system",
 				StripeData:       fmt.Sprintf("Customer: %s, OrgID: %s", customer.ID, orgID),
 			})
+
 			continue
 		}
 
@@ -499,6 +520,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 	}
 
 	log.Info().Int("mismatch_count", len(report)).Msg("completed Stripe system mismatch analysis")
+
 	return report, nil
 }
 
@@ -522,6 +544,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 	// Get all organizations from internal system for lookup
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
+
 	orgs, err := r.db.Organization.Query().
 		Where(
 			organization.And(
@@ -537,6 +560,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 	// Build lookup map for internal organizations
 	orgMap := make(map[string]bool)
 	customerIDMap := make(map[string]bool)
+
 	for _, org := range orgs {
 		orgMap[org.ID] = true
 		if org.StripeCustomerID != nil {
@@ -544,8 +568,10 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		}
 	}
 
-	var deleteCount int
-	var rows []actionRow
+	var (
+		deleteCount int
+		rows        []actionRow
+	)
 
 	// List all Stripe customers
 	customerIt := r.stripe.Client.V1Customers.List(ctx, &stripe.CustomerListParams{
@@ -564,6 +590,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		// Check if customer has organization metadata
 		orgID := ""
 		orgName := ""
+
 		if customer.Metadata != nil {
 			orgID = customer.Metadata["organization_id"]
 			orgName = customer.Metadata["organization_name"]
@@ -602,12 +629,15 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		})
 
 		hasActiveSubscriptions := false
+
 		for _, err := range subscriptionIt {
 			if err != nil {
 				log.Error().Err(err).Str("customer_id", customer.ID).Msg("failed to check customer subscriptions")
 				break
 			}
+
 			hasActiveSubscriptions = true
+
 			break
 		}
 
@@ -623,6 +653,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		}
 
 		deleteCount++
+
 		log.Info().Str("customer_id", customer.ID).Str("reason", deleteReason).Msg("deleted orphaned customer")
 	}
 
@@ -654,6 +685,7 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
+
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
 		WithSetting().
@@ -668,8 +700,10 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 		return nil, fmt.Errorf("query personal organizations: %w", err)
 	}
 
-	var updateCount int
-	var rows []actionRow
+	var (
+		updateCount int
+		rows        []actionRow
+	)
 
 	for _, org := range orgs {
 		if org.StripeCustomerID == nil || *org.StripeCustomerID == "" {
@@ -690,6 +724,7 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 		if r.dryRun {
 			action := fmt.Sprintf("add personal_org metadata to customer %s", *org.StripeCustomerID)
 			rows = append(rows, actionRow{OrgID: org.ID, OrgName: org.DisplayName, Action: action})
+
 			continue
 		}
 
@@ -712,6 +747,7 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 		}
 
 		updateCount++
+
 		log.Info().Str("org_id", org.ID).Str("customer_id", *org.StripeCustomerID).Msg("updated personal org metadata")
 	}
 
@@ -720,5 +756,6 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 	} else {
 		log.Info().Int("updated_count", updateCount).Msg("completed updating personal org metadata")
 	}
+
 	return &MetadataUpdateResult{Actions: rows}, nil
 }

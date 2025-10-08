@@ -43,6 +43,7 @@ func HookStandardDelete() ent.Hook {
 			}
 
 			id, _ := m.ID()
+
 			var err error
 
 			// use the same context we use on edge_cleanup to make sure everything is cleaned up properly

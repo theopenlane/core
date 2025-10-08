@@ -49,11 +49,13 @@ func HookDeleteCustomDomain() ent.Hook {
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
 				zerolog.Ctx(ctx).Debug().Msg("custom domain delete hook")
+
 				if !isDeleteOp(ctx, m) {
 					// only allow system admin to update
 					if !auth.IsSystemAdminFromContext(ctx) {
 						return nil, generated.ErrPermissionDenied
 					}
+
 					return next.Mutate(ctx, m)
 				}
 
@@ -75,6 +77,7 @@ func HookDeleteCustomDomain() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
+
 				for _, tc := range trustCenters {
 					if err = m.Client().TrustCenter.UpdateOneID(tc.ID).
 						ClearCustomDomain().

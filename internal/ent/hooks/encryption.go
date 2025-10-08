@@ -144,6 +144,7 @@ func decryptResultField(result ent.Value, fieldName string) error {
 				return err
 			}
 		}
+
 		return nil
 	}
 
@@ -181,6 +182,7 @@ func decryptEntityField(entity any, fieldName string) error {
 
 	// Set the decrypted value
 	field.SetString(decrypted)
+
 	return nil
 }
 

@@ -39,6 +39,7 @@ func AllowCreate() privacy.MutationRule {
 			if m.Op() == ent.OpCreate {
 				return privacy.Allow
 			}
+
 			return privacy.Skip
 		}),
 
@@ -175,6 +176,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 	for _, edge := range edges {
 		relationCheck := fgax.CanEdit
+
 		edgeMap := mapEdgeToObjectType(ctx, m.Type(), edge)
 		if edgeMap.SkipEditCheck {
 			if edgeMap.CheckViewAccess {
@@ -241,7 +243,6 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				return generated.ErrPermissionDenied
 			}
 		}
-
 	}
 
 	return nil

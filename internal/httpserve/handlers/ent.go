@@ -305,7 +305,6 @@ func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.
 		Where(
 			invite.Token(token),
 		).WithOwner().Only(ctx)
-
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining user from token")
 

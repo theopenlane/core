@@ -56,8 +56,10 @@ func HookJobTemplate() ent.Hook {
 
 			// capture old values
 			var oldWindmillPath, oldDownloadURL string
+
 			if hasWindmillUpdate && mutation.Op().Is(ent.OpUpdateOne) {
 				var err error
+
 				oldWindmillPath, err = mutation.OldWindmillPath(ctx)
 				if err != nil {
 					return nil, err
@@ -166,8 +168,10 @@ func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 	platform, hasPlatform := mutation.Platform()
 
 	var rawCode string
+
 	if hasDownloadURL && downloadURL != "" && downloadURL != oldDownloadURL {
 		var err error
+
 		rawCode, err = downloadRawCode(ctx, downloadURL)
 		if err != nil {
 			return err
@@ -223,7 +227,6 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 		httpsling.URL(downloadURL),
 		httpsling.Get(),
 	)
-
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create httpsling requestor")
 
@@ -231,6 +234,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	}
 
 	var rawCode string
+
 	resp, err := requestor.ReceiveWithContext(ctx, &rawCode)
 	if err != nil {
 		return "", fmt.Errorf("failed to download raw code: %w", err)
@@ -285,6 +289,7 @@ func getCustomerFolderName(ctx context.Context, mutation utils.GenericMutation) 
 
 	// allow to bypass auth checks for org name
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	org, err := mutation.Client().Organization.Query().
 		Where(organization.ID(orgID)).
 		Select(organization.FieldName).
@@ -301,6 +306,7 @@ func getCustomerFolderName(ctx context.Context, mutation utils.GenericMutation) 
 		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' || r == '-' {
 			return r
 		}
+
 		return '_'
 	}, org.Name)
 

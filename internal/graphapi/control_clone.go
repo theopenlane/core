@@ -130,6 +130,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// we cannot use a transaction here because we are running multiple go-routines
 	// and transactions cannot be used across go-routines
 	funcs := make([]func(), len(controlsToClone))
+
 	var (
 		errors []error
 		mu     sync.Mutex
@@ -147,6 +148,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// skip the access checks for the controls, we are already filtering on organization id
 	// and controls are visible to users in the organization
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	existingControls, err := r.db.Control.Query().
 		Where(
 			control.And(
@@ -168,12 +170,13 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// find the ones we do need to clone
 	updatedControlsToClone := []*generated.Control{}
+
 	for _, c := range controlsToClone {
 		// check if the control already exists in the organization
 		exists := false
+
 		for _, existingControl := range existingControls {
 			if existingControl.RefCode == c.RefCode && existingControl.StandardID == c.StandardID {
-
 				// control already exists, we will not clone it again
 				existingControlIDs = append(existingControlIDs, existingControl.ID)
 				exists = true
@@ -219,7 +222,9 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 				SetInput(controlInput).Save(ctrlCtx)
 			if err != nil {
 				mu.Lock()
+
 				errors = append(errors, err)
+
 				mu.Unlock()
 
 				return
@@ -228,6 +233,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			newControlID := res.ID
 
 			mu.Lock()
+
 			createdControlIDs = append(createdControlIDs, newControlID)
 
 			// add subcontrols to create if they exist
@@ -237,6 +243,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 					refControl:   c,
 				})
 			}
+
 			mu.Unlock()
 		}
 	}
@@ -257,7 +264,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			if _, err := withTransactionalMutation(ctx).Control.Delete().
 				Where(control.IDIn(createdControlIDs...)).
 				Exec(allowCtx); err != nil {
-
 				log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 			}
 		}
@@ -274,7 +280,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		if _, err := withTransactionalMutation(ctx).Control.Delete().
 			Where(control.IDIn(createdControlIDs...)).
 			Exec(allowCtx); err != nil {
-
 			log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 
 			return nil, err
@@ -291,7 +296,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
 			Exec(ctrlCtx); err != nil {
-
 			return nil, err
 		}
 	}
@@ -417,6 +421,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 		for _, toCloneSubcontrol := range c.refControl.Edges.Subcontrols {
 			// check if the subcontrol already exists in the organization
 			exists := false
+
 			for _, existingSubcontrol := range existingSubcontrols {
 				if existingSubcontrol.RefCode == toCloneSubcontrol.RefCode &&
 					existingSubcontrol.ControlID == c.newControlID {
@@ -472,6 +477,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 // bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel
 func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) error {
 	errors := []error{}
+
 	var mu sync.Mutex
 
 	funks := make([]func(), len(input))
@@ -479,11 +485,12 @@ func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context
 	for i, data := range input {
 		c := data // capture loop variable
 		funks[i] = func() {
-
 			if err := r.db.Subcontrol.Create().
 				SetInput(*c).Exec(ctx); err != nil {
 				mu.Lock()
+
 				errors = append(errors, err)
+
 				mu.Unlock()
 
 				return
