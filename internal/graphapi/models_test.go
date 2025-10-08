@@ -1761,6 +1761,8 @@ type TrustCenterComplianceBuilder struct {
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
+	// do not use internal ctx or skip the checks so
+	// the owner_id can be applied
 	ctx = ent.NewContext(ctx, tc.client.db)
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
