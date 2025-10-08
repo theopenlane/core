@@ -1992,19 +1992,27 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	customFramework := "Custom"
 
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserAnother := suite.userBuilder(context.Background(), t)
+
 	// create controls with categories and subcategories
-	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser.UserCtx, t)
 
 	// create one without a subcategory
-	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// create one with a duplicate subcategory
-	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser1.UserCtx, t)
+	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser.UserCtx, t)
 
 	// create one with a different framework
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control5 := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control5 := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: standard.ID}).MustNew(testUser.UserCtx, t)
+
+	// add default where to limit overlap between tests
+	defaultWhere := &testclient.ControlWhereInput{
+		OwnerIDIn: []string{testUser.OrganizationID},
+	}
 
 	testCases := []struct {
 		name           string
@@ -2016,8 +2024,9 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	}{
 		{
 			name:   "happy path, get control subcategories",
+			where:  defaultWhere,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
 				{
 					Node: testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
@@ -2042,7 +2051,7 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 		{
 			name:   "filter by standard, one result expected",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 			where: &testclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
@@ -2058,7 +2067,7 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 		{
 			name:           "no controls, no results",
 			client:         suite.client.api,
-			ctx:            testUser2.UserCtx,
+			ctx:            testUserAnother.UserCtx,
 			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
 		},
 	}
@@ -2100,8 +2109,8 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	}
 
 	// cleanup created controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestQueryControlGroupsByCategory(t *testing.T) {
@@ -2119,16 +2128,25 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 
 	// create one with a different framework
 	standard := (&StandardBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
-	category := "Meow"
+
+	// make sure categories are unique across tests or you'll have a bad time
+	// with test conflicts
+	category := "Meow-" + ulids.New().String()
 	control5 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
 	// create another with the another category
-	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(user1.UserCtx, t)
+	control6 := (&ControlBuilder{client: suite.client, Category: "Woof-" + ulids.New().String(), StandardID: standard.ID}).MustNew(user1.UserCtx, t)
 	// create one with with duplicate category
 	control7 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
 
 	// create another without a category to test multiple controls in "No Category"
 	control8 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
 
+	// add default where to limit overlap between tests
+	defaultWhere := &testclient.ControlWhereInput{
+		OwnerIDIn: []string{user1.OrganizationID},
+	}
+
+	// track cursor for pagination
 	var cursor string
 	testCases := []struct {
 		name               string
@@ -2143,6 +2161,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	}{
 		{
 			name:   "happy path, get control categories",
+			where:  defaultWhere,
 			client: suite.client.api,
 			ctx:    user1.UserCtx,
 			expectedCategories: map[string]struct{}{
@@ -2155,12 +2174,14 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		},
 		{
 			name:   "happy path, get control categories",
+			where:  defaultWhere,
 			client: suite.client.api,
 			ctx:    user1.UserCtx,
 			first:  lo.ToPtr(int64(1)), // test pagination
 		},
 		{
 			name:        "happy path, get control categories",
+			where:       defaultWhere,
 			client:      suite.client.api,
 			ctx:         user1.UserCtx,
 			first:       lo.ToPtr(int64(1)),                                // test pagination
@@ -2169,6 +2190,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		},
 		{
 			name:     "happy path, get control for specific category",
+			where:    defaultWhere,
 			client:   suite.client.api,
 			ctx:      user1.UserCtx,
 			first:    lo.ToPtr(int64(1)), // test pagination
@@ -2188,6 +2210,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		},
 		{
 			name:     "happy path, get next result for specific category, no more results",
+			where:    defaultWhere,
 			client:   suite.client.api,
 			ctx:      user1.UserCtx,
 			first:    lo.ToPtr(int64(1)), // test pagination
@@ -2211,6 +2234,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		},
 		{
 			name:     "happy path, get controls in No Category",
+			where:    defaultWhere,
 			client:   suite.client.api,
 			ctx:      user1.UserCtx,
 			category: lo.ToPtr("No Category"),
@@ -2220,6 +2244,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		},
 		{
 			name:   "no controls, no results",
+			where:  defaultWhere,
 			client: suite.client.api,
 			ctx:    testUser2.UserCtx,
 		},
@@ -2229,7 +2254,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		t.Run("Get Controls By Categories "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetControlsGroupByCategory(tc.ctx, tc.first, nil, tc.after, nil, tc.where, nil, tc.category)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return
 			}
