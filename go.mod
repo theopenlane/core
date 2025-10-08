@@ -14,7 +14,7 @@ tool (
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/secretmanager v1.15.0
+	cloud.google.com/go/secretmanager v1.15.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.81
@@ -26,8 +26,8 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.39.2
 	github.com/aws/aws-sdk-go-v2/config v1.31.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.16
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.11
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.3
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.12
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.4
 	github.com/brianvoe/gofakeit/v7 v7.7.3
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.1.0
@@ -151,7 +151,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.8.9 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.6 // indirect
