@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
@@ -206,7 +207,8 @@ func (h *Handler) validateImpersonationPermissions(currentUser *auth.Authenticat
 // getTargetUser retrieves information about the target user and validates organization access
 func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string) (*generated.User, error) {
 	// First get the user
-	user, err := h.DBClient.User.Get(ctx, userID)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	user, err := h.DBClient.User.Get(allowCtx, userID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil, ErrTargetUserNotFound
