@@ -1097,10 +1097,10 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				switch control.RefCode {
 				case "AA-1":
 					assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
-					assert.Check(t, is.Equal("INT-0001", control.ReferenceID))
+					assert.Check(t, is.Equal("INT-0001", *control.ReferenceID))
 				case "AA-2":
 					assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
-					assert.Check(t, is.Equal("INT-0002", control.ReferenceID))
+					assert.Check(t, is.Equal("INT-0002", *control.ReferenceID))
 
 				}
 

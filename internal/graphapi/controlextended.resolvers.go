@@ -148,11 +148,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 
 		if isSubControl {
 			hasUpdate := false
-			scInput := generated.UpdateSubcontrolInput{}
-			if c.ControlInput != nil && c.ControlInput.Status != nil {
-				hasUpdate = true
-				scInput.Status = c.ControlInput.Status
-			}
+			scInput, hasUpdate := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
 
 			if len(commentIDs) > 0 {
 				scInput.AddCommentIDs = commentIDs
@@ -165,7 +161,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			}
 
 			if hasUpdate || c.ImplementationGuidance != nil {
-				base := r.db.Subcontrol.UpdateOneID(*controlID).SetInput(scInput)
+				base := r.db.Subcontrol.UpdateOneID(*controlID)
+
+				if scInput != nil {
+					base.SetInput(*scInput)
+				}
 
 				if c.ImplementationGuidance != nil {
 					cleanG := strings.Trim(*c.ImplementationGuidance, "\"")
@@ -185,11 +185,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			}
 		} else {
 			hasUpdate := false
-			cInput := generated.UpdateControlInput{}
-			if c.ControlInput != nil && c.ControlInput.Status != nil {
-				hasUpdate = true
-				cInput.Status = c.ControlInput.Status
-			}
+			cInput, hasUpdate := getFieldsToUpdate[generated.UpdateControlInput](c)
 
 			if c.ImplementationGuidance != nil {
 				parts := strings.Split(*c.ImplementationGuidance, "\n")
@@ -217,7 +213,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			}
 
 			if hasUpdate || c.ImplementationGuidance != nil {
-				base := r.db.Control.UpdateOneID(*controlID).SetInput(cInput)
+				base := r.db.Control.UpdateOneID(*controlID)
+
+				if cInput != nil {
+					base.SetInput(*cInput)
+				}
 
 				if c.ImplementationGuidance != nil {
 					parts := strings.Split(*c.ImplementationGuidance, "\n")
