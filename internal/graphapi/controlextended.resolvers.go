@@ -8,18 +8,15 @@ import (
 	"context"
 	"fmt"
 	"slices"
-	"strings"
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
@@ -124,26 +121,9 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			continue
 		}
 
-		commentIDs := []string{}
-		if c.Comment != nil {
-			cleanComment := strings.Trim(*c.Comment, "\"")
-			cleanComment = strings.TrimSpace(cleanComment)
-
-			if cleanComment != "" {
-				// create comment
-				commentInput := generated.CreateNoteInput{
-					OwnerID: c.OwnerID,
-					Text:    cleanComment,
-				}
-
-				comment, err := r.db.Note.Create().SetInput(commentInput).Save(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				commentIDs = append(commentIDs, comment.ID)
-
-			}
+		commentIDs, err := r.createComment(ctx, c.OwnerID, c.Comment)
+		if err != nil {
+			return nil, err
 		}
 
 		if isSubControl {
@@ -168,14 +148,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if c.ImplementationGuidance != nil {
-					cleanG := strings.Trim(*c.ImplementationGuidance, "\"")
-					cleanG = strings.TrimSpace(cleanG)
+					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
 
-					guide := models.ImplementationGuidance{
-						Guidance: []string{cleanG},
+					if guidance != nil {
+						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})
 					}
-
-					base.AppendImplementationGuidance([]models.ImplementationGuidance{guide})
 				}
 
 				err := base.Exec(ctx)
@@ -186,21 +163,6 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		} else {
 			hasUpdate := false
 			cInput, hasUpdate := getFieldsToUpdate[generated.UpdateControlInput](c)
-
-			if c.ImplementationGuidance != nil {
-				parts := strings.Split(*c.ImplementationGuidance, "\n")
-				for i, p := range parts {
-					parts[i] = strings.TrimSpace(p)
-
-				}
-
-				guide := models.ImplementationGuidance{
-					Guidance: parts,
-				}
-
-				cInput.AppendImplementationGuidance = []models.ImplementationGuidance{guide}
-				hasUpdate = true
-			}
 
 			if len(commentIDs) > 0 {
 				cInput.AddCommentIDs = commentIDs
@@ -220,17 +182,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if c.ImplementationGuidance != nil {
-					parts := strings.Split(*c.ImplementationGuidance, "\n")
-					for i, p := range parts {
-						parts[i] = strings.TrimSpace(p)
+					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
 
+					if guidance != nil {
+						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})
 					}
-
-					guide := models.ImplementationGuidance{
-						Guidance: parts,
-					}
-
-					base.AppendImplementationGuidance([]models.ImplementationGuidance{guide})
 				}
 
 				err := base.Exec(ctx)
@@ -240,59 +196,12 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			}
 		}
 
-		if c.ControlImplementation != nil && *c.ControlImplementation != "" {
-			// create control implementation
-			cleanImp := strings.Trim(*c.ControlImplementation, "\"")
-			cleanImp = strings.TrimSpace(cleanImp)
-
-			coInput := generated.CreateControlImplementationInput{
-				Status:     &enums.DocumentPublished,
-				Verified:   lo.ToPtr(true),
-				Details:    &cleanImp,
-				OwnerID:    c.OwnerID,
-				ControlIDs: []string{*controlID},
-			}
-
-			err := r.db.ControlImplementation.Create().SetInput(coInput).Exec(ctx)
-			if err != nil {
-				return nil, err
-			}
+		if err := r.createControlImplementation(ctx, c.OwnerID, *controlID, c.ControlImplementation); err != nil {
+			return nil, err
 		}
 
-		if c.ControlObjective != nil && *c.ControlObjective != "" {
-			// create control implementation
-			co := strings.Trim(*c.ControlObjective, "\"")
-			co = strings.TrimSpace(co)
-
-			// create control objective
-			coInput := generated.CreateControlObjectiveInput{
-				DesiredOutcome: c.ControlObjective,
-				Status:         &enums.ObjectiveActiveStatus,
-				OwnerID:        c.OwnerID,
-				ControlIDs:     []string{*controlID},
-			}
-
-			err := r.db.ControlObjective.Create().SetInput(coInput).Exec(ctx)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		if c.Comment != nil {
-			cleanComment := strings.Trim(*c.Comment, "\"")
-			cleanComment = strings.TrimSpace(cleanComment)
-
-			if cleanComment != "" {
-				commentInput := generated.CreateNoteInput{
-					OwnerID: c.OwnerID,
-					Text:    cleanComment,
-				}
-
-				err := r.db.Note.Create().SetInput(commentInput).Exec(ctx)
-				if err != nil {
-					return nil, err
-				}
-			}
+		if err := r.createControlObjective(ctx, c.OwnerID, *controlID, c.ControlObjective); err != nil {
+			return nil, err
 		}
 	}
 

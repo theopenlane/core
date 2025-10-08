@@ -8,11 +8,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/oklog/ulid/v2"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -257,4 +260,94 @@ func getControlIDFromRefCode(refCode string, controls []*generated.Control) (*st
 	}
 
 	return nil, false
+}
+
+// cleanImplementationGuidance cleans and formats the implementation guidance input
+// by splitting on new lines and trimming spaces
+func cleanImplementationGuidance(input *string) *models.ImplementationGuidance {
+	if input == nil || *input == "" {
+		return nil
+	}
+
+	parts := strings.Split(*input, "\n")
+	for i, p := range parts {
+		parts[i] = strings.TrimSpace(p)
+
+	}
+
+	guide := models.ImplementationGuidance{
+		Guidance: parts,
+	}
+
+	return &guide
+}
+
+// createControlImplementation creates a control implementation for the given control ID and owner ID with the provided implementation guidance and makes it verified and published
+func (r *mutationResolver) createControlImplementation(ctx context.Context, ownerID *string, controlID string, input *string) error {
+	if input == nil || *input == "" {
+		return nil
+	}
+
+	cleanImp := strings.Trim(*input, "\"")
+	cleanImp = strings.TrimSpace(cleanImp)
+
+	if cleanImp == "" {
+		return nil
+	}
+	coInput := generated.CreateControlImplementationInput{
+		Status:     &enums.DocumentPublished,
+		Verified:   lo.ToPtr(true),
+		Details:    &cleanImp,
+		OwnerID:    ownerID,
+		ControlIDs: []string{controlID},
+	}
+
+	return r.db.ControlImplementation.Create().SetInput(coInput).Exec(ctx)
+}
+
+// createControlObjective creates a control objective for the given control ID and owner ID with the provided objective details and makes it verified and published
+func (r *mutationResolver) createControlObjective(ctx context.Context, ownerID *string, controlID string, input *string) error {
+	if input == nil || *input == "" {
+		return nil
+	}
+
+	// create control implementation
+	co := strings.Trim(*input, "\"")
+	co = strings.TrimSpace(co)
+
+	// create control objective
+	coInput := generated.CreateControlObjectiveInput{
+		DesiredOutcome: input,
+		Status:         &enums.ObjectiveActiveStatus,
+		OwnerID:        ownerID,
+		ControlIDs:     []string{controlID},
+	}
+
+	return r.db.ControlObjective.Create().SetInput(coInput).Exec(ctx)
+}
+
+// createComment creates a comment for the given control ID and owner ID with the provided comment text
+func (r *mutationResolver) createComment(ctx context.Context, ownerID *string, input *string) ([]string, error) {
+	if input == nil {
+		return nil, nil
+	}
+
+	cleanComment := strings.Trim(*input, "\"")
+	cleanComment = strings.TrimSpace(cleanComment)
+
+	if cleanComment == "" {
+		return nil, nil
+	}
+
+	commentInput := generated.CreateNoteInput{
+		Text:    cleanComment,
+		OwnerID: ownerID,
+	}
+
+	res, err := r.db.Note.Create().SetInput(commentInput).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return []string{res.ID}, nil
 }
