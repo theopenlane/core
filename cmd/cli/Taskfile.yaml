@@ -237,7 +237,7 @@ tasks:
       - task: login
         vars:
           EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
-      - go run -tags cli main.go user get -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email
+      - go run -tags cli main.go user get -s=false -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email'
 
   # === Testing Utilities ===
   test:connection:
