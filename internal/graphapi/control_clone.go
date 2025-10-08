@@ -564,8 +564,11 @@ func (r *mutationResolver) markSubcontrolsAsNotApplicable(ctx context.Context, i
 	return nil
 }
 
+// getFieldsToUpdate returns the fields to update for the given control or subcontrol input
+// by converting the input to a map and checking for non-empty values
+// and then converting back to the appropriate type
+// it will return a boolean indicating if there are any fields to update
 func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontrolInput](c *model.CloneControlUploadInput) (*T, bool) {
-
 	hasUpdate := false
 	updates := map[string]any{}
 
@@ -579,9 +582,9 @@ func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontr
 	}
 
 	for k, v := range *input {
-		if lo.IsNotEmpty(&v) {
-			updates[k] = v
+		if !isEmpty(v) {
 			hasUpdate = true
+			updates[k] = v
 		}
 	}
 
