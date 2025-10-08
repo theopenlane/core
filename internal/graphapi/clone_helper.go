@@ -294,6 +294,7 @@ func (r *mutationResolver) createControlImplementation(ctx context.Context, owne
 	if cleanImp == "" {
 		return nil
 	}
+
 	coInput := generated.CreateControlImplementationInput{
 		Status:     &enums.DocumentPublished,
 		Verified:   lo.ToPtr(true),
@@ -315,9 +316,13 @@ func (r *mutationResolver) createControlObjective(ctx context.Context, ownerID *
 	co := strings.Trim(*input, "\"")
 	co = strings.TrimSpace(co)
 
+	if co == "" {
+		return nil
+	}
+
 	// create control objective
 	coInput := generated.CreateControlObjectiveInput{
-		DesiredOutcome: input,
+		DesiredOutcome: &co,
 		Status:         &enums.ObjectiveActiveStatus,
 		OwnerID:        ownerID,
 		ControlIDs:     []string{controlID},

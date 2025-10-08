@@ -553,12 +553,9 @@ func (r *mutationResolver) markSubcontrolsAsNotApplicable(ctx context.Context, i
 			}
 
 			if !found {
-				err := r.db.Subcontrol.UpdateOneID(sc.ID).SetStatus(enums.ControlStatusNotApplicable).Exec(ctx)
-				if err != nil {
+				if err := r.db.Subcontrol.UpdateOneID(sc.ID).SetStatus(enums.ControlStatusNotApplicable).Exec(ctx); err != nil {
 					return err
 				}
-
-				log.Info().Str("ref_code", sc.RefCode).Msg("marking subcontrol as NOT_APPLICABLE since it was not in the upload list")
 			}
 		}
 	}
