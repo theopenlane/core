@@ -83,6 +83,8 @@ var (
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
+	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
+	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

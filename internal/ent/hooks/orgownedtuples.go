@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // OrgOwnedTuplesHookWithAdmin is a hook that adds organization owned tuples for the object being created
@@ -73,7 +73,7 @@ func hookOrgOwnedTuples(includeAdminRelation bool) ent.Hook {
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 {
-				if _, err := generated.FromContext(ctx).Authz.WriteTupleKeys(ctx, addTuples, nil); err != nil {
+				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, nil); err != nil {
 					return nil, err
 				}
 			}
