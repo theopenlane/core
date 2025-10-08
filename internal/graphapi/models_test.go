@@ -1806,6 +1806,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 // MustNew trust center setting builder is used to create, without authz checks, trust center settings in the database
 func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterSetting {
+	userCtx := ctx
 	ctx = setContext(ctx, tcs.client.db)
 
 	if tcs.Title == "" {
@@ -1821,8 +1822,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	if tcs.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(userCtx, t)
 		tcs.TrustCenterID = trustCenter.ID
 	}
 
@@ -1843,11 +1843,11 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 }
 
 func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterCompliance {
+	userCtx := ctx
 	ctx = setContext(ctx, tccb.client.db)
 
 	if tccb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(userCtx, t)
 		tccb.TrustCenterID = trustCenter.ID
 	}
 
@@ -2101,6 +2101,9 @@ type TrustCenterDocBuilder struct {
 
 // MustNew trust center doc builder is used to create trust center docs using the GraphQL API
 func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterDoc {
+	// save original context for trust center creation to preserve org scoping
+	userCtx := ctx
+
 	if tcdb.Title == "" {
 		tcdb.Title = gofakeit.Sentence(3)
 	}
@@ -2110,8 +2113,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	if tcdb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(userCtx, t)
 		tcdb.TrustCenterID = trustCenter.ID
 	}
 
