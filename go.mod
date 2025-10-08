@@ -14,7 +14,7 @@ tool (
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/secretmanager v1.15.0
+	cloud.google.com/go/secretmanager v1.15.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.81
