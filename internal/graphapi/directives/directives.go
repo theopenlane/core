@@ -151,7 +151,7 @@ var ExternalSourceDirectiveAnnotation = entgql.Directives(
 
 // ExternalSourceDirective is used to mark fields or objects that are populated by an external source
 // that will prevent the ability to update the field if the object is framework sourced
-var ExternalSourceDirective = func(ctx context.Context, _ any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
+var ExternalSourceDirective = func(ctx context.Context, _ any, next graphql.Resolver, _ *enums.ControlSource) (any, error) {
 	// this is a no-op, this is only used for setting the annotations on the schema
 	// to affect the mutation inputs
 	return next(ctx)

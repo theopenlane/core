@@ -579,7 +579,7 @@ func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontr
 	}
 
 	for k, v := range *input {
-		if !lo.IsEmpty(&v) {
+		if lo.IsNotEmpty(&v) {
 			updates[k] = v
 			hasUpdate = true
 		}

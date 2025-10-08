@@ -433,18 +433,3 @@ func convertToObject[J any](obj any) (*J, error) {
 
 	return &result, nil
 }
-
-func convertToMap(obj any) (map[string]any, error) {
-	jsonBytes, err := json.Marshal(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	var result map[string]any
-	err = json.Unmarshal(jsonBytes, &result)
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
-}
