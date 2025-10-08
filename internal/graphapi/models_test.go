@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -1760,7 +1761,9 @@ type TrustCenterComplianceBuilder struct {
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
-	ctx = setContext(ctx, tc.client.db)
+	ctx = ent.NewContext(ctx, tc.client.db)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 
 	if tc.Slug == "" {
 		tc.Slug = randomName(t)
