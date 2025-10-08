@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -37,14 +38,18 @@ func NewExtension(opts ...ExtensionOption) (*Extension, error) {
 
 // SchemaHooks of the extension to seamlessly edit the final gql interface
 func (e *Extension) SchemaHooks() []entgql.SchemaHook {
-	return []entgql.SchemaHook{addInputDirectiveHook(Hidden, ReadOnly), addInputDirectiveHook(ExternalSource, ExternalReadOnly)}
+	return []entgql.SchemaHook{
+		addInputDirectiveHook(Hidden, ReadOnly, nil),
+		addInputDirectiveHook(ExternalSource, ExternalReadOnly, ast.ArgumentList{
+			argsWithControlSource(enums.ControlSourceFramework),
+		})}
 }
 
 // addInputDirectiveHook is used to add the out directive to input fields that are marked with the in
 // directive this prevents fields from being set in create and update mutations
 // as of today, there is no way to annotate a schema to do this automatically so we use a schema
 // addInputDirectiveHook to modify the generated schema
-func addInputDirectiveHook(in, out string) func(_ *gen.Graph, s *ast.Schema) error {
+func addInputDirectiveHook(in, out string, args ast.ArgumentList) func(_ *gen.Graph, s *ast.Schema) error {
 	return func(_ *gen.Graph, s *ast.Schema) error {
 		for _, t := range s.Types {
 			// if the type is an input object, we want to check its fields for directives
@@ -59,7 +64,7 @@ func addInputDirectiveHook(in, out string) func(_ *gen.Graph, s *ast.Schema) err
 			}
 
 			for _, f := range t.Fields {
-				setDirectiveOnInput(f, object, t, in, out)
+				setDirectiveOnInput(f, object, t, in, out, args)
 			}
 
 		}
@@ -70,7 +75,7 @@ func addInputDirectiveHook(in, out string) func(_ *gen.Graph, s *ast.Schema) err
 // setDirectiveOnInput checks if a field in an input object corresponds to a field in the main object
 // that is marked with the checkForDirective. If it is, it adds the directiveName to the input field
 // and also to the clear<FieldName> field if it exists
-func setDirectiveOnInput(f *ast.FieldDefinition, object *ast.Definition, t *ast.Definition, checkForDirective, directiveName string) {
+func setDirectiveOnInput(f *ast.FieldDefinition, object *ast.Definition, t *ast.Definition, checkForDirective, directiveName string, args ast.ArgumentList) {
 	// get the directives from the corresponding object field
 	field := object.Fields.ForName(f.Name)
 	if field == nil {
@@ -85,12 +90,17 @@ func setDirectiveOnInput(f *ast.FieldDefinition, object *ast.Definition, t *ast.
 	// so that it cannot be set in mutations
 	for _, d := range field.Directives {
 		if d.Name == checkForDirective {
-			f.Directives = append(f.Directives, &ast.Directive{Name: directiveName})
+			dir := &ast.Directive{Name: directiveName}
+			if args != nil {
+				dir.Arguments = args
+			}
+
+			f.Directives = append(f.Directives, dir)
 
 			// if the field is marked with the directiveName, we also need to make the clear<FieldName> field marked with the directiveName
 			clearField := "clear" + strcase.UpperCamelCase(f.Name)
 			if t.Fields.ForName(clearField) != nil {
-				t.Fields.ForName(clearField).Directives = append(t.Fields.ForName(clearField).Directives, &ast.Directive{Name: directiveName})
+				t.Fields.ForName(clearField).Directives = append(t.Fields.ForName(clearField).Directives, dir)
 			}
 		}
 	}

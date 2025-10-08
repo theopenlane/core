@@ -417,3 +417,34 @@ func stripOperation(field string) string {
 
 	return field
 }
+
+// convertToObject converts an object to a specific type
+func convertToObject[J any](obj any) (*J, error) {
+	jsonBytes, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+
+	var result J
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func convertToMap(obj any) (map[string]any, error) {
+	jsonBytes, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]any
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

@@ -316,40 +316,8 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}
 
-	for _, c := range out.Controls {
-		for _, sc := range c.Edges.Subcontrols {
-			found := false
-			refCode := sc.RefCode
-			aliases := sc.Aliases
-
-			for _, c := range data {
-				if c.RefCode == &refCode {
-					found = true
-					break
-				}
-
-				for _, alias := range aliases {
-					if c.RefCode == &alias {
-						found = true
-						break
-					}
-				}
-
-				if found {
-					break
-				}
-			}
-
-			if !found {
-				// update status to NOT_APPLICABLE
-				err := r.db.Subcontrol.UpdateOneID(sc.ID).SetStatus(enums.ControlStatusNotApplicable).Exec(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				log.Info().Str("ref_code", sc.RefCode).Msg("marking subcontrol as NOT_APPLICABLE since it was not in the upload list")
-			}
-		}
+	if err := r.markSubcontrolsAsNotApplicable(ctx, data, out.Controls); err != nil {
+		return nil, err
 	}
 
 	return out, nil

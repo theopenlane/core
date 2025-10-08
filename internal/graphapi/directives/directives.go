@@ -126,7 +126,10 @@ var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Re
 		return next(ctx)
 	}
 
-	if checkFieldSet(ctx) && !checkSourceAllowed(ctx, source) {
+	fieldSet := checkFieldSet(ctx)
+	allowed := checkSourceAllowed(ctx, source)
+
+	if fieldSet && !allowed {
 		return nil, ErrReadOnlyField
 	}
 
@@ -206,22 +209,22 @@ func checkFieldSet(ctx context.Context) bool {
 // checkIsSystemOwned checks if the object is system owned
 // this is used in the externalReadOnly directive to prevent non-system admin users
 // from setting fields that are populated by an external source on system-owned objects
-func checkSourceAllowed(ctx context.Context, source *enums.ControlSource) bool {
-	if source == nil {
+func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSource) bool {
+	if restrictedSource == nil {
 		return true
 	}
 
 	id := graphutils.GetStringInputVariableByName(ctx, "id")
 	if id == nil {
 		zerolog.Ctx(ctx).Error().Msg("no id found in context for externalReadOnly directive")
-		return false
+		return true
 	}
 
 	// now get the object from the database
 	client := ent.FromContext(ctx)
 	if client == nil {
 		zerolog.Ctx(ctx).Error().Msg("no ent client found in context for externalReadOnly directive")
-		return false
+		return true
 	}
 
 	var objSource *enums.ControlSource
@@ -233,7 +236,7 @@ func checkSourceAllowed(ctx context.Context, source *enums.ControlSource) bool {
 		if err != nil {
 			zerolog.Ctx(ctx).Error().Msg("failed to check for object source in externalReadOnly directive")
 
-			return false
+			return true
 		}
 
 		objSource = &obj.Source
@@ -241,5 +244,5 @@ func checkSourceAllowed(ctx context.Context, source *enums.ControlSource) bool {
 
 	// only allow if the source is different than the one on the object
 	// the specified source is not allowed to make changes
-	return objSource != source
+	return *objSource != *restrictedSource
 }

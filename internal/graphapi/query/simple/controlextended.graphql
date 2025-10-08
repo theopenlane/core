@@ -41,6 +41,50 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
   }
 }
 
+mutation CloneBulkCSVControl($input: Upload!) {
+  cloneBulkCSVControl(input: $input) {
+    controls {
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      referenceFrameworkRevision
+      referenceID
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+      subcontrols {
+        edges {
+          node {
+            id
+            refCode
+            title
+          }
+        }
+      }
+    }
+  }
+}
+
 mutation CreateControlsByCloneReturnID($input: CloneControlInput!) {
   createControlsByClone(input: $input) {
     controls {

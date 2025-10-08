@@ -1172,7 +1172,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			// this field doesn't actually need to be unique, but is an easy way to do the tests
 			SetCategory(gofakeit.Adjective() + ulids.New().String()).
 			SetCategoryID(ulids.New().String()).
-			SetSubcategory(gofakeit.Adjective()).
+			SetSubcategory(gofakeit.Adjective() + ulids.New().String()).
 			SetControlType(enums.ControlTypeDetective).
 			SetExampleEvidence([]models.ExampleEvidence{
 				{

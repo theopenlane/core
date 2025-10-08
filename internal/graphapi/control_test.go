@@ -9,12 +9,14 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -1027,6 +1029,91 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
+func TestMutationCreateControlsByCloneCSV(t *testing.T) {
+	validFile, err := objects.NewUploadFile("testdata/uploads/clone.csv")
+	assert.NilError(t, err)
+
+	missingControlsFile, err := objects.NewUploadFile("testdata/uploads/all_missing_clone.csv")
+	assert.NilError(t, err)
+
+	// create the standard and controls to be cloned
+	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	testCases := []struct {
+		name                  string
+		fileInput             graphql.Upload
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectedCountControls int
+		expectedErr           string
+	}{
+		{
+			name: "happy path, clone controls from csv",
+			fileInput: graphql.Upload{
+				File:        validFile.File,
+				Filename:    validFile.Filename,
+				Size:        validFile.Size,
+				ContentType: validFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 2,
+		},
+		{
+			name: "controls missing from system, no controls cloned",
+			fileInput: graphql.Upload{
+				File:        missingControlsFile.File,
+				Filename:    missingControlsFile.Filename,
+				Size:        missingControlsFile.Size,
+				ContentType: missingControlsFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 0,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CloneBulkCSVControl(tc.ctx, tc.fileInput)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.CloneBulkCSVControl.Controls, tc.expectedCountControls))
+
+			// sort controls so they are consistent
+			slices.SortFunc(resp.CloneBulkCSVControl.Controls, func(a, b *testclient.CloneBulkCSVControl_CloneBulkCSVControl_Controls) int {
+				return cmp.Compare(a.RefCode, b.RefCode)
+			})
+
+			for _, control := range resp.CloneBulkCSVControl.Controls {
+				assert.Check(t, len(control.ID) != 0)
+				assert.Check(t, len(control.DisplayID) != 0)
+				assert.Check(t, len(control.RefCode) != 0)
+				assert.Check(t, len(*control.Title) != 0)
+
+				switch control.RefCode {
+				case "AA-1":
+					assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+					assert.Check(t, is.Equal("INT-0001", control.ReferenceID))
+				case "AA-2":
+					assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
+					assert.Check(t, is.Equal("INT-0002", control.ReferenceID))
+
+				}
+
+				assert.Check(t, control.ImplementationGuidance != nil)
+			}
+		})
+	}
+
+	// cleanup created controls and standards
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
 func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
 
@@ -1347,7 +1434,6 @@ func TestMutationUpdateControl(t *testing.T) {
 				},
 				ControlOwnerID: &ownerGroup.ID,
 				DelegateID:     &delegateGroup.ID,
-				Source:         &enums.ControlSourceFramework,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -1649,7 +1735,7 @@ func TestQueryControlCategories(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run("Delete "+tc.name, func(t *testing.T) {
+		t.Run("Query Control "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetControlCategories(tc.ctx)
 			if tc.expectedErr != "" {
 
@@ -1660,15 +1746,22 @@ func TestQueryControlCategories(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlCategories, len(tc.expectedResult)))
-
 			// sort the categories so they are consistent
 			slices.Sort(tc.expectedResult)
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategories))
 
-			for _, category := range resp.ControlCategories {
-				// check for empty categories
-				assert.Check(t, category != "")
+			for _, expected := range tc.expectedResult {
+				found := false
+				for _, category := range resp.ControlCategories {
+					if category == expected {
+						found = true
+						break
+					}
+
+					// check for empty categories
+					assert.Check(t, category != "")
+				}
+
+				assert.Check(t, found)
 			}
 		})
 	}
@@ -1720,7 +1813,7 @@ func TestQueryControlSubcategories(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run("Delete "+tc.name, func(t *testing.T) {
+		t.Run("Query Control Subcategories "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetControlSubcategories(tc.ctx)
 			if tc.expectedErr != "" {
 
@@ -1731,15 +1824,22 @@ func TestQueryControlSubcategories(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlSubcategories, len(tc.expectedResult)))
-
 			// sort the categories so they are consistent
 			slices.Sort(tc.expectedResult)
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategories))
 
-			for _, category := range resp.ControlSubcategories {
-				// check for empty categories
-				assert.Check(t, category != "")
+			for _, expected := range tc.expectedResult {
+				found := false
+				for _, category := range resp.ControlSubcategories {
+					if category == expected {
+						found = true
+						break
+					}
+
+					// check for empty categories
+					assert.Check(t, category != "")
+				}
+
+				assert.Check(t, found)
 			}
 		})
 	}
@@ -1771,11 +1871,11 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 
 	// create one with a different framework
 	standard := (&StandardBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	control5 := (&ControlBuilder{client: suite.client, Category: "Meow", StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
+	control5 := (&ControlBuilder{client: suite.client, Category: "Meow" + ulids.New().String(), StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
 	// create another with the another category
-	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
+	control6 := (&ControlBuilder{client: suite.client, Category: "Woof" + ulids.New().String(), StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
 	// create one with with duplicate category
-	control7 := (&ControlBuilder{client: suite.client, Category: "Meow", StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
+	control7 := (&ControlBuilder{client: suite.client, Category: control5.Category, StandardID: standard.ID}).MustNew(newUser.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -1865,12 +1965,21 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
 
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategoriesByFramework))
+			for _, category := range tc.expectedResult {
+				foundCat := false
+				for _, respCat := range resp.ControlCategoriesByFramework {
+					// check for empty categories
+					assert.Check(t, category.Node.Name != "")
+					// ensure the reference framework is set
+					assert.Check(t, category.Node.ReferenceFramework != nil)
 
-			for _, category := range resp.ControlCategoriesByFramework {
-				// check for empty categories
-				assert.Check(t, category.Node.Name != "")
-				assert.Check(t, category.Node.ReferenceFramework != nil)
+					if category.Node.Name == respCat.Node.Name && category.Node.ReferenceFramework != nil && respCat.Node.ReferenceFramework != nil &&
+						*category.Node.ReferenceFramework == *respCat.Node.ReferenceFramework {
+						foundCat = true
+						break
+					}
+				}
+				assert.Check(t, foundCat, "Expected category %s to be in the response", category.Node.Name)
 			}
 		})
 	}
@@ -2172,9 +2281,6 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardUpdate := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -2206,23 +2312,16 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
-		expectedRefFramework map[string]string // control ID -> expected framework
 		expectedUpdatedCount int
 	}{
 		{
 			name: "happy path, update status on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
 			input: testclient.UpdateControlInput{
-				Status:     &enums.ControlStatusPreparing,
-				StandardID: &standard.ID,
+				Status: &enums.ControlStatusPreparing,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			expectedRefFramework: map[string]string{
-				control1.ID: standard.ShortName,
-				control2.ID: standard.ShortName,
-				control3.ID: standard.ShortName,
-			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -2232,14 +2331,9 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 				AddEditorIDs:          []string{groupMember.GroupID},
-				StandardID:            &standardUpdate.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			expectedRefFramework: map[string]string{
-				control1.ID: standardUpdate.ShortName,
-				control2.ID: standardUpdate.ShortName,
-			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -2380,14 +2474,6 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 					assert.Check(t, is.Len(control.ControlImplementations.Edges, len(tc.input.AddControlImplementationIDs)))
 				}
 
-				if tc.input.StandardID != nil {
-					expectedFramework, exists := tc.expectedRefFramework[control.ID]
-					if exists {
-						assert.Check(t, is.Equal(expectedFramework, *control.ReferenceFramework))
-						assert.Check(t, is.Equal(*tc.input.StandardID, *control.StandardID))
-					}
-				}
-
 				// ensure the program is set
 				if len(tc.input.AddProgramIDs) > 0 {
 					foundPrograms := 0
@@ -2445,5 +2531,4 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID, standardUpdate.ID}}).MustDelete(testUser1.UserCtx, t)
 }

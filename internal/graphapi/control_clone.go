@@ -54,7 +54,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
 		All(ctx)
 	if err != nil || stds == nil || len(stds) == 0 {
-		log.Error().Err(err).Msgf("error getting standard with ID %s", *filters.standardID)
+		log.Error().Err(err).Msgf("error getting standard with ID")
 
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 	// if we have more than one standard, and the version was provided, return an error
 	// because we are unable to determine which standard to use
 	if len(stds) > 1 && (filters.standardShortName != nil && filters.standardVersion != nil) {
-		log.Error().Err(err).Msgf("error getting standard with ID %s", *filters.standardID)
+		log.Error().Err(err).Msgf("error getting standard with ID")
 
 		return nil, fmt.Errorf("%w: error getting standard, too many results", ErrInvalidInput)
 	}
@@ -522,4 +522,75 @@ func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context
 
 	// return the first error but log all
 	return errors[0]
+}
+
+func (r *mutationResolver) markSubcontrolsAsNotApplicable(ctx context.Context, input []*model.CloneControlUploadInput, controls []*generated.Control) error {
+	// find any subcontrols that were created but aren't in the list, and mark as NOT_APPLICABLE
+	for _, c := range controls {
+		for _, sc := range c.Edges.Subcontrols {
+			found := false
+			refCode := sc.RefCode
+			aliases := sc.Aliases
+
+			for _, c := range input {
+				if c.RefCode == &refCode {
+					found = true
+					break
+				}
+
+				for _, alias := range aliases {
+					if c.RefCode == &alias {
+						found = true
+						break
+					}
+				}
+
+				if found {
+					break
+				}
+			}
+
+			if !found {
+				err := r.db.Subcontrol.UpdateOneID(sc.ID).SetStatus(enums.ControlStatusNotApplicable).Exec(ctx)
+				if err != nil {
+					return err
+				}
+
+				log.Info().Str("ref_code", sc.RefCode).Msg("marking subcontrol as NOT_APPLICABLE since it was not in the upload list")
+			}
+		}
+	}
+
+	return nil
+}
+
+func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontrolInput](c *model.CloneControlUploadInput) (*T, bool) {
+
+	hasUpdate := false
+	updates := map[string]any{}
+
+	input, err := convertToObject[map[string]any](c.ControlInput)
+	if err != nil {
+		return nil, false
+	}
+
+	if input == nil {
+		return nil, false
+	}
+
+	for k, v := range *input {
+		if !lo.IsEmpty(&v) {
+			updates[k] = v
+			hasUpdate = true
+		}
+	}
+
+	out, err := convertToObject[T](updates)
+	if err != nil {
+		log.Error().Err(err).Msg("error converting updates to object")
+
+		return nil, false
+	}
+
+	return out, hasUpdate
 }

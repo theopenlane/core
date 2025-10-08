@@ -46817,11 +46817,11 @@ input CreateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String @externalReadOnly
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String @externalReadOnly
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -46841,15 +46841,15 @@ input CreateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource @externalReadOnly
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String @externalReadOnly
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
-  referenceFrameworkRevision: String @externalReadOnly
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -46857,15 +46857,15 @@ input CreateControlInput {
   """
   category of the control
   """
-  category: String @externalReadOnly
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String @externalReadOnly
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String @externalReadOnly
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -46905,7 +46905,7 @@ input CreateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String! @externalReadOnly
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -48570,11 +48570,11 @@ input CreateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String @externalReadOnly
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String @externalReadOnly
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -48594,15 +48594,15 @@ input CreateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource @externalReadOnly
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String @externalReadOnly
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
-  referenceFrameworkRevision: String @externalReadOnly
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -48610,15 +48610,15 @@ input CreateSubcontrolInput {
   """
   category of the control
   """
-  category: String @externalReadOnly
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String @externalReadOnly
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String @externalReadOnly
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -48658,7 +48658,7 @@ input CreateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String! @externalReadOnly
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -92784,13 +92784,13 @@ input UpdateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String @externalReadOnly
-  clearTitle: Boolean @externalReadOnly
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String @externalReadOnly
-  clearDescription: Boolean @externalReadOnly
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -92815,13 +92815,13 @@ input UpdateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource @externalReadOnly
-  clearSource: Boolean @externalReadOnly
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
-  referenceFrameworkRevision: String @externalReadOnly
-  clearReferenceFrameworkRevision: Boolean @externalReadOnly
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -92830,18 +92830,18 @@ input UpdateControlInput {
   """
   category of the control
   """
-  category: String @externalReadOnly
-  clearCategory: Boolean @externalReadOnly
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String @externalReadOnly
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String @externalReadOnly
-  clearSubcategory: Boolean @externalReadOnly
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -92897,7 +92897,7 @@ input UpdateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String @externalReadOnly
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -95251,13 +95251,13 @@ input UpdateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String @externalReadOnly
-  clearTitle: Boolean @externalReadOnly
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String @externalReadOnly
-  clearDescription: Boolean @externalReadOnly
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -95282,13 +95282,13 @@ input UpdateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource @externalReadOnly
-  clearSource: Boolean @externalReadOnly
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
-  referenceFrameworkRevision: String @externalReadOnly
-  clearReferenceFrameworkRevision: Boolean @externalReadOnly
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -95297,18 +95297,18 @@ input UpdateSubcontrolInput {
   """
   category of the control
   """
-  category: String @externalReadOnly
-  clearCategory: Boolean @externalReadOnly
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String @externalReadOnly
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String @externalReadOnly
-  clearSubcategory: Boolean @externalReadOnly
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -95364,7 +95364,7 @@ input UpdateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String @externalReadOnly
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
