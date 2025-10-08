@@ -62,11 +62,11 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 				r.Category: true,
 			}
 		} else {
-			if fieldName == control.FieldCategory && r.Category == "" {
+			if fieldName == control.FieldCategory && r.Category != "" {
 				if _, ok := tmp[refFramework][r.Category]; !ok {
 					tmp[refFramework][r.Category] = true
 				}
-			} else if fieldName == control.FieldSubcategory && r.Subcategory == "" {
+			} else if fieldName == control.FieldSubcategory && r.Subcategory != "" {
 				if _, ok := tmp[refFramework][r.Subcategory]; !ok {
 					tmp[refFramework][r.Subcategory] = true
 				}
