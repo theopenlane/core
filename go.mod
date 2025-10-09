@@ -82,7 +82,7 @@ require (
 	github.com/riverqueue/river/rivertype v0.26.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.34.0
-	github.com/samber/lo v1.51.0
+	github.com/samber/lo v1.52.0
 	github.com/sebdah/goldie/v2 v2.7.1
 	github.com/spf13/cast v1.10.0
 	github.com/spf13/cobra v1.10.1
