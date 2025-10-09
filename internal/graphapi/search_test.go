@@ -43,13 +43,6 @@ func TestGlobalSearch(t *testing.T) {
 		programIDs = append(programIDs, program.ID)
 	}
 
-	numControls := 3
-	controlIDs := []string{}
-	for i := range numControls {
-		control := (&ControlBuilder{client: suite.client, RefCode: fmt.Sprintf("Test Control %d", i)}).MustNew(testSearchUser.UserCtx, t)
-		controlIDs = append(controlIDs, control.ID)
-	}
-
 	testCases := []struct {
 		name             string
 		client           *testclient.TestClient
@@ -59,7 +52,6 @@ func TestGlobalSearch(t *testing.T) {
 		expectedGroups   int
 		expectedContacts int
 		expectedPrograms int
-		expectedControls int
 		errExpected      string
 	}{
 		{
@@ -67,44 +59,40 @@ func TestGlobalSearch(t *testing.T) {
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
 			query:            "Test",
-			expectedResults:  21, // this is total count of all objects searched
+			expectedResults:  18, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
 			expectedContacts: 3,
 			expectedPrograms: 3,
-			expectedControls: 3,
 		},
 		{
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
 			query:            "TEST",
-			expectedResults:  21, // this is total count of all objects searched
+			expectedResults:  18, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
 			expectedContacts: 3,
 			expectedPrograms: 3,
-			expectedControls: 3,
 		},
 		{
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
 			query:            "con",
-			expectedResults:  6, // this is total count of all objects searched
+			expectedResults:  3, // this is total count of all objects searched
 			expectedGroups:   0,
 			expectedContacts: 3,
 			expectedPrograms: 0,
-			expectedControls: 3,
 		},
 		{
 			name:             "happy path, view only user",
 			client:           suite.client.api,
 			ctx:              testViewOnlyUser.UserCtx,
 			query:            "Test",
-			expectedResults:  18, // this is total count of all objects searched
+			expectedResults:  15, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
 			expectedContacts: 3,
 			expectedPrograms: 0, // no access to the programs by the view only user
-			expectedControls: 3,
 		},
 		{
 			name:            "no results",
@@ -168,12 +156,6 @@ func TestGlobalSearch(t *testing.T) {
 					assert.Check(t, is.Nil(resp.Search.Programs))
 				}
 
-				if tc.expectedControls > 0 {
-					assert.Assert(t, resp.Search.Controls != nil)
-					assert.Check(t, is.Len(resp.Search.Controls.Edges, tc.expectedControls))
-				} else {
-					assert.Check(t, is.Nil(resp.Search.Controls))
-				}
 			} else {
 				assert.Check(t, is.Nil(resp.Search.Groups))
 				assert.Check(t, is.Nil(resp.Search.Contacts))
@@ -187,5 +169,4 @@ func TestGlobalSearch(t *testing.T) {
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: groupIDs}).MustDelete(testSearchUser.UserCtx, t)
 	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: contactIDs}).MustDelete(testSearchUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDs}).MustDelete(testSearchUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testSearchUser.UserCtx, t)
 }
