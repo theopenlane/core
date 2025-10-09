@@ -92,6 +92,8 @@ const (
 	EdgeAssigneeTasks = "assignee_tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
+	EdgeProgramOwner = "program_owner"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
@@ -202,6 +204,13 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// ProgramOwnerTable is the table that holds the program_owner relation/edge.
+	ProgramOwnerTable = "programs"
+	// ProgramOwnerInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramOwnerInverseTable = "programs"
+	// ProgramOwnerColumn is the table column denoting the program_owner relation/edge.
+	ProgramOwnerColumn = "program_owner_id"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -670,6 +679,13 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProgramOwnerField orders the results by program_owner field.
+func ByProgramOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByGroupMembershipsCount orders the results by group_memberships count.
 func ByGroupMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -821,6 +837,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newProgramOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramOwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, ProgramOwnerTable, ProgramOwnerColumn),
 	)
 }
 func newGroupMembershipsStep() *sqlgraph.Step {

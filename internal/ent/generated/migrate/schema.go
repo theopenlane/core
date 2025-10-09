@@ -3630,6 +3630,7 @@ var (
 		{Name: "auditor", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_email", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "program_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
 	ProgramsTable = &schema.Table{
@@ -3641,6 +3642,12 @@ var (
 				Symbol:     "programs_organizations_programs",
 				Columns:    []*schema.Column{ProgramsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_users_program_owner",
+				Columns:    []*schema.Column{ProgramsColumns[23]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3688,6 +3695,7 @@ var (
 		{Name: "audit_firm", Type: field.TypeString, Nullable: true},
 		{Name: "auditor", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_email", Type: field.TypeString, Nullable: true},
+		{Name: "program_owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramHistoryTable holds the schema information for the "program_history" table.
 	ProgramHistoryTable = &schema.Table{
@@ -8731,6 +8739,7 @@ func init() {
 		Table: "procedure_history",
 	}
 	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ProgramsTable.ForeignKeys[1].RefTable = UsersTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
 	}

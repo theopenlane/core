@@ -2645,6 +2645,9 @@ func (_m *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(_m.AuditorEmail, new.AuditorEmail) {
 		changes = append(changes, NewChange(programhistory.FieldAuditorEmail, _m.AuditorEmail, new.AuditorEmail))
 	}
+	if !reflect.DeepEqual(_m.ProgramOwnerID, new.ProgramOwnerID) {
+		changes = append(changes, NewChange(programhistory.FieldProgramOwnerID, _m.ProgramOwnerID, new.ProgramOwnerID))
+	}
 	return changes
 }
 

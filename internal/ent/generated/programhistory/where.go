@@ -171,6 +171,11 @@ func AuditorEmail(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorEmail, v))
 }
 
+// ProgramOwnerID applies equality check predicate on the "program_owner_id" field. It's identical to ProgramOwnerIDEQ.
+func ProgramOwnerID(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramOwnerID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1459,6 +1464,81 @@ func AuditorEmailEqualFold(v string) predicate.ProgramHistory {
 // AuditorEmailContainsFold applies the ContainsFold predicate on the "auditor_email" field.
 func AuditorEmailContainsFold(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldContainsFold(FieldAuditorEmail, v))
+}
+
+// ProgramOwnerIDEQ applies the EQ predicate on the "program_owner_id" field.
+func ProgramOwnerIDEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDNEQ applies the NEQ predicate on the "program_owner_id" field.
+func ProgramOwnerIDNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDIn applies the In predicate on the "program_owner_id" field.
+func ProgramOwnerIDIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldProgramOwnerID, vs...))
+}
+
+// ProgramOwnerIDNotIn applies the NotIn predicate on the "program_owner_id" field.
+func ProgramOwnerIDNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldProgramOwnerID, vs...))
+}
+
+// ProgramOwnerIDGT applies the GT predicate on the "program_owner_id" field.
+func ProgramOwnerIDGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDGTE applies the GTE predicate on the "program_owner_id" field.
+func ProgramOwnerIDGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDLT applies the LT predicate on the "program_owner_id" field.
+func ProgramOwnerIDLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDLTE applies the LTE predicate on the "program_owner_id" field.
+func ProgramOwnerIDLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDContains applies the Contains predicate on the "program_owner_id" field.
+func ProgramOwnerIDContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDHasPrefix applies the HasPrefix predicate on the "program_owner_id" field.
+func ProgramOwnerIDHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDHasSuffix applies the HasSuffix predicate on the "program_owner_id" field.
+func ProgramOwnerIDHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDIsNil applies the IsNil predicate on the "program_owner_id" field.
+func ProgramOwnerIDIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldProgramOwnerID))
+}
+
+// ProgramOwnerIDNotNil applies the NotNil predicate on the "program_owner_id" field.
+func ProgramOwnerIDNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldProgramOwnerID))
+}
+
+// ProgramOwnerIDEqualFold applies the EqualFold predicate on the "program_owner_id" field.
+func ProgramOwnerIDEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDContainsFold applies the ContainsFold predicate on the "program_owner_id" field.
+func ProgramOwnerIDContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldProgramOwnerID, v))
 }
 
 // And groups predicates with the AND operator between them.

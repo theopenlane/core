@@ -554,6 +554,25 @@ func (_c *UserCreate) AddPrograms(v ...*Program) *UserCreate {
 	return _c.AddProgramIDs(ids...)
 }
 
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_c *UserCreate) SetProgramOwnerID(id string) *UserCreate {
+	_c.mutation.SetProgramOwnerID(id)
+	return _c
+}
+
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_c *UserCreate) SetNillableProgramOwnerID(id *string) *UserCreate {
+	if id != nil {
+		_c = _c.SetProgramOwnerID(*id)
+	}
+	return _c
+}
+
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_c *UserCreate) SetProgramOwner(v *Program) *UserCreate {
+	return _c.SetProgramOwnerID(v.ID)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (_c *UserCreate) AddGroupMembershipIDs(ids ...string) *UserCreate {
 	_c.mutation.AddGroupMembershipIDs(ids...)
@@ -1148,6 +1167,23 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}

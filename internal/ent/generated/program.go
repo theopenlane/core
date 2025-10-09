@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -64,6 +65,8 @@ type Program struct {
 	Auditor string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
 	AuditorEmail string `json:"auditor_email,omitempty"`
+	// the id of the user who is responsible for this program
+	ProgramOwnerID string `json:"program_owner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges        ProgramEdges `json:"edges"`
@@ -106,13 +109,15 @@ type ProgramEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -288,10 +293,21 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "users"}
 }
 
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramEdges) UserOrErr() (*User, error) {
+	if e.User != nil {
+		return e.User, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -306,7 +322,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -465,6 +481,12 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.AuditorEmail = value.String
 			}
+		case program.FieldProgramOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_owner_id", values[i])
+			} else if value.Valid {
+				_m.ProgramOwnerID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -563,6 +585,11 @@ func (_m *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(_m.config).QueryUsers(_m)
 }
 
+// QueryUser queries the "user" edge of the Program entity.
+func (_m *Program) QueryUser() *UserQuery {
+	return NewProgramClient(_m.config).QueryUser(_m)
+}
+
 // QueryMembers queries the "members" edge of the Program entity.
 func (_m *Program) QueryMembers() *ProgramMembershipQuery {
 	return NewProgramClient(_m.config).QueryMembers(_m)
@@ -656,6 +683,9 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auditor_email=")
 	builder.WriteString(_m.AuditorEmail)
+	builder.WriteString(", ")
+	builder.WriteString("program_owner_id=")
+	builder.WriteString(_m.ProgramOwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

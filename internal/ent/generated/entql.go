@@ -2450,6 +2450,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldAuditFirm:            {Type: field.TypeString, Column: program.FieldAuditFirm},
 			program.FieldAuditor:              {Type: field.TypeString, Column: program.FieldAuditor},
 			program.FieldAuditorEmail:         {Type: field.TypeString, Column: program.FieldAuditorEmail},
+			program.FieldProgramOwnerID:       {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[74] = &sqlgraph.Node{
@@ -2488,6 +2489,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldAuditFirm:            {Type: field.TypeString, Column: programhistory.FieldAuditFirm},
 			programhistory.FieldAuditor:              {Type: field.TypeString, Column: programhistory.FieldAuditor},
 			programhistory.FieldAuditorEmail:         {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
+			programhistory.FieldProgramOwnerID:       {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[75] = &sqlgraph.Node{
@@ -7831,6 +7833,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"User",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -9241,6 +9255,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   user.ProgramsTable,
 			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+		},
+		"User",
+		"Program",
+	)
+	graph.MustAddE(
+		"program_owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -23748,6 +23774,11 @@ func (f *ProgramFilter) WhereAuditorEmail(p entql.StringP) {
 	f.Where(p.Field(program.FieldAuditorEmail))
 }
 
+// WhereProgramOwnerID applies the entql string predicate on the program_owner_id field.
+func (f *ProgramFilter) WhereProgramOwnerID(p entql.StringP) {
+	f.Where(p.Field(program.FieldProgramOwnerID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ProgramFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -23986,6 +24017,20 @@ func (f *ProgramFilter) WhereHasUsersWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasUser applies a predicate to check if query has an edge user.
+func (f *ProgramFilter) WhereHasUser() {
+	f.Where(entql.HasEdge("user"))
+}
+
+// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *ProgramFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -24163,6 +24208,11 @@ func (f *ProgramHistoryFilter) WhereAuditor(p entql.StringP) {
 // WhereAuditorEmail applies the entql string predicate on the auditor_email field.
 func (f *ProgramHistoryFilter) WhereAuditorEmail(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldAuditorEmail))
+}
+
+// WhereProgramOwnerID applies the entql string predicate on the program_owner_id field.
+func (f *ProgramHistoryFilter) WhereProgramOwnerID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldProgramOwnerID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -30132,6 +30182,20 @@ func (f *UserFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *UserFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProgramOwner applies a predicate to check if query has an edge program_owner.
+func (f *UserFilter) WhereHasProgramOwner() {
+	f.Where(entql.HasEdge("program_owner"))
+}
+
+// WhereHasProgramOwnerWith applies a predicate to check if query has an edge program_owner with a given conditions (other predicates).
+func (f *UserFilter) WhereHasProgramOwnerWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("program_owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

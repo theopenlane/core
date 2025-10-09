@@ -1495,13 +1495,14 @@ func adminSearchPrograms(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				program.OwnerIDContainsFold(query),       // search by OwnerID
-				program.NameContainsFold(query),          // search by Name
-				program.DescriptionContainsFold(query),   // search by Description
-				program.FrameworkNameContainsFold(query), // search by FrameworkName
-				program.AuditFirmContainsFold(query),     // search by AuditFirm
-				program.AuditorContainsFold(query),       // search by Auditor
-				program.AuditorEmailContainsFold(query),  // search by AuditorEmail
+				program.OwnerIDContainsFold(query),        // search by OwnerID
+				program.NameContainsFold(query),           // search by Name
+				program.DescriptionContainsFold(query),    // search by Description
+				program.FrameworkNameContainsFold(query),  // search by FrameworkName
+				program.AuditFirmContainsFold(query),      // search by AuditFirm
+				program.AuditorContainsFold(query),        // search by Auditor
+				program.AuditorEmailContainsFold(query),   // search by AuditorEmail
+				program.ProgramOwnerIDContainsFold(query), // search by ProgramOwnerID
 			),
 		)
 

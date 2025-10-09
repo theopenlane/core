@@ -733,6 +733,7 @@ query AdminSearch($query: String!) {
           auditFirm
           auditor
           auditorEmail
+          programOwnerID
         }
       }
     }

@@ -7621,10 +7621,6 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
-  """
-  SSO verification time for the owning organization
-  """
-  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -9202,10 +9198,6 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
-  """
-  SSO authorization timestamps by organization id
-  """
-  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -9382,6 +9374,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
+  userID: ID
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -10117,6 +10110,7 @@ input CreateUserInput {
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
+  programOwnerID: ID
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -35192,6 +35186,10 @@ type Program implements Node {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  """
+  the id of the user who is responsible for this program
+  """
+  programOwnerID: ID
   owner: Organization
   blockedGroups(
     """
@@ -35689,6 +35687,7 @@ type Program implements Node {
     """
     where: UserWhereInput
   ): UserConnection!
+  user: User
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -35824,6 +35823,10 @@ type ProgramHistory implements Node {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  """
+  the id of the user who is responsible for this program
+  """
+  programOwnerID: String
 }
 """
 A connection to a list of items.
@@ -36224,6 +36227,24 @@ input ProgramHistoryWhereInput {
   auditorEmailNotNil: Boolean
   auditorEmailEqualFold: String
   auditorEmailContainsFold: String
+  """
+  program_owner_id field predicates
+  """
+  programOwnerID: String
+  programOwnerIDNEQ: String
+  programOwnerIDIn: [String!]
+  programOwnerIDNotIn: [String!]
+  programOwnerIDGT: String
+  programOwnerIDGTE: String
+  programOwnerIDLT: String
+  programOwnerIDLTE: String
+  programOwnerIDContains: String
+  programOwnerIDHasPrefix: String
+  programOwnerIDHasSuffix: String
+  programOwnerIDIsNil: Boolean
+  programOwnerIDNotNil: Boolean
+  programOwnerIDEqualFold: String
+  programOwnerIDContainsFold: String
 }
 type ProgramMembership implements Node {
   id: ID!
@@ -36950,6 +36971,24 @@ input ProgramWhereInput {
   auditorEmailEqualFold: String
   auditorEmailContainsFold: String
   """
+  program_owner_id field predicates
+  """
+  programOwnerID: ID
+  programOwnerIDNEQ: ID
+  programOwnerIDIn: [ID!]
+  programOwnerIDNotIn: [ID!]
+  programOwnerIDGT: ID
+  programOwnerIDGTE: ID
+  programOwnerIDLT: ID
+  programOwnerIDLTE: ID
+  programOwnerIDContains: ID
+  programOwnerIDHasPrefix: ID
+  programOwnerIDHasSuffix: ID
+  programOwnerIDIsNil: Boolean
+  programOwnerIDNotNil: Boolean
+  programOwnerIDEqualFold: ID
+  programOwnerIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -37034,6 +37073,11 @@ input ProgramWhereInput {
   """
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
   """
   members edge predicates
   """
@@ -53492,11 +53536,6 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
-  """
-  SSO verification time for the owning organization
-  """
-  ssoAuthorizations: SSOAuthorizationMap
-  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -55716,11 +55755,6 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
-  """
-  SSO authorization timestamps by organization id
-  """
-  ssoAuthorizations: SSOAuthorizationMap
-  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """
@@ -55989,6 +56023,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  userID: ID
+  clearUser: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -57001,6 +57037,8 @@ input UpdateUserInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  programOwnerID: ID
+  clearProgramOwner: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -57475,6 +57513,7 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  programOwner: Program
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59031,6 +59070,11 @@ input UserWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  program_owner edge predicates
+  """
+  hasProgramOwner: Boolean
+  hasProgramOwnerWith: [ProgramWhereInput!]
   """
   group_memberships edge predicates
   """
