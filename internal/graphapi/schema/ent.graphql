@@ -3351,11 +3351,11 @@ type Control implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -3379,11 +3379,15 @@ type Control implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
+  source: ControlControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -3391,15 +3395,15 @@ type Control implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -3455,7 +3459,7 @@ type Control implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the standard that the control belongs to, if applicable
   """
@@ -4082,11 +4086,11 @@ type ControlHistory implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -4110,11 +4114,15 @@ type ControlHistory implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlHistoryControlSource
+  source: ControlHistoryControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -4122,15 +4130,15 @@ type ControlHistory implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -4186,7 +4194,7 @@ type ControlHistory implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the standard that the control belongs to, if applicable
   """
@@ -4550,6 +4558,24 @@ input ControlHistoryWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -7234,6 +7260,24 @@ input ControlWhereInput {
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
   """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
+  """
   control_type field predicates
   """
   controlType: ControlControlType
@@ -7828,11 +7872,11 @@ input CreateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -7852,11 +7896,15 @@ input CreateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -7864,15 +7912,15 @@ input CreateControlInput {
   """
   category of the control
   """
-  category: String
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -7912,7 +7960,7 @@ input CreateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -9577,11 +9625,11 @@ input CreateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -9601,11 +9649,15 @@ input CreateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -9613,15 +9665,15 @@ input CreateSubcontrolInput {
   """
   category of the control
   """
-  category: String
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -9661,7 +9713,7 @@ input CreateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -44498,11 +44550,11 @@ type Subcontrol implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -44526,11 +44578,15 @@ type Subcontrol implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
+  source: SubcontrolControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -44538,15 +44594,15 @@ type Subcontrol implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -44602,7 +44658,7 @@ type Subcontrol implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the parent control
   """
@@ -45043,11 +45099,11 @@ type SubcontrolHistory implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -45071,11 +45127,15 @@ type SubcontrolHistory implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolHistoryControlSource
+  source: SubcontrolHistoryControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -45083,15 +45143,15 @@ type SubcontrolHistory implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -45147,7 +45207,7 @@ type SubcontrolHistory implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the parent control
   """
@@ -45511,6 +45571,24 @@ input SubcontrolHistoryWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -45960,6 +46038,24 @@ input SubcontrolWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -53743,13 +53839,13 @@ input UpdateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
-  clearTitle: Boolean
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
-  clearDescription: Boolean
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -53774,8 +53870,13 @@ input UpdateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
-  clearSource: Boolean
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -53784,18 +53885,18 @@ input UpdateControlInput {
   """
   category of the control
   """
-  category: String
-  clearCategory: Boolean
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String
-  clearSubcategory: Boolean
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -53851,7 +53952,7 @@ input UpdateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -56205,13 +56306,13 @@ input UpdateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
-  clearTitle: Boolean
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
-  clearDescription: Boolean
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -56236,8 +56337,13 @@ input UpdateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
-  clearSource: Boolean
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -56246,18 +56352,18 @@ input UpdateSubcontrolInput {
   """
   category of the control
   """
-  category: String
-  clearCategory: Boolean
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String
-  clearSubcategory: Boolean
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -56313,7 +56419,7 @@ input UpdateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean

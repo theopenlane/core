@@ -102,14 +102,52 @@ type AssetUpdatePayload struct {
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
-	// controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+	// controlIDs are the ids of the control to clone. If standardID or standardShortName are passed, this is ignored
 	ControlIDs []string `json:"controlIDs,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCodes []string `json:"refCodes,omitempty"`
 	// standardID to clone all controls from into the organization
 	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 	// organization ID that the controls will be under
 	OwnerID *string `json:"ownerID,omitempty"`
 	// optional program ID to associate to the controls
 	ProgramID *string `json:"programID,omitempty"`
+}
+
+// CloneControlUploadInput is used to clone controls and their subcontrols
+// under an organization using a csv upload
+type CloneControlUploadInput struct {
+	// controlID is the id of the control to clone. If standardID or standardShortName are passed, this is ignored
+	ControlID *string `json:"controlID,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCode *string `json:"refCode,omitempty"`
+	// standardID to clone all controls from into the organization
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// organization ID that the controls will be under
+	OwnerID *string `json:"ownerID,omitempty"`
+	// controlImplementation is the implementation details of the control
+	ControlImplementation *string `json:"controlImplementation,omitempty"`
+	// controlObjective is the objective details of the control
+	ControlObjective *string `json:"controlObjective,omitempty"`
+	// implementationGuidance is guidance details on the implementation of the control
+	ImplementationGuidance *string `json:"implementationGuidance,omitempty"`
+	// comment to associate with the control that was created
+	Comment *string `json:"comment,omitempty"`
+	// internalPolicyIDs to associate with the created control
+	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
+	// controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+	// if the control is being clone from a system owned standard
+	ControlInput *generated.CreateControlInput `json:"controlInput,omitempty"`
 }
 
 // Return response for createBulkContact mutation
@@ -288,9 +326,18 @@ type CreateMemberWithProgramInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program    *generated.CreateProgramInput   `json:"program"`
-	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
-	StandardID *string                         `json:"standardID,omitempty"`
+	// program input for the base program details
+	Program *generated.CreateProgramInput `json:"program"`
+	// members to add to the program
+	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	// standardID to clone all controls from into the organization and associated with the program
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation

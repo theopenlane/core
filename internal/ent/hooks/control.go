@@ -18,6 +18,7 @@ func HookControlReferenceFramework() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
 			shortName := ""
+			revision := ""
 
 			// if the control is created with a reference framework, we will use it
 			if m.Op().Is(ent.OpCreate) {
@@ -34,14 +35,16 @@ func HookControlReferenceFramework() ent.Hook {
 			} else {
 				standardID, ok := m.StandardID()
 				if ok {
-					std, err := m.Client().Standard.Query().Select(standard.FieldShortName).
+					std, err := m.Client().Standard.Query().Select(standard.FieldShortName, standard.FieldRevision).
 						Where(standard.ID(standardID)).Only(ctx)
 					if err != nil {
 						return nil, err
 					}
 
 					m.SetReferenceFramework(std.ShortName)
+					m.SetReferenceFrameworkRevision(std.Revision)
 					shortName = std.ShortName
+					revision = std.Revision
 				}
 			}
 
@@ -63,8 +66,10 @@ func HookControlReferenceFramework() ent.Hook {
 
 				if stdCleared {
 					mut.ClearReferenceFramework()
+					mut.ClearReferenceFrameworkRevision()
 				} else {
 					mut.SetReferenceFramework(shortName)
+					mut.SetReferenceFrameworkRevision(revision)
 				}
 				// set the reference framework on all subcontrols as well
 				if err := mut.Exec(allowCtx); err != nil {

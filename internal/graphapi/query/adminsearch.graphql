@@ -120,6 +120,7 @@ query AdminSearch($query: String!) {
           auditorReferenceID
           responsiblePartyID
           referenceFramework
+          referenceFrameworkRevision
           category
           categoryID
           subcategory
@@ -827,6 +828,7 @@ query AdminSearch($query: String!) {
           auditorReferenceID
           responsiblePartyID
           referenceFramework
+          referenceFrameworkRevision
           category
           categoryID
           subcategory

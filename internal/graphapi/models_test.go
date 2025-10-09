@@ -248,7 +248,9 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name                    string
+	RefCode                 string
+	Aliases                 []string
+	Title                   string
 	ProgramID               string
 	StandardID              string
 	ControlOwnerID          string
@@ -1130,12 +1132,16 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control {
 	ctx = setContext(ctx, c.client.db)
 
-	if c.Name == "" {
-		c.Name = gofakeit.UUID()
+	if c.RefCode == "" {
+		c.RefCode = gofakeit.UUID()
+	}
+
+	if c.Title == "" {
+		c.Title = gofakeit.HipsterSentence(3)
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetRefCode(c.Name)
+		SetRefCode(c.RefCode).SetTitle(c.Title)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
@@ -1144,6 +1150,8 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	if c.StandardID != "" {
 		mutation.SetStandardID(c.StandardID)
 		mutation.SetSource(enums.ControlSourceFramework)
+	} else {
+		mutation.SetSource(enums.ControlSourceUserDefined)
 	}
 
 	if c.ControlOwnerID != "" {
@@ -1160,9 +1168,11 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.AllFields {
 		mutation.SetDescription(gofakeit.HipsterSentence(5)).
-			SetCategory(gofakeit.Adjective()).
-			SetCategoryID("A").
-			SetSubcategory(gofakeit.Adjective()).
+			// add a unique string to ensure we know the number of controls created per category is singular
+			// this field doesn't actually need to be unique, but is an easy way to do the tests
+			SetCategory(gofakeit.Adjective() + ulids.New().String()).
+			SetCategoryID(ulids.New().String()).
+			SetSubcategory(gofakeit.Adjective() + ulids.New().String()).
 			SetControlType(enums.ControlTypeDetective).
 			SetExampleEvidence([]models.ExampleEvidence{
 				{
@@ -1172,7 +1182,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetImplementationGuidance([]models.ImplementationGuidance{
 				{
-					ReferenceID: "A",
+					ReferenceID: ulids.New().String(),
 					Guidance: []string{
 						gofakeit.HipsterSentence(5),
 						gofakeit.HipsterSentence(5),
@@ -1188,13 +1198,13 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
-			SetSource(enums.ControlSourceUserDefined).
 			SetReferences([]models.Reference{
 				{
 					Name: gofakeit.HipsterSentence(5),
 					URL:  gofakeit.URL(),
 				},
-			})
+			}).
+			SetAliases([]string{gofakeit.UUID(), gofakeit.UUID()})
 	}
 
 	if c.Category != "" {
@@ -1203,6 +1213,10 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.Subcategory != "" {
 		mutation.SetSubcategory(c.Subcategory)
+	}
+
+	if c.Aliases != nil {
+		mutation.SetAliases(c.Aliases)
 	}
 
 	control, err := mutation.

@@ -1,3 +1,63 @@
+mutation CloneBulkCSVControl($input: Upload!) {
+  cloneBulkCSVControl(input: $input) {
+    controls {
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      referenceFrameworkRevision
+      referenceID
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+      comments {
+        edges {
+          node {
+            id
+            text
+          }
+        }
+      }
+      controlImplementations {
+        edges {
+          node {
+            id
+            details
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+            refCode
+            title
+          }
+        }
+      }
+    }
+  }
+}
+
 mutation CreateControlsByClone($input: CloneControlInput!) {
   createControlsByClone(input: $input) {
     controls {
@@ -19,10 +79,12 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
       refCode
       references
       referenceFramework
+      referenceFrameworkRevision
       source
       standardID
       status
       subcategory
+      title
       tags
       updatedAt
       updatedBy
@@ -31,6 +93,7 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
           node {
             id
             refCode
+            title
           }
         }
       }

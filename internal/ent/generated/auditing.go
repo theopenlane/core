@@ -560,6 +560,9 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.ReferenceFramework, new.ReferenceFramework) {
 		changes = append(changes, NewChange(controlhistory.FieldReferenceFramework, _m.ReferenceFramework, new.ReferenceFramework))
 	}
+	if !reflect.DeepEqual(_m.ReferenceFrameworkRevision, new.ReferenceFrameworkRevision) {
+		changes = append(changes, NewChange(controlhistory.FieldReferenceFrameworkRevision, _m.ReferenceFrameworkRevision, new.ReferenceFrameworkRevision))
+	}
 	if !reflect.DeepEqual(_m.ControlType, new.ControlType) {
 		changes = append(changes, NewChange(controlhistory.FieldControlType, _m.ControlType, new.ControlType))
 	}
@@ -3088,6 +3091,9 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.ReferenceFramework, new.ReferenceFramework) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceFramework, _m.ReferenceFramework, new.ReferenceFramework))
+	}
+	if !reflect.DeepEqual(_m.ReferenceFrameworkRevision, new.ReferenceFrameworkRevision) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceFrameworkRevision, _m.ReferenceFrameworkRevision, new.ReferenceFrameworkRevision))
 	}
 	if !reflect.DeepEqual(_m.ControlType, new.ControlType) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldControlType, _m.ControlType, new.ControlType))

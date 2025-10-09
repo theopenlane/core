@@ -4318,6 +4318,11 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldReferenceFramework)
 				fieldSeen[control.FieldReferenceFramework] = struct{}{}
 			}
+		case "referenceFrameworkRevision":
+			if _, ok := fieldSeen[control.FieldReferenceFrameworkRevision]; !ok {
+				selectedFields = append(selectedFields, control.FieldReferenceFrameworkRevision)
+				fieldSeen[control.FieldReferenceFrameworkRevision] = struct{}{}
+			}
 		case "controlType":
 			if _, ok := fieldSeen[control.FieldControlType]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlType)
@@ -4592,6 +4597,11 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldReferenceFramework]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldReferenceFramework)
 				fieldSeen[controlhistory.FieldReferenceFramework] = struct{}{}
+			}
+		case "referenceFrameworkRevision":
+			if _, ok := fieldSeen[controlhistory.FieldReferenceFrameworkRevision]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldReferenceFrameworkRevision)
+				fieldSeen[controlhistory.FieldReferenceFrameworkRevision] = struct{}{}
 			}
 		case "controlType":
 			if _, ok := fieldSeen[controlhistory.FieldControlType]; !ok {
@@ -41203,6 +41213,11 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldReferenceFramework)
 				fieldSeen[subcontrol.FieldReferenceFramework] = struct{}{}
 			}
+		case "referenceFrameworkRevision":
+			if _, ok := fieldSeen[subcontrol.FieldReferenceFrameworkRevision]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldReferenceFrameworkRevision)
+				fieldSeen[subcontrol.FieldReferenceFrameworkRevision] = struct{}{}
+			}
 		case "controlType":
 			if _, ok := fieldSeen[subcontrol.FieldControlType]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldControlType)
@@ -41477,6 +41492,11 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldReferenceFramework]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldReferenceFramework)
 				fieldSeen[subcontrolhistory.FieldReferenceFramework] = struct{}{}
+			}
+		case "referenceFrameworkRevision":
+			if _, ok := fieldSeen[subcontrolhistory.FieldReferenceFrameworkRevision]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldReferenceFrameworkRevision)
+				fieldSeen[subcontrolhistory.FieldReferenceFrameworkRevision] = struct{}{}
 			}
 		case "controlType":
 			if _, ok := fieldSeen[subcontrolhistory.FieldControlType]; !ok {
