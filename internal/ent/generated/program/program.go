@@ -62,6 +62,8 @@ const (
 	FieldAuditor = "auditor"
 	// FieldAuditorEmail holds the string denoting the auditor_email field in the database.
 	FieldAuditorEmail = "auditor_email"
+	// FieldProgramOwnerID holds the string denoting the program_owner_id field in the database.
+	FieldProgramOwnerID = "program_owner_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -96,6 +98,8 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the program in the database.
@@ -191,6 +195,13 @@ const (
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "users"
+	// UserTable is the table that holds the user relation/edge.
+	UserTable = "programs"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "program_owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "program_memberships"
 	// MembersInverseTable is the table name for the ProgramMembership entity.
@@ -225,6 +236,7 @@ var Columns = []string{
 	FieldAuditFirm,
 	FieldAuditor,
 	FieldAuditorEmail,
+	FieldProgramOwnerID,
 }
 
 var (
@@ -452,6 +464,11 @@ func ByAuditor(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorEmail orders the results by the auditor_email field.
 func ByAuditorEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorEmail, opts...).ToFunc()
+}
+
+// ByProgramOwnerID orders the results by the program_owner_id field.
+func ByProgramOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramOwnerID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -685,6 +702,13 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByUserField orders the results by user field.
+func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -815,6 +839,13 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
+	)
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, true, UserTable, UserColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

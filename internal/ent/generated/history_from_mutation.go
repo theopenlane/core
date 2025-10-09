@@ -8513,6 +8513,10 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetAuditorEmail(auditorEmail)
 	}
 
+	if programOwnerID, exists := m.ProgramOwnerID(); exists {
+		create = create.SetProgramOwnerID(programOwnerID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8676,6 +8680,12 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAuditorEmail(program.AuditorEmail)
 		}
 
+		if programOwnerID, exists := m.ProgramOwnerID(); exists {
+			create = create.SetProgramOwnerID(programOwnerID)
+		} else {
+			create = create.SetProgramOwnerID(program.ProgramOwnerID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8733,6 +8743,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditFirm(program.AuditFirm).
 			SetAuditor(program.Auditor).
 			SetAuditorEmail(program.AuditorEmail).
+			SetProgramOwnerID(program.ProgramOwnerID).
 			Save(ctx)
 		if err != nil {
 			return err

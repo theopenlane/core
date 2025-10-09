@@ -1857,6 +1857,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.User {
 	})
 }
 
+// HasProgramOwner applies the HasEdge predicate on the "program_owner" edge.
+func HasProgramOwner() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, ProgramOwnerTable, ProgramOwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramOwnerWith applies the HasEdge predicate on the "program_owner" edge with a given conditions (other predicates).
+func HasProgramOwnerWith(preds ...predicate.Program) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newProgramOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasGroupMemberships applies the HasEdge predicate on the "group_memberships" edge.
 func HasGroupMemberships() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

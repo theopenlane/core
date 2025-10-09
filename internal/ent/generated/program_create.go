@@ -321,6 +321,20 @@ func (_c *ProgramCreate) SetNillableAuditorEmail(v *string) *ProgramCreate {
 	return _c
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_c *ProgramCreate) SetProgramOwnerID(v string) *ProgramCreate {
+	_c.mutation.SetProgramOwnerID(v)
+	return _c
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableProgramOwnerID(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetProgramOwnerID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProgramCreate) SetID(v string) *ProgramCreate {
 	_c.mutation.SetID(v)
@@ -578,6 +592,25 @@ func (_c *ProgramCreate) AddUsers(v ...*User) *ProgramCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddUserIDs(ids...)
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (_c *ProgramCreate) SetUserID(id string) *ProgramCreate {
+	_c.mutation.SetUserID(id)
+	return _c
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (_c *ProgramCreate) SetNillableUserID(id *string) *ProgramCreate {
+	if id != nil {
+		_c = _c.SetUserID(*id)
+	}
+	return _c
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (_c *ProgramCreate) SetUser(v *User) *ProgramCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
@@ -1148,6 +1181,24 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ProgramOwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.MembersIDs(); len(nodes) > 0 {

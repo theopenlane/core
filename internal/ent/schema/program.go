@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -117,6 +118,9 @@ func (Program) Fields() []ent.Field {
 				return err
 			}).
 			Optional(),
+		field.String("program_owner_id").
+			Comment("the id of the user who is responsible for this program").
+			Optional(),
 	}
 }
 
@@ -171,6 +175,16 @@ func (p Program) Edges() []ent.Edge {
 				entgql.MultiOrder(),
 			).
 			Through("members", ProgramMembership.Type),
+
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: User{},
+			ref:        "program_owner",
+			field:      "program_owner_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
 	}
 }
 

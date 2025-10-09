@@ -367,6 +367,26 @@ func (_u *ProgramHistoryUpdate) ClearAuditorEmail() *ProgramHistoryUpdate {
 	return _u
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_u *ProgramHistoryUpdate) SetProgramOwnerID(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetProgramOwnerID(v)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_u *ProgramHistoryUpdate) SetNillableProgramOwnerID(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetProgramOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearProgramOwnerID clears the value of the "program_owner_id" field.
+func (_u *ProgramHistoryUpdate) ClearProgramOwnerID() *ProgramHistoryUpdate {
+	_u.mutation.ClearProgramOwnerID()
+	return _u
+}
+
 // Mutation returns the ProgramHistoryMutation object of the builder.
 func (_u *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
 	return _u.mutation
@@ -556,6 +576,12 @@ func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProgramOwnerID(); ok {
+		_spec.SetField(programhistory.FieldProgramOwnerID, field.TypeString, value)
+	}
+	if _u.mutation.ProgramOwnerIDCleared() {
+		_spec.ClearField(programhistory.FieldProgramOwnerID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProgramHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -915,6 +941,26 @@ func (_u *ProgramHistoryUpdateOne) ClearAuditorEmail() *ProgramHistoryUpdateOne 
 	return _u
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_u *ProgramHistoryUpdateOne) SetProgramOwnerID(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetProgramOwnerID(v)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_u *ProgramHistoryUpdateOne) SetNillableProgramOwnerID(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetProgramOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearProgramOwnerID clears the value of the "program_owner_id" field.
+func (_u *ProgramHistoryUpdateOne) ClearProgramOwnerID() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearProgramOwnerID()
+	return _u
+}
+
 // Mutation returns the ProgramHistoryMutation object of the builder.
 func (_u *ProgramHistoryUpdateOne) Mutation() *ProgramHistoryMutation {
 	return _u.mutation
@@ -1134,6 +1180,12 @@ func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramH
 	}
 	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProgramOwnerID(); ok {
+		_spec.SetField(programhistory.FieldProgramOwnerID, field.TypeString, value)
+	}
+	if _u.mutation.ProgramOwnerIDCleared() {
+		_spec.ClearField(programhistory.FieldProgramOwnerID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProgramHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -70,7 +70,9 @@ type ProgramHistory struct {
 	Auditor string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
 	AuditorEmail string `json:"auditor_email,omitempty"`
-	selectValues sql.SelectValues
+	// the id of the user who is responsible for this program
+	ProgramOwnerID string `json:"program_owner_id,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -84,7 +86,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldProgramType, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldProgramType, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -261,6 +263,12 @@ func (_m *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.AuditorEmail = value.String
 			}
+		case programhistory.FieldProgramOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_owner_id", values[i])
+			} else if value.Valid {
+				_m.ProgramOwnerID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -371,6 +379,9 @@ func (_m *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auditor_email=")
 	builder.WriteString(_m.AuditorEmail)
+	builder.WriteString(", ")
+	builder.WriteString("program_owner_id=")
+	builder.WriteString(_m.ProgramOwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

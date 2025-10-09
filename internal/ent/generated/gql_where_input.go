@@ -63704,6 +63704,23 @@ type ProgramWhereInput struct {
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 
+	// "program_owner_id" field predicates.
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIDNEQ          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIDGT           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIDGTE          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIDLT           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIDLTE          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        bool     `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -63771,6 +63788,10 @@ type ProgramWhereInput struct {
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+
+	// "user" edge predicates.
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 
 	// "members" edge predicates.
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
@@ -64478,6 +64499,51 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	if i.AuditorEmailContainsFold != nil {
 		predicates = append(predicates, program.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
 	}
+	if i.ProgramOwnerID != nil {
+		predicates = append(predicates, program.ProgramOwnerIDEQ(*i.ProgramOwnerID))
+	}
+	if i.ProgramOwnerIDNEQ != nil {
+		predicates = append(predicates, program.ProgramOwnerIDNEQ(*i.ProgramOwnerIDNEQ))
+	}
+	if len(i.ProgramOwnerIDIn) > 0 {
+		predicates = append(predicates, program.ProgramOwnerIDIn(i.ProgramOwnerIDIn...))
+	}
+	if len(i.ProgramOwnerIDNotIn) > 0 {
+		predicates = append(predicates, program.ProgramOwnerIDNotIn(i.ProgramOwnerIDNotIn...))
+	}
+	if i.ProgramOwnerIDGT != nil {
+		predicates = append(predicates, program.ProgramOwnerIDGT(*i.ProgramOwnerIDGT))
+	}
+	if i.ProgramOwnerIDGTE != nil {
+		predicates = append(predicates, program.ProgramOwnerIDGTE(*i.ProgramOwnerIDGTE))
+	}
+	if i.ProgramOwnerIDLT != nil {
+		predicates = append(predicates, program.ProgramOwnerIDLT(*i.ProgramOwnerIDLT))
+	}
+	if i.ProgramOwnerIDLTE != nil {
+		predicates = append(predicates, program.ProgramOwnerIDLTE(*i.ProgramOwnerIDLTE))
+	}
+	if i.ProgramOwnerIDContains != nil {
+		predicates = append(predicates, program.ProgramOwnerIDContains(*i.ProgramOwnerIDContains))
+	}
+	if i.ProgramOwnerIDHasPrefix != nil {
+		predicates = append(predicates, program.ProgramOwnerIDHasPrefix(*i.ProgramOwnerIDHasPrefix))
+	}
+	if i.ProgramOwnerIDHasSuffix != nil {
+		predicates = append(predicates, program.ProgramOwnerIDHasSuffix(*i.ProgramOwnerIDHasSuffix))
+	}
+	if i.ProgramOwnerIDIsNil {
+		predicates = append(predicates, program.ProgramOwnerIDIsNil())
+	}
+	if i.ProgramOwnerIDNotNil {
+		predicates = append(predicates, program.ProgramOwnerIDNotNil())
+	}
+	if i.ProgramOwnerIDEqualFold != nil {
+		predicates = append(predicates, program.ProgramOwnerIDEqualFold(*i.ProgramOwnerIDEqualFold))
+	}
+	if i.ProgramOwnerIDContainsFold != nil {
+		predicates = append(predicates, program.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := program.HasOwner()
@@ -64784,6 +64850,24 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, program.HasUsersWith(with...))
+	}
+	if i.HasUser != nil {
+		p := program.HasUser()
+		if !*i.HasUser {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasUserWith))
+		for _, w := range i.HasUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasUserWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := program.HasMembers()
@@ -65102,6 +65186,23 @@ type ProgramHistoryWhereInput struct {
 	AuditorEmailNotNil       bool     `json:"auditorEmailNotNil,omitempty"`
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
+
+	// "program_owner_id" field predicates.
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIDNEQ          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIDGT           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIDGTE          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIDLT           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIDLTE          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        bool     `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -65885,6 +65986,51 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.AuditorEmailContainsFold != nil {
 		predicates = append(predicates, programhistory.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
+	}
+	if i.ProgramOwnerID != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDEQ(*i.ProgramOwnerID))
+	}
+	if i.ProgramOwnerIDNEQ != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNEQ(*i.ProgramOwnerIDNEQ))
+	}
+	if len(i.ProgramOwnerIDIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramOwnerIDIn(i.ProgramOwnerIDIn...))
+	}
+	if len(i.ProgramOwnerIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNotIn(i.ProgramOwnerIDNotIn...))
+	}
+	if i.ProgramOwnerIDGT != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDGT(*i.ProgramOwnerIDGT))
+	}
+	if i.ProgramOwnerIDGTE != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDGTE(*i.ProgramOwnerIDGTE))
+	}
+	if i.ProgramOwnerIDLT != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDLT(*i.ProgramOwnerIDLT))
+	}
+	if i.ProgramOwnerIDLTE != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDLTE(*i.ProgramOwnerIDLTE))
+	}
+	if i.ProgramOwnerIDContains != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDContains(*i.ProgramOwnerIDContains))
+	}
+	if i.ProgramOwnerIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDHasPrefix(*i.ProgramOwnerIDHasPrefix))
+	}
+	if i.ProgramOwnerIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDHasSuffix(*i.ProgramOwnerIDHasSuffix))
+	}
+	if i.ProgramOwnerIDIsNil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDIsNil())
+	}
+	if i.ProgramOwnerIDNotNil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNotNil())
+	}
+	if i.ProgramOwnerIDEqualFold != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDEqualFold(*i.ProgramOwnerIDEqualFold))
+	}
+	if i.ProgramOwnerIDContainsFold != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -95385,6 +95531,10 @@ type UserWhereInput struct {
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 
+	// "program_owner" edge predicates.
+	HasProgramOwner     *bool                `json:"hasProgramOwner,omitempty"`
+	HasProgramOwnerWith []*ProgramWhereInput `json:"hasProgramOwnerWith,omitempty"`
+
 	// "group_memberships" edge predicates.
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
@@ -96396,6 +96546,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasProgramsWith(with...))
+	}
+	if i.HasProgramOwner != nil {
+		p := user.HasProgramOwner()
+		if !*i.HasProgramOwner {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramOwnerWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramOwnerWith))
+		for _, w := range i.HasProgramOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasProgramOwnerWith(with...))
 	}
 	if i.HasGroupMemberships != nil {
 		p := user.HasGroupMemberships()

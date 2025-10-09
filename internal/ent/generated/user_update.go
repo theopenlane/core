@@ -606,6 +606,25 @@ func (_u *UserUpdate) AddPrograms(v ...*Program) *UserUpdate {
 	return _u.AddProgramIDs(ids...)
 }
 
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_u *UserUpdate) SetProgramOwnerID(id string) *UserUpdate {
+	_u.mutation.SetProgramOwnerID(id)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_u *UserUpdate) SetNillableProgramOwnerID(id *string) *UserUpdate {
+	if id != nil {
+		_u = _u.SetProgramOwnerID(*id)
+	}
+	return _u
+}
+
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_u *UserUpdate) SetProgramOwner(v *Program) *UserUpdate {
+	return _u.SetProgramOwnerID(v.ID)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (_u *UserUpdate) AddGroupMembershipIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddGroupMembershipIDs(ids...)
@@ -960,6 +979,12 @@ func (_u *UserUpdate) RemovePrograms(v ...*Program) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearProgramOwner clears the "program_owner" edge to the Program entity.
+func (_u *UserUpdate) ClearProgramOwner() *UserUpdate {
+	_u.mutation.ClearProgramOwner()
+	return _u
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -2048,6 +2073,37 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ProgramOwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2772,6 +2828,25 @@ func (_u *UserUpdateOne) AddPrograms(v ...*Program) *UserUpdateOne {
 	return _u.AddProgramIDs(ids...)
 }
 
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_u *UserUpdateOne) SetProgramOwnerID(id string) *UserUpdateOne {
+	_u.mutation.SetProgramOwnerID(id)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableProgramOwnerID(id *string) *UserUpdateOne {
+	if id != nil {
+		_u = _u.SetProgramOwnerID(*id)
+	}
+	return _u
+}
+
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_u *UserUpdateOne) SetProgramOwner(v *Program) *UserUpdateOne {
+	return _u.SetProgramOwnerID(v.ID)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (_u *UserUpdateOne) AddGroupMembershipIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddGroupMembershipIDs(ids...)
@@ -3126,6 +3201,12 @@ func (_u *UserUpdateOne) RemovePrograms(v ...*Program) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearProgramOwner clears the "program_owner" edge to the Program entity.
+func (_u *UserUpdateOne) ClearProgramOwner() *UserUpdateOne {
+	_u.mutation.ClearProgramOwner()
+	return _u
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -4241,6 +4322,37 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProgramOwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

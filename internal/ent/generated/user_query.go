@@ -59,6 +59,7 @@ type UserQuery struct {
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
+	withProgramOwner                 *ProgramQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
@@ -517,6 +518,31 @@ func (_q *UserQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryProgramOwner chains the current query on the "program_owner" edge.
+func (_q *UserQuery) QueryProgramOwner() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.ProgramOwnerTable, user.ProgramOwnerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (_q *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: _q.config}).Query()
@@ -800,6 +826,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withAssignerTasks:           _q.withAssignerTasks.Clone(),
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
+		withProgramOwner:            _q.withProgramOwner.Clone(),
 		withGroupMemberships:        _q.withGroupMemberships.Clone(),
 		withOrgMemberships:          _q.withOrgMemberships.Clone(),
 		withProgramMemberships:      _q.withProgramMemberships.Clone(),
@@ -986,6 +1013,17 @@ func (_q *UserQuery) WithPrograms(opts ...func(*ProgramQuery)) *UserQuery {
 	return _q
 }
 
+// WithProgramOwner tells the query-builder to eager-load the nodes that are connected to
+// the "program_owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithProgramOwner(opts ...func(*ProgramQuery)) *UserQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProgramOwner = query
+	return _q
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -1103,7 +1141,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1120,6 +1158,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withAssignerTasks != nil,
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
+			_q.withProgramOwner != nil,
 			_q.withGroupMemberships != nil,
 			_q.withOrgMemberships != nil,
 			_q.withProgramMemberships != nil,
@@ -1261,6 +1300,12 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *User) { n.Edges.Programs = []*Program{} },
 			func(n *User, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProgramOwner; query != nil {
+		if err := _q.loadProgramOwner(ctx, query, nodes, nil,
+			func(n *User, e *Program) { n.Edges.ProgramOwner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2053,6 +2098,33 @@ func (_q *UserQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *UserQuery) loadProgramOwner(ctx context.Context, query *ProgramQuery, nodes []*User, init func(*User), assign func(*User, *Program)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(program.FieldProgramOwnerID)
+	}
+	query.Where(predicate.Program(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ProgramOwnerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ProgramOwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "program_owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
