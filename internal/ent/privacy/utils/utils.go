@@ -107,6 +107,7 @@ func GetIntersection(s1 []string, s2 []string) []string {
 
 	set := make(map[string]any)
 	intersection := make([]string, 0)
+
 	for _, item := range s2 {
 		if _, exists := m[item]; exists {
 			if _, seen := set[item]; !seen {

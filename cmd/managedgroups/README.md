@@ -4,8 +4,8 @@ This directory contains a command line utility used for managing user groups in
 organizations. This ensures that each organization member has a managed group named
 after them in their org.
 
-Ideally this will only be run once if you had the 
-openlane project running before `v0.37`. 
+Ideally this will only be run once if you had the
+openlane project running before `v0.37`.
 
 ## Overview
 

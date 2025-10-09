@@ -1774,6 +1774,7 @@ func (t *IntegrationToken) IsExpired() bool {
 	if t.ExpiresAt == nil {
 		return false // No expiry means never expires
 	}
+
 	return time.Now().After(*t.ExpiresAt)
 }
 
@@ -1793,6 +1794,7 @@ type IntegrationTokenResponse struct {
 // ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
 func (r *IntegrationTokenResponse) ExampleResponse() any {
 	expiresAt := time.Now().Add(time.Hour * 24 * 30) // nolint:mnd
+
 	return IntegrationTokenResponse{
 		Reply:    rout.Reply{Success: true},
 		Provider: "github",
@@ -1873,6 +1875,7 @@ func (r *GetIntegrationTokenRequest) Validate() error {
 	if r.Provider == "" {
 		return errProviderRequired
 	}
+
 	return nil
 }
 
@@ -1882,6 +1885,7 @@ func (r *DeleteIntegrationRequest) Validate() error {
 	if r.ID == "" {
 		return errIntegrationIDRequired
 	}
+
 	return nil
 }
 
@@ -1891,6 +1895,7 @@ func (r *RefreshIntegrationTokenRequest) Validate() error {
 	if r.Provider == "" {
 		return errProviderRequired
 	}
+
 	return nil
 }
 
@@ -1900,6 +1905,7 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 	if r.Provider == "" {
 		return errProviderRequired
 	}
+
 	return nil
 }
 
@@ -1924,6 +1930,7 @@ func (r *OAuthFlowRequest) Validate() error {
 
 	// Validate supported providers
 	supportedProviders := []string{"github", "slack"}
+
 	validProvider := slices.Contains(supportedProviders, r.Provider)
 	if !validProvider {
 		return rout.InvalidField("provider")
@@ -1936,6 +1943,7 @@ func (r *OAuthFlowRequest) Validate() error {
 			cleanScopes = append(cleanScopes, trimmed)
 		}
 	}
+
 	r.Scopes = cleanScopes
 
 	return nil

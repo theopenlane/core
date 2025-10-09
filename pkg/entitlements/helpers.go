@@ -64,6 +64,7 @@ func WritePlansToYAML(product []Product, filename string) error {
 //   - bool: true if the sequence is empty, false otherwise.
 func Seq2IsEmpty[K any, V error](seq stripe.Seq2[K, V]) bool {
 	isEmpty := true
+
 	seq(func(_ K, _ V) bool {
 		isEmpty = false
 		return false // stop after first element

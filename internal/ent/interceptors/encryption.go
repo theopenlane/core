@@ -49,10 +49,12 @@ func decryptQueryResult(result ent.Value, fieldNames []string) (ent.Value, error
 				return nil, err
 			}
 		}
+
 		return result, nil
 	}
 
 	// Handle single result
 	err := hooks.DecryptEntityFields(result, fieldNames)
+
 	return result, err
 }

@@ -95,6 +95,7 @@ func toProperCamelCase(s string) string {
 	// If camelcase splitting worked (found boundaries), use the split result
 	if len(words) > 1 {
 		var result strings.Builder
+
 		for _, word := range words {
 			if len(word) == 0 {
 				continue
@@ -102,6 +103,7 @@ func toProperCamelCase(s string) string {
 			// Capitalize first letter, keep the rest as-is to preserve internal capitalization
 			result.WriteString(strings.ToUpper(string(word[0])) + word[1:])
 		}
+
 		return result.String()
 	}
 
@@ -305,5 +307,6 @@ func updateMainImports(cmdName string) error {
 	}
 
 	fmt.Printf("----> updated main.go with import for %s\n", packageName)
+
 	return nil
 }

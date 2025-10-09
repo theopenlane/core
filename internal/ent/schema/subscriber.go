@@ -66,6 +66,7 @@ func (Subscriber) Fields() []ent.Field {
 			Validate(func(phone string) error {
 				regex := `^\+[1-9]{1}[0-9]{3,14}$`
 				_, err := regexp.MatchString(regex, phone)
+
 				return err
 			}),
 		field.Bool("verified_email").

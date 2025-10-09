@@ -59,5 +59,6 @@ func DecryptHush(u *generated.Hush) error {
 	}
 
 	u.SecretValue = string(decrypted)
+
 	return nil
 }

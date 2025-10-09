@@ -19,7 +19,6 @@ func HookFileDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
-
 				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
 					return next.Mutate(ctx, m)
 				}
@@ -36,7 +35,6 @@ func HookFileDelete() ent.Hook {
 					ids = append(ids, dbIDs...)
 
 				case ent.OpDeleteOne:
-
 					id, ok := m.ID()
 					if !ok {
 						return nil, errInvalidStoragePath

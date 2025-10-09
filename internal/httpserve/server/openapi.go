@@ -215,6 +215,7 @@ func getTypeDescription(t reflect.Type) string {
 
 	// Check cache first
 	docMutex.RLock()
+
 	if desc, exists := docCache[cacheKey]; exists {
 		docMutex.RUnlock()
 		return desc
@@ -244,8 +245,11 @@ func getTypeDescription(t reflect.Type) string {
 			if typ.Name == t.Name() {
 				// Cache and return the description
 				description := strings.TrimSpace(typ.Doc)
+
 				docMutex.Lock()
+
 				docCache[cacheKey] = description
+
 				docMutex.Unlock()
 
 				return description
@@ -271,6 +275,7 @@ func getPackageDir(pkgPath string) string {
 
 		// Convert package path to file path
 		relativePath := strings.TrimPrefix(pkgPath, "github.com/theopenlane/core/")
+
 		return filepath.Join(projectRoot, relativePath)
 	}
 

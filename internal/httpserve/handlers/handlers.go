@@ -123,6 +123,7 @@ func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Contex
 // BindAndValidate binds the context payload into T and runs Validate if present.
 func BindAndValidate[T any](ctx echo.Context) (*T, error) {
 	var obj T
+
 	reqType := reflect.TypeOf(obj).Name()
 
 	ctx.Set(requestTypeKey, reqType)
@@ -291,6 +292,7 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 
 	// Get authenticated user from context
 	reqCtx := ctx.Request().Context()
+
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")

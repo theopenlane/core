@@ -51,6 +51,7 @@ func ParseLLMProvider(name string) (LLMProvider, error) {
 	if x, ok := _LLMProviderValue[name]; ok {
 		return x, nil
 	}
+
 	return LLMProvider(""), fmt.Errorf("%s is %w", name, ErrInvalidLLMProvider)
 }
 
@@ -85,5 +86,6 @@ func ParseType(name string) (Type, error) {
 	if x, ok := _TypeValue[name]; ok {
 		return x, nil
 	}
+
 	return Type(""), fmt.Errorf("%s is %w", name, ErrInvalidType)
 }

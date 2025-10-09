@@ -38,8 +38,11 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				return nil, errCannotSetFileOnCreate
 			}
 
-			var err error
-			var fileUploaded bool
+			var (
+				err          error
+				fileUploaded bool
+			)
+
 			ctx, fileUploaded, err = checkTrustCenterDocFile(ctx, m)
 			if err != nil {
 				return nil, err
@@ -55,6 +58,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				if !origFileIDSet {
 					return nil, errMissingFileID
 				}
+
 				m.SetFileID(origFileID)
 			}
 
@@ -92,6 +96,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.WatermarkingEnabled {
 				zerolog.Ctx(ctx).Debug().Msg("watermarking enabled, queuing job")
+
 				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
@@ -115,8 +120,11 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 			zerolog.Ctx(ctx).Debug().Msg("trust center doc hook")
 
-			var err error
-			var fileUploaded bool
+			var (
+				err          error
+				fileUploaded bool
+			)
+
 			ctx, fileUploaded, err = checkTrustCenterDocFile(ctx, m)
 			if err != nil {
 				return nil, err
@@ -125,6 +133,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 			_, mutationSetsOriginalFileID := m.OriginalFileID()
 
 			var watermarkFileUploaded bool
+
 			ctx, watermarkFileUploaded, err = checkWatermarkedTrustCenterDocFile(ctx, m)
 			if err != nil {
 				return nil, err
@@ -186,6 +195,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 					// and mark as internal operation to avoid triggering the update hook logic
 					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 					internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
+
 					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 					if err != nil {
 						return nil, err
@@ -253,6 +263,7 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -273,6 +284,7 @@ func checkTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMut
 		if len(docFile) > 1 {
 			return ctx, uploadsFile, ErrNotSingularUpload
 		}
+
 		m.SetOriginalFileID(docFile[0].ID)
 
 		docFile[0].Parent.ID, _ = m.ID()
@@ -302,6 +314,7 @@ func checkWatermarkedTrustCenterDocFile(ctx context.Context, m *generated.TrustC
 		if len(docFile) > 1 {
 			return ctx, uploadsFile, ErrNotSingularUpload
 		}
+
 		m.SetFileID(docFile[0].ID)
 
 		docFile[0].Parent.ID, _ = m.ID()

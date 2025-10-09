@@ -29,6 +29,7 @@ type Config struct {
 func Init(cfg Config) error {
 	config = cfg
 	tinkAEAD = nil // Reset to force reinitialization
+
 	return initTink(cfg)
 }
 
@@ -43,6 +44,7 @@ func initTink(cfg Config) error {
 		if err := initTinkFromKeyset(cfg.Keyset); err != nil {
 			return err
 		}
+
 		return nil
 	}
 
@@ -52,6 +54,7 @@ func initTink(cfg Config) error {
 		if err := initTinkFromKeyset(keysetData); err != nil {
 			return err
 		}
+
 		return nil
 	}
 
@@ -69,6 +72,7 @@ func initTinkFromKeyset(keysetData string) error {
 
 	// Create keyset handle from binary
 	reader := strings.NewReader(string(keysetBytes))
+
 	keysetHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return fmt.Errorf("failed to create keyset handle: %w", err)
@@ -81,6 +85,7 @@ func initTinkFromKeyset(keysetData string) error {
 	}
 
 	tinkAEAD = primitive
+
 	return nil
 }
 
@@ -94,6 +99,7 @@ func GenerateTinkKeyset() (string, error) {
 
 	// Serialize keyset
 	var buf strings.Builder
+
 	err = insecurecleartextkeyset.Write(keysetHandle, keyset.NewBinaryWriter(&buf))
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize keyset: %w", err)
@@ -116,6 +122,7 @@ func RotateKeyset(currentKeysetData string) (string, error) {
 
 	// Load current keyset
 	reader := strings.NewReader(string(keysetBytes))
+
 	currentHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return "", fmt.Errorf("failed to load current keyset: %w", err)
@@ -144,6 +151,7 @@ func RotateKeyset(currentKeysetData string) (string, error) {
 
 	// Serialize the new keyset
 	var buf strings.Builder
+
 	err = insecurecleartextkeyset.Write(newHandle, keyset.NewBinaryWriter(&buf))
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize new keyset: %w", err)
@@ -164,6 +172,7 @@ func AddKeyToKeyset(currentKeysetData string) (string, error) {
 	}
 
 	reader := strings.NewReader(string(keysetBytes))
+
 	currentHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return "", fmt.Errorf("failed to load current keyset: %w", err)
@@ -184,6 +193,7 @@ func AddKeyToKeyset(currentKeysetData string) (string, error) {
 	}
 
 	var buf strings.Builder
+
 	err = insecurecleartextkeyset.Write(newHandle, keyset.NewBinaryWriter(&buf))
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize new keyset: %w", err)
@@ -203,6 +213,7 @@ func DisableOldKeys(currentKeysetData string, keepRecentCount int) (string, erro
 	}
 
 	reader := strings.NewReader(string(keysetBytes))
+
 	currentHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return "", fmt.Errorf("failed to load current keyset: %w", err)
@@ -232,6 +243,7 @@ func DisableOldKeys(currentKeysetData string, keepRecentCount int) (string, erro
 	}
 
 	var buf strings.Builder
+
 	err = insecurecleartextkeyset.Write(newHandle, keyset.NewBinaryWriter(&buf))
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize new keyset: %w", err)
@@ -250,6 +262,7 @@ func GetKeysetInfo(keysetData string) (map[string]any, error) {
 	}
 
 	reader := strings.NewReader(string(keysetBytes))
+
 	keysetHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load keyset: %w", err)

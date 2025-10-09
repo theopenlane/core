@@ -186,7 +186,6 @@ func withListObjectsFilter() objectOwnedOption { //nolint:unused
 	return func(o *ObjectOwnedMixin) {
 		o.UseListObjectsFilter = true
 	}
-
 }
 
 func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
@@ -458,7 +457,6 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 		customSkipperFunc = func(ctx context.Context) bool {
 			return skipQueryModeCheck(ctx, o.SkipListFilterInterceptor)
 		}
-
 	}
 
 	if o.SkipListFilterInterceptorSkipperFunc != nil {

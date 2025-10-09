@@ -99,6 +99,7 @@ func (e Extension) Hook() gen.Hook {
 			lowerToSentence := func(s string) string {
 				s = strings.ReplaceAll(s, "_", " ")
 				s = strings.ToLower(s)
+
 				return s
 			}
 
@@ -111,6 +112,7 @@ func (e Extension) Hook() gen.Hook {
 
 			// loop through all nodes and generate a list of schemas with the Export annotation
 			schemas := []string{}
+
 			for _, node := range g.Nodes {
 				if checkHasExportAnnotation(node) {
 					schemas = append(schemas, node.Name)
@@ -149,6 +151,7 @@ func (e Extension) Hook() gen.Hook {
 			}
 
 			log.Info().Str("file", outputPath).Msg("generated enum file")
+
 			return nil
 		})
 	}

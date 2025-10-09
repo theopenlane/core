@@ -66,6 +66,7 @@ Examples:
 
 func createDB(c *cli.Command) (*generated.Client, error) {
 	cfgLoc := c.Root().String("config")
+
 	cfg, err := config.Load(&cfgLoc)
 	if err != nil {
 		return nil, fmt.Errorf("load config: %w", err) //nolint:err113
@@ -94,6 +95,7 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("database client: %w", err) //nolint:err113
 	}
+
 	return dbClient, nil
 }
 
@@ -169,6 +171,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 
 			if existing == nil {
 				fmt.Printf("No existing managed group found for user '%s' in org '%s'\n", user.DisplayName, org.ID)
+
 				if dryRun {
 					fmt.Printf("[DRY-RUN] create managed group '%s' in org '%s' for user '%s'\n", user.DisplayName, org.ID, user.ID)
 				} else {
@@ -186,6 +189,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 					if err != nil {
 						return err
 					}
+
 					existing = g
 					createdGroups++
 				}
@@ -219,6 +223,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 							Exec(newCtx); err != nil {
 							return err
 						}
+
 						addedMemberships++
 					}
 				}
@@ -227,6 +232,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 	}
 
 	fmt.Printf("Done. Created %d groups and added %d memberships\n", createdGroups, addedMemberships)
+
 	if dryRun {
 		fmt.Println("(dry-run) No changes were persisted.")
 	}

@@ -211,6 +211,7 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 		if generated.IsNotFound(err) {
 			return nil, ErrTargetUserNotFound
 		}
+
 		return nil, err
 	}
 

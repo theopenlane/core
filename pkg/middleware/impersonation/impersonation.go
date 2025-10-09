@@ -138,7 +138,6 @@ func BlockImpersonation() echo.MiddlewareFunc {
 
 			// Check if this is an impersonated request
 			if _, ok := auth.ImpersonatedUserFromContext(ctx); ok {
-
 				return echo.NewHTTPError(http.StatusForbidden, "action not allowed during impersonation session")
 			}
 

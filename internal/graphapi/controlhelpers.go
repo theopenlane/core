@@ -70,6 +70,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 		if fieldName == control.FieldSubcategory {
 			cat = *category.Subcategory
 		}
+
 		resp = append(resp, &model.ControlCategoryEdge{
 			Node: &model.ControlCategory{
 				Name:               cat,

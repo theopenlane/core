@@ -34,6 +34,7 @@ func (r *SchemaRegistry) MustRegisterType(v any) *openapi3.SchemaRef {
 	if err != nil {
 		panic(fmt.Sprintf("failed to register schema for type %T: %v", v, err))
 	}
+
 	return ref
 }
 
@@ -63,6 +64,7 @@ func (r *SchemaRegistry) RegisterType(v any) (*openapi3.SchemaRef, error) {
 
 	// Generate schema using a generator
 	generator := openapi3gen.NewGenerator(r.genOpts...)
+
 	schemaRef, err := generator.NewSchemaRefForValue(v, r.spec.Components.Schemas)
 	if err != nil {
 		return nil, err
@@ -118,6 +120,7 @@ func (r *SchemaRegistry) MustGetOrRegister(v any) *openapi3.SchemaRef {
 	if err != nil {
 		panic(fmt.Sprintf("failed to get or register schema for type %T: %v", v, err))
 	}
+
 	return ref
 }
 
@@ -128,6 +131,7 @@ func (r *SchemaRegistry) RegisterAll(models map[string]any) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -148,5 +152,6 @@ func (r *SchemaRegistry) GetSchemas() map[string]any {
 	for k, v := range r.schemas {
 		result[k] = v
 	}
+
 	return result
 }

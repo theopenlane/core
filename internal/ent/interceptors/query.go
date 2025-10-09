@@ -21,6 +21,7 @@ func QueryLogger() ent.InterceptFunc {
 			}
 
 			start := time.Now()
+
 			defer func() {
 				zerolog.Ctx(ctx).Info().
 					Str("duration", time.Since(start).String()).

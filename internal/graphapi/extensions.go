@@ -76,6 +76,7 @@ func getMissingModuleFromErrors(errorList gqlerror.List) string {
 			}
 		}
 	}
+
 	return ""
 }
 

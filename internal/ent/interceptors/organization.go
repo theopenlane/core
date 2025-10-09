@@ -65,6 +65,7 @@ func InterceptorOrganization() ent.Interceptor {
 			// fall back to ListObjects if we are in one of the cases above
 			fCtx := graphql.GetFieldContext(ctx)
 			fieldCheck := ""
+
 			if fCtx != nil {
 				if fCtx.Object == "Query" || fCtx.Object == "Mutation" {
 					fieldCheck = fCtx.Field.Name
@@ -83,6 +84,7 @@ func InterceptorOrganization() ent.Interceptor {
 
 			// other requests can fall back to the authorized orgs
 			q.WhereP(organization.IDIn(authorizedOrgs...))
+
 			return nil
 		}
 

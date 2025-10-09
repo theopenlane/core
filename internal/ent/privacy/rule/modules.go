@@ -52,6 +52,7 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 			for _, f := range moduleFeats {
 				feats = append(feats, f.String())
 			}
+
 			return feats, nil
 		}
 	}
@@ -79,6 +80,7 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 		if parseErr != nil {
 			continue
 		}
+
 		feats = append(feats, ent.Identifier)
 	}
 
@@ -89,6 +91,7 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 		for _, f := range feats {
 			moduleFeats = append(moduleFeats, models.OrgModule(f))
 		}
+
 		if err := cache.SetFeatures(ctx, orgID, moduleFeats); err != nil {
 			log.Err(err).Msg("failed to set feature cache")
 		}
@@ -166,6 +169,7 @@ func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgMo
 				return false, &f, nil
 			}
 		}
+
 		return true, nil, nil
 	}
 

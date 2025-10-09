@@ -14,13 +14,16 @@ import (
 // TraverseSubprocessor only returns public subprocessors and subprocessors owned by the organization
 func TraverseSubprocessor() ent.Interceptor {
 	return intercept.TraverseSubprocessor(func(ctx context.Context, q *generated.SubprocessorQuery) error {
-		var orgIDs []string
-		var err error
+		var (
+			orgIDs []string
+			err    error
+		)
 
 		// allow anonymous access to subprocessors this will only allow view
 		// access to the trust center-owned subprocessors we could probably go
 		// further here and check that the subprocessor is referenced by a
 		// trustcentersubprocessor, but i don't think that is necessary here
+
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			orgIDs = []string{anon.OrganizationID}
 		} else {

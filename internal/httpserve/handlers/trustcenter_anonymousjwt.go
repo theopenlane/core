@@ -48,6 +48,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
 			return h.BadRequest(ctx, ErrMissingSlugInPath, openapi)
 		}
+
 		slug := pathSegments[0]
 
 		// 4a. query the database for trust centers with the slug and the default hostname
@@ -59,6 +60,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
+
 			return h.InternalServerError(ctx, err, openapi)
 		}
 	} else {
@@ -73,6 +75,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
+
 			return h.InternalServerError(ctx, err, openapi)
 		}
 	}
