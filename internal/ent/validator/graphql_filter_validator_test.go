@@ -7,39 +7,15 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-func TestValidateExportType(t *testing.T) {
-	tests := []struct {
-		name       string
-		filter     string
-		exportType enums.ExportType
-		wantErr    bool
-	}{
-		{
-			name:       "valid export type",
-			filter:     "TASK",
-			exportType: enums.ExportTypeTask,
-			wantErr:    false,
-		},
-		{
-			name:       "invalid export type",
-			filter:     "INVALID_TYPE",
-			exportType: enums.ExportTypeTask,
-			wantErr:    true,
-		},
-		{
-			name:       "null filter",
-			filter:     "",
-			exportType: enums.ExportTypeTask,
-			wantErr:    false,
-		},
+func TestValidateFilter(t *testing.T) {
+	validFilter := `statusIn: [OPEN, IN_PROGRESS]`
+	invalidFilter := `banana: [POTATO]`
+
+	if err := validator.ValidateFilter(validFilter, enums.ExportTypeTask); err != nil {
+		t.Errorf("expected valid filter, got error: %v", err)
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := validator.ValidateExportType(tt.filter, tt.exportType)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateExportType() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+	if err := validator.ValidateFilter(invalidFilter, enums.ExportTypeTask); err == nil {
+		t.Errorf("expected invalid filter to fail")
 	}
 }
