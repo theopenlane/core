@@ -66,7 +66,7 @@ require (
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/nyaruka/phonenumbers v1.6.5
+	github.com/nyaruka/phonenumbers v1.6.6
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.3
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
