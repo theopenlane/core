@@ -100,7 +100,7 @@ require (
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.2
 	github.com/theopenlane/utils v0.5.2
-	github.com/tink-crypto/tink-go/v2 v2.4.0
+	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
