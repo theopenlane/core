@@ -24,6 +24,7 @@ func TrialMonthlyPrices(useSandbox bool) []entitlements.Price {
 // monthlyPriceIDs returns Stripe price IDs for monthly prices of modules that match the provided filter function
 func monthlyPriceIDs(filter func(catalog.Feature) bool, useSandbox bool) []string {
 	ids := make([]string, 0)
+
 	for _, f := range gencatalog.GetModules(useSandbox) {
 		if filter(f) {
 			for _, p := range f.Billing.Prices {
@@ -42,6 +43,7 @@ func monthlyPriceIDs(filter func(catalog.Feature) bool, useSandbox bool) []strin
 // monthlyPriceIDs returns the entitlements.Prices for monthly prices of modules that match the provided filter function
 func monthlyPrices(filter func(catalog.Feature) bool, useSandbox bool) []entitlements.Price {
 	prices := make([]entitlements.Price, 0)
+
 	for module, f := range gencatalog.GetModules(useSandbox) {
 		if filter(f) {
 			for _, p := range f.Billing.Prices {

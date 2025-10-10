@@ -107,6 +107,9 @@ func (APIToken) Fields() []ent.Field {
 			Nillable(),
 		field.JSON("sso_authorizations", models.SSOAuthorizationMap{}).
 			Comment("SSO verification time for the owning organization").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
 			Optional(),
 	}
 }

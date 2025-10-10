@@ -130,7 +130,7 @@ func TestQueryScheduledJob(t *testing.T) {
 func TestScheduledJobs(t *testing.T) {
 	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, Name: "Test Control"}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(testUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
 		MustNew(testUser1.UserCtx, t)
 
@@ -232,7 +232,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 	// jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, Name: "Test Control"}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(testUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
 		MustNew(testUser1.UserCtx, t)
 
@@ -413,7 +413,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 
 func TestMutationUpdateScheduledJob(t *testing.T) {
 	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control1 := (&ControlBuilder{client: suite.client, Name: "TC-1"}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, RefCode: "TC-1"}).MustNew(testUser1.UserCtx, t)
 
 	// ensure we can create two scheduled jobs with the same job template id
 	scheduledJob := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
@@ -421,7 +421,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	anotherRunner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, Name: "TC-2"}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, RefCode: "TC-2"}).MustNew(testUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID, Name: "SCT-1"}).
 		MustNew(testUser1.UserCtx, t)
 

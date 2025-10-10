@@ -36,10 +36,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			if templateID == "" {
 				return nil, errMissingTemplate
 			}
+
 			docTemplate, err := m.Client().Template.Query().Where(template.ID(templateID)).Only(ctx)
 			if err != nil {
 				return nil, err
 			}
+
 			if docTemplate.Kind != enums.TemplateKindTrustCenterNda {
 				return next.Mutate(ctx, m)
 			}
@@ -142,6 +144,7 @@ func validateJSON(schema interface{}, document interface{}) error {
 		for _, err := range result.Errors() {
 			errors = append(errors, err.String())
 		}
+
 		return fmt.Errorf("%w: %v", errValidationFailed, errors)
 	}
 

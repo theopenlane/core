@@ -166,6 +166,7 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 // addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
 func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
 	var orgID string
+
 	orgID, err = auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)

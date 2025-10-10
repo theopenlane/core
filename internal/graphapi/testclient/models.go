@@ -1829,14 +1829,52 @@ type AuditLogWhereInput struct {
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
-	// controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+	// controlIDs are the ids of the control to clone. If standardID or standardShortName are passed, this is ignored
 	ControlIDs []string `json:"controlIDs,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCodes []string `json:"refCodes,omitempty"`
 	// standardID to clone all controls from into the organization
 	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 	// organization ID that the controls will be under
 	OwnerID *string `json:"ownerID,omitempty"`
 	// optional program ID to associate to the controls
 	ProgramID *string `json:"programID,omitempty"`
+}
+
+// CloneControlUploadInput is used to clone controls and their subcontrols
+// under an organization using a csv upload
+type CloneControlUploadInput struct {
+	// controlID is the id of the control to clone. If standardID or standardShortName are passed, this is ignored
+	ControlID *string `json:"controlID,omitempty"`
+	// refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	RefCode *string `json:"refCode,omitempty"`
+	// standardID to clone all controls from into the organization
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// organization ID that the controls will be under
+	OwnerID *string `json:"ownerID,omitempty"`
+	// controlImplementation is the implementation details of the control
+	ControlImplementation *string `json:"controlImplementation,omitempty"`
+	// controlObjective is the objective details of the control
+	ControlObjective *string `json:"controlObjective,omitempty"`
+	// implementationGuidance is guidance details on the implementation of the control
+	ImplementationGuidance *string `json:"implementationGuidance,omitempty"`
+	// comment to associate with the control that was created
+	Comment *string `json:"comment,omitempty"`
+	// internalPolicyIDs to associate with the created control
+	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
+	// controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+	// if the control is being clone from a system owned standard
+	ControlInput *CreateControlInput `json:"controlInput,omitempty"`
 }
 
 type Contact struct {
@@ -2428,6 +2466,8 @@ type Control struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -2613,6 +2653,8 @@ type ControlHistory struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -2906,6 +2948,22 @@ type ControlHistoryWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -4569,6 +4627,22 @@ type ControlWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -4828,9 +4902,7 @@ type CreateAPITokenInput struct {
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
 	RevokedAt *time.Time `json:"revokedAt,omitempty"`
-	// SSO verification time for the owning organization
-	SsoAuthorizations *string `json:"ssoAuthorizations,omitempty"`
-	OwnerID           *string `json:"ownerID,omitempty"`
+	OwnerID   *string    `json:"ownerID,omitempty"`
 }
 
 // CreateActionPlanInput is used for create ActionPlan object.
@@ -4991,6 +5063,8 @@ type CreateControlInput struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -5853,11 +5927,9 @@ type CreatePersonalAccessTokenInput struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string  `json:"description,omitempty"`
-	Scopes      []string `json:"scopes,omitempty"`
-	// SSO authorization timestamps by organization id
-	SsoAuthorizations *string    `json:"ssoAuthorizations,omitempty"`
-	LastUsedAt        *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive        *bool    `json:"isActive,omitempty"`
 	OrganizationIDs []string `json:"organizationIDs,omitempty"`
@@ -5965,6 +6037,7 @@ type CreateProgramInput struct {
 	EvidenceIDs         []string `json:"evidenceIDs,omitempty"`
 	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
 	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
+	UserID              *string  `json:"userID,omitempty"`
 }
 
 // CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -5976,9 +6049,18 @@ type CreateProgramMembershipInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program    *CreateProgramInput             `json:"program"`
-	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
-	StandardID *string                         `json:"standardID,omitempty"`
+	// program input for the base program details
+	Program *CreateProgramInput `json:"program"`
+	// members to add to the program
+	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	// standardID to clone all controls from into the organization and associated with the program
+	StandardID *string `json:"standardID,omitempty"`
+	// standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	StandardShortName *string `json:"standardShortName,omitempty"`
+	// standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	StandardVersion *string `json:"standardVersion,omitempty"`
+	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+	Categories []string `json:"categories,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -6140,6 +6222,8 @@ type CreateSubcontrolInput struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -6447,6 +6531,7 @@ type CreateUserInput struct {
 	AssignerTaskIDs        []string    `json:"assignerTaskIDs,omitempty"`
 	AssigneeTaskIDs        []string    `json:"assigneeTaskIDs,omitempty"`
 	ProgramIDs             []string    `json:"programIDs,omitempty"`
+	ProgramOwnerID         *string     `json:"programOwnerID,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -21653,7 +21738,9 @@ type Program struct {
 	// the full name of the auditor conducting the audit
 	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
-	AuditorEmail      *string                      `json:"auditorEmail,omitempty"`
+	AuditorEmail *string `json:"auditorEmail,omitempty"`
+	// the id of the user who is responsible for this program
+	ProgramOwnerID    *string                      `json:"programOwnerID,omitempty"`
 	Owner             *Organization                `json:"owner,omitempty"`
 	BlockedGroups     *GroupConnection             `json:"blockedGroups"`
 	Editors           *GroupConnection             `json:"editors"`
@@ -21671,6 +21758,7 @@ type Program struct {
 	Narratives        *NarrativeConnection         `json:"narratives"`
 	ActionPlans       *ActionPlanConnection        `json:"actionPlans"`
 	Users             *UserConnection              `json:"users"`
+	User              *User                        `json:"user,omitempty"`
 	Members           *ProgramMembershipConnection `json:"members"`
 }
 
@@ -21753,6 +21841,8 @@ type ProgramHistory struct {
 	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
 	AuditorEmail *string `json:"auditorEmail,omitempty"`
+	// the id of the user who is responsible for this program
+	ProgramOwnerID *string `json:"programOwnerID,omitempty"`
 }
 
 func (ProgramHistory) IsNode() {}
@@ -22049,6 +22139,22 @@ type ProgramHistoryWhereInput struct {
 	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
+	// program_owner_id field predicates
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIdneq          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIdgt           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIdgte          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIdlt           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIdlte          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        *bool    `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       *bool    `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
 }
 
 type ProgramMembership struct {
@@ -22624,6 +22730,22 @@ type ProgramWhereInput struct {
 	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
+	// program_owner_id field predicates
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIdneq          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIdgt           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIdgte          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIdlt           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIdlte          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        *bool    `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       *bool    `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -22675,6 +22797,9 @@ type ProgramWhereInput struct {
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -25464,6 +25589,8 @@ type Subcontrol struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -25592,6 +25719,8 @@ type SubcontrolHistory struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -25885,6 +26014,22 @@ type SubcontrolHistoryWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -26264,6 +26409,22 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+	// reference_framework_revision field predicates
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNeq          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGt           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGte          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLt           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLte          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -31645,11 +31806,8 @@ type UpdateAPITokenInput struct {
 	// when the token was revoked
 	RevokedAt      *time.Time `json:"revokedAt,omitempty"`
 	ClearRevokedAt *bool      `json:"clearRevokedAt,omitempty"`
-	// SSO verification time for the owning organization
-	SsoAuthorizations      *string `json:"ssoAuthorizations,omitempty"`
-	ClearSSOAuthorizations *bool   `json:"clearSSOAuthorizations,omitempty"`
-	OwnerID                *string `json:"ownerID,omitempty"`
-	ClearOwner             *bool   `json:"clearOwner,omitempty"`
+	OwnerID        *string    `json:"ownerID,omitempty"`
+	ClearOwner     *bool      `json:"clearOwner,omitempty"`
 }
 
 // UpdateActionPlanInput is used for update ActionPlan object.
@@ -31911,6 +32069,9 @@ type UpdateControlInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
+	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -33346,16 +33507,13 @@ type UpdatePersonalAccessTokenInput struct {
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
 	// a description of the token's purpose
-	Description      *string  `json:"description,omitempty"`
-	ClearDescription *bool    `json:"clearDescription,omitempty"`
-	Scopes           []string `json:"scopes,omitempty"`
-	AppendScopes     []string `json:"appendScopes,omitempty"`
-	ClearScopes      *bool    `json:"clearScopes,omitempty"`
-	// SSO authorization timestamps by organization id
-	SsoAuthorizations      *string    `json:"ssoAuthorizations,omitempty"`
-	ClearSSOAuthorizations *bool      `json:"clearSSOAuthorizations,omitempty"`
-	LastUsedAt             *time.Time `json:"lastUsedAt,omitempty"`
-	ClearLastUsedAt        *bool      `json:"clearLastUsedAt,omitempty"`
+	Description      *string    `json:"description,omitempty"`
+	ClearDescription *bool      `json:"clearDescription,omitempty"`
+	Scopes           []string   `json:"scopes,omitempty"`
+	AppendScopes     []string   `json:"appendScopes,omitempty"`
+	ClearScopes      *bool      `json:"clearScopes,omitempty"`
+	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive              *bool    `json:"isActive,omitempty"`
 	ClearIsActive         *bool    `json:"clearIsActive,omitempty"`
@@ -33555,6 +33713,8 @@ type UpdateProgramInput struct {
 	AddActionPlanIDs          []string                     `json:"addActionPlanIDs,omitempty"`
 	RemoveActionPlanIDs       []string                     `json:"removeActionPlanIDs,omitempty"`
 	ClearActionPlans          *bool                        `json:"clearActionPlans,omitempty"`
+	UserID                    *string                      `json:"userID,omitempty"`
+	ClearUser                 *bool                        `json:"clearUser,omitempty"`
 	AddProgramMembers         []*AddProgramMembershipInput `json:"addProgramMembers,omitempty"`
 	RemoveProgramMembers      []string                     `json:"removeProgramMembers,omitempty"`
 }
@@ -33811,6 +33971,9 @@ type UpdateSubcontrolInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
+	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -34303,6 +34466,8 @@ type UpdateUserInput struct {
 	AddProgramIDs                []string    `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs             []string    `json:"removeProgramIDs,omitempty"`
 	ClearPrograms                *bool       `json:"clearPrograms,omitempty"`
+	ProgramOwnerID               *string     `json:"programOwnerID,omitempty"`
+	ClearProgramOwner            *bool       `json:"clearProgramOwner,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.
@@ -34381,6 +34546,7 @@ type User struct {
 	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
 	Programs             *ProgramConnection             `json:"programs"`
+	ProgramOwner         *Program                       `json:"programOwner,omitempty"`
 	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
 	ProgramMemberships   *ProgramMembershipConnection   `json:"programMemberships"`
@@ -35468,6 +35634,9 @@ type UserWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// program_owner edge predicates
+	HasProgramOwner     *bool                `json:"hasProgramOwner,omitempty"`
+	HasProgramOwnerWith []*ProgramWhereInput `json:"hasProgramOwnerWith,omitempty"`
 	// group_memberships edge predicates
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`

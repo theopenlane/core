@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/rs/zerolog"
@@ -14,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -139,6 +142,27 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
 	moduleKey := strings.TrimSpace(productMetadata["module"])
 
+	if moduleKey == models.CatalogTrustCenterModule.String() {
+		// use a fresh context to avoid inheriting the OrgSubscriptionContextKey bypass and others
+		newCtx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+			SubjectID:          orgSub.CreatedBy,
+			OrganizationID:     orgSub.OwnerID,
+			OrganizationIDs:    []string{orgSub.OwnerID},
+			AuthenticationType: auth.JWTAuthentication,
+		})
+
+		// add tx back to the context
+		newCtx = transaction.NewContext(newCtx, tx)
+
+		newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
+
+		_, err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
+			Save(newCtx)
+		if err != nil && !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
+			return nil, err
+		}
+	}
+
 	// include softdeleted modules in the query
 	// if the module was previously marked as deleted, bring it back
 	// instead of making a new record/row
@@ -191,6 +215,7 @@ func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentM
 			orgmodule.ModuleNotIn(currentModules...),
 		),
 	).Exec(allowCtx)
+
 	return err
 }
 

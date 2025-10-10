@@ -265,6 +265,7 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // to their personal org
 func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
 	skip := skipOrgValidation(ctx)
+
 	if orgID == "" {
 		// get the default org for the user to check access
 		var err error

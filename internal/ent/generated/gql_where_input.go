@@ -7513,6 +7513,23 @@ type ControlWhereInput struct {
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
+	// "reference_framework_revision" field predicates.
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNEQ          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGT           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGTE          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLT           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLTE          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        bool     `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       bool     `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -8379,6 +8396,51 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.ReferenceFrameworkContainsFold != nil {
 		predicates = append(predicates, control.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
+	}
+	if i.ReferenceFrameworkRevision != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionEQ(*i.ReferenceFrameworkRevision))
+	}
+	if i.ReferenceFrameworkRevisionNEQ != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionNEQ(*i.ReferenceFrameworkRevisionNEQ))
+	}
+	if len(i.ReferenceFrameworkRevisionIn) > 0 {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionIn(i.ReferenceFrameworkRevisionIn...))
+	}
+	if len(i.ReferenceFrameworkRevisionNotIn) > 0 {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionNotIn(i.ReferenceFrameworkRevisionNotIn...))
+	}
+	if i.ReferenceFrameworkRevisionGT != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionGT(*i.ReferenceFrameworkRevisionGT))
+	}
+	if i.ReferenceFrameworkRevisionGTE != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionGTE(*i.ReferenceFrameworkRevisionGTE))
+	}
+	if i.ReferenceFrameworkRevisionLT != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionLT(*i.ReferenceFrameworkRevisionLT))
+	}
+	if i.ReferenceFrameworkRevisionLTE != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionLTE(*i.ReferenceFrameworkRevisionLTE))
+	}
+	if i.ReferenceFrameworkRevisionContains != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionContains(*i.ReferenceFrameworkRevisionContains))
+	}
+	if i.ReferenceFrameworkRevisionHasPrefix != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionHasPrefix(*i.ReferenceFrameworkRevisionHasPrefix))
+	}
+	if i.ReferenceFrameworkRevisionHasSuffix != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionHasSuffix(*i.ReferenceFrameworkRevisionHasSuffix))
+	}
+	if i.ReferenceFrameworkRevisionIsNil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionIsNil())
+	}
+	if i.ReferenceFrameworkRevisionNotNil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionNotNil())
+	}
+	if i.ReferenceFrameworkRevisionEqualFold != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionEqualFold(*i.ReferenceFrameworkRevisionEqualFold))
+	}
+	if i.ReferenceFrameworkRevisionContainsFold != nil {
+		predicates = append(predicates, control.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, control.ControlTypeEQ(*i.ControlType))
@@ -9504,6 +9566,23 @@ type ControlHistoryWhereInput struct {
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
+	// "reference_framework_revision" field predicates.
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNEQ          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGT           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGTE          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLT           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLTE          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        bool     `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       bool     `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -10363,6 +10442,51 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.ReferenceFrameworkContainsFold != nil {
 		predicates = append(predicates, controlhistory.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
+	}
+	if i.ReferenceFrameworkRevision != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionEQ(*i.ReferenceFrameworkRevision))
+	}
+	if i.ReferenceFrameworkRevisionNEQ != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionNEQ(*i.ReferenceFrameworkRevisionNEQ))
+	}
+	if len(i.ReferenceFrameworkRevisionIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionIn(i.ReferenceFrameworkRevisionIn...))
+	}
+	if len(i.ReferenceFrameworkRevisionNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionNotIn(i.ReferenceFrameworkRevisionNotIn...))
+	}
+	if i.ReferenceFrameworkRevisionGT != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionGT(*i.ReferenceFrameworkRevisionGT))
+	}
+	if i.ReferenceFrameworkRevisionGTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionGTE(*i.ReferenceFrameworkRevisionGTE))
+	}
+	if i.ReferenceFrameworkRevisionLT != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionLT(*i.ReferenceFrameworkRevisionLT))
+	}
+	if i.ReferenceFrameworkRevisionLTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionLTE(*i.ReferenceFrameworkRevisionLTE))
+	}
+	if i.ReferenceFrameworkRevisionContains != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionContains(*i.ReferenceFrameworkRevisionContains))
+	}
+	if i.ReferenceFrameworkRevisionHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionHasPrefix(*i.ReferenceFrameworkRevisionHasPrefix))
+	}
+	if i.ReferenceFrameworkRevisionHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionHasSuffix(*i.ReferenceFrameworkRevisionHasSuffix))
+	}
+	if i.ReferenceFrameworkRevisionIsNil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionIsNil())
+	}
+	if i.ReferenceFrameworkRevisionNotNil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionNotNil())
+	}
+	if i.ReferenceFrameworkRevisionEqualFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionEqualFold(*i.ReferenceFrameworkRevisionEqualFold))
+	}
+	if i.ReferenceFrameworkRevisionContainsFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, controlhistory.ControlTypeEQ(*i.ControlType))
@@ -63580,6 +63704,23 @@ type ProgramWhereInput struct {
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 
+	// "program_owner_id" field predicates.
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIDNEQ          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIDGT           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIDGTE          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIDLT           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIDLTE          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        bool     `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -63647,6 +63788,10 @@ type ProgramWhereInput struct {
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+
+	// "user" edge predicates.
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 
 	// "members" edge predicates.
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
@@ -64354,6 +64499,51 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	if i.AuditorEmailContainsFold != nil {
 		predicates = append(predicates, program.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
 	}
+	if i.ProgramOwnerID != nil {
+		predicates = append(predicates, program.ProgramOwnerIDEQ(*i.ProgramOwnerID))
+	}
+	if i.ProgramOwnerIDNEQ != nil {
+		predicates = append(predicates, program.ProgramOwnerIDNEQ(*i.ProgramOwnerIDNEQ))
+	}
+	if len(i.ProgramOwnerIDIn) > 0 {
+		predicates = append(predicates, program.ProgramOwnerIDIn(i.ProgramOwnerIDIn...))
+	}
+	if len(i.ProgramOwnerIDNotIn) > 0 {
+		predicates = append(predicates, program.ProgramOwnerIDNotIn(i.ProgramOwnerIDNotIn...))
+	}
+	if i.ProgramOwnerIDGT != nil {
+		predicates = append(predicates, program.ProgramOwnerIDGT(*i.ProgramOwnerIDGT))
+	}
+	if i.ProgramOwnerIDGTE != nil {
+		predicates = append(predicates, program.ProgramOwnerIDGTE(*i.ProgramOwnerIDGTE))
+	}
+	if i.ProgramOwnerIDLT != nil {
+		predicates = append(predicates, program.ProgramOwnerIDLT(*i.ProgramOwnerIDLT))
+	}
+	if i.ProgramOwnerIDLTE != nil {
+		predicates = append(predicates, program.ProgramOwnerIDLTE(*i.ProgramOwnerIDLTE))
+	}
+	if i.ProgramOwnerIDContains != nil {
+		predicates = append(predicates, program.ProgramOwnerIDContains(*i.ProgramOwnerIDContains))
+	}
+	if i.ProgramOwnerIDHasPrefix != nil {
+		predicates = append(predicates, program.ProgramOwnerIDHasPrefix(*i.ProgramOwnerIDHasPrefix))
+	}
+	if i.ProgramOwnerIDHasSuffix != nil {
+		predicates = append(predicates, program.ProgramOwnerIDHasSuffix(*i.ProgramOwnerIDHasSuffix))
+	}
+	if i.ProgramOwnerIDIsNil {
+		predicates = append(predicates, program.ProgramOwnerIDIsNil())
+	}
+	if i.ProgramOwnerIDNotNil {
+		predicates = append(predicates, program.ProgramOwnerIDNotNil())
+	}
+	if i.ProgramOwnerIDEqualFold != nil {
+		predicates = append(predicates, program.ProgramOwnerIDEqualFold(*i.ProgramOwnerIDEqualFold))
+	}
+	if i.ProgramOwnerIDContainsFold != nil {
+		predicates = append(predicates, program.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := program.HasOwner()
@@ -64660,6 +64850,24 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, program.HasUsersWith(with...))
+	}
+	if i.HasUser != nil {
+		p := program.HasUser()
+		if !*i.HasUser {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasUserWith))
+		for _, w := range i.HasUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasUserWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := program.HasMembers()
@@ -64978,6 +65186,23 @@ type ProgramHistoryWhereInput struct {
 	AuditorEmailNotNil       bool     `json:"auditorEmailNotNil,omitempty"`
 	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
 	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
+
+	// "program_owner_id" field predicates.
+	ProgramOwnerID             *string  `json:"programOwnerID,omitempty"`
+	ProgramOwnerIDNEQ          *string  `json:"programOwnerIDNEQ,omitempty"`
+	ProgramOwnerIDIn           []string `json:"programOwnerIDIn,omitempty"`
+	ProgramOwnerIDNotIn        []string `json:"programOwnerIDNotIn,omitempty"`
+	ProgramOwnerIDGT           *string  `json:"programOwnerIDGT,omitempty"`
+	ProgramOwnerIDGTE          *string  `json:"programOwnerIDGTE,omitempty"`
+	ProgramOwnerIDLT           *string  `json:"programOwnerIDLT,omitempty"`
+	ProgramOwnerIDLTE          *string  `json:"programOwnerIDLTE,omitempty"`
+	ProgramOwnerIDContains     *string  `json:"programOwnerIDContains,omitempty"`
+	ProgramOwnerIDHasPrefix    *string  `json:"programOwnerIDHasPrefix,omitempty"`
+	ProgramOwnerIDHasSuffix    *string  `json:"programOwnerIDHasSuffix,omitempty"`
+	ProgramOwnerIDIsNil        bool     `json:"programOwnerIDIsNil,omitempty"`
+	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
+	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
+	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -65761,6 +65986,51 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.AuditorEmailContainsFold != nil {
 		predicates = append(predicates, programhistory.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
+	}
+	if i.ProgramOwnerID != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDEQ(*i.ProgramOwnerID))
+	}
+	if i.ProgramOwnerIDNEQ != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNEQ(*i.ProgramOwnerIDNEQ))
+	}
+	if len(i.ProgramOwnerIDIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramOwnerIDIn(i.ProgramOwnerIDIn...))
+	}
+	if len(i.ProgramOwnerIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNotIn(i.ProgramOwnerIDNotIn...))
+	}
+	if i.ProgramOwnerIDGT != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDGT(*i.ProgramOwnerIDGT))
+	}
+	if i.ProgramOwnerIDGTE != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDGTE(*i.ProgramOwnerIDGTE))
+	}
+	if i.ProgramOwnerIDLT != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDLT(*i.ProgramOwnerIDLT))
+	}
+	if i.ProgramOwnerIDLTE != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDLTE(*i.ProgramOwnerIDLTE))
+	}
+	if i.ProgramOwnerIDContains != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDContains(*i.ProgramOwnerIDContains))
+	}
+	if i.ProgramOwnerIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDHasPrefix(*i.ProgramOwnerIDHasPrefix))
+	}
+	if i.ProgramOwnerIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDHasSuffix(*i.ProgramOwnerIDHasSuffix))
+	}
+	if i.ProgramOwnerIDIsNil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDIsNil())
+	}
+	if i.ProgramOwnerIDNotNil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDNotNil())
+	}
+	if i.ProgramOwnerIDEqualFold != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDEqualFold(*i.ProgramOwnerIDEqualFold))
+	}
+	if i.ProgramOwnerIDContainsFold != nil {
+		predicates = append(predicates, programhistory.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -75583,6 +75853,23 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
+	// "reference_framework_revision" field predicates.
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNEQ          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGT           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGTE          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLT           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLTE          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        bool     `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       bool     `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -76423,6 +76710,51 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.ReferenceFrameworkContainsFold != nil {
 		predicates = append(predicates, subcontrol.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
+	}
+	if i.ReferenceFrameworkRevision != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionEQ(*i.ReferenceFrameworkRevision))
+	}
+	if i.ReferenceFrameworkRevisionNEQ != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionNEQ(*i.ReferenceFrameworkRevisionNEQ))
+	}
+	if len(i.ReferenceFrameworkRevisionIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionIn(i.ReferenceFrameworkRevisionIn...))
+	}
+	if len(i.ReferenceFrameworkRevisionNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionNotIn(i.ReferenceFrameworkRevisionNotIn...))
+	}
+	if i.ReferenceFrameworkRevisionGT != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionGT(*i.ReferenceFrameworkRevisionGT))
+	}
+	if i.ReferenceFrameworkRevisionGTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionGTE(*i.ReferenceFrameworkRevisionGTE))
+	}
+	if i.ReferenceFrameworkRevisionLT != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionLT(*i.ReferenceFrameworkRevisionLT))
+	}
+	if i.ReferenceFrameworkRevisionLTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionLTE(*i.ReferenceFrameworkRevisionLTE))
+	}
+	if i.ReferenceFrameworkRevisionContains != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionContains(*i.ReferenceFrameworkRevisionContains))
+	}
+	if i.ReferenceFrameworkRevisionHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionHasPrefix(*i.ReferenceFrameworkRevisionHasPrefix))
+	}
+	if i.ReferenceFrameworkRevisionHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionHasSuffix(*i.ReferenceFrameworkRevisionHasSuffix))
+	}
+	if i.ReferenceFrameworkRevisionIsNil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionIsNil())
+	}
+	if i.ReferenceFrameworkRevisionNotNil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionNotNil())
+	}
+	if i.ReferenceFrameworkRevisionEqualFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionEqualFold(*i.ReferenceFrameworkRevisionEqualFold))
+	}
+	if i.ReferenceFrameworkRevisionContainsFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, subcontrol.ControlTypeEQ(*i.ControlType))
@@ -77434,6 +77766,23 @@ type SubcontrolHistoryWhereInput struct {
 	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
 	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
+	// "reference_framework_revision" field predicates.
+	ReferenceFrameworkRevision             *string  `json:"referenceFrameworkRevision,omitempty"`
+	ReferenceFrameworkRevisionNEQ          *string  `json:"referenceFrameworkRevisionNEQ,omitempty"`
+	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
+	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
+	ReferenceFrameworkRevisionGT           *string  `json:"referenceFrameworkRevisionGT,omitempty"`
+	ReferenceFrameworkRevisionGTE          *string  `json:"referenceFrameworkRevisionGTE,omitempty"`
+	ReferenceFrameworkRevisionLT           *string  `json:"referenceFrameworkRevisionLT,omitempty"`
+	ReferenceFrameworkRevisionLTE          *string  `json:"referenceFrameworkRevisionLTE,omitempty"`
+	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
+	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
+	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
+	ReferenceFrameworkRevisionIsNil        bool     `json:"referenceFrameworkRevisionIsNil,omitempty"`
+	ReferenceFrameworkRevisionNotNil       bool     `json:"referenceFrameworkRevisionNotNil,omitempty"`
+	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
+	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -78291,6 +78640,51 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.ReferenceFrameworkContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
+	}
+	if i.ReferenceFrameworkRevision != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionEQ(*i.ReferenceFrameworkRevision))
+	}
+	if i.ReferenceFrameworkRevisionNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionNEQ(*i.ReferenceFrameworkRevisionNEQ))
+	}
+	if len(i.ReferenceFrameworkRevisionIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionIn(i.ReferenceFrameworkRevisionIn...))
+	}
+	if len(i.ReferenceFrameworkRevisionNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionNotIn(i.ReferenceFrameworkRevisionNotIn...))
+	}
+	if i.ReferenceFrameworkRevisionGT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionGT(*i.ReferenceFrameworkRevisionGT))
+	}
+	if i.ReferenceFrameworkRevisionGTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionGTE(*i.ReferenceFrameworkRevisionGTE))
+	}
+	if i.ReferenceFrameworkRevisionLT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionLT(*i.ReferenceFrameworkRevisionLT))
+	}
+	if i.ReferenceFrameworkRevisionLTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionLTE(*i.ReferenceFrameworkRevisionLTE))
+	}
+	if i.ReferenceFrameworkRevisionContains != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionContains(*i.ReferenceFrameworkRevisionContains))
+	}
+	if i.ReferenceFrameworkRevisionHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionHasPrefix(*i.ReferenceFrameworkRevisionHasPrefix))
+	}
+	if i.ReferenceFrameworkRevisionHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionHasSuffix(*i.ReferenceFrameworkRevisionHasSuffix))
+	}
+	if i.ReferenceFrameworkRevisionIsNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionIsNil())
+	}
+	if i.ReferenceFrameworkRevisionNotNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionNotNil())
+	}
+	if i.ReferenceFrameworkRevisionEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionEqualFold(*i.ReferenceFrameworkRevisionEqualFold))
+	}
+	if i.ReferenceFrameworkRevisionContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, subcontrolhistory.ControlTypeEQ(*i.ControlType))
@@ -95137,6 +95531,10 @@ type UserWhereInput struct {
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 
+	// "program_owner" edge predicates.
+	HasProgramOwner     *bool                `json:"hasProgramOwner,omitempty"`
+	HasProgramOwnerWith []*ProgramWhereInput `json:"hasProgramOwnerWith,omitempty"`
+
 	// "group_memberships" edge predicates.
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
@@ -96148,6 +96546,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasProgramsWith(with...))
+	}
+	if i.HasProgramOwner != nil {
+		p := user.HasProgramOwner()
+		if !*i.HasProgramOwner {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramOwnerWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramOwnerWith))
+		for _, w := range i.HasProgramOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasProgramOwnerWith(with...))
 	}
 	if i.HasGroupMemberships != nil {
 		p := user.HasGroupMemberships()

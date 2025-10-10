@@ -31,6 +31,7 @@ func ParseDocument(content []byte, mimeType string) (string, error) {
 
 func parseDocx(content []byte) (string, error) {
 	reader := bytes.NewReader(content)
+
 	doc, err := document.Read(reader, int64(len(content)))
 	if err != nil {
 		return "", fmt.Errorf("failed to read docx file: %w", err) // nolint:err113

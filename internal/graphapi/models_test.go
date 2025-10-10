@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -247,7 +248,9 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name                    string
+	RefCode                 string
+	Aliases                 []string
+	Title                   string
 	ProgramID               string
 	StandardID              string
 	ControlOwnerID          string
@@ -1129,12 +1132,16 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control {
 	ctx = setContext(ctx, c.client.db)
 
-	if c.Name == "" {
-		c.Name = gofakeit.UUID()
+	if c.RefCode == "" {
+		c.RefCode = gofakeit.UUID()
+	}
+
+	if c.Title == "" {
+		c.Title = gofakeit.HipsterSentence(3)
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetRefCode(c.Name)
+		SetRefCode(c.RefCode).SetTitle(c.Title)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
@@ -1143,6 +1150,8 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	if c.StandardID != "" {
 		mutation.SetStandardID(c.StandardID)
 		mutation.SetSource(enums.ControlSourceFramework)
+	} else {
+		mutation.SetSource(enums.ControlSourceUserDefined)
 	}
 
 	if c.ControlOwnerID != "" {
@@ -1159,9 +1168,11 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.AllFields {
 		mutation.SetDescription(gofakeit.HipsterSentence(5)).
-			SetCategory(gofakeit.Adjective()).
-			SetCategoryID("A").
-			SetSubcategory(gofakeit.Adjective()).
+			// add a unique string to ensure we know the number of controls created per category is singular
+			// this field doesn't actually need to be unique, but is an easy way to do the tests
+			SetCategory(gofakeit.Adjective() + ulids.New().String()).
+			SetCategoryID(ulids.New().String()).
+			SetSubcategory(gofakeit.Adjective() + ulids.New().String()).
 			SetControlType(enums.ControlTypeDetective).
 			SetExampleEvidence([]models.ExampleEvidence{
 				{
@@ -1171,7 +1182,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetImplementationGuidance([]models.ImplementationGuidance{
 				{
-					ReferenceID: "A",
+					ReferenceID: ulids.New().String(),
 					Guidance: []string{
 						gofakeit.HipsterSentence(5),
 						gofakeit.HipsterSentence(5),
@@ -1187,13 +1198,13 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
-			SetSource(enums.ControlSourceUserDefined).
 			SetReferences([]models.Reference{
 				{
 					Name: gofakeit.HipsterSentence(5),
 					URL:  gofakeit.URL(),
 				},
-			})
+			}).
+			SetAliases([]string{gofakeit.UUID(), gofakeit.UUID()})
 	}
 
 	if c.Category != "" {
@@ -1202,6 +1213,10 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.Subcategory != "" {
 		mutation.SetSubcategory(c.Subcategory)
+	}
+
+	if c.Aliases != nil {
+		mutation.SetAliases(c.Aliases)
 	}
 
 	control, err := mutation.
@@ -1760,7 +1775,11 @@ type TrustCenterComplianceBuilder struct {
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
-	ctx = setContext(ctx, tc.client.db)
+	// do not use internal ctx or skip the checks so
+	// the owner_id can be applied
+	ctx = ent.NewContext(ctx, tc.client.db)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 
 	if tc.Slug == "" {
 		tc.Slug = randomName(t)
@@ -1801,6 +1820,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 // MustNew trust center setting builder is used to create, without authz checks, trust center settings in the database
 func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterSetting {
+	userCtx := ctx
 	ctx = setContext(ctx, tcs.client.db)
 
 	if tcs.Title == "" {
@@ -1816,8 +1836,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	if tcs.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(userCtx, t)
 		tcs.TrustCenterID = trustCenter.ID
 	}
 
@@ -1838,11 +1857,11 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 }
 
 func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterCompliance {
+	userCtx := ctx
 	ctx = setContext(ctx, tccb.client.db)
 
 	if tccb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tccb.client}).MustNew(userCtx, t)
 		tccb.TrustCenterID = trustCenter.ID
 	}
 
@@ -2096,6 +2115,9 @@ type TrustCenterDocBuilder struct {
 
 // MustNew trust center doc builder is used to create trust center docs using the GraphQL API
 func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterDoc {
+	// save original context for trust center creation to preserve org scoping
+	userCtx := ctx
+
 	if tcdb.Title == "" {
 		tcdb.Title = gofakeit.Sentence(3)
 	}
@@ -2105,8 +2127,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	if tcdb.TrustCenterID == "" {
-		// Create a trust center if not provided
-		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(ctx, t)
+		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(userCtx, t)
 		tcdb.TrustCenterID = trustCenter.ID
 	}
 

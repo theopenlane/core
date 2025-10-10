@@ -108,6 +108,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					if !conf.AllowAnonymous {
 						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
+
 					an, err := createAnonymousTrustCenterUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 					if err != nil {
 						return unauthorized(c, err, conf, validator)
@@ -250,7 +251,6 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 }
 
 func createAnonymousTrustCenterUserFromClaims(_ context.Context, _ *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
-
 	return &auth.AnonymousTrustCenterUser{
 		SubjectID:          claims.UserID,
 		SubjectName:        "Anonymous User",
@@ -286,7 +286,6 @@ func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string)
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
 func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
-
 	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -312,11 +311,13 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		if err != nil {
 			return nil, "", err
 		}
+
 		if enforced {
 			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
 			if err != nil {
 				return nil, "", err
 			}
+
 			if !authorized {
 				return nil, "", ErrTokenSSORequired
 			}
@@ -532,6 +533,7 @@ func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID stri
 	}
 
 	ctx = models.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
+
 	auths, ok := models.SSOAuthorizationsFromContext(ctx)
 	if !ok || auths == nil {
 		return false, nil

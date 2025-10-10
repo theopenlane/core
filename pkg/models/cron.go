@@ -64,6 +64,7 @@ func (c Cron) Validate() error {
 // nextExecutions computes the next `count` executions of the cron schedule
 func nextExecutions(schedule cron.Schedule, count int) ([]time.Time, error) {
 	var times []time.Time
+
 	next := time.Now()
 
 	for range count {

@@ -40,6 +40,89 @@ func (_m *MockOpenlaneGraphClient) EXPECT() *MockOpenlaneGraphClient_Expecter {
 	return &MockOpenlaneGraphClient_Expecter{mock: &_m.Mock}
 }
 
+// CloneBulkCSVControl provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CloneBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CloneBulkCSVControl, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CloneBulkCSVControl")
+	}
+
+	var r0 *openlaneclient.CloneBulkCSVControl
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CloneBulkCSVControl, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CloneBulkCSVControl); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CloneBulkCSVControl)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CloneBulkCSVControl_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CloneBulkCSVControl'
+type MockOpenlaneGraphClient_CloneBulkCSVControl_Call struct {
+	*mock.Call
+}
+
+// CloneBulkCSVControl is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CloneBulkCSVControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CloneBulkCSVControl_Call {
+	return &MockOpenlaneGraphClient_CloneBulkCSVControl_Call{Call: _e.mock.On("CloneBulkCSVControl",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CloneBulkCSVControl_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CloneBulkCSVControl_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CloneBulkCSVControl_Call) Return(cloneBulkCSVControl *openlaneclient.CloneBulkCSVControl, err error) *MockOpenlaneGraphClient_CloneBulkCSVControl_Call {
+	_c.Call.Return(cloneBulkCSVControl, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CloneBulkCSVControl_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CloneBulkCSVControl, error)) *MockOpenlaneGraphClient_CloneBulkCSVControl_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateAPIToken provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateAPIToken(ctx context.Context, input openlaneclient.CreateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateAPIToken, error) {
 	var tmpRet mock.Arguments

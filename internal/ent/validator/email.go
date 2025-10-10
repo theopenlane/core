@@ -128,6 +128,7 @@ func (c *EmailVerifier) VerifyEmailAddress(email string) (bool, *emailverifier.R
 	}
 
 	metrics.RecordEmailValidation(true, ResultValid)
+
 	return true, ret, nil
 }
 

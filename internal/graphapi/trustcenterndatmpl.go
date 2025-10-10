@@ -74,6 +74,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenternda"})
 	}
+
 	key := "templateFiles"
 
 	// get the file from the context, if it exists
@@ -103,6 +104,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 
 	// Get the output as a string from the buffer
 	outputString := buf.String()
+
 	var outputInterface map[string]interface{}
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenternda"})
@@ -116,11 +118,11 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	return &model.TrustCenterNDACreatePayload{
 		Template: updatedTmpl,
 	}, nil
-
 }
 
 func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDAUpdatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
+
 	ndaTemplate, err := txnCtx.Template.Query().Where(gentemplate.TrustCenterIDEQ(id)).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenternda"})
@@ -161,6 +163,7 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 	// Get the output as a string from the buffer
 	outputString := buf.String()
+
 	var outputInterface map[string]interface{}
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenternda"})
@@ -182,8 +185,8 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		if anon.TrustCenterID != input.TrustCenterID {
 			return nil, rout.ErrPermissionDenied
 		}
-		anonymousUser = anon
 
+		anonymousUser = anon
 	} else {
 		// allow for system admins to also send the email
 		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
@@ -194,6 +197,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		if !admin {
 			return nil, rout.ErrPermissionDenied
 		}
+
 		anonymousUser = &auth.AnonymousTrustCenterUser{
 			SubjectID:          fmt.Sprintf("anon_%s", uuid.New().String()),
 			SubjectName:        "Anonymous User",
@@ -210,6 +214,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	trustCenterOwner, err := txnCtx.Organization.Get(allowCtx, trustCenter.OwnerID)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterndaemail"})
@@ -298,6 +303,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 			}, nil); err != nil {
 				return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterndaemail"})
 			}
+
 			return &model.SendTrustCenterNDAEmailPayload{
 				Success: true,
 			}, nil

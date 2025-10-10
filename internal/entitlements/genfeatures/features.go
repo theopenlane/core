@@ -93,6 +93,7 @@ func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
 	}
 
 	log.Info().Str("file", outputPath).Msg("generated local feature map")
+
 	return nil
 }
 
@@ -104,16 +105,20 @@ func parseSchemaInfo(filePath string) (string, []string) {
 	}
 
 	fset := token.NewFileSet()
+
 	file, err := parser.ParseFile(fset, filePath, content, parser.ParseComments)
 	if err != nil {
 		log.Debug().Str("file", filePath).Err(err).Msg("could not parse schema file")
 		return "", nil
 	}
 
-	var schemaName string
-	var modules []string
+	var (
+		schemaName string
+		modules    []string
+	)
 
 	// retrieve the Name() and Modules() methods
+
 	ast.Inspect(file, func(n ast.Node) bool {
 		if funcDecl, ok := n.(*ast.FuncDecl); ok {
 			if funcDecl.Recv != nil && len(funcDecl.Recv.List) > 0 {
@@ -130,6 +135,7 @@ func parseSchemaInfo(filePath string) (string, []string) {
 				}
 			}
 		}
+
 		return true
 	})
 
@@ -155,6 +161,7 @@ func extractModules(funcDecl *ast.FuncDecl) []string {
 				}
 			}
 		}
+
 		return true
 	})
 

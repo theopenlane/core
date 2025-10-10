@@ -47,7 +47,9 @@ func (d SoftDeleteMixin) Interceptors() []ent.Interceptor {
 			if skip, _ := ctx.Value(entx.SoftDeleteSkipKey{}).(bool); skip {
 				return nil
 			}
+
 			d.P(q)
+
 			return nil
 		}),
 	}

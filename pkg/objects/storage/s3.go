@@ -182,11 +182,11 @@ func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOption
 	if opts.Bucket == "" {
 		opts.Bucket = s.Opts.Bucket
 	}
+
 	_, err = s.Downloader.Download(ctx, w, &s3.GetObjectInput{
 		Bucket: aws.String(opts.Bucket),
 		Key:    aws.String(opts.FileName),
 	})
-
 	if err != nil {
 		return nil, err
 	}

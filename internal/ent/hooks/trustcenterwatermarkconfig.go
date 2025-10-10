@@ -26,6 +26,7 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 
 				m.SetFileID(fileIDs[0])
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
@@ -45,9 +46,11 @@ func checkTrustCenterWatermarkConfigFiles(ctx context.Context, m *generated.Trus
 	if len(file) > 1 {
 		return ctx, ErrNotSingularUpload
 	}
+
 	if len(file) == 0 {
 		return ctx, nil
 	}
+
 	if file[0].FieldName != key {
 		return ctx, nil
 	}

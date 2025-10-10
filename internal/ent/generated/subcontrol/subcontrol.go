@@ -52,6 +52,8 @@ const (
 	FieldSource = "source"
 	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
 	FieldReferenceFramework = "reference_framework"
+	// FieldReferenceFrameworkRevision holds the string denoting the reference_framework_revision field in the database.
+	FieldReferenceFrameworkRevision = "reference_framework_revision"
 	// FieldControlType holds the string denoting the control_type field in the database.
 	FieldControlType = "control_type"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -256,6 +258,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldSource,
 	FieldReferenceFramework,
+	FieldReferenceFrameworkRevision,
 	FieldControlType,
 	FieldCategory,
 	FieldCategoryID,
@@ -480,6 +483,11 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByReferenceFramework orders the results by the reference_framework field.
 func ByReferenceFramework(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReferenceFramework, opts...).ToFunc()
+}
+
+// ByReferenceFrameworkRevision orders the results by the reference_framework_revision field.
+func ByReferenceFrameworkRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceFrameworkRevision, opts...).ToFunc()
 }
 
 // ByControlType orders the results by the control_type field.

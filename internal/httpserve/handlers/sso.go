@@ -135,6 +135,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		}
 
 		metrics.RecordLogin(false)
+
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
@@ -364,7 +365,6 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
 	switch tokenType {
 	case "api":
-
 		apiToken, err := transaction.FromContext(ctx).APIToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
@@ -399,7 +399,6 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 			UpdateOne(pat).
 			SetSSOAuthorizations(auths).
 			Exec(ctx)
-
 	}
 
 	return errInvalidTokenType

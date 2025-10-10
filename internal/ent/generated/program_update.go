@@ -383,6 +383,26 @@ func (_u *ProgramUpdate) ClearAuditorEmail() *ProgramUpdate {
 	return _u
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_u *ProgramUpdate) SetProgramOwnerID(v string) *ProgramUpdate {
+	_u.mutation.SetProgramOwnerID(v)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableProgramOwnerID(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetProgramOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearProgramOwnerID clears the value of the "program_owner_id" field.
+func (_u *ProgramUpdate) ClearProgramOwnerID() *ProgramUpdate {
+	_u.mutation.ClearProgramOwnerID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProgramUpdate) SetOwner(v *Organization) *ProgramUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -626,6 +646,25 @@ func (_u *ProgramUpdate) AddUsers(v ...*User) *ProgramUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddUserIDs(ids...)
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (_u *ProgramUpdate) SetUserID(id string) *ProgramUpdate {
+	_u.mutation.SetUserID(id)
+	return _u
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableUserID(id *string) *ProgramUpdate {
+	if id != nil {
+		_u = _u.SetUserID(*id)
+	}
+	return _u
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (_u *ProgramUpdate) SetUser(v *User) *ProgramUpdate {
+	return _u.SetUserID(v.ID)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
@@ -988,6 +1027,12 @@ func (_u *ProgramUpdate) RemoveUsers(v ...*User) *ProgramUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveUserIDs(ids...)
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (_u *ProgramUpdate) ClearUser() *ProgramUpdate {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
@@ -2022,6 +2067,37 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2428,6 +2504,26 @@ func (_u *ProgramUpdateOne) ClearAuditorEmail() *ProgramUpdateOne {
 	return _u
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_u *ProgramUpdateOne) SetProgramOwnerID(v string) *ProgramUpdateOne {
+	_u.mutation.SetProgramOwnerID(v)
+	return _u
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableProgramOwnerID(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetProgramOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearProgramOwnerID clears the value of the "program_owner_id" field.
+func (_u *ProgramUpdateOne) ClearProgramOwnerID() *ProgramUpdateOne {
+	_u.mutation.ClearProgramOwnerID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProgramUpdateOne) SetOwner(v *Organization) *ProgramUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2671,6 +2767,25 @@ func (_u *ProgramUpdateOne) AddUsers(v ...*User) *ProgramUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddUserIDs(ids...)
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (_u *ProgramUpdateOne) SetUserID(id string) *ProgramUpdateOne {
+	_u.mutation.SetUserID(id)
+	return _u
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableUserID(id *string) *ProgramUpdateOne {
+	if id != nil {
+		_u = _u.SetUserID(*id)
+	}
+	return _u
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (_u *ProgramUpdateOne) SetUser(v *User) *ProgramUpdateOne {
+	return _u.SetUserID(v.ID)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
@@ -3033,6 +3148,12 @@ func (_u *ProgramUpdateOne) RemoveUsers(v ...*User) *ProgramUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveUserIDs(ids...)
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (_u *ProgramUpdateOne) ClearUser() *ProgramUpdateOne {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
@@ -4094,6 +4215,37 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

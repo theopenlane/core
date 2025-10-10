@@ -33,6 +33,7 @@ func (job JobConfiguration) MarshalJSON() ([]byte, error) {
 	if job == nil {
 		return []byte("null"), nil
 	}
+
 	return []byte(job), nil
 }
 
@@ -41,7 +42,9 @@ func (job *JobConfiguration) UnmarshalJSON(data []byte) error {
 	if job == nil {
 		return errNilJobConfiguration
 	}
+
 	*job = append((*job)[0:0], data...)
+
 	return nil
 }
 

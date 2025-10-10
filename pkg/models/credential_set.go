@@ -30,23 +30,29 @@ func (c CredentialSet) String() string {
 	if c.AccessKeyID != "" {
 		masked["accessKeyID"] = "***"
 	}
+
 	if c.SecretAccessKey != "" {
 		masked["secretAccessKey"] = "***"
 	}
+
 	if c.Endpoint != "" {
 		masked["endpoint"] = c.Endpoint
 	}
+
 	if c.ProjectID != "" {
 		masked["projectID"] = c.ProjectID
 	}
+
 	if c.AccountID != "" {
 		masked["accountID"] = c.AccountID
 	}
+
 	if c.APIToken != "" {
 		masked["apiToken"] = "***"
 	}
 
 	data, _ := json.Marshal(masked)
+
 	return string(data)
 }
 

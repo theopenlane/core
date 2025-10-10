@@ -89,6 +89,7 @@ func (s *ProviderWithRefresh) Close() {
 
 	if s.stop != nil {
 		s.stop <- true
+
 		close(s.stop)
 	}
 }

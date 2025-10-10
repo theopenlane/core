@@ -238,6 +238,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	// Create random bytes for security
 	const stateRandomBytesLength = 16
+
 	randomBytes := make([]byte, stateRandomBytesLength)
 
 	if _, err := rand.Read(randomBytes); err != nil {
@@ -369,6 +370,7 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 			Exec(systemCtx); err != nil {
 			return err
 		}
+
 		return nil
 	}
 
@@ -398,12 +400,12 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 func (h *Handler) validateGithubIntegrationToken(ctx context.Context, token *oauth2.Token) (*IntegrationUserInfo, error) {
 	// For integration tokens, we'll need to make a direct API call to GitHub
 	// since the github provider's UserFromContext expects a specific flow
-
 	helper := NewIntegrationHelper("github", "")
 	headerName, headerValue := helper.AuthHeader(token.AccessToken)
 
 	// Use httpsling to make the API call
 	var githubUser GitHubUser
+
 	resp, err := httpsling.ReceiveWithContext(ctx, &githubUser,
 		httpsling.Get("https://api.github.com/user"),
 		httpsling.Header(headerName, headerValue),
@@ -440,6 +442,7 @@ func (h *Handler) getGithubUserEmail(ctx context.Context, accessToken string) (s
 
 	// Use httpsling to make the API call
 	var emails []GitHubEmail
+
 	resp, err := httpsling.ReceiveWithContext(ctx, &emails,
 		httpsling.Get("https://api.github.com/user/emails"),
 		httpsling.Header(headerName, headerValue),
@@ -481,6 +484,7 @@ func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oaut
 
 	// Use httpsling to make the API call
 	var slackResp SlackUser
+
 	resp, err := httpsling.ReceiveWithContext(ctx, &slackResp,
 		httpsling.Get("https://slack.com/api/users.identity"),
 		httpsling.Header(headerName, headerValue),
@@ -573,6 +577,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 	// Get provider configuration
 	providers := h.getIntegrationProviders()
+
 	providerConfig, exists := providers[provider]
 	if !exists {
 		return nil, ErrInvalidProvider
@@ -589,6 +594,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 	// Use token source to get a fresh token
 	tokenSource := providerConfig.Config.TokenSource(ctx, token)
+
 	freshToken, err := tokenSource.Token()
 	if err != nil {
 		return nil, wrapTokenError("refresh", provider, err)
@@ -638,6 +644,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *Open
 
 	// Get the authenticated user and organization
 	userCtx := ctx.Request().Context()
+
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
 		return h.Unauthorized(ctx, err, openapi)
@@ -651,6 +658,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *Open
 		if ent.IsNotFound(err) {
 			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
 		}
+
 		return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err), openapi)
 	}
 
@@ -668,6 +676,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *Open
 // that is dependent on if the environment is test/dev or production
 func (h *Handler) getOauthCookieConfig() sessions.CookieConfig {
 	secure := !h.IsTest && !h.IsDev
+
 	sameSite := http.SameSiteNoneMode
 	if !secure {
 		sameSite = http.SameSiteLaxMode

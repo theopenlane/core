@@ -354,6 +354,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 		}
 
 		log.Error().Err(err).Msg("failed to find org subscription")
+
 		return nil, err
 	}
 
@@ -363,7 +364,6 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
 func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription) (*string, error) {
-
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err

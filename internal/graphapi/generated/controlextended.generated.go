@@ -409,7 +409,7 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"controlIDs", "standardID", "ownerID", "programID"}
+	fieldsInOrder := [...]string{"controlIDs", "refCodes", "standardID", "standardShortName", "standardVersion", "categories", "ownerID", "programID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -423,6 +423,13 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 				return it, err
 			}
 			it.ControlIDs = data
+		case "refCodes":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refCodes"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefCodes = data
 		case "standardID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -430,6 +437,27 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 				return it, err
 			}
 			it.StandardID = data
+		case "standardShortName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardShortName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardShortName = data
+		case "standardVersion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardVersion"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardVersion = data
+		case "categories":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categories"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Categories = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -444,6 +472,110 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 				return it, err
 			}
 			it.ProgramID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Context, obj any) (model.CloneControlUploadInput, error) {
+	var it model.CloneControlUploadInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"controlID", "refCode", "standardID", "standardShortName", "standardVersion", "ownerID", "controlImplementation", "controlObjective", "implementationGuidance", "comment", "internalPolicyID", "controlInput"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "controlID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlID = data
+		case "refCode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refCode"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefCode = data
+		case "standardID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardID = data
+		case "standardShortName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardShortName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardShortName = data
+		case "standardVersion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardVersion"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardVersion = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "controlImplementation":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlImplementation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlImplementation = data
+		case "controlObjective":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlObjective"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlObjective = data
+		case "implementationGuidance":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("implementationGuidance"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ImplementationGuidance = data
+		case "comment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Comment = data
+		case "internalPolicyID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalPolicyID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalPolicyID = data
+		case "controlInput":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlInput"))
+			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlInput = data
 		}
 	}
 

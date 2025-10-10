@@ -112,6 +112,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 
 	if w.requester == nil {
 		var err error
+
 		w.requester, err = httpsling.New(
 			httpsling.URL(w.Config.OpenlaneAPIHost),
 			httpsling.BearerAuth(w.Config.OpenlaneAPIToken),
@@ -130,12 +131,14 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	}
 
 	ownerIDPtr := export.Export.OwnerID
+
 	ownerID := ""
 	if ownerIDPtr != nil {
 		ownerID = *ownerIDPtr
 	}
 
 	var filterMap map[string]any
+
 	filtersPtr := export.Export.Filters
 	if filtersPtr != nil {
 		filters := *filtersPtr
@@ -144,7 +147,6 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 				log.Error().Err(err).Msg("failed to parse filters")
 				return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
 			}
-
 		}
 	}
 
@@ -165,8 +167,10 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 
 	query := w.buildGraphQLQuery(rootQuery, exportType, fields, hasWhere)
 
-	var allNodes []map[string]any
-	var after *string
+	var (
+		allNodes []map[string]any
+		after    *string
+	)
 
 	for {
 		nodes, hasNext, nextCursor, err := w.fetchPage(ctx, query, rootQuery, after, where, job.Args)
@@ -259,8 +263,11 @@ func (w *ExportContentWorker) buildGraphQLQuery(root string, singular string, fi
 
 	fieldStr := strings.Join(fields, "\n        ")
 
-	var varStr string
-	var argStr string
+	var (
+		varStr string
+		argStr string
+	)
+
 	if hasWhere {
 		whereInputType := strcase.UpperCamelCase(singular) + "WhereInput"
 		varStr = fmt.Sprintf(", $where: %s!", whereInputType)
@@ -290,6 +297,7 @@ func extractErrors(errs []any) error {
 	}
 
 	var errMsgs []error
+
 	for _, e := range errs {
 		if msg, ok := e.(map[string]any); ok {
 			if m, ok := msg["message"].(string); ok {
@@ -321,6 +329,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	if jobArgs.UserID != "" {
 		opts = append(opts, httpsling.Header(auth.UserIDHeader, jobArgs.UserID))
 	}
+
 	if jobArgs.OrganizationID != "" {
 		opts = append(opts, httpsling.Header(auth.OrganizationIDHeader, jobArgs.OrganizationID))
 	}
@@ -408,6 +417,7 @@ func (w *ExportContentWorker) updateExportStatus(ctx context.Context, exportID s
 			Str("export_id", exportID).
 			Str("status", string(status)).
 			Msg("failed to update export status")
+
 		return err
 	}
 
@@ -421,6 +431,7 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 	if after != nil {
 		vars["after"] = *after
 	}
+
 	if len(where) > 0 {
 		vars["where"] = where
 	}
@@ -449,6 +460,7 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 		if !ok {
 			continue
 		}
+
 		node, ok := edgeMap["node"].(map[string]any)
 		if ok {
 			nodes = append(nodes, node)

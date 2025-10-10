@@ -26,12 +26,6 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 
 	resp := []*model.ControlCategoryEdge{}
 
-	var categories []struct {
-		Category           string  `json:"category,omitempty"`
-		Subcategory        *string `json:"subcategory,omitempty"`
-		ReferenceFramework *string `json:"reference_framework,omitempty"`
-	}
-
 	whereP, err := getControlWherePredicate(where)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
@@ -48,34 +42,57 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 		)
 	}
 
-	if err := withTransactionalMutation(ctx).Control.Query().
+	res, err := withTransactionalMutation(ctx).Control.Query().
 		Select(fieldName,
 			control.FieldReferenceFramework).
-		Where(whereFilter).
-		GroupBy(fieldName, control.FieldReferenceFramework).Scan(ctx, &categories); err != nil {
+		Where(whereFilter).All(ctx)
+	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
 	}
 
-	if len(categories) == 0 {
+	tmp := map[string]map[string]bool{}
+	for _, r := range res {
+		refFramework := "Custom"
+		if r.ReferenceFramework != nil {
+			refFramework = *r.ReferenceFramework
+		}
+
+		if _, ok := tmp[refFramework]; !ok {
+			if fieldName == control.FieldCategory && r.Category != "" {
+				tmp[refFramework] = map[string]bool{
+					r.Category: true,
+				}
+			} else if fieldName == control.FieldSubcategory && r.Subcategory != "" {
+				tmp[refFramework] = map[string]bool{
+					r.Subcategory: true,
+				}
+			}
+		} else {
+			if fieldName == control.FieldCategory && r.Category != "" {
+				if _, ok := tmp[refFramework][r.Category]; !ok {
+					tmp[refFramework][r.Category] = true
+				}
+			} else if fieldName == control.FieldSubcategory && r.Subcategory != "" {
+				if _, ok := tmp[refFramework][r.Subcategory]; !ok {
+					tmp[refFramework][r.Subcategory] = true
+				}
+			}
+		}
+	}
+
+	if len(tmp) == 0 {
 		return resp, nil // No categories found
 	}
 
-	for _, category := range categories {
-		referenceFramework := "Custom"
-		if category.ReferenceFramework != nil {
-			referenceFramework = *category.ReferenceFramework
+	for refFramework, categories := range tmp {
+		for cat := range categories {
+			resp = append(resp, &model.ControlCategoryEdge{
+				Node: &model.ControlCategory{
+					Name:               cat,
+					ReferenceFramework: &refFramework,
+				},
+			})
 		}
-
-		cat := category.Category
-		if fieldName == control.FieldSubcategory {
-			cat = *category.Subcategory
-		}
-		resp = append(resp, &model.ControlCategoryEdge{
-			Node: &model.ControlCategory{
-				Name:               cat,
-				ReferenceFramework: &referenceFramework,
-			},
-		})
 	}
 
 	// sort the categories to ensure consistent order

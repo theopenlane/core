@@ -270,7 +270,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "trustcenter already exists", // This will be the error when trying to create a duplicate
+			expectedErr: "one trust center at a time",
 		},
 	}
 

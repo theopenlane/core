@@ -163,6 +163,11 @@ func AuditorEmail(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldAuditorEmail, v))
 }
 
+// ProgramOwnerID applies equality check predicate on the "program_owner_id" field. It's identical to ProgramOwnerIDEQ.
+func ProgramOwnerID(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramOwnerID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldCreatedAt, v))
@@ -1318,6 +1323,81 @@ func AuditorEmailContainsFold(v string) predicate.Program {
 	return predicate.Program(sql.FieldContainsFold(FieldAuditorEmail, v))
 }
 
+// ProgramOwnerIDEQ applies the EQ predicate on the "program_owner_id" field.
+func ProgramOwnerIDEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDNEQ applies the NEQ predicate on the "program_owner_id" field.
+func ProgramOwnerIDNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDIn applies the In predicate on the "program_owner_id" field.
+func ProgramOwnerIDIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldProgramOwnerID, vs...))
+}
+
+// ProgramOwnerIDNotIn applies the NotIn predicate on the "program_owner_id" field.
+func ProgramOwnerIDNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldProgramOwnerID, vs...))
+}
+
+// ProgramOwnerIDGT applies the GT predicate on the "program_owner_id" field.
+func ProgramOwnerIDGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDGTE applies the GTE predicate on the "program_owner_id" field.
+func ProgramOwnerIDGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDLT applies the LT predicate on the "program_owner_id" field.
+func ProgramOwnerIDLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDLTE applies the LTE predicate on the "program_owner_id" field.
+func ProgramOwnerIDLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDContains applies the Contains predicate on the "program_owner_id" field.
+func ProgramOwnerIDContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDHasPrefix applies the HasPrefix predicate on the "program_owner_id" field.
+func ProgramOwnerIDHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDHasSuffix applies the HasSuffix predicate on the "program_owner_id" field.
+func ProgramOwnerIDHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDIsNil applies the IsNil predicate on the "program_owner_id" field.
+func ProgramOwnerIDIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldProgramOwnerID))
+}
+
+// ProgramOwnerIDNotNil applies the NotNil predicate on the "program_owner_id" field.
+func ProgramOwnerIDNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldProgramOwnerID))
+}
+
+// ProgramOwnerIDEqualFold applies the EqualFold predicate on the "program_owner_id" field.
+func ProgramOwnerIDEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldProgramOwnerID, v))
+}
+
+// ProgramOwnerIDContainsFold applies the ContainsFold predicate on the "program_owner_id" field.
+func ProgramOwnerIDContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldProgramOwnerID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
@@ -1803,6 +1883,35 @@ func HasUsersWith(preds ...predicate.User) predicate.Program {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ProgramMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUser applies the HasEdge predicate on the "user" edge.
+func HasUser() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, UserTable, UserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
+func HasUserWith(preds ...predicate.User) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Program
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

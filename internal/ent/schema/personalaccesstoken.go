@@ -83,6 +83,9 @@ func (PersonalAccessToken) Fields() []ent.Field {
 			Optional(),
 		field.JSON("sso_authorizations", models.SSOAuthorizationMap{}).
 			Comment("SSO authorization timestamps by organization id").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
 			Optional(),
 		field.Time("last_used_at").
 			Annotations(

@@ -292,3 +292,86 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 		})
 	}
 }
+
+func TestIsEmpty(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		input    any
+		expected bool
+	}{
+		{
+			name:     "Nil value",
+			input:    nil,
+			expected: true,
+		},
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: true,
+		},
+		{
+			name:     "Non-empty string",
+			input:    "hello",
+			expected: false,
+		},
+		{
+			name:     "Zero integer",
+			input:    0,
+			expected: true,
+		},
+		{
+			name:     "Non-zero integer",
+			input:    42,
+			expected: false,
+		},
+		{
+			name:     "Zero float",
+			input:    0.0,
+			expected: true,
+		},
+		{
+			name:     "Non-zero float",
+			input:    3.14,
+			expected: false,
+		},
+		{
+			name:     "Empty slice",
+			input:    []int{},
+			expected: true,
+		},
+		{
+			name:     "Non-empty slice",
+			input:    []int{1, 2, 3},
+			expected: false,
+		},
+		{
+			name:     "Empty map",
+			input:    map[string]any{},
+			expected: true,
+		},
+		{
+			name:     "Non-empty map",
+			input:    map[string]int{"a": 1},
+			expected: false,
+		},
+		{
+			name:     "Boolean false",
+			input:    false,
+			expected: true,
+		},
+		{
+			name:     "Boolean true",
+			input:    true,
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := isEmpty(tt.input)
+			assert.Check(t, is.Equal(tt.expected, result))
+		})
+	}
+}

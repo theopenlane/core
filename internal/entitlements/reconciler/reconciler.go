@@ -119,6 +119,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
+
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
 		WithSetting().
@@ -131,6 +132,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	}
 
 	var rows []actionRow
+
 	for _, org := range orgs {
 		if r.dryRun {
 			action, err := r.analyzeOrg(ctx, org)
@@ -163,6 +165,7 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		sub = org.Edges.OrgSubscriptions[0]
 	} else {
 		var err error
+
 		sub, err = r.db.OrgSubscription.Create().SetOwnerID(org.ID).Save(internalCtx)
 		if err != nil {
 			return fmt.Errorf("create subscription: %w", err)
@@ -266,6 +269,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
 	// Add internal context for administrative operations
 	internalCtx := rule.WithInternalContext(ctx)
+
 	if c.OrganizationSubscriptionID == "" {
 		return ErrMissingSubscriptionID
 	}
@@ -386,6 +390,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 		// Find the first price with "month" interval
 		// we want to create, by default, a monthly recurring price rather than a one-time or annual
 		var monthlyPrice *catalog.Price
+
 		for _, price := range mod.Billing.Prices {
 			if price.Interval == "month" {
 				monthlyPrice = &price
