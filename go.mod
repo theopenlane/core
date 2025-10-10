@@ -66,7 +66,7 @@ require (
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/nyaruka/phonenumbers v1.6.5
+	github.com/nyaruka/phonenumbers v1.6.6
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.3
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
@@ -100,12 +100,12 @@ require (
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.2
 	github.com/theopenlane/utils v0.5.2
-	github.com/tink-crypto/tink-go/v2 v2.4.0
+	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.557.0
+	github.com/windmill-labs/windmill-go-client v1.558.1
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
