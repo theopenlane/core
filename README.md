@@ -62,6 +62,10 @@ You can install the Openlane CLI by running `brew install theopenlane/tap/openla
 
 See the [README](/config/README.md) in the `config` directory.
 
+> [!TIP]
+> You can pass in multiple configuration files, but be careful about value collisions; the last configuration file in order of loading will have its values take precedent over any passed in before it. ex: `go run main.go serve --debug --pretty --config config/.config.yaml,config/config.e2e.database.yaml`
+
+
 ### Starting the Server
 
 1. Copy the config, this is in .gitignore so you do not have to worry about

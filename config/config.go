@@ -194,6 +194,35 @@ var (
 	defaultConfigFilePath = "./config/.config.yaml"
 )
 
+// configFileList processes the cfgFile input and returns a list of config file paths to load
+func configFileList(cfgFile *string) []string {
+	if cfgFile == nil {
+		return []string{defaultConfigFilePath}
+	}
+
+	raw := strings.TrimSpace(*cfgFile)
+	if raw == "" {
+		*cfgFile = defaultConfigFilePath
+		return []string{defaultConfigFilePath}
+	}
+
+	parts := strings.Split(raw, ",")
+	files := make([]string, 0, len(parts))
+	for _, part := range parts {
+		trimmed := strings.TrimSpace(part)
+		if trimmed != "" {
+			files = append(files, trimmed)
+		}
+	}
+
+	if len(files) == 0 {
+		*cfgFile = defaultConfigFilePath
+		return []string{defaultConfigFilePath}
+	}
+
+	return files
+}
+
 // Option configures the Config
 type Option func(*Config)
 
@@ -305,21 +334,28 @@ func applyDomain(v reflect.Value, domain string) {
 func Load(cfgFile *string) (*Config, error) {
 	k := koanf.New(".")
 
-	if cfgFile == nil || *cfgFile == "" {
-		*cfgFile = defaultConfigFilePath
-	}
-
-	if _, err := os.Stat(*cfgFile); err != nil {
-		if os.IsNotExist(err) {
-			log.Warn().Err(err).Msg("config file not found, proceeding with default configuration")
-		}
-	}
+	files := configFileList(cfgFile)
 
 	conf := New()
 
-	// parse yaml config
-	if err := k.Load(file.Provider(*cfgFile), yaml.Parser()); err != nil {
-		log.Warn().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid or use environment variables to set the configuration")
+	for _, cfgPath := range files {
+		if cfgPath == "" {
+			continue
+		}
+
+		if _, err := os.Stat(cfgPath); err != nil {
+			if os.IsNotExist(err) {
+				log.Warn().Str("config_file", cfgPath).Err(err).Msg("config file not found, skipping")
+				continue
+			}
+
+			log.Warn().Str("config_file", cfgPath).Err(err).Msg("config file inaccessible, skipping")
+			continue
+		}
+
+		if err := k.Load(file.Provider(cfgPath), yaml.Parser()); err != nil {
+			log.Warn().Str("config_file", cfgPath).Err(err).Msg("failed to load config file - ensure the file is present and valid or use environment variables to set the configuration")
+		}
 	}
 
 	// unmarshal the config
