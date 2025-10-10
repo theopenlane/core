@@ -13,8 +13,6 @@ import (
 )
 
 func TestGlobalSearch(t *testing.T) {
-	t.Parallel()
-
 	// create a new user for this test
 	testSearchUser := suite.userBuilder(context.Background(), t)
 
