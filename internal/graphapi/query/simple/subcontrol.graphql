@@ -30,6 +30,7 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
       status
       subcategory
       tags
+      title
       updatedAt
       updatedBy
     }
@@ -67,6 +68,7 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
       status
       subcategory
       tags
+      title
       updatedAt
       updatedBy
     }
@@ -104,6 +106,7 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       status
       subcategory
       tags
+      title
       updatedAt
       updatedBy
     }
@@ -155,6 +158,7 @@ query GetAllSubcontrols {
         status
         subcategory
         tags
+        title
         updatedAt
         updatedBy
       }
@@ -191,6 +195,7 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     status
     subcategory
     tags
+    title
     updatedAt
     updatedBy
   }
@@ -235,6 +240,7 @@ query GetSubcontrols($first: Int, $last: Int, $where: SubcontrolWhereInput) {
         status
         subcategory
         tags
+        title
         updatedAt
         updatedBy
       }
@@ -272,6 +278,7 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       status
       subcategory
       tags
+      title
       updatedAt
       updatedBy
     }

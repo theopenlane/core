@@ -673,8 +673,8 @@ github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
 github.com/theopenlane/riverboat v0.4.2 h1:2XYWMYLD7uU8ziKQWTW9kY65Y0Y3L11BsPHMVNTjZMw=
 github.com/theopenlane/riverboat v0.4.2/go.mod h1:rskBfcmJmgmfIdi5a3m7ODc0U0zyP/lSfk+kRNpkEHc=
-github.com/theopenlane/utils v0.5.1 h1:VY2+TbTVvcgBwfOhhVx/PbUBIpFZYW07bjprXpcPFcA=
-github.com/theopenlane/utils v0.5.1/go.mod h1:d7F811pRS817S9wo9SmsSghS5GDgN32BFn6meMM9PM0=
+github.com/theopenlane/utils v0.5.2 h1:5Hpg+lgSGxBZwirh9DQumTHCBU9Wgopjp7Oug2FA+1c=
+github.com/theopenlane/utils v0.5.2/go.mod h1:d7F811pRS817S9wo9SmsSghS5GDgN32BFn6meMM9PM0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
 github.com/tidwall/gjson v1.18.0 h1:FIDeeyB800efLX89e5a8Y0BNH+LOngJyGrIWxG2FKQY=
 github.com/tidwall/gjson v1.18.0/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
@@ -716,8 +716,8 @@ github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IU
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
 github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV6mEfg5OIWRZA9qds=
-github.com/windmill-labs/windmill-go-client v1.557.0 h1:M/TagN4kB/UcWdlG0bXQq9taFovswFa5GP6I4Zdckmc=
-github.com/windmill-labs/windmill-go-client v1.557.0/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
+github.com/windmill-labs/windmill-go-client v1.558.1 h1:rkGy/40Gc/Fqf/uozBN0i3ipuPmXU4BgWJDLyUzb6Uk=
+github.com/windmill-labs/windmill-go-client v1.558.1/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
 github.com/wk8/go-ordered-map/v2 v2.1.8 h1:5h/BUHu93oj4gIdvHHHGsScSTMijfx5PeYkE/fJgbpc=
 github.com/wk8/go-ordered-map/v2 v2.1.8/go.mod h1:5nJHM5DyteebpVlHnWMV0rPz6Zp7+xBAnxjb1X5vnTw=
 github.com/woodsbury/decimal128 v1.4.0 h1:xJATj7lLu4f2oObouMt2tgGiElE5gO6mSWUjQsBgUlc=

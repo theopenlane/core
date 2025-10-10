@@ -99,13 +99,13 @@ require (
 	github.com/theopenlane/iam v0.17.4
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.2
-	github.com/theopenlane/utils v0.5.1
+	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.557.0
+	github.com/windmill-labs/windmill-go-client v1.558.1
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
