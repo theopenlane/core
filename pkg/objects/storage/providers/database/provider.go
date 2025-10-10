@@ -172,7 +172,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, fileRef *storagetypes.Fi
 
 	duration := opts.Duration
 	if duration <= 0 {
-		duration = 15 * time.Minute
+		duration = 15 * time.Minute // nolint:mnd
 	}
 
 	now := time.Now()
@@ -276,8 +276,8 @@ func extractFileIdentifier(opts *storagetypes.UploadFileOptions) string {
 		}
 	}
 
-	if opts.FileMetadata.ProviderHints != nil && opts.FileMetadata.ProviderHints.Metadata != nil {
-		if id, ok := opts.FileMetadata.ProviderHints.Metadata["file_id"]; ok && id != "" {
+	if opts.FileMetadata.ProviderHints != nil && opts.FileMetadata.ProviderHints.Metadata != nil { // nolint:staticcheck
+		if id, ok := opts.FileMetadata.ProviderHints.Metadata["file_id"]; ok && id != "" { // nolint:staticcheck
 			return id
 		}
 	}
