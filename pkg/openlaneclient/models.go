@@ -24729,6 +24729,7 @@ type SearchResults struct {
 	Users                       *UserConnection                       `json:"users,omitempty"`
 	UserSettings                *UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *WebauthnConnection                   `json:"webauthns,omitempty"`
+	SearchContext               []*models.SearchContext               `json:"searchContext,omitempty"`
 }
 
 type SendTrustCenterNDAEmailPayload struct {

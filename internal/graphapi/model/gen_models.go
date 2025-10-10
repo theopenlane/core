@@ -11,6 +11,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Return response for createBulkAPIToken mutation
@@ -1341,6 +1342,7 @@ type SearchResults struct {
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
+	SearchContext               []*models.SearchContext                         `json:"searchContext,omitempty"`
 }
 
 type SendTrustCenterNDAEmailPayload struct {
