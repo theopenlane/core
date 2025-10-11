@@ -6358,6 +6358,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -6530,6 +6531,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTags() []string 
 	}
 	return t.Tags
 }
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Title
+}
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
@@ -6583,6 +6590,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -6755,6 +6763,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.Title
+}
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
@@ -6808,6 +6822,7 @@ type CreateControl_CreateControl_Control struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -6980,6 +6995,12 @@ func (t *CreateControl_CreateControl_Control) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *CreateControl_CreateControl_Control) GetTitle() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Title
+}
 func (t *CreateControl_CreateControl_Control) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
@@ -7076,6 +7097,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -7248,6 +7270,12 @@ func (t *GetAllControls_Controls_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetAllControls_Controls_Edges_Node) GetTitle() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Title
+}
 func (t *GetAllControls_Controls_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
@@ -7326,6 +7354,7 @@ type GetControlByID_Control struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -7498,6 +7527,12 @@ func (t *GetControlByID_Control) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetControlByID_Control) GetTitle() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Title
+}
 func (t *GetControlByID_Control) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetControlByID_Control{}
@@ -7572,6 +7607,7 @@ type GetControls_Controls_Edges_Node struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -7744,6 +7780,12 @@ func (t *GetControls_Controls_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetControls_Controls_Edges_Node) GetTitle() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Title
+}
 func (t *GetControls_Controls_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
@@ -7822,6 +7864,7 @@ type UpdateControl_UpdateControl_Control struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -7993,6 +8036,12 @@ func (t *UpdateControl_UpdateControl_Control) GetTags() []string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Tags
+}
+func (t *UpdateControl_UpdateControl_Control) GetTitle() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Title
 }
 func (t *UpdateControl_UpdateControl_Control) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -60903,6 +60952,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -61075,6 +61125,12 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetTags() 
 	}
 	return t.Tags
 }
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.Title
+}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
@@ -61128,6 +61184,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -61300,6 +61357,12 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetTags() []stri
 	}
 	return t.Tags
 }
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.Title
+}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
@@ -61353,6 +61416,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -61525,6 +61589,12 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetTitle() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Title
+}
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
@@ -61621,6 +61691,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -61793,6 +61864,12 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetTitle() *string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Title
+}
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
@@ -61871,6 +61948,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -62043,6 +62121,12 @@ func (t *GetSubcontrolByID_Subcontrol) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetSubcontrolByID_Subcontrol) GetTitle() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Title
+}
 func (t *GetSubcontrolByID_Subcontrol) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
@@ -62117,6 +62201,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -62289,6 +62374,12 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetTitle() *string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Title
+}
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
@@ -62367,6 +62458,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                  *string                          "json:\"title,omitempty\" graphql:\"title\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -62538,6 +62630,12 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetTags() []string {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.Tags
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetTitle() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Title
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -86436,6 +86534,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -86491,6 +86590,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -86546,6 +86646,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -86633,6 +86734,7 @@ const GetAllControlsDocument = `query GetAllControls {
 				status
 				subcategory
 				tags
+				title
 				updatedAt
 				updatedBy
 			}
@@ -86686,6 +86788,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		status
 		subcategory
 		tags
+		title
 		updatedAt
 		updatedBy
 	}
@@ -86748,6 +86851,7 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 				status
 				subcategory
 				tags
+				title
 				updatedAt
 				updatedBy
 			}
@@ -86806,6 +86910,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -102768,6 +102873,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -102823,6 +102929,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -102878,6 +102985,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
@@ -102965,6 +103073,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				status
 				subcategory
 				tags
+				title
 				updatedAt
 				updatedBy
 			}
@@ -103018,6 +103127,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		status
 		subcategory
 		tags
+		title
 		updatedAt
 		updatedBy
 	}
@@ -103080,6 +103190,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($first: Int, $last: Int, $
 				status
 				subcategory
 				tags
+				title
 				updatedAt
 				updatedBy
 			}
@@ -103138,6 +103249,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			status
 			subcategory
 			tags
+			title
 			updatedAt
 			updatedBy
 		}
