@@ -2,88 +2,168 @@ package corejobs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
+
+	"github.com/rs/zerolog/log"
+
+	"github.com/riverqueue/river"
+	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
+	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
-// --- Mock client for Openlane API ---
-type OpenlaneClient interface {
-	CreateTask(ctx context.Context, input CreateTaskInput) error
-}
+// --- Constants and Types ---
 
-type CreateTaskInput struct {
-	Title          string
-	Description    string
-	Category       string
-	Assignee       string
+type TaskType string
+
+const (
+	TaskTypeGeneric      TaskType = "Generic"
+	TaskTypePolicyReview TaskType = "PolicyReview"
+)
+
+var (
+	ErrUnsupportedTask = errors.New("unsupported task type")
+)
+
+type TaskConfig struct {
+	Delay          time.Duration
 	OrganizationID string
-	PolicyIDs      []string
 }
 
-// --- Mock implementation ---
-type MockOpenlaneClient struct{}
-
-func (m *MockOpenlaneClient) CreateTask(ctx context.Context, input CreateTaskInput) error {
-	fmt.Println("Mock task created:", input)
-	return nil
+type GenericTaskConfig struct {
+	TaskConfig
+	Title       string
+	Description string
+	Category    string
 }
 
-// --- Job args ---
-type CreateTaskJobArgs struct {
-	Type              string
-	Title             string
-	Description       string
-	Category          string
-	Assignee          string
-	OrganizationID    string
+type PolicyReviewConfig struct {
+	TaskConfig
 	InternalPolicyIDs []string
-	Delay             time.Duration
 }
 
-// --- The job struct ---
-type CreateTaskJob struct {
-	Client OpenlaneClient
+type CreateTaskArgs struct {
+	Type TaskType `json:"type"`
+
+	GenericConfig      *GenericTaskConfig  `json:"generic_config,omitempty"`
+	PolicyReviewConfig *PolicyReviewConfig `json:"policy_review_config,omitempty"`
 }
 
-// --- Job execution ---
-func (j *CreateTaskJob) Run(ctx context.Context, args CreateTaskJobArgs) error {
-	// Optional delay
-	if args.Delay > 0 {
-		fmt.Println("Delaying job for:", args.Delay)
-		time.Sleep(args.Delay)
+// --- Worker ---
+
+type CreateTaskWorker struct {
+	river.WorkerDefaults[CreateTaskArgs]
+
+	olClient    olclient.OpenlaneClient
+	riverClient riverqueue.JobClient
+}
+
+// WithOpenlaneClient sets the Openlane client
+func (w *CreateTaskWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *CreateTaskWorker {
+	w.olClient = cl
+	return w
+}
+
+// WithRiverClient sets the River client
+func (w *CreateTaskWorker) WithRiverClient(cl riverqueue.JobClient) *CreateTaskWorker {
+	w.riverClient = cl
+	return w
+}
+
+// Work implements river.Worker interface
+func (w *CreateTaskWorker) Work(ctx context.Context, job *river.Job[CreateTaskArgs]) error {
+	log.Debug().Str("task_type", string(job.Args.Type)).Msg("starting task creation")
+
+	if w.olClient == nil {
+		cl, err := getOpenlaneClient(TaskConfig{}) // implement this to return your olClient
+		if err != nil {
+			return err
+		}
+		w.olClient = cl
 	}
 
-	var task CreateTaskInput
+	if w.riverClient == nil {
+		client, err := riverqueue.New(ctx)
+		if err != nil {
+			return err
+		}
+		w.riverClient = client
+	}
 
-	switch args.Type {
-	case "Generic":
-		task = CreateTaskInput{
-			Title:          args.Title,
-			Description:    args.Description,
-			Category:       args.Category,
-			Assignee:       args.Assignee,
-			OrganizationID: args.OrganizationID,
-		}
-	case "Policy Review":
-		if len(args.InternalPolicyIDs) == 0 {
-			return fmt.Errorf("Policy Review requires InternalPolicyIDs")
-		}
-		// Random assignee mock
-		approvers := []string{"user1", "user2", "user3"}
-		randomAssignee := approvers[rand.Intn(len(approvers))]
+	// Schedule job if Delay is set
+	var delay time.Duration
+	switch job.Args.Type {
+	case TaskTypeGeneric:
+		delay = job.Args.GenericConfig.Delay
+	case TaskTypePolicyReview:
+		delay = job.Args.PolicyReviewConfig.Delay
+	}
 
-		task = CreateTaskInput{
-			Title:          fmt.Sprintf("Policy Review %s", args.InternalPolicyIDs[0]),
-			Description:    "Conduct the annual review of this internal policy to ensure it remains accurate, effective, and aligned with current business practices, legal requirements, and compliance frameworks. Review and update the content as needed, obtain necessary approvals, and document any changes or confirmations.",
-			Category:       "Policy Review",
-			Assignee:       randomAssignee,
-			OrganizationID: args.OrganizationID,
-			PolicyIDs:      args.InternalPolicyIDs,
+	if delay > 0 {
+		log.Debug().Dur("delay", delay).Msg("scheduling delayed task")
+		_, err := w.riverClient.Insert(ctx, job.Args, &river.InsertOpts{
+			RunAt: time.Now().Add(delay),
+		})
+		if err != nil {
+			return err
 		}
+		return nil
+	}
+
+	// Task creation logic
+	switch job.Args.Type {
+	case TaskTypeGeneric:
+		cfg := job.Args.GenericConfig
+		if cfg == nil {
+			return fmt.Errorf("%w: missing GenericTaskConfig", ErrUnsupportedTask)
+		}
+		task := openlaneclient.CreateTaskInput{
+			Title:          cfg.Title,
+			Description:    cfg.Description,
+			Category:       cfg.Category,
+			OrganizationID: cfg.OrganizationID,
+		}
+		_, err := w.olClient.CreateTask(ctx, task)
+		if err != nil {
+			return err
+		}
+		log.Info().Str("title", cfg.Title).Msg("Generic task created")
+
+	case TaskTypePolicyReview:
+		cfg := job.Args.PolicyReviewConfig
+		if cfg == nil || len(cfg.InternalPolicyIDs) == 0 {
+			return fmt.Errorf("%w: PolicyReview requires InternalPolicyIDs", ErrUnsupportedTask)
+		}
+
+		// Pick random approver from internal policy
+		policy, err := w.olClient.GetInternalPolicy(ctx, cfg.InternalPolicyIDs[0])
+		if err != nil {
+			return err
+		}
+		if len(policy.ApproversGroup.Users) == 0 {
+			return errors.New("policy has no approvers")
+		}
+		assignee := policy.ApproversGroup.Users[rand.Intn(len(policy.ApproversGroup.Users))]
+
+		task := openlaneclient.CreateTaskInput{
+			Title:          fmt.Sprintf("Policy Review %s", cfg.InternalPolicyIDs[0]),
+			Description:    policy.Description,
+			OrganizationID: cfg.OrganizationID,
+			AssigneeID:     assignee.ID,
+			PolicyIDs:      cfg.InternalPolicyIDs,
+		}
+		_, err = w.olClient.CreateTask(ctx, task)
+		if err != nil {
+			return err
+		}
+		log.Info().Str("policy_id", cfg.InternalPolicyIDs[0]).Str("assignee", assignee.ID).Msg("Policy review task created")
+
 	default:
-		return fmt.Errorf("unsupported task type: %s", args.Type)
+		return fmt.Errorf("%w: %s", ErrUnsupportedTask, job.Args.Type)
 	}
 
-	return j.Client.CreateTask(ctx, task)
+	return nil
 }
