@@ -49,7 +49,7 @@ func (b *Builder) WithOptions(opts ...Option) *Builder {
 }
 
 // Build implements eddy.Builder.
-func (b *Builder) Build(credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}
