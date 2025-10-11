@@ -4,13 +4,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
 )
 
 // ImpersonationEvent holds the schema definition for the ImpersonationEvent entity
@@ -76,21 +76,22 @@ func (i ImpersonationEvent) Mixin() []ent.Mixin {
 // Edges of the ImpersonationEvent
 func (i ImpersonationEvent) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).
-			Ref("impersonation_events").
-			Field("user_id").
-			Unique().
-			Required(),
-		edge.From("target_user", User.Type).
-			Ref("targeted_impersonations").
-			Field("target_user_id").
-			Unique().
-			Required(),
-		edge.From("organization", Organization.Type).
-			Ref("organization_impersonation_events").
-			Field("organization_id").
-			Unique().
-			Required(),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: ImpersonationEvent{},
+			field:      "user_id",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: i,
+			name:       "target_user",
+			t:          ImpersonationEvent.Type,
+			field:      "target_user_id",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Organization{},
+			field:      "organization_id",
+		}),
 	}
 }
 
@@ -105,6 +106,9 @@ func (ImpersonationEvent) Annotations() []schema.Annotation {
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }
 

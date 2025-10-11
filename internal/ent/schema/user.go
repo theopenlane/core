@@ -252,6 +252,11 @@ func (u User) Edges() []ent.Edge {
 			name:       "program_owner",
 			t:          Program.Type,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "targeted_impersonations",
+			t:          ImpersonationEvent.Type,
+		}),
 	}
 }
 
