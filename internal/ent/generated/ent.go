@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -223,6 +224,7 @@ func checkColumn(t, c string) error {
 			groupsettinghistory.Table:               groupsettinghistory.ValidColumn,
 			hush.Table:                              hush.ValidColumn,
 			hushhistory.Table:                       hushhistory.ValidColumn,
+			impersonationevent.Table:                impersonationevent.ValidColumn,
 			integration.Table:                       integration.ValidColumn,
 			integrationhistory.Table:                integrationhistory.ValidColumn,
 			internalpolicy.Table:                    internalpolicy.ValidColumn,

@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -1322,6 +1323,21 @@ func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigs(v ...*TrustCenterWa
 		ids[i] = v[i].ID
 	}
 	return _c.AddTrustCenterWatermarkConfigIDs(ids...)
+}
+
+// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
+func (_c *OrganizationCreate) AddImpersonationEventIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddImpersonationEventIDs(ids...)
+	return _c
+}
+
+// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
+func (_c *OrganizationCreate) AddImpersonationEvents(v ...*ImpersonationEvent) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddImpersonationEventIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2688,6 +2704,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

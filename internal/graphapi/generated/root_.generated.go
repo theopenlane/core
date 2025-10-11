@@ -48052,6 +48052,7 @@ input CreateOrganizationInput {
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
+  impersonationEventIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -49088,6 +49089,8 @@ input CreateUserInput {
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
   programOwnerID: ID
+  impersonationEventIDs: [ID!]
+  targetedImpersonationIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -94581,6 +94584,9 @@ input UpdateOrganizationInput {
   addTrustCenterWatermarkConfigIDs: [ID!]
   removeTrustCenterWatermarkConfigIDs: [ID!]
   clearTrustCenterWatermarkConfigs: Boolean
+  addImpersonationEventIDs: [ID!]
+  removeImpersonationEventIDs: [ID!]
+  clearImpersonationEvents: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -96016,6 +96022,12 @@ input UpdateUserInput {
   clearPrograms: Boolean
   programOwnerID: ID
   clearProgramOwner: Boolean
+  addImpersonationEventIDs: [ID!]
+  removeImpersonationEventIDs: [ID!]
+  clearImpersonationEvents: Boolean
+  addTargetedImpersonationIDs: [ID!]
+  removeTargetedImpersonationIDs: [ID!]
+  clearTargetedImpersonations: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.

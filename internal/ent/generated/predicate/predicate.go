@@ -120,6 +120,9 @@ type Hush func(*sql.Selector)
 // HushHistory is the predicate function for hushhistory builders.
 type HushHistory func(*sql.Selector)
 
+// ImpersonationEvent is the predicate function for impersonationevent builders.
+type ImpersonationEvent func(*sql.Selector)
+
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)
 
