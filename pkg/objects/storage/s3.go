@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -39,7 +40,7 @@ type S3Store struct {
 
 // NewS3FromConfig creates a new S3Store from the provided configuration
 func NewS3FromConfig(opts *S3Options) (*S3Store, error) {
-	if isStringEmpty(opts.AccessKeyID) || isStringEmpty(opts.SecretAccessKey) {
+	if lo.IsEmpty(opts.AccessKeyID) || lo.IsEmpty(opts.SecretAccessKey) {
 		log.Info().Msg("AWS credentials not provided, attempting to use environment variables")
 
 		awsEnvConfig, err := config.NewEnvConfig()
@@ -47,7 +48,7 @@ func NewS3FromConfig(opts *S3Options) (*S3Store, error) {
 			return nil, err
 		}
 
-		if isStringEmpty(awsEnvConfig.Credentials.AccessKeyID) || isStringEmpty(awsEnvConfig.Credentials.SecretAccessKey) {
+		if lo.IsEmpty(awsEnvConfig.Credentials.AccessKeyID) || lo.IsEmpty(awsEnvConfig.Credentials.SecretAccessKey) {
 			log.Error().Err(err).Msg("AWS credentials not found in environment variables")
 			return nil, err
 		}
@@ -204,8 +205,8 @@ func (s *S3Store) GetPresignedURL(key string, expires time.Duration) (string, er
 	presignURL, err := s.PresignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
 		Bucket:                     aws.String(s.Opts.Bucket),
 		Key:                        aws.String(key),
-		ResponseContentType:        toPointer("application/octet-stream"),
-		ResponseContentDisposition: toPointer("attachment"),
+		ResponseContentType:        lo.ToPtr("application/octet-stream"),
+		ResponseContentDisposition: lo.ToPtr("attachment"),
 	}, func(opts *s3.PresignOptions) {
 		if expires == 0 {
 			expires = 15 * time.Minute // nolint: mnd

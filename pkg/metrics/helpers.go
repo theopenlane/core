@@ -207,3 +207,38 @@ func RecordGraphQLOperation(operation string, duration float64, err error) {
 	GraphQLOperationTotal.WithLabelValues(operation, successStr).Inc()
 	GraphQLOperationDuration.WithLabelValues(operation).Observe(duration)
 }
+
+// StartFileUpload records the start of a file upload
+func StartFileUpload() {
+	FileUploadsStarted.Inc()
+	FileUploadsInFlight.Inc()
+}
+
+// FinishFileUpload records the completion of a file upload
+func FinishFileUpload(status string, duration float64) {
+	FileUploadsInFlight.Dec()
+	FileUploadsCompleted.WithLabelValues(status).Inc()
+	FileUploadDuration.WithLabelValues(status).Observe(duration)
+}
+
+// RecordFileBufferingStrategy records which buffering strategy was used
+func RecordFileBufferingStrategy(strategy string) {
+	FileBufferingStrategy.WithLabelValues(strategy).Inc()
+}
+
+// RecordStorageUpload records an upload operation for a storage provider
+func RecordStorageUpload(provider string, bytes int64) {
+	StorageProviderUploads.WithLabelValues(provider).Inc()
+	StorageProviderBytesUploaded.WithLabelValues(provider).Add(float64(bytes))
+}
+
+// RecordStorageDownload records a download operation for a storage provider
+func RecordStorageDownload(provider string, bytes int64) {
+	StorageProviderDownloads.WithLabelValues(provider).Inc()
+	StorageProviderBytesDownloaded.WithLabelValues(provider).Add(float64(bytes))
+}
+
+// RecordStorageDelete records a delete operation for a storage provider
+func RecordStorageDelete(provider string) {
+	StorageProviderDeletes.WithLabelValues(provider).Inc()
+}

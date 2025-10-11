@@ -36,56 +36,56 @@ type S3Options struct {
 type S3Option func(*S3Options)
 
 // WithRegion sets the region for S3Options
-func WithRegion(region string) S3Option {
+func WithS3Region(region string) S3Option {
 	return func(o *S3Options) {
 		o.Region = region
 	}
 }
 
 // WithBucket sets the bucket for S3Options
-func WithBucket(bucket string) S3Option {
+func WithS3Bucket(bucket string) S3Option {
 	return func(o *S3Options) {
 		o.Bucket = bucket
 	}
 }
 
 // WithAccessKeyID sets the access key ID for S3Options
-func WithAccessKeyID(accessKeyID string) S3Option {
+func WithS3AccessKeyID(accessKeyID string) S3Option {
 	return func(o *S3Options) {
 		o.AccessKeyID = accessKeyID
 	}
 }
 
 // WithSecretAccessKey sets the secret access key for S3Options
-func WithSecretAccessKey(secretAccessKey string) S3Option {
+func WithS3SecretAccessKey(secretAccessKey string) S3Option {
 	return func(o *S3Options) {
 		o.SecretAccessKey = secretAccessKey
 	}
 }
 
 // WithEndpoint sets the endpoint for S3Options
-func WithEndpoint(endpoint string) S3Option {
+func WithS3Endpoint(endpoint string) S3Option {
 	return func(o *S3Options) {
 		o.Endpoint = endpoint
 	}
 }
 
 // WithUseSSL sets the use SSL flag for S3Options
-func WithUseSSL(useSSL bool) S3Option {
+func WithS3UseSSL(useSSL bool) S3Option {
 	return func(o *S3Options) {
 		o.UseSSL = useSSL
 	}
 }
 
 // WithPresignedURLTimeout sets the presigned URL timeout for S3Options
-func WithPresignedURLTimeout(timeout int) S3Option {
+func WithS3PresignedURLTimeout(timeout int) S3Option {
 	return func(o *S3Options) {
 		o.PresignedURLTimeout = timeout
 	}
 }
 
 // WithAWSConfig sets the AWS configuration for S3Options
-func WithAWSConfig(cfg aws.Config) S3Option {
+func WithS3AWSConfig(cfg aws.Config) S3Option {
 	return func(o *S3Options) {
 		o.AWSConfig = cfg
 	}
@@ -93,7 +93,7 @@ func WithAWSConfig(cfg aws.Config) S3Option {
 
 // WithPathStyle allows you set the path style. This is useful for
 // other compatible s3 storage systems
-func WithPathStyle(v bool) S3Option {
+func WithS3PathStyle(v bool) S3Option {
 	return func(o *S3Options) {
 		o.UsePathStyle = v
 	}
