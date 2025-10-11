@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -31,7 +32,7 @@ var ProviderDisk = "disk"
 
 // NewDiskStorage creates a new Disk storage backend
 func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
-	if isStringEmpty(opts.Bucket) {
+	if lo.IsEmpty(opts.Bucket) {
 		return nil, ErrInvalidFolderPath
 	}
 
