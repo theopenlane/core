@@ -9,6 +9,10 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
+const (
+	maxSnippetLength = 100
+)
+
 type searchCtxTracker struct {
 	contexts map[string]*models.SearchContext
 	query    string
@@ -111,10 +115,10 @@ func (t *searchCtxTracker) createSnippet(fieldName, text, queryLower string) *mo
 	idx := strings.Index(textLower, queryLower)
 
 	if idx == -1 {
-		if len(text) > 100 {
+		if len(text) > maxSnippetLength {
 			return &models.SearchSnippet{
 				Field: fieldName,
-				Text:  text[:100] + "...", // if too long, add ...
+				Text:  text[:maxSnippetLength] + "...", // if too long, add ...
 			}
 		}
 
@@ -136,7 +140,7 @@ func (t *searchCtxTracker) createSnippet(fieldName, text, queryLower string) *mo
 	}
 
 	if end < len(text) {
-		snippet = snippet + "..."
+		snippet += "..."
 	}
 
 	return &models.SearchSnippet{
@@ -223,34 +227,11 @@ func (c *fieldMatchChecker) check(entity any, fieldNames []string) []string {
 	return matches
 }
 
-func getEntityID(entity any) string {
-	if entity == nil {
-		return ""
-	}
-
-	val := reflect.ValueOf(entity)
-	if val.Kind() == reflect.Pointer {
-		if val.IsNil() {
-			return ""
-		}
-		val = val.Elem()
-	}
-
-	if val.Kind() != reflect.Struct {
-		return ""
-	}
-
-	idField := val.FieldByName("ID")
-	if idField.IsValid() && idField.Kind() == reflect.String {
-		return idField.String()
-	}
-
-	return ""
-}
-
 // highlightSearchContext processes search results using type switches for better type safety
 // This is a non-magical alternative to processSearchResults that explicitly handles each type
-func highlightSearchContext(ctx context.Context, query string, results any, tracker *searchCtxTracker) {
+//
+//nolint:gocyclo
+func highlightSearchContext(_ context.Context, query string, results any, tracker *searchCtxTracker) {
 	if results == nil || tracker == nil {
 		return
 	}

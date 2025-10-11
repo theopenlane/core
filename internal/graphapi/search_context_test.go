@@ -66,20 +66,6 @@ func TestCreateSnippet(t *testing.T) {
 	assert.Contains(t, snippet2.Text, "Security")
 }
 
-func TestGetEntityID(t *testing.T) {
-	control := &generated.Control{
-		ID:    "ctrl-123",
-		Title: "Test Control",
-	}
-
-	entityID := getEntityID(control)
-	assert.Equal(t, "ctrl-123", entityID)
-
-	// test with nil
-	entityID = getEntityID(nil)
-	assert.Empty(t, entityID)
-}
-
 func TestExtractSnippets(t *testing.T) {
 	tracker := newContextTracker("test")
 
