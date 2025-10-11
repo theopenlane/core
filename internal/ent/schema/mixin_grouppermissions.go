@@ -235,6 +235,7 @@ func groupPermissionInterceptorSkipper(ctx context.Context, au *auth.Authenticat
 func addBlockedGroupPredicate(q intercept.Query, groupIDs []string) {
 	objectSnakeCase := strcase.SnakeCase(q.Type())
 	tableName := fmt.Sprintf("%s_blocked_groups", objectSnakeCase)
+
 	q.WhereP(func(s *sql.Selector) {
 		t := sql.Table(tableName)
 		s.LeftJoin(t).On(
@@ -257,6 +258,7 @@ func addBlockedGroupPredicate(q intercept.Query, groupIDs []string) {
 func addViewGroupPredicate(q intercept.Query, groupIDs []string) {
 	objectSnakeCase := strcase.SnakeCase(q.Type())
 	tableName := fmt.Sprintf("%s_viewers", objectSnakeCase)
+
 	q.WhereP(func(s *sql.Selector) {
 		t := sql.Table(tableName)
 		s.Join(t).On(

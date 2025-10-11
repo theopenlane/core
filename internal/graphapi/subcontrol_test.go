@@ -492,7 +492,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 			request: testclient.UpdateSubcontrolInput{
 				Status:         &enums.ControlStatusPreparing,
 				Tags:           []string{"tag1", "tag2"},
-				Source:         lo.ToPtr(enums.ControlSourceFramework),
+				Source:         lo.ToPtr(enums.ControlSourceUserDefined),
 				ControlOwnerID: &ownerGroup.ID,
 				DelegateID:     &delegateGroup.ID,
 			},

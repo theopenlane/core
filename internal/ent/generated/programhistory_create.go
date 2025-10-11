@@ -340,6 +340,20 @@ func (_c *ProgramHistoryCreate) SetNillableAuditorEmail(v *string) *ProgramHisto
 	return _c
 }
 
+// SetProgramOwnerID sets the "program_owner_id" field.
+func (_c *ProgramHistoryCreate) SetProgramOwnerID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetProgramOwnerID(v)
+	return _c
+}
+
+// SetNillableProgramOwnerID sets the "program_owner_id" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableProgramOwnerID(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetProgramOwnerID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProgramHistoryCreate) SetID(v string) *ProgramHistoryCreate {
 	_c.mutation.SetID(v)
@@ -625,6 +639,10 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AuditorEmail(); ok {
 		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
 		_node.AuditorEmail = value
+	}
+	if value, ok := _c.mutation.ProgramOwnerID(); ok {
+		_spec.SetField(programhistory.FieldProgramOwnerID, field.TypeString, value)
+		_node.ProgramOwnerID = value
 	}
 	return _node, _spec
 }

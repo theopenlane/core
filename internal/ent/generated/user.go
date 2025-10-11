@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
@@ -103,10 +104,8 @@ type UserEdges struct {
 	AssigneeTasks []*Task `json:"assignee_tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
-	// ImpersonationEvents holds the value of the impersonation_events edge.
-	ImpersonationEvents []*ImpersonationEvent `json:"impersonation_events,omitempty"`
-	// TargetedImpersonations holds the value of the targeted_impersonations edge.
-	TargetedImpersonations []*ImpersonationEvent `json:"targeted_impersonations,omitempty"`
+	// ProgramOwner holds the value of the program_owner edge.
+	ProgramOwner *Program `json:"program_owner,omitempty"`
 	// GroupMemberships holds the value of the group_memberships edge.
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
@@ -115,9 +114,9 @@ type UserEdges struct {
 	ProgramMemberships []*ProgramMembership `json:"program_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [18]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -288,28 +287,21 @@ func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
-// ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[16] {
-		return e.ImpersonationEvents, nil
+// ProgramOwnerOrErr returns the ProgramOwner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserEdges) ProgramOwnerOrErr() (*Program, error) {
+	if e.ProgramOwner != nil {
+		return e.ProgramOwner, nil
+	} else if e.loadedTypes[16] {
+		return nil, &NotFoundError{label: program.Label}
 	}
-	return nil, &NotLoadedError{edge: "impersonation_events"}
-}
-
-// TargetedImpersonationsOrErr returns the TargetedImpersonations value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) TargetedImpersonationsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[17] {
-		return e.TargetedImpersonations, nil
-	}
-	return nil, &NotLoadedError{edge: "targeted_impersonations"}
+	return nil, &NotLoadedError{edge: "program_owner"}
 }
 
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -318,7 +310,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -327,7 +319,7 @@ func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
 // ProgramMembershipsOrErr returns the ProgramMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramMembershipsOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.ProgramMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "program_memberships"}
@@ -591,14 +583,9 @@ func (_m *User) QueryPrograms() *ProgramQuery {
 	return NewUserClient(_m.config).QueryPrograms(_m)
 }
 
-// QueryImpersonationEvents queries the "impersonation_events" edge of the User entity.
-func (_m *User) QueryImpersonationEvents() *ImpersonationEventQuery {
-	return NewUserClient(_m.config).QueryImpersonationEvents(_m)
-}
-
-// QueryTargetedImpersonations queries the "targeted_impersonations" edge of the User entity.
-func (_m *User) QueryTargetedImpersonations() *ImpersonationEventQuery {
-	return NewUserClient(_m.config).QueryTargetedImpersonations(_m)
+// QueryProgramOwner queries the "program_owner" edge of the User entity.
+func (_m *User) QueryProgramOwner() *ProgramQuery {
+	return NewUserClient(_m.config).QueryProgramOwner(_m)
 }
 
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.

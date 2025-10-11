@@ -115,7 +115,6 @@ func userFilterType(ctx context.Context) string {
 
 // filterUsingFGA filters the user query using the FGA service to get the users with access to the org
 func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
-
 	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
 		return nil
 	}
@@ -123,6 +122,7 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 	if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
 		return nil
 	}
+
 	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 	if err != nil {
 		return err

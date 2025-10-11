@@ -133,6 +133,7 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 
 	// bypass further permissions checks and allow the file to be created
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	entFile, err := txFileClientFromContext(ctx).Create().
 		SetFileContents(contents).
 		SetInput(set).

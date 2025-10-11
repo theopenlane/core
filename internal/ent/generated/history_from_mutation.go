@@ -1111,6 +1111,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableReferenceFramework(&referenceFramework)
 	}
 
+	if referenceFrameworkRevision, exists := m.ReferenceFrameworkRevision(); exists {
+		create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
+	}
+
 	if controlType, exists := m.ControlType(); exists {
 		create = create.SetControlType(controlType)
 	}
@@ -1320,6 +1324,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableReferenceFramework(control.ReferenceFramework)
 		}
 
+		if referenceFrameworkRevision, exists := m.ReferenceFrameworkRevision(); exists {
+			create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
+		} else {
+			create = create.SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision)
+		}
+
 		if controlType, exists := m.ControlType(); exists {
 			create = create.SetControlType(controlType)
 		} else {
@@ -1486,6 +1496,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(control.Status).
 			SetSource(control.Source).
 			SetNillableReferenceFramework(control.ReferenceFramework).
+			SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision).
 			SetControlType(control.ControlType).
 			SetCategory(control.Category).
 			SetCategoryID(control.CategoryID).
@@ -8769,6 +8780,10 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetAuditorEmail(auditorEmail)
 	}
 
+	if programOwnerID, exists := m.ProgramOwnerID(); exists {
+		create = create.SetProgramOwnerID(programOwnerID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8932,6 +8947,12 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAuditorEmail(program.AuditorEmail)
 		}
 
+		if programOwnerID, exists := m.ProgramOwnerID(); exists {
+			create = create.SetProgramOwnerID(programOwnerID)
+		} else {
+			create = create.SetProgramOwnerID(program.ProgramOwnerID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8989,6 +9010,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditFirm(program.AuditFirm).
 			SetAuditor(program.Auditor).
 			SetAuditorEmail(program.AuditorEmail).
+			SetProgramOwnerID(program.ProgramOwnerID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -10395,6 +10417,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableReferenceFramework(&referenceFramework)
 	}
 
+	if referenceFrameworkRevision, exists := m.ReferenceFrameworkRevision(); exists {
+		create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
+	}
+
 	if controlType, exists := m.ControlType(); exists {
 		create = create.SetControlType(controlType)
 	}
@@ -10604,6 +10630,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableReferenceFramework(subcontrol.ReferenceFramework)
 		}
 
+		if referenceFrameworkRevision, exists := m.ReferenceFrameworkRevision(); exists {
+			create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
+		} else {
+			create = create.SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision)
+		}
+
 		if controlType, exists := m.ControlType(); exists {
 			create = create.SetControlType(controlType)
 		} else {
@@ -10770,6 +10802,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetStatus(subcontrol.Status).
 			SetSource(subcontrol.Source).
 			SetNillableReferenceFramework(subcontrol.ReferenceFramework).
+			SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision).
 			SetControlType(subcontrol.ControlType).
 			SetCategory(subcontrol.Category).
 			SetCategoryID(subcontrol.CategoryID).

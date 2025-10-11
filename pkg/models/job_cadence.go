@@ -144,6 +144,7 @@ func (c JobCadence) Next(from time.Time) (time.Time, error) {
 
 		if expectedNextRun.Before(from) {
 			const next24hrs = 24 * time.Hour
+
 			expectedNextRun = expectedNextRun.Add(next24hrs)
 		}
 

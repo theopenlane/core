@@ -447,20 +447,19 @@ func WithObjectStorage() ServerOption {
 
 			switch settings.Provider {
 			case storage.ProviderS3:
-
 				storageOptions := []storage.S3Option{
-					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
-					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
-					storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
+					storage.WithS3Region(s.Config.Settings.ObjectStorage.Region),
+					storage.WithS3Bucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+					storage.WithS3AccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
+					storage.WithS3SecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
 				}
 
 				if endpoint := s.Config.Settings.ObjectStorage.Endpoint; endpoint != "" {
-					storageOptions = append(storageOptions, storage.WithEndpoint(endpoint))
+					storageOptions = append(storageOptions, storage.WithS3Endpoint(endpoint))
 				}
 
 				if set := s.Config.Settings.ObjectStorage.UsePathStyle; set {
-					storageOptions = append(storageOptions, storage.WithPathStyle(set))
+					storageOptions = append(storageOptions, storage.WithS3PathStyle(set))
 				}
 
 				opts := storage.NewS3Options(storageOptions...)
@@ -478,39 +477,12 @@ func WithObjectStorage() ServerOption {
 				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
 					log.Panic().Msg("default bucket not found")
 				}
-			// case storage.ProviderGCS:
-			// 	gcsOpts := []storage.GCSOption{
-			// 		storage.WithGCSBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-			// 	}
-
-			// 	if s.Config.Settings.ObjectStorage.CredentialsJSON != "" {
-			// 		gcsOpts = append(gcsOpts, storage.WithGCSClientOptions(option.WithCredentialsJSON([]byte(s.Config.Settings.ObjectStorage.CredentialsJSON))))
-			// 	}
-
-			// 	// reuse region field to hold project ID for now
-			// 	if s.Config.Settings.ObjectStorage.Region != "" {
-			// 		gcsOpts = append(gcsOpts, storage.WithGCSProjectID(s.Config.Settings.ObjectStorage.Region))
-			// 	}
-
-			// 	store, err = storage.NewGCSFromConfig(context.Background(), storage.NewGCSOptions(gcsOpts...))
-			// 	if err != nil {
-			// 		log.Panic().Err(err).Msg("error creating GCS store")
-			// 	}
-
-			// 	bucks, err := store.ListBuckets()
-			// 	if err != nil {
-			// 		log.Panic().Err(err).Msg("error listing buckets")
-			// 	}
-
-			// 	if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
-			// 		log.Panic().Msg("default bucket not found")
-			// 	}
 			default:
 				s.Config.Settings.ObjectStorage.Provider = storage.ProviderDisk
 
 				opts := storage.NewDiskOptions(
-					storage.WithLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithLocalURL(s.Config.Settings.ObjectStorage.LocalURL),
+					storage.WithDiskLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+					storage.WithDiskLocalURL(s.Config.Settings.ObjectStorage.LocalURL),
 				)
 
 				store, err = storage.NewDiskStorage(opts)
@@ -565,13 +537,13 @@ func WithEntitlements() ServerOption {
 
 		if s.Config.Settings.Entitlements.Enabled {
 			var err error
+
 			client, err = entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
 				entitlements.WithConfig(s.Config.Settings.Entitlements))
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating entitlements client")
 			}
-
 		}
 
 		s.Config.Handler.Entitlements = client

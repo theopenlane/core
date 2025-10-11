@@ -10,12 +10,14 @@ import (
 	"slices"
 
 	"entgo.io/contrib/entgql"
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
@@ -29,9 +31,11 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	filters := getCloneFilterOptions(input)
+
 	// if a standard is provided, clone those controls
-	if input.StandardID != nil {
-		res, err := r.cloneControlsFromStandard(ctx, *input.StandardID, input.ProgramID)
+	if filterByStandard(filters) {
+		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
 			return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
 		}
@@ -65,6 +69,164 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	return &model.ControlBulkCreatePayload{
 		Controls: createdControls,
 	}, nil
+}
+
+// CloneBulkCSVControl is the resolver for the cloneBulkCSVControl field.
+func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
+	data, err := unmarshalBulkData[model.CloneControlUploadInput](input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	convertedInput, err := convertToCloneControlInput(data)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to convert clone control input")
+
+		return nil, err
+	}
+
+	out := &model.ControlBulkCreatePayload{
+		Controls: []*generated.Control{},
+	}
+
+	for _, ci := range convertedInput {
+		res, err := r.CreateControlsByClone(ctx, ci)
+		if err != nil {
+			return nil, err
+		}
+
+		if res == nil || len(res.Controls) == 0 {
+			continue
+		}
+
+		out.Controls = append(out.Controls, res.Controls...)
+	}
+
+	// check to see if there are additional control objects or implementations to create
+	for _, c := range data {
+		if c.RefCode == nil || *c.RefCode == "" {
+			continue
+		}
+
+		controlID, isSubControl := getControlIDFromRefCode(*c.RefCode, out.Controls)
+		if controlID == nil || *controlID == "" {
+			log.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
+
+			continue
+		}
+
+		commentIDs, err := r.createComment(ctx, c.OwnerID, c.Comment)
+		if err != nil {
+			return nil, err
+		}
+
+		if isSubControl {
+			hasUpdate := false
+			scInput, hasUpdate := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+
+			if len(commentIDs) > 0 {
+				scInput.AddCommentIDs = commentIDs
+				hasUpdate = true
+			}
+
+			if c.InternalPolicyID != nil {
+				scInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
+				hasUpdate = true
+			}
+
+			if hasUpdate || c.ImplementationGuidance != nil {
+				base := r.db.Subcontrol.UpdateOneID(*controlID)
+
+				if scInput != nil {
+					base.SetInput(*scInput)
+				}
+
+				if c.ImplementationGuidance != nil {
+					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
+
+					if guidance != nil {
+						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})
+					}
+				}
+
+				err := base.Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+		} else {
+			hasUpdate := false
+			cInput, hasUpdate := getFieldsToUpdate[generated.UpdateControlInput](c)
+
+			if len(commentIDs) > 0 {
+				cInput.AddCommentIDs = commentIDs
+				hasUpdate = true
+			}
+
+			if c.InternalPolicyID != nil {
+				cInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
+				hasUpdate = true
+			}
+
+			if hasUpdate || c.ImplementationGuidance != nil {
+				base := r.db.Control.UpdateOneID(*controlID)
+
+				if cInput != nil {
+					base.SetInput(*cInput)
+				}
+
+				if c.ImplementationGuidance != nil {
+					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
+
+					if guidance != nil {
+						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})
+					}
+				}
+
+				err := base.Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		if err := r.createControlImplementation(ctx, c.OwnerID, *controlID, c.ControlImplementation); err != nil {
+			return nil, err
+		}
+
+		if err := r.createControlObjective(ctx, c.OwnerID, *controlID, c.ControlObjective); err != nil {
+			return nil, err
+		}
+	}
+
+	// get all control IDs
+	controlIDs := []string{}
+	for _, c := range out.Controls {
+		controlIDs = append(controlIDs, c.ID)
+	}
+
+	// get the full control objects with implementations and objectives
+	out.Controls, err = withTransactionalMutation(ctx).Control.Query().
+		Where(control.IDIn(controlIDs...)).
+		WithSubcontrols().
+		WithControlImplementations().
+		WithControlObjectives().
+		All(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+	}
+
+	if err := r.markSubcontrolsAsNotApplicable(ctx, data, out.Controls); err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }
 
 // ControlCategories is the resolver for the controlCategories field.

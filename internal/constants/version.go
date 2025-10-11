@@ -66,8 +66,8 @@ func init() {
 func (vvs *versionStruct) String() string {
 	stringBuilder := &strings.Builder{}
 	tmpl := template.Must(template.New("version").Parse(verboseTemplate))
-	err := tmpl.Execute(stringBuilder, vvs)
 
+	err := tmpl.Execute(stringBuilder, vvs)
 	if err != nil {
 		panic(err)
 	}

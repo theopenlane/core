@@ -446,6 +446,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		if len(groups) == 0 {
 			continue
 		}
+
 		groupIDs := make([]string, 0, len(groups))
 		for _, g := range groups {
 			groupIDs = append(groupIDs, g.ID)
@@ -457,11 +458,11 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 			SetDisplayName(displayName).
 			SetDescription(getUserGroupName(displayName, user.ID)).
 			Exec(privacy.DecisionContext(newCtx, privacy.Allow))
-
 		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).
 				Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
 				Msg("error updating system managed group names in bulk")
+
 			return err
 		}
 	}

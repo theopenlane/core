@@ -555,34 +555,23 @@ func (_c *UserCreate) AddPrograms(v ...*Program) *UserCreate {
 	return _c.AddProgramIDs(ids...)
 }
 
-// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
-func (_c *UserCreate) AddImpersonationEventIDs(ids ...string) *UserCreate {
-	_c.mutation.AddImpersonationEventIDs(ids...)
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_c *UserCreate) SetProgramOwnerID(id string) *UserCreate {
+	_c.mutation.SetProgramOwnerID(id)
 	return _c
 }
 
-// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
-func (_c *UserCreate) AddImpersonationEvents(v ...*ImpersonationEvent) *UserCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_c *UserCreate) SetNillableProgramOwnerID(id *string) *UserCreate {
+	if id != nil {
+		_c = _c.SetProgramOwnerID(*id)
 	}
-	return _c.AddImpersonationEventIDs(ids...)
-}
-
-// AddTargetedImpersonationIDs adds the "targeted_impersonations" edge to the ImpersonationEvent entity by IDs.
-func (_c *UserCreate) AddTargetedImpersonationIDs(ids ...string) *UserCreate {
-	_c.mutation.AddTargetedImpersonationIDs(ids...)
 	return _c
 }
 
-// AddTargetedImpersonations adds the "targeted_impersonations" edges to the ImpersonationEvent entity.
-func (_c *UserCreate) AddTargetedImpersonations(v ...*ImpersonationEvent) *UserCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddTargetedImpersonationIDs(ids...)
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_c *UserCreate) SetProgramOwner(v *Program) *UserCreate {
+	return _c.SetProgramOwnerID(v.ID)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -1182,35 +1171,18 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.TargetedImpersonationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
+		edge.Schema = _c.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

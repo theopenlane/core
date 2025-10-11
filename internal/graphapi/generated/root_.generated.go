@@ -13,6 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -58,8 +59,10 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	Hidden   func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
-	ReadOnly func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
+	ExternalReadOnly func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
+	ExternalSource   func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
+	Hidden           func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
+	ReadOnly         func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 }
 
 type ComplexityRoot struct {
@@ -427,63 +430,64 @@ type ComplexityRoot struct {
 	}
 
 	Control struct {
-		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Aliases                func(childComplexity int) int
-		AssessmentMethods      func(childComplexity int) int
-		AssessmentObjectives   func(childComplexity int) int
-		Assets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		AuditorReferenceID     func(childComplexity int) int
-		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Category               func(childComplexity int) int
-		CategoryID             func(childComplexity int) int
-		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlOwner           func(childComplexity int) int
-		ControlOwnerID         func(childComplexity int) int
-		ControlQuestions       func(childComplexity int) int
-		ControlType            func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Delegate               func(childComplexity int) int
-		DelegateID             func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		ExampleEvidence        func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		ImplementationGuidance func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		MappedCategories       func(childComplexity int) int
-		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RefCode                func(childComplexity int) int
-		ReferenceFramework     func(childComplexity int) int
-		ReferenceID            func(childComplexity int) int
-		References             func(childComplexity int) int
-		ResponsibleParty       func(childComplexity int) int
-		ResponsiblePartyID     func(childComplexity int) int
-		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		Source                 func(childComplexity int) int
-		Standard               func(childComplexity int) int
-		StandardID             func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcategory            func(childComplexity int) int
-		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
+		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Aliases                    func(childComplexity int) int
+		AssessmentMethods          func(childComplexity int) int
+		AssessmentObjectives       func(childComplexity int) int
+		Assets                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AuditorReferenceID         func(childComplexity int) int
+		BlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category                   func(childComplexity int) int
+		CategoryID                 func(childComplexity int) int
+		Comments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ControlImplementations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOwner               func(childComplexity int) int
+		ControlOwnerID             func(childComplexity int) int
+		ControlQuestions           func(childComplexity int) int
+		ControlType                func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		Delegate                   func(childComplexity int) int
+		DelegateID                 func(childComplexity int) int
+		Description                func(childComplexity int) int
+		DisplayID                  func(childComplexity int) int
+		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		ExampleEvidence            func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		ImplementationGuidance     func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
+		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		MappedCategories           func(childComplexity int) int
+		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Owner                      func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RefCode                    func(childComplexity int) int
+		ReferenceFramework         func(childComplexity int) int
+		ReferenceFrameworkRevision func(childComplexity int) int
+		ReferenceID                func(childComplexity int) int
+		References                 func(childComplexity int) int
+		ResponsibleParty           func(childComplexity int) int
+		ResponsiblePartyID         func(childComplexity int) int
+		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		Source                     func(childComplexity int) int
+		Standard                   func(childComplexity int) int
+		StandardID                 func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Subcategory                func(childComplexity int) int
+		Subcontrols                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Tasks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                      func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -544,44 +548,45 @@ type ComplexityRoot struct {
 	}
 
 	ControlHistory struct {
-		Aliases                func(childComplexity int) int
-		AssessmentMethods      func(childComplexity int) int
-		AssessmentObjectives   func(childComplexity int) int
-		AuditorReferenceID     func(childComplexity int) int
-		Category               func(childComplexity int) int
-		CategoryID             func(childComplexity int) int
-		ControlOwnerID         func(childComplexity int) int
-		ControlQuestions       func(childComplexity int) int
-		ControlType            func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		DelegateID             func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		ExampleEvidence        func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		ImplementationGuidance func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		MappedCategories       func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		RefCode                func(childComplexity int) int
-		ReferenceFramework     func(childComplexity int) int
-		ReferenceID            func(childComplexity int) int
-		References             func(childComplexity int) int
-		ResponsiblePartyID     func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		StandardID             func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcategory            func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
+		Aliases                    func(childComplexity int) int
+		AssessmentMethods          func(childComplexity int) int
+		AssessmentObjectives       func(childComplexity int) int
+		AuditorReferenceID         func(childComplexity int) int
+		Category                   func(childComplexity int) int
+		CategoryID                 func(childComplexity int) int
+		ControlOwnerID             func(childComplexity int) int
+		ControlQuestions           func(childComplexity int) int
+		ControlType                func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		DelegateID                 func(childComplexity int) int
+		Description                func(childComplexity int) int
+		DisplayID                  func(childComplexity int) int
+		ExampleEvidence            func(childComplexity int) int
+		HistoryTime                func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		ImplementationGuidance     func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
+		MappedCategories           func(childComplexity int) int
+		Operation                  func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		Ref                        func(childComplexity int) int
+		RefCode                    func(childComplexity int) int
+		ReferenceFramework         func(childComplexity int) int
+		ReferenceFrameworkRevision func(childComplexity int) int
+		ReferenceID                func(childComplexity int) int
+		References                 func(childComplexity int) int
+		ResponsiblePartyID         func(childComplexity int) int
+		Source                     func(childComplexity int) int
+		StandardID                 func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Subcategory                func(childComplexity int) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Title                      func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
 	}
 
 	ControlHistoryConnection struct {
@@ -2490,6 +2495,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
@@ -3500,6 +3506,7 @@ type ComplexityRoot struct {
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Procedures           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramOwnerID       func(childComplexity int) int
 		ProgramType          func(childComplexity int) int
 		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		StartDate            func(childComplexity int) int
@@ -3509,6 +3516,7 @@ type ComplexityRoot struct {
 		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
+		User                 func(childComplexity int) int
 		Users                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		Viewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
@@ -3554,6 +3562,7 @@ type ComplexityRoot struct {
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		ProgramOwnerID       func(childComplexity int) int
 		ProgramType          func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		StartDate            func(childComplexity int) int
@@ -4374,57 +4383,58 @@ type ComplexityRoot struct {
 	}
 
 	Subcontrol struct {
-		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Aliases                func(childComplexity int) int
-		AssessmentMethods      func(childComplexity int) int
-		AssessmentObjectives   func(childComplexity int) int
-		AuditorReferenceID     func(childComplexity int) int
-		Category               func(childComplexity int) int
-		CategoryID             func(childComplexity int) int
-		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Control                func(childComplexity int) int
-		ControlID              func(childComplexity int) int
-		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlOwner           func(childComplexity int) int
-		ControlOwnerID         func(childComplexity int) int
-		ControlQuestions       func(childComplexity int) int
-		ControlType            func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Delegate               func(childComplexity int) int
-		DelegateID             func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		ExampleEvidence        func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		ImplementationGuidance func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		MappedCategories       func(childComplexity int) int
-		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		RefCode                func(childComplexity int) int
-		ReferenceFramework     func(childComplexity int) int
-		ReferenceID            func(childComplexity int) int
-		References             func(childComplexity int) int
-		ResponsibleParty       func(childComplexity int) int
-		ResponsiblePartyID     func(childComplexity int) int
-		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		Source                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcategory            func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
+		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Aliases                    func(childComplexity int) int
+		AssessmentMethods          func(childComplexity int) int
+		AssessmentObjectives       func(childComplexity int) int
+		AuditorReferenceID         func(childComplexity int) int
+		Category                   func(childComplexity int) int
+		CategoryID                 func(childComplexity int) int
+		Comments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Control                    func(childComplexity int) int
+		ControlID                  func(childComplexity int) int
+		ControlImplementations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOwner               func(childComplexity int) int
+		ControlOwnerID             func(childComplexity int) int
+		ControlQuestions           func(childComplexity int) int
+		ControlType                func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		Delegate                   func(childComplexity int) int
+		DelegateID                 func(childComplexity int) int
+		Description                func(childComplexity int) int
+		DisplayID                  func(childComplexity int) int
+		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		ExampleEvidence            func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		ImplementationGuidance     func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
+		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		MappedCategories           func(childComplexity int) int
+		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Owner                      func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		RefCode                    func(childComplexity int) int
+		ReferenceFramework         func(childComplexity int) int
+		ReferenceFrameworkRevision func(childComplexity int) int
+		ReferenceID                func(childComplexity int) int
+		References                 func(childComplexity int) int
+		ResponsibleParty           func(childComplexity int) int
+		ResponsiblePartyID         func(childComplexity int) int
+		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		Source                     func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Subcategory                func(childComplexity int) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Tasks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                      func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
 	}
 
 	SubcontrolBulkCreatePayload struct {
@@ -4451,44 +4461,45 @@ type ComplexityRoot struct {
 	}
 
 	SubcontrolHistory struct {
-		Aliases                func(childComplexity int) int
-		AssessmentMethods      func(childComplexity int) int
-		AssessmentObjectives   func(childComplexity int) int
-		AuditorReferenceID     func(childComplexity int) int
-		Category               func(childComplexity int) int
-		CategoryID             func(childComplexity int) int
-		ControlID              func(childComplexity int) int
-		ControlOwnerID         func(childComplexity int) int
-		ControlQuestions       func(childComplexity int) int
-		ControlType            func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		DelegateID             func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		ExampleEvidence        func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		ImplementationGuidance func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		MappedCategories       func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		RefCode                func(childComplexity int) int
-		ReferenceFramework     func(childComplexity int) int
-		ReferenceID            func(childComplexity int) int
-		References             func(childComplexity int) int
-		ResponsiblePartyID     func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Subcategory            func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
+		Aliases                    func(childComplexity int) int
+		AssessmentMethods          func(childComplexity int) int
+		AssessmentObjectives       func(childComplexity int) int
+		AuditorReferenceID         func(childComplexity int) int
+		Category                   func(childComplexity int) int
+		CategoryID                 func(childComplexity int) int
+		ControlID                  func(childComplexity int) int
+		ControlOwnerID             func(childComplexity int) int
+		ControlQuestions           func(childComplexity int) int
+		ControlType                func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		DelegateID                 func(childComplexity int) int
+		Description                func(childComplexity int) int
+		DisplayID                  func(childComplexity int) int
+		ExampleEvidence            func(childComplexity int) int
+		HistoryTime                func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		ImplementationGuidance     func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
+		MappedCategories           func(childComplexity int) int
+		Operation                  func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		Ref                        func(childComplexity int) int
+		RefCode                    func(childComplexity int) int
+		ReferenceFramework         func(childComplexity int) int
+		ReferenceFrameworkRevision func(childComplexity int) int
+		ReferenceID                func(childComplexity int) int
+		References                 func(childComplexity int) int
+		ResponsiblePartyID         func(childComplexity int) int
+		Source                     func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Subcategory                func(childComplexity int) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Title                      func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
 	}
 
 	SubcontrolHistoryConnection struct {
@@ -5336,6 +5347,7 @@ type ComplexityRoot struct {
 		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		ProgramMemberships   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		ProgramOwner         func(childComplexity int) int
 		Programs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Role                 func(childComplexity int) int
 		Setting              func(childComplexity int) int
@@ -7566,6 +7578,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ReferenceFramework(childComplexity), true
 
+	case "Control.referenceFrameworkRevision":
+		if e.complexity.Control.ReferenceFrameworkRevision == nil {
+			break
+		}
+
+		return e.complexity.Control.ReferenceFrameworkRevision(childComplexity), true
+
 	case "Control.referenceID":
 		if e.complexity.Control.ReferenceID == nil {
 			break
@@ -8052,6 +8071,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.ReferenceFramework(childComplexity), true
+
+	case "ControlHistory.referenceFrameworkRevision":
+		if e.complexity.ControlHistory.ReferenceFrameworkRevision == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ReferenceFrameworkRevision(childComplexity), true
 
 	case "ControlHistory.referenceID":
 		if e.complexity.ControlHistory.ReferenceID == nil {
@@ -17238,6 +17264,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
 
+	case "Mutation.cloneBulkCSVControl":
+		if e.complexity.Mutation.CloneBulkCSVControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cloneBulkCSVControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CloneBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createAPIToken":
 		if e.complexity.Mutation.CreateAPIToken == nil {
 			break
@@ -24579,6 +24617,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Program.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
+	case "Program.programOwnerID":
+		if e.complexity.Program.ProgramOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Program.ProgramOwnerID(childComplexity), true
+
 	case "Program.programType":
 		if e.complexity.Program.ProgramType == nil {
 			break
@@ -24656,6 +24701,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.UpdatedBy(childComplexity), true
+
+	case "Program.user":
+		if e.complexity.Program.User == nil {
+			break
+		}
+
+		return e.complexity.Program.User(childComplexity), true
 
 	case "Program.users":
 		if e.complexity.Program.Users == nil {
@@ -24855,6 +24907,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramHistory.OwnerID(childComplexity), true
+
+	case "ProgramHistory.programOwnerID":
+		if e.complexity.ProgramHistory.ProgramOwnerID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.ProgramOwnerID(childComplexity), true
 
 	case "ProgramHistory.programType":
 		if e.complexity.ProgramHistory.ProgramType == nil {
@@ -30961,6 +31020,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ReferenceFramework(childComplexity), true
 
+	case "Subcontrol.referenceFrameworkRevision":
+		if e.complexity.Subcontrol.ReferenceFrameworkRevision == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ReferenceFrameworkRevision(childComplexity), true
+
 	case "Subcontrol.referenceID":
 		if e.complexity.Subcontrol.ReferenceID == nil {
 			break
@@ -31325,6 +31391,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.ReferenceFramework(childComplexity), true
+
+	case "SubcontrolHistory.referenceFrameworkRevision":
+		if e.complexity.SubcontrolHistory.ReferenceFrameworkRevision == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ReferenceFrameworkRevision(childComplexity), true
 
 	case "SubcontrolHistory.referenceID":
 		if e.complexity.SubcontrolHistory.ReferenceID == nil {
@@ -35189,6 +35262,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ProgramMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramMembershipOrder), args["where"].(*generated.ProgramMembershipWhereInput)), true
 
+	case "User.programOwner":
+		if e.complexity.User.ProgramOwner == nil {
+			break
+		}
+
+		return e.complexity.User.ProgramOwner(childComplexity), true
+
 	case "User.programs":
 		if e.complexity.User.Programs == nil {
 			break
@@ -35999,6 +36079,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
 		ec.unmarshalInputCloneControlInput,
+		ec.unmarshalInputCloneControlUploadInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputContactOrder,
@@ -38315,13 +38396,29 @@ under an organization (ownerID)
 """
 input CloneControlInput {
     """
-    controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+    controlIDs are the ids of the control to clone. If standardID or standardShortName are passed, this is ignored
     """
     controlIDs: [ID!]
+    """
+    refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+    """
+    refCodes: [String!]
     """
     standardID to clone all controls from into the organization
     """
     standardID: ID
+    """
+    standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+    """
+    standardShortName: String
+    """
+    standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+    """
+    standardVersion: String
+    """
+    categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+    """
+    categories: [String!]
     """
     organization ID that the controls will be under
     """
@@ -38332,12 +38429,77 @@ input CloneControlInput {
     programID: ID
 }
 
+"""
+CloneControlUploadInput is used to clone controls and their subcontrols
+under an organization using a csv upload
+"""
+input CloneControlUploadInput {
+	"""
+	controlID is the id of the control to clone. If standardID or standardShortName are passed, this is ignored
+	"""
+	controlID: ID
+	"""
+	refCodes are the refCodes to control. A standardID must be provided to lookup the refCode from.
+	"""
+	refCode: String
+	"""
+	standardID to clone all controls from into the organization
+	"""
+	standardID: ID
+	"""
+	standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+	"""
+	standardShortName: String
+	"""
+	standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+	"""
+	standardVersion: String
+	"""
+	organization ID that the controls will be under
+	"""
+	ownerID: ID
+  """
+  controlImplementation is the implementation details of the control
+  """
+  controlImplementation: String
+  """
+  controlObjective is the objective details of the control
+  """
+  controlObjective: String
+  """
+  implementationGuidance is guidance details on the implementation of the control
+  """
+  implementationGuidance: String
+  """
+  comment to associate with the control that was created
+  """
+  comment: String
+  """
+  internalPolicyIDs to associate with the created control
+  """
+  internalPolicyID: ID
+  """
+  controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
+  if the control is being clone from a system owned standard
+  """
+  controlInput: CreateControlInput
+}
+
 extend type Mutation{
   """
   Create a new controls based on existing control ID(s)
   """
   createControlsByClone(
       input: CloneControlInput
+  ): ControlBulkCreatePayload!
+  """
+  Create multiple new controls via a clone from a standard using a CSV
+  """
+  cloneBulkCSVControl(
+      """
+      csv file containing values of the control
+      """
+      input: Upload!
   ): ControlBulkCreatePayload!
 }
 
@@ -38803,6 +38965,17 @@ If an input is marked as @readOnly, only system-admin users
 can set the field
 """
 directive @readOnly on INPUT_FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users for system-owned objects
+If an input is marked as @externalReadOnly, only system-admin users
+can set the field if the object is marked as source == ControlSourceFramework
+"""
+directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINITION
+"""
+Indicates that this field cannot be set on the input, and comes from an external source
+This does not prevent the viewing of the field
+"""
+directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
 `, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
     """
@@ -42363,11 +42536,11 @@ type Control implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -42391,11 +42564,15 @@ type Control implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
+  source: ControlControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -42403,15 +42580,15 @@ type Control implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -42467,7 +42644,7 @@ type Control implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the standard that the control belongs to, if applicable
   """
@@ -43094,11 +43271,11 @@ type ControlHistory implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -43122,11 +43299,15 @@ type ControlHistory implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlHistoryControlSource
+  source: ControlHistoryControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -43134,15 +43315,15 @@ type ControlHistory implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -43198,7 +43379,7 @@ type ControlHistory implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the standard that the control belongs to, if applicable
   """
@@ -43562,6 +43743,24 @@ input ControlHistoryWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -46246,6 +46445,24 @@ input ControlWhereInput {
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
   """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
+  """
   control_type field predicates
   """
   controlType: ControlControlType
@@ -46589,10 +46806,6 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
-  """
-  SSO verification time for the owning organization
-  """
-  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -46840,11 +47053,11 @@ input CreateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -46864,11 +47077,15 @@ input CreateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -46876,15 +47093,15 @@ input CreateControlInput {
   """
   category of the control
   """
-  category: String
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -46924,7 +47141,7 @@ input CreateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -48167,10 +48384,6 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
-  """
-  SSO authorization timestamps by organization id
-  """
-  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -48347,6 +48560,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
+  userID: ID
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -48590,11 +48804,11 @@ input CreateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -48614,11 +48828,15 @@ input CreateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -48626,15 +48844,15 @@ input CreateSubcontrolInput {
   """
   category of the control
   """
-  category: String
+  category: String @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -48674,7 +48892,7 @@ input CreateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalReadOnly(source: FRAMEWORK)
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -49078,8 +49296,7 @@ input CreateUserInput {
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
-  impersonationEventIDs: [ID!]
-  targetedImpersonationIDs: [ID!]
+  programOwnerID: ID
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -74515,6 +74732,10 @@ type Program implements Node {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  """
+  the id of the user who is responsible for this program
+  """
+  programOwnerID: ID
   owner: Organization
   blockedGroups(
     """
@@ -75012,6 +75233,7 @@ type Program implements Node {
     """
     where: UserWhereInput
   ): UserConnection!
+  user: User
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -75147,6 +75369,10 @@ type ProgramHistory implements Node {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  """
+  the id of the user who is responsible for this program
+  """
+  programOwnerID: String
 }
 """
 A connection to a list of items.
@@ -75547,6 +75773,24 @@ input ProgramHistoryWhereInput {
   auditorEmailNotNil: Boolean
   auditorEmailEqualFold: String
   auditorEmailContainsFold: String
+  """
+  program_owner_id field predicates
+  """
+  programOwnerID: String
+  programOwnerIDNEQ: String
+  programOwnerIDIn: [String!]
+  programOwnerIDNotIn: [String!]
+  programOwnerIDGT: String
+  programOwnerIDGTE: String
+  programOwnerIDLT: String
+  programOwnerIDLTE: String
+  programOwnerIDContains: String
+  programOwnerIDHasPrefix: String
+  programOwnerIDHasSuffix: String
+  programOwnerIDIsNil: Boolean
+  programOwnerIDNotNil: Boolean
+  programOwnerIDEqualFold: String
+  programOwnerIDContainsFold: String
 }
 type ProgramMembership implements Node {
   id: ID!
@@ -76273,6 +76517,24 @@ input ProgramWhereInput {
   auditorEmailEqualFold: String
   auditorEmailContainsFold: String
   """
+  program_owner_id field predicates
+  """
+  programOwnerID: ID
+  programOwnerIDNEQ: ID
+  programOwnerIDIn: [ID!]
+  programOwnerIDNotIn: [ID!]
+  programOwnerIDGT: ID
+  programOwnerIDGTE: ID
+  programOwnerIDLT: ID
+  programOwnerIDLTE: ID
+  programOwnerIDContains: ID
+  programOwnerIDHasPrefix: ID
+  programOwnerIDHasSuffix: ID
+  programOwnerIDIsNil: Boolean
+  programOwnerIDNotNil: Boolean
+  programOwnerIDEqualFold: ID
+  programOwnerIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -76357,6 +76619,11 @@ input ProgramWhereInput {
   """
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
   """
   members edge predicates
   """
@@ -83904,11 +84171,11 @@ type Subcontrol implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -83932,11 +84199,15 @@ type Subcontrol implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
+  source: SubcontrolControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -83944,15 +84215,15 @@ type Subcontrol implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -84008,7 +84279,7 @@ type Subcontrol implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the parent control
   """
@@ -84449,11 +84720,11 @@ type SubcontrolHistory implements Node {
   """
   human readable title of the control for quick identification
   """
-  title: String
+  title: String @externalSource(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
+  description: String @externalSource(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -84477,11 +84748,15 @@ type SubcontrolHistory implements Node {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolHistoryControlSource
+  source: SubcontrolHistoryControlSource @externalSource(source: FRAMEWORK)
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
-  referenceFramework: String
+  referenceFramework: String @externalSource(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -84489,15 +84764,15 @@ type SubcontrolHistory implements Node {
   """
   category of the control
   """
-  category: String
+  category: String @externalSource(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalSource(source: FRAMEWORK)
   """
   subcategory of the control
   """
-  subcategory: String
+  subcategory: String @externalSource(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -84553,7 +84828,7 @@ type SubcontrolHistory implements Node {
   """
   the unique reference code for the control
   """
-  refCode: String!
+  refCode: String! @externalSource(source: FRAMEWORK)
   """
   the id of the parent control
   """
@@ -84917,6 +85192,24 @@ input SubcontrolHistoryWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -85366,6 +85659,24 @@ input SubcontrolWhereInput {
   referenceFrameworkNotNil: Boolean
   referenceFrameworkEqualFold: String
   referenceFrameworkContainsFold: String
+  """
+  reference_framework_revision field predicates
+  """
+  referenceFrameworkRevision: String
+  referenceFrameworkRevisionNEQ: String
+  referenceFrameworkRevisionIn: [String!]
+  referenceFrameworkRevisionNotIn: [String!]
+  referenceFrameworkRevisionGT: String
+  referenceFrameworkRevisionGTE: String
+  referenceFrameworkRevisionLT: String
+  referenceFrameworkRevisionLTE: String
+  referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
+  referenceFrameworkRevisionHasSuffix: String
+  referenceFrameworkRevisionIsNil: Boolean
+  referenceFrameworkRevisionNotNil: Boolean
+  referenceFrameworkRevisionEqualFold: String
+  referenceFrameworkRevisionContainsFold: String
   """
   control_type field predicates
   """
@@ -92802,11 +93113,6 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
-  """
-  SSO verification time for the owning organization
-  """
-  ssoAuthorizations: SSOAuthorizationMap
-  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -93149,13 +93455,13 @@ input UpdateControlInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
-  clearTitle: Boolean
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
-  clearDescription: Boolean
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -93180,8 +93486,13 @@ input UpdateControlInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: ControlControlSource
-  clearSource: Boolean
+  source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -93190,18 +93501,18 @@ input UpdateControlInput {
   """
   category of the control
   """
-  category: String
-  clearCategory: Boolean
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String
-  clearSubcategory: Boolean
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -93257,7 +93568,7 @@ input UpdateControlInput {
   """
   the unique reference code for the control
   """
-  refCode: String
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -95024,11 +95335,6 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
-  """
-  SSO authorization timestamps by organization id
-  """
-  ssoAuthorizations: SSOAuthorizationMap
-  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """
@@ -95297,6 +95603,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  userID: ID
+  clearUser: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -95614,13 +95922,13 @@ input UpdateSubcontrolInput {
   """
   human readable title of the control for quick identification
   """
-  title: String
-  clearTitle: Boolean
+  title: String @externalReadOnly(source: FRAMEWORK)
+  clearTitle: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   description of what the control is supposed to accomplish
   """
-  description: String
-  clearDescription: Boolean
+  description: String @externalReadOnly(source: FRAMEWORK)
+  clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   additional names (ref_codes) for the control
   """
@@ -95645,8 +95953,13 @@ input UpdateSubcontrolInput {
   """
   source of the control, e.g. framework, template, custom, etc.
   """
-  source: SubcontrolControlSource
-  clearSource: Boolean
+  source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
+  """
+  referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
+  clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -95655,18 +95968,18 @@ input UpdateSubcontrolInput {
   """
   category of the control
   """
-  category: String
-  clearCategory: Boolean
+  category: String @externalReadOnly(source: FRAMEWORK)
+  clearCategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   category id of the control
   """
-  categoryID: String
+  categoryID: String @externalReadOnly(source: FRAMEWORK)
   clearCategoryID: Boolean
   """
   subcategory of the control
   """
-  subcategory: String
-  clearSubcategory: Boolean
+  subcategory: String @externalReadOnly(source: FRAMEWORK)
+  clearSubcategory: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   mapped categories of the control to other standards
   """
@@ -95722,7 +96035,7 @@ input UpdateSubcontrolInput {
   """
   the unique reference code for the control
   """
-  refCode: String
+  refCode: String @externalReadOnly(source: FRAMEWORK)
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -96304,12 +96617,8 @@ input UpdateUserInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
-  addImpersonationEventIDs: [ID!]
-  removeImpersonationEventIDs: [ID!]
-  clearImpersonationEvents: Boolean
-  addTargetedImpersonationIDs: [ID!]
-  removeTargetedImpersonationIDs: [ID!]
-  clearTargetedImpersonations: Boolean
+  programOwnerID: ID
+  clearProgramOwner: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -96784,6 +97093,7 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  programOwner: Program
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98340,6 +98650,11 @@ input UserWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  program_owner edge predicates
+  """
+  hasProgramOwner: Boolean
+  hasProgramOwnerWith: [ProgramWhereInput!]
   """
   group_memberships edge predicates
   """
@@ -101526,9 +101841,30 @@ input CreateFullProgramInput{
 }
 
 input CreateProgramWithMembersInput{
+  """
+  program input for the base program details
+  """
   program: CreateProgramInput!
+  """
+  members to add to the program
+  """
   members: [CreateMemberWithProgramInput!]
+  """
+  standardID to clone all controls from into the organization and associated with the program
+  """
   standardID: ID
+  """
+  standardShortName to clone all controls from into the organization, if the standardID is provided that will take precedence
+  """
+  standardShortName: String
+  """
+  standardVersion is the version of the standard to use when filtering by short name, if not provided, the latest version will be used
+  """
+  standardVersion: String
+  """
+  categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
+  """
+  categories: [String!]
 }
 
 input CreateMemberWithProgramInput {

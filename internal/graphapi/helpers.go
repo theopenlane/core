@@ -2,6 +2,7 @@ package graphapi
 
 import (
 	"context"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -190,8 +192,15 @@ func unmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 	if readErr != nil {
 		return nil, readErr
 	}
+	// Configure the CSV reader gocsv will use
+	gocsv.SetCSVReader(func(in io.Reader) gocsv.CSVReader {
+		r := csv.NewReader(in)
+		r.LazyQuotes = true    // tolerate odd quotes
+		r.FieldsPerRecord = -1 // allow variable field counts
+		r.TrimLeadingSpace = true
+		return r
+	})
 
-	// parse the csv
 	if err := gocsv.UnmarshalBytes(stream, &data); err != nil {
 		return nil, err
 	}
@@ -408,4 +417,64 @@ func stripOperation(field string) string {
 	}
 
 	return field
+}
+
+// convertToObject converts an object to a specific type
+func convertToObject[J any](obj any) (*J, error) {
+	jsonBytes, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+
+	var result J
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// isEmpty checks if the given interface is empty
+func isEmpty(x any) bool {
+	if x == nil {
+		return true
+	}
+
+	switch v := x.(type) {
+	case string:
+		return v == lo.Empty[string]()
+	case []int, []string, []float64, []any:
+		return isEmptySlice(v)
+	case map[string]any:
+		return len(v) == 0
+	case int, int8, int16, int32, int64:
+		return v == lo.Empty[int]()
+	case uint, uint8, uint16, uint32, uint64:
+		return v == lo.Empty[uint]()
+	case float32, float64:
+		return v == lo.Empty[float64]()
+	case bool:
+		return v == lo.Empty[bool]()
+	default:
+		// fallback to this helper, which expects a comparable type
+		return lo.IsNil(v)
+	}
+
+}
+
+// isEmptySlice checks if the given interface is an empty slice
+func isEmptySlice(x any) bool {
+	switch v := x.(type) {
+	case []int:
+		return len(v) == 0
+	case []string:
+		return len(v) == 0
+	case []float64:
+		return len(v) == 0
+	case []any:
+		return len(v) == 0
+	default:
+		return false
+	}
 }

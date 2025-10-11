@@ -129,7 +129,6 @@ func HookInviteGroups() ent.Hook {
 			}
 
 			return next.Mutate(ctx, m)
-
 		})
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
@@ -176,10 +175,10 @@ func HookInviteAccepted() ent.Hook {
 
 			// bypass interceptors that filters results
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 			inviteResp, err := m.Client().Invite.Query().WithGroups().Where(invite.ID(id)).Only(allowCtx)
 			if err != nil {
 				return nil, err
-
 			}
 
 			// get the group IDs from the invite edges

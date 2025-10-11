@@ -607,34 +607,23 @@ func (_u *UserUpdate) AddPrograms(v ...*Program) *UserUpdate {
 	return _u.AddProgramIDs(ids...)
 }
 
-// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
-func (_u *UserUpdate) AddImpersonationEventIDs(ids ...string) *UserUpdate {
-	_u.mutation.AddImpersonationEventIDs(ids...)
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_u *UserUpdate) SetProgramOwnerID(id string) *UserUpdate {
+	_u.mutation.SetProgramOwnerID(id)
 	return _u
 }
 
-// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
-func (_u *UserUpdate) AddImpersonationEvents(v ...*ImpersonationEvent) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_u *UserUpdate) SetNillableProgramOwnerID(id *string) *UserUpdate {
+	if id != nil {
+		_u = _u.SetProgramOwnerID(*id)
 	}
-	return _u.AddImpersonationEventIDs(ids...)
-}
-
-// AddTargetedImpersonationIDs adds the "targeted_impersonations" edge to the ImpersonationEvent entity by IDs.
-func (_u *UserUpdate) AddTargetedImpersonationIDs(ids ...string) *UserUpdate {
-	_u.mutation.AddTargetedImpersonationIDs(ids...)
 	return _u
 }
 
-// AddTargetedImpersonations adds the "targeted_impersonations" edges to the ImpersonationEvent entity.
-func (_u *UserUpdate) AddTargetedImpersonations(v ...*ImpersonationEvent) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddTargetedImpersonationIDs(ids...)
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_u *UserUpdate) SetProgramOwner(v *Program) *UserUpdate {
+	return _u.SetProgramOwnerID(v.ID)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -993,46 +982,10 @@ func (_u *UserUpdate) RemovePrograms(v ...*Program) *UserUpdate {
 	return _u.RemoveProgramIDs(ids...)
 }
 
-// ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
-func (_u *UserUpdate) ClearImpersonationEvents() *UserUpdate {
-	_u.mutation.ClearImpersonationEvents()
+// ClearProgramOwner clears the "program_owner" edge to the Program entity.
+func (_u *UserUpdate) ClearProgramOwner() *UserUpdate {
+	_u.mutation.ClearProgramOwner()
 	return _u
-}
-
-// RemoveImpersonationEventIDs removes the "impersonation_events" edge to ImpersonationEvent entities by IDs.
-func (_u *UserUpdate) RemoveImpersonationEventIDs(ids ...string) *UserUpdate {
-	_u.mutation.RemoveImpersonationEventIDs(ids...)
-	return _u
-}
-
-// RemoveImpersonationEvents removes "impersonation_events" edges to ImpersonationEvent entities.
-func (_u *UserUpdate) RemoveImpersonationEvents(v ...*ImpersonationEvent) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveImpersonationEventIDs(ids...)
-}
-
-// ClearTargetedImpersonations clears all "targeted_impersonations" edges to the ImpersonationEvent entity.
-func (_u *UserUpdate) ClearTargetedImpersonations() *UserUpdate {
-	_u.mutation.ClearTargetedImpersonations()
-	return _u
-}
-
-// RemoveTargetedImpersonationIDs removes the "targeted_impersonations" edge to ImpersonationEvent entities by IDs.
-func (_u *UserUpdate) RemoveTargetedImpersonationIDs(ids ...string) *UserUpdate {
-	_u.mutation.RemoveTargetedImpersonationIDs(ids...)
-	return _u
-}
-
-// RemoveTargetedImpersonations removes "targeted_impersonations" edges to ImpersonationEvent entities.
-func (_u *UserUpdate) RemoveTargetedImpersonations(v ...*ImpersonationEvent) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveTargetedImpersonationIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -2121,97 +2074,32 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ImpersonationEventsCleared() {
+	if _u.mutation.ProgramOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
+	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TargetedImpersonationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedTargetedImpersonationsIDs(); len(nodes) > 0 && !_u.mutation.TargetedImpersonationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TargetedImpersonationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2941,34 +2829,23 @@ func (_u *UserUpdateOne) AddPrograms(v ...*Program) *UserUpdateOne {
 	return _u.AddProgramIDs(ids...)
 }
 
-// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
-func (_u *UserUpdateOne) AddImpersonationEventIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.AddImpersonationEventIDs(ids...)
+// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
+func (_u *UserUpdateOne) SetProgramOwnerID(id string) *UserUpdateOne {
+	_u.mutation.SetProgramOwnerID(id)
 	return _u
 }
 
-// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
-func (_u *UserUpdateOne) AddImpersonationEvents(v ...*ImpersonationEvent) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
+// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableProgramOwnerID(id *string) *UserUpdateOne {
+	if id != nil {
+		_u = _u.SetProgramOwnerID(*id)
 	}
-	return _u.AddImpersonationEventIDs(ids...)
-}
-
-// AddTargetedImpersonationIDs adds the "targeted_impersonations" edge to the ImpersonationEvent entity by IDs.
-func (_u *UserUpdateOne) AddTargetedImpersonationIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.AddTargetedImpersonationIDs(ids...)
 	return _u
 }
 
-// AddTargetedImpersonations adds the "targeted_impersonations" edges to the ImpersonationEvent entity.
-func (_u *UserUpdateOne) AddTargetedImpersonations(v ...*ImpersonationEvent) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddTargetedImpersonationIDs(ids...)
+// SetProgramOwner sets the "program_owner" edge to the Program entity.
+func (_u *UserUpdateOne) SetProgramOwner(v *Program) *UserUpdateOne {
+	return _u.SetProgramOwnerID(v.ID)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -3327,46 +3204,10 @@ func (_u *UserUpdateOne) RemovePrograms(v ...*Program) *UserUpdateOne {
 	return _u.RemoveProgramIDs(ids...)
 }
 
-// ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
-func (_u *UserUpdateOne) ClearImpersonationEvents() *UserUpdateOne {
-	_u.mutation.ClearImpersonationEvents()
+// ClearProgramOwner clears the "program_owner" edge to the Program entity.
+func (_u *UserUpdateOne) ClearProgramOwner() *UserUpdateOne {
+	_u.mutation.ClearProgramOwner()
 	return _u
-}
-
-// RemoveImpersonationEventIDs removes the "impersonation_events" edge to ImpersonationEvent entities by IDs.
-func (_u *UserUpdateOne) RemoveImpersonationEventIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.RemoveImpersonationEventIDs(ids...)
-	return _u
-}
-
-// RemoveImpersonationEvents removes "impersonation_events" edges to ImpersonationEvent entities.
-func (_u *UserUpdateOne) RemoveImpersonationEvents(v ...*ImpersonationEvent) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveImpersonationEventIDs(ids...)
-}
-
-// ClearTargetedImpersonations clears all "targeted_impersonations" edges to the ImpersonationEvent entity.
-func (_u *UserUpdateOne) ClearTargetedImpersonations() *UserUpdateOne {
-	_u.mutation.ClearTargetedImpersonations()
-	return _u
-}
-
-// RemoveTargetedImpersonationIDs removes the "targeted_impersonations" edge to ImpersonationEvent entities by IDs.
-func (_u *UserUpdateOne) RemoveTargetedImpersonationIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.RemoveTargetedImpersonationIDs(ids...)
-	return _u
-}
-
-// RemoveTargetedImpersonations removes "targeted_impersonations" edges to ImpersonationEvent entities.
-func (_u *UserUpdateOne) RemoveTargetedImpersonations(v ...*ImpersonationEvent) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveTargetedImpersonationIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -4485,97 +4326,32 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ImpersonationEventsCleared() {
+	if _u.mutation.ProgramOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
+	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TargetedImpersonationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedTargetedImpersonationsIDs(); len(nodes) > 0 && !_u.mutation.TargetedImpersonationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TargetedImpersonationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -96,6 +96,7 @@ func detectEncryptedFields(schema ent.Interface) []string {
 	// Iterate through fields to find encrypted ones
 	for i := 0; i < fieldsValue.Len(); i++ {
 		fieldValue := fieldsValue.Index(i)
+
 		field, ok := fieldValue.Interface().(ent.Field)
 		if !ok {
 			continue

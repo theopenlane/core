@@ -24,6 +24,7 @@ func HookSubprocessor() ent.Hook {
 
 				m.AddFileIDs(fileIDs...)
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
@@ -44,6 +45,7 @@ func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMut
 		if len(logoFile) > 1 {
 			return ctx, ErrTooManyLogoFiles
 		}
+
 		m.SetLogoLocalFileID(logoFile[0].ID)
 
 		logoFile[0].Parent.ID, _ = m.ID()

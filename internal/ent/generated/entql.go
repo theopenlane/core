@@ -391,42 +391,43 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Control",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			control.FieldCreatedAt:              {Type: field.TypeTime, Column: control.FieldCreatedAt},
-			control.FieldUpdatedAt:              {Type: field.TypeTime, Column: control.FieldUpdatedAt},
-			control.FieldCreatedBy:              {Type: field.TypeString, Column: control.FieldCreatedBy},
-			control.FieldUpdatedBy:              {Type: field.TypeString, Column: control.FieldUpdatedBy},
-			control.FieldDeletedAt:              {Type: field.TypeTime, Column: control.FieldDeletedAt},
-			control.FieldDeletedBy:              {Type: field.TypeString, Column: control.FieldDeletedBy},
-			control.FieldDisplayID:              {Type: field.TypeString, Column: control.FieldDisplayID},
-			control.FieldTags:                   {Type: field.TypeJSON, Column: control.FieldTags},
-			control.FieldTitle:                  {Type: field.TypeString, Column: control.FieldTitle},
-			control.FieldDescription:            {Type: field.TypeString, Column: control.FieldDescription},
-			control.FieldAliases:                {Type: field.TypeJSON, Column: control.FieldAliases},
-			control.FieldReferenceID:            {Type: field.TypeString, Column: control.FieldReferenceID},
-			control.FieldAuditorReferenceID:     {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
-			control.FieldResponsiblePartyID:     {Type: field.TypeString, Column: control.FieldResponsiblePartyID},
-			control.FieldStatus:                 {Type: field.TypeEnum, Column: control.FieldStatus},
-			control.FieldSource:                 {Type: field.TypeEnum, Column: control.FieldSource},
-			control.FieldReferenceFramework:     {Type: field.TypeString, Column: control.FieldReferenceFramework},
-			control.FieldControlType:            {Type: field.TypeEnum, Column: control.FieldControlType},
-			control.FieldCategory:               {Type: field.TypeString, Column: control.FieldCategory},
-			control.FieldCategoryID:             {Type: field.TypeString, Column: control.FieldCategoryID},
-			control.FieldSubcategory:            {Type: field.TypeString, Column: control.FieldSubcategory},
-			control.FieldMappedCategories:       {Type: field.TypeJSON, Column: control.FieldMappedCategories},
-			control.FieldAssessmentObjectives:   {Type: field.TypeJSON, Column: control.FieldAssessmentObjectives},
-			control.FieldAssessmentMethods:      {Type: field.TypeJSON, Column: control.FieldAssessmentMethods},
-			control.FieldControlQuestions:       {Type: field.TypeJSON, Column: control.FieldControlQuestions},
-			control.FieldImplementationGuidance: {Type: field.TypeJSON, Column: control.FieldImplementationGuidance},
-			control.FieldExampleEvidence:        {Type: field.TypeJSON, Column: control.FieldExampleEvidence},
-			control.FieldReferences:             {Type: field.TypeJSON, Column: control.FieldReferences},
-			control.FieldControlOwnerID:         {Type: field.TypeString, Column: control.FieldControlOwnerID},
-			control.FieldDelegateID:             {Type: field.TypeString, Column: control.FieldDelegateID},
-			control.FieldOwnerID:                {Type: field.TypeString, Column: control.FieldOwnerID},
-			control.FieldSystemOwned:            {Type: field.TypeBool, Column: control.FieldSystemOwned},
-			control.FieldInternalNotes:          {Type: field.TypeString, Column: control.FieldInternalNotes},
-			control.FieldSystemInternalID:       {Type: field.TypeString, Column: control.FieldSystemInternalID},
-			control.FieldRefCode:                {Type: field.TypeString, Column: control.FieldRefCode},
-			control.FieldStandardID:             {Type: field.TypeString, Column: control.FieldStandardID},
+			control.FieldCreatedAt:                  {Type: field.TypeTime, Column: control.FieldCreatedAt},
+			control.FieldUpdatedAt:                  {Type: field.TypeTime, Column: control.FieldUpdatedAt},
+			control.FieldCreatedBy:                  {Type: field.TypeString, Column: control.FieldCreatedBy},
+			control.FieldUpdatedBy:                  {Type: field.TypeString, Column: control.FieldUpdatedBy},
+			control.FieldDeletedAt:                  {Type: field.TypeTime, Column: control.FieldDeletedAt},
+			control.FieldDeletedBy:                  {Type: field.TypeString, Column: control.FieldDeletedBy},
+			control.FieldDisplayID:                  {Type: field.TypeString, Column: control.FieldDisplayID},
+			control.FieldTags:                       {Type: field.TypeJSON, Column: control.FieldTags},
+			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
+			control.FieldDescription:                {Type: field.TypeString, Column: control.FieldDescription},
+			control.FieldAliases:                    {Type: field.TypeJSON, Column: control.FieldAliases},
+			control.FieldReferenceID:                {Type: field.TypeString, Column: control.FieldReferenceID},
+			control.FieldAuditorReferenceID:         {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
+			control.FieldResponsiblePartyID:         {Type: field.TypeString, Column: control.FieldResponsiblePartyID},
+			control.FieldStatus:                     {Type: field.TypeEnum, Column: control.FieldStatus},
+			control.FieldSource:                     {Type: field.TypeEnum, Column: control.FieldSource},
+			control.FieldReferenceFramework:         {Type: field.TypeString, Column: control.FieldReferenceFramework},
+			control.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: control.FieldReferenceFrameworkRevision},
+			control.FieldControlType:                {Type: field.TypeEnum, Column: control.FieldControlType},
+			control.FieldCategory:                   {Type: field.TypeString, Column: control.FieldCategory},
+			control.FieldCategoryID:                 {Type: field.TypeString, Column: control.FieldCategoryID},
+			control.FieldSubcategory:                {Type: field.TypeString, Column: control.FieldSubcategory},
+			control.FieldMappedCategories:           {Type: field.TypeJSON, Column: control.FieldMappedCategories},
+			control.FieldAssessmentObjectives:       {Type: field.TypeJSON, Column: control.FieldAssessmentObjectives},
+			control.FieldAssessmentMethods:          {Type: field.TypeJSON, Column: control.FieldAssessmentMethods},
+			control.FieldControlQuestions:           {Type: field.TypeJSON, Column: control.FieldControlQuestions},
+			control.FieldImplementationGuidance:     {Type: field.TypeJSON, Column: control.FieldImplementationGuidance},
+			control.FieldExampleEvidence:            {Type: field.TypeJSON, Column: control.FieldExampleEvidence},
+			control.FieldReferences:                 {Type: field.TypeJSON, Column: control.FieldReferences},
+			control.FieldControlOwnerID:             {Type: field.TypeString, Column: control.FieldControlOwnerID},
+			control.FieldDelegateID:                 {Type: field.TypeString, Column: control.FieldDelegateID},
+			control.FieldOwnerID:                    {Type: field.TypeString, Column: control.FieldOwnerID},
+			control.FieldSystemOwned:                {Type: field.TypeBool, Column: control.FieldSystemOwned},
+			control.FieldInternalNotes:              {Type: field.TypeString, Column: control.FieldInternalNotes},
+			control.FieldSystemInternalID:           {Type: field.TypeString, Column: control.FieldSystemInternalID},
+			control.FieldRefCode:                    {Type: field.TypeString, Column: control.FieldRefCode},
+			control.FieldStandardID:                 {Type: field.TypeString, Column: control.FieldStandardID},
 		},
 	}
 	graph.Nodes[8] = &sqlgraph.Node{
@@ -440,45 +441,46 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ControlHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			controlhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: controlhistory.FieldHistoryTime},
-			controlhistory.FieldRef:                    {Type: field.TypeString, Column: controlhistory.FieldRef},
-			controlhistory.FieldOperation:              {Type: field.TypeEnum, Column: controlhistory.FieldOperation},
-			controlhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: controlhistory.FieldCreatedAt},
-			controlhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: controlhistory.FieldUpdatedAt},
-			controlhistory.FieldCreatedBy:              {Type: field.TypeString, Column: controlhistory.FieldCreatedBy},
-			controlhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: controlhistory.FieldUpdatedBy},
-			controlhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: controlhistory.FieldDeletedAt},
-			controlhistory.FieldDeletedBy:              {Type: field.TypeString, Column: controlhistory.FieldDeletedBy},
-			controlhistory.FieldDisplayID:              {Type: field.TypeString, Column: controlhistory.FieldDisplayID},
-			controlhistory.FieldTags:                   {Type: field.TypeJSON, Column: controlhistory.FieldTags},
-			controlhistory.FieldTitle:                  {Type: field.TypeString, Column: controlhistory.FieldTitle},
-			controlhistory.FieldDescription:            {Type: field.TypeString, Column: controlhistory.FieldDescription},
-			controlhistory.FieldAliases:                {Type: field.TypeJSON, Column: controlhistory.FieldAliases},
-			controlhistory.FieldReferenceID:            {Type: field.TypeString, Column: controlhistory.FieldReferenceID},
-			controlhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
-			controlhistory.FieldResponsiblePartyID:     {Type: field.TypeString, Column: controlhistory.FieldResponsiblePartyID},
-			controlhistory.FieldStatus:                 {Type: field.TypeEnum, Column: controlhistory.FieldStatus},
-			controlhistory.FieldSource:                 {Type: field.TypeEnum, Column: controlhistory.FieldSource},
-			controlhistory.FieldReferenceFramework:     {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
-			controlhistory.FieldControlType:            {Type: field.TypeEnum, Column: controlhistory.FieldControlType},
-			controlhistory.FieldCategory:               {Type: field.TypeString, Column: controlhistory.FieldCategory},
-			controlhistory.FieldCategoryID:             {Type: field.TypeString, Column: controlhistory.FieldCategoryID},
-			controlhistory.FieldSubcategory:            {Type: field.TypeString, Column: controlhistory.FieldSubcategory},
-			controlhistory.FieldMappedCategories:       {Type: field.TypeJSON, Column: controlhistory.FieldMappedCategories},
-			controlhistory.FieldAssessmentObjectives:   {Type: field.TypeJSON, Column: controlhistory.FieldAssessmentObjectives},
-			controlhistory.FieldAssessmentMethods:      {Type: field.TypeJSON, Column: controlhistory.FieldAssessmentMethods},
-			controlhistory.FieldControlQuestions:       {Type: field.TypeJSON, Column: controlhistory.FieldControlQuestions},
-			controlhistory.FieldImplementationGuidance: {Type: field.TypeJSON, Column: controlhistory.FieldImplementationGuidance},
-			controlhistory.FieldExampleEvidence:        {Type: field.TypeJSON, Column: controlhistory.FieldExampleEvidence},
-			controlhistory.FieldReferences:             {Type: field.TypeJSON, Column: controlhistory.FieldReferences},
-			controlhistory.FieldControlOwnerID:         {Type: field.TypeString, Column: controlhistory.FieldControlOwnerID},
-			controlhistory.FieldDelegateID:             {Type: field.TypeString, Column: controlhistory.FieldDelegateID},
-			controlhistory.FieldOwnerID:                {Type: field.TypeString, Column: controlhistory.FieldOwnerID},
-			controlhistory.FieldSystemOwned:            {Type: field.TypeBool, Column: controlhistory.FieldSystemOwned},
-			controlhistory.FieldInternalNotes:          {Type: field.TypeString, Column: controlhistory.FieldInternalNotes},
-			controlhistory.FieldSystemInternalID:       {Type: field.TypeString, Column: controlhistory.FieldSystemInternalID},
-			controlhistory.FieldRefCode:                {Type: field.TypeString, Column: controlhistory.FieldRefCode},
-			controlhistory.FieldStandardID:             {Type: field.TypeString, Column: controlhistory.FieldStandardID},
+			controlhistory.FieldHistoryTime:                {Type: field.TypeTime, Column: controlhistory.FieldHistoryTime},
+			controlhistory.FieldRef:                        {Type: field.TypeString, Column: controlhistory.FieldRef},
+			controlhistory.FieldOperation:                  {Type: field.TypeEnum, Column: controlhistory.FieldOperation},
+			controlhistory.FieldCreatedAt:                  {Type: field.TypeTime, Column: controlhistory.FieldCreatedAt},
+			controlhistory.FieldUpdatedAt:                  {Type: field.TypeTime, Column: controlhistory.FieldUpdatedAt},
+			controlhistory.FieldCreatedBy:                  {Type: field.TypeString, Column: controlhistory.FieldCreatedBy},
+			controlhistory.FieldUpdatedBy:                  {Type: field.TypeString, Column: controlhistory.FieldUpdatedBy},
+			controlhistory.FieldDeletedAt:                  {Type: field.TypeTime, Column: controlhistory.FieldDeletedAt},
+			controlhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: controlhistory.FieldDeletedBy},
+			controlhistory.FieldDisplayID:                  {Type: field.TypeString, Column: controlhistory.FieldDisplayID},
+			controlhistory.FieldTags:                       {Type: field.TypeJSON, Column: controlhistory.FieldTags},
+			controlhistory.FieldTitle:                      {Type: field.TypeString, Column: controlhistory.FieldTitle},
+			controlhistory.FieldDescription:                {Type: field.TypeString, Column: controlhistory.FieldDescription},
+			controlhistory.FieldAliases:                    {Type: field.TypeJSON, Column: controlhistory.FieldAliases},
+			controlhistory.FieldReferenceID:                {Type: field.TypeString, Column: controlhistory.FieldReferenceID},
+			controlhistory.FieldAuditorReferenceID:         {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
+			controlhistory.FieldResponsiblePartyID:         {Type: field.TypeString, Column: controlhistory.FieldResponsiblePartyID},
+			controlhistory.FieldStatus:                     {Type: field.TypeEnum, Column: controlhistory.FieldStatus},
+			controlhistory.FieldSource:                     {Type: field.TypeEnum, Column: controlhistory.FieldSource},
+			controlhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
+			controlhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: controlhistory.FieldReferenceFrameworkRevision},
+			controlhistory.FieldControlType:                {Type: field.TypeEnum, Column: controlhistory.FieldControlType},
+			controlhistory.FieldCategory:                   {Type: field.TypeString, Column: controlhistory.FieldCategory},
+			controlhistory.FieldCategoryID:                 {Type: field.TypeString, Column: controlhistory.FieldCategoryID},
+			controlhistory.FieldSubcategory:                {Type: field.TypeString, Column: controlhistory.FieldSubcategory},
+			controlhistory.FieldMappedCategories:           {Type: field.TypeJSON, Column: controlhistory.FieldMappedCategories},
+			controlhistory.FieldAssessmentObjectives:       {Type: field.TypeJSON, Column: controlhistory.FieldAssessmentObjectives},
+			controlhistory.FieldAssessmentMethods:          {Type: field.TypeJSON, Column: controlhistory.FieldAssessmentMethods},
+			controlhistory.FieldControlQuestions:           {Type: field.TypeJSON, Column: controlhistory.FieldControlQuestions},
+			controlhistory.FieldImplementationGuidance:     {Type: field.TypeJSON, Column: controlhistory.FieldImplementationGuidance},
+			controlhistory.FieldExampleEvidence:            {Type: field.TypeJSON, Column: controlhistory.FieldExampleEvidence},
+			controlhistory.FieldReferences:                 {Type: field.TypeJSON, Column: controlhistory.FieldReferences},
+			controlhistory.FieldControlOwnerID:             {Type: field.TypeString, Column: controlhistory.FieldControlOwnerID},
+			controlhistory.FieldDelegateID:                 {Type: field.TypeString, Column: controlhistory.FieldDelegateID},
+			controlhistory.FieldOwnerID:                    {Type: field.TypeString, Column: controlhistory.FieldOwnerID},
+			controlhistory.FieldSystemOwned:                {Type: field.TypeBool, Column: controlhistory.FieldSystemOwned},
+			controlhistory.FieldInternalNotes:              {Type: field.TypeString, Column: controlhistory.FieldInternalNotes},
+			controlhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: controlhistory.FieldSystemInternalID},
+			controlhistory.FieldRefCode:                    {Type: field.TypeString, Column: controlhistory.FieldRefCode},
+			controlhistory.FieldStandardID:                 {Type: field.TypeString, Column: controlhistory.FieldStandardID},
 		},
 	}
 	graph.Nodes[9] = &sqlgraph.Node{
@@ -2511,6 +2513,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldAuditFirm:            {Type: field.TypeString, Column: program.FieldAuditFirm},
 			program.FieldAuditor:              {Type: field.TypeString, Column: program.FieldAuditor},
 			program.FieldAuditorEmail:         {Type: field.TypeString, Column: program.FieldAuditorEmail},
+			program.FieldProgramOwnerID:       {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[76] = &sqlgraph.Node{
@@ -2549,6 +2552,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldAuditFirm:            {Type: field.TypeString, Column: programhistory.FieldAuditFirm},
 			programhistory.FieldAuditor:              {Type: field.TypeString, Column: programhistory.FieldAuditor},
 			programhistory.FieldAuditorEmail:         {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
+			programhistory.FieldProgramOwnerID:       {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[77] = &sqlgraph.Node{
@@ -2888,42 +2892,43 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Subcontrol",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			subcontrol.FieldCreatedAt:              {Type: field.TypeTime, Column: subcontrol.FieldCreatedAt},
-			subcontrol.FieldUpdatedAt:              {Type: field.TypeTime, Column: subcontrol.FieldUpdatedAt},
-			subcontrol.FieldCreatedBy:              {Type: field.TypeString, Column: subcontrol.FieldCreatedBy},
-			subcontrol.FieldUpdatedBy:              {Type: field.TypeString, Column: subcontrol.FieldUpdatedBy},
-			subcontrol.FieldDeletedAt:              {Type: field.TypeTime, Column: subcontrol.FieldDeletedAt},
-			subcontrol.FieldDeletedBy:              {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
-			subcontrol.FieldDisplayID:              {Type: field.TypeString, Column: subcontrol.FieldDisplayID},
-			subcontrol.FieldTags:                   {Type: field.TypeJSON, Column: subcontrol.FieldTags},
-			subcontrol.FieldTitle:                  {Type: field.TypeString, Column: subcontrol.FieldTitle},
-			subcontrol.FieldDescription:            {Type: field.TypeString, Column: subcontrol.FieldDescription},
-			subcontrol.FieldAliases:                {Type: field.TypeJSON, Column: subcontrol.FieldAliases},
-			subcontrol.FieldReferenceID:            {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
-			subcontrol.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
-			subcontrol.FieldResponsiblePartyID:     {Type: field.TypeString, Column: subcontrol.FieldResponsiblePartyID},
-			subcontrol.FieldStatus:                 {Type: field.TypeEnum, Column: subcontrol.FieldStatus},
-			subcontrol.FieldSource:                 {Type: field.TypeEnum, Column: subcontrol.FieldSource},
-			subcontrol.FieldReferenceFramework:     {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
-			subcontrol.FieldControlType:            {Type: field.TypeEnum, Column: subcontrol.FieldControlType},
-			subcontrol.FieldCategory:               {Type: field.TypeString, Column: subcontrol.FieldCategory},
-			subcontrol.FieldCategoryID:             {Type: field.TypeString, Column: subcontrol.FieldCategoryID},
-			subcontrol.FieldSubcategory:            {Type: field.TypeString, Column: subcontrol.FieldSubcategory},
-			subcontrol.FieldMappedCategories:       {Type: field.TypeJSON, Column: subcontrol.FieldMappedCategories},
-			subcontrol.FieldAssessmentObjectives:   {Type: field.TypeJSON, Column: subcontrol.FieldAssessmentObjectives},
-			subcontrol.FieldAssessmentMethods:      {Type: field.TypeJSON, Column: subcontrol.FieldAssessmentMethods},
-			subcontrol.FieldControlQuestions:       {Type: field.TypeJSON, Column: subcontrol.FieldControlQuestions},
-			subcontrol.FieldImplementationGuidance: {Type: field.TypeJSON, Column: subcontrol.FieldImplementationGuidance},
-			subcontrol.FieldExampleEvidence:        {Type: field.TypeJSON, Column: subcontrol.FieldExampleEvidence},
-			subcontrol.FieldReferences:             {Type: field.TypeJSON, Column: subcontrol.FieldReferences},
-			subcontrol.FieldControlOwnerID:         {Type: field.TypeString, Column: subcontrol.FieldControlOwnerID},
-			subcontrol.FieldDelegateID:             {Type: field.TypeString, Column: subcontrol.FieldDelegateID},
-			subcontrol.FieldOwnerID:                {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
-			subcontrol.FieldSystemOwned:            {Type: field.TypeBool, Column: subcontrol.FieldSystemOwned},
-			subcontrol.FieldInternalNotes:          {Type: field.TypeString, Column: subcontrol.FieldInternalNotes},
-			subcontrol.FieldSystemInternalID:       {Type: field.TypeString, Column: subcontrol.FieldSystemInternalID},
-			subcontrol.FieldRefCode:                {Type: field.TypeString, Column: subcontrol.FieldRefCode},
-			subcontrol.FieldControlID:              {Type: field.TypeString, Column: subcontrol.FieldControlID},
+			subcontrol.FieldCreatedAt:                  {Type: field.TypeTime, Column: subcontrol.FieldCreatedAt},
+			subcontrol.FieldUpdatedAt:                  {Type: field.TypeTime, Column: subcontrol.FieldUpdatedAt},
+			subcontrol.FieldCreatedBy:                  {Type: field.TypeString, Column: subcontrol.FieldCreatedBy},
+			subcontrol.FieldUpdatedBy:                  {Type: field.TypeString, Column: subcontrol.FieldUpdatedBy},
+			subcontrol.FieldDeletedAt:                  {Type: field.TypeTime, Column: subcontrol.FieldDeletedAt},
+			subcontrol.FieldDeletedBy:                  {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
+			subcontrol.FieldDisplayID:                  {Type: field.TypeString, Column: subcontrol.FieldDisplayID},
+			subcontrol.FieldTags:                       {Type: field.TypeJSON, Column: subcontrol.FieldTags},
+			subcontrol.FieldTitle:                      {Type: field.TypeString, Column: subcontrol.FieldTitle},
+			subcontrol.FieldDescription:                {Type: field.TypeString, Column: subcontrol.FieldDescription},
+			subcontrol.FieldAliases:                    {Type: field.TypeJSON, Column: subcontrol.FieldAliases},
+			subcontrol.FieldReferenceID:                {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
+			subcontrol.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
+			subcontrol.FieldResponsiblePartyID:         {Type: field.TypeString, Column: subcontrol.FieldResponsiblePartyID},
+			subcontrol.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrol.FieldStatus},
+			subcontrol.FieldSource:                     {Type: field.TypeEnum, Column: subcontrol.FieldSource},
+			subcontrol.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
+			subcontrol.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrol.FieldReferenceFrameworkRevision},
+			subcontrol.FieldControlType:                {Type: field.TypeEnum, Column: subcontrol.FieldControlType},
+			subcontrol.FieldCategory:                   {Type: field.TypeString, Column: subcontrol.FieldCategory},
+			subcontrol.FieldCategoryID:                 {Type: field.TypeString, Column: subcontrol.FieldCategoryID},
+			subcontrol.FieldSubcategory:                {Type: field.TypeString, Column: subcontrol.FieldSubcategory},
+			subcontrol.FieldMappedCategories:           {Type: field.TypeJSON, Column: subcontrol.FieldMappedCategories},
+			subcontrol.FieldAssessmentObjectives:       {Type: field.TypeJSON, Column: subcontrol.FieldAssessmentObjectives},
+			subcontrol.FieldAssessmentMethods:          {Type: field.TypeJSON, Column: subcontrol.FieldAssessmentMethods},
+			subcontrol.FieldControlQuestions:           {Type: field.TypeJSON, Column: subcontrol.FieldControlQuestions},
+			subcontrol.FieldImplementationGuidance:     {Type: field.TypeJSON, Column: subcontrol.FieldImplementationGuidance},
+			subcontrol.FieldExampleEvidence:            {Type: field.TypeJSON, Column: subcontrol.FieldExampleEvidence},
+			subcontrol.FieldReferences:                 {Type: field.TypeJSON, Column: subcontrol.FieldReferences},
+			subcontrol.FieldControlOwnerID:             {Type: field.TypeString, Column: subcontrol.FieldControlOwnerID},
+			subcontrol.FieldDelegateID:                 {Type: field.TypeString, Column: subcontrol.FieldDelegateID},
+			subcontrol.FieldOwnerID:                    {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
+			subcontrol.FieldSystemOwned:                {Type: field.TypeBool, Column: subcontrol.FieldSystemOwned},
+			subcontrol.FieldInternalNotes:              {Type: field.TypeString, Column: subcontrol.FieldInternalNotes},
+			subcontrol.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrol.FieldSystemInternalID},
+			subcontrol.FieldRefCode:                    {Type: field.TypeString, Column: subcontrol.FieldRefCode},
+			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
 		},
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
@@ -2937,45 +2942,46 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "SubcontrolHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			subcontrolhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: subcontrolhistory.FieldHistoryTime},
-			subcontrolhistory.FieldRef:                    {Type: field.TypeString, Column: subcontrolhistory.FieldRef},
-			subcontrolhistory.FieldOperation:              {Type: field.TypeEnum, Column: subcontrolhistory.FieldOperation},
-			subcontrolhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: subcontrolhistory.FieldCreatedAt},
-			subcontrolhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: subcontrolhistory.FieldUpdatedAt},
-			subcontrolhistory.FieldCreatedBy:              {Type: field.TypeString, Column: subcontrolhistory.FieldCreatedBy},
-			subcontrolhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: subcontrolhistory.FieldUpdatedBy},
-			subcontrolhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: subcontrolhistory.FieldDeletedAt},
-			subcontrolhistory.FieldDeletedBy:              {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
-			subcontrolhistory.FieldDisplayID:              {Type: field.TypeString, Column: subcontrolhistory.FieldDisplayID},
-			subcontrolhistory.FieldTags:                   {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
-			subcontrolhistory.FieldTitle:                  {Type: field.TypeString, Column: subcontrolhistory.FieldTitle},
-			subcontrolhistory.FieldDescription:            {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
-			subcontrolhistory.FieldAliases:                {Type: field.TypeJSON, Column: subcontrolhistory.FieldAliases},
-			subcontrolhistory.FieldReferenceID:            {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceID},
-			subcontrolhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
-			subcontrolhistory.FieldResponsiblePartyID:     {Type: field.TypeString, Column: subcontrolhistory.FieldResponsiblePartyID},
-			subcontrolhistory.FieldStatus:                 {Type: field.TypeEnum, Column: subcontrolhistory.FieldStatus},
-			subcontrolhistory.FieldSource:                 {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
-			subcontrolhistory.FieldReferenceFramework:     {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
-			subcontrolhistory.FieldControlType:            {Type: field.TypeEnum, Column: subcontrolhistory.FieldControlType},
-			subcontrolhistory.FieldCategory:               {Type: field.TypeString, Column: subcontrolhistory.FieldCategory},
-			subcontrolhistory.FieldCategoryID:             {Type: field.TypeString, Column: subcontrolhistory.FieldCategoryID},
-			subcontrolhistory.FieldSubcategory:            {Type: field.TypeString, Column: subcontrolhistory.FieldSubcategory},
-			subcontrolhistory.FieldMappedCategories:       {Type: field.TypeJSON, Column: subcontrolhistory.FieldMappedCategories},
-			subcontrolhistory.FieldAssessmentObjectives:   {Type: field.TypeJSON, Column: subcontrolhistory.FieldAssessmentObjectives},
-			subcontrolhistory.FieldAssessmentMethods:      {Type: field.TypeJSON, Column: subcontrolhistory.FieldAssessmentMethods},
-			subcontrolhistory.FieldControlQuestions:       {Type: field.TypeJSON, Column: subcontrolhistory.FieldControlQuestions},
-			subcontrolhistory.FieldImplementationGuidance: {Type: field.TypeJSON, Column: subcontrolhistory.FieldImplementationGuidance},
-			subcontrolhistory.FieldExampleEvidence:        {Type: field.TypeJSON, Column: subcontrolhistory.FieldExampleEvidence},
-			subcontrolhistory.FieldReferences:             {Type: field.TypeJSON, Column: subcontrolhistory.FieldReferences},
-			subcontrolhistory.FieldControlOwnerID:         {Type: field.TypeString, Column: subcontrolhistory.FieldControlOwnerID},
-			subcontrolhistory.FieldDelegateID:             {Type: field.TypeString, Column: subcontrolhistory.FieldDelegateID},
-			subcontrolhistory.FieldOwnerID:                {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
-			subcontrolhistory.FieldSystemOwned:            {Type: field.TypeBool, Column: subcontrolhistory.FieldSystemOwned},
-			subcontrolhistory.FieldInternalNotes:          {Type: field.TypeString, Column: subcontrolhistory.FieldInternalNotes},
-			subcontrolhistory.FieldSystemInternalID:       {Type: field.TypeString, Column: subcontrolhistory.FieldSystemInternalID},
-			subcontrolhistory.FieldRefCode:                {Type: field.TypeString, Column: subcontrolhistory.FieldRefCode},
-			subcontrolhistory.FieldControlID:              {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
+			subcontrolhistory.FieldHistoryTime:                {Type: field.TypeTime, Column: subcontrolhistory.FieldHistoryTime},
+			subcontrolhistory.FieldRef:                        {Type: field.TypeString, Column: subcontrolhistory.FieldRef},
+			subcontrolhistory.FieldOperation:                  {Type: field.TypeEnum, Column: subcontrolhistory.FieldOperation},
+			subcontrolhistory.FieldCreatedAt:                  {Type: field.TypeTime, Column: subcontrolhistory.FieldCreatedAt},
+			subcontrolhistory.FieldUpdatedAt:                  {Type: field.TypeTime, Column: subcontrolhistory.FieldUpdatedAt},
+			subcontrolhistory.FieldCreatedBy:                  {Type: field.TypeString, Column: subcontrolhistory.FieldCreatedBy},
+			subcontrolhistory.FieldUpdatedBy:                  {Type: field.TypeString, Column: subcontrolhistory.FieldUpdatedBy},
+			subcontrolhistory.FieldDeletedAt:                  {Type: field.TypeTime, Column: subcontrolhistory.FieldDeletedAt},
+			subcontrolhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
+			subcontrolhistory.FieldDisplayID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldDisplayID},
+			subcontrolhistory.FieldTags:                       {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
+			subcontrolhistory.FieldTitle:                      {Type: field.TypeString, Column: subcontrolhistory.FieldTitle},
+			subcontrolhistory.FieldDescription:                {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
+			subcontrolhistory.FieldAliases:                    {Type: field.TypeJSON, Column: subcontrolhistory.FieldAliases},
+			subcontrolhistory.FieldReferenceID:                {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceID},
+			subcontrolhistory.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
+			subcontrolhistory.FieldResponsiblePartyID:         {Type: field.TypeString, Column: subcontrolhistory.FieldResponsiblePartyID},
+			subcontrolhistory.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldStatus},
+			subcontrolhistory.FieldSource:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
+			subcontrolhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
+			subcontrolhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFrameworkRevision},
+			subcontrolhistory.FieldControlType:                {Type: field.TypeEnum, Column: subcontrolhistory.FieldControlType},
+			subcontrolhistory.FieldCategory:                   {Type: field.TypeString, Column: subcontrolhistory.FieldCategory},
+			subcontrolhistory.FieldCategoryID:                 {Type: field.TypeString, Column: subcontrolhistory.FieldCategoryID},
+			subcontrolhistory.FieldSubcategory:                {Type: field.TypeString, Column: subcontrolhistory.FieldSubcategory},
+			subcontrolhistory.FieldMappedCategories:           {Type: field.TypeJSON, Column: subcontrolhistory.FieldMappedCategories},
+			subcontrolhistory.FieldAssessmentObjectives:       {Type: field.TypeJSON, Column: subcontrolhistory.FieldAssessmentObjectives},
+			subcontrolhistory.FieldAssessmentMethods:          {Type: field.TypeJSON, Column: subcontrolhistory.FieldAssessmentMethods},
+			subcontrolhistory.FieldControlQuestions:           {Type: field.TypeJSON, Column: subcontrolhistory.FieldControlQuestions},
+			subcontrolhistory.FieldImplementationGuidance:     {Type: field.TypeJSON, Column: subcontrolhistory.FieldImplementationGuidance},
+			subcontrolhistory.FieldExampleEvidence:            {Type: field.TypeJSON, Column: subcontrolhistory.FieldExampleEvidence},
+			subcontrolhistory.FieldReferences:                 {Type: field.TypeJSON, Column: subcontrolhistory.FieldReferences},
+			subcontrolhistory.FieldControlOwnerID:             {Type: field.TypeString, Column: subcontrolhistory.FieldControlOwnerID},
+			subcontrolhistory.FieldDelegateID:                 {Type: field.TypeString, Column: subcontrolhistory.FieldDelegateID},
+			subcontrolhistory.FieldOwnerID:                    {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
+			subcontrolhistory.FieldSystemOwned:                {Type: field.TypeBool, Column: subcontrolhistory.FieldSystemOwned},
+			subcontrolhistory.FieldInternalNotes:              {Type: field.TypeString, Column: subcontrolhistory.FieldInternalNotes},
+			subcontrolhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrolhistory.FieldSystemInternalID},
+			subcontrolhistory.FieldRefCode:                    {Type: field.TypeString, Column: subcontrolhistory.FieldRefCode},
+			subcontrolhistory.FieldControlID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
 		},
 	}
 	graph.Nodes[90] = &sqlgraph.Node{
@@ -7938,6 +7944,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   program.UserTable,
+			Columns: []string{program.UserColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"User",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -9354,28 +9372,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
-		"impersonation_events",
+		"program_owner",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.ImpersonationEventsTable,
-			Columns: []string{user.ImpersonationEventsColumn},
+			Table:   user.ProgramOwnerTable,
+			Columns: []string{user.ProgramOwnerColumn},
 			Bidi:    false,
 		},
 		"User",
-		"ImpersonationEvent",
-	)
-	graph.MustAddE(
-		"targeted_impersonations",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.TargetedImpersonationsTable,
-			Columns: []string{user.TargetedImpersonationsColumn},
-			Bidi:    false,
-		},
-		"User",
-		"ImpersonationEvent",
+		"Program",
 	)
 	graph.MustAddE(
 		"group_memberships",
@@ -10927,6 +10933,11 @@ func (f *ControlFilter) WhereReferenceFramework(p entql.StringP) {
 	f.Where(p.Field(control.FieldReferenceFramework))
 }
 
+// WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
+func (f *ControlFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
+	f.Where(p.Field(control.FieldReferenceFrameworkRevision))
+}
+
 // WhereControlType applies the entql string predicate on the control_type field.
 func (f *ControlFilter) WhereControlType(p entql.StringP) {
 	f.Where(p.Field(control.FieldControlType))
@@ -11496,6 +11507,11 @@ func (f *ControlHistoryFilter) WhereSource(p entql.StringP) {
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.
 func (f *ControlHistoryFilter) WhereReferenceFramework(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldReferenceFramework))
+}
+
+// WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
+func (f *ControlHistoryFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldReferenceFrameworkRevision))
 }
 
 // WhereControlType applies the entql string predicate on the control_type field.
@@ -24180,6 +24196,11 @@ func (f *ProgramFilter) WhereAuditorEmail(p entql.StringP) {
 	f.Where(p.Field(program.FieldAuditorEmail))
 }
 
+// WhereProgramOwnerID applies the entql string predicate on the program_owner_id field.
+func (f *ProgramFilter) WhereProgramOwnerID(p entql.StringP) {
+	f.Where(p.Field(program.FieldProgramOwnerID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ProgramFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -24418,6 +24439,20 @@ func (f *ProgramFilter) WhereHasUsersWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasUser applies a predicate to check if query has an edge user.
+func (f *ProgramFilter) WhereHasUser() {
+	f.Where(entql.HasEdge("user"))
+}
+
+// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *ProgramFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -24595,6 +24630,11 @@ func (f *ProgramHistoryFilter) WhereAuditor(p entql.StringP) {
 // WhereAuditorEmail applies the entql string predicate on the auditor_email field.
 func (f *ProgramHistoryFilter) WhereAuditorEmail(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldAuditorEmail))
+}
+
+// WhereProgramOwnerID applies the entql string predicate on the program_owner_id field.
+func (f *ProgramHistoryFilter) WhereProgramOwnerID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldProgramOwnerID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26581,6 +26621,11 @@ func (f *SubcontrolFilter) WhereReferenceFramework(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldReferenceFramework))
 }
 
+// WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
+func (f *SubcontrolFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldReferenceFrameworkRevision))
+}
+
 // WhereControlType applies the entql string predicate on the control_type field.
 func (f *SubcontrolFilter) WhereControlType(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldControlType))
@@ -27066,6 +27111,11 @@ func (f *SubcontrolHistoryFilter) WhereSource(p entql.StringP) {
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.
 func (f *SubcontrolHistoryFilter) WhereReferenceFramework(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldReferenceFramework))
+}
+
+// WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
+func (f *SubcontrolHistoryFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldReferenceFrameworkRevision))
 }
 
 // WhereControlType applies the entql string predicate on the control_type field.
@@ -30560,28 +30610,14 @@ func (f *UserFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	})))
 }
 
-// WhereHasImpersonationEvents applies a predicate to check if query has an edge impersonation_events.
-func (f *UserFilter) WhereHasImpersonationEvents() {
-	f.Where(entql.HasEdge("impersonation_events"))
+// WhereHasProgramOwner applies a predicate to check if query has an edge program_owner.
+func (f *UserFilter) WhereHasProgramOwner() {
+	f.Where(entql.HasEdge("program_owner"))
 }
 
-// WhereHasImpersonationEventsWith applies a predicate to check if query has an edge impersonation_events with a given conditions (other predicates).
-func (f *UserFilter) WhereHasImpersonationEventsWith(preds ...predicate.ImpersonationEvent) {
-	f.Where(entql.HasEdgeWith("impersonation_events", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasTargetedImpersonations applies a predicate to check if query has an edge targeted_impersonations.
-func (f *UserFilter) WhereHasTargetedImpersonations() {
-	f.Where(entql.HasEdge("targeted_impersonations"))
-}
-
-// WhereHasTargetedImpersonationsWith applies a predicate to check if query has an edge targeted_impersonations with a given conditions (other predicates).
-func (f *UserFilter) WhereHasTargetedImpersonationsWith(preds ...predicate.ImpersonationEvent) {
-	f.Where(entql.HasEdgeWith("targeted_impersonations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasProgramOwnerWith applies a predicate to check if query has an edge program_owner with a given conditions (other predicates).
+func (f *UserFilter) WhereHasProgramOwnerWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("program_owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

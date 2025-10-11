@@ -74,6 +74,7 @@ func (e *BaseEvent) Payload() any {
 func (e *BaseEvent) SetPayload(payload any) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
+
 	e.payload = payload
 }
 
@@ -93,6 +94,7 @@ func (e *BaseEvent) SetProperties(properties Properties) {
 
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
+
 	e.properties = properties
 }
 
@@ -100,6 +102,7 @@ func (e *BaseEvent) SetProperties(properties Properties) {
 func (e *BaseEvent) SetAborted(abort bool) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
+
 	e.aborted = abort
 }
 
@@ -153,6 +156,7 @@ func (e *BaseEvent) Context() context.Context {
 func (e *BaseEvent) SetContext(ctx context.Context) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
+
 	zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 		return c.Str("event-topic", e.Topic())
 	})

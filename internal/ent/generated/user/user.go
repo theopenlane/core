@@ -92,10 +92,8 @@ const (
 	EdgeAssigneeTasks = "assignee_tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
-	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
-	EdgeImpersonationEvents = "impersonation_events"
-	// EdgeTargetedImpersonations holds the string denoting the targeted_impersonations edge name in mutations.
-	EdgeTargetedImpersonations = "targeted_impersonations"
+	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
+	EdgeProgramOwner = "program_owner"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
@@ -206,20 +204,13 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
-	// ImpersonationEventsTable is the table that holds the impersonation_events relation/edge.
-	ImpersonationEventsTable = "impersonation_events"
-	// ImpersonationEventsInverseTable is the table name for the ImpersonationEvent entity.
-	// It exists in this package in order to avoid circular dependency with the "impersonationevent" package.
-	ImpersonationEventsInverseTable = "impersonation_events"
-	// ImpersonationEventsColumn is the table column denoting the impersonation_events relation/edge.
-	ImpersonationEventsColumn = "user_id"
-	// TargetedImpersonationsTable is the table that holds the targeted_impersonations relation/edge.
-	TargetedImpersonationsTable = "impersonation_events"
-	// TargetedImpersonationsInverseTable is the table name for the ImpersonationEvent entity.
-	// It exists in this package in order to avoid circular dependency with the "impersonationevent" package.
-	TargetedImpersonationsInverseTable = "impersonation_events"
-	// TargetedImpersonationsColumn is the table column denoting the targeted_impersonations relation/edge.
-	TargetedImpersonationsColumn = "target_user_id"
+	// ProgramOwnerTable is the table that holds the program_owner relation/edge.
+	ProgramOwnerTable = "programs"
+	// ProgramOwnerInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramOwnerInverseTable = "programs"
+	// ProgramOwnerColumn is the table column denoting the program_owner relation/edge.
+	ProgramOwnerColumn = "program_owner_id"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -688,31 +679,10 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByImpersonationEventsCount orders the results by impersonation_events count.
-func ByImpersonationEventsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProgramOwnerField orders the results by program_owner field.
+func ByProgramOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newImpersonationEventsStep(), opts...)
-	}
-}
-
-// ByImpersonationEvents orders the results by impersonation_events terms.
-func ByImpersonationEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newImpersonationEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByTargetedImpersonationsCount orders the results by targeted_impersonations count.
-func ByTargetedImpersonationsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTargetedImpersonationsStep(), opts...)
-	}
-}
-
-// ByTargetedImpersonations orders the results by targeted_impersonations terms.
-func ByTargetedImpersonations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTargetedImpersonationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProgramOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -869,18 +839,11 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
-func newImpersonationEventsStep() *sqlgraph.Step {
+func newProgramOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ImpersonationEventsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
-	)
-}
-func newTargetedImpersonationsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TargetedImpersonationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TargetedImpersonationsTable, TargetedImpersonationsColumn),
+		sqlgraph.To(ProgramOwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, ProgramOwnerTable, ProgramOwnerColumn),
 	)
 }
 func newGroupMembershipsStep() *sqlgraph.Step {

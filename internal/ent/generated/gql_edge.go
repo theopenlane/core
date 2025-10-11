@@ -5876,6 +5876,14 @@ func (_m *Program) Users(
 	return _m.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Program) User(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Program) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProgramMembershipOrder, where *ProgramMembershipWhereInput,
 ) (*ProgramMembershipConnection, error) {
@@ -5884,7 +5892,7 @@ func (_m *Program) Members(
 		WithProgramMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[17][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[18][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newProgramMembershipPager(opts, last != nil)
 		if err != nil {
@@ -7655,6 +7663,14 @@ func (_m *User) Programs(
 	return _m.QueryPrograms().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *User) ProgramOwner(ctx context.Context) (*Program, error) {
+	result, err := _m.Edges.ProgramOwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryProgramOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *User) GroupMemberships(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupMembershipOrder, where *GroupMembershipWhereInput,
 ) (*GroupMembershipConnection, error) {
@@ -7663,7 +7679,7 @@ func (_m *User) GroupMemberships(
 		WithGroupMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
 	if nodes, err := _m.NamedGroupMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newGroupMembershipPager(opts, last != nil)
 		if err != nil {
@@ -7684,7 +7700,7 @@ func (_m *User) OrgMemberships(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
 	if nodes, err := _m.NamedOrgMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -7705,7 +7721,7 @@ func (_m *User) ProgramMemberships(
 		WithProgramMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[17][alias]
 	if nodes, err := _m.NamedProgramMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newProgramMembershipPager(opts, last != nil)
 		if err != nil {

@@ -172,7 +172,6 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		}
 
 		if exists {
-
 			continue
 		}
 

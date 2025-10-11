@@ -379,6 +379,7 @@ func validateEdgeDefinition(e *edgeDefinition) {
 // field set to true to allow system admins to bypass the organization ownership requirement
 func autoSetSkipForSystemAdmin(mixinConfig *mixinConfig) bool {
 	hasSystemOwnedMixin := false
+
 	for _, m := range mixinConfig.additionalMixins {
 		if so, ok := m.(mixin.SystemOwnedMixin); ok {
 			// ensure its actually the SystemOwnedMixin by checking the name
@@ -394,6 +395,7 @@ func autoSetSkipForSystemAdmin(mixinConfig *mixinConfig) bool {
 	}
 
 	hasObjectOwnedMixin := false
+
 	for _, m := range mixinConfig.additionalMixins {
 		if _, ok := m.(ObjectOwnedMixin); ok {
 			hasObjectOwnedMixin = true

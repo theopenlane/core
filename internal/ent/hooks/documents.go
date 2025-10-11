@@ -97,7 +97,6 @@ func HookImportDocument() ent.Hook {
 				if err := importFileToSchema(ctx, mut); err != nil {
 					return nil, err
 				}
-
 			}
 
 			return next.Mutate(ctx, m)
@@ -224,6 +223,7 @@ func importURLToSchema(m importSchemaMutation) error {
 	}
 
 	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
+
 	buf, err := io.ReadAll(reader)
 	if err != nil {
 		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
@@ -235,7 +235,6 @@ func importURLToSchema(m importSchemaMutation) error {
 	switch mimeType {
 	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		"text/plain", "text/markdown", "text/plain; charset=utf-8":
-
 		content, err := objects.ParseDocument(buf, mimeType)
 		if err != nil {
 			return fmt.Errorf("failed to parse document: %w", err)

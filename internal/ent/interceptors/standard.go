@@ -28,6 +28,7 @@ func TraverseStandard() ent.Interceptor {
 					),
 				),
 			)
+
 			return nil
 		}
 

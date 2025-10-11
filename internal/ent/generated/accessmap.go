@@ -1464,6 +1464,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   false,
@@ -1955,12 +1959,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "program",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "impersonation_events": {
-	ObjectType:      "impersonation_event",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "targeted_impersonations": {
-	ObjectType:      "targeted_impersonation",
+}, "program_owner": {
+	ObjectType:      "program_owner",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "group_memberships": {

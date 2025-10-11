@@ -26,6 +26,12 @@ var (
 	ErrUnexpectedType = errors.New("unexpected type provided")
 	// ErrSeekError is returned when an error occurs while seeking
 	ErrSeekError = errors.New("error seeking")
+	// ErrReaderCannotBeNil is returned when a nil reader is provided to BufferedReader
+	ErrReaderCannotBeNil = errors.New("reader cannot be nil")
+	// ErrFailedToReadData is returned when reading data from a reader fails
+	ErrFailedToReadData = errors.New("failed to read data from reader")
+	// ErrFileSizeExceedsLimit is returned when file size exceeds the specified limit
+	ErrFileSizeExceedsLimit = errors.New("file size exceeds limit")
 )
 
 type errorMsg string

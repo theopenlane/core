@@ -76,6 +76,7 @@ func validateConfig(cfg entconfig.Config) error {
 	if cfg.Windmill.Workspace == "" {
 		return ErrMissingWorkspace
 	}
+
 	return nil
 }
 
@@ -141,6 +142,7 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 	}
 
 	var out string
+
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(path),
 		httpsling.Body(jsonData),
@@ -203,6 +205,7 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 	}
 
 	var out string
+
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(url),
 		httpsling.Body(jsonData),
@@ -225,6 +228,7 @@ func (c *Client) GetFlow(ctx context.Context, path string) (*api.Flow, error) {
 	requestPath := fmt.Sprintf("api/w/%s/flows/get/%s", c.workspace, path)
 
 	var out api.Flow
+
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Get(requestPath),
 	)
@@ -281,6 +285,7 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	}
 
 	var out string
+
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(url),
 		httpsling.Body(jsonData),
@@ -332,7 +337,6 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 		case []byte:
 			codeContent = string(v)
 		default:
-
 			if jsonBytes, err := json.Marshal(v); err == nil {
 				codeContent = string(jsonBytes)
 			} else {
@@ -391,5 +395,6 @@ func generateRandomID() string {
 	if _, err := rand.Read(bytes); err != nil {
 		return fmt.Sprintf("%d", time.Now().UnixNano())
 	}
+
 	return hex.EncodeToString(bytes)
 }

@@ -19,6 +19,9 @@ var (
 	// ErrInternalServerError is returned when an internal error occurs.
 	ErrInternalServerError = errors.New("internal server error")
 
+	// ErrInvalidInput is returned when the input is invalid
+	ErrInvalidInput = errors.New("invalid input")
+
 	// ErrCascadeDelete is returned when an error occurs while performing cascade deletes on associated objects
 	ErrCascadeDelete = errors.New("error deleting associated objects")
 
@@ -37,8 +40,10 @@ var (
 	// ErrResourceNotAccessibleWithToken is returned when a resource is not accessible with a personal access token or api token
 	ErrResourceNotAccessibleWithToken = errors.New("resource is not accessible with token authentication")
 
+	// ErrMissingTrustCenterCnameTarget is returned when the trust center cname target is missing
 	ErrMissingTrustCenterCnameTarget = errors.New("missing trust center cname target")
 
+	// ErrTrustCenterDomainAlreadyExists is returned when the domain already exists for the trust center
 	ErrTrustCenterDomainAlreadyExists = errors.New("domain already exists for this trust center")
 )
 

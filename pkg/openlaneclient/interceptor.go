@@ -69,6 +69,7 @@ func WithImpersonationInterceptor(userID string, orgID string) clientv2.RequestI
 		if userID != "" {
 			req.Header.Set(auth.UserIDHeader, userID)
 		}
+
 		if orgID != "" {
 			req.Header.Set(auth.OrganizationIDHeader, orgID)
 		}

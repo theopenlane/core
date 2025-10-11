@@ -13,21 +13,21 @@ type DiskOptions struct {
 }
 
 // WithLocalBucket is a DiskOption that sets the bucket for the disk storage which equates to a folder on the file system
-func WithLocalBucket(bucket string) DiskOption {
+func WithDiskLocalBucket(bucket string) DiskOption {
 	return func(d *DiskOptions) {
 		d.Bucket = bucket
 	}
 }
 
 // WithLocalKey specifies the name of the file in the local folder
-func WithLocalKey(key string) DiskOption {
+func WithDiskLocalKey(key string) DiskOption {
 	return func(d *DiskOptions) {
 		d.Key = key
 	}
 }
 
 // WithLocalURL specifies the URL to use for the "presigned" URL for the file
-func WithLocalURL(url string) DiskOption {
+func WithDiskLocalURL(url string) DiskOption {
 	return func(d *DiskOptions) {
 		d.LocalURL = url
 	}

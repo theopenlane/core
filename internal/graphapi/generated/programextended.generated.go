@@ -205,7 +205,7 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"program", "members", "standardID"}
+	fieldsInOrder := [...]string{"program", "members", "standardID", "standardShortName", "standardVersion", "categories"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -233,6 +233,27 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 				return it, err
 			}
 			it.StandardID = data
+		case "standardShortName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardShortName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardShortName = data
+		case "standardVersion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardVersion"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardVersion = data
+		case "categories":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categories"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Categories = data
 		}
 	}
 

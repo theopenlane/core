@@ -52,6 +52,7 @@ func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Cat
 	filtered := cat
 
 	modules := catalog.FeatureSet{}
+
 	for k, v := range cat.Modules {
 		if include(v.Audience, includeBeta, includePrivate) {
 			modules[k] = v
@@ -59,6 +60,7 @@ func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Cat
 	}
 
 	addons := catalog.FeatureSet{}
+
 	for k, v := range cat.Addons {
 		if include(v.Audience, includeBeta, includePrivate) {
 			addons[k] = v

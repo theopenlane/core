@@ -82,6 +82,57 @@ var (
 		Buckets: prometheus.DefBuckets,
 	}, []string{"operation"})
 
+	FileUploadsInFlight = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "openlane_file_uploads_in_flight",
+		Help: "Current number of file uploads in progress",
+	})
+
+	FileUploadsStarted = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "openlane_file_uploads_started_total",
+		Help: "Total number of file uploads started",
+	})
+
+	FileUploadsCompleted = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_file_uploads_completed_total",
+		Help: "Total number of file uploads completed",
+	}, []string{"status"})
+
+	FileUploadDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "openlane_file_upload_duration_seconds",
+		Help:    "Duration of file uploads in seconds",
+		Buckets: []float64{0.1, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0, 60.0, 120.0},
+	}, []string{"status"})
+
+	FileBufferingStrategy = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_file_buffering_strategy_total",
+		Help: "Total number of files buffered by strategy (memory vs disk)",
+	}, []string{"strategy"})
+
+	StorageProviderUploads = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_provider_uploads_total",
+		Help: "Total number of files uploaded per storage provider",
+	}, []string{"provider"})
+
+	StorageProviderBytesUploaded = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_provider_bytes_uploaded_total",
+		Help: "Total bytes uploaded per storage provider",
+	}, []string{"provider"})
+
+	StorageProviderDownloads = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_provider_downloads_total",
+		Help: "Total number of files downloaded per storage provider",
+	}, []string{"provider"})
+
+	StorageProviderBytesDownloaded = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_provider_bytes_downloaded_total",
+		Help: "Total bytes downloaded per storage provider",
+	}, []string{"provider"})
+
+	StorageProviderDeletes = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_provider_deletes_total",
+		Help: "Total number of files deleted per storage provider",
+	}, []string{"provider"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -95,6 +146,16 @@ var (
 		RequestValidations,
 		HandlerErrors,
 		HandlerResults,
+		FileUploadsInFlight,
+		FileUploadsStarted,
+		FileUploadsCompleted,
+		FileUploadDuration,
+		FileBufferingStrategy,
+		StorageProviderUploads,
+		StorageProviderBytesUploaded,
+		StorageProviderDownloads,
+		StorageProviderBytesDownloaded,
+		StorageProviderDeletes,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{

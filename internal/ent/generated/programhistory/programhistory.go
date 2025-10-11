@@ -68,6 +68,8 @@ const (
 	FieldAuditor = "auditor"
 	// FieldAuditorEmail holds the string denoting the auditor_email field in the database.
 	FieldAuditorEmail = "auditor_email"
+	// FieldProgramOwnerID holds the string denoting the program_owner_id field in the database.
+	FieldProgramOwnerID = "program_owner_id"
 	// Table holds the table name of the programhistory in the database.
 	Table = "program_history"
 )
@@ -100,6 +102,7 @@ var Columns = []string{
 	FieldAuditFirm,
 	FieldAuditor,
 	FieldAuditorEmail,
+	FieldProgramOwnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -301,6 +304,11 @@ func ByAuditor(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorEmail orders the results by the auditor_email field.
 func ByAuditorEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorEmail, opts...).ToFunc()
+}
+
+// ByProgramOwnerID orders the results by the program_owner_id field.
+func ByProgramOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramOwnerID, opts...).ToFunc()
 }
 
 var (

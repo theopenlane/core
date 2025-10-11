@@ -20,6 +20,7 @@ func HookTrustCenterComplianceAuthz() ent.Hook {
 				// if we error, do not attempt to create the relationships
 				return retValue, err
 			}
+
 			if m.Op().Is(ent.OpCreate) {
 				// create the trust member admin and relationship tuple for parent org
 				err = trustCenterComplianceCreateHook(ctx, m)
@@ -35,13 +36,13 @@ func HookTrustCenterComplianceAuthz() ent.Hook {
 
 func trustCenterComplianceCreateHook(ctx context.Context, m *generated.TrustCenterComplianceMutation) error {
 	_, exists := m.ID()
+
 	tcID, tcExists := m.TrustCenterID()
 	if exists && tcExists {
 		writeTuples := []fgax.TupleKey{}
 
 		standardID, standardExists := m.StandardID()
 		if standardExists {
-
 			standardReq := fgax.TupleRequest{
 				SubjectID:   tcID,
 				SubjectType: "trust_center",
@@ -58,15 +59,18 @@ func trustCenterComplianceCreateHook(ctx context.Context, m *generated.TrustCent
 			return ErrInternalServerError
 		}
 	}
+
 	return nil
 }
 
 func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCenterComplianceMutation) error {
 	trustCenterID, trustCenterExists := m.TrustCenterID()
+
 	standardID, standardExists := m.StandardID()
 	if !trustCenterExists || !standardExists {
 		return nil
 	}
+
 	tupleKey := fgax.GetTupleKey(fgax.TupleRequest{
 		SubjectID:   trustCenterID,
 		SubjectType: "trust_center",
@@ -79,5 +83,6 @@ func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCent
 
 		return ErrInternalServerError
 	}
+
 	return nil
 }

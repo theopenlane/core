@@ -68,7 +68,6 @@ func (s *RedisStore) SaveEvent(e Event) error {
 	// this ensures that we don't end up with an event in the queue without it being stored
 	// caller is responsible for handling errors
 	_, err = pipe.Exec(ctx)
-
 	if err == nil {
 		s.metrics.redisEventsPersisted.Inc()
 		s.metrics.redisQueueLength.Inc()

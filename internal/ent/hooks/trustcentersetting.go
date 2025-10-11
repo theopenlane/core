@@ -31,6 +31,7 @@ func HookTrustCenterSetting() ent.Hook {
 
 				m.AddFileIDs(fileIDs...)
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
@@ -50,6 +51,7 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 		if len(logoFile) > 1 {
 			return ctx, ErrTooManyLogoFiles
 		}
+
 		m.SetLogoLocalFileID(logoFile[0].ID)
 
 		logoFile[0].Parent.ID, _ = m.ID()

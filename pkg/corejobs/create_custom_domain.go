@@ -100,6 +100,7 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 	if err != nil {
 		return err
 	}
+
 	zoneID := customDomain.GetCustomDomain().MappableDomain.ZoneID
 
 	log.Debug().

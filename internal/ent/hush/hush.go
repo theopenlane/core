@@ -24,6 +24,7 @@ func IsFieldEncrypted(annotations []schema.Annotation) bool {
 			return true
 		}
 	}
+
 	return false
 }
 

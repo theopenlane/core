@@ -60,8 +60,7 @@ type UserQuery struct {
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
-	withImpersonationEvents          *ImpersonationEventQuery
-	withTargetedImpersonations       *ImpersonationEventQuery
+	withProgramOwner                 *ProgramQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
@@ -522,9 +521,9 @@ func (_q *UserQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
-// QueryImpersonationEvents chains the current query on the "impersonation_events" edge.
-func (_q *UserQuery) QueryImpersonationEvents() *ImpersonationEventQuery {
-	query := (&ImpersonationEventClient{config: _q.config}).Query()
+// QueryProgramOwner chains the current query on the "program_owner" edge.
+func (_q *UserQuery) QueryProgramOwner() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -535,37 +534,12 @@ func (_q *UserQuery) QueryImpersonationEvents() *ImpersonationEventQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.ImpersonationEventsTable, user.ImpersonationEventsColumn),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.ProgramOwnerTable, user.ProgramOwnerColumn),
 		)
 		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryTargetedImpersonations chains the current query on the "targeted_impersonations" edge.
-func (_q *UserQuery) QueryTargetedImpersonations() *ImpersonationEventQuery {
-	query := (&ImpersonationEventClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.TargetedImpersonationsTable, user.TargetedImpersonationsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -855,8 +829,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withAssignerTasks:           _q.withAssignerTasks.Clone(),
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
-		withImpersonationEvents:     _q.withImpersonationEvents.Clone(),
-		withTargetedImpersonations:  _q.withTargetedImpersonations.Clone(),
+		withProgramOwner:            _q.withProgramOwner.Clone(),
 		withGroupMemberships:        _q.withGroupMemberships.Clone(),
 		withOrgMemberships:          _q.withOrgMemberships.Clone(),
 		withProgramMemberships:      _q.withProgramMemberships.Clone(),
@@ -1043,25 +1016,14 @@ func (_q *UserQuery) WithPrograms(opts ...func(*ProgramQuery)) *UserQuery {
 	return _q
 }
 
-// WithImpersonationEvents tells the query-builder to eager-load the nodes that are connected to
-// the "impersonation_events" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithImpersonationEvents(opts ...func(*ImpersonationEventQuery)) *UserQuery {
-	query := (&ImpersonationEventClient{config: _q.config}).Query()
+// WithProgramOwner tells the query-builder to eager-load the nodes that are connected to
+// the "program_owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithProgramOwner(opts ...func(*ProgramQuery)) *UserQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withImpersonationEvents = query
-	return _q
-}
-
-// WithTargetedImpersonations tells the query-builder to eager-load the nodes that are connected to
-// the "targeted_impersonations" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithTargetedImpersonations(opts ...func(*ImpersonationEventQuery)) *UserQuery {
-	query := (&ImpersonationEventClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withTargetedImpersonations = query
+	_q.withProgramOwner = query
 	return _q
 }
 
@@ -1182,7 +1144,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [20]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1199,8 +1161,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withAssignerTasks != nil,
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
-			_q.withImpersonationEvents != nil,
-			_q.withTargetedImpersonations != nil,
+			_q.withProgramOwner != nil,
 			_q.withGroupMemberships != nil,
 			_q.withOrgMemberships != nil,
 			_q.withProgramMemberships != nil,
@@ -1345,21 +1306,9 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := _q.withImpersonationEvents; query != nil {
-		if err := _q.loadImpersonationEvents(ctx, query, nodes,
-			func(n *User) { n.Edges.ImpersonationEvents = []*ImpersonationEvent{} },
-			func(n *User, e *ImpersonationEvent) {
-				n.Edges.ImpersonationEvents = append(n.Edges.ImpersonationEvents, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withTargetedImpersonations; query != nil {
-		if err := _q.loadTargetedImpersonations(ctx, query, nodes,
-			func(n *User) { n.Edges.TargetedImpersonations = []*ImpersonationEvent{} },
-			func(n *User, e *ImpersonationEvent) {
-				n.Edges.TargetedImpersonations = append(n.Edges.TargetedImpersonations, e)
-			}); err != nil {
+	if query := _q.withProgramOwner; query != nil {
+		if err := _q.loadProgramOwner(ctx, query, nodes, nil,
+			func(n *User, e *Program) { n.Edges.ProgramOwner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2169,61 +2118,28 @@ func (_q *UserQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	return nil
 }
-func (_q *UserQuery) loadImpersonationEvents(ctx context.Context, query *ImpersonationEventQuery, nodes []*User, init func(*User), assign func(*User, *ImpersonationEvent)) error {
+func (_q *UserQuery) loadProgramOwner(ctx context.Context, query *ProgramQuery, nodes []*User, init func(*User), assign func(*User, *Program)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(impersonationevent.FieldUserID)
+		query.ctx.AppendFieldOnce(program.FieldProgramOwnerID)
 	}
-	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.ImpersonationEventsColumn), fks...))
+	query.Where(predicate.Program(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ProgramOwnerColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.UserID
+		fk := n.ProgramOwnerID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadTargetedImpersonations(ctx context.Context, query *ImpersonationEventQuery, nodes []*User, init func(*User), assign func(*User, *ImpersonationEvent)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(impersonationevent.FieldTargetUserID)
-	}
-	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.TargetedImpersonationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.TargetUserID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "target_user_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "program_owner_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

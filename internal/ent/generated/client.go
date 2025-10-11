@@ -18303,6 +18303,25 @@ func (c *ProgramClient) QueryUsers(_m *Program) *UserQuery {
 	return query
 }
 
+// QueryUser queries the user edge of a Program.
+func (c *ProgramClient) QueryUser(_m *Program) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, program.UserTable, program.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Program.
 func (c *ProgramClient) QueryMembers(_m *Program) *ProgramMembershipQuery {
 	query := (&ProgramMembershipClient{config: c.config}).Query()
@@ -25270,38 +25289,19 @@ func (c *UserClient) QueryPrograms(_m *User) *ProgramQuery {
 	return query
 }
 
-// QueryImpersonationEvents queries the impersonation_events edge of a User.
-func (c *UserClient) QueryImpersonationEvents(_m *User) *ImpersonationEventQuery {
-	query := (&ImpersonationEventClient{config: c.config}).Query()
+// QueryProgramOwner queries the program_owner edge of a User.
+func (c *UserClient) QueryProgramOwner(_m *User) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.ImpersonationEventsTable, user.ImpersonationEventsColumn),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.ProgramOwnerTable, user.ProgramOwnerColumn),
 		)
 		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryTargetedImpersonations queries the targeted_impersonations edge of a User.
-func (c *UserClient) QueryTargetedImpersonations(_m *User) *ImpersonationEventQuery {
-	query := (&ImpersonationEventClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.TargetedImpersonationsTable, user.TargetedImpersonationsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

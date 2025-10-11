@@ -94,6 +94,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_auditor(ctx, field)
 			case "auditorEmail":
 				return ec.fieldContext_Program_auditorEmail(ctx, field)
+			case "programOwnerID":
+				return ec.fieldContext_Program_programOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -128,6 +130,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
+			case "user":
+				return ec.fieldContext_Program_user(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}
@@ -203,6 +207,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_auditor(ctx, field)
 			case "auditorEmail":
 				return ec.fieldContext_Program_auditorEmail(ctx, field)
+			case "programOwnerID":
+				return ec.fieldContext_Program_programOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -237,6 +243,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
+			case "user":
+				return ec.fieldContext_Program_user(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}
@@ -341,6 +349,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_auditor(ctx, field)
 			case "auditorEmail":
 				return ec.fieldContext_Program_auditorEmail(ctx, field)
+			case "programOwnerID":
+				return ec.fieldContext_Program_programOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -375,6 +385,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
+			case "user":
+				return ec.fieldContext_Program_user(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}

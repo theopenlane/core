@@ -45,6 +45,7 @@ func (r *Router) addPathParametersFromPattern(path string, operation *openapi3.O
 
 			// Check if parameter already exists (e.g., from struct tags)
 			exists := false
+
 			if operation.Parameters != nil {
 				for _, p := range operation.Parameters {
 					if p.Value != nil && p.Value.Name == paramName && p.Value.In == "path" {
@@ -381,6 +382,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 			// This is expected and OK - the schemas should still be registered
 			_ = recover()
 		}()
+
 		if config.Handler != nil {
 			_ = config.Handler(regCtx, openAPIContext)
 		} else if config.SimpleHandler != nil {
@@ -420,6 +422,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 
 	// Add route to echo router
 	grp := r.VersionOne()
+
 	_, err := grp.AddRoute(route)
 	if err != nil {
 		return err
@@ -458,6 +461,7 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 			// During registration, handlers might panic when accessing nil request fields
 			_ = recover()
 		}()
+
 		if config.Handler != nil {
 			_ = config.Handler(regCtx, openAPIContext)
 		} else if config.SimpleHandler != nil {
@@ -493,6 +497,7 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 
 	// Add route to echo router
 	grp := r.Base()
+
 	_, err := grp.AddRoute(route)
 	if err != nil {
 		return err
@@ -608,7 +613,6 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesHandler,
 		registerAccountRolesOrganizationHandler,
 		registerAccountFeaturesHandler,
-		registerAppleMerchantHandler,
 		register2faHandler,
 		registerExampleCSVHandler,
 		registerWebAuthnWellKnownHandler,

@@ -179,7 +179,6 @@ func EmitEventHook(e *Eventer) ent.Hook {
 						log.Err(err).Msg("Failed to parse event ID")
 						return
 					}
-
 				}
 
 				if eventID == nil || eventID.ID == "" {
@@ -390,7 +389,6 @@ func handleSubscriberCreate(event soiree.Event) error {
 		}
 
 		t, err = template.New("slack").Parse(string(b))
-
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
 
@@ -526,6 +524,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 		return nil
 	}
+
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {

@@ -649,6 +649,7 @@ func findCustomerAndSubscription(ctx context.Context, sc stripeClient, orgID str
 
 	// Find active subscription
 	var activeSubscription *stripe.Subscription
+
 	for _, sub := range subscriptions {
 		if entitlements.IsSubscriptionActive(sub.Status) {
 			if activeSubscription != nil {
@@ -666,6 +667,7 @@ func findCustomerAndSubscription(ctx context.Context, sc stripeClient, orgID str
 func getAvailableModules(cat *catalog.Catalog, subscription *stripe.Subscription) map[string]catalog.Feature {
 	// Get current subscription price IDs
 	currentPrices := make(map[string]bool)
+
 	if subscription != nil && subscription.Items != nil {
 		for _, item := range subscription.Items.Data {
 			if item.Price != nil {
@@ -676,9 +678,11 @@ func getAvailableModules(cat *catalog.Catalog, subscription *stripe.Subscription
 
 	// Filter out modules that are already in the subscription
 	available := make(map[string]catalog.Feature)
+
 	for name, module := range cat.Modules {
 		// Skip if any price for this module is already in the subscription
 		hasPrice := false
+
 		for _, price := range module.Billing.Prices {
 			if currentPrices[price.PriceID] {
 				hasPrice = true
@@ -708,6 +712,7 @@ func selectModuleInteractively(modules map[string]catalog.Feature) (catalog.Feat
 	}
 
 	var options []moduleOption
+
 	for name, module := range modules {
 		label := fmt.Sprintf("%s - %s", module.DisplayName, module.Description)
 		options = append(options, moduleOption{
@@ -753,6 +758,7 @@ func selectModuleInteractively(modules map[string]catalog.Feature) (catalog.Feat
 		if err != nil {
 			return catalog.Feature{}, catalog.Price{}, err
 		}
+
 		return selectedModule, selectedPrice, nil
 	}
 
@@ -765,10 +771,12 @@ func selectPriceInteractively(prices []catalog.Price) (catalog.Price, error) {
 	labels := make([]string, len(prices))
 	for i, price := range prices {
 		amount := float64(price.UnitAmount) / centsToDollars
+
 		label := fmt.Sprintf("$%.2f/%s", amount, price.Interval)
 		if price.Nickname != "" {
 			label = fmt.Sprintf("%s (%s)", label, price.Nickname)
 		}
+
 		labels[i] = label
 	}
 
