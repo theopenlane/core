@@ -196,11 +196,13 @@ type OrganizationEdges struct {
 	Exports []*Export `json:"exports,omitempty"`
 	// TrustCenterWatermarkConfigs holds the value of the trust_center_watermark_configs edge.
 	TrustCenterWatermarkConfigs []*TrustCenterWatermarkConfig `json:"trust_center_watermark_configs,omitempty"`
+	// ImpersonationEvents holds the value of the impersonation_events edge.
+	ImpersonationEvents []*ImpersonationEvent `json:"impersonation_events,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [68]bool
+	loadedTypes [69]bool
 	// totalCount holds the count of the edges above.
 	totalCount [65]map[string]int
 
@@ -268,6 +270,7 @@ type OrganizationEdges struct {
 	namedSubprocessors                 map[string][]*Subprocessor
 	namedExports                       map[string][]*Export
 	namedTrustCenterWatermarkConfigs   map[string][]*TrustCenterWatermarkConfig
+	namedImpersonationEvents           map[string][]*ImpersonationEvent
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -880,10 +883,19 @@ func (e OrganizationEdges) TrustCenterWatermarkConfigsOrErr() ([]*TrustCenterWat
 	return nil, &NotLoadedError{edge: "trust_center_watermark_configs"}
 }
 
+// ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
+	if e.loadedTypes[67] {
+		return e.ImpersonationEvents, nil
+	}
+	return nil, &NotLoadedError{edge: "impersonation_events"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[67] {
+	if e.loadedTypes[68] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1377,6 +1389,11 @@ func (_m *Organization) QueryExports() *ExportQuery {
 // QueryTrustCenterWatermarkConfigs queries the "trust_center_watermark_configs" edge of the Organization entity.
 func (_m *Organization) QueryTrustCenterWatermarkConfigs() *TrustCenterWatermarkConfigQuery {
 	return NewOrganizationClient(_m.config).QueryTrustCenterWatermarkConfigs(_m)
+}
+
+// QueryImpersonationEvents queries the "impersonation_events" edge of the Organization entity.
+func (_m *Organization) QueryImpersonationEvents() *ImpersonationEventQuery {
+	return NewOrganizationClient(_m.config).QueryImpersonationEvents(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3002,6 +3019,30 @@ func (_m *Organization) appendNamedTrustCenterWatermarkConfigs(name string, edge
 		_m.Edges.namedTrustCenterWatermarkConfigs[name] = []*TrustCenterWatermarkConfig{}
 	} else {
 		_m.Edges.namedTrustCenterWatermarkConfigs[name] = append(_m.Edges.namedTrustCenterWatermarkConfigs[name], edges...)
+	}
+}
+
+// NamedImpersonationEvents returns the ImpersonationEvents named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedImpersonationEvents(name string) ([]*ImpersonationEvent, error) {
+	if _m.Edges.namedImpersonationEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedImpersonationEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedImpersonationEvents(name string, edges ...*ImpersonationEvent) {
+	if _m.Edges.namedImpersonationEvents == nil {
+		_m.Edges.namedImpersonationEvents = make(map[string][]*ImpersonationEvent)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedImpersonationEvents[name] = []*ImpersonationEvent{}
+	} else {
+		_m.Edges.namedImpersonationEvents[name] = append(_m.Edges.namedImpersonationEvents[name], edges...)
 	}
 }
 
