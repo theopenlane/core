@@ -257,6 +257,7 @@ func (p *Provider) entClient(ctx context.Context) (*ent.Client, error) {
 	return nil, ErrMissingEntClient
 }
 
+// bucket returns the configured bucket or a default value
 func (p *Provider) bucket() string {
 	if p.options == nil || p.options.Bucket == "" {
 		return defaultDatabaseBucket
@@ -265,6 +266,7 @@ func (p *Provider) bucket() string {
 	return p.options.Bucket
 }
 
+// extractFileIdentifier retrieves the file ID from provider hints in upload options
 func extractFileIdentifier(opts *storagetypes.UploadFileOptions) string {
 	if opts == nil {
 		return ""

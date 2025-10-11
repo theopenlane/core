@@ -25,6 +25,7 @@ type Provider interface {
 	GetScheme() *string
 	// ListBuckets is used to list the buckets in the storage backend
 	ListBuckets() ([]string, error)
+	// ProviderType returns the type of the storage provider (e.g., S3, R2, GCS)
 	ProviderType() ProviderType
 	io.Closer
 }
@@ -33,10 +34,15 @@ type Provider interface {
 type ProviderType string
 
 const (
-	S3Provider       ProviderType = "s3"
-	R2Provider       ProviderType = "r2"
-	GCSProvider      ProviderType = "gcs"
-	DiskProvider     ProviderType = "disk"
+	// S3Provider is the type for AWS S3 storage
+	S3Provider ProviderType = "s3"
+	// R2Provider is the type for Cloudflare R2 storage
+	R2Provider ProviderType = "r2"
+	// GCSProvider is the type for Google Cloud Storage
+	GCSProvider ProviderType = "gcs"
+	// DiskProvider is the type for local disk storage
+	DiskProvider ProviderType = "disk"
+	// DatabaseProvider is the type for database storage
 	DatabaseProvider ProviderType = "database"
 )
 
@@ -67,7 +73,9 @@ type File struct {
 	CorrelatedObjectID string
 	// CorrelatedObjectType is the type of object this file belongs to
 	CorrelatedObjectType string
-	ProviderType         ProviderType `json:"provider_type,omitempty"`
+	// ProviderType indicates which storage provider is used for this file
+	ProviderType ProviderType `json:"provider_type,omitempty"`
+	// FileMetadata contains common metadata about the file
 	FileMetadata
 }
 
@@ -89,6 +97,7 @@ type UploadFileOptions struct {
 	Bucket string `json:"bucket,omitempty"`
 	// FolderDestination is the folder/path within the bucket
 	FolderDestination string `json:"folder_destination,omitempty"`
+	// FileMetadata contains common metadata about the file
 	FileMetadata
 }
 
@@ -98,6 +107,7 @@ type UploadedFileMetadata struct {
 	TimeUploaded time.Time `json:"time_uploaded"`
 	// ElapsedTime is the duration taken to upload the file
 	ElapsedTime time.Duration `json:"elapsed_time"`
+	// FileMetadata contains common metadata about the file
 	FileMetadata
 }
 
@@ -135,6 +145,7 @@ type DownloadFileOptions struct {
 	DownloadFileLocation string `json:"download_file_location,omitempty"`
 	// Writer can be passed in if you want to provide a specific io.Writer or similar
 	Writer any `json:"-"`
+	// FileMetadata contains common metadata about the file
 	FileMetadata
 }
 
@@ -169,11 +180,13 @@ type ProviderHints struct {
 	Metadata map[string]string `json:"metadata,omitempty"`
 }
 
+// PresignedURLOptions contains options for generating presigned URLs
 type PresignedURLOptions struct {
 	// Duration is the duration the presigned URL should be valid for
 	Duration time.Duration `json:"duration"`
 }
 
+// DeleteFileOptions contains options for deleting files
 type DeleteFileOptions struct {
 	// Reason is the reason for deleting the file
 	Reason string `json:"reason,omitempty"`

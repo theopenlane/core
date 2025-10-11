@@ -1,7 +1,6 @@
 package s3_test
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -48,7 +47,7 @@ func TestS3BuilderBuild(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			builder := s3provider.NewS3Builder()
-			provider, err := builder.Build(context.Background(), tt.credentials, tt.options)
+			provider, err := builder.Build(tt.credentials, tt.options)
 
 			if tt.expectError {
 				assert.Error(t, err)

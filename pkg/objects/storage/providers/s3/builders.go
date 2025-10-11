@@ -1,8 +1,6 @@
 package s3
 
 import (
-	"context"
-
 	"github.com/samber/mo"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
@@ -26,7 +24,7 @@ func (b *Builder) WithOptions(opts ...Option) *Builder {
 }
 
 // Build implements eddy.Builder
-func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}

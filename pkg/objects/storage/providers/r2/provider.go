@@ -182,13 +182,13 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 }
 
 // GetPresignedURL implements storagetypes.Provider
-func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
 	expires := opts.Duration
 	if expires == 0 {
 		expires = DefaultPresignedURLExpiry
 	}
 
-	presignURL, err := p.presignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
+	presignURL, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
 		Bucket:                     aws.String(p.options.Bucket),
 		Key:                        aws.String(file.Key),
 		ResponseContentType:        aws.String("application/octet-stream"),
