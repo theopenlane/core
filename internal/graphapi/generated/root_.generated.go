@@ -4196,6 +4196,13 @@ type ComplexityRoot struct {
 		ScheduledJob func(childComplexity int) int
 	}
 
+	SearchContext struct {
+		EntityID      func(childComplexity int) int
+		EntityType    func(childComplexity int) int
+		MatchedFields func(childComplexity int) int
+		Snippets      func(childComplexity int) int
+	}
+
 	SearchResults struct {
 		APITokens                   func(childComplexity int) int
 		ActionPlans                 func(childComplexity int) int
@@ -4232,6 +4239,7 @@ type ComplexityRoot struct {
 		Programs                    func(childComplexity int) int
 		Risks                       func(childComplexity int) int
 		Scans                       func(childComplexity int) int
+		SearchContext               func(childComplexity int) int
 		Standards                   func(childComplexity int) int
 		Subcontrols                 func(childComplexity int) int
 		Subprocessors               func(childComplexity int) int
@@ -4245,6 +4253,11 @@ type ComplexityRoot struct {
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
 		Webauthns                   func(childComplexity int) int
+	}
+
+	SearchSnippet struct {
+		Field func(childComplexity int) int
+		Text  func(childComplexity int) int
 	}
 
 	SendTrustCenterNDAEmailPayload struct {
@@ -29700,6 +29713,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobUpdatePayload.ScheduledJob(childComplexity), true
 
+	case "SearchContext.entityID":
+		if e.complexity.SearchContext.EntityID == nil {
+			break
+		}
+
+		return e.complexity.SearchContext.EntityID(childComplexity), true
+
+	case "SearchContext.entityType":
+		if e.complexity.SearchContext.EntityType == nil {
+			break
+		}
+
+		return e.complexity.SearchContext.EntityType(childComplexity), true
+
+	case "SearchContext.matchedFields":
+		if e.complexity.SearchContext.MatchedFields == nil {
+			break
+		}
+
+		return e.complexity.SearchContext.MatchedFields(childComplexity), true
+
+	case "SearchContext.snippets":
+		if e.complexity.SearchContext.Snippets == nil {
+			break
+		}
+
+		return e.complexity.SearchContext.Snippets(childComplexity), true
+
 	case "SearchResults.apiTokens":
 		if e.complexity.SearchResults.APITokens == nil {
 			break
@@ -29945,6 +29986,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Scans(childComplexity), true
 
+	case "SearchResults.searchContext":
+		if e.complexity.SearchResults.SearchContext == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.SearchContext(childComplexity), true
+
 	case "SearchResults.standards":
 		if e.complexity.SearchResults.Standards == nil {
 			break
@@ -30035,6 +30083,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Webauthns(childComplexity), true
+
+	case "SearchSnippet.field":
+		if e.complexity.SearchSnippet.Field == nil {
+			break
+		}
+
+		return e.complexity.SearchSnippet.Field(childComplexity), true
+
+	case "SearchSnippet.text":
+		if e.complexity.SearchSnippet.Text == nil {
+			break
+		}
+
+		return e.complexity.SearchSnippet.Text(childComplexity), true
 
 	case "SendTrustCenterNDAEmailPayload.success":
 		if e.complexity.SendTrustCenterNDAEmailPayload.Success == nil {
@@ -103208,6 +103270,47 @@ extend type Query{
         last: Int
     ): SearchResults
 }`, BuiltIn: false},
+	{Name: "../schema/search_ext.graphql", Input: `"""
+SearchSnippet represents a piece of matched content with surrounding context
+"""
+type SearchSnippet{
+  """
+  The field name where the match occurred
+  """
+  field: String!
+  """
+  The matched text with surrounding context (with highlighting markers if applicable)
+  """
+  text: String!
+}
+
+"""
+SearchContext provides information about why a particular entity matched the search query
+"""
+type SearchContext{
+  """
+  The ID of the entity that matched
+  """
+  entityID: String!
+  """
+  The type of entity (e.g., "ActionPlan", "Control", "User")
+  """
+  entityType: String!
+  """
+  The fields that matched the search query
+  """
+  matchedFields: [String!]!
+  """
+  Optional snippets showing the matched content with context
+  """
+  snippets: [SearchSnippet!]
+}
+
+extend type SearchResults{
+  searchContext: [SearchContext!]
+}
+
+`, BuiltIn: false},
 	{Name: "../schema/standard.graphql", Input: `extend type Query {
     """
     Look up standard by ID

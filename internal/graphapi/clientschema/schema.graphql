@@ -51773,6 +51773,27 @@ input ScheduledJobWhereInput {
 	hasJobRunner: Boolean
 	hasJobRunnerWith: [JobRunnerWhereInput!]
 }
+"""
+SearchContext provides information about why a particular entity matched the search query
+"""
+type SearchContext {
+	"""
+	The ID of the entity that matched
+	"""
+	entityID: String!
+	"""
+	The type of entity (e.g., "ActionPlan", "Control", "User")
+	"""
+	entityType: String!
+	"""
+	The fields that matched the search query
+	"""
+	matchedFields: [String!]!
+	"""
+	Optional snippets showing the matched content with context
+	"""
+	snippets: [SearchSnippet!]
+}
 type SearchResults {
 	"""
 	Information to aid in pagination.
@@ -51828,6 +51849,20 @@ type SearchResults {
 	users: UserConnection
 	userSettings: UserSettingConnection
 	webauthns: WebauthnConnection
+	searchContext: [SearchContext!]
+}
+"""
+SearchSnippet represents a piece of matched content with surrounding context
+"""
+type SearchSnippet {
+	"""
+	The field name where the match occurred
+	"""
+	field: String!
+	"""
+	The matched text with surrounding context (with highlighting markers if applicable)
+	"""
+	text: String!
 }
 type SendTrustCenterNDAEmailPayload {
 	success: Boolean!

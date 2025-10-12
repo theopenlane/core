@@ -24681,6 +24681,18 @@ type ScheduledJobWhereInput struct {
 	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
+// SearchContext provides information about why a particular entity matched the search query
+type SearchContext struct {
+	// The ID of the entity that matched
+	EntityID string `json:"entityID"`
+	// The type of entity (e.g., "ActionPlan", "Control", "User")
+	EntityType string `json:"entityType"`
+	// The fields that matched the search query
+	MatchedFields []string `json:"matchedFields"`
+	// Optional snippets showing the matched content with context
+	Snippets []*SearchSnippet `json:"snippets,omitempty"`
+}
+
 type SearchResults struct {
 	// Information to aid in pagination.
 	Page *PageInfo `json:"page"`
@@ -24732,6 +24744,15 @@ type SearchResults struct {
 	Users                       *UserConnection                       `json:"users,omitempty"`
 	UserSettings                *UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *WebauthnConnection                   `json:"webauthns,omitempty"`
+	SearchContext               []*SearchContext                      `json:"searchContext,omitempty"`
+}
+
+// SearchSnippet represents a piece of matched content with surrounding context
+type SearchSnippet struct {
+	// The field name where the match occurred
+	Field string `json:"field"`
+	// The matched text with surrounding context (with highlighting markers if applicable)
+	Text string `json:"text"`
 }
 
 type SendTrustCenterNDAEmailPayload struct {
