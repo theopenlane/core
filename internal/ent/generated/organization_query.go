@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -144,6 +145,7 @@ type OrganizationQuery struct {
 	withSubprocessors                      *SubprocessorQuery
 	withExports                            *ExportQuery
 	withTrustCenterWatermarkConfigs        *TrustCenterWatermarkConfigQuery
+	withImpersonationEvents                *ImpersonationEventQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -211,6 +213,7 @@ type OrganizationQuery struct {
 	withNamedSubprocessors                 map[string]*SubprocessorQuery
 	withNamedExports                       map[string]*ExportQuery
 	withNamedTrustCenterWatermarkConfigs   map[string]*TrustCenterWatermarkConfigQuery
+	withNamedImpersonationEvents           map[string]*ImpersonationEventQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1923,6 +1926,31 @@ func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigs() *TrustCenterWate
 	return query
 }
 
+// QueryImpersonationEvents chains the current query on the "impersonation_events" edge.
+func (_q *OrganizationQuery) QueryImpersonationEvents() *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ImpersonationEventsTable, organization.ImpersonationEventsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2207,6 +2235,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSubprocessors:                 _q.withSubprocessors.Clone(),
 		withExports:                       _q.withExports.Clone(),
 		withTrustCenterWatermarkConfigs:   _q.withTrustCenterWatermarkConfigs.Clone(),
+		withImpersonationEvents:           _q.withImpersonationEvents.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -2952,6 +2981,17 @@ func (_q *OrganizationQuery) WithTrustCenterWatermarkConfigs(opts ...func(*Trust
 	return _q
 }
 
+// WithImpersonationEvents tells the query-builder to eager-load the nodes that are connected to
+// the "impersonation_events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithImpersonationEvents(opts ...func(*ImpersonationEventQuery)) *OrganizationQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withImpersonationEvents = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3047,7 +3087,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [68]bool{
+		loadedTypes = [69]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3115,6 +3155,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
+			_q.withImpersonationEvents != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3635,6 +3676,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withImpersonationEvents; query != nil {
+		if err := _q.loadImpersonationEvents(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ImpersonationEvents = []*ImpersonationEvent{} },
+			func(n *Organization, e *ImpersonationEvent) {
+				n.Edges.ImpersonationEvents = append(n.Edges.ImpersonationEvents, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4091,6 +4141,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *TrustCenterWatermarkConfig) {
 				n.appendNamedTrustCenterWatermarkConfigs(name, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedImpersonationEvents {
+		if err := _q.loadImpersonationEvents(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedImpersonationEvents(name) },
+			func(n *Organization, e *ImpersonationEvent) { n.appendNamedImpersonationEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6275,6 +6332,36 @@ func (_q *OrganizationQuery) loadTrustCenterWatermarkConfigs(ctx context.Context
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadImpersonationEvents(ctx context.Context, query *ImpersonationEventQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ImpersonationEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(impersonationevent.FieldOrganizationID)
+	}
+	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ImpersonationEventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrganizationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7303,6 +7390,20 @@ func (_q *OrganizationQuery) WithNamedTrustCenterWatermarkConfigs(name string, o
 		_q.withNamedTrustCenterWatermarkConfigs = make(map[string]*TrustCenterWatermarkConfigQuery)
 	}
 	_q.withNamedTrustCenterWatermarkConfigs[name] = query
+	return _q
+}
+
+// WithNamedImpersonationEvents tells the query-builder to eager-load the nodes that are connected to the "impersonation_events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedImpersonationEvents(name string, opts ...func(*ImpersonationEventQuery)) *OrganizationQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedImpersonationEvents == nil {
+		_q.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery)
+	}
+	_q.withNamedImpersonationEvents[name] = query
 	return _q
 }
 

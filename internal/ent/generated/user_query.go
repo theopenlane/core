@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -60,6 +61,8 @@ type UserQuery struct {
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
 	withProgramOwner                 *ProgramQuery
+	withImpersonationEvents          *ImpersonationEventQuery
+	withTargetedImpersonations       *ImpersonationEventQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
@@ -79,6 +82,8 @@ type UserQuery struct {
 	withNamedAssignerTasks           map[string]*TaskQuery
 	withNamedAssigneeTasks           map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
+	withNamedImpersonationEvents     map[string]*ImpersonationEventQuery
+	withNamedTargetedImpersonations  map[string]*ImpersonationEventQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	withNamedProgramMemberships      map[string]*ProgramMembershipQuery
@@ -543,6 +548,56 @@ func (_q *UserQuery) QueryProgramOwner() *ProgramQuery {
 	return query
 }
 
+// QueryImpersonationEvents chains the current query on the "impersonation_events" edge.
+func (_q *UserQuery) QueryImpersonationEvents() *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ImpersonationEventsTable, user.ImpersonationEventsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTargetedImpersonations chains the current query on the "targeted_impersonations" edge.
+func (_q *UserQuery) QueryTargetedImpersonations() *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.TargetedImpersonationsTable, user.TargetedImpersonationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (_q *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: _q.config}).Query()
@@ -827,6 +882,8 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
 		withProgramOwner:            _q.withProgramOwner.Clone(),
+		withImpersonationEvents:     _q.withImpersonationEvents.Clone(),
+		withTargetedImpersonations:  _q.withTargetedImpersonations.Clone(),
 		withGroupMemberships:        _q.withGroupMemberships.Clone(),
 		withOrgMemberships:          _q.withOrgMemberships.Clone(),
 		withProgramMemberships:      _q.withProgramMemberships.Clone(),
@@ -1024,6 +1081,28 @@ func (_q *UserQuery) WithProgramOwner(opts ...func(*ProgramQuery)) *UserQuery {
 	return _q
 }
 
+// WithImpersonationEvents tells the query-builder to eager-load the nodes that are connected to
+// the "impersonation_events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithImpersonationEvents(opts ...func(*ImpersonationEventQuery)) *UserQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withImpersonationEvents = query
+	return _q
+}
+
+// WithTargetedImpersonations tells the query-builder to eager-load the nodes that are connected to
+// the "targeted_impersonations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithTargetedImpersonations(opts ...func(*ImpersonationEventQuery)) *UserQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTargetedImpersonations = query
+	return _q
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -1141,7 +1220,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [22]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1159,6 +1238,8 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
 			_q.withProgramOwner != nil,
+			_q.withImpersonationEvents != nil,
+			_q.withTargetedImpersonations != nil,
 			_q.withGroupMemberships != nil,
 			_q.withOrgMemberships != nil,
 			_q.withProgramMemberships != nil,
@@ -1309,6 +1390,24 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := _q.withImpersonationEvents; query != nil {
+		if err := _q.loadImpersonationEvents(ctx, query, nodes,
+			func(n *User) { n.Edges.ImpersonationEvents = []*ImpersonationEvent{} },
+			func(n *User, e *ImpersonationEvent) {
+				n.Edges.ImpersonationEvents = append(n.Edges.ImpersonationEvents, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTargetedImpersonations; query != nil {
+		if err := _q.loadTargetedImpersonations(ctx, query, nodes,
+			func(n *User) { n.Edges.TargetedImpersonations = []*ImpersonationEvent{} },
+			func(n *User, e *ImpersonationEvent) {
+				n.Edges.TargetedImpersonations = append(n.Edges.TargetedImpersonations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGroupMemberships; query != nil {
 		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
@@ -1427,6 +1526,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *User) { n.appendNamedPrograms(name) },
 			func(n *User, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedImpersonationEvents {
+		if err := _q.loadImpersonationEvents(ctx, query, nodes,
+			func(n *User) { n.appendNamedImpersonationEvents(name) },
+			func(n *User, e *ImpersonationEvent) { n.appendNamedImpersonationEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTargetedImpersonations {
+		if err := _q.loadTargetedImpersonations(ctx, query, nodes,
+			func(n *User) { n.appendNamedTargetedImpersonations(name) },
+			func(n *User, e *ImpersonationEvent) { n.appendNamedTargetedImpersonations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2128,6 +2241,66 @@ func (_q *UserQuery) loadProgramOwner(ctx context.Context, query *ProgramQuery, 
 	}
 	return nil
 }
+func (_q *UserQuery) loadImpersonationEvents(ctx context.Context, query *ImpersonationEventQuery, nodes []*User, init func(*User), assign func(*User, *ImpersonationEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(impersonationevent.FieldUserID)
+	}
+	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ImpersonationEventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadTargetedImpersonations(ctx context.Context, query *ImpersonationEventQuery, nodes []*User, init func(*User), assign func(*User, *ImpersonationEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(impersonationevent.FieldTargetUserID)
+	}
+	query.Where(predicate.ImpersonationEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.TargetedImpersonationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TargetUserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "target_user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*User, init func(*User), assign func(*User, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2515,6 +2688,34 @@ func (_q *UserQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery))
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedImpersonationEvents tells the query-builder to eager-load the nodes that are connected to the "impersonation_events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedImpersonationEvents(name string, opts ...func(*ImpersonationEventQuery)) *UserQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedImpersonationEvents == nil {
+		_q.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery)
+	}
+	_q.withNamedImpersonationEvents[name] = query
+	return _q
+}
+
+// WithNamedTargetedImpersonations tells the query-builder to eager-load the nodes that are connected to the "targeted_impersonations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedTargetedImpersonations(name string, opts ...func(*ImpersonationEventQuery)) *UserQuery {
+	query := (&ImpersonationEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTargetedImpersonations == nil {
+		_q.withNamedTargetedImpersonations = make(map[string]*ImpersonationEventQuery)
+	}
+	_q.withNamedTargetedImpersonations[name] = query
 	return _q
 }
 

@@ -429,6 +429,7 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         TrustCenterWatermarkConfig{},
 			cascadeDeleteOwner: true,
 		}),
+		defaultEdgeToWithPagination(o, ImpersonationEvent{}),
 	}
 }
 

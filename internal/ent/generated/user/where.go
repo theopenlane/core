@@ -1886,6 +1886,64 @@ func HasProgramOwnerWith(preds ...predicate.Program) predicate.User {
 	})
 }
 
+// HasImpersonationEvents applies the HasEdge predicate on the "impersonation_events" edge.
+func HasImpersonationEvents() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasImpersonationEventsWith applies the HasEdge predicate on the "impersonation_events" edge with a given conditions (other predicates).
+func HasImpersonationEventsWith(preds ...predicate.ImpersonationEvent) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newImpersonationEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTargetedImpersonations applies the HasEdge predicate on the "targeted_impersonations" edge.
+func HasTargetedImpersonations() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TargetedImpersonationsTable, TargetedImpersonationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTargetedImpersonationsWith applies the HasEdge predicate on the "targeted_impersonations" edge with a given conditions (other predicates).
+func HasTargetedImpersonationsWith(preds ...predicate.ImpersonationEvent) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newTargetedImpersonationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasGroupMemberships applies the HasEdge predicate on the "group_memberships" edge.
 func HasGroupMemberships() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

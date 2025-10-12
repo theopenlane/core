@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -1303,6 +1304,21 @@ func (_u *OrganizationUpdate) AddTrustCenterWatermarkConfigs(v ...*TrustCenterWa
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterWatermarkConfigIDs(ids...)
+}
+
+// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
+func (_u *OrganizationUpdate) AddImpersonationEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddImpersonationEventIDs(ids...)
+	return _u
+}
+
+// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
+func (_u *OrganizationUpdate) AddImpersonationEvents(v ...*ImpersonationEvent) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddImpersonationEventIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2679,6 +2695,27 @@ func (_u *OrganizationUpdate) RemoveTrustCenterWatermarkConfigs(v ...*TrustCente
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterWatermarkConfigIDs(ids...)
+}
+
+// ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
+func (_u *OrganizationUpdate) ClearImpersonationEvents() *OrganizationUpdate {
+	_u.mutation.ClearImpersonationEvents()
+	return _u
+}
+
+// RemoveImpersonationEventIDs removes the "impersonation_events" edge to ImpersonationEvent entities by IDs.
+func (_u *OrganizationUpdate) RemoveImpersonationEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveImpersonationEventIDs(ids...)
+	return _u
+}
+
+// RemoveImpersonationEvents removes "impersonation_events" edges to ImpersonationEvent entities.
+func (_u *OrganizationUpdate) RemoveImpersonationEvents(v ...*ImpersonationEvent) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveImpersonationEventIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -6021,6 +6058,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ImpersonationEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7313,6 +7398,21 @@ func (_u *OrganizationUpdateOne) AddTrustCenterWatermarkConfigs(v ...*TrustCente
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterWatermarkConfigIDs(ids...)
+}
+
+// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
+func (_u *OrganizationUpdateOne) AddImpersonationEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddImpersonationEventIDs(ids...)
+	return _u
+}
+
+// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
+func (_u *OrganizationUpdateOne) AddImpersonationEvents(v ...*ImpersonationEvent) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddImpersonationEventIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -8689,6 +8789,27 @@ func (_u *OrganizationUpdateOne) RemoveTrustCenterWatermarkConfigs(v ...*TrustCe
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterWatermarkConfigIDs(ids...)
+}
+
+// ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
+func (_u *OrganizationUpdateOne) ClearImpersonationEvents() *OrganizationUpdateOne {
+	_u.mutation.ClearImpersonationEvents()
+	return _u
+}
+
+// RemoveImpersonationEventIDs removes the "impersonation_events" edge to ImpersonationEvent entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveImpersonationEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveImpersonationEventIDs(ids...)
+	return _u
+}
+
+// RemoveImpersonationEvents removes "impersonation_events" edges to ImpersonationEvent entities.
+func (_u *OrganizationUpdateOne) RemoveImpersonationEvents(v ...*ImpersonationEvent) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveImpersonationEventIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -12056,6 +12177,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ImpersonationEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ImpersonationEventsTable,
+			Columns: []string{organization.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
