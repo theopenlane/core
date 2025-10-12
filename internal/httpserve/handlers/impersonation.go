@@ -118,7 +118,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		log.Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
-	if err := h.logImpersonationEvent("start", auditLog, ctx.Request().Context()); err != nil {
+	if err := h.logImpersonationEvent(ctx.Request().Context(), "start", auditLog); err != nil {
 		// Log the error but don't fail the request
 		log.Error().Err(err).Msg("failed to log impersonation event")
 	}
@@ -153,7 +153,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 	}
 
 	// Log impersonation end
-	if err := h.logImpersonationEvent("end", &auth.ImpersonationAuditLog{
+	if err := h.logImpersonationEvent(ctx.Request().Context(), "end", &auth.ImpersonationAuditLog{
 		SessionID:         req.SessionID,
 		Type:              impUser.ImpersonationContext.Type,
 		ImpersonatorID:    impUser.ImpersonationContext.ImpersonatorID,
@@ -167,7 +167,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    impUser.OrganizationID,
 		Scopes:            impUser.ImpersonationContext.Scopes,
-	}, ctx.Request().Context()); err != nil {
+	}); err != nil {
 		log.Error().Err(err).Msg("failed to log impersonation end event")
 	}
 
@@ -244,7 +244,7 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 
 // logImpersonationEvent logs impersonation events for audit purposes
 // and persists it into the database
-func (h *Handler) logImpersonationEvent(action string, auditLog *auth.ImpersonationAuditLog, ctx context.Context) error {
+func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
 	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
 	_, err := h.DBClient.ImpersonationEvent.Create().
