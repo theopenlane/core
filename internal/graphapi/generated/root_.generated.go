@@ -92549,6 +92549,11 @@ input UpdateAPITokenInput {
   """
   name: String
   """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
+  """
   a description of the token's purpose
   """
   description: String
@@ -94792,6 +94797,11 @@ input UpdatePersonalAccessTokenInput {
   the name associated with the token
   """
   name: String
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   """
   a description of the token's purpose
   """

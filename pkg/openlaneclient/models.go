@@ -31790,6 +31790,9 @@ type UpdateAPITokenInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
+	// when the token expires
+	ExpiresAt      *time.Time `json:"expiresAt,omitempty"`
+	ClearExpiresAt *bool      `json:"clearExpiresAt,omitempty"`
 	// a description of the token's purpose
 	Description      *string    `json:"description,omitempty"`
 	ClearDescription *bool      `json:"clearDescription,omitempty"`
@@ -33513,6 +33516,9 @@ type UpdatePersonalAccessTokenInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
+	// when the token expires
+	ExpiresAt      *time.Time `json:"expiresAt,omitempty"`
+	ClearExpiresAt *bool      `json:"clearExpiresAt,omitempty"`
 	// a description of the token's purpose
 	Description      *string    `json:"description,omitempty"`
 	ClearDescription *bool      `json:"clearDescription,omitempty"`

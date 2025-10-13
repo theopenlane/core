@@ -67,7 +67,6 @@ func (PersonalAccessToken) Fields() []ent.Field {
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationUpdateInput),
 				entgql.OrderField("expires_at"),
 			).
 			Optional().
