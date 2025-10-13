@@ -71,6 +71,8 @@ type UpdateAPITokenInput struct {
 	Tags               []string
 	AppendTags         []string
 	Name               *string
+	ClearExpiresAt     bool
+	ExpiresAt          *time.Time
 	ClearDescription   bool
 	Description        *string
 	ClearScopes        bool
@@ -103,6 +105,12 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -8573,6 +8581,8 @@ type UpdatePersonalAccessTokenInput struct {
 	Tags                  []string
 	AppendTags            []string
 	Name                  *string
+	ClearExpiresAt        bool
+	ExpiresAt             *time.Time
 	ClearDescription      bool
 	Description           *string
 	ClearScopes           bool
@@ -8603,6 +8613,12 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
