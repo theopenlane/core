@@ -90,8 +90,6 @@ type ProviderConfig struct {
 	MaxMemoryMB int64 `json:"maxMemoryMB" koanf:"maxMemoryMB"`
 	// DevMode enables simple file upload handling for local development and testing
 	DevMode bool `json:"devMode" koanf:"devMode" default:"false"`
-	// EnsureAvailable enforces provider availability before completing server startup
-	EnsureAvailable bool `json:"ensureAvailable" koanf:"ensureAvailable" default:"false"`
 	// CredentialSync contains options for synchronizing provider credentials into the database
 	CredentialSync CredentialSyncConfig `json:"credentialSync" koanf:"credentialSync"`
 	// Providers contains configuration for each storage provider
@@ -101,7 +99,7 @@ type ProviderConfig struct {
 // CredentialSyncConfig controls whether provider credentials are synchronized into the database
 type CredentialSyncConfig struct {
 	// Enabled indicates whether credential synchronization runs on startup
-	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 
 type Providers struct {
@@ -122,6 +120,8 @@ type Providers struct {
 type ProviderConfigs struct {
 	// Enabled indicates if this provider is enabled
 	Enabled bool `json:"enabled" koanf:"enabled"`
+	// EnsureAvailable enforces provider availability before completing server startup
+	EnsureAvailable bool `json:"ensureAvailable" koanf:"ensureAvailable" default:"false"`
 	// Region for cloud providers
 	Region string `json:"region" koanf:"region"`
 	// Bucket name for cloud providers

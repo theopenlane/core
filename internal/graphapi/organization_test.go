@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryOrganization(t *testing.T) {
@@ -176,10 +176,10 @@ func TestMutationCreateOrganization(t *testing.T) {
 	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.UserCtx, t)
 
 	// avatar file setup
-	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -211,8 +211,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			displayName:    gofakeit.LetterN(50),
 			orgDescription: gofakeit.HipsterSentence(10),
 			avatarFile: &graphql.Upload{
-				File:        avatarFile.File,
-				Filename:    avatarFile.Filename,
+				File:        avatarFile.RawFile,
+				Filename:    avatarFile.OriginalName,
 				Size:        avatarFile.Size,
 				ContentType: avatarFile.ContentType,
 			},
@@ -388,8 +388,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:    "invalid avatar file",
 			orgName: ulids.New().String(), // use ulid to ensure uniqueness
 			avatarFile: &graphql.Upload{
-				File:        invalidAvatarFile.File,
-				Filename:    invalidAvatarFile.Filename,
+				File:        invalidAvatarFile.RawFile,
+				Filename:    invalidAvatarFile.OriginalName,
 				Size:        invalidAvatarFile.Size,
 				ContentType: invalidAvatarFile.ContentType,
 			},
@@ -423,9 +423,9 @@ func TestMutationCreateOrganization(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 
@@ -580,10 +580,10 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
-	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -733,8 +733,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				Description: &descriptionUpdate,
 			},
 			avatarFile: &graphql.Upload{
-				File:        avatarFile.File,
-				Filename:    avatarFile.Filename,
+				File:        avatarFile.RawFile,
+				Filename:    avatarFile.OriginalName,
 				Size:        avatarFile.Size,
 				ContentType: avatarFile.ContentType,
 			},
@@ -784,8 +784,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			name:  "update avatar, invalid file",
 			orgID: org.ID,
 			avatarFile: &graphql.Upload{
-				File:        invalidAvatarFile.File,
-				Filename:    invalidAvatarFile.Filename,
+				File:        invalidAvatarFile.RawFile,
+				Filename:    invalidAvatarFile.OriginalName,
 				Size:        invalidAvatarFile.Size,
 				ContentType: invalidAvatarFile.ContentType,
 			},
@@ -829,9 +829,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 

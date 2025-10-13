@@ -13,7 +13,7 @@ import (
 
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/internal/objects"
 )
 
 var (
@@ -45,8 +45,8 @@ type Config struct {
 	Handler handlers.Handler
 	// SessionConfig manages sessions for users
 	SessionConfig *sessions.SessionConfig
-	// ObjectManager manages objects for the server
-	ObjectManager *objects.Objects
+	// StorageService manages objects for the server
+	StorageService *objects.Service
 }
 
 // Ensure that *Config implements ConfigProvider interface.

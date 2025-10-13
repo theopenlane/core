@@ -10,7 +10,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 func TestStripOperation(t *testing.T) {
@@ -69,7 +69,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 		fieldName   string
 		key         string
 		arguments   ast.ArgumentList
-		expected    *objects.FileUpload
+		expected    *pkgobjects.File
 		expectedErr error
 	}{
 		{
@@ -86,9 +86,11 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected: &objects.FileUpload{
+			expected: &pkgobjects.File{
 				CorrelatedObjectType: "User",
-				Key:                  "file",
+				FileMetadata: pkgobjects.FileMetadata{
+					Key: "file",
+				},
 			},
 			expectedErr: nil,
 		},
@@ -106,7 +108,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected:    &objects.FileUpload{},
+			expected:    &pkgobjects.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
@@ -114,7 +116,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 			fieldName:   "createUser",
 			key:         "file",
 			arguments:   ast.ArgumentList{},
-			expected:    &objects.FileUpload{},
+			expected:    &pkgobjects.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
@@ -131,7 +133,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected:    &objects.FileUpload{},
+			expected:    &pkgobjects.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 	}
@@ -147,8 +149,8 @@ func TestRetrieveObjectDetails(t *testing.T) {
 				},
 			}
 
-			upload := &objects.FileUpload{
-				Filename: "meow.txt",
+			upload := &pkgobjects.File{
+				OriginalName: "meow.txt",
 			}
 
 			result, err := retrieveObjectDetails(rctx, tt.key, upload)

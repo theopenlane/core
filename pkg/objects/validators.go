@@ -1,7 +1,6 @@
 package objects
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -18,7 +17,7 @@ func MimeTypeValidator(validMimeTypes ...string) ValidationFunc {
 			}
 		}
 
-		return fmt.Errorf("%w: %s", ErrUnsupportedMimeType, f.ContentType)
+		return ErrUnsupportedMimeType
 	}
 }
 

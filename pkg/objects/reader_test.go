@@ -10,13 +10,14 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNewBufferedReader(t *testing.T) {
 	data := []byte("test data")
 	br := NewBufferedReader(data)
 
-	assert.NotNil(t, br)
+	require.NotNil(t, br)
 	assert.Equal(t, int64(len(data)), br.Size())
 	assert.Equal(t, data, br.Data())
 }
@@ -61,8 +62,8 @@ func TestNewBufferedReaderFromReader(t *testing.T) {
 				assert.ErrorIs(t, err, tt.expectError)
 				assert.Nil(t, br)
 			} else {
-				assert.NoError(t, err)
-				assert.NotNil(t, br)
+				require.NoError(t, err)
+				require.NotNil(t, br)
 				assert.Equal(t, tt.expectSize, br.Size())
 			}
 		})
@@ -114,8 +115,8 @@ func TestNewBufferedReaderFromReaderWithLimit(t *testing.T) {
 				assert.ErrorIs(t, err, tt.expectError)
 				assert.Nil(t, br)
 			} else {
-				assert.NoError(t, err)
-				assert.NotNil(t, br)
+				require.NoError(t, err)
+				require.NotNil(t, br)
 				assert.Equal(t, tt.expectSize, br.Size())
 			}
 		})
@@ -129,7 +130,7 @@ func TestBufferedReaderRead(t *testing.T) {
 	buf := make([]byte, 5)
 	n, err := br.Read(buf)
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 5, n)
 	assert.Equal(t, []byte("hello"), buf)
 }
@@ -140,13 +141,13 @@ func TestBufferedReaderSeek(t *testing.T) {
 
 	// Seek to position 6
 	pos, err := br.Seek(6, io.SeekStart)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, int64(6), pos)
 
 	// Read from new position
 	buf := make([]byte, 5)
 	n, err := br.Read(buf)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 5, n)
 	assert.Equal(t, []byte("world"), buf)
 }
@@ -173,7 +174,7 @@ func TestBufferedReaderReset(t *testing.T) {
 	// Read again from start
 	buf2 := make([]byte, 5)
 	n, err := br.Read(buf2)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 5, n)
 	assert.Equal(t, []byte("hello"), buf2)
 }
@@ -208,7 +209,7 @@ func TestBufferedReaderNewReader(t *testing.T) {
 	// New reader should start from beginning
 	buf2 := make([]byte, 5)
 	n, err := newReader.Read(buf2)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 5, n)
 	assert.Equal(t, data, buf2)
 }
@@ -218,18 +219,18 @@ func TestBufferedReaderNewReadSeeker(t *testing.T) {
 	br := NewBufferedReader(data)
 
 	rs := br.NewReadSeeker()
-	assert.NotNil(t, rs)
+	require.NotNil(t, rs)
 
 	// Test Read
 	buf := make([]byte, 5)
 	n, err := rs.Read(buf)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 5, n)
 	assert.Equal(t, data, buf)
 
 	// Test Seek
 	pos, err := rs.Seek(0, io.SeekStart)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, int64(0), pos)
 }
 

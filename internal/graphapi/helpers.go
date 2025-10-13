@@ -23,9 +23,11 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/internal/objects/store"
+	"github.com/theopenlane/core/internal/objects/upload"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -50,7 +52,7 @@ func injectClient(db *ent.Client) graphql.OperationMiddleware {
 // injectFileUploader adds the file uploader as middleware to the graphql operation
 // this is used to handle file uploads to a storage backend, add the file to the file schema
 // and add the uploaded files to the echo context
-func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
+func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 	return func(ctx context.Context, next graphql.Resolver) (any, error) {
 		rctx := graphql.GetFieldContext(ctx)
 
@@ -67,39 +69,39 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		// get the uploads from the variables
-		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
-		uploads := []objects.FileUpload{}
-
-		// check for the input key in the request, this is used for uploads and shouldn't be processed
+		// Use consolidated parsing logic for GraphQL variables
 		inputKey := graphutils.GetInputFieldVariableName(ctx)
 
-		for k, v := range op.Variables {
-			ups := getUploadsFromRequest(v)
+		// Parse files from GraphQL variables using the consolidated parser
+		filesMap, err := pkgobjects.ParseFilesFromSource(op.Variables)
+		if err != nil {
+			return nil, err
+		}
 
-			for _, up := range ups {
-				fileUpload := &objects.FileUpload{
-					File:        up.File,
-					Filename:    up.Filename,
-					Size:        up.Size,
-					ContentType: up.ContentType,
+		// Convert to flat list, filtering out input key and adding object details
+		uploads := []pkgobjects.File{}
+		for k, files := range filesMap {
+			// skip the input key
+			if k == inputKey {
+				continue
+			}
+
+			for _, fileUpload := range files {
+				// Buffer the file in memory if small enough, otherwise leave as-is
+				if fileUpload.RawFile != nil {
+					buffered, err := pkgobjects.NewBufferedReaderFromReader(fileUpload.RawFile)
+					if err == nil {
+						fileUpload.RawFile = buffered
+					}
 				}
 
-				var err error
-
-				// skip the input key
-				if k == inputKey {
-					log.Debug().Str("file", up.Filename).Msg("skipping input key, this is for bulk upload")
-
-					continue
-				}
-
-				fileUpload, err = retrieveObjectDetails(rctx, k, fileUpload)
+				// Add object details using existing logic
+				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
 				if err != nil {
 					return nil, err
 				}
 
-				uploads = append(uploads, *fileUpload)
+				uploads = append(uploads, *enhanced)
 			}
 		}
 
@@ -108,8 +110,19 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		// handle the file uploads
-		ctx, err := u.FileUpload(ctx, uploads)
+		// Clean up any temporary files created by multipart form parser
+		ec, err := echocontext.EchoContextFromContext(ctx)
+		if err == nil && ec.Request().MultipartForm != nil {
+			multipartForm := ec.Request().MultipartForm
+
+			defer func() {
+				if removeErr := multipartForm.RemoveAll(); removeErr != nil {
+					log.Ctx(ctx).Warn().Err(removeErr).Msg("failed to clean multipart form")
+				}
+			}()
+		}
+
+		ctx, _, err = upload.HandleUploads(ctx, u, uploads)
 		if err != nil {
 			return nil, err
 		}
@@ -117,8 +130,7 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 		// add the uploaded files to the echo context if there are any
 		// this is useful for using other middleware that depends on the echo context
 		// and the uploaded files (e.g. body dump middleware)
-		ec, err := echocontext.EchoContextFromContext(ctx)
-		if err == nil {
+		if ec != nil {
 			ec.SetRequest(ec.Request().WithContext(ctx))
 		}
 
@@ -129,35 +141,12 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 		}
 
 		// add the file permissions before returning the field
-		if err := objmw.AddFilePermissions(ctx); err != nil {
+		if ctx, err = store.AddFilePermissions(ctx); err != nil {
 			return nil, err
 		}
 
 		return field, nil
 	}
-}
-
-// getUploadsFromRequest returns the uploads from the request
-// this is used to get the uploads from the variables in the request
-func getUploadsFromRequest(v any) []graphql.Upload {
-	switch v := v.(type) {
-	case []graphql.Upload:
-		return v
-	case graphql.Upload:
-		return []graphql.Upload{v}
-	case []interface{}:
-		uploads := []graphql.Upload{}
-
-		for _, i := range v {
-			if u, ok := i.(graphql.Upload); ok {
-				uploads = append(uploads, u)
-			}
-		}
-
-		return uploads
-	}
-
-	return nil
 }
 
 // withPool returns the existing pool or creates a new one if it does not exist to be used in queries
@@ -366,7 +355,7 @@ func checkAllowedAuthType(ctx context.Context) error {
 }
 
 // retrieveObjectDetails retrieves the object details from the field context
-func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objects.FileUpload) (*objects.FileUpload, error) {
+func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *pkgobjects.File) (*pkgobjects.File, error) {
 	// loop through the arguments in the request
 	for _, arg := range rctx.Field.Arguments {
 		// check if the argument is an upload
@@ -376,15 +365,21 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objec
 				objectID, ok := rctx.Args["id"].(string)
 				if ok {
 					upload.CorrelatedObjectID = objectID
+					upload.Parent.ID = objectID
 				}
 
-				upload.CorrelatedObjectType = stripOperation(rctx.Field.Name)
-				upload.Key = arg.Name
+				objectType := stripOperation(rctx.Field.Name)
+				upload.CorrelatedObjectType = objectType
+				upload.Parent.Type = objectType
+				upload.FieldName = arg.Name
+				upload.Key = arg.Name // Also set Key in FileMetadata for backwards compatibility
 
 				return upload, nil
 			}
 		}
 	}
+
+	log.Debug().Str("key", key).Msg("unable to determine object type - no matching upload argument found")
 
 	return upload, ErrUnableToDetermineObjectType
 }
@@ -406,33 +401,21 @@ func argIsUpload(arg *ast.Argument) bool {
 	return false
 }
 
-// stripOperation strips the operation from the field name, e.g. updateUser becomes user
+// stripOperation strips the operation from the field name and converts to snake_case
+// e.g. updateUser becomes user, createTrustCenterDoc becomes trust_center_doc
 func stripOperation(field string) string {
 	operations := []string{"create", "update", "delete", "get"}
 
 	for _, op := range operations {
 		if strings.HasPrefix(field, op) {
-			return strings.ReplaceAll(field, op, "")
+			// Strip the operation prefix
+			stripped := strings.ReplaceAll(field, op, "")
+			// Convert camelCase to snake_case
+			return lo.SnakeCase(stripped)
 		}
 	}
 
-	return field
-}
-
-// convertToObject converts an object to a specific type
-func convertToObject[J any](obj any) (*J, error) {
-	jsonBytes, err := json.Marshal(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	var result J
-	err = json.Unmarshal(jsonBytes, &result)
-	if err != nil {
-		return nil, err
-	}
-
-	return &result, nil
+	return lo.SnakeCase(field)
 }
 
 // isEmpty checks if the given interface is empty
@@ -477,4 +460,20 @@ func isEmptySlice(x any) bool {
 	default:
 		return false
 	}
+}
+
+// convertToObject converts an object to a specific type
+func convertToObject[J any](obj any) (*J, error) {
+	jsonBytes, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+
+	var result J
+	err = json.Unmarshal(jsonBytes, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
 }

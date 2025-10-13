@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gabriel-vasile/mimetype"
+	"github.com/unidoc/unioffice/document"
 	"gopkg.in/yaml.v3"
 )
 
@@ -17,8 +19,19 @@ const (
 	MIMEDetectionBufferSize = 512
 )
 
-// DetectContentType detects the MIME type of the provided reader using gabriel-vasile/mimetype library
+// DetectContentType is a helper that detects the MIME type of an io.ReadSeeker, returning application/octet-stream for empty inputs
 func DetectContentType(reader io.ReadSeeker) (string, error) {
+	// If the reader is empty, return a safe default
+	if _, err := reader.Seek(0, io.SeekEnd); err == nil {
+		if size, err := reader.Seek(0, io.SeekCurrent); err == nil && size == 0 {
+			// Reset and return default for empty content
+			if _, err := reader.Seek(0, io.SeekStart); err != nil {
+				return "", err
+			}
+			return "application/octet-stream", nil
+		}
+	}
+
 	// Seek to beginning
 	if _, err := reader.Seek(0, io.SeekStart); err != nil {
 		return "", err
@@ -62,10 +75,41 @@ func ParseDocument(reader io.Reader, mimeType string) (any, error) {
 
 	case strings.Contains(mimeType, "text/plain"):
 		return string(data), nil
+	case strings.Contains(mimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"):
+		text, err := parseDocx(data)
+		if err != nil {
+			return nil, err
+		}
 
+		return text, nil
 	default:
 		return data, nil
 	}
+}
+
+// parseDocx extracts and returns the text content from a DOCX file
+func parseDocx(content []byte) (string, error) {
+	reader := bytes.NewReader(content)
+
+	doc, err := document.Read(reader, int64(len(content)))
+	if err != nil {
+		return "", fmt.Errorf("failed to read docx file: %w", err) // nolint:err113
+	}
+
+	defer doc.Close()
+
+	var w strings.Builder
+
+	for _, para := range doc.Paragraphs() {
+		for _, run := range para.Runs() {
+			w.WriteString(run.Text())
+			w.WriteString(" ")
+		}
+
+		w.WriteString("\n")
+	}
+
+	return strings.TrimSpace(w.String()), nil
 }
 
 // NewUploadFile creates a new File from a file path

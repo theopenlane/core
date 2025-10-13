@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -138,14 +138,14 @@ func createValidation(ctx context.Context, client *openlaneclient.OpenlaneClient
 
 	// parse the files to upload
 	for _, file := range files {
-		u, err := objects.NewUploadFile(file)
+		u, err := storage.NewUploadFile(file)
 		if err != nil {
 			return input, nil, err
 		}
 
 		uploads = append(uploads, &graphql.Upload{
-			File:        u.File,
-			Filename:    u.Filename,
+			File:        u.RawFile,
+			Filename:    u.OriginalName,
 			Size:        u.Size,
 			ContentType: u.ContentType,
 		})

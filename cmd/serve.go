@@ -142,7 +142,7 @@ func serve(ctx context.Context) error {
 		ent.EntConfig(&so.Config.Settings.EntConfig),
 		ent.Emailer(&so.Config.Settings.Email),
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
-		ent.ObjectManager(so.Config.ObjectManager),
+		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
 		ent.Windmill(so.Config.Handler.Windmill),
 		ent.PondPool(pool),

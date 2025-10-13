@@ -10,7 +10,7 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -84,14 +84,14 @@ func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, *grap
 	var fileUpload *graphql.Upload
 	filePath := cmd.Config.String("file")
 	if filePath != "" {
-		u, err := objects.NewUploadFile(filePath)
+		u, err := storage.NewUploadFile(filePath)
 		if err != nil {
 			return "", input, nil, nil, err
 		}
 
 		fileUpload = &graphql.Upload{
-			File:        u.File,
-			Filename:    u.Filename,
+			File:        u.RawFile,
+			Filename:    u.OriginalName,
 			Size:        u.Size,
 			ContentType: u.ContentType,
 		}
@@ -100,14 +100,14 @@ func updateValidation() (string, openlaneclient.UpdateTrustCenterDocInput, *grap
 	var watermarkedFileUpload *graphql.Upload
 	watermarkedFilePath := cmd.Config.String("watermarked-file")
 	if watermarkedFilePath != "" {
-		u, err := objects.NewUploadFile(watermarkedFilePath)
+		u, err := storage.NewUploadFile(watermarkedFilePath)
 		if err != nil {
 			return "", input, nil, nil, err
 		}
 
 		watermarkedFileUpload = &graphql.Upload{
-			File:        u.File,
-			Filename:    u.Filename,
+			File:        u.RawFile,
+			Filename:    u.OriginalName,
 			Size:        u.Size,
 			ContentType: u.ContentType,
 		}

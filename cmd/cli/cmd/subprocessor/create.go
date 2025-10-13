@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -54,14 +54,14 @@ func createValidation() (input openlaneclient.CreateSubprocessorInput, logoFile 
 
 	logoFileLoc := cmd.Config.String("logo-file")
 	if logoFileLoc != "" {
-		file, err := objects.NewUploadFile(logoFileLoc)
+		file, err := storage.NewUploadFile(logoFileLoc)
 		if err != nil {
 			return input, nil, err
 		}
 
 		logoFile = &graphql.Upload{
-			File:        file.File,
-			Filename:    file.Filename,
+			File:        file.RawFile,
+			Filename:    file.OriginalName,
 			Size:        file.Size,
 			ContentType: file.ContentType,
 		}
