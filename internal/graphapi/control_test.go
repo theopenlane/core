@@ -9,12 +9,14 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -1028,13 +1030,13 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
-	validFile, err := objects.NewUploadFile("testdata/uploads/clone.csv")
+	validFile, err := storage.NewUploadFile("testdata/uploads/clone.csv")
 	assert.NilError(t, err)
 
-	missingControlsFile, err := objects.NewUploadFile("testdata/uploads/all_missing_clone.csv")
+	missingControlsFile, err := storage.NewUploadFile("testdata/uploads/all_missing_clone.csv")
 	assert.NilError(t, err)
 
-	updateControlsFile, err := objects.NewUploadFile("testdata/uploads/update.csv")
+	updateControlsFile, err := storage.NewUploadFile("testdata/uploads/update.csv")
 	assert.NilError(t, err)
 
 	// create the standard and controls to be cloned
@@ -1055,8 +1057,8 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		{
 			name: "happy path, clone controls from csv",
 			fileInput: graphql.Upload{
-				File:        validFile.File,
-				Filename:    validFile.Filename,
+				File:        validFile.RawFile,
+				Filename:    validFile.OriginalName,
 				Size:        validFile.Size,
 				ContentType: validFile.ContentType,
 			},
@@ -1067,8 +1069,8 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		{
 			name: "update existing controls, no new controls cloned",
 			fileInput: graphql.Upload{
-				File:        updateControlsFile.File,
-				Filename:    updateControlsFile.Filename,
+				File:        updateControlsFile.RawFile,
+				Filename:    updateControlsFile.OriginalName,
 				Size:        updateControlsFile.Size,
 				ContentType: updateControlsFile.ContentType,
 			},
@@ -1079,8 +1081,8 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		{
 			name: "controls missing from system, no controls cloned",
 			fileInput: graphql.Upload{
-				File:        missingControlsFile.File,
-				Filename:    missingControlsFile.Filename,
+				File:        missingControlsFile.RawFile,
+				Filename:    missingControlsFile.OriginalName,
 				Size:        missingControlsFile.Size,
 				ContentType: missingControlsFile.ContentType,
 			},
@@ -1111,7 +1113,7 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 
 				switch control.RefCode {
 				case "AA-1":
-					if tc.fileInput.Filename == updateControlsFile.Filename {
+					if tc.fileInput.Filename == updateControlsFile.OriginalName {
 						assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
 					} else {
 						assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
@@ -1126,9 +1128,9 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				assert.Check(t, control.ImplementationGuidance != nil)
 
 				switch tc.fileInput.Filename {
-				case updateControlsFile.Filename:
+				case updateControlsFile.OriginalName:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 2)
-				case validFile.Filename:
+				case validFile.OriginalName:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 1)
 				}
 

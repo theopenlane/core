@@ -52,6 +52,8 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
+				// This query is intentionally being modified to return WithIntegrations and WithSecrets so that
+				// we can pass the related ID's to the object manager at such a time when they are used to also perform storage
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
 					Select(
 						file.FieldID,
@@ -85,6 +87,7 @@ func HookFileDelete() ent.Hook {
 							},
 						}
 
+						// These ID's arent yet used but we should set them now so that when we do use them, they are available
 						// Set integration ID from edges
 						for _, integration := range f.Edges.Integrations {
 							storageFile.ProviderHints.IntegrationID = integration.ID
@@ -95,7 +98,6 @@ func HookFileDelete() ent.Hook {
 							storageFile.ProviderHints.HushID = secret.ID
 						}
 
-						// Convert metadata from map[string]interface{} to map[string]string
 						if f.Metadata != nil {
 							metadata := make(map[string]string)
 							for k, v := range f.Metadata {

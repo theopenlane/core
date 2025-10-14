@@ -141,7 +141,6 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 	// Fallback: Download the uploaded file contents using the object storage service and parse into details
 	content, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
 		FileName: file[0].OriginalName,
-		//		ContentType: file[0].ContentType,
 	})
 	if err != nil {
 		return err
@@ -166,76 +165,6 @@ const defaultImportTimeout = time.Second * 10
 var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
-
-// importURLToSchema is a helper that fetches content from a URL, detects its MIME type, parses it and writes
-// the sanitized content into the mutation details, recording the URL used
-//func importURLToSchema(m importSchemaMutation) error {
-//	downloadURL, exists := m.URL()
-//	if !exists {
-//		return nil
-//	}
-//
-//	_, err := url.Parse(downloadURL)
-//	if err != nil {
-//		return err
-//	}
-//
-//	ctx, cancel := context.WithTimeout(context.Background(), defaultImportTimeout)
-//	defer cancel()
-//
-//	req, err := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)
-//	if err != nil {
-//		return err
-//	}
-//
-//	resp, err := client.Do(req)
-//	if err != nil {
-//		return err
-//	}
-//
-//	defer resp.Body.Close()
-//
-//	if resp.StatusCode != http.StatusOK {
-//		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
-//	}
-//
-//	// Read a bounded amount of data based on configured import size to prevent memory overuse
-//	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
-//
-//	buf, err := io.ReadAll(reader)
-//	if err != nil {
-//		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
-//	}
-//
-//	// Detect MIME using storage helper with fallback to header to handle servers with incorrect content type
-//	mimeType := resp.Header.Get("Content-Type")
-//	if detected, derr := storage.DetectContentType(bytes.NewReader(buf)); derr == nil && detected != "" {
-//		mimeType = detected
-//	} else {
-//		mimeType = strings.ToLower(strings.TrimSpace(mimeType))
-//	}
-//
-//	// Parse the document using the detected MIME type
-//	parsed, err := storage.ParseDocument(bytes.NewReader(buf), mimeType)
-//	if err != nil {
-//		return fmt.Errorf("failed to parse document: %w", err)
-//	}
-//
-//	// Convert structured results into a string representation for details
-//	var detailsStr string
-//	switch v := parsed.(type) {
-//	case string:
-//		detailsStr = v
-//	default:
-//		detailsStr = fmt.Sprintf("%v", v)
-//	}
-//
-//	p := bluemonday.UGCPolicy()
-//	m.SetURL(downloadURL)
-//	m.SetDetails(p.Sanitize(detailsStr))
-//
-//	return nil
-//}
 
 func importURLToSchema(m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
@@ -307,6 +236,8 @@ func detectMimeTypeFromContent(content []byte, fallbackMimeType string) string {
 	return mimeType
 }
 
+// ParseDocument parses a document based on its MIME type
+// TODO: Reconcile with pkg/objects/storage/utils.go - I'm leaving this as-is for now for sanity
 func ParseDocument(content []byte, mimeType string) (string, error) {
 	if len(content) == 0 {
 		return "", errEmptyContentProvided
