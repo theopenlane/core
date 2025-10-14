@@ -119,7 +119,7 @@ type Providers struct {
 // This is structured to allow easy extension for additional providers in the future
 type ProviderConfigs struct {
 	// Enabled indicates if this provider is enabled
-	Enabled bool `json:"enabled" koanf:"enabled"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// EnsureAvailable enforces provider availability before completing server startup
 	EnsureAvailable bool `json:"ensureAvailable" koanf:"ensureAvailable" default:"false"`
 	// Region for cloud providers

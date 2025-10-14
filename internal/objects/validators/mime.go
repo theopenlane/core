@@ -1,7 +1,6 @@
 package validators
 
 import (
-	logpkg "github.com/rs/zerolog/log"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -44,8 +43,6 @@ var validMimeTypes = map[string][]string{
 
 // MimeTypeValidator returns a storage.ValidationFunc enforcing the configured mime-type set per form field.
 func mimeTypeValidator(f storage.File) error {
-	log := logpkg.With().Str("field", f.FieldName).Str("content_type", f.ContentType).Logger()
-	log.Debug().Msg("mime validator input")
 	if mimes, ok := validMimeTypes[f.FieldName]; ok {
 		return pkgobjects.MimeTypeValidator(mimes...)(f)
 	}

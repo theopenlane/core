@@ -22,7 +22,7 @@ import (
 // in subsequent parts of the request
 // this is different than the `key` in the multipart form, which is the form field name that the file was uploaded with
 type FileContextKey struct {
-    Files Files
+	Files Files
 }
 
 // FileSource represents any source that can provide file uploads.
@@ -91,21 +91,6 @@ func extractUploads(v any) []graphql.Upload {
 	switch val := v.(type) {
 	case []graphql.Upload:
 		return val
-	case []*graphql.Upload:
-		// Handle slice of pointers
-		uploads := make([]graphql.Upload, 0, len(val))
-		for _, upload := range val {
-			if upload != nil {
-				uploads = append(uploads, *upload)
-			}
-		}
-		return uploads
-	case *graphql.Upload:
-		// Handle pointer to single upload
-		if val != nil {
-			return []graphql.Upload{*val}
-		}
-		return nil
 	case graphql.Upload:
 		return []graphql.Upload{val}
 	case []any:
@@ -113,8 +98,6 @@ func extractUploads(v any) []graphql.Upload {
 		for _, item := range val {
 			if upload, ok := item.(graphql.Upload); ok {
 				uploads = append(uploads, upload)
-			} else if uploadPtr, ok := item.(*graphql.Upload); ok && uploadPtr != nil {
-				uploads = append(uploads, *uploadPtr)
 			}
 		}
 		return uploads
@@ -143,26 +126,26 @@ func ProcessFilesForMutation[T Mutation](ctx context.Context, mutation T, key st
 		return ctx, nil
 	}
 
-    mutationType := mutation.Type()
-    if len(parentType) > 0 {
-        mutationType = parentType[0] // Allow override of parent type
-    }
+	mutationType := mutation.Type()
+	if len(parentType) > 0 {
+		mutationType = parentType[0] // Allow override of parent type
+	}
 
-    // Set the parent ID and type for the file(s)
-    for i, f := range files {
-        // this should always be true, but check just in case
-        if f.FieldName == key {
-            id, _ := mutation.ID()
-            // Set parent information used by tuple writer
-            files[i].Parent.ID = id
-            files[i].Parent.Type = mutationType
-            // Also set correlated object information used by persistence to derive org owner
-            files[i].CorrelatedObjectID = id
-            files[i].CorrelatedObjectType = mutation.Type()
+	// Set the parent ID and type for the file(s)
+	for i, f := range files {
+		// this should always be true, but check just in case
+		if f.FieldName == key {
+			id, _ := mutation.ID()
+			// Set parent information used by tuple writer
+			files[i].Parent.ID = id
+			files[i].Parent.Type = mutationType
+			// Also set correlated object information used by persistence to derive org owner
+			files[i].CorrelatedObjectID = id
+			files[i].CorrelatedObjectType = mutation.Type()
 
-            ctx = UpdateFileInContextByKey(ctx, key, files[i])
-        }
-    }
+			ctx = UpdateFileInContextByKey(ctx, key, files[i])
+		}
+	}
 
 	return ctx, nil
 }

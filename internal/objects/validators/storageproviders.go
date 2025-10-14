@@ -1,12 +1,12 @@
 package validators
 
 import (
-    "context"
-    "errors"
-    "fmt"
-    "os"
-    "slices"
-    "time"
+	"context"
+	"errors"
+	"fmt"
+	"os"
+	"slices"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -21,13 +21,13 @@ import (
 )
 
 const (
-    StorageValidationTimeout     = 10 * time.Second
-    StorageCredentialSyncTimeout = 10 * time.Second
+	StorageValidationTimeout     = 10 * time.Second
+	StorageCredentialSyncTimeout = 10 * time.Second
 )
 
 var (
-    // ErrBucketNotFound is returned when a provider does not contain the expected bucket
-    ErrBucketNotFound = errors.New("bucket not found")
+	// ErrBucketNotFound is returned when a provider does not contain the expected bucket
+	ErrBucketNotFound = errors.New("bucket not found")
 )
 
 // ValidateConfiguredStorageProviders checks connectivity and configuration of all enabled storage providers
@@ -127,6 +127,7 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 	return errs
 }
 
+// validateDiskProvider checks connectivity to the disk provider and the existence of the specified bucket (directory)
 func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs) error {
 	if !cfg.Enabled {
 		return nil
@@ -154,6 +155,7 @@ func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs) erro
 	return validateBuckets("disk", provider, bucket)
 }
 
+// validateS3Provider checks connectivity to the S3 provider and the existence of the specified bucket
 func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error {
 	if !cfg.Enabled {
 		return nil
@@ -181,6 +183,7 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	return validateBuckets("s3", provider, cfg.Bucket)
 }
 
+// validateR2Provider checks connectivity to Cloudflare R2 and the existence of the specified bucket
 func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error {
 	if !cfg.Enabled {
 		return nil
@@ -203,6 +206,7 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	return validateBuckets("r2", provider, cfg.Bucket)
 }
 
+// validateDatabaseProvider checks that the database provider can access the File table
 func validateDatabaseProvider(ctx context.Context, cfg storage.ProviderConfigs) error {
 	if !cfg.Enabled {
 		return nil
@@ -222,6 +226,7 @@ func validateDatabaseProvider(ctx context.Context, cfg storage.ProviderConfigs) 
 	return nil
 }
 
+// validateBuckets checks that the expected bucket exists in the provider's list of buckets
 func validateBuckets(providerName string, provider storagetypes.Provider, expectedBucket string) error {
 	buckets, err := provider.ListBuckets()
 	if err != nil {
@@ -230,13 +235,14 @@ func validateBuckets(providerName string, provider storagetypes.Provider, expect
 
 	log.Info().Str("provider", providerName).Strs("available_buckets", buckets).Msg("storage provider connectivity verified")
 
-    if expectedBucket != "" && !slices.Contains(buckets, expectedBucket) {
-        return fmt.Errorf("%w: provider %s bucket %s", ErrBucketNotFound, providerName, expectedBucket)
-    }
+	if expectedBucket != "" && !slices.Contains(buckets, expectedBucket) {
+		return fmt.Errorf("%w: provider %s bucket %s", ErrBucketNotFound, providerName, expectedBucket)
+	}
 
 	return nil
 }
 
+// ensureDirectoryExists creates the directory at path if it does not already exist
 func ensureDirectoryExists(path string) error {
 	if path == "" {
 		return nil
@@ -245,6 +251,7 @@ func ensureDirectoryExists(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
+// StorageAvailabilityCheck returns a handlers.CheckFunc that validates storage provider availability
 func StorageAvailabilityCheck(cfgProvider func() storage.ProviderConfig) handlers.CheckFunc {
 	return func(ctx context.Context) error {
 		errs := ValidateConfiguredStorageProviders(ctx, cfgProvider())

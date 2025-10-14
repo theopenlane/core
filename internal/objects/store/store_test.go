@@ -84,3 +84,15 @@ func TestTxHelpersReturnClients(t *testing.T) {
 
 	require.Equal(t, fileClient, txFileClientFromContext(ent.NewContext(context.Background(), client)))
 }
+
+func TestAddFilePermissionsNoFiles(t *testing.T) {
+	ctx := context.Background()
+	updated, err := AddFilePermissions(ctx)
+	require.NoError(t, err)
+	require.Equal(t, ctx, updated)
+}
+
+func TestTxClientFromContextEmpty(t *testing.T) {
+	require.Nil(t, txClientFromContext(context.Background()))
+	require.Nil(t, txFileClientFromContext(context.Background()))
+}

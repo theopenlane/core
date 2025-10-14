@@ -405,7 +405,7 @@ coreConfiguration:
       # -- S3 provider configuration
       s3:
         # -- Enabled indicates if this provider is enabled
-        enabled: false  # @schema type:boolean
+        enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureAvailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
@@ -431,7 +431,7 @@ coreConfiguration:
       # -- CloudflareR2 provider configuration
       cloudflareR2:
         # -- Enabled indicates if this provider is enabled
-        enabled: false  # @schema type:boolean
+        enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureAvailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
@@ -457,7 +457,7 @@ coreConfiguration:
       # -- GCS provider configuration
       gcs:
         # -- Enabled indicates if this provider is enabled
-        enabled: false  # @schema type:boolean
+        enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureAvailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
@@ -483,7 +483,7 @@ coreConfiguration:
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
-        enabled: false  # @schema type:boolean
+        enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureAvailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
@@ -509,7 +509,7 @@ coreConfiguration:
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
-        enabled: false  # @schema type:boolean
+        enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureAvailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers

@@ -70,6 +70,33 @@ func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
 	require.NotNil(t, opts.ProviderHints)
 }
 
+func TestBuildUploadOptionsNilFile(t *testing.T) {
+	opts := BuildUploadOptions(context.Background(), nil)
+	require.NotNil(t, opts)
+	require.Empty(t, opts.FileName)
+	require.Empty(t, opts.ContentType)
+}
+
+func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
+	file := &pkgobjects.File{
+		OriginalName: "photo.jpg",
+		FieldName:    "avatarFile",
+		FileMetadata: pkgobjects.FileMetadata{ContentType: "image/jpeg"},
+	}
+
+	opts := BuildUploadOptions(context.Background(), file)
+	require.Equal(t, "image/jpeg", opts.ContentType)
+	require.Equal(t, "image/jpeg", file.ContentType)
+}
+
+func TestHandleUploadsNoFiles(t *testing.T) {
+	ctx := context.Background()
+	newCtx, files, err := HandleUploads(ctx, nil, nil)
+	require.NoError(t, err)
+	require.Equal(t, ctx, newCtx)
+	require.Nil(t, files)
+}
+
 func TestMergeUploadedFileMetadata(t *testing.T) {
 	src := pkgobjects.File{
 		FieldName:            "avatar",
