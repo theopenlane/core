@@ -58,6 +58,10 @@ type TrustCenterSetting struct {
 	BackgroundColor string `json:"background_color,omitempty"`
 	// accent/brand color for the trust center
 	AccentColor string `json:"accent_color,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -130,7 +134,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -273,6 +277,18 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.AccentColor = value.String
 			}
+		case trustcentersetting.FieldSecondaryBackgroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field secondary_background_color", values[i])
+			} else if value.Valid {
+				_m.SecondaryBackgroundColor = value.String
+			}
+		case trustcentersetting.FieldSecondaryForegroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field secondary_foreground_color", values[i])
+			} else if value.Valid {
+				_m.SecondaryForegroundColor = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -393,6 +409,12 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("accent_color=")
 	builder.WriteString(_m.AccentColor)
+	builder.WriteString(", ")
+	builder.WriteString("secondary_background_color=")
+	builder.WriteString(_m.SecondaryBackgroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("secondary_foreground_color=")
+	builder.WriteString(_m.SecondaryForegroundColor)
 	builder.WriteByte(')')
 	return builder.String()
 }

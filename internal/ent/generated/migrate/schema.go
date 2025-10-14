@@ -5109,6 +5109,8 @@ var (
 		{Name: "foreground_color", Type: field.TypeString, Nullable: true},
 		{Name: "background_color", Type: field.TypeString, Nullable: true},
 		{Name: "accent_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
@@ -5121,19 +5123,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_trust_centers_setting",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[17]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[19]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[18]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[20]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_settings_files_favicon_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[19]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5142,7 +5144,7 @@ var (
 			{
 				Name:    "trustcentersetting_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[17]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5174,6 +5176,8 @@ var (
 		{Name: "foreground_color", Type: field.TypeString, Nullable: true},
 		{Name: "background_color", Type: field.TypeString, Nullable: true},
 		{Name: "accent_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{

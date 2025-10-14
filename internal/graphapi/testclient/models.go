@@ -6452,11 +6452,15 @@ type CreateTrustCenterSettingInput struct {
 	// background color for the trust center
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent/brand color for the trust center
-	AccentColor   *string  `json:"accentColor,omitempty"`
-	TrustCenterID *string  `json:"trustCenterID,omitempty"`
-	FileIDs       []string `json:"fileIDs,omitempty"`
-	LogoFileID    *string  `json:"logoFileID,omitempty"`
-	FaviconFileID *string  `json:"faviconFileID,omitempty"`
+	AccentColor *string `json:"accentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor *string  `json:"secondaryForegroundColor,omitempty"`
+	TrustCenterID            *string  `json:"trustCenterID,omitempty"`
+	FileIDs                  []string `json:"fileIDs,omitempty"`
+	LogoFileID               *string  `json:"logoFileID,omitempty"`
+	FaviconFileID            *string  `json:"faviconFileID,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -29989,11 +29993,15 @@ type TrustCenterSetting struct {
 	// background color for the trust center
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent/brand color for the trust center
-	AccentColor *string         `json:"accentColor,omitempty"`
-	TrustCenter *TrustCenter    `json:"trustCenter,omitempty"`
-	Files       *FileConnection `json:"files"`
-	LogoFile    *File           `json:"logoFile,omitempty"`
-	FaviconFile *File           `json:"faviconFile,omitempty"`
+	AccentColor *string `json:"accentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor *string         `json:"secondaryForegroundColor,omitempty"`
+	TrustCenter              *TrustCenter    `json:"trustCenter,omitempty"`
+	Files                    *FileConnection `json:"files"`
+	LogoFile                 *File           `json:"logoFile,omitempty"`
+	FaviconFile              *File           `json:"faviconFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -30069,6 +30077,10 @@ type TrustCenterSettingHistory struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent/brand color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
 }
 
 func (TrustCenterSettingHistory) IsNode() {}
@@ -30399,6 +30411,38 @@ type TrustCenterSettingHistoryWhereInput struct {
 	AccentColorNotNil       *bool    `json:"accentColorNotNil,omitempty"`
 	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
 	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
+	// secondary_background_color field predicates
+	SecondaryBackgroundColor             *string  `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryBackgroundColorNeq          *string  `json:"secondaryBackgroundColorNEQ,omitempty"`
+	SecondaryBackgroundColorIn           []string `json:"secondaryBackgroundColorIn,omitempty"`
+	SecondaryBackgroundColorNotIn        []string `json:"secondaryBackgroundColorNotIn,omitempty"`
+	SecondaryBackgroundColorGt           *string  `json:"secondaryBackgroundColorGT,omitempty"`
+	SecondaryBackgroundColorGte          *string  `json:"secondaryBackgroundColorGTE,omitempty"`
+	SecondaryBackgroundColorLt           *string  `json:"secondaryBackgroundColorLT,omitempty"`
+	SecondaryBackgroundColorLte          *string  `json:"secondaryBackgroundColorLTE,omitempty"`
+	SecondaryBackgroundColorContains     *string  `json:"secondaryBackgroundColorContains,omitempty"`
+	SecondaryBackgroundColorHasPrefix    *string  `json:"secondaryBackgroundColorHasPrefix,omitempty"`
+	SecondaryBackgroundColorHasSuffix    *string  `json:"secondaryBackgroundColorHasSuffix,omitempty"`
+	SecondaryBackgroundColorIsNil        *bool    `json:"secondaryBackgroundColorIsNil,omitempty"`
+	SecondaryBackgroundColorNotNil       *bool    `json:"secondaryBackgroundColorNotNil,omitempty"`
+	SecondaryBackgroundColorEqualFold    *string  `json:"secondaryBackgroundColorEqualFold,omitempty"`
+	SecondaryBackgroundColorContainsFold *string  `json:"secondaryBackgroundColorContainsFold,omitempty"`
+	// secondary_foreground_color field predicates
+	SecondaryForegroundColor             *string  `json:"secondaryForegroundColor,omitempty"`
+	SecondaryForegroundColorNeq          *string  `json:"secondaryForegroundColorNEQ,omitempty"`
+	SecondaryForegroundColorIn           []string `json:"secondaryForegroundColorIn,omitempty"`
+	SecondaryForegroundColorNotIn        []string `json:"secondaryForegroundColorNotIn,omitempty"`
+	SecondaryForegroundColorGt           *string  `json:"secondaryForegroundColorGT,omitempty"`
+	SecondaryForegroundColorGte          *string  `json:"secondaryForegroundColorGTE,omitempty"`
+	SecondaryForegroundColorLt           *string  `json:"secondaryForegroundColorLT,omitempty"`
+	SecondaryForegroundColorLte          *string  `json:"secondaryForegroundColorLTE,omitempty"`
+	SecondaryForegroundColorContains     *string  `json:"secondaryForegroundColorContains,omitempty"`
+	SecondaryForegroundColorHasPrefix    *string  `json:"secondaryForegroundColorHasPrefix,omitempty"`
+	SecondaryForegroundColorHasSuffix    *string  `json:"secondaryForegroundColorHasSuffix,omitempty"`
+	SecondaryForegroundColorIsNil        *bool    `json:"secondaryForegroundColorIsNil,omitempty"`
+	SecondaryForegroundColorNotNil       *bool    `json:"secondaryForegroundColorNotNil,omitempty"`
+	SecondaryForegroundColorEqualFold    *string  `json:"secondaryForegroundColorEqualFold,omitempty"`
+	SecondaryForegroundColorContainsFold *string  `json:"secondaryForegroundColorContainsFold,omitempty"`
 }
 
 // Ordering options for TrustCenterSetting connections
@@ -30685,6 +30729,38 @@ type TrustCenterSettingWhereInput struct {
 	AccentColorNotNil       *bool    `json:"accentColorNotNil,omitempty"`
 	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
 	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
+	// secondary_background_color field predicates
+	SecondaryBackgroundColor             *string  `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryBackgroundColorNeq          *string  `json:"secondaryBackgroundColorNEQ,omitempty"`
+	SecondaryBackgroundColorIn           []string `json:"secondaryBackgroundColorIn,omitempty"`
+	SecondaryBackgroundColorNotIn        []string `json:"secondaryBackgroundColorNotIn,omitempty"`
+	SecondaryBackgroundColorGt           *string  `json:"secondaryBackgroundColorGT,omitempty"`
+	SecondaryBackgroundColorGte          *string  `json:"secondaryBackgroundColorGTE,omitempty"`
+	SecondaryBackgroundColorLt           *string  `json:"secondaryBackgroundColorLT,omitempty"`
+	SecondaryBackgroundColorLte          *string  `json:"secondaryBackgroundColorLTE,omitempty"`
+	SecondaryBackgroundColorContains     *string  `json:"secondaryBackgroundColorContains,omitempty"`
+	SecondaryBackgroundColorHasPrefix    *string  `json:"secondaryBackgroundColorHasPrefix,omitempty"`
+	SecondaryBackgroundColorHasSuffix    *string  `json:"secondaryBackgroundColorHasSuffix,omitempty"`
+	SecondaryBackgroundColorIsNil        *bool    `json:"secondaryBackgroundColorIsNil,omitempty"`
+	SecondaryBackgroundColorNotNil       *bool    `json:"secondaryBackgroundColorNotNil,omitempty"`
+	SecondaryBackgroundColorEqualFold    *string  `json:"secondaryBackgroundColorEqualFold,omitempty"`
+	SecondaryBackgroundColorContainsFold *string  `json:"secondaryBackgroundColorContainsFold,omitempty"`
+	// secondary_foreground_color field predicates
+	SecondaryForegroundColor             *string  `json:"secondaryForegroundColor,omitempty"`
+	SecondaryForegroundColorNeq          *string  `json:"secondaryForegroundColorNEQ,omitempty"`
+	SecondaryForegroundColorIn           []string `json:"secondaryForegroundColorIn,omitempty"`
+	SecondaryForegroundColorNotIn        []string `json:"secondaryForegroundColorNotIn,omitempty"`
+	SecondaryForegroundColorGt           *string  `json:"secondaryForegroundColorGT,omitempty"`
+	SecondaryForegroundColorGte          *string  `json:"secondaryForegroundColorGTE,omitempty"`
+	SecondaryForegroundColorLt           *string  `json:"secondaryForegroundColorLT,omitempty"`
+	SecondaryForegroundColorLte          *string  `json:"secondaryForegroundColorLTE,omitempty"`
+	SecondaryForegroundColorContains     *string  `json:"secondaryForegroundColorContains,omitempty"`
+	SecondaryForegroundColorHasPrefix    *string  `json:"secondaryForegroundColorHasPrefix,omitempty"`
+	SecondaryForegroundColorHasSuffix    *string  `json:"secondaryForegroundColorHasSuffix,omitempty"`
+	SecondaryForegroundColorIsNil        *bool    `json:"secondaryForegroundColorIsNil,omitempty"`
+	SecondaryForegroundColorNotNil       *bool    `json:"secondaryForegroundColorNotNil,omitempty"`
+	SecondaryForegroundColorEqualFold    *string  `json:"secondaryForegroundColorEqualFold,omitempty"`
+	SecondaryForegroundColorContainsFold *string  `json:"secondaryForegroundColorContainsFold,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -34365,17 +34441,23 @@ type UpdateTrustCenterSettingInput struct {
 	BackgroundColor      *string `json:"backgroundColor,omitempty"`
 	ClearBackgroundColor *bool   `json:"clearBackgroundColor,omitempty"`
 	// accent/brand color for the trust center
-	AccentColor      *string  `json:"accentColor,omitempty"`
-	ClearAccentColor *bool    `json:"clearAccentColor,omitempty"`
-	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter *bool    `json:"clearTrustCenter,omitempty"`
-	AddFileIDs       []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs    []string `json:"removeFileIDs,omitempty"`
-	ClearFiles       *bool    `json:"clearFiles,omitempty"`
-	LogoFileID       *string  `json:"logoFileID,omitempty"`
-	ClearLogoFile    *bool    `json:"clearLogoFile,omitempty"`
-	FaviconFileID    *string  `json:"faviconFileID,omitempty"`
-	ClearFaviconFile *bool    `json:"clearFaviconFile,omitempty"`
+	AccentColor      *string `json:"accentColor,omitempty"`
+	ClearAccentColor *bool   `json:"clearAccentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor      *string `json:"secondaryBackgroundColor,omitempty"`
+	ClearSecondaryBackgroundColor *bool   `json:"clearSecondaryBackgroundColor,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor      *string  `json:"secondaryForegroundColor,omitempty"`
+	ClearSecondaryForegroundColor *bool    `json:"clearSecondaryForegroundColor,omitempty"`
+	TrustCenterID                 *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter              *bool    `json:"clearTrustCenter,omitempty"`
+	AddFileIDs                    []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                 []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                    *bool    `json:"clearFiles,omitempty"`
+	LogoFileID                    *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile                 *bool    `json:"clearLogoFile,omitempty"`
+	FaviconFileID                 *string  `json:"faviconFileID,omitempty"`
+	ClearFaviconFile              *bool    `json:"clearFaviconFile,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.

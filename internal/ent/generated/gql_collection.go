@@ -46148,6 +46148,16 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldAccentColor)
 				fieldSeen[trustcentersetting.FieldAccentColor] = struct{}{}
 			}
+		case "secondaryBackgroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldSecondaryBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldSecondaryBackgroundColor)
+				fieldSeen[trustcentersetting.FieldSecondaryBackgroundColor] = struct{}{}
+			}
+		case "secondaryForegroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldSecondaryForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldSecondaryForegroundColor)
+				fieldSeen[trustcentersetting.FieldSecondaryForegroundColor] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -46337,6 +46347,16 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldAccentColor]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAccentColor)
 				fieldSeen[trustcentersettinghistory.FieldAccentColor] = struct{}{}
+			}
+		case "secondaryBackgroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldSecondaryBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecondaryBackgroundColor)
+				fieldSeen[trustcentersettinghistory.FieldSecondaryBackgroundColor] = struct{}{}
+			}
+		case "secondaryForegroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecondaryForegroundColor)
+				fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor] = struct{}{}
 			}
 		case "id":
 		case "__typename":
