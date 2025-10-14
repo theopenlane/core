@@ -9536,6 +9536,8 @@ input CreateNoteInput {
 	text: String!
 	ownerID: ID
 	taskID: ID
+	controlID: ID
+	subcontrolID: ID
 	fileIDs: [ID!]
 }
 """
@@ -29781,6 +29783,44 @@ type Mutation {
 		noteFiles: [Upload!]
 	): TaskUpdatePayload!
 	"""
+	Update an existing control comment
+	"""
+	updateControlComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): ControlUpdatePayload!
+	"""
+	Update an existing subcontrol comment
+	"""
+	updateSubontrolComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): SubcontrolUpdatePayload!
+	"""
 	Create a new onboarding
 	"""
 	createOnboarding(
@@ -32070,6 +32110,8 @@ type Note implements Node {
 	text: String!
 	owner: Organization
 	task: Task
+	control: Control
+	subcontrol: Subcontrol
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -32546,6 +32588,16 @@ input NoteWhereInput {
 	"""
 	hasTask: Boolean
 	hasTaskWith: [TaskWhereInput!]
+	"""
+	control edge predicates
+	"""
+	hasControl: Boolean
+	hasControlWith: [ControlWhereInput!]
+	"""
+	subcontrol edge predicates
+	"""
+	hasSubcontrol: Boolean
+	hasSubcontrolWith: [SubcontrolWhereInput!]
 	"""
 	files edge predicates
 	"""
@@ -62950,6 +63002,8 @@ input UpdateControlInput {
 	addScheduledJobIDs: [ID!]
 	removeScheduledJobIDs: [ID!]
 	clearScheduledJobs: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -64285,6 +64339,10 @@ input UpdateNoteInput {
 	text: String
 	taskID: ID
 	clearTask: Boolean
+	controlID: ID
+	clearControl: Boolean
+	subcontrolID: ID
+	clearSubcontrol: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
@@ -65416,6 +65474,8 @@ input UpdateSubcontrolInput {
 	addScheduledJobIDs: [ID!]
 	removeScheduledJobIDs: [ID!]
 	clearScheduledJobs: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.

@@ -70,6 +70,16 @@ func (n Note) Edges() []ent.Edge {
 			edgeSchema: Task{},
 			ref:        "comments",
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Control{},
+			ref:        "comments",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Subcontrol{},
+			ref:        "comments",
+		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}
 }

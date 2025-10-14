@@ -6913,10 +6913,12 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Text    string
-	OwnerID *string
-	TaskID  *string
-	FileIDs []string
+	Text         string
+	OwnerID      *string
+	TaskID       *string
+	ControlID    *string
+	SubcontrolID *string
+	FileIDs      []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -6927,6 +6929,12 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -6941,12 +6949,16 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	Text          *string
-	ClearTask     bool
-	TaskID        *string
-	ClearFiles    bool
-	AddFileIDs    []string
-	RemoveFileIDs []string
+	Text            *string
+	ClearTask       bool
+	TaskID          *string
+	ClearControl    bool
+	ControlID       *string
+	ClearSubcontrol bool
+	SubcontrolID    *string
+	ClearFiles      bool
+	AddFileIDs      []string
+	RemoveFileIDs   []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -6959,6 +6971,18 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearSubcontrol {
+		m.ClearSubcontrol()
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

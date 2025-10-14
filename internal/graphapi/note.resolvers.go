@@ -10,7 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -49,6 +51,54 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 	}, nil
 }
 
+// UpdateControlComment is the resolver for the updateControlComment field.
+func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Control.Query().Where(control.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+	}
+
+	return &model.ControlUpdatePayload{
+		Control: objectRes,
+	}, nil
+}
+
+// UpdateSubontrolComment is the resolver for the updateSubontrolComment field.
+func (r *mutationResolver) UpdateSubontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+	}
+
+	return &model.SubcontrolUpdatePayload{
+		Subcontrol: objectRes,
+	}, nil
+}
+
 // Note is the resolver for the note field.
 func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, error) {
 	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx)
@@ -62,6 +112,82 @@ func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, e
 	}
 
 	return res, nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *generated.UpdateControlInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ControlID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ControlID == nil {
+		return newNotFoundError("control")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateControlInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateControlInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.SubcontrolID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.SubcontrolID == nil {
+		return newNotFoundError("subcontrol")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateSubcontrolInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
 }
 
 // AddComment is the resolver for the addComment field.

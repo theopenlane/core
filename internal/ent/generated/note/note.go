@@ -37,6 +37,10 @@ const (
 	EdgeOwner = "owner"
 	// EdgeTask holds the string denoting the task edge name in mutations.
 	EdgeTask = "task"
+	// EdgeControl holds the string denoting the control edge name in mutations.
+	EdgeControl = "control"
+	// EdgeSubcontrol holds the string denoting the subcontrol edge name in mutations.
+	EdgeSubcontrol = "subcontrol"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the note in the database.
@@ -55,6 +59,20 @@ const (
 	TaskInverseTable = "tasks"
 	// TaskColumn is the table column denoting the task relation/edge.
 	TaskColumn = "task_comments"
+	// ControlTable is the table that holds the control relation/edge.
+	ControlTable = "notes"
+	// ControlInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlInverseTable = "controls"
+	// ControlColumn is the table column denoting the control relation/edge.
+	ControlColumn = "control_comments"
+	// SubcontrolTable is the table that holds the subcontrol relation/edge.
+	SubcontrolTable = "notes"
+	// SubcontrolInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolInverseTable = "subcontrols"
+	// SubcontrolColumn is the table column denoting the subcontrol relation/edge.
+	SubcontrolColumn = "subcontrol_comments"
 	// FilesTable is the table that holds the files relation/edge.
 	FilesTable = "files"
 	// FilesInverseTable is the table name for the File entity.
@@ -195,6 +213,20 @@ func ByTaskField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByControlField orders the results by control field.
+func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySubcontrolField orders the results by subcontrol field.
+func BySubcontrolField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -220,6 +252,20 @@ func newTaskStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TaskInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, TaskTable, TaskColumn),
+	)
+}
+func newControlStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ControlTable, ControlColumn),
+	)
+}
+func newSubcontrolStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubcontrolTable, SubcontrolColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {
