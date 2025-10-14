@@ -25,6 +25,7 @@ var (
 // internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
 type internalTrustCenterDocUpdateKey struct{}
 
+// HookCreateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on create
 func HookCreateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
@@ -118,7 +119,8 @@ func HookCreateTrustCenterDoc() ent.Hook {
 	}, ent.OpCreate)
 }
 
-func HookUpdateTrustCenterDoc() ent.Hook {
+// HookUpdateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on update
+func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
