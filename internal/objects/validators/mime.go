@@ -26,6 +26,7 @@ var sharedMimeTypes = []string{
 	"text/csv",
 	"application/x-yaml", "application/x-yaml; charset=utf-8", "text/yaml",
 	"application/json", "application/json; charset=utf-8",
+	"application/octet-stream",
 }
 
 var validMimeTypes = map[string][]string{

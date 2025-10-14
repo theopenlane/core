@@ -25,13 +25,6 @@ type FileContextKey struct {
     Files Files
 }
 
-// ParsedDocContextKey is the context key for parsed document contents associated with uploaded files
-// It allows upstream middleware to parse text from uploads (e.g., docx/markdown/plaintext) and make it
-// available to downstream ent hooks without requiring a storage download
-type ParsedDocContextKey struct {
-    Docs map[string]string
-}
-
 // FileSource represents any source that can provide file uploads.
 // The tilde (~) allows for types that are identical or aliases to the specified types.
 type FileSource interface {
@@ -218,37 +211,6 @@ func WriteFilesToContext(ctx context.Context, f Files) context.Context {
 	}
 
 	return contextx.With(ctx, fileCtx)
-}
-
-// WriteParsedDocumentToContext stores parsed document contents for a given form field key
-func WriteParsedDocumentToContext(ctx context.Context, key, content string) context.Context {
-    if key == "" || content == "" {
-        return ctx
-    }
-
-    parsedCtx, ok := contextx.From[ParsedDocContextKey](ctx)
-    if !ok {
-        parsedCtx = ParsedDocContextKey{Docs: map[string]string{}}
-    }
-
-    if parsedCtx.Docs == nil {
-        parsedCtx.Docs = map[string]string{}
-    }
-
-    parsedCtx.Docs[key] = content
-
-    return contextx.With(ctx, parsedCtx)
-}
-
-// ParsedDocumentFromContext retrieves parsed document contents by form field key if present
-func ParsedDocumentFromContext(ctx context.Context, key string) (string, bool) {
-    parsedCtx, ok := contextx.From[ParsedDocContextKey](ctx)
-    if !ok || parsedCtx.Docs == nil {
-        return "", false
-    }
-
-    v, exists := parsedCtx.Docs[key]
-    return v, exists
 }
 
 // UpdateFileInContextByKey updates the file in the context based on the key and the file ID

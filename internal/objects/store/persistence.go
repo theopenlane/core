@@ -1,16 +1,15 @@
 package store
 
 import (
-    "context"
-    "path/filepath"
-    "strings"
+	"context"
+	"path/filepath"
+	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
-    "github.com/samber/lo"
-    loiter "github.com/samber/lo"
+	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -51,8 +50,6 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 
 		return err
 	}
-
-	log.Debug().Str("file", fileData.Name).Str("id", fileData.ID).Str("key", fileData.Key).Int64("size", fileData.Size).Msg("file uploaded")
 
 	return nil
 }
@@ -104,33 +101,90 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		return "", nil
 	}
 
+	// If the actor is a system admin, prefer deriving the organization from the
+	// correlated object rather than using the admin's org from context
+	isAdmin := false
+	if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au.IsSystemAdmin {
+		isAdmin = true
+	}
+
 	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+	if isAdmin {
+		orgID = ""
+	}
 
 	if orgID == "" {
 		var rows sql.Rows
 
-    // derive table name from correlated object type using snake_case to match DB naming
-    objectType := loiter.SnakeCase(f.CorrelatedObjectType)
-    objectTable := pluralize.NewClient().Plural(objectType)
-		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
+		// derive table name from correlated object type using snake_case to match DB naming
+		objectType := lo.SnakeCase(f.CorrelatedObjectType)
+		objectTable := pluralize.NewClient().Plural(objectType)
 
-		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
-			return "", err
-		}
+		// For schemas that do not include owner_id (e.g., trust_center_docs), resolve owner through the parent
+		if objectType == "trust_center_doc" {
+			// first get the trust_center_id from the doc
+			var tcRows sql.Rows
 
-		if rows.Err() != nil {
-			return "", rows.Err()
-		}
+			tcQuery := "SELECT trust_center_id FROM trust_center_docs WHERE id = $1"
 
-		defer rows.Close()
-
-		if rows.Next() {
-			var ownerID string
-			if err := rows.Scan(&ownerID); err != nil {
+			if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &tcRows); err != nil {
 				return "", err
 			}
+			if tcRows.Err() != nil {
+				_ = tcRows.Close()
+				return "", tcRows.Err()
+			}
 
-			orgID = ownerID
+			var trustCenterID string
+
+			if tcRows.Next() {
+				if err := tcRows.Scan(&trustCenterID); err != nil {
+					_ = tcRows.Close()
+					return "", err
+				}
+			}
+
+			_ = tcRows.Close()
+			if trustCenterID == "" {
+				return "", ErrMissingOrganizationID
+			}
+
+			// now resolve owner_id from trust_centers
+			var ownerRows sql.Rows
+			ownerQuery := "SELECT owner_id FROM trust_centers WHERE id = $1"
+			if err := txClientFromContext(ctx).Driver().Query(ctx, ownerQuery, []any{trustCenterID}, &ownerRows); err != nil {
+				return "", err
+			}
+			if ownerRows.Err() != nil {
+				_ = ownerRows.Close()
+				return "", ownerRows.Err()
+			}
+			if ownerRows.Next() {
+				var ownerID string
+				if err := ownerRows.Scan(&ownerID); err != nil {
+					_ = ownerRows.Close()
+					return "", err
+				}
+				orgID = ownerID
+			}
+			_ = ownerRows.Close()
+		} else {
+			// Generic case: attempt to read owner_id directly from the correlated table
+			query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
+			if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
+				return "", err
+			}
+			if rows.Err() != nil {
+				return "", rows.Err()
+			}
+			defer rows.Close()
+			if rows.Next() {
+				var ownerID string
+				if err := rows.Scan(&ownerID); err != nil {
+					return "", err
+				}
+				orgID = ownerID
+			}
 		}
 	}
 
