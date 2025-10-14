@@ -1027,97 +1027,128 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-//func TestMutationCreateControlsByCloneCSV(t *testing.T) {
-//	validFile, err := storage.NewUploadFile("testdata/uploads/clone.csv")
-//	assert.NilError(t, err)
-//
-//	missingControlsFile, err := storage.NewUploadFile("testdata/uploads/all_missing_clone.csv")
-//	assert.NilError(t, err)
-//
-//	// create the standard and controls to be cloned
-//	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
-//	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
-//	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
-//
-//	testCases := []struct {
-//		name                  string
-//		fileInput             graphql.Upload
-//		client                *testclient.TestClient
-//		ctx                   context.Context
-//		expectedCountControls int
-//		expectedErr           string
-//	}{
-//		{
-//			name: "happy path, clone controls from csv",
-//			fileInput: graphql.Upload{
-//				File:        validFile.File,
-//				Filename:    validFile.Filename,
-//				Size:        validFile.Size,
-//				ContentType: validFile.ContentType,
-//			},
-//			client:                suite.client.api,
-//			ctx:                   testUser1.UserCtx,
-//			expectedCountControls: 2,
-//		},
-//		{
-//			name: "controls missing from system, no controls cloned",
-//			fileInput: graphql.Upload{
-//				File:        missingControlsFile.File,
-//				Filename:    missingControlsFile.Filename,
-//				Size:        missingControlsFile.Size,
-//				ContentType: missingControlsFile.ContentType,
-//			},
-//			client:                suite.client.api,
-//			ctx:                   testUser1.UserCtx,
-//			expectedCountControls: 0,
-//		},
-//	}
-//
-//	for _, tc := range testCases {
-//		t.Run("Create "+tc.name, func(t *testing.T) {
-//			resp, err := tc.client.CloneBulkCSVControl(tc.ctx, tc.fileInput)
-//			assert.NilError(t, err)
-//			assert.Check(t, resp != nil)
-//
-//			assert.Check(t, is.Len(resp.CloneBulkCSVControl.Controls, tc.expectedCountControls))
-//
-//			// sort controls so they are consistent
-//			slices.SortFunc(resp.CloneBulkCSVControl.Controls, func(a, b *testclient.CloneBulkCSVControl_CloneBulkCSVControl_Controls) int {
-//				return cmp.Compare(a.RefCode, b.RefCode)
-//			})
-//
-//			for _, control := range resp.CloneBulkCSVControl.Controls {
-//				assert.Check(t, len(control.ID) != 0)
-//				assert.Check(t, len(control.DisplayID) != 0)
-//				assert.Check(t, len(control.RefCode) != 0)
-//				assert.Check(t, len(*control.Title) != 0)
-//
-//				switch control.RefCode {
-//				case "AA-1":
-//					assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
-//					assert.Check(t, is.Equal("INT-0001", *control.ReferenceID))
-//				case "AA-2":
-//					assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
-//					assert.Check(t, is.Equal("INT-0002", *control.ReferenceID))
-//
-//				}
-//
-//				assert.Check(t, control.ImplementationGuidance != nil)
-//				assert.Check(t, len(control.ControlImplementations.Edges) == 1)
-//
-//				// cleanup controls
-//				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
-//				// cleanup control implementation
-//				(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: control.ControlImplementations.Edges[0].Node.ID}).MustDelete(tc.ctx, t)
-//
-//			}
-//		})
-//	}
-//
-//	// cleanup created controls and standards
-//	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-//	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-//}
+func TestMutationCreateControlsByCloneCSV(t *testing.T) {
+	validFile, err := objects.NewUploadFile("testdata/uploads/clone.csv")
+	assert.NilError(t, err)
+
+	missingControlsFile, err := objects.NewUploadFile("testdata/uploads/all_missing_clone.csv")
+	assert.NilError(t, err)
+
+	updateControlsFile, err := objects.NewUploadFile("testdata/uploads/update.csv")
+	assert.NilError(t, err)
+
+	// create the standard and controls to be cloned
+	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	controlsToDelete := []string{}
+	implementationsToDelete := []string{}
+	testCases := []struct {
+		name                  string
+		fileInput             graphql.Upload
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectedCountControls int
+		expectedErr           string
+	}{
+		{
+			name: "happy path, clone controls from csv",
+			fileInput: graphql.Upload{
+				File:        validFile.File,
+				Filename:    validFile.Filename,
+				Size:        validFile.Size,
+				ContentType: validFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 2,
+		},
+		{
+			name: "update existing controls, no new controls cloned",
+			fileInput: graphql.Upload{
+				File:        updateControlsFile.File,
+				Filename:    updateControlsFile.Filename,
+				Size:        updateControlsFile.Size,
+				ContentType: updateControlsFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 2,
+		},
+		{
+			name: "controls missing from system, no controls cloned",
+			fileInput: graphql.Upload{
+				File:        missingControlsFile.File,
+				Filename:    missingControlsFile.Filename,
+				Size:        missingControlsFile.Size,
+				ContentType: missingControlsFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 0,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CloneBulkCSVControl(tc.ctx, tc.fileInput)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.CloneBulkCSVControl.Controls, tc.expectedCountControls))
+
+			// sort controls so they are consistent
+			slices.SortFunc(resp.CloneBulkCSVControl.Controls, func(a, b *testclient.CloneBulkCSVControl_CloneBulkCSVControl_Controls) int {
+				return cmp.Compare(a.RefCode, b.RefCode)
+			})
+
+			for _, control := range resp.CloneBulkCSVControl.Controls {
+				assert.Check(t, len(control.ID) != 0)
+				assert.Check(t, len(control.DisplayID) != 0)
+				assert.Check(t, len(control.RefCode) != 0)
+				assert.Check(t, len(*control.Title) != 0)
+
+				switch control.RefCode {
+				case "AA-1":
+					if tc.fileInput.Filename == updateControlsFile.Filename {
+						assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
+					} else {
+						assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+					}
+					assert.Check(t, is.Equal("INT-0001", *control.ReferenceID))
+				case "AA-2":
+					assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
+					assert.Check(t, is.Equal("INT-0002", *control.ReferenceID))
+
+				}
+
+				assert.Check(t, control.ImplementationGuidance != nil)
+
+				switch tc.fileInput.Filename {
+				case updateControlsFile.Filename:
+					assert.Check(t, len(control.ControlImplementations.Edges) == 2)
+				case validFile.Filename:
+					assert.Check(t, len(control.ControlImplementations.Edges) == 1)
+				}
+
+				controlsToDelete = append(controlsToDelete, control.ID)
+				implementationsToDelete = append(implementationsToDelete, control.ControlImplementations.Edges[0].Node.ID)
+			}
+		})
+	}
+
+	controlsToDelete = lo.Uniq(controlsToDelete)
+	implementationsToDelete = lo.Uniq(implementationsToDelete)
+
+	// cleanup controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToDelete}).MustDelete(testUser1.UserCtx, t)
+	// cleanup control implementation
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: implementationsToDelete}).MustDelete(testUser1.UserCtx, t)
+	// cleanup created controls and standards
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+}
 
 func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)

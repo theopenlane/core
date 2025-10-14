@@ -5065,28 +5065,30 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSetting struct {
-		AccentColor        func(childComplexity int) int
-		BackgroundColor    func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		FaviconFile        func(childComplexity int) int
-		FaviconLocalFileID func(childComplexity int) int
-		FaviconRemoteURL   func(childComplexity int) int
-		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Font               func(childComplexity int) int
-		ForegroundColor    func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		LogoFile           func(childComplexity int) int
-		LogoLocalFileID    func(childComplexity int) int
-		LogoRemoteURL      func(childComplexity int) int
-		Overview           func(childComplexity int) int
-		PrimaryColor       func(childComplexity int) int
-		ThemeMode          func(childComplexity int) int
-		Title              func(childComplexity int) int
-		TrustCenter        func(childComplexity int) int
-		TrustCenterID      func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AccentColor              func(childComplexity int) int
+		BackgroundColor          func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		FaviconFile              func(childComplexity int) int
+		FaviconLocalFileID       func(childComplexity int) int
+		FaviconRemoteURL         func(childComplexity int) int
+		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Font                     func(childComplexity int) int
+		ForegroundColor          func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		LogoFile                 func(childComplexity int) int
+		LogoLocalFileID          func(childComplexity int) int
+		LogoRemoteURL            func(childComplexity int) int
+		Overview                 func(childComplexity int) int
+		PrimaryColor             func(childComplexity int) int
+		SecondaryBackgroundColor func(childComplexity int) int
+		SecondaryForegroundColor func(childComplexity int) int
+		ThemeMode                func(childComplexity int) int
+		Title                    func(childComplexity int) int
+		TrustCenter              func(childComplexity int) int
+		TrustCenterID            func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterSettingBulkCreatePayload struct {
@@ -5113,27 +5115,29 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
-		AccentColor        func(childComplexity int) int
-		BackgroundColor    func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		FaviconLocalFileID func(childComplexity int) int
-		FaviconRemoteURL   func(childComplexity int) int
-		Font               func(childComplexity int) int
-		ForegroundColor    func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		LogoLocalFileID    func(childComplexity int) int
-		LogoRemoteURL      func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		Overview           func(childComplexity int) int
-		PrimaryColor       func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		ThemeMode          func(childComplexity int) int
-		Title              func(childComplexity int) int
-		TrustCenterID      func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AccentColor              func(childComplexity int) int
+		BackgroundColor          func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		FaviconLocalFileID       func(childComplexity int) int
+		FaviconRemoteURL         func(childComplexity int) int
+		Font                     func(childComplexity int) int
+		ForegroundColor          func(childComplexity int) int
+		HistoryTime              func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		LogoLocalFileID          func(childComplexity int) int
+		LogoRemoteURL            func(childComplexity int) int
+		Operation                func(childComplexity int) int
+		Overview                 func(childComplexity int) int
+		PrimaryColor             func(childComplexity int) int
+		Ref                      func(childComplexity int) int
+		SecondaryBackgroundColor func(childComplexity int) int
+		SecondaryForegroundColor func(childComplexity int) int
+		ThemeMode                func(childComplexity int) int
+		Title                    func(childComplexity int) int
+		TrustCenterID            func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -33992,6 +33996,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.PrimaryColor(childComplexity), true
 
+	case "TrustCenterSetting.secondaryBackgroundColor":
+		if e.complexity.TrustCenterSetting.SecondaryBackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.SecondaryBackgroundColor(childComplexity), true
+
+	case "TrustCenterSetting.secondaryForegroundColor":
+		if e.complexity.TrustCenterSetting.SecondaryForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.SecondaryForegroundColor(childComplexity), true
+
 	case "TrustCenterSetting.themeMode":
 		if e.complexity.TrustCenterSetting.ThemeMode == nil {
 			break
@@ -34201,6 +34219,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.Ref(childComplexity), true
+
+	case "TrustCenterSettingHistory.secondaryBackgroundColor":
+		if e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.secondaryForegroundColor":
+		if e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.themeMode":
 		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
@@ -49030,6 +49062,14 @@ input CreateTrustCenterSettingInput {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
@@ -90248,6 +90288,14 @@ type TrustCenterSetting implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenter: TrustCenter
   files(
     """
@@ -90374,6 +90422,14 @@ type TrustCenterSettingHistory implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
 }
 """
 A connection to a list of items.
@@ -90785,6 +90841,42 @@ input TrustCenterSettingHistoryWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -91121,6 +91213,42 @@ input TrustCenterSettingWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
   """
   trust_center edge predicates
   """
@@ -92548,6 +92676,11 @@ input UpdateAPITokenInput {
   the name associated with the token
   """
   name: String
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   """
   a description of the token's purpose
   """
@@ -94793,6 +94926,11 @@ input UpdatePersonalAccessTokenInput {
   """
   name: String
   """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
+  """
   a description of the token's purpose
   """
   description: String
@@ -95909,6 +96047,16 @@ input UpdateTrustCenterSettingInput {
   """
   accentColor: String
   clearAccentColor: Boolean
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  clearSecondaryBackgroundColor: Boolean
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
+  clearSecondaryForegroundColor: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]

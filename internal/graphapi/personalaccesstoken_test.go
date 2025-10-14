@@ -11,6 +11,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -117,6 +118,15 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 			},
+		},
+		{
+			name: "bad path, set expire to the past",
+			input: testclient.CreatePersonalAccessTokenInput{
+				Name:        "forthethingz",
+				Description: &tokenDescription,
+				ExpiresAt:   lo.ToPtr(time.Now().Add(-time.Hour)),
+			},
+			errorMsg: hooks.ErrPastTimeNotAllowed.Error(),
 		},
 		{
 			name: "happy path, set expire",
@@ -317,6 +327,12 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 			assert.Check(t, is.Equal(redacted, resp.UpdatePersonalAccessToken.PersonalAccessToken.Token))
 		})
 	}
+
+	// update expiration date
+	_, err := suite.client.api.UpdatePersonalAccessToken(testUser1.UserCtx, token.ID, testclient.UpdatePersonalAccessTokenInput{
+		ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
+	})
+	assert.NilError(t, err)
 
 	// cleanup
 	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{

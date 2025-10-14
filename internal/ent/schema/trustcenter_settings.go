@@ -104,6 +104,12 @@ func (TrustCenterSetting) Fields() []ent.Field {
 		field.String("accent_color").
 			Comment("accent/brand color for the trust center").
 			Optional(),
+		field.String("secondary_background_color").
+			Comment("secondary background color for the trust center").
+			Optional(),
+		field.String("secondary_foreground_color").
+			Comment("seconday foreground color for the trust center").
+			Optional(),
 	}
 }
 

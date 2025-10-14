@@ -288,6 +288,34 @@ func (_c *TrustCenterSettingCreate) SetNillableAccentColor(v *string) *TrustCent
 	return _c
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_c *TrustCenterSettingCreate) SetSecondaryBackgroundColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetSecondaryBackgroundColor(v)
+	return _c
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetSecondaryBackgroundColor(*v)
+	}
+	return _c
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_c *TrustCenterSettingCreate) SetSecondaryForegroundColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetSecondaryForegroundColor(v)
+	return _c
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetSecondaryForegroundColor(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -556,6 +584,14 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.AccentColor(); ok {
 		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
 		_node.AccentColor = value
+	}
+	if value, ok := _c.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryBackgroundColor, field.TypeString, value)
+		_node.SecondaryBackgroundColor = value
+	}
+	if value, ok := _c.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString, value)
+		_node.SecondaryForegroundColor = value
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

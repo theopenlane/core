@@ -71,6 +71,8 @@ type UpdateAPITokenInput struct {
 	Tags               []string
 	AppendTags         []string
 	Name               *string
+	ClearExpiresAt     bool
+	ExpiresAt          *time.Time
 	ClearDescription   bool
 	Description        *string
 	ClearScopes        bool
@@ -103,6 +105,12 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -8573,6 +8581,8 @@ type UpdatePersonalAccessTokenInput struct {
 	Tags                  []string
 	AppendTags            []string
 	Name                  *string
+	ClearExpiresAt        bool
+	ExpiresAt             *time.Time
 	ClearDescription      bool
 	Description           *string
 	ClearScopes           bool
@@ -8603,6 +8613,12 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -12405,20 +12421,22 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	Title            *string
-	Overview         *string
-	LogoRemoteURL    *string
-	FaviconRemoteURL *string
-	ThemeMode        *enums.TrustCenterThemeMode
-	PrimaryColor     *string
-	Font             *string
-	ForegroundColor  *string
-	BackgroundColor  *string
-	AccentColor      *string
-	TrustCenterID    *string
-	FileIDs          []string
-	LogoFileID       *string
-	FaviconFileID    *string
+	Title                    *string
+	Overview                 *string
+	LogoRemoteURL            *string
+	FaviconRemoteURL         *string
+	ThemeMode                *enums.TrustCenterThemeMode
+	PrimaryColor             *string
+	Font                     *string
+	ForegroundColor          *string
+	BackgroundColor          *string
+	AccentColor              *string
+	SecondaryBackgroundColor *string
+	SecondaryForegroundColor *string
+	TrustCenterID            *string
+	FileIDs                  []string
+	LogoFileID               *string
+	FaviconFileID            *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -12453,6 +12471,12 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.AccentColor; v != nil {
 		m.SetAccentColor(*v)
 	}
+	if v := i.SecondaryBackgroundColor; v != nil {
+		m.SetSecondaryBackgroundColor(*v)
+	}
+	if v := i.SecondaryForegroundColor; v != nil {
+		m.SetSecondaryForegroundColor(*v)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
@@ -12475,35 +12499,39 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTitle            bool
-	Title                 *string
-	ClearOverview         bool
-	Overview              *string
-	ClearLogoRemoteURL    bool
-	LogoRemoteURL         *string
-	ClearFaviconRemoteURL bool
-	FaviconRemoteURL      *string
-	ClearThemeMode        bool
-	ThemeMode             *enums.TrustCenterThemeMode
-	ClearPrimaryColor     bool
-	PrimaryColor          *string
-	ClearFont             bool
-	Font                  *string
-	ClearForegroundColor  bool
-	ForegroundColor       *string
-	ClearBackgroundColor  bool
-	BackgroundColor       *string
-	ClearAccentColor      bool
-	AccentColor           *string
-	ClearTrustCenter      bool
-	TrustCenterID         *string
-	ClearFiles            bool
-	AddFileIDs            []string
-	RemoveFileIDs         []string
-	ClearLogoFile         bool
-	LogoFileID            *string
-	ClearFaviconFile      bool
-	FaviconFileID         *string
+	ClearTitle                    bool
+	Title                         *string
+	ClearOverview                 bool
+	Overview                      *string
+	ClearLogoRemoteURL            bool
+	LogoRemoteURL                 *string
+	ClearFaviconRemoteURL         bool
+	FaviconRemoteURL              *string
+	ClearThemeMode                bool
+	ThemeMode                     *enums.TrustCenterThemeMode
+	ClearPrimaryColor             bool
+	PrimaryColor                  *string
+	ClearFont                     bool
+	Font                          *string
+	ClearForegroundColor          bool
+	ForegroundColor               *string
+	ClearBackgroundColor          bool
+	BackgroundColor               *string
+	ClearAccentColor              bool
+	AccentColor                   *string
+	ClearSecondaryBackgroundColor bool
+	SecondaryBackgroundColor      *string
+	ClearSecondaryForegroundColor bool
+	SecondaryForegroundColor      *string
+	ClearTrustCenter              bool
+	TrustCenterID                 *string
+	ClearFiles                    bool
+	AddFileIDs                    []string
+	RemoveFileIDs                 []string
+	ClearLogoFile                 bool
+	LogoFileID                    *string
+	ClearFaviconFile              bool
+	FaviconFileID                 *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -12567,6 +12595,18 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.AccentColor; v != nil {
 		m.SetAccentColor(*v)
+	}
+	if i.ClearSecondaryBackgroundColor {
+		m.ClearSecondaryBackgroundColor()
+	}
+	if v := i.SecondaryBackgroundColor; v != nil {
+		m.SetSecondaryBackgroundColor(*v)
+	}
+	if i.ClearSecondaryForegroundColor {
+		m.ClearSecondaryForegroundColor()
+	}
+	if v := i.SecondaryForegroundColor; v != nil {
+		m.SetSecondaryForegroundColor(*v)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()

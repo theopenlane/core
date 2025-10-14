@@ -10637,6 +10637,14 @@ input CreateTrustCenterSettingInput {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 	trustCenterID: ID
 	fileIDs: [ID!]
 	logoFileID: ID
@@ -59987,6 +59995,14 @@ type TrustCenterSetting implements Node {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 	trustCenter: TrustCenter
 	files(
 		"""
@@ -60140,6 +60156,14 @@ type TrustCenterSettingHistory implements Node {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 }
 """
 A connection to a list of items.
@@ -60551,6 +60575,42 @@ input TrustCenterSettingHistoryWhereInput {
 	accentColorNotNil: Boolean
 	accentColorEqualFold: String
 	accentColorContainsFold: String
+	"""
+	secondary_background_color field predicates
+	"""
+	secondaryBackgroundColor: String
+	secondaryBackgroundColorNEQ: String
+	secondaryBackgroundColorIn: [String!]
+	secondaryBackgroundColorNotIn: [String!]
+	secondaryBackgroundColorGT: String
+	secondaryBackgroundColorGTE: String
+	secondaryBackgroundColorLT: String
+	secondaryBackgroundColorLTE: String
+	secondaryBackgroundColorContains: String
+	secondaryBackgroundColorHasPrefix: String
+	secondaryBackgroundColorHasSuffix: String
+	secondaryBackgroundColorIsNil: Boolean
+	secondaryBackgroundColorNotNil: Boolean
+	secondaryBackgroundColorEqualFold: String
+	secondaryBackgroundColorContainsFold: String
+	"""
+	secondary_foreground_color field predicates
+	"""
+	secondaryForegroundColor: String
+	secondaryForegroundColorNEQ: String
+	secondaryForegroundColorIn: [String!]
+	secondaryForegroundColorNotIn: [String!]
+	secondaryForegroundColorGT: String
+	secondaryForegroundColorGTE: String
+	secondaryForegroundColorLT: String
+	secondaryForegroundColorLTE: String
+	secondaryForegroundColorContains: String
+	secondaryForegroundColorHasPrefix: String
+	secondaryForegroundColorHasSuffix: String
+	secondaryForegroundColorIsNil: Boolean
+	secondaryForegroundColorNotNil: Boolean
+	secondaryForegroundColorEqualFold: String
+	secondaryForegroundColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -60896,6 +60956,42 @@ input TrustCenterSettingWhereInput {
 	accentColorNotNil: Boolean
 	accentColorEqualFold: String
 	accentColorContainsFold: String
+	"""
+	secondary_background_color field predicates
+	"""
+	secondaryBackgroundColor: String
+	secondaryBackgroundColorNEQ: String
+	secondaryBackgroundColorIn: [String!]
+	secondaryBackgroundColorNotIn: [String!]
+	secondaryBackgroundColorGT: String
+	secondaryBackgroundColorGTE: String
+	secondaryBackgroundColorLT: String
+	secondaryBackgroundColorLTE: String
+	secondaryBackgroundColorContains: String
+	secondaryBackgroundColorHasPrefix: String
+	secondaryBackgroundColorHasSuffix: String
+	secondaryBackgroundColorIsNil: Boolean
+	secondaryBackgroundColorNotNil: Boolean
+	secondaryBackgroundColorEqualFold: String
+	secondaryBackgroundColorContainsFold: String
+	"""
+	secondary_foreground_color field predicates
+	"""
+	secondaryForegroundColor: String
+	secondaryForegroundColorNEQ: String
+	secondaryForegroundColorIn: [String!]
+	secondaryForegroundColorNotIn: [String!]
+	secondaryForegroundColorGT: String
+	secondaryForegroundColorGTE: String
+	secondaryForegroundColorLT: String
+	secondaryForegroundColorLTE: String
+	secondaryForegroundColorContains: String
+	secondaryForegroundColorHasPrefix: String
+	secondaryForegroundColorHasSuffix: String
+	secondaryForegroundColorIsNil: Boolean
+	secondaryForegroundColorNotNil: Boolean
+	secondaryForegroundColorEqualFold: String
+	secondaryForegroundColorContainsFold: String
 	"""
 	trust_center edge predicates
 	"""
@@ -62404,6 +62500,11 @@ input UpdateAPITokenInput {
 	the name associated with the token
 	"""
 	name: String
+	"""
+	when the token expires
+	"""
+	expiresAt: Time
+	clearExpiresAt: Boolean
 	"""
 	a description of the token's purpose
 	"""
@@ -64664,6 +64765,11 @@ input UpdatePersonalAccessTokenInput {
 	"""
 	name: String
 	"""
+	when the token expires
+	"""
+	expiresAt: Time
+	clearExpiresAt: Boolean
+	"""
 	a description of the token's purpose
 	"""
 	description: String
@@ -65791,6 +65897,16 @@ input UpdateTrustCenterSettingInput {
 	"""
 	accentColor: String
 	clearAccentColor: Boolean
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	clearSecondaryBackgroundColor: Boolean
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
+	clearSecondaryForegroundColor: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
 	addFileIDs: [ID!]
