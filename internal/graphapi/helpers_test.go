@@ -51,6 +51,16 @@ func TestStripOperation(t *testing.T) {
 			input:    "fetchUser",
 			expected: "fetchUser",
 		},
+		{
+			name:     "Create Upload operation",
+			input:    "createUploadProcedure",
+			expected: "Procedure",
+		},
+		{
+			name:     "Create Upload Document",
+			input:    "createUploadDocument",
+			expected: "Document",
+		},
 	}
 
 	for _, tt := range tests {

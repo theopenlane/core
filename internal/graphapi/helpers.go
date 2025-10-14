@@ -407,16 +407,20 @@ func argIsUpload(arg *ast.Argument) bool {
 }
 
 // stripOperation strips the operation from the field name, e.g. updateUser becomes user
+// it also strips the "Upload" modifier for upload operations, e.g. createUploadProcedure -> Procedure
+// createUploadInternalPolicy -> internalPolicy
 func stripOperation(field string) string {
 	operations := []string{"create", "update", "delete", "get"}
 
+	result := field
 	for _, op := range operations {
-		if strings.HasPrefix(field, op) {
-			return strings.ReplaceAll(field, op, "")
+		if strings.HasPrefix(result, op) {
+			result = strings.ReplaceAll(result, op, "")
+			break
 		}
 	}
 
-	return field
+	return strings.TrimPrefix(result, "Upload")
 }
 
 // convertToObject converts an object to a specific type
