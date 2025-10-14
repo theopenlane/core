@@ -91,6 +91,21 @@ func extractUploads(v any) []graphql.Upload {
 	switch val := v.(type) {
 	case []graphql.Upload:
 		return val
+	case []*graphql.Upload:
+		// Handle slice of pointers
+		uploads := make([]graphql.Upload, 0, len(val))
+		for _, upload := range val {
+			if upload != nil {
+				uploads = append(uploads, *upload)
+			}
+		}
+		return uploads
+	case *graphql.Upload:
+		// Handle pointer to single upload
+		if val != nil {
+			return []graphql.Upload{*val}
+		}
+		return nil
 	case graphql.Upload:
 		return []graphql.Upload{val}
 	case []any:
@@ -98,6 +113,8 @@ func extractUploads(v any) []graphql.Upload {
 		for _, item := range val {
 			if upload, ok := item.(graphql.Upload); ok {
 				uploads = append(uploads, upload)
+			} else if uploadPtr, ok := item.(*graphql.Upload); ok && uploadPtr != nil {
+				uploads = append(uploads, *uploadPtr)
 			}
 		}
 		return uploads
