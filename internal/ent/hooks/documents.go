@@ -122,13 +122,23 @@ func mutationToFileKey(m importSchemaMutation) string {
 // importFileToSchema is a helper that reads an uploaded file from context, downloads it from storage, parses it,
 // sanitizes the content and sets the document name, fileID and details on the mutation
 func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error {
-	key := mutationToFileKey(m)
+    key := mutationToFileKey(m)
 
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
+    file, _ := objects.FilesFromContextWithKey(ctx, key)
 
-	if len(file) == 0 {
-		return nil
-	}
+    if len(file) == 0 {
+        return nil
+    }
+
+    // First, prefer parsed document content provided by middleware (avoids storage download)
+    if parsed, ok := objects.ParsedDocumentFromContext(ctx, key); ok && parsed != "" {
+        p := bluemonday.UGCPolicy()
+        m.SetName(file[0].OriginalName)
+        m.SetFileID(file[0].ID)
+        m.SetDetails(p.Sanitize(parsed))
+
+        return nil
+    }
 
 	currentFileID, exists := m.FileID()
 	// If the mutation already has a file, delete the old record to avoid leaving stale files around
@@ -138,38 +148,36 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 		}
 	}
 
-	// Download the uploaded file contents using the new object storage service so we can parse it locally
-	downloaded, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
-		FileName:    file[0].OriginalName,
-		ContentType: file[0].ContentType,
-	})
-	if err != nil {
-		return err
-	}
+    // Fallback: Download the uploaded file contents using the object storage service and parse into details
+    downloaded, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
+        FileName:    file[0].OriginalName,
+        ContentType: file[0].ContentType,
+    })
+    if err != nil {
+        return err
+    }
 
-	// Parse the document into text or structured content depending on the MIME type
-	parsedContent, err := storage.ParseDocument(bytes.NewReader(downloaded.File), file[0].ContentType)
-	if err != nil {
-		return err
-	}
+    parsedContent, err := storage.ParseDocument(bytes.NewReader(downloaded.File), file[0].ContentType)
+    if err != nil {
+        return err
+    }
 
-	p := bluemonday.UGCPolicy()
+    p := bluemonday.UGCPolicy()
 
-	m.SetName(file[0].OriginalName)
-	m.SetFileID(file[0].ID)
+    m.SetName(file[0].OriginalName)
+    m.SetFileID(file[0].ID)
 
-	// Ensure we end up with a string for details regardless of parse shape
-	var detailsStr string
-	switch v := parsedContent.(type) {
-	case string:
-		detailsStr = v
-	default:
-		detailsStr = fmt.Sprintf("%v", v)
-	}
+    var detailsStr string
+    switch v := parsedContent.(type) {
+    case string:
+        detailsStr = v
+    default:
+        detailsStr = fmt.Sprintf("%v", v)
+    }
 
-	m.SetDetails(p.Sanitize(detailsStr))
+    m.SetDetails(p.Sanitize(detailsStr))
 
-	return nil
+    return nil
 }
 
 const defaultImportTimeout = time.Second * 10

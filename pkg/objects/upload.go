@@ -22,7 +22,14 @@ import (
 // in subsequent parts of the request
 // this is different than the `key` in the multipart form, which is the form field name that the file was uploaded with
 type FileContextKey struct {
-	Files Files
+    Files Files
+}
+
+// ParsedDocContextKey is the context key for parsed document contents associated with uploaded files
+// It allows upstream middleware to parse text from uploads (e.g., docx/markdown/plaintext) and make it
+// available to downstream ent hooks without requiring a storage download
+type ParsedDocContextKey struct {
+    Docs map[string]string
 }
 
 // FileSource represents any source that can provide file uploads.
@@ -126,21 +133,26 @@ func ProcessFilesForMutation[T Mutation](ctx context.Context, mutation T, key st
 		return ctx, nil
 	}
 
-	mutationType := mutation.Type()
-	if len(parentType) > 0 {
-		mutationType = parentType[0] // Allow override of parent type
-	}
+    mutationType := mutation.Type()
+    if len(parentType) > 0 {
+        mutationType = parentType[0] // Allow override of parent type
+    }
 
-	// Set the parent ID and type for the file(s)
-	for i, f := range files {
-		// this should always be true, but check just in case
-		if f.FieldName == key {
-			files[i].Parent.ID, _ = mutation.ID()
-			files[i].Parent.Type = mutationType
+    // Set the parent ID and type for the file(s)
+    for i, f := range files {
+        // this should always be true, but check just in case
+        if f.FieldName == key {
+            id, _ := mutation.ID()
+            // Set parent information used by tuple writer
+            files[i].Parent.ID = id
+            files[i].Parent.Type = mutationType
+            // Also set correlated object information used by persistence to derive org owner
+            files[i].CorrelatedObjectID = id
+            files[i].CorrelatedObjectType = mutation.Type()
 
-			ctx = UpdateFileInContextByKey(ctx, key, files[i])
-		}
-	}
+            ctx = UpdateFileInContextByKey(ctx, key, files[i])
+        }
+    }
 
 	return ctx, nil
 }
@@ -206,6 +218,37 @@ func WriteFilesToContext(ctx context.Context, f Files) context.Context {
 	}
 
 	return contextx.With(ctx, fileCtx)
+}
+
+// WriteParsedDocumentToContext stores parsed document contents for a given form field key
+func WriteParsedDocumentToContext(ctx context.Context, key, content string) context.Context {
+    if key == "" || content == "" {
+        return ctx
+    }
+
+    parsedCtx, ok := contextx.From[ParsedDocContextKey](ctx)
+    if !ok {
+        parsedCtx = ParsedDocContextKey{Docs: map[string]string{}}
+    }
+
+    if parsedCtx.Docs == nil {
+        parsedCtx.Docs = map[string]string{}
+    }
+
+    parsedCtx.Docs[key] = content
+
+    return contextx.With(ctx, parsedCtx)
+}
+
+// ParsedDocumentFromContext retrieves parsed document contents by form field key if present
+func ParsedDocumentFromContext(ctx context.Context, key string) (string, bool) {
+    parsedCtx, ok := contextx.From[ParsedDocContextKey](ctx)
+    if !ok || parsedCtx.Docs == nil {
+        return "", false
+    }
+
+    v, exists := parsedCtx.Docs[key]
+    return v, exists
 }
 
 // UpdateFileInContextByKey updates the file in the context based on the key and the file ID

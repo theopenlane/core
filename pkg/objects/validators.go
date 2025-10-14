@@ -1,7 +1,8 @@
 package objects
 
 import (
-	"strings"
+    "fmt"
+    "strings"
 )
 
 // ValidationFunc is a type that can be used to dynamically validate a file
@@ -9,16 +10,24 @@ type ValidationFunc func(f File) error
 
 // MimeTypeValidator makes sure we only accept a valid mimetype.
 // It takes in an array of supported mimes
+// MimeTypeValidator is a validator factory that ensures the file's content type matches one of the provided types
+// When validation fails it wraps ErrUnsupportedMimeType and includes a normalized mime type without charset parameters
 func MimeTypeValidator(validMimeTypes ...string) ValidationFunc {
-	return func(f File) error {
-		for _, mimeType := range validMimeTypes {
-			if strings.EqualFold(strings.ToLower(mimeType), f.ContentType) {
-				return nil
-			}
-		}
+    return func(f File) error {
+        for _, mimeType := range validMimeTypes {
+            if strings.EqualFold(strings.ToLower(mimeType), f.ContentType) {
+                return nil
+            }
+        }
 
-		return ErrUnsupportedMimeType
-	}
+        // normalize mime for error display (strip parameters like charset) to keep messages stable
+        norm := f.ContentType
+        if idx := strings.Index(norm, ";"); idx > -1 {
+            norm = strings.TrimSpace(norm[:idx])
+        }
+
+        return fmt.Errorf("%w: %s", ErrUnsupportedMimeType, norm)
+    }
 }
 
 // ChainValidators returns a validator that accepts multiple validating criteria

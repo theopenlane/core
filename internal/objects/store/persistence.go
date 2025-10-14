@@ -1,15 +1,16 @@
 package store
 
 import (
-	"context"
-	"path/filepath"
-	"strings"
+    "context"
+    "path/filepath"
+    "strings"
 
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
+    "github.com/samber/lo"
+    loiter "github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -108,7 +109,9 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	if orgID == "" {
 		var rows sql.Rows
 
-		objectTable := pluralize.NewClient().Plural(f.CorrelatedObjectType)
+    // derive table name from correlated object type using snake_case to match DB naming
+    objectType := loiter.SnakeCase(f.CorrelatedObjectType)
+    objectTable := pluralize.NewClient().Plural(objectType)
 		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
 
 		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {

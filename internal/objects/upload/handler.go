@@ -1,12 +1,13 @@
 package upload
 
 import (
-	"context"
-	"io"
-	"strings"
-	"time"
+    "context"
+    "io"
+    "strings"
+    "time"
 
-	"github.com/rs/zerolog/log"
+    "github.com/rs/zerolog/log"
+    ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/objects"
@@ -101,6 +102,93 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 	ctx = pkgobjects.WriteFilesToContext(ctx, contextFilesMap)
 	return ctx, uploadedFiles, nil
+}
+
+// StageUploads prepares file records and enriches context with file IDs without calling the storage provider
+// This allows resolvers to run business validation prior to invoking uploads
+func StageUploads(ctx context.Context, files []pkgobjects.File) (context.Context, []pkgobjects.File, error) {
+	if len(files) == 0 {
+		return ctx, nil, nil
+	}
+
+	var staged []pkgobjects.File
+
+	for _, file := range files {
+		// Attach correlated object defaults from auth context if not set
+		orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" {
+			file.CorrelatedObjectID = orgID
+			file.CorrelatedObjectType = "organization"
+		}
+
+		// Normalize provider hints and content type for persistence purposes only
+		_ = BuildUploadOptions(ctx, &file)
+
+		// Persist an ent.File record so downstream resolvers can reference the file ID in the same request
+		entFile, err := store.CreateFileRecord(ctx, file)
+		if err != nil {
+			log.Error().Err(err).Str("file", file.OriginalName).Msg("failed to create file record during stage")
+			return ctx, nil, err
+		}
+
+		// Assign generated ID back to the staged file for context propagation
+		file.ID = entFile.ID
+		staged = append(staged, file)
+	}
+
+	// Write staged files to request context grouped by their form field name
+	contextFilesMap := make(pkgobjects.Files)
+	for _, f := range staged {
+		key := f.FieldName
+		if key == "" {
+			key = "uploads"
+		}
+		contextFilesMap[key] = append(contextFilesMap[key], f)
+	}
+
+	ctx = pkgobjects.WriteFilesToContext(ctx, contextFilesMap)
+
+	return ctx, staged, nil
+}
+
+// FinalizeUploads runs validation and performs the actual provider upload for previously staged files
+func FinalizeUploads(ctx context.Context, svc *objects.Service, files []pkgobjects.File) error {
+	if len(files) == 0 {
+		return nil
+	}
+
+	for _, file := range files {
+		metrics.StartFileUpload()
+		startTime := time.Now()
+
+		finish := func(status string) {
+			metrics.FinishFileUpload(status, time.Since(startTime).Seconds())
+		}
+
+		uploadOpts := BuildUploadOptions(ctx, &file)
+
+		uploadedFile, err := svc.Upload(ctx, file.RawFile, uploadOpts)
+		if err != nil {
+			log.Error().Err(err).Str("file", file.OriginalName).Msg("failed to upload file")
+			finish("error")
+			return err
+		}
+
+		if closer, ok := file.RawFile.(io.Closer); ok {
+			_ = closer.Close()
+		}
+
+		mergeUploadedFileMetadata(uploadedFile, file.ID, file)
+		if err := store.UpdateFileWithStorageMetadata(ctx, &ent.File{ID: file.ID}, *uploadedFile); err != nil {
+			log.Error().Err(err).Msg("failed to update file metadata after upload")
+			finish("error")
+			return err
+		}
+
+		finish("success")
+	}
+
+	return nil
 }
 
 // BuildUploadOptions prepares upload options enriched with provider hints and ensures

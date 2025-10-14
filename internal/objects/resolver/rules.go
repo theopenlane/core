@@ -154,7 +154,7 @@ func (rc *ruleCoordinator) addModuleRule(module models.OrgModule, provider stora
 			hint, ok := contextx.From[objects.ModuleHint](ctx)
 			return ok && models.OrgModule(hint) == module
 		},
-		Resolver: func(ctx context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
 			return rc.resolveProviderWithBuilder(moduleProvider)
 		},
 	}
@@ -171,7 +171,7 @@ func (rc *ruleCoordinator) addDefaultProviderRule() {
 
 	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 		Predicate: func(_ context.Context) bool { return true },
-		Resolver: func(ctx context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
 			return rc.resolveProviderWithBuilder(defaultProvider)
 		},
 	}

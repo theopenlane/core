@@ -1,12 +1,12 @@
 package validators
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"os"
-	"slices"
-	"time"
+    "context"
+    "errors"
+    "fmt"
+    "os"
+    "slices"
+    "time"
 
 	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -21,8 +21,13 @@ import (
 )
 
 const (
-	StorageValidationTimeout     = 10 * time.Second
-	StorageCredentialSyncTimeout = 10 * time.Second
+    StorageValidationTimeout     = 10 * time.Second
+    StorageCredentialSyncTimeout = 10 * time.Second
+)
+
+var (
+    // ErrBucketNotFound is returned when a provider does not contain the expected bucket
+    ErrBucketNotFound = errors.New("bucket not found")
 )
 
 // ValidateConfiguredStorageProviders checks connectivity and configuration of all enabled storage providers
@@ -225,9 +230,9 @@ func validateBuckets(providerName string, provider storagetypes.Provider, expect
 
 	log.Info().Str("provider", providerName).Strs("available_buckets", buckets).Msg("storage provider connectivity verified")
 
-	if expectedBucket != "" && !slices.Contains(buckets, expectedBucket) {
-		return fmt.Errorf("%s bucket %s not found", providerName, expectedBucket)
-	}
+    if expectedBucket != "" && !slices.Contains(buckets, expectedBucket) {
+        return fmt.Errorf("%w: provider %s bucket %s", ErrBucketNotFound, providerName, expectedBucket)
+    }
 
 	return nil
 }

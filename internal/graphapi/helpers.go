@@ -1,12 +1,12 @@
 package graphapi
 
 import (
-	"context"
-	"encoding/csv"
-	"encoding/json"
-	"fmt"
-	"io"
-	"strings"
+    "context"
+    "encoding/csv"
+    "encoding/json"
+    "fmt"
+    "io"
+    "strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
@@ -25,9 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
-	"github.com/theopenlane/core/internal/objects/upload"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+    "github.com/theopenlane/core/internal/objects/upload"
+    "github.com/theopenlane/core/pkg/events/soiree"
+    "github.com/microcosm-cc/bluemonday"
+    storage "github.com/theopenlane/core/pkg/objects/storage"
+    pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -88,12 +90,34 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 
 			for _, fileUpload := range files {
 				// Buffer the file in memory if small enough, otherwise leave as-is
-				if fileUpload.RawFile != nil {
-					buffered, err := pkgobjects.NewBufferedReaderFromReader(fileUpload.RawFile)
-					if err == nil {
-						fileUpload.RawFile = buffered
-					}
-				}
+                if fileUpload.RawFile != nil {
+                    buffered, err := pkgobjects.NewBufferedReaderFromReader(fileUpload.RawFile)
+                    if err == nil {
+                        fileUpload.RawFile = buffered
+
+                        // Opportunistically parse document-like uploads to avoid storage downloads in downstream hooks
+                        ct := strings.ToLower(strings.TrimSpace(fileUpload.ContentType))
+                        if ct == "text/plain" || strings.HasPrefix(ct, "text/plain;") ||
+                            ct == "text/markdown" ||
+                            ct == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" {
+                            if br, ok := fileUpload.RawFile.(*pkgobjects.BufferedReader); ok {
+                                parsed, perr := storage.ParseDocument(br.NewReader(), fileUpload.ContentType)
+                                if perr == nil {
+                                    var detailsStr string
+                                    switch v := parsed.(type) {
+                                    case string:
+                                        detailsStr = v
+                                    default:
+                                        detailsStr = fmt.Sprintf("%v", v)
+                                    }
+
+                                    p := bluemonday.UGCPolicy()
+                                    ctx = pkgobjects.WriteParsedDocumentToContext(ctx, k, p.Sanitize(detailsStr))
+                                }
+                            }
+                        }
+                    }
+                }
 
 				// Add object details using existing logic
 				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
@@ -122,10 +146,31 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			}()
 		}
 
-		ctx, _, err = upload.HandleUploads(ctx, u, uploads)
-		if err != nil {
-			return nil, err
-		}
+        // Decide whether to defer uploads for this field
+        // Some mutations (e.g., ones that accept templateFiles) should run business logic before storage validation
+        // Generic heuristic: if an Upload argument is named "templateFiles", defer uploads
+        deferUploads := false
+        for _, arg := range rctx.Field.Arguments {
+            if argIsUpload(arg) && arg.Name == "templateFiles" {
+                deferUploads = true
+                break
+            }
+        }
+
+        var staged []pkgobjects.File
+        if deferUploads {
+            // Stage file records first so resolvers can perform business checks before storage validation/upload
+            ctx, staged, err = upload.StageUploads(ctx, uploads)
+            if err != nil {
+                return nil, err
+            }
+        } else {
+            // Perform normal upload flow including validation before resolver
+            ctx, _, err = upload.HandleUploads(ctx, u, uploads)
+            if err != nil {
+                return nil, err
+            }
+        }
 
 		// add the uploaded files to the echo context if there are any
 		// this is useful for using other middleware that depends on the echo context
@@ -139,6 +184,13 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		if err != nil {
 			return nil, err
 		}
+
+        // After successful resolver execution, finalize storage uploads and validation if deferred
+        if deferUploads {
+            if err = upload.FinalizeUploads(ctx, u, staged); err != nil {
+                return nil, err
+            }
+        }
 
 		// add the file permissions before returning the field
 		if ctx, err = store.AddFilePermissions(ctx); err != nil {
@@ -368,9 +420,10 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *pkgob
 					upload.Parent.ID = objectID
 				}
 
-				objectType := stripOperation(rctx.Field.Name)
-				upload.CorrelatedObjectType = objectType
-				upload.Parent.Type = objectType
+            objectType := stripOperation(rctx.Field.Name)
+            upload.CorrelatedObjectType = objectType
+            // Parent.Type must use snake_case to align with authz tuple expectations (e.g., trust_center_doc)
+            upload.Parent.Type = lo.SnakeCase(objectType)
 				upload.FieldName = arg.Name
 				upload.Key = arg.Name // Also set Key in FileMetadata for backwards compatibility
 
@@ -401,21 +454,19 @@ func argIsUpload(arg *ast.Argument) bool {
 	return false
 }
 
-// stripOperation strips the operation from the field name and converts to snake_case
-// e.g. updateUser becomes user, createTrustCenterDoc becomes trust_center_doc
+// stripOperation strips the operation prefix from the field name and returns the remainder unchanged
+// e.g. updateUser becomes User, createTrustCenterDoc becomes TrustCenterDoc
 func stripOperation(field string) string {
-	operations := []string{"create", "update", "delete", "get"}
+    operations := []string{"create", "update", "delete", "get"}
 
-	for _, op := range operations {
-		if strings.HasPrefix(field, op) {
-			// Strip the operation prefix
-			stripped := strings.ReplaceAll(field, op, "")
-			// Convert camelCase to snake_case
-			return lo.SnakeCase(stripped)
-		}
-	}
+    for _, op := range operations {
+        if strings.HasPrefix(field, op) {
+            // Strip the operation prefix
+            return strings.TrimPrefix(field, op)
+        }
+    }
 
-	return lo.SnakeCase(field)
+    return field
 }
 
 // isEmpty checks if the given interface is empty

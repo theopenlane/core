@@ -20,9 +20,11 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/auth"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/stretchr/testify/mock"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/eddy"
@@ -246,14 +248,31 @@ func MockStorageServiceWithValidation(t *testing.T, uploader storage.UploaderFun
 // MockStorageServiceWithValidationAndProvider creates a new storage service for testing with custom validation
 // and returns both the StorageService and the mock provider for setting up expectations
 func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, *mock_shared.MockProvider, error) {
-	// Create mock provider - handle nil testing.T gracefully
-	var mockProvider *mock_shared.MockProvider
-	if t != nil {
-		mockProvider = mock_shared.NewMockProvider(t)
-	} else {
-		// Create a basic mock without test cleanup for non-test contexts
-		mockProvider = &mock_shared.MockProvider{}
-	}
+    // Create mock provider - handle nil testing.T gracefully
+    var mockProvider *mock_shared.MockProvider
+    if t != nil {
+        mockProvider = mock_shared.NewMockProvider(t)
+    } else {
+        // Create a basic mock without test cleanup for non-test contexts
+        mockProvider = &mock_shared.MockProvider{}
+    }
+
+    // Provide safe default stubs so tests that forget explicit expectations don't panic
+    // Explicit expectUpload calls still take precedence with Once()
+    mockScheme := "file://"
+    mockProvider.On("GetScheme").Return(&mockScheme).Maybe()
+    mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+    mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+        FileMetadata: pkgobjects.FileMetadata{
+            Key:          "test-key",
+            ProviderType: storage.DiskProvider,
+        },
+    }, nil).Maybe()
+    mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+        File: []byte("test content"),
+        Size: 12,
+    }, nil).Maybe()
+    mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("http://localhost/presigned", nil).Maybe()
 
 	// Create eddy components
 	pool := eddy.NewClientPool[storage.Provider](time.Minute)
