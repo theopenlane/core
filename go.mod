@@ -66,6 +66,7 @@ require (
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/nguyenthenguyen/docx v0.0.0-20230621112118-9c8e795a11db
 	github.com/nyaruka/phonenumbers v1.6.6
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.3
@@ -102,7 +103,6 @@ require (
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
-	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/windmill-labs/windmill-go-client v1.558.1
@@ -319,7 +319,6 @@ require (
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.17.0 // indirect
 	github.com/resend/resend-go/v2 v2.23.0 // indirect
-	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/riverqueue/river/riverdriver v0.26.0 // indirect
 	github.com/riverqueue/river/rivershared v0.26.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.5.0 // indirect

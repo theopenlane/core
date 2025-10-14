@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/unidoc/unioffice/document"
+	"github.com/nguyenthenguyen/docx"
 )
 
 var (
@@ -32,23 +32,12 @@ func ParseDocument(content []byte, mimeType string) (string, error) {
 func parseDocx(content []byte) (string, error) {
 	reader := bytes.NewReader(content)
 
-	doc, err := document.Read(reader, int64(len(content)))
+	doc, err := docx.ReadDocxFromMemory(reader, int64(len(content)))
 	if err != nil {
 		return "", fmt.Errorf("failed to read docx file: %w", err) // nolint:err113
 	}
 
 	defer doc.Close()
 
-	var w strings.Builder
-
-	for _, para := range doc.Paragraphs() {
-		for _, run := range para.Runs() {
-			w.WriteString(run.Text())
-			w.WriteString(" ")
-		}
-
-		w.WriteString("\n")
-	}
-
-	return strings.TrimSpace(w.String()), nil
+	return strings.TrimSpace(doc.Editable().GetContent()), nil
 }
