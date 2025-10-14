@@ -87,19 +87,6 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			}
 
 			for _, fileUpload := range files {
-				// Buffer the file in memory if small enough, otherwise leave as-is
-				if fileUpload.RawFile != nil {
-					original := fileUpload.RawFile
-					buffered, err := pkgobjects.NewBufferedReaderFromReader(original)
-					if err == nil {
-						fileUpload.RawFile = buffered
-						// Reset reusable readers (e.g., *os.File) so subsequent requests can reuse the upload
-						if seeker, ok := original.(io.Seeker); ok {
-							_, _ = seeker.Seek(0, io.SeekStart)
-						}
-					}
-				}
-
 				// Add object details using existing logic
 				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
 				if err != nil {
