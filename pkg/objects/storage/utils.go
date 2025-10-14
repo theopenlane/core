@@ -19,19 +19,8 @@ const (
 	MIMEDetectionBufferSize = 512
 )
 
-// DetectContentType is a helper that detects the MIME type of an io.ReadSeeker, returning application/octet-stream for empty inputs
+// DetectContentType detects the MIME type of the provided reader using gabriel-vasile/mimetype library
 func DetectContentType(reader io.ReadSeeker) (string, error) {
-	// If the reader is empty, return a safe default
-	if _, err := reader.Seek(0, io.SeekEnd); err == nil {
-		if size, err := reader.Seek(0, io.SeekCurrent); err == nil && size == 0 {
-			// Reset and return default for empty content
-			if _, err := reader.Seek(0, io.SeekStart); err != nil {
-				return "", err
-			}
-			return "application/octet-stream", nil
-		}
-	}
-
 	// Seek to beginning
 	if _, err := reader.Seek(0, io.SeekStart); err != nil {
 		return "", err

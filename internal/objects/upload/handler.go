@@ -3,6 +3,7 @@ package upload
 import (
 	"context"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -118,12 +119,23 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 	objects.PopulateProviderHints(f, orgID)
 
 	contentType := f.ContentType
-	if contentType == "" && f.RawFile != nil {
-		if seeker, ok := f.RawFile.(io.ReadSeeker); ok {
-			if detected, err := storage.DetectContentType(seeker); err == nil && detected != "" {
+	if contentType == "" || strings.EqualFold(contentType, "application/octet-stream") {
+		// When we buffer the upload we lose any stream-specific metadata, so detect the MIME now
+		// and swap in the buffered reader so the downstream provider still has access to the data.
+		if f.RawFile != nil {
+			if detected, err := storage.DetectContentType(f.RawFile); err == nil && detected != "" {
 				contentType = detected
-				f.ContentType = contentType
+			} else if buffered, err := pkgobjects.NewBufferedReaderFromReader(f.RawFile); err == nil {
+				if detected, err := storage.DetectContentType(buffered); err == nil && detected != "" {
+					contentType = detected
+				}
+				// Replace the original reader so the upload pipeline can still stream the contents.
+				f.RawFile = buffered
 			}
+		}
+
+		if contentType != "" {
+			f.ContentType = contentType
 		}
 	}
 

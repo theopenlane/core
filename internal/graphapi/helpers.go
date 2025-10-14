@@ -87,6 +87,14 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			}
 
 			for _, fileUpload := range files {
+				// Buffer the file in memory if small enough, otherwise leave as-is
+				if fileUpload.RawFile != nil {
+					buffered, err := pkgobjects.NewBufferedReaderFromReader(fileUpload.RawFile)
+					if err == nil {
+						fileUpload.RawFile = buffered
+					}
+				}
+
 				// Add object details using existing logic
 				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
 				if err != nil {
@@ -114,7 +122,6 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			}()
 		}
 
-		// Perform normal upload flow including validation before resolver
 		ctx, _, err = upload.HandleUploads(ctx, u, uploads)
 		if err != nil {
 			return nil, err
@@ -132,8 +139,6 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		if err != nil {
 			return nil, err
 		}
-
-		// No deferred uploads, continue
 
 		// add the file permissions before returning the field
 		if ctx, err = store.AddFilePermissions(ctx); err != nil {
