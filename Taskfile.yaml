@@ -120,18 +120,15 @@ tasks:
     sources:
       - pkg/catalog/**/*.go
       - pkg/corejobs/internal/**/*.go
-      - pkg/objects/**/*.go
       - .mockery.yml
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
       - pkg/corejobs/internal/cloudflare/mocks/mocks.go
-      - pkg/objects/mocks/mocks.go
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
       - go generate pkg/corejobs/internal/generate.go
-      - go generate pkg/objects/objects.go
 
   # Buildkite automation tasks
   buildkite:draft-pr:
