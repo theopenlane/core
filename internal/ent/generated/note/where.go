@@ -750,6 +750,64 @@ func HasTaskWith(preds ...predicate.Task) predicate.Note {
 	})
 }
 
+// HasControl applies the HasEdge predicate on the "control" edge.
+func HasControl() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ControlTable, ControlColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
+func HasControlWith(preds ...predicate.Control) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newControlStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubcontrol applies the HasEdge predicate on the "subcontrol" edge.
+func HasSubcontrol() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubcontrolTable, SubcontrolColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolWith applies the HasEdge predicate on the "subcontrol" edge with a given conditions (other predicates).
+func HasSubcontrolWith(preds ...predicate.Subcontrol) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newSubcontrolStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {
