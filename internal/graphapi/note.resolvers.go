@@ -75,8 +75,8 @@ func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, 
 	}, nil
 }
 
-// UpdateSubontrolComment is the resolver for the updateSubontrolComment field.
-func (r *mutationResolver) UpdateSubontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error) {
+// UpdateSubcontrolComment is the resolver for the updateSubcontrolComment field.
+func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})

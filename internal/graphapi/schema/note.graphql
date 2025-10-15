@@ -63,7 +63,7 @@ extend type Mutation{
     """
     Update an existing subcontrol comment
     """
-    updateSubontrolComment(
+    updateSubcontrolComment(
         """
         ID of the comment
         """

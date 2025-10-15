@@ -164,7 +164,7 @@ type MutationResolver interface {
 	DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error)
 	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error)
 	UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error)
-	UpdateSubontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error)
+	UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error)
 	CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error)
 	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
 	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error)
@@ -3483,23 +3483,7 @@ func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubcontrolInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateSubontrolComment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_updateSubcontrolComment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
@@ -3517,6 +3501,22 @@ func (ec *executionContext) field_Mutation_updateSubontrolComment_args(ctx conte
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubcontrolInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -10882,15 +10882,15 @@ func (ec *executionContext) fieldContext_Mutation_updateControlComment(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateSubontrolComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_updateSubcontrolComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_updateSubontrolComment,
+		ec.fieldContext_Mutation_updateSubcontrolComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateSubontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.resolvers.Mutation().UpdateSubcontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubcontrolUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolUpdatePayload,
@@ -10899,7 +10899,7 @@ func (ec *executionContext) _Mutation_updateSubontrolComment(ctx context.Context
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_updateSubontrolComment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updateSubcontrolComment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -10920,7 +10920,7 @@ func (ec *executionContext) fieldContext_Mutation_updateSubontrolComment(ctx con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateSubontrolComment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updateSubcontrolComment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -17859,9 +17859,9 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "updateSubontrolComment":
+		case "updateSubcontrolComment":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateSubontrolComment(ctx, field)
+				return ec._Mutation_updateSubcontrolComment(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

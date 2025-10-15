@@ -2722,7 +2722,7 @@ type ComplexityRoot struct {
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubontrolComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
@@ -20173,17 +20173,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateSubcontrol(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubcontrolInput)), true
 
-	case "Mutation.updateSubontrolComment":
-		if e.complexity.Mutation.UpdateSubontrolComment == nil {
+	case "Mutation.updateSubcontrolComment":
+		if e.complexity.Mutation.UpdateSubcontrolComment == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_updateSubontrolComment_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_updateSubcontrolComment_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSubontrolComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+		return e.complexity.Mutation.UpdateSubcontrolComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateSubprocessor":
 		if e.complexity.Mutation.UpdateSubprocessor == nil {
@@ -100658,7 +100658,7 @@ extend type Mutation{
     """
     Update an existing subcontrol comment
     """
-    updateSubontrolComment(
+    updateSubcontrolComment(
         """
         ID of the comment
         """
