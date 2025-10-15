@@ -322,6 +322,34 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableAccentColor(v *string) *Tr
 	return _c
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_c *TrustCenterSettingHistoryCreate) SetSecondaryBackgroundColor(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetSecondaryBackgroundColor(v)
+	return _c
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetSecondaryBackgroundColor(*v)
+	}
+	return _c
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_c *TrustCenterSettingHistoryCreate) SetSecondaryForegroundColor(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetSecondaryForegroundColor(v)
+	return _c
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetSecondaryForegroundColor(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -549,6 +577,14 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.AccentColor(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
 		_node.AccentColor = value
+	}
+	if value, ok := _c.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString, value)
+		_node.SecondaryBackgroundColor = value
+	}
+	if value, ok := _c.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
+		_node.SecondaryForegroundColor = value
 	}
 	return _node, _spec
 }

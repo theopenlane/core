@@ -24,6 +24,10 @@ func HookCreatePersonalAccessToken() ent.Hook {
 				return nil, err
 			}
 
+			if err := validateExpirationTime(m); err != nil {
+				return nil, err
+			}
+
 			// set user on the token
 			m.SetOwnerID(userID)
 

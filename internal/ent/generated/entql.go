@@ -3361,25 +3361,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSetting",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersetting.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
-			trustcentersetting.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
-			trustcentersetting.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
-			trustcentersetting.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
-			trustcentersetting.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
-			trustcentersetting.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
-			trustcentersetting.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
-			trustcentersetting.FieldTitle:              {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
-			trustcentersetting.FieldOverview:           {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
-			trustcentersetting.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
-			trustcentersetting.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
-			trustcentersetting.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
-			trustcentersetting.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
-			trustcentersetting.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersetting.FieldThemeMode},
-			trustcentersetting.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
-			trustcentersetting.FieldFont:               {Type: field.TypeString, Column: trustcentersetting.FieldFont},
-			trustcentersetting.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldForegroundColor},
-			trustcentersetting.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldBackgroundColor},
-			trustcentersetting.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
+			trustcentersetting.FieldCreatedAt:                {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
+			trustcentersetting.FieldUpdatedAt:                {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
+			trustcentersetting.FieldCreatedBy:                {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
+			trustcentersetting.FieldUpdatedBy:                {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
+			trustcentersetting.FieldDeletedAt:                {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
+			trustcentersetting.FieldDeletedBy:                {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
+			trustcentersetting.FieldTrustCenterID:            {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
+			trustcentersetting.FieldTitle:                    {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
+			trustcentersetting.FieldOverview:                 {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
+			trustcentersetting.FieldLogoRemoteURL:            {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
+			trustcentersetting.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
+			trustcentersetting.FieldFaviconRemoteURL:         {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
+			trustcentersetting.FieldFaviconLocalFileID:       {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
+			trustcentersetting.FieldThemeMode:                {Type: field.TypeEnum, Column: trustcentersetting.FieldThemeMode},
+			trustcentersetting.FieldPrimaryColor:             {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldFont:                     {Type: field.TypeString, Column: trustcentersetting.FieldFont},
+			trustcentersetting.FieldForegroundColor:          {Type: field.TypeString, Column: trustcentersetting.FieldForegroundColor},
+			trustcentersetting.FieldBackgroundColor:          {Type: field.TypeString, Column: trustcentersetting.FieldBackgroundColor},
+			trustcentersetting.FieldAccentColor:              {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
+			trustcentersetting.FieldSecondaryBackgroundColor: {Type: field.TypeString, Column: trustcentersetting.FieldSecondaryBackgroundColor},
+			trustcentersetting.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersetting.FieldSecondaryForegroundColor},
 		},
 	}
 	graph.Nodes[104] = &sqlgraph.Node{
@@ -3393,28 +3395,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersettinghistory.FieldHistoryTime:        {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
-			trustcentersettinghistory.FieldRef:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
-			trustcentersettinghistory.FieldOperation:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
-			trustcentersettinghistory.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
-			trustcentersettinghistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
-			trustcentersettinghistory.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
-			trustcentersettinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
-			trustcentersettinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
-			trustcentersettinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
-			trustcentersettinghistory.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
-			trustcentersettinghistory.FieldTitle:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
-			trustcentersettinghistory.FieldOverview:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
-			trustcentersettinghistory.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
-			trustcentersettinghistory.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
-			trustcentersettinghistory.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
-			trustcentersettinghistory.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
-			trustcentersettinghistory.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
-			trustcentersettinghistory.FieldFont:               {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
-			trustcentersettinghistory.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
-			trustcentersettinghistory.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
-			trustcentersettinghistory.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
+			trustcentersettinghistory.FieldHistoryTime:              {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
+			trustcentersettinghistory.FieldRef:                      {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
+			trustcentersettinghistory.FieldOperation:                {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
+			trustcentersettinghistory.FieldCreatedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
+			trustcentersettinghistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
+			trustcentersettinghistory.FieldCreatedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
+			trustcentersettinghistory.FieldUpdatedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
+			trustcentersettinghistory.FieldDeletedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
+			trustcentersettinghistory.FieldDeletedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
+			trustcentersettinghistory.FieldTrustCenterID:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
+			trustcentersettinghistory.FieldTitle:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
+			trustcentersettinghistory.FieldOverview:                 {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
+			trustcentersettinghistory.FieldLogoRemoteURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
+			trustcentersettinghistory.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
+			trustcentersettinghistory.FieldFaviconRemoteURL:         {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
+			trustcentersettinghistory.FieldFaviconLocalFileID:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
+			trustcentersettinghistory.FieldThemeMode:                {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
+			trustcentersettinghistory.FieldPrimaryColor:             {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldFont:                     {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
+			trustcentersettinghistory.FieldForegroundColor:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
+			trustcentersettinghistory.FieldBackgroundColor:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
+			trustcentersettinghistory.FieldAccentColor:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
+			trustcentersettinghistory.FieldSecondaryBackgroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryBackgroundColor},
+			trustcentersettinghistory.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryForegroundColor},
 		},
 	}
 	graph.Nodes[105] = &sqlgraph.Node{
@@ -29433,6 +29437,16 @@ func (f *TrustCenterSettingFilter) WhereAccentColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldAccentColor))
 }
 
+// WhereSecondaryBackgroundColor applies the entql string predicate on the secondary_background_color field.
+func (f *TrustCenterSettingFilter) WhereSecondaryBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldSecondaryBackgroundColor))
+}
+
+// WhereSecondaryForegroundColor applies the entql string predicate on the secondary_foreground_color field.
+func (f *TrustCenterSettingFilter) WhereSecondaryForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldSecondaryForegroundColor))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -29637,6 +29651,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereBackgroundColor(p entql.StringP) 
 // WhereAccentColor applies the entql string predicate on the accent_color field.
 func (f *TrustCenterSettingHistoryFilter) WhereAccentColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldAccentColor))
+}
+
+// WhereSecondaryBackgroundColor applies the entql string predicate on the secondary_background_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereSecondaryBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldSecondaryBackgroundColor))
+}
+
+// WhereSecondaryForegroundColor applies the entql string predicate on the secondary_foreground_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereSecondaryForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldSecondaryForegroundColor))
 }
 
 // addPredicate implements the predicateAdder interface.
