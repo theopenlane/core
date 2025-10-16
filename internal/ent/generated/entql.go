@@ -6391,6 +6391,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"control",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrol",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -20120,6 +20144,34 @@ func (f *NoteFilter) WhereHasTask() {
 // WhereHasTaskWith applies a predicate to check if query has an edge task with a given conditions (other predicates).
 func (f *NoteFilter) WhereHasTaskWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("task", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControl applies a predicate to check if query has an edge control.
+func (f *NoteFilter) WhereHasControl() {
+	f.Where(entql.HasEdge("control"))
+}
+
+// WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasControlWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrol applies a predicate to check if query has an edge subcontrol.
+func (f *NoteFilter) WhereHasSubcontrol() {
+	f.Where(entql.HasEdge("subcontrol"))
+}
+
+// WhereHasSubcontrolWith applies a predicate to check if query has an edge subcontrol with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasSubcontrolWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

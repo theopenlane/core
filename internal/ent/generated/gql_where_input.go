@@ -50317,6 +50317,14 @@ type NoteWhereInput struct {
 	HasTask     *bool             `json:"hasTask,omitempty"`
 	HasTaskWith []*TaskWhereInput `json:"hasTaskWith,omitempty"`
 
+	// "control" edge predicates.
+	HasControl     *bool                `json:"hasControl,omitempty"`
+	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+
+	// "subcontrol" edge predicates.
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -50732,6 +50740,42 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasTaskWith(with...))
+	}
+	if i.HasControl != nil {
+		p := note.HasControl()
+		if !*i.HasControl {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		for _, w := range i.HasControlWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasControlWith(with...))
+	}
+	if i.HasSubcontrol != nil {
+		p := note.HasSubcontrol()
+		if !*i.HasSubcontrol {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		for _, w := range i.HasSubcontrolWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasSubcontrolWith(with...))
 	}
 	if i.HasFiles != nil {
 		p := note.HasFiles()

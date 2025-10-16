@@ -3820,6 +3820,22 @@ func (_m *Note) Task(ctx context.Context) (*Task, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Control(ctx context.Context) (*Control, error) {
+	result, err := _m.Edges.ControlOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryControl().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Note) Subcontrol(ctx context.Context) (*Subcontrol, error) {
+	result, err := _m.Edges.SubcontrolOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QuerySubcontrol().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) Files(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
 ) (*FileConnection, error) {
@@ -3828,7 +3844,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {

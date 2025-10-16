@@ -944,6 +944,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "control": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "subcontrol": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "files": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,

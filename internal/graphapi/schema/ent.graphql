@@ -8937,6 +8937,8 @@ input CreateNoteInput {
   text: String!
   ownerID: ID
   taskID: ID
+  controlID: ID
+  subcontrolID: ID
   fileIDs: [ID!]
 }
 """
@@ -27609,6 +27611,8 @@ type Note implements Node {
   text: String!
   owner: Organization
   task: Task
+  control: Control
+  subcontrol: Subcontrol
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -28085,6 +28089,16 @@ input NoteWhereInput {
   """
   hasTask: Boolean
   hasTaskWith: [TaskWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
   """
   files edge predicates
   """
@@ -55479,6 +55493,10 @@ input UpdateNoteInput {
   text: String
   taskID: ID
   clearTask: Boolean
+  controlID: ID
+  clearControl: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean

@@ -15,6 +15,16 @@ extend input UpdateTaskInput {
     deleteComment: ID
 }
 
+extend input UpdateControlInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateSubcontrolInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -33,5 +43,39 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): TaskUpdatePayload!
+    """
+    Update an existing control comment
+    """
+    updateControlComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ControlUpdatePayload!
+    """
+    Update an existing subcontrol comment
+    """
+    updateSubcontrolComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): SubcontrolUpdatePayload!
 }
 

@@ -13,10 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -31,6 +33,8 @@ type NoteQuery struct {
 	predicates     []predicate.Note
 	withOwner      *OrganizationQuery
 	withTask       *TaskQuery
+	withControl    *ControlQuery
+	withSubcontrol *SubcontrolQuery
 	withFiles      *FileQuery
 	withFKs        bool
 	loadTotal      []func(context.Context, []*Note) error
@@ -115,6 +119,56 @@ func (_q *NoteQuery) QueryTask() *TaskQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControl chains the current query on the "control" edge.
+func (_q *NoteQuery) QueryControl() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ControlTable, note.ControlColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrol chains the current query on the "subcontrol" edge.
+func (_q *NoteQuery) QuerySubcontrol() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.SubcontrolTable, note.SubcontrolColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -334,14 +388,16 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		return nil
 	}
 	return &NoteQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]note.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.Note{}, _q.predicates...),
-		withOwner:  _q.withOwner.Clone(),
-		withTask:   _q.withTask.Clone(),
-		withFiles:  _q.withFiles.Clone(),
+		config:         _q.config,
+		ctx:            _q.ctx.Clone(),
+		order:          append([]note.OrderOption{}, _q.order...),
+		inters:         append([]Interceptor{}, _q.inters...),
+		predicates:     append([]predicate.Note{}, _q.predicates...),
+		withOwner:      _q.withOwner.Clone(),
+		withTask:       _q.withTask.Clone(),
+		withControl:    _q.withControl.Clone(),
+		withSubcontrol: _q.withSubcontrol.Clone(),
+		withFiles:      _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -368,6 +424,28 @@ func (_q *NoteQuery) WithTask(opts ...func(*TaskQuery)) *NoteQuery {
 		opt(query)
 	}
 	_q.withTask = query
+	return _q
+}
+
+// WithControl tells the query-builder to eager-load the nodes that are connected to
+// the "control" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithControl(opts ...func(*ControlQuery)) *NoteQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControl = query
+	return _q
+}
+
+// WithSubcontrol tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrol" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithSubcontrol(opts ...func(*SubcontrolQuery)) *NoteQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrol = query
 	return _q
 }
 
@@ -467,13 +545,15 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
+			_q.withControl != nil,
+			_q.withSubcontrol != nil,
 			_q.withFiles != nil,
 		}
 	)
-	if _q.withTask != nil {
+	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -511,6 +591,18 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := _q.withTask; query != nil {
 		if err := _q.loadTask(ctx, query, nodes, nil,
 			func(n *Note, e *Task) { n.Edges.Task = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControl; query != nil {
+		if err := _q.loadControl(ctx, query, nodes, nil,
+			func(n *Note, e *Control) { n.Edges.Control = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubcontrol; query != nil {
+		if err := _q.loadSubcontrol(ctx, query, nodes, nil,
+			func(n *Note, e *Subcontrol) { n.Edges.Subcontrol = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -590,6 +682,70 @@ func (_q *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*No
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "task_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*Note, init func(*Note), assign func(*Note, *Control)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].control_comments == nil {
+			continue
+		}
+		fk := *nodes[i].control_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(control.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadSubcontrol(ctx context.Context, query *SubcontrolQuery, nodes []*Note, init func(*Note), assign func(*Note, *Subcontrol)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].subcontrol_comments == nil {
+			continue
+		}
+		fk := *nodes[i].subcontrol_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(subcontrol.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subcontrol_comments" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

@@ -45,6 +45,7 @@ type ResolverRoot interface {
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
+	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
@@ -53,6 +54,7 @@ type ResolverRoot interface {
 	UpdateProcedureInput() UpdateProcedureInputResolver
 	UpdateProgramInput() UpdateProgramInputResolver
 	UpdateStandardInput() UpdateStandardInputResolver
+	UpdateSubcontrolInput() UpdateSubcontrolInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
@@ -2684,6 +2686,7 @@ type ComplexityRoot struct {
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
 		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
@@ -2719,6 +2722,7 @@ type ComplexityRoot struct {
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
@@ -2820,17 +2824,19 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		DisplayID func(childComplexity int) int
-		Files     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID        func(childComplexity int) int
-		Owner     func(childComplexity int) int
-		OwnerID   func(childComplexity int) int
-		Task      func(childComplexity int) int
-		Text      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		Control    func(childComplexity int) int
+		CreatedAt  func(childComplexity int) int
+		CreatedBy  func(childComplexity int) int
+		DisplayID  func(childComplexity int) int
+		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID         func(childComplexity int) int
+		Owner      func(childComplexity int) int
+		OwnerID    func(childComplexity int) int
+		Subcontrol func(childComplexity int) int
+		Task       func(childComplexity int) int
+		Text       func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
+		UpdatedBy  func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -19739,6 +19745,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateControl(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlInput)), true
 
+	case "Mutation.updateControlComment":
+		if e.complexity.Mutation.UpdateControlComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateControlComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateControlComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateControlImplementation":
 		if e.complexity.Mutation.UpdateControlImplementation == nil {
 			break
@@ -20158,6 +20176,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateSubcontrol(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubcontrolInput)), true
+
+	case "Mutation.updateSubcontrolComment":
+		if e.complexity.Mutation.UpdateSubcontrolComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSubcontrolComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSubcontrolComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateSubprocessor":
 		if e.complexity.Mutation.UpdateSubprocessor == nil {
@@ -20745,6 +20775,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeUpdatePayload.Narrative(childComplexity), true
 
+	case "Note.control":
+		if e.complexity.Note.Control == nil {
+			break
+		}
+
+		return e.complexity.Note.Control(childComplexity), true
+
 	case "Note.createdAt":
 		if e.complexity.Note.CreatedAt == nil {
 			break
@@ -20798,6 +20835,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.subcontrol":
+		if e.complexity.Note.Subcontrol == nil {
+			break
+		}
+
+		return e.complexity.Note.Subcontrol(childComplexity), true
 
 	case "Note.task":
 		if e.complexity.Note.Task == nil {
@@ -48008,6 +48052,8 @@ input CreateNoteInput {
   text: String!
   ownerID: ID
   taskID: ID
+  controlID: ID
+  subcontrolID: ID
   fileIDs: [ID!]
 }
 """
@@ -66680,6 +66726,8 @@ type Note implements Node {
   text: String!
   owner: Organization
   task: Task
+  control: Control
+  subcontrol: Subcontrol
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67156,6 +67204,16 @@ input NoteWhereInput {
   """
   hasTask: Boolean
   hasTaskWith: [TaskWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
   """
   files edge predicates
   """
@@ -94550,6 +94608,10 @@ input UpdateNoteInput {
   text: String
   taskID: ID
   clearTask: Boolean
+  controlID: ID
+  clearControl: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -100696,6 +100758,16 @@ extend input UpdateTaskInput {
     deleteComment: ID
 }
 
+extend input UpdateControlInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateSubcontrolInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -100714,6 +100786,40 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): TaskUpdatePayload!
+    """
+    Update an existing control comment
+    """
+    updateControlComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ControlUpdatePayload!
+    """
+    Update an existing subcontrol comment
+    """
+    updateSubcontrolComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): SubcontrolUpdatePayload!
 }
 
 `, BuiltIn: false},
