@@ -687,12 +687,22 @@ func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
 // after the auth middleware
 func authMiddleware(router *Router) []echo.MiddlewareFunc {
 	mw := baseMW
+	// add the impersonation middleware to identify and validate impersonated requests
+	mw = append(mw, impersonationMiddleware(router))
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
 	// add system admin user context middleware (after auth, so we know if user is system admin)
 	mw = append(mw, impersonation.SystemAdminUserContextMiddleware())
 	// append any additional middleware after the auth middleware (includes csrf)
 	return append(mw, router.Handler.AdditionalMiddleware...)
+}
+
+// impersonationMiddleware returns the middleware for the router that is used on
+// authenticated routes. it identifies impersonated requests and the user impersonating
+// and checks access
+func impersonationMiddleware(router *Router) echo.MiddlewareFunc {
+	mw := impersonation.New(router.Handler.TokenManager)
+	return mw.Process
 }
 
 // defaultMiddleware returns the default middleware for the router to be used

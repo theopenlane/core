@@ -48,6 +48,13 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
 }
 
+// AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
+// based on the presence of impersonation token
+var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
+	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
+	return ok
+}
+
 // Authenticate is a middleware function that is used to authenticate requests - it is not applied to all routes so be cognizant of that
 func Authenticate(conf *Options) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {

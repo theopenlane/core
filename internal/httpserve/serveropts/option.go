@@ -179,6 +179,9 @@ func WithAuth() ServerOption {
 			authmw.WithDBClient(s.Config.Handler.DBClient),
 			authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
 			authmw.WithAllowAnonymous(true),
+			authmw.WithSkipperFunc(func(c echo.Context) bool {
+				return authmw.AuthenticateSkipperFuncForImpersonation(c)
+			}),
 		}
 
 		if s.Config.Handler.RedisClient != nil {
