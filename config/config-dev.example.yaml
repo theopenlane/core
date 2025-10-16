@@ -146,16 +146,35 @@ entConfig:
     onSuccessScript: ""
 
 objectStorage:
-  # when using local storage, we serve the files up on a static handler
-  # if switching to s3, be sure to use the below defaultBucket instead
-  defaultBucket:
-    "file_uploads"
-    # uncomment and update to enable s3, otherwise it will default to local storage
-    # accessKey: "REDACTED"
-    # secretKey: "REDACTED"
-    # region: "us-west-2"
-    # defaultBucket: "openlane-development"
-    # provider: "s3"
+    devMode: true
+    enabled: true
+    providers:
+        disk:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
+        s3:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
 
 subscription:
   enabled: false

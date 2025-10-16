@@ -396,10 +396,6 @@ coreConfiguration:
     maxMemoryMB: 0  # @schema type:integer
     # -- DevMode enables simple file upload handling for local development and testing
     devMode: false  # @schema type:boolean; default:false
-    # -- CredentialSync contains options for synchronizing provider credentials into the database
-    credentialSync:
-      # -- Enabled indicates whether credential synchronization runs on startup
-      enabled: false  # @schema type:boolean; default:false
     # -- Providers contains configuration for each storage provider
     providers:
       # -- S3 provider configuration

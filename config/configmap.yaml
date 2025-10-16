@@ -318,7 +318,6 @@ data:
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB | quote }}
   CORE_OBJECTSTORAGE_DEVMODE: {{ .Values.openlane.coreConfiguration.objectStorage.devMode | quote | default "false" }}
-  CORE_OBJECTSTORAGE_CREDENTIALSYNC_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.credentialSync.enabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.enabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_ENSUREAVAILABLE: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.ensureAvailable | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.region | quote }}

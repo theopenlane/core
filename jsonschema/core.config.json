@@ -1176,17 +1176,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "storage.CredentialSyncConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates whether credential synchronization runs on startup"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "CredentialSyncConfig controls whether provider credentials are synchronized into the database"
-    },
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
@@ -1208,10 +1197,6 @@
         "devMode": {
           "type": "boolean",
           "description": "DevMode enables simple file upload handling for local development and testing"
-        },
-        "credentialSync": {
-          "$ref": "#/$defs/storage.CredentialSyncConfig",
-          "description": "CredentialSync contains options for synchronizing provider credentials into the database"
         },
         "providers": {
           "$ref": "#/$defs/storage.Providers",

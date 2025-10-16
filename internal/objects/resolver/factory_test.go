@@ -13,7 +13,6 @@ import (
 
 func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 	config := storage.ProviderConfig{
-		CredentialSync: storage.CredentialSyncConfig{Enabled: false},
 		Providers: storage.Providers{
 			S3: storage.ProviderConfigs{
 				Enabled: true,

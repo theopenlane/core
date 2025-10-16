@@ -187,8 +187,6 @@ keywatcher:
     keyDir: ./keys
     secretManager: ""
 objectStorage:
-    credentialSync:
-        enabled: false
     devMode: false
     enabled: true
     keys:

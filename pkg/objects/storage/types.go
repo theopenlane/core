@@ -90,16 +90,8 @@ type ProviderConfig struct {
 	MaxMemoryMB int64 `json:"maxMemoryMB" koanf:"maxMemoryMB"`
 	// DevMode enables simple file upload handling for local development and testing
 	DevMode bool `json:"devMode" koanf:"devMode" default:"false"`
-	// CredentialSync contains options for synchronizing provider credentials into the database
-	CredentialSync CredentialSyncConfig `json:"credentialSync" koanf:"credentialSync"`
 	// Providers contains configuration for each storage provider
 	Providers Providers `json:"providers" koanf:"providers"`
-}
-
-// CredentialSyncConfig controls whether provider credentials are synchronized into the database
-type CredentialSyncConfig struct {
-	// Enabled indicates whether credential synchronization runs on startup
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 
 type Providers struct {

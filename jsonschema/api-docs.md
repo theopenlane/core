@@ -101,7 +101,6 @@ Config contains the configuration for the core server
     "totp": {},
     "ratelimit": {},
     "objectStorage": {
-        "credentialSync": {},
         "providers": {
             "s3": {
                 "credentials": {}
@@ -1196,7 +1195,6 @@ ProviderConfig contains configuration for object storage providers
 |**maxSizeMB**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
 |**maxMemoryMB**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
 |**devMode**|`boolean`|DevMode enables simple file upload handling for local development and testing<br/>||
-|[**credentialSync**](#objectstoragecredentialsync)|`object`|CredentialSyncConfig controls whether provider credentials are synchronized into the database<br/>||
 |[**providers**](#objectstorageproviders)|`object`|||
 
 **Additional Properties:** not allowed  
@@ -1204,7 +1202,6 @@ ProviderConfig contains configuration for object storage providers
 
 ```json
 {
-    "credentialSync": {},
     "providers": {
         "s3": {
             "credentials": {}
@@ -1231,19 +1228,6 @@ ProviderConfig contains configuration for object storage providers
 **Items**
 
 **Item Type:** `string`  
-<a name="objectstoragecredentialsync"></a>
-### objectStorage\.credentialSync: object
-
-CredentialSyncConfig controls whether provider credentials are synchronized into the database
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether credential synchronization runs on startup<br/>||
-
-**Additional Properties:** not allowed  
 <a name="objectstorageproviders"></a>
 ### objectStorage\.providers: object
 
