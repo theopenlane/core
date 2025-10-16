@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id
@@ -122,7 +123,35 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 		return nil
 	}
 
-	url, err := q.ObjectManager.Storage.GetPresignedURL(file.StoragePath, presignedURLDuration)
+	// Convert ent File to storagetypes.File
+	storageFile := &storagetypes.File{
+		ID:           file.ID,
+		OriginalName: file.ProvidedFileName,
+		FileMetadata: storagetypes.FileMetadata{
+			Key:          file.StoragePath,
+			Bucket:       file.StorageVolume,
+			ContentType:  file.DetectedContentType,
+			Size:         file.PersistedFileSize,
+			ProviderType: storagetypes.ProviderType(file.StorageProvider),
+			ProviderHints: &storagetypes.ProviderHints{
+				KnownProvider: storagetypes.ProviderType(file.StorageProvider),
+			},
+		},
+	}
+
+	// Convert metadata from map[string]interface{} to map[string]string
+	if file.Metadata != nil {
+		metadata := make(map[string]string)
+		for k, v := range file.Metadata {
+			if str, ok := v.(string); ok {
+				metadata[k] = str
+			}
+		}
+
+		storageFile.Metadata = metadata
+	}
+
+	url, err := q.ObjectManager.GetPresignedURL(ctx, storageFile, presignedURLDuration)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to get presigned URL")
 

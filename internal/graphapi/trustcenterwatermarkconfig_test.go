@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -17,11 +17,11 @@ import (
 func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 		assert.NilError(t, err)
 		return &graphql.Upload{
-			File:        pngFile.File,
-			Filename:    pngFile.Filename,
+			File:        pngFile.RawFile,
+			Filename:    pngFile.OriginalName,
 			Size:        pngFile.Size,
 			ContentType: pngFile.ContentType,
 		}
@@ -100,9 +100,9 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.logoFile != nil {
 				if tc.expectedErr == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.logoFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 			resp, err := tc.client.CreateTrustCenterWatermarkConfig(tc.ctx, tc.input, tc.logoFile)
@@ -186,11 +186,11 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	watermarkConfig := (&TrustCenterWatermarkConfigBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, trustCenter.ID)
 	createPNGUpload := func() *graphql.Upload {
-		pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 		assert.NilError(t, err)
 		return &graphql.Upload{
-			File:        pngFile.File,
-			Filename:    pngFile.Filename,
+			File:        pngFile.RawFile,
+			Filename:    pngFile.OriginalName,
 			Size:        pngFile.Size,
 			ContentType: pngFile.ContentType,
 		}
@@ -248,9 +248,9 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.logoFile != nil {
 				if tc.expectedErr == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.logoFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 			resp, err := tc.client.UpdateTrustCenterWatermarkConfig(tc.ctx, watermarkConfig.ID, tc.input, tc.logoFile)

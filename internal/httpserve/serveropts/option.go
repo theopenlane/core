@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -9,7 +10,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"slices"
 	"strings"
 
 	"github.com/redis/go-redis/v9"
@@ -35,7 +35,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects/resolver"
+	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -45,7 +46,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
@@ -228,7 +228,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c, s.Config.ObjectManager).
+		r := graphapi.NewResolver(c, s.Config.StorageService).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
@@ -441,91 +441,39 @@ func WithCORS() ServerOption {
 // WithObjectStorage sets up the object storage for the server
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		settings := s.Config.Settings.ObjectStorage
-		if settings.Enabled {
-			var (
-				store objects.Storage
-				err   error
-			)
+		cfg := s.Config.Settings.ObjectStorage
+		authTokenCfg := s.Config.Settings.Auth.Token
 
-			switch settings.Provider {
-			case storage.ProviderS3:
-				storageOptions := []storage.S3Option{
-					storage.WithS3Region(s.Config.Settings.ObjectStorage.Region),
-					storage.WithS3Bucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithS3AccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
-					storage.WithS3SecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
-				}
+		// Create StorageService with resolver and cp using runtime config
+		storageService := resolver.NewServiceFromConfig(cfg,
+			resolver.WithPresignConfig(func() *tokens.TokenManager {
+				return s.Config.Handler.TokenManager
+			}, authTokenCfg.Issuer, authTokenCfg.Audience),
+		)
 
-				if endpoint := s.Config.Settings.ObjectStorage.Endpoint; endpoint != "" {
-					storageOptions = append(storageOptions, storage.WithS3Endpoint(endpoint))
-				}
+		// Store in config for access
+		s.Config.StorageService = storageService
+		s.Config.Handler.ObjectStore = storageService
 
-				if set := s.Config.Settings.ObjectStorage.UsePathStyle; set {
-					storageOptions = append(storageOptions, storage.WithS3PathStyle(set))
-				}
-
-				opts := storage.NewS3Options(storageOptions...)
-
-				store, err = storage.NewS3FromConfig(opts)
-				if err != nil {
-					log.Panic().Err(err).Msg("error creating S3 store")
-				}
-
-				bucks, err := store.ListBuckets()
-				if err != nil {
-					log.Panic().Err(err).Msg("error listing buckets")
-				}
-
-				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
-					log.Panic().Msg("default bucket not found")
-				}
-			default:
-				s.Config.Settings.ObjectStorage.Provider = storage.ProviderDisk
-
-				opts := storage.NewDiskOptions(
-					storage.WithDiskLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithDiskLocalURL(s.Config.Settings.ObjectStorage.LocalURL),
-				)
-
-				store, err = storage.NewDiskStorage(opts)
-				if err != nil {
-					log.Panic().Err(err).Msg("error creating disk store")
-				}
+		errs := validators.ValidateConfiguredStorageProviders(context.Background(), cfg)
+		if len(errs) > 0 {
+			for _, err := range errs {
+				log.Warn().Err(err).Msg("object storage validation warning")
 			}
-
-			opts := []objects.Option{objects.WithMaxFileSize(10 << 20), // nolint:mnd
-				objects.WithStorage(store),
-				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
-				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
-				objects.WithUploaderFunc(objmw.Upload),
-				objects.WithValidationFunc(objmw.MimeTypeValidator),
-			}
-
-			if s.Config.Settings.ObjectStorage.MaxUploadMemoryMB != 0 {
-				opts = append(opts,
-					objects.WithMaxMemory(s.Config.Settings.ObjectStorage.MaxUploadMemoryMB*1024*1024), //nolint:mnd
-				)
-			}
-
-			if s.Config.Settings.ObjectStorage.MaxUploadSizeMB != 0 {
-				opts = append(opts,
-					objects.WithMaxFileSize(s.Config.Settings.ObjectStorage.MaxUploadSizeMB*1024*1024), //nolint:mnd
-				)
-			}
-
-			s.Config.ObjectManager, err = objects.New(opts...)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error creating object storage")
-			}
-
-			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
-			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
-
-			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
-
-			log.Info().Msg("Object storage initialized")
 		}
+
+		// Strict availability check for providers with ensureAvailable=true
+		strictErrs := validators.ValidateAvailabilityByProvider(context.Background(), cfg)
+		if len(strictErrs) > 0 {
+			log.Fatal().Err(errors.Join(strictErrs...)).Msg("object storage availability check failed")
+		}
+
+		// expose readiness check so storage availability can be monitored continuously
+		s.Config.Handler.AddReadinessCheck("object_storage", validators.StorageAvailabilityCheck(func() storage.ProviderConfig {
+			return s.Config.Settings.ObjectStorage
+		}))
+
+		log.Info().Msg("Object storage initialized")
 	})
 }
 

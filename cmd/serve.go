@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 var serveCmd = &cobra.Command{
@@ -142,7 +143,7 @@ func serve(ctx context.Context) error {
 		ent.EntConfig(&so.Config.Settings.EntConfig),
 		ent.Emailer(&so.Config.Settings.Email),
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
-		ent.ObjectManager(so.Config.ObjectManager),
+		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
 		ent.Windmill(so.Config.Handler.Windmill),
 		ent.PondPool(pool),
@@ -163,6 +164,10 @@ func serve(ctx context.Context) error {
 
 	go func() {
 		<-ctx.Done()
+
+		log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
+		pkgobjects.WaitForUploads()
+		log.Ctx(ctx).Info().Msg("all uploads completed")
 
 		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")

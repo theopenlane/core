@@ -41,36 +41,34 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	logoKey := "logoFile"
 	faviconKey := "faviconFile"
 
-	// get the file from the context, if it exists
-	logoFile, _ := objects.FilesFromContextWithKey(ctx, logoKey)
-	faviconFile, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
+	logoFiles, _ := objects.FilesFromContextWithKey(ctx, logoKey)
+	if len(logoFiles) > 1 {
+		return ctx, ErrTooManyLogoFiles
+	}
+	if len(logoFiles) == 1 {
+		m.SetLogoLocalFileID(logoFiles[0].ID)
 
-	// this should always be true, but check just in case
-	if logoFile != nil && logoFile[0].FieldName == logoKey {
-		// we should only have one file
-		if len(logoFile) > 1 {
-			return ctx, ErrTooManyLogoFiles
-		}
+		adapter := objects.NewGenericMutationAdapter(m,
+			func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
+			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
+		)
 
-		m.SetLogoLocalFileID(logoFile[0].ID)
-
-		logoFile[0].Parent.ID, _ = m.ID()
-		logoFile[0].Parent.Type = "trust_center_setting"
-
-		ctx = objects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
+		ctx, _ = objects.ProcessFilesForMutation(ctx, adapter, logoKey, "trust_center_setting")
 	}
 
-	if faviconFile != nil && faviconFile[0].FieldName == faviconKey {
-		if len(faviconFile) > 1 {
-			return ctx, ErrTooManyFaviconFiles
-		}
+	faviconFiles, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
+	if len(faviconFiles) > 1 {
+		return ctx, ErrTooManyFaviconFiles
+	}
+	if len(faviconFiles) == 1 {
+		m.SetFaviconLocalFileID(faviconFiles[0].ID)
 
-		m.SetFaviconLocalFileID(faviconFile[0].ID)
+		adapter := objects.NewGenericMutationAdapter(m,
+			func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
+			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
+		)
 
-		faviconFile[0].Parent.ID, _ = m.ID()
-		faviconFile[0].Parent.Type = "trust_center_setting"
-
-		ctx = objects.UpdateFileInContextByKey(ctx, faviconKey, faviconFile[0])
+		ctx, _ = objects.ProcessFilesForMutation(ctx, adapter, faviconKey, "trust_center_setting")
 	}
 
 	return ctx, nil

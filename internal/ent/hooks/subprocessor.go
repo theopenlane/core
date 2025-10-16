@@ -6,14 +6,15 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// HookSubprocessor runs on subprocessor mutations to check for uploaded logo file
 func HookSubprocessor() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubprocessorFunc(func(ctx context.Context, m *generated.SubprocessorMutation) (generated.Value, error) {
 			// check for uploaded files (e.g. logo image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 
@@ -24,7 +25,6 @@ func HookSubprocessor() ent.Hook {
 
 				m.AddFileIDs(fileIDs...)
 			}
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
@@ -33,26 +33,23 @@ func HookSubprocessor() ent.Hook {
 func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMutation) (context.Context, error) {
 	logoKey := "logoFile"
 
-	// get the file from the context, if it exists
-	logoFile, _ := objects.FilesFromContextWithKey(ctx, logoKey)
-	if logoFile == nil {
+	logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
+	if len(logoFiles) == 0 {
 		return ctx, nil
 	}
 
-	// this should always be true, but check just in case
-	if logoFile[0].FieldName == logoKey {
-		// we should only have one file
-		if len(logoFile) > 1 {
-			return ctx, ErrTooManyLogoFiles
-		}
-
-		m.SetLogoLocalFileID(logoFile[0].ID)
-
-		logoFile[0].Parent.ID, _ = m.ID()
-		logoFile[0].Parent.Type = "trust_center_setting"
-
-		ctx = objects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
+	if len(logoFiles) > 1 {
+		return ctx, ErrTooManyLogoFiles
 	}
+
+	m.SetLogoLocalFileID(logoFiles[0].ID)
+
+	adapter := pkgobjects.NewGenericMutationAdapter(m,
+		func(mut *generated.SubprocessorMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.SubprocessorMutation) string { return mut.Type() },
+	)
+
+	ctx, _ = pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey, "subprocessor")
 
 	return ctx, nil
 }

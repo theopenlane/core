@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -78,13 +78,13 @@ func createValidation(cobraCmd *cobra.Command) (input openlaneclient.CreateJobRe
 	}
 
 	for _, file := range files {
-		u, err := objects.NewUploadFile(file)
+		u, err := storage.NewUploadFile(file)
 		if err != nil {
 			return input, nil, err
 		}
 		uploads = append(uploads, &graphql.Upload{
-			File:        u.File,
-			Filename:    u.Filename,
+			File:        u.RawFile,
+			Filename:    u.OriginalName,
 			Size:        u.Size,
 			ContentType: u.ContentType,
 		})

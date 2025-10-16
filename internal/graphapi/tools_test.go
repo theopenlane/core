@@ -31,12 +31,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
-	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/summarizer"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
@@ -73,7 +75,8 @@ type client struct {
 	apiWithPAT   *testclient.TestClient
 	apiWithToken *testclient.TestClient
 	fga          *fgax.Client
-	objectStore  *objects.Objects
+	objectStore  *objects.Service
+	mockProvider *mock_shared.MockProvider
 }
 
 var suite = &GraphTestSuite{}
@@ -212,11 +215,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	requireNoError(err)
 
-	c.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
+	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
 	requireNoError(err)
-
-	// set the validation function
-	c.objectStore.ValidationFunc = objmw.MimeTypeValidator
 
 	// assign values
 	c.db = db
@@ -240,50 +240,65 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
-func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []graphql.Upload) {
-	assert.Assert(t, mockStore != nil)
-
-	ms, ok := mockStore.(*mock_objects.MockStorage)
-	assert.Assert(t, ok)
+func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
+	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
 
-	for _, upload := range expectedUploads {
-		ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
-		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
-			Size: upload.Size,
-		}, nil).Times(1)
-	}
+    for _, upload := range expectedUploads {
+        mockProvider.On("GetScheme").Return(&mockScheme).Once()
+        mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+        mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+            FileMetadata: pkgobjects.FileMetadata{
+                Key:          "test-key",
+                Size:         upload.Size,
+                ProviderType: storage.DiskProvider,
+            },
+        }, nil).Once()
+
+        // Allow document hooks to download the just-uploaded content for parsing
+        mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+            File: []byte("test content"),
+            Size: upload.Size,
+        }, nil).Maybe()
+    }
 }
 
 // expectUploadNillable sets up the mock object store to expect an upload and related operations
-func expectUploadNillable(t *testing.T, mockStore objects.Storage, expectedUploads []*graphql.Upload) {
-	assert.Check(t, mockStore != nil)
-
-	ms, ok := mockStore.(*mock_objects.MockStorage)
-	assert.Assert(t, ok)
+func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []*graphql.Upload) {
+	assert.Check(t, mockProvider != nil)
 
 	mockScheme := "file://"
 
-	for _, upload := range expectedUploads {
-		ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
-		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
-			Size: upload.Size,
-		}, nil).Times(1)
-	}
+    for _, upload := range expectedUploads {
+        if upload != nil {
+            mockProvider.On("GetScheme").Return(&mockScheme).Once()
+            mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+            mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+                FileMetadata: pkgobjects.FileMetadata{
+                    Key:          "test-key",
+                    Size:         upload.Size,
+                    ProviderType: storage.DiskProvider,
+                },
+            }, nil).Once()
+
+            // Allow document hooks to download the just-uploaded content for parsing
+            mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+                File: []byte("test content"),
+                Size: upload.Size,
+            }, nil).Maybe()
+        }
+    }
 }
 
 // expectUploadCheckOnly sets up the mock object store to expect an upload check only operation
 // but fails before the upload is attempted
-func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {
-	assert.Assert(t, mockStore != nil)
-
-	ms, ok := mockStore.(*mock_objects.MockStorage)
-	assert.Assert(t, ok)
+func expectUploadCheckOnly(t *testing.T, mockProvider *mock_shared.MockProvider) {
+	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
 
-	ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
+	mockProvider.On("GetScheme").Return(&mockScheme).Once()
 }
 
 // parseClientError parses the error response from the client and returns a slice of gqlerror.Error
