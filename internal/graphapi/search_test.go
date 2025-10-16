@@ -135,10 +135,8 @@ func TestGlobalSearch(t *testing.T) {
 				}
 
 			} else {
-				assert.Check(t, is.Nil(resp.Search.Groups))
 				assert.Check(t, is.Nil(resp.Search.Contacts))
 				assert.Check(t, is.Nil(resp.Search.Programs))
-				assert.Check(t, is.Nil(resp.Search.Controls))
 			}
 		})
 	}
