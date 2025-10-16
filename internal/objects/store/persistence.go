@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -96,6 +97,26 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	return entFile, nil
 }
 
+// mappedParent represents the table used to derive the organization ID for object types
+// that do not have an owner_id field directly and the field in the child table that references the parent
+type mappedParent struct {
+	// parentTable is the table that contains the owner_id field, it should be the plural form, e.g. for trust_center it would be trust_centers
+	parentTable string
+	// idField is the field in the child table that references the parent table, e.g. for trust_center_docs it would be trust_center_id
+	idField string
+}
+
+// nonOwnedSchemas is a map of object types that do not have an owner_id field
+// to their parent table and the field in that table that references the object
+// This is used to derive the organization ID for files correlated to these object types
+// by joining through the parent table
+var nonOwnedSchemas = map[string]mappedParent{
+	"trust_center_doc": mappedParent{
+		parentTable: "trust_centers",
+		idField:     "trust_center_id",
+	},
+}
+
 func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	if strings.EqualFold(f.CorrelatedObjectType, "user") {
 		return "", nil
@@ -112,35 +133,18 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		return au.OrganizationID, nil
 	}
 
-	var rows sql.Rows
-
 	// derive table name from correlated object type using snake_case to match DB naming
 	objectType := lo.SnakeCase(f.CorrelatedObjectType)
 	objectTable := pluralize.NewClient().Plural(objectType)
 
+	var rows sql.Rows
+
 	// For schemas that do not include owner_id (e.g., trust_center_docs), resolve owner through the parent
-	if objectType == "trust_center_doc" {
-		// first get the trust_center_id from the doc
-		var tcRows sql.Rows
-		tcQuery := "SELECT tc.owner_id FROM trust_center as tc JOIN trust_center_docs as tcd ON tc.id = tcd. trust_center_id WHERE tcd.id = $1"
+	if mappedParent, ok := nonOwnedSchemas[objectType]; ok {
+		tcQuery := fmt.Sprintf("SELECT a.owner_id FROM %s as a JOIN %s as b ON a.id = b.%s WHERE b.id = $1", mappedParent.parentTable, objectTable, mappedParent.idField)
 
-		if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &tcRows); err != nil {
+		if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &rows); err != nil {
 			return "", err
-		}
-
-		defer tcRows.Close()
-
-		if tcRows.Err() != nil {
-			return "", tcRows.Err()
-		}
-
-		if tcRows.Next() {
-			var ownerID string
-			if err := tcRows.Scan(&ownerID); err != nil {
-				return "", err
-			}
-
-			return ownerID, nil
 		}
 	} else {
 		// Generic case: attempt to read owner_id directly from the correlated table
@@ -148,20 +152,21 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
 			return "", err
 		}
+	}
 
-		if rows.Err() != nil {
-			return "", rows.Err()
+	defer rows.Close()
+
+	if rows.Err() != nil {
+		return "", rows.Err()
+	}
+
+	if rows.Next() {
+		var ownerID string
+		if err := rows.Scan(&ownerID); err != nil {
+			return "", err
 		}
 
-		defer rows.Close()
-		if rows.Next() {
-			var ownerID string
-			if err := rows.Scan(&ownerID); err != nil {
-				return "", err
-			}
-
-			return ownerID, nil
-		}
+		return ownerID, nil
 	}
 
 	return "", ErrMissingOrganizationID

@@ -164,18 +164,27 @@ func TestQueryControlImplementation(t *testing.T) {
 }
 
 func TestQueryControlImplementations(t *testing.T) {
-	// create multiple controlImplementations to be queried using testUser1
+	// create a new user cause its a count test and we don't want to interfere with other tests
+	testUser := suite.userBuilder(context.Background(), t)
+	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+	patClient := suite.setupPatClient(testUser, t)
+	viewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
+
+	anotherUser := suite.userBuilder(context.Background(), t)
+
+	// create multiple controlImplementations to be queried using testUser
 	numCIs := 5
 	for range numCIs {
-		(&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		(&ControlImplementationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	}
 
 	// view only users should be able to see these because they are associated with a control
 	numCIsWithAssociatedControls := 2
 	controlIDs := []string{}
 	for range numCIsWithAssociatedControls {
-		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
+		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser.UserCtx, t)
 
 		controlIDs = append(controlIDs, control1.ID)
 	}
@@ -189,31 +198,31 @@ func TestQueryControlImplementations(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewUser.UserCtx,
 			expectedResults: numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          apiClient,
 			ctx:             context.Background(),
 			expectedResults: numCIsWithAssociatedControls, // only the ones with linked controls will be returned
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          patClient,
 			ctx:             context.Background(),
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "another user, no controlImplementations should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             anotherUser.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -229,8 +238,8 @@ func TestQueryControlImplementations(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestMutationCreateControlImplementation(t *testing.T) {

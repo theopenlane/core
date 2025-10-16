@@ -52,8 +52,6 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
-				// This query is intentionally being modified to return WithIntegrations and WithSecrets so that
-				// we can pass the related ID's to the object manager at such a time when they are used to also perform storage
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
 					Select(
 						file.FieldID,

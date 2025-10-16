@@ -146,35 +146,35 @@ entConfig:
     onSuccessScript: ""
 
 objectStorage:
-    devMode: true
-    enabled: true
-    providers:
-        disk:
-            bucket: ""
-            credentials:
-                accessKeyID: ""
-                accountID: ""
-                apiToken: ""
-                endpoint: ""
-                projectID: ""
-                secretAccessKey: ""
-            enabled: false
-            endpoint: ""
-            ensureAvailable: false
-            region: ""
-        s3:
-            bucket: ""
-            credentials:
-                accessKeyID: ""
-                accountID: ""
-                apiToken: ""
-                endpoint: ""
-                projectID: ""
-                secretAccessKey: ""
-            enabled: false
-            endpoint: ""
-            ensureAvailable: false
-            region: ""
+  devMode: true
+  enabled: true
+  providers:
+      disk:
+          bucket: ""
+          credentials:
+              accessKeyID: ""
+              accountID: ""
+              apiToken: ""
+              endpoint: ""
+              projectID: ""
+              secretAccessKey: ""
+          enabled: false
+          endpoint: ""
+          ensureAvailable: false
+          region: ""
+      s3:
+          bucket: ""
+          credentials:
+              accessKeyID: ""
+              accountID: ""
+              apiToken: ""
+              endpoint: ""
+              projectID: ""
+              secretAccessKey: ""
+          enabled: false
+          endpoint: ""
+          ensureAvailable: false
+          region: ""
 
 subscription:
   enabled: false
