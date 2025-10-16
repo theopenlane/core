@@ -8,8 +8,11 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
+// OpenlaneConfig contains the configuration for connecting to the Openlane API.
 type OpenlaneConfig struct {
-	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
+	// OpenlaneAPIHost is the host URL for the Openlane API
+	OpenlaneAPIHost string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
+	// OpenlaneAPIToken is the API token for authenticating with the Openlane API
 	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
 }
 
@@ -22,6 +25,7 @@ var allowedPrefixes = []string{
 	"runner_",
 }
 
+// Validate checks if the OpenlaneConfig has all required fields set and valid.
 func (c *OpenlaneConfig) Validate() error {
 	if c.OpenlaneAPIHost == "" {
 		return ErrOpenlaneHostMissing
@@ -38,6 +42,7 @@ func (c *OpenlaneConfig) Validate() error {
 	return nil
 }
 
+// validateTokenPrefix checks if the provided token starts with one of the allowed prefixes.
 func validateTokenPrefix(token string) bool {
 	for _, prefix := range allowedPrefixes {
 		if strings.HasPrefix(token, prefix) {
