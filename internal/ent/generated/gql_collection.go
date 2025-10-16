@@ -24658,6 +24658,28 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			}
 			_q.withTask = query
 
+		case "control":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			_q.withControl = query
+
+		case "subcontrol":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			_q.withSubcontrol = query
+
 		case "files":
 			var (
 				alias = field.Alias
@@ -24701,10 +24723,10 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[4][alias] = n
 						}
 						return nil
 					})
@@ -24712,10 +24734,10 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Note) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[4][alias] = n
 						}
 						return nil
 					})
@@ -46148,6 +46170,16 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldAccentColor)
 				fieldSeen[trustcentersetting.FieldAccentColor] = struct{}{}
 			}
+		case "secondaryBackgroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldSecondaryBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldSecondaryBackgroundColor)
+				fieldSeen[trustcentersetting.FieldSecondaryBackgroundColor] = struct{}{}
+			}
+		case "secondaryForegroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldSecondaryForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldSecondaryForegroundColor)
+				fieldSeen[trustcentersetting.FieldSecondaryForegroundColor] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -46337,6 +46369,16 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldAccentColor]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAccentColor)
 				fieldSeen[trustcentersettinghistory.FieldAccentColor] = struct{}{}
+			}
+		case "secondaryBackgroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldSecondaryBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecondaryBackgroundColor)
+				fieldSeen[trustcentersettinghistory.FieldSecondaryBackgroundColor] = struct{}{}
+			}
+		case "secondaryForegroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecondaryForegroundColor)
+				fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor] = struct{}{}
 			}
 		case "id":
 		case "__typename":

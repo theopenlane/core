@@ -9536,6 +9536,8 @@ input CreateNoteInput {
 	text: String!
 	ownerID: ID
 	taskID: ID
+	controlID: ID
+	subcontrolID: ID
 	fileIDs: [ID!]
 }
 """
@@ -10637,6 +10639,14 @@ input CreateTrustCenterSettingInput {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 	trustCenterID: ID
 	fileIDs: [ID!]
 	logoFileID: ID
@@ -29781,6 +29791,44 @@ type Mutation {
 		noteFiles: [Upload!]
 	): TaskUpdatePayload!
 	"""
+	Update an existing control comment
+	"""
+	updateControlComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): ControlUpdatePayload!
+	"""
+	Update an existing subcontrol comment
+	"""
+	updateSubcontrolComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): SubcontrolUpdatePayload!
+	"""
 	Create a new onboarding
 	"""
 	createOnboarding(
@@ -32070,6 +32118,8 @@ type Note implements Node {
 	text: String!
 	owner: Organization
 	task: Task
+	control: Control
+	subcontrol: Subcontrol
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -32546,6 +32596,16 @@ input NoteWhereInput {
 	"""
 	hasTask: Boolean
 	hasTaskWith: [TaskWhereInput!]
+	"""
+	control edge predicates
+	"""
+	hasControl: Boolean
+	hasControlWith: [ControlWhereInput!]
+	"""
+	subcontrol edge predicates
+	"""
+	hasSubcontrol: Boolean
+	hasSubcontrolWith: [SubcontrolWhereInput!]
 	"""
 	files edge predicates
 	"""
@@ -59987,6 +60047,14 @@ type TrustCenterSetting implements Node {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 	trustCenter: TrustCenter
 	files(
 		"""
@@ -60140,6 +60208,14 @@ type TrustCenterSettingHistory implements Node {
 	accent/brand color for the trust center
 	"""
 	accentColor: String
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
 }
 """
 A connection to a list of items.
@@ -60551,6 +60627,42 @@ input TrustCenterSettingHistoryWhereInput {
 	accentColorNotNil: Boolean
 	accentColorEqualFold: String
 	accentColorContainsFold: String
+	"""
+	secondary_background_color field predicates
+	"""
+	secondaryBackgroundColor: String
+	secondaryBackgroundColorNEQ: String
+	secondaryBackgroundColorIn: [String!]
+	secondaryBackgroundColorNotIn: [String!]
+	secondaryBackgroundColorGT: String
+	secondaryBackgroundColorGTE: String
+	secondaryBackgroundColorLT: String
+	secondaryBackgroundColorLTE: String
+	secondaryBackgroundColorContains: String
+	secondaryBackgroundColorHasPrefix: String
+	secondaryBackgroundColorHasSuffix: String
+	secondaryBackgroundColorIsNil: Boolean
+	secondaryBackgroundColorNotNil: Boolean
+	secondaryBackgroundColorEqualFold: String
+	secondaryBackgroundColorContainsFold: String
+	"""
+	secondary_foreground_color field predicates
+	"""
+	secondaryForegroundColor: String
+	secondaryForegroundColorNEQ: String
+	secondaryForegroundColorIn: [String!]
+	secondaryForegroundColorNotIn: [String!]
+	secondaryForegroundColorGT: String
+	secondaryForegroundColorGTE: String
+	secondaryForegroundColorLT: String
+	secondaryForegroundColorLTE: String
+	secondaryForegroundColorContains: String
+	secondaryForegroundColorHasPrefix: String
+	secondaryForegroundColorHasSuffix: String
+	secondaryForegroundColorIsNil: Boolean
+	secondaryForegroundColorNotNil: Boolean
+	secondaryForegroundColorEqualFold: String
+	secondaryForegroundColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -60896,6 +61008,42 @@ input TrustCenterSettingWhereInput {
 	accentColorNotNil: Boolean
 	accentColorEqualFold: String
 	accentColorContainsFold: String
+	"""
+	secondary_background_color field predicates
+	"""
+	secondaryBackgroundColor: String
+	secondaryBackgroundColorNEQ: String
+	secondaryBackgroundColorIn: [String!]
+	secondaryBackgroundColorNotIn: [String!]
+	secondaryBackgroundColorGT: String
+	secondaryBackgroundColorGTE: String
+	secondaryBackgroundColorLT: String
+	secondaryBackgroundColorLTE: String
+	secondaryBackgroundColorContains: String
+	secondaryBackgroundColorHasPrefix: String
+	secondaryBackgroundColorHasSuffix: String
+	secondaryBackgroundColorIsNil: Boolean
+	secondaryBackgroundColorNotNil: Boolean
+	secondaryBackgroundColorEqualFold: String
+	secondaryBackgroundColorContainsFold: String
+	"""
+	secondary_foreground_color field predicates
+	"""
+	secondaryForegroundColor: String
+	secondaryForegroundColorNEQ: String
+	secondaryForegroundColorIn: [String!]
+	secondaryForegroundColorNotIn: [String!]
+	secondaryForegroundColorGT: String
+	secondaryForegroundColorGTE: String
+	secondaryForegroundColorLT: String
+	secondaryForegroundColorLTE: String
+	secondaryForegroundColorContains: String
+	secondaryForegroundColorHasPrefix: String
+	secondaryForegroundColorHasSuffix: String
+	secondaryForegroundColorIsNil: Boolean
+	secondaryForegroundColorNotNil: Boolean
+	secondaryForegroundColorEqualFold: String
+	secondaryForegroundColorContainsFold: String
 	"""
 	trust_center edge predicates
 	"""
@@ -62955,6 +63103,8 @@ input UpdateControlInput {
 	addScheduledJobIDs: [ID!]
 	removeScheduledJobIDs: [ID!]
 	clearScheduledJobs: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -64290,6 +64440,10 @@ input UpdateNoteInput {
 	text: String
 	taskID: ID
 	clearTask: Boolean
+	controlID: ID
+	clearControl: Boolean
+	subcontrolID: ID
+	clearSubcontrol: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
@@ -65426,6 +65580,8 @@ input UpdateSubcontrolInput {
 	addScheduledJobIDs: [ID!]
 	removeScheduledJobIDs: [ID!]
 	clearScheduledJobs: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.
@@ -65801,6 +65957,16 @@ input UpdateTrustCenterSettingInput {
 	"""
 	accentColor: String
 	clearAccentColor: Boolean
+	"""
+	secondary background color for the trust center
+	"""
+	secondaryBackgroundColor: String
+	clearSecondaryBackgroundColor: Boolean
+	"""
+	seconday foreground color for the trust center
+	"""
+	secondaryForegroundColor: String
+	clearSecondaryForegroundColor: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
 	addFileIDs: [ID!]

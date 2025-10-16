@@ -62,8 +62,12 @@ type TrustCenterSettingHistory struct {
 	// background color for the trust center
 	BackgroundColor string `json:"background_color,omitempty"`
 	// accent/brand color for the trust center
-	AccentColor  string `json:"accent_color,omitempty"`
-	selectValues sql.SelectValues
+	AccentColor string `json:"accent_color,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
+	// seconday foreground color for the trust center
+	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
+	selectValues             sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -73,7 +77,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -234,6 +238,18 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.AccentColor = value.String
 			}
+		case trustcentersettinghistory.FieldSecondaryBackgroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field secondary_background_color", values[i])
+			} else if value.Valid {
+				_m.SecondaryBackgroundColor = value.String
+			}
+		case trustcentersettinghistory.FieldSecondaryForegroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field secondary_foreground_color", values[i])
+			} else if value.Valid {
+				_m.SecondaryForegroundColor = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -343,6 +359,12 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("accent_color=")
 	builder.WriteString(_m.AccentColor)
+	builder.WriteString(", ")
+	builder.WriteString("secondary_background_color=")
+	builder.WriteString(_m.SecondaryBackgroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("secondary_foreground_color=")
+	builder.WriteString(_m.SecondaryForegroundColor)
 	builder.WriteByte(')')
 	return builder.String()
 }

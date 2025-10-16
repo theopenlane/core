@@ -9,8 +9,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
@@ -54,13 +56,17 @@ type NoteEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Task holds the value of the task edge.
 	Task *Task `json:"task,omitempty"`
+	// Control holds the value of the control edge.
+	Control *Control `json:"control,omitempty"`
+	// Subcontrol holds the value of the subcontrol edge.
+	Subcontrol *Subcontrol `json:"subcontrol,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedFiles map[string][]*File
 }
@@ -87,10 +93,32 @@ func (e NoteEdges) TaskOrErr() (*Task, error) {
 	return nil, &NotLoadedError{edge: "task"}
 }
 
+// ControlOrErr returns the Control value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) ControlOrErr() (*Control, error) {
+	if e.Control != nil {
+		return e.Control, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: control.Label}
+	}
+	return nil, &NotLoadedError{edge: "control"}
+}
+
+// SubcontrolOrErr returns the Subcontrol value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) SubcontrolOrErr() (*Subcontrol, error) {
+	if e.Subcontrol != nil {
+		return e.Subcontrol, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: subcontrol.Label}
+	}
+	return nil, &NotLoadedError{edge: "subcontrol"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -246,6 +274,16 @@ func (_m *Note) QueryOwner() *OrganizationQuery {
 // QueryTask queries the "task" edge of the Note entity.
 func (_m *Note) QueryTask() *TaskQuery {
 	return NewNoteClient(_m.config).QueryTask(_m)
+}
+
+// QueryControl queries the "control" edge of the Note entity.
+func (_m *Note) QueryControl() *ControlQuery {
+	return NewNoteClient(_m.config).QueryControl(_m)
+}
+
+// QuerySubcontrol queries the "subcontrol" edge of the Note entity.
+func (_m *Note) QuerySubcontrol() *SubcontrolQuery {
+	return NewNoteClient(_m.config).QuerySubcontrol(_m)
 }
 
 // QueryFiles queries the "files" edge of the Note entity.

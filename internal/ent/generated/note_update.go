@@ -11,9 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -138,6 +140,44 @@ func (_u *NoteUpdate) SetTask(v *Task) *NoteUpdate {
 	return _u.SetTaskID(v.ID)
 }
 
+// SetControlID sets the "control" edge to the Control entity by ID.
+func (_u *NoteUpdate) SetControlID(id string) *NoteUpdate {
+	_u.mutation.SetControlID(id)
+	return _u
+}
+
+// SetNillableControlID sets the "control" edge to the Control entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableControlID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetControlID(*id)
+	}
+	return _u
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_u *NoteUpdate) SetControl(v *Control) *NoteUpdate {
+	return _u.SetControlID(v.ID)
+}
+
+// SetSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID.
+func (_u *NoteUpdate) SetSubcontrolID(id string) *NoteUpdate {
+	_u.mutation.SetSubcontrolID(id)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableSubcontrolID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetSubcontrolID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdate) SetSubcontrol(v *Subcontrol) *NoteUpdate {
+	return _u.SetSubcontrolID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -161,6 +201,18 @@ func (_u *NoteUpdate) Mutation() *NoteMutation {
 // ClearTask clears the "task" edge to the Task entity.
 func (_u *NoteUpdate) ClearTask() *NoteUpdate {
 	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearControl clears the "control" edge to the Control entity.
+func (_u *NoteUpdate) ClearControl() *NoteUpdate {
+	_u.mutation.ClearControl()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdate) ClearSubcontrol() *NoteUpdate {
+	_u.mutation.ClearSubcontrol()
 	return _u
 }
 
@@ -311,6 +363,68 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
@@ -496,6 +610,44 @@ func (_u *NoteUpdateOne) SetTask(v *Task) *NoteUpdateOne {
 	return _u.SetTaskID(v.ID)
 }
 
+// SetControlID sets the "control" edge to the Control entity by ID.
+func (_u *NoteUpdateOne) SetControlID(id string) *NoteUpdateOne {
+	_u.mutation.SetControlID(id)
+	return _u
+}
+
+// SetNillableControlID sets the "control" edge to the Control entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableControlID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetControlID(*id)
+	}
+	return _u
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_u *NoteUpdateOne) SetControl(v *Control) *NoteUpdateOne {
+	return _u.SetControlID(v.ID)
+}
+
+// SetSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID.
+func (_u *NoteUpdateOne) SetSubcontrolID(id string) *NoteUpdateOne {
+	_u.mutation.SetSubcontrolID(id)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableSubcontrolID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetSubcontrolID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdateOne) SetSubcontrol(v *Subcontrol) *NoteUpdateOne {
+	return _u.SetSubcontrolID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -519,6 +671,18 @@ func (_u *NoteUpdateOne) Mutation() *NoteMutation {
 // ClearTask clears the "task" edge to the Task entity.
 func (_u *NoteUpdateOne) ClearTask() *NoteUpdateOne {
 	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearControl clears the "control" edge to the Control entity.
+func (_u *NoteUpdateOne) ClearControl() *NoteUpdateOne {
+	_u.mutation.ClearControl()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdateOne) ClearSubcontrol() *NoteUpdateOne {
+	_u.mutation.ClearSubcontrol()
 	return _u
 }
 
@@ -699,6 +863,68 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

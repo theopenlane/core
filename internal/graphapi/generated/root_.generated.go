@@ -45,6 +45,7 @@ type ResolverRoot interface {
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
+	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
@@ -53,6 +54,7 @@ type ResolverRoot interface {
 	UpdateProcedureInput() UpdateProcedureInputResolver
 	UpdateProgramInput() UpdateProgramInputResolver
 	UpdateStandardInput() UpdateStandardInputResolver
+	UpdateSubcontrolInput() UpdateSubcontrolInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
@@ -2684,6 +2686,7 @@ type ComplexityRoot struct {
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
 		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
@@ -2719,6 +2722,7 @@ type ComplexityRoot struct {
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
@@ -2820,17 +2824,19 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		DisplayID func(childComplexity int) int
-		Files     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID        func(childComplexity int) int
-		Owner     func(childComplexity int) int
-		OwnerID   func(childComplexity int) int
-		Task      func(childComplexity int) int
-		Text      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		Control    func(childComplexity int) int
+		CreatedAt  func(childComplexity int) int
+		CreatedBy  func(childComplexity int) int
+		DisplayID  func(childComplexity int) int
+		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID         func(childComplexity int) int
+		Owner      func(childComplexity int) int
+		OwnerID    func(childComplexity int) int
+		Subcontrol func(childComplexity int) int
+		Task       func(childComplexity int) int
+		Text       func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
+		UpdatedBy  func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -5065,28 +5071,30 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSetting struct {
-		AccentColor        func(childComplexity int) int
-		BackgroundColor    func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		FaviconFile        func(childComplexity int) int
-		FaviconLocalFileID func(childComplexity int) int
-		FaviconRemoteURL   func(childComplexity int) int
-		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Font               func(childComplexity int) int
-		ForegroundColor    func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		LogoFile           func(childComplexity int) int
-		LogoLocalFileID    func(childComplexity int) int
-		LogoRemoteURL      func(childComplexity int) int
-		Overview           func(childComplexity int) int
-		PrimaryColor       func(childComplexity int) int
-		ThemeMode          func(childComplexity int) int
-		Title              func(childComplexity int) int
-		TrustCenter        func(childComplexity int) int
-		TrustCenterID      func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AccentColor              func(childComplexity int) int
+		BackgroundColor          func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		FaviconFile              func(childComplexity int) int
+		FaviconLocalFileID       func(childComplexity int) int
+		FaviconRemoteURL         func(childComplexity int) int
+		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Font                     func(childComplexity int) int
+		ForegroundColor          func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		LogoFile                 func(childComplexity int) int
+		LogoLocalFileID          func(childComplexity int) int
+		LogoRemoteURL            func(childComplexity int) int
+		Overview                 func(childComplexity int) int
+		PrimaryColor             func(childComplexity int) int
+		SecondaryBackgroundColor func(childComplexity int) int
+		SecondaryForegroundColor func(childComplexity int) int
+		ThemeMode                func(childComplexity int) int
+		Title                    func(childComplexity int) int
+		TrustCenter              func(childComplexity int) int
+		TrustCenterID            func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterSettingBulkCreatePayload struct {
@@ -5113,27 +5121,29 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
-		AccentColor        func(childComplexity int) int
-		BackgroundColor    func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		FaviconLocalFileID func(childComplexity int) int
-		FaviconRemoteURL   func(childComplexity int) int
-		Font               func(childComplexity int) int
-		ForegroundColor    func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		LogoLocalFileID    func(childComplexity int) int
-		LogoRemoteURL      func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		Overview           func(childComplexity int) int
-		PrimaryColor       func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		ThemeMode          func(childComplexity int) int
-		Title              func(childComplexity int) int
-		TrustCenterID      func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AccentColor              func(childComplexity int) int
+		BackgroundColor          func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		FaviconLocalFileID       func(childComplexity int) int
+		FaviconRemoteURL         func(childComplexity int) int
+		Font                     func(childComplexity int) int
+		ForegroundColor          func(childComplexity int) int
+		HistoryTime              func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		LogoLocalFileID          func(childComplexity int) int
+		LogoRemoteURL            func(childComplexity int) int
+		Operation                func(childComplexity int) int
+		Overview                 func(childComplexity int) int
+		PrimaryColor             func(childComplexity int) int
+		Ref                      func(childComplexity int) int
+		SecondaryBackgroundColor func(childComplexity int) int
+		SecondaryForegroundColor func(childComplexity int) int
+		ThemeMode                func(childComplexity int) int
+		Title                    func(childComplexity int) int
+		TrustCenterID            func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -19735,6 +19745,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateControl(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlInput)), true
 
+	case "Mutation.updateControlComment":
+		if e.complexity.Mutation.UpdateControlComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateControlComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateControlComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateControlImplementation":
 		if e.complexity.Mutation.UpdateControlImplementation == nil {
 			break
@@ -20154,6 +20176,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateSubcontrol(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubcontrolInput)), true
+
+	case "Mutation.updateSubcontrolComment":
+		if e.complexity.Mutation.UpdateSubcontrolComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSubcontrolComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSubcontrolComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateSubprocessor":
 		if e.complexity.Mutation.UpdateSubprocessor == nil {
@@ -20741,6 +20775,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeUpdatePayload.Narrative(childComplexity), true
 
+	case "Note.control":
+		if e.complexity.Note.Control == nil {
+			break
+		}
+
+		return e.complexity.Note.Control(childComplexity), true
+
 	case "Note.createdAt":
 		if e.complexity.Note.CreatedAt == nil {
 			break
@@ -20794,6 +20835,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.subcontrol":
+		if e.complexity.Note.Subcontrol == nil {
+			break
+		}
+
+		return e.complexity.Note.Subcontrol(childComplexity), true
 
 	case "Note.task":
 		if e.complexity.Note.Task == nil {
@@ -33992,6 +34040,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.PrimaryColor(childComplexity), true
 
+	case "TrustCenterSetting.secondaryBackgroundColor":
+		if e.complexity.TrustCenterSetting.SecondaryBackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.SecondaryBackgroundColor(childComplexity), true
+
+	case "TrustCenterSetting.secondaryForegroundColor":
+		if e.complexity.TrustCenterSetting.SecondaryForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.SecondaryForegroundColor(childComplexity), true
+
 	case "TrustCenterSetting.themeMode":
 		if e.complexity.TrustCenterSetting.ThemeMode == nil {
 			break
@@ -34201,6 +34263,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.Ref(childComplexity), true
+
+	case "TrustCenterSettingHistory.secondaryBackgroundColor":
+		if e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.secondaryForegroundColor":
+		if e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.themeMode":
 		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
@@ -47976,6 +48052,8 @@ input CreateNoteInput {
   text: String!
   ownerID: ID
   taskID: ID
+  controlID: ID
+  subcontrolID: ID
   fileIDs: [ID!]
 }
 """
@@ -49030,6 +49108,14 @@ input CreateTrustCenterSettingInput {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
@@ -66640,6 +66726,8 @@ type Note implements Node {
   text: String!
   owner: Organization
   task: Task
+  control: Control
+  subcontrol: Subcontrol
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67116,6 +67204,16 @@ input NoteWhereInput {
   """
   hasTask: Boolean
   hasTaskWith: [TaskWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
   """
   files edge predicates
   """
@@ -90248,6 +90346,14 @@ type TrustCenterSetting implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenter: TrustCenter
   files(
     """
@@ -90374,6 +90480,14 @@ type TrustCenterSettingHistory implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
 }
 """
 A connection to a list of items.
@@ -90785,6 +90899,42 @@ input TrustCenterSettingHistoryWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -91121,6 +91271,42 @@ input TrustCenterSettingWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
   """
   trust_center edge predicates
   """
@@ -94422,6 +94608,10 @@ input UpdateNoteInput {
   text: String
   taskID: ID
   clearTask: Boolean
+  controlID: ID
+  clearControl: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -95919,6 +96109,16 @@ input UpdateTrustCenterSettingInput {
   """
   accentColor: String
   clearAccentColor: Boolean
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  clearSecondaryBackgroundColor: Boolean
+  """
+  seconday foreground color for the trust center
+  """
+  secondaryForegroundColor: String
+  clearSecondaryForegroundColor: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -100558,6 +100758,16 @@ extend input UpdateTaskInput {
     deleteComment: ID
 }
 
+extend input UpdateControlInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateSubcontrolInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -100576,6 +100786,40 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): TaskUpdatePayload!
+    """
+    Update an existing control comment
+    """
+    updateControlComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ControlUpdatePayload!
+    """
+    Update an existing subcontrol comment
+    """
+    updateSubcontrolComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): SubcontrolUpdatePayload!
 }
 
 `, BuiltIn: false},

@@ -3598,6 +3598,11 @@ func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputRes
 	return &updateActionPlanInputResolver{r}
 }
 
+// UpdateControlInput returns gqlgenerated.UpdateControlInputResolver implementation.
+func (r *Resolver) UpdateControlInput() gqlgenerated.UpdateControlInputResolver {
+	return &updateControlInputResolver{r}
+}
+
 // UpdateControlObjectiveInput returns gqlgenerated.UpdateControlObjectiveInputResolver implementation.
 func (r *Resolver) UpdateControlObjectiveInput() gqlgenerated.UpdateControlObjectiveInputResolver {
 	return &updateControlObjectiveInputResolver{r}
@@ -3638,6 +3643,11 @@ func (r *Resolver) UpdateStandardInput() gqlgenerated.UpdateStandardInputResolve
 	return &updateStandardInputResolver{r}
 }
 
+// UpdateSubcontrolInput returns gqlgenerated.UpdateSubcontrolInputResolver implementation.
+func (r *Resolver) UpdateSubcontrolInput() gqlgenerated.UpdateSubcontrolInputResolver {
+	return &updateSubcontrolInputResolver{r}
+}
+
 // UpdateTFASettingInput returns gqlgenerated.UpdateTFASettingInputResolver implementation.
 func (r *Resolver) UpdateTFASettingInput() gqlgenerated.UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
@@ -3660,6 +3670,7 @@ type createGroupInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
+type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
@@ -3668,6 +3679,7 @@ type updateOrganizationInputResolver struct{ *Resolver }
 type updateProcedureInputResolver struct{ *Resolver }
 type updateProgramInputResolver struct{ *Resolver }
 type updateStandardInputResolver struct{ *Resolver }
+type updateSubcontrolInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }

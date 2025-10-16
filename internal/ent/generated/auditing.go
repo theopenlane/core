@@ -3653,6 +3653,12 @@ func (_m *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) []C
 	if !reflect.DeepEqual(_m.AccentColor, new.AccentColor) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldAccentColor, _m.AccentColor, new.AccentColor))
 	}
+	if !reflect.DeepEqual(_m.SecondaryBackgroundColor, new.SecondaryBackgroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldSecondaryBackgroundColor, _m.SecondaryBackgroundColor, new.SecondaryBackgroundColor))
+	}
+	if !reflect.DeepEqual(_m.SecondaryForegroundColor, new.SecondaryForegroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldSecondaryForegroundColor, _m.SecondaryForegroundColor, new.SecondaryForegroundColor))
+	}
 	return changes
 }
 
