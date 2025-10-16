@@ -93,7 +93,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Optional(),
 		field.Bool("allow_matching_domains_autojoin").
 			Comment("allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization").
-			Default(true).
+			Default(false).
 			Optional(),
 		field.Enum("identity_provider").
 			Comment("SSO provider type for the organization").
