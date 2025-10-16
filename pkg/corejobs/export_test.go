@@ -281,8 +281,10 @@ func TestExportContentWorker(t *testing.T) {
 			}
 
 			config := corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
+				OpenlaneConfig: corejobs.OpenlaneConfig{
+					OpenlaneAPIHost:  "https://api.example.com",
+					OpenlaneAPIToken: "tola_test-token",
+				},
 			}
 			if mockServer != nil {
 				config.OpenlaneAPIHost = mockServer.URL
@@ -349,8 +351,10 @@ func TestExportContentWorker_GraphQLErrorResponse(t *testing.T) {
 
 	worker := &corejobs.ExportContentWorker{
 		Config: corejobs.ExportWorkerConfig{
-			OpenlaneAPIHost:  mockServer.URL,
-			OpenlaneAPIToken: "test-token",
+			OpenlaneConfig: corejobs.OpenlaneConfig{
+				OpenlaneAPIHost:  mockServer.URL,
+				OpenlaneAPIToken: "tola_test-token",
+			},
 		},
 	}
 

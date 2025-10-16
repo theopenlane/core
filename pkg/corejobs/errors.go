@@ -1,7 +1,13 @@
 package corejobs
 
 import (
+	"errors"
 	"fmt"
+)
+
+var (
+	ErrOpenlaneHostMissing  = errors.New("openlane api host is required")
+	ErrOpenlaneTokenMissing = errors.New("openlane api token is required")
 )
 
 // MissingRequiredArgError is returned when a required argument was not provided to a job
