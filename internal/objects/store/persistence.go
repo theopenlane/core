@@ -111,7 +111,7 @@ type mappedParent struct {
 // This is used to derive the organization ID for files correlated to these object types
 // by joining through the parent table
 var nonOwnedSchemas = map[string]mappedParent{
-	"trust_center_doc": mappedParent{
+	"trust_center_doc": {
 		parentTable: "trust_centers",
 		idField:     "trust_center_id",
 	},
