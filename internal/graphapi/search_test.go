@@ -19,20 +19,22 @@ func TestGlobalSearch(t *testing.T) {
 	testViewOnlyUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(testSearchUser.UserCtx, t, &testViewOnlyUser, enums.RoleMember, testSearchUser.OrganizationID)
 
+	testAnotherUser := suite.userBuilder(context.Background(), t)
+
 	// create multiple objects to be searched by testSearchUser
 	// dont use objects that might be created by the system, that could be returned such as system owned controls, policies, etc
 	// also don't use objects that are created automatically, like groups
 	numContacts := 10
 	contactIDs := []string{}
 	for i := range numContacts {
-		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		contactIDs = append(contactIDs, contact.ID)
 	}
 
 	numPrograms := 3
 	programIDs := []string{}
 	for i := range numPrograms {
-		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		programIDs = append(programIDs, program.ID)
 	}
 
@@ -50,7 +52,7 @@ func TestGlobalSearch(t *testing.T) {
 			name:             "happy path",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "Test",
+			query:            "A1CD2D",
 			expectedResults:  13, // this is total count of all objects searched
 			expectedContacts: 10,
 			expectedPrograms: 3,
@@ -59,7 +61,7 @@ func TestGlobalSearch(t *testing.T) {
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "TEST",
+			query:            "a1cd2d",
 			expectedResults:  13, // this is total count of all objects searched
 			expectedContacts: 10,
 			expectedPrograms: 3,
@@ -77,7 +79,7 @@ func TestGlobalSearch(t *testing.T) {
 			name:             "happy path, view only user",
 			client:           suite.client.api,
 			ctx:              testViewOnlyUser.UserCtx,
-			query:            "Test",
+			query:            "A1CD2D",
 			expectedResults:  10, // this is total count of all objects searched
 			expectedContacts: 10,
 			expectedPrograms: 0, // no access to the programs by the view only user
@@ -92,8 +94,8 @@ func TestGlobalSearch(t *testing.T) {
 		{
 			name:            "no results, another user",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			query:           "Test",
+			ctx:             testAnotherUser.UserCtx,
+			query:           "A1CD2D",
 			expectedResults: 0,
 		},
 		{
