@@ -175,8 +175,10 @@ func TestQueryControlImplementations(t *testing.T) {
 
 	// create multiple controlImplementations to be queried using testUser
 	numCIs := 5
+	ciIDs := []string{}
 	for range numCIs {
-		(&ControlImplementationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		ciIDs = append(ciIDs, ci.ID)
 	}
 
 	// view only users should be able to see these because they are associated with a control
@@ -184,7 +186,8 @@ func TestQueryControlImplementations(t *testing.T) {
 	controlIDs := []string{}
 	for range numCIsWithAssociatedControls {
 		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser.UserCtx, t)
+		ciIDs = append(ciIDs, ci.ID)
 
 		controlIDs = append(controlIDs, control1.ID)
 	}
@@ -229,7 +232,12 @@ func TestQueryControlImplementations(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllControlImplementations(tc.ctx)
+			// ensure we don't conflict with other tests
+			where := &testclient.ControlImplementationWhereInput{
+				IDIn: ciIDs,
+			}
+
+			resp, err := tc.client.GetControlImplementations(tc.ctx, where)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
@@ -238,7 +246,7 @@ func TestQueryControlImplementations(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: ciIDs}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser.UserCtx, t)
 }
 
