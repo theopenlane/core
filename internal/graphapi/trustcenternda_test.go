@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -21,15 +21,15 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
-	uploadFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 	require.Nil(t, err)
 	up := graphql.Upload{
-		File:        uploadFile.File,
-		Filename:    uploadFile.Filename,
+		File:        uploadFile.RawFile,
+		Filename:    uploadFile.OriginalName,
 		Size:        uploadFile.Size,
 		ContentType: uploadFile.ContentType,
 	}
-	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{up})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
@@ -115,15 +115,15 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 	// First, let's test the scenario where user has already signed NDA
 	t.Run("Test email scenarios with existing NDA", func(t *testing.T) {
 		// Create NDA template for trustCenter1
-		uploadFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+		uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 		require.Nil(t, err)
 		up := graphql.Upload{
-			File:        uploadFile.File,
-			Filename:    uploadFile.Filename,
+			File:        uploadFile.RawFile,
+			Filename:    uploadFile.OriginalName,
 			Size:        uploadFile.Size,
 			ContentType: uploadFile.ContentType,
 		}
-		expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{up})
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
 
 		trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 			TrustCenterID: trustCenter1.ID,
@@ -396,11 +396,11 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 			uploads := []*graphql.Upload{}
 			expectUploads := []graphql.Upload{}
 			for _, file := range tc.uploads {
-				uploadFile, err := objects.NewUploadFile(file)
+				uploadFile, err := storage.NewUploadFile(file)
 				assert.NilError(t, err)
 				up := graphql.Upload{
-					File:        uploadFile.File,
-					Filename:    uploadFile.Filename,
+					File:        uploadFile.RawFile,
+					Filename:    uploadFile.OriginalName,
 					Size:        uploadFile.Size,
 					ContentType: uploadFile.ContentType,
 				}
@@ -409,7 +409,7 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 				uploads = append(uploads, &up)
 			}
 			if len(uploads) > 0 {
-				expectUpload(t, suite.client.objectStore.Storage, expectUploads)
+				expectUpload(t, suite.client.mockProvider, expectUploads)
 			}
 			resp, err := suite.client.api.CreateTrustCenterNda(tc.ctx, tc.input, uploads)
 
@@ -438,11 +438,11 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 	uploads := []*graphql.Upload{}
 	expectUploads := []graphql.Upload{}
 	for _, file := range uploadFiles {
-		uploadFile, err := objects.NewUploadFile(file)
+		uploadFile, err := storage.NewUploadFile(file)
 		assert.NilError(t, err)
 		up := graphql.Upload{
-			File:        uploadFile.File,
-			Filename:    uploadFile.Filename,
+			File:        uploadFile.RawFile,
+			Filename:    uploadFile.OriginalName,
 			Size:        uploadFile.Size,
 			ContentType: uploadFile.ContentType,
 		}
@@ -451,7 +451,7 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 		uploads = append(uploads, &up)
 	}
 	if len(uploads) > 0 {
-		expectUpload(t, suite.client.objectStore.Storage, expectUploads)
+		expectUpload(t, suite.client.mockProvider, expectUploads)
 	}
 	resp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, input, uploads)
 
@@ -484,15 +484,15 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	uploadFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 	require.Nil(t, err)
 	up := graphql.Upload{
-		File:        uploadFile.File,
-		Filename:    uploadFile.Filename,
+		File:        uploadFile.RawFile,
+		Filename:    uploadFile.OriginalName,
 		Size:        uploadFile.Size,
 		ContentType: uploadFile.ContentType,
 	}
-	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{up})
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,

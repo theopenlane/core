@@ -3,9 +3,11 @@ package logx
 import (
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/labstack/gommon/log"
 	"github.com/rs/zerolog"
+	"github.com/theopenlane/core/pkg/logx/consolelog"
 )
 
 // Logger is a wrapper around zerolog.Logger that provides an implementation of the echo.Logger interface
@@ -25,6 +27,34 @@ func New(out io.Writer, setters ...ConfigSetter) *Logger {
 	default:
 		return newLogger(zerolog.New(out), setters)
 	}
+}
+
+// CreateLogger creates a new logger for the echo server based on the provided configuration
+func CreateLogger(level log.Lvl, pretty bool) *Logger {
+	var logger *Logger
+
+	setters := []ConfigSetter{
+		WithLevel(level),
+		WithTimestamp(),
+		WithCaller(),
+	}
+
+	// if PrettyLog is enabled, use the console writer for pretty logging
+	// otherwise, use the default stdout writer (json format)
+	if pretty {
+		cw := consolelog.NewConsoleWriter()
+		logger = New(
+			&cw,
+			setters...,
+		)
+	} else {
+		logger = New(
+			os.Stdout,
+			setters...,
+		)
+	}
+
+	return logger
 }
 
 // From returns a new Logger instance using existing zerolog log

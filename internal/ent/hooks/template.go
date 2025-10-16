@@ -26,6 +26,7 @@ func HookTemplate() ent.Hook {
 				if !auth.IsSystemAdminFromContext(ctx) {
 					return nil, fmt.Errorf("%w: only system admins can create or update root templates", ErrInvalidInput)
 				}
+
 			}
 
 			return next.Mutate(ctx, m)
@@ -86,24 +87,17 @@ func HookTemplateFiles() ent.Hook {
 func checkTemplateFiles(ctx context.Context, m *generated.TemplateMutation) (context.Context, error) {
 	key := "templateFiles"
 
-	// get the file from the context, if it exists
 	files, _ := objects.FilesFromContextWithKey(ctx, key)
-
-	// return early if no file is provided
-	if files == nil {
+	if len(files) == 0 {
 		return ctx, nil
 	}
 
-	for _, file := range files {
-		if file.FieldName == key {
-			file.Parent.ID, _ = m.ID()
-			file.Parent.Type = m.Type()
+	adapter := objects.NewGenericMutationAdapter(m,
+		func(mut *generated.TemplateMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TemplateMutation) string { return mut.Type() },
+	)
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file)
-		}
-	}
-
-	return ctx, nil
+	return objects.ProcessFilesForMutation(ctx, adapter, key)
 }
 
 func templateCreateHook(ctx context.Context, m *generated.TemplateMutation) error {

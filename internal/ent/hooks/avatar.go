@@ -3,7 +3,7 @@ package hooks
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // AvatarMutation is an interface for setting the local file ID for an avatar
@@ -18,28 +18,21 @@ type AvatarMutation interface {
 func checkAvatarFile[T AvatarMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "avatarFile"
 
-	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
-
-	// return early if no file is provided
-	if file == nil {
+	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
+	if len(files) == 0 {
 		return ctx, nil
 	}
 
-	// we should only have one file
-	if len(file) > 1 {
+	if len(files) > 1 {
 		return ctx, ErrTooManyAvatarFiles
 	}
 
-	// this should always be true, but check just in case
-	if file[0].FieldName == key {
-		m.SetAvatarLocalFileID(file[0].ID)
+	m.SetAvatarLocalFileID(files[0].ID)
 
-		file[0].Parent.ID, _ = m.ID()
-		file[0].Parent.Type = m.Type()
+	adapter := pkgobjects.NewGenericMutationAdapter(m,
+		func(mut T) (string, bool) { return mut.ID() },
+		func(mut T) string { return mut.Type() },
+	)
 
-		ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
-	}
-
-	return ctx, nil
+	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -55,14 +55,14 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationInput
 
 	avatarFileLoc := cmd.Config.String("avatar-file")
 	if avatarFileLoc != "" {
-		file, err := objects.NewUploadFile(avatarFileLoc)
+		file, err := storage.NewUploadFile(avatarFileLoc)
 		if err != nil {
 			return id, input, nil, err
 		}
 
 		avatarFile = &graphql.Upload{
-			File:        file.File,
-			Filename:    file.Filename,
+			File:        file.RawFile,
+			Filename:    file.OriginalName,
 			Size:        file.Size,
 			ContentType: file.ContentType,
 		}

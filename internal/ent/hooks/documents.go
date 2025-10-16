@@ -1,6 +1,7 @@
 package hooks
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type detailsMutation interface {
@@ -39,7 +41,7 @@ type importSchemaMutation interface {
 	URL() (string, bool)
 }
 
-// HookSummarizeDetails summarizes the policy and produces a short human readable copy
+// HookSummarizeDetails is an ent hook that summarizes long details fields into a short human readable summary
 func HookSummarizeDetails() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -67,9 +69,8 @@ func HookSummarizeDetails() ent.Hook {
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
 }
 
-// HookImportDocument  checks to see if we have an uploaded file.
-// If we do, use that as the details of the document and also
-// use the name of the file
+// HookImportDocument is an ent hook that imports document content from either an uploaded file or a provided URL
+// If a file is uploaded it becomes the source of the details and sets the document name to the original filename
 func HookImportDocument() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -89,11 +90,20 @@ func HookImportDocument() ent.Hook {
 				}
 
 			default:
-				ctx, err := checkDocumentFile(ctx, mut)
+				// Derive the expected file key for this mutation and attach parent metadata to uploaded files
+				key := mutationToFileKey(mut)
+				adapter := objects.NewGenericMutationAdapter(mut,
+					func(mm importSchemaMutation) (string, bool) { return mm.ID() },
+					func(mm importSchemaMutation) string { return mm.Type() },
+				)
+
+				var err error
+				ctx, err = objects.ProcessFilesForMutation(ctx, adapter, key)
 				if err != nil {
 					return nil, err
 				}
 
+				// Parse the uploaded file and write values into the mutation
 				if err := importFileToSchema(ctx, mut); err != nil {
 					return nil, err
 				}
@@ -104,39 +114,13 @@ func HookImportDocument() ent.Hook {
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
 }
 
+// mutationToFileKey is a helper that converts a mutation type into the expected upload field name
 func mutationToFileKey(m importSchemaMutation) string {
 	return fmt.Sprintf("%sFile", strcase.LowerCamelCase(m.Type()))
 }
 
-func checkDocumentFile[T importSchemaMutation](ctx context.Context, m T) (context.Context, error) {
-	key := mutationToFileKey(m)
-
-	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
-
-	// return early if no file is provided
-	if file == nil {
-		return ctx, nil
-	}
-
-	// we should only have one file
-	if len(file) > 1 {
-		return ctx, ErrNotSingularUpload
-	}
-
-	// this should always be true, but check just in case
-	if file[0].FieldName == key {
-		file[0].Parent.ID, _ = m.ID()
-		file[0].Parent.Type = strcase.SnakeCase(m.Type())
-
-		ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
-	}
-
-	return ctx, nil
-}
-
-// importFileToSchema handles the common logic for processing uploaded files
-// and setting the name and details from the file content
+// importFileToSchema is a helper that reads an uploaded file from context, downloads it from storage, parses it,
+// sanitizes the content and sets the document name, fileID and details on the mutation
 func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error {
 	key := mutationToFileKey(m)
 
@@ -147,22 +131,23 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 	}
 
 	currentFileID, exists := m.FileID()
-	// delete the existing file since we are replacing it
-	// and we do not want old files laying around
+	// If the mutation already has a file, delete the old record to avoid leaving stale files around
 	if exists {
 		if err := m.Client().File.DeleteOneID(currentFileID).Exec(ctx); err != nil {
 			return err
 		}
 	}
 
-	content, err := m.Client().ObjectManager.Storage.Download(ctx, &objects.DownloadFileOptions{
-		FileName: file[0].UploadedFileName,
+	// Fallback: Download the uploaded file contents using the object storage service and parse into details
+	downloaded, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
+		FileName:    file[0].OriginalName,
+		ContentType: file[0].ContentType,
 	})
 	if err != nil {
 		return err
 	}
 
-	parsedContent, err := objects.ParseDocument(content.File, file[0].MimeType)
+	parsedContent, err := storage.ParseDocument(bytes.NewReader(downloaded.File), file[0].ContentType)
 	if err != nil {
 		return err
 	}
@@ -171,7 +156,16 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	m.SetName(file[0].OriginalName)
 	m.SetFileID(file[0].ID)
-	m.SetDetails(p.Sanitize(parsedContent))
+
+	var detailsStr string
+	switch v := parsedContent.(type) {
+	case string:
+		detailsStr = v
+	default:
+		detailsStr = fmt.Sprintf("%v", v)
+	}
+
+	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
 }
@@ -182,16 +176,8 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
-func detectMimeTypeFromContent(content []byte, fallbackMimeType string) string {
-	mimeType := http.DetectContentType(content)
-
-	if mimeType == "" {
-		return strings.ToLower(strings.TrimSpace(fallbackMimeType))
-	}
-
-	return mimeType
-}
-
+// importURLToSchema is a helper that fetches content from a URL, detects its MIME type, parses it and writes
+// the sanitized content into the mutation details, recording the URL used
 func importURLToSchema(m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
@@ -222,6 +208,7 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
 	}
 
+	// Read a bounded amount of data based on configured import size to prevent memory overuse
 	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
 
 	buf, err := io.ReadAll(reader)
@@ -229,25 +216,32 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
 	}
 
-	fallbackMimeType := resp.Header.Get("Content-Type")
-	mimeType := detectMimeTypeFromContent(buf, fallbackMimeType)
-
-	switch mimeType {
-	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		"text/plain", "text/markdown", "text/plain; charset=utf-8":
-		content, err := objects.ParseDocument(buf, mimeType)
-		if err != nil {
-			return fmt.Errorf("failed to parse document: %w", err)
-		}
-
-		p := bluemonday.UGCPolicy()
-
-		m.SetURL(downloadURL)
-		m.SetDetails(p.Sanitize(content))
-
-		return nil
-
-	default:
-		return fmt.Errorf("unspupported content-type ( %s)", mimeType) // nolint:err113
+	// Detect MIME using storage helper with fallback to header to handle servers with incorrect content type
+	mimeType := resp.Header.Get("Content-Type")
+	if detected, derr := storage.DetectContentType(bytes.NewReader(buf)); derr == nil && detected != "" {
+		mimeType = detected
+	} else {
+		mimeType = strings.ToLower(strings.TrimSpace(mimeType))
 	}
+
+	// Parse the document using the detected MIME type
+	parsed, err := storage.ParseDocument(bytes.NewReader(buf), mimeType)
+	if err != nil {
+		return fmt.Errorf("failed to parse document: %w", err)
+	}
+
+	// Convert structured results into a string representation for details
+	var detailsStr string
+	switch v := parsed.(type) {
+	case string:
+		detailsStr = v
+	default:
+		detailsStr = fmt.Sprintf("%v", v)
+	}
+
+	p := bluemonday.UGCPolicy()
+	m.SetURL(downloadURL)
+	m.SetDetails(p.Sanitize(detailsStr))
+
+	return nil
 }

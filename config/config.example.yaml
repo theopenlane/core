@@ -187,20 +187,78 @@ keywatcher:
     keyDir: ./keys
     secretManager: ""
 objectStorage:
-    accessKey: ""
-    credentialsJSON: ""
-    defaultBucket: file_uploads
+    devMode: false
     enabled: true
-    endpoint: ""
     keys:
-        - uploadFile
-    localURL: http://localhost:17608/files/
+        - '"uploadFile"'
     maxMemoryMB: 0
     maxSizeMB: 0
-    provider: ""
-    region: ""
-    secretKey: ""
-    usePathStyle: false
+    providers:
+        cloudflareR2:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
+        database:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
+        disk:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
+        gcs:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
+        s3:
+            bucket: ""
+            credentials:
+                accessKeyID: ""
+                accountID: ""
+                apiToken: ""
+                endpoint: ""
+                projectID: ""
+                secretAccessKey: ""
+            enabled: false
+            endpoint: ""
+            ensureAvailable: false
+            region: ""
 ratelimit:
     burst: 30
     enabled: false

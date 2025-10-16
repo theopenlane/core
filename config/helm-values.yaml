@@ -385,33 +385,149 @@ coreConfiguration:
     expires: 10m0s  # @schema type:integer; default:10m
   # -- ObjectStorage contains the configuration for the object storage backend
   objectStorage:
-    # -- Enabled indicates if the store is enabled
+    # -- Enabled indicates if object storage is enabled
     enabled: true  # @schema type:boolean; default:true
-    # -- Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set
-    provider: ""  # @schema type:string
-    # -- Region is the region for the storage provider
-    region: ""  # @schema type:string
-    # -- DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default
-    # this is the local path for disk storage or the bucket name for S3
-    defaultBucket: "file_uploads"  # @schema type:string; default:file_uploads
-    # -- LocalURL is the URL to use for the "presigned" URL for the file when using local storage
-    # e.g for local development, this can be http://localhost:17608/files/
-    localURL: "http://localhost:17608/files/"  # @schema type:string; default:http://localhost:17608/files/
-    # -- Keys is a list of keys to look for in the multipart form on the REST request
-    # if the keys are not found, the request upload will be skipped
-    # this is not used when uploading files with gqlgen and the graphql handler
+    # -- Keys are the form field keys that will be processed for uploads
     keys:
-        - uploadFile
-    # -- MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes
+        - "uploadFile"
+    # -- MaxSizeMB is the maximum file size allowed in MB
     maxSizeMB: 0  # @schema type:integer
-    # -- MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form
+    # -- MaxMemoryMB is the maximum memory to use for file uploads in MB
     maxMemoryMB: 0  # @schema type:integer
-    # -- Endpoint is used for other s3 compatible storage systems e.g minio, digital ocean spaces .
-    # they do not use the same s3 endpoint
-    endpoint: ""  # @schema type:string
-    # -- UsePathStyle is useful for other s3 compatible systems that use path styles not bucket.host path
-    # minio is a popular example here
-    usePathStyle: false  # @schema type:boolean
+    # -- DevMode enables simple file upload handling for local development and testing
+    devMode: false  # @schema type:boolean; default:false
+    # -- Providers contains configuration for each storage provider
+    providers:
+      # -- S3 provider configuration
+      s3:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureAvailable: false  # @schema type:boolean; default:false
+        # -- Region for cloud providers
+        region: ""  # @schema type:string
+        # -- Bucket name for cloud providers
+        bucket: ""  # @schema type:string
+        # -- Endpoint for custom endpoints
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the credentials for accessing the provider
+        credentials:
+          # -- AccessKeyID for cloud providers
+          accessKeyID: ""  # @schema type:string
+          # -- SecretAccessKey for cloud providers
+          secretAccessKey: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProjectID for GCS
+          projectID: ""  # @schema type:string
+          # -- AccountID for Cloudflare R2
+          accountID: ""  # @schema type:string
+          # -- APIToken for Cloudflare R2
+          apiToken: ""  # @schema type:string
+      # -- CloudflareR2 provider configuration
+      cloudflareR2:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureAvailable: false  # @schema type:boolean; default:false
+        # -- Region for cloud providers
+        region: ""  # @schema type:string
+        # -- Bucket name for cloud providers
+        bucket: ""  # @schema type:string
+        # -- Endpoint for custom endpoints
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the credentials for accessing the provider
+        credentials:
+          # -- AccessKeyID for cloud providers
+          accessKeyID: ""  # @schema type:string
+          # -- SecretAccessKey for cloud providers
+          secretAccessKey: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProjectID for GCS
+          projectID: ""  # @schema type:string
+          # -- AccountID for Cloudflare R2
+          accountID: ""  # @schema type:string
+          # -- APIToken for Cloudflare R2
+          apiToken: ""  # @schema type:string
+      # -- GCS provider configuration
+      gcs:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureAvailable: false  # @schema type:boolean; default:false
+        # -- Region for cloud providers
+        region: ""  # @schema type:string
+        # -- Bucket name for cloud providers
+        bucket: ""  # @schema type:string
+        # -- Endpoint for custom endpoints
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the credentials for accessing the provider
+        credentials:
+          # -- AccessKeyID for cloud providers
+          accessKeyID: ""  # @schema type:string
+          # -- SecretAccessKey for cloud providers
+          secretAccessKey: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProjectID for GCS
+          projectID: ""  # @schema type:string
+          # -- AccountID for Cloudflare R2
+          accountID: ""  # @schema type:string
+          # -- APIToken for Cloudflare R2
+          apiToken: ""  # @schema type:string
+      # -- Disk provider configuration
+      disk:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureAvailable: false  # @schema type:boolean; default:false
+        # -- Region for cloud providers
+        region: ""  # @schema type:string
+        # -- Bucket name for cloud providers
+        bucket: ""  # @schema type:string
+        # -- Endpoint for custom endpoints
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the credentials for accessing the provider
+        credentials:
+          # -- AccessKeyID for cloud providers
+          accessKeyID: ""  # @schema type:string
+          # -- SecretAccessKey for cloud providers
+          secretAccessKey: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProjectID for GCS
+          projectID: ""  # @schema type:string
+          # -- AccountID for Cloudflare R2
+          accountID: ""  # @schema type:string
+          # -- APIToken for Cloudflare R2
+          apiToken: ""  # @schema type:string
+      # -- Database provider configuration
+      database:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureAvailable: false  # @schema type:boolean; default:false
+        # -- Region for cloud providers
+        region: ""  # @schema type:string
+        # -- Bucket name for cloud providers
+        bucket: ""  # @schema type:string
+        # -- Endpoint for custom endpoints
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the credentials for accessing the provider
+        credentials:
+          # -- AccessKeyID for cloud providers
+          accessKeyID: ""  # @schema type:string
+          # -- SecretAccessKey for cloud providers
+          secretAccessKey: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProjectID for GCS
+          projectID: ""  # @schema type:string
+          # -- AccountID for Cloudflare R2
+          accountID: ""  # @schema type:string
+          # -- APIToken for Cloudflare R2
+          apiToken: ""  # @schema type:string
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -571,30 +687,6 @@ externalSecrets:
       secretKey: "CORE_TOTP_SECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-totp-secret"  # @schema type:string
-    # -- core-objectstorage-accesskey secret configuration
-    core-objectstorage-accesskey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.accessKey
-      secretKey: "CORE_OBJECTSTORAGE_ACCESSKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-accesskey"  # @schema type:string
-    # -- core-objectstorage-secretkey secret configuration
-    core-objectstorage-secretkey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.secretKey
-      secretKey: "CORE_OBJECTSTORAGE_SECRETKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-secretkey"  # @schema type:string
-    # -- core-objectstorage-credentialsjson secret configuration
-    core-objectstorage-credentialsjson:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.credentialsJSON
-      secretKey: "CORE_OBJECTSTORAGE_CREDENTIALSJSON"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-credentialsjson"  # @schema type:string
     # -- core-subscription-privatestripekey secret configuration
     core-subscription-privatestripekey:
       # -- Enable this external secret

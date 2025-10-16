@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+
 	"github.com/theopenlane/iam/tokens"
 
 	storage "github.com/theopenlane/core/pkg/objects/storage"
@@ -49,7 +51,7 @@ func (b *Builder) WithOptions(opts ...Option) *Builder {
 }
 
 // Build implements eddy.Builder.
-func (b *Builder) Build(config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(_ context.Context, _ storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}
