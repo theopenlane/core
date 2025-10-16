@@ -100,10 +100,9 @@ require (
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
-	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.561.0
+	github.com/windmill-labs/windmill-go-client v1.562.0
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
@@ -111,6 +110,7 @@ require (
 	golang.org/x/crypto v0.43.0
 	golang.org/x/mod v0.29.0
 	golang.org/x/oauth2 v0.32.0
+	golang.org/x/sync v0.17.0
 	golang.org/x/term v0.36.0
 	golang.org/x/text v0.30.0
 	golang.org/x/tools v0.38.0
@@ -119,10 +119,8 @@ require (
 )
 
 require (
-	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/sebdah/goldie/v2 v2.8.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	golang.org/x/sync v0.17.0 // indirect
 	google.golang.org/api v0.252.0 // indirect
 )
 

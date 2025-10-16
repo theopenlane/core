@@ -568,8 +568,6 @@ github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/resend/resend-go/v2 v2.23.0 h1:zOMoKJUW0IKyzKU///ieyxUFcz576Y5l+Z6wUrur01Q=
 github.com/resend/resend-go/v2 v2.23.0/go.mod h1:3YCb8c8+pLiqhtRFXTyFwlLvfjQtluxOr9HEh2BwCkQ=
-github.com/richardlehane/msoleps v1.0.3 h1:aznSZzrwYRl3rLKRT3gUk9am7T/mLNSnJINvN0AQoVM=
-github.com/richardlehane/msoleps v1.0.3/go.mod h1:BWev5JBpU9Ko2WAgmZEuiz4/u3ZYTKbjLycmwiWUfWg=
 github.com/riverqueue/river v0.26.0 h1:Lykh7L6iDBNxku3NXrnL5RXUGk7FgEnk5CdN/ak3lko=
 github.com/riverqueue/river v0.26.0/go.mod h1:w8+9lbnPQe/vlmBsIG7T1TObTm94Rvx63ZLUZHPmcR8=
 github.com/riverqueue/river/riverdriver v0.26.0 h1:hMW/OOEjAkyvkTIzTf/zqZChThJCQQO0Mi2aMvgcFzg=
@@ -702,8 +700,6 @@ github.com/tmc/langchaingo v0.1.13 h1:rcpMWBIi2y3B90XxfE4Ao8dhCQPVDMaNPnN5cGB1Ca
 github.com/tmc/langchaingo v0.1.13/go.mod h1:vpQ5NOIhpzxDfTZK9B6tf2GM/MoaHewPWM5KXXGh7hg=
 github.com/ugorji/go/codec v1.2.12 h1:9LC83zGrHhuUA9l16C9AHXAqEV/2wBQ4nkvumAE65EE=
 github.com/ugorji/go/codec v1.2.12/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
-github.com/unidoc/unioffice v1.39.0 h1:Wo5zvrzCqhyK/1Zi5dg8a5F5+NRftIMZPnFPYwruLto=
-github.com/unidoc/unioffice v1.39.0/go.mod h1:Axz6ltIZZTUUyHoEnPe4Mb3VmsN4TRHT5iZCGZ1rgnU=
 github.com/urfave/cli/v2 v2.27.7 h1:bH59vdhbjLv3LAvIu6gd0usJHgoTTPhCFib8qqOwXYU=
 github.com/urfave/cli/v2 v2.27.7/go.mod h1:CyNAG/xg+iAOg0N4MPGZqVmv2rCoP267496AOXUZjA4=
 github.com/urfave/cli/v3 v3.4.1 h1:1M9UOCy5bLmGnuu1yn3t3CB4rG79Rtoxuv1sPhnm6qM=
@@ -722,8 +718,8 @@ github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IU
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
 github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV6mEfg5OIWRZA9qds=
-github.com/windmill-labs/windmill-go-client v1.561.0 h1:O5dhYU6qOzt9UScBfVkaiDopX48GwdQ+Ctt4Z3XVTlk=
-github.com/windmill-labs/windmill-go-client v1.561.0/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
+github.com/windmill-labs/windmill-go-client v1.562.0 h1:jg+oZXf59yICOTTXAJA8boFBGhC1zcBDJiZVpEASXjE=
+github.com/windmill-labs/windmill-go-client v1.562.0/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
 github.com/wk8/go-ordered-map/v2 v2.1.8 h1:5h/BUHu93oj4gIdvHHHGsScSTMijfx5PeYkE/fJgbpc=
 github.com/wk8/go-ordered-map/v2 v2.1.8/go.mod h1:5nJHM5DyteebpVlHnWMV0rPz6Zp7+xBAnxjb1X5vnTw=
 github.com/woodsbury/decimal128 v1.4.0 h1:xJATj7lLu4f2oObouMt2tgGiElE5gO6mSWUjQsBgUlc=
