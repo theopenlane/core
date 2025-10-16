@@ -407,14 +407,16 @@ func argIsUpload(arg *ast.Argument) bool {
 func stripOperation(field string) string {
 	operations := []string{"create", "update", "delete", "get"}
 
+	result := field
 	for _, op := range operations {
-		if strings.HasPrefix(field, op) {
-			// Strip the operation prefix
-			return strings.TrimPrefix(field, op)
+		if strings.HasPrefix(result, op) {
+			result = strings.ReplaceAll(result, op, "")
+
+			break
 		}
 	}
 
-	return field
+	return strings.TrimPrefix(result, "Upload")
 }
 
 // isEmpty checks if the given interface is empty

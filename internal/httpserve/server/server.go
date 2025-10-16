@@ -132,12 +132,6 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 
 	s.Router.Handler = &s.config.Handler
 
-	// Set the local file path if the object storage provider is disk
-	// this allows us to serve up the files during testing
-	//	if s.config.Settings.ObjectStorage.Provider == storagetypes.DiskProvider {
-	//		s.Router.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
-	//	}
-
 	// Add base routes to the server
 	if err := route.RegisterRoutes(s.Router); err != nil {
 		return err

@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/unidoc/unioffice/document"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type detailsMutation interface {
@@ -139,14 +139,15 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 	}
 
 	// Fallback: Download the uploaded file contents using the object storage service and parse into details
-	content, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
-		FileName: file[0].OriginalName,
+	downloaded, err := m.Client().ObjectManager.Download(ctx, nil, &file[0], &objects.DownloadOptions{
+		FileName:    file[0].OriginalName,
+		ContentType: file[0].ContentType,
 	})
 	if err != nil {
 		return err
 	}
 
-	parsedContent, err := ParseDocument(content.File, file[0].ContentType)
+	parsedContent, err := storage.ParseDocument(bytes.NewReader(downloaded.File), file[0].ContentType)
 	if err != nil {
 		return err
 	}
@@ -155,7 +156,16 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	m.SetName(file[0].OriginalName)
 	m.SetFileID(file[0].ID)
-	m.SetDetails(p.Sanitize(parsedContent))
+
+	var detailsStr string
+	switch v := parsedContent.(type) {
+	case string:
+		detailsStr = v
+	default:
+		detailsStr = fmt.Sprintf("%v", v)
+	}
+
+	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
 }
@@ -166,6 +176,8 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
+// importURLToSchema is a helper that fetches content from a URL, detects its MIME type, parses it and writes
+// the sanitized content into the mutation details, recording the URL used
 func importURLToSchema(m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
@@ -196,6 +208,7 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
 	}
 
+	// Read a bounded amount of data based on configured import size to prevent memory overuse
 	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
 
 	buf, err := io.ReadAll(reader)
@@ -203,78 +216,32 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
 	}
 
-	fallbackMimeType := resp.Header.Get("Content-Type")
-	mimeType := detectMimeTypeFromContent(buf, fallbackMimeType)
-
-	switch mimeType {
-	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		"text/plain", "text/markdown", "text/plain; charset=utf-8":
-		content, err := ParseDocument(buf, mimeType)
-		if err != nil {
-			return fmt.Errorf("failed to parse document: %w", err)
-		}
-
-		p := bluemonday.UGCPolicy()
-
-		m.SetURL(downloadURL)
-		m.SetDetails(p.Sanitize(content))
-
-		return nil
-
-	default:
-		return fmt.Errorf("unspupported content-type ( %s)", mimeType) // nolint:err113
-	}
-}
-
-func detectMimeTypeFromContent(content []byte, fallbackMimeType string) string {
-	mimeType := http.DetectContentType(content)
-
-	if mimeType == "" {
-		return strings.ToLower(strings.TrimSpace(fallbackMimeType))
+	// Detect MIME using storage helper with fallback to header to handle servers with incorrect content type
+	mimeType := resp.Header.Get("Content-Type")
+	if detected, derr := storage.DetectContentType(bytes.NewReader(buf)); derr == nil && detected != "" {
+		mimeType = detected
+	} else {
+		mimeType = strings.ToLower(strings.TrimSpace(mimeType))
 	}
 
-	return mimeType
-}
-
-// ParseDocument parses a document based on its MIME type
-// TODO: Reconcile with pkg/objects/storage/utils.go - I'm leaving this as-is for now for sanity
-func ParseDocument(content []byte, mimeType string) (string, error) {
-	if len(content) == 0 {
-		return "", errEmptyContentProvided
-	}
-
-	switch mimeType {
-	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-		return parseDocx(content)
-	default:
-		return string(content), nil
-	}
-}
-
-func parseDocx(content []byte) (string, error) {
-	reader := bytes.NewReader(content)
-
-	doc, err := document.Read(reader, int64(len(content)))
+	// Parse the document using the detected MIME type
+	parsed, err := storage.ParseDocument(bytes.NewReader(buf), mimeType)
 	if err != nil {
-		return "", fmt.Errorf("failed to read docx file: %w", err) // nolint:err113
+		return fmt.Errorf("failed to parse document: %w", err)
 	}
 
-	defer doc.Close()
-
-	var w strings.Builder
-
-	for _, para := range doc.Paragraphs() {
-		for _, run := range para.Runs() {
-			w.WriteString(run.Text())
-			w.WriteString(" ")
-		}
-
-		w.WriteString("\n")
+	// Convert structured results into a string representation for details
+	var detailsStr string
+	switch v := parsed.(type) {
+	case string:
+		detailsStr = v
+	default:
+		detailsStr = fmt.Sprintf("%v", v)
 	}
 
-	return strings.TrimSpace(w.String()), nil
+	p := bluemonday.UGCPolicy()
+	m.SetURL(downloadURL)
+	m.SetDetails(p.Sanitize(detailsStr))
+
+	return nil
 }
-
-var (
-	errEmptyContentProvided = errors.New("empty content provided")
-)

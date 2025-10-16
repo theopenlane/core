@@ -103,96 +103,68 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
-	isAdmin := false
-	if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au.IsSystemAdmin {
-		isAdmin = true
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		return "", err
 	}
 
-	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
-	if isAdmin {
-		orgID = ""
+	if !au.IsSystemAdmin && au.OrganizationID != "" {
+		return au.OrganizationID, nil
 	}
 
-	if orgID == "" {
-		var rows sql.Rows
+	var rows sql.Rows
 
-		// derive table name from correlated object type using snake_case to match DB naming
-		objectType := lo.SnakeCase(f.CorrelatedObjectType)
-		objectTable := pluralize.NewClient().Plural(objectType)
+	// derive table name from correlated object type using snake_case to match DB naming
+	objectType := lo.SnakeCase(f.CorrelatedObjectType)
+	objectTable := pluralize.NewClient().Plural(objectType)
 
-		// For schemas that do not include owner_id (e.g., trust_center_docs), resolve owner through the parent
-		if objectType == "trust_center_doc" {
-			// first get the trust_center_id from the doc
-			var tcRows sql.Rows
+	// For schemas that do not include owner_id (e.g., trust_center_docs), resolve owner through the parent
+	if objectType == "trust_center_doc" {
+		// first get the trust_center_id from the doc
+		var tcRows sql.Rows
+		tcQuery := "SELECT tc.owner_id FROM trust_center as tc JOIN trust_center_docs as tcd ON tc.id = tcd. trust_center_id WHERE tcd.id = $1"
 
-			tcQuery := "SELECT trust_center_id FROM trust_center_docs WHERE id = $1"
+		if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &tcRows); err != nil {
+			return "", err
+		}
 
-			if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &tcRows); err != nil {
+		defer tcRows.Close()
+
+		if tcRows.Err() != nil {
+			return "", tcRows.Err()
+		}
+
+		if tcRows.Next() {
+			var ownerID string
+			if err := tcRows.Scan(&ownerID); err != nil {
 				return "", err
 			}
-			if tcRows.Err() != nil {
-				_ = tcRows.Close()
-				return "", tcRows.Err()
-			}
 
-			var trustCenterID string
+			return ownerID, nil
+		}
+	} else {
+		// Generic case: attempt to read owner_id directly from the correlated table
+		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
+		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
+			return "", err
+		}
 
-			if tcRows.Next() {
-				if err := tcRows.Scan(&trustCenterID); err != nil {
-					_ = tcRows.Close()
-					return "", err
-				}
-			}
+		if rows.Err() != nil {
+			return "", rows.Err()
+		}
 
-			_ = tcRows.Close()
-			if trustCenterID == "" {
-				return "", ErrMissingOrganizationID
-			}
-
-			// now resolve owner_id from trust_centers
-			var ownerRows sql.Rows
-			ownerQuery := "SELECT owner_id FROM trust_centers WHERE id = $1"
-			if err := txClientFromContext(ctx).Driver().Query(ctx, ownerQuery, []any{trustCenterID}, &ownerRows); err != nil {
+		defer rows.Close()
+		if rows.Next() {
+			var ownerID string
+			if err := rows.Scan(&ownerID); err != nil {
 				return "", err
 			}
-			if ownerRows.Err() != nil {
-				_ = ownerRows.Close()
-				return "", ownerRows.Err()
-			}
-			if ownerRows.Next() {
-				var ownerID string
-				if err := ownerRows.Scan(&ownerID); err != nil {
-					_ = ownerRows.Close()
-					return "", err
-				}
-				orgID = ownerID
-			}
-			_ = ownerRows.Close()
-		} else {
-			// Generic case: attempt to read owner_id directly from the correlated table
-			query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
-			if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
-				return "", err
-			}
-			if rows.Err() != nil {
-				return "", rows.Err()
-			}
-			defer rows.Close()
-			if rows.Next() {
-				var ownerID string
-				if err := rows.Scan(&ownerID); err != nil {
-					return "", err
-				}
-				orgID = ownerID
-			}
+
+			return ownerID, nil
 		}
 	}
 
-	if orgID == "" {
-		return "", ErrMissingOrganizationID
-	}
-
-	return orgID, nil
+	return "", ErrMissingOrganizationID
 }
 
 func txFileClientFromContext(ctx context.Context) *ent.FileClient {

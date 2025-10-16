@@ -101,9 +101,14 @@ func (rc *ruleCoordinator) handleDevMode() bool {
 		return false
 	}
 
+	bucket := rc.config.Providers.Disk.Bucket
+	if bucket == "" {
+		bucket = objects.DefaultDevStorageBucket
+	}
+
 	options := storage.NewProviderOptions(
-		storage.WithBucket(objects.DefaultDevStorageBucket),
-		storage.WithBasePath(objects.DefaultDevStorageBucket),
+		storage.WithBucket(bucket),
+		storage.WithBasePath(bucket),
 		storage.WithExtra("dev_mode", true),
 	)
 

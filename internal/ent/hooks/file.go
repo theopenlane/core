@@ -37,7 +37,7 @@ func HookFileDelete() ent.Hook {
 
 					ids = append(ids, dbIDs...)
 
-				case ent.OpDeleteOne:
+				case ent.OpDeleteOne, ent.OpUpdateOne:
 
 					id, ok := m.ID()
 					if !ok {
@@ -63,10 +63,7 @@ func HookFileDelete() ent.Hook {
 						file.FieldPersistedFileSize,
 						file.FieldMetadata,
 						file.FieldStorageVolume,
-					).
-					WithIntegrations().
-					WithSecrets().
-					All(ctx)
+					).All(ctx)
 				if err != nil {
 					return nil, err
 				}
@@ -87,17 +84,6 @@ func HookFileDelete() ent.Hook {
 							},
 						}
 
-						// These ID's arent yet used but we should set them now so that when we do use them, they are available
-						// Set integration ID from edges
-						for _, integration := range f.Edges.Integrations {
-							storageFile.ProviderHints.IntegrationID = integration.ID
-						}
-
-						// Set hush ID from edges
-						for _, secret := range f.Edges.Secrets {
-							storageFile.ProviderHints.HushID = secret.ID
-						}
-
 						if f.Metadata != nil {
 							metadata := make(map[string]string)
 							for k, v := range f.Metadata {
@@ -114,8 +100,7 @@ func HookFileDelete() ent.Hook {
 						}
 
 						if err := m.ObjectManager.Delete(ctx, storageFile, nil); err != nil {
-							log.Error().Err(err).Str("file_id", f.ID).Msg("failed to delete file from storage")
-							// Continue with other files rather than failing the entire operation
+							return nil, err
 						}
 					}
 				}

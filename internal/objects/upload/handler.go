@@ -34,6 +34,9 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 			pkgobjects.DoneUpload()
 		}
 
+		// we are intentionally swallowing this error because if we can't get the org ID
+		// we just won't populate the provider hints with it. The upload can still proceed
+		// without it - failing at this stage prevents the upload from ever progressing
 		orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" {
 			file.CorrelatedObjectID = orgID

@@ -208,21 +208,6 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 				}
 			}
 
-			// Ensure parent tuple exists linking the document to the current file for protected visibility flows
-			if (mutationSetFileID || len(watermarkedFiles) > 0) && trustCenterDoc.FileID != nil {
-				parentTuple := fgax.GetTupleKey(fgax.TupleRequest{
-					SubjectID:   trustCenterDoc.ID,
-					SubjectType: "trust_center_doc",
-					ObjectID:    *trustCenterDoc.FileID,
-					ObjectType:  generated.TypeFile,
-					Relation:    "tc_doc_parent",
-				})
-
-				if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{parentTuple}, nil); err != nil {
-					return nil, err
-				}
-			}
-
 			fileIDsToUpdate := []string{*trustCenterDoc.OriginalFileID}
 			if trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
 				fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)

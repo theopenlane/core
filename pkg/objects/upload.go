@@ -8,11 +8,13 @@ import (
 	"os"
 	"reflect"
 	"slices"
+	"sync"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/contextx"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -153,6 +155,8 @@ func ProcessFilesForMutation[T Mutation](ctx context.Context, mutation T, key st
 // parseMultipartForm extracts files from multipart.Form
 func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]File, error) {
 	result := make(map[string][]File)
+	var mu sync.Mutex
+	var eg errgroup.Group
 
 	// If no keys specified, use all available keys
 	if len(keys) == 0 {
@@ -167,30 +171,43 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]File
 			continue
 		}
 
-		var files []File
-		for _, header := range fileHeaders {
-			file, err := header.Open()
-			if err != nil {
-				log.Error().Err(err).Str("file", header.Filename).Msg("failed to open file")
+		eg.Go(func() error {
+			var files []File
+			for _, header := range fileHeaders {
+				file, err := header.Open()
+				if err != nil {
+					log.Error().Err(err).Str("file", header.Filename).Msg("failed to open file")
+					// TODO: update behavior + wrap AroundResponses which can put failed files
+					// into a context and the AroundResponses which checks for it and adds errors to return
+					return err
+				}
 
-				continue
+				defer file.Close()
+
+				files = append(files, File{
+					RawFile:      file,
+					OriginalName: header.Filename,
+					FieldName:    key,
+					FileMetadata: FileMetadata{
+						Size:        header.Size,
+						ContentType: header.Header.Get("Content-Type"),
+						Key:         key,
+					},
+				})
 			}
 
-			files = append(files, File{
-				RawFile:      file,
-				OriginalName: header.Filename,
-				FieldName:    key,
-				FileMetadata: FileMetadata{
-					Size:        header.Size,
-					ContentType: header.Header.Get("Content-Type"),
-					Key:         key,
-				},
-			})
-		}
+			if len(files) > 0 {
+				mu.Lock()
+				result[key] = files
+				mu.Unlock()
+			}
 
-		if len(files) > 0 {
-			result[key] = files
-		}
+			return nil
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		return result, err
 	}
 
 	return result, nil
