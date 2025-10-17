@@ -1301,7 +1301,7 @@ ProviderCredentials contains credentials for a storage provider
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
-|**accessKeySecret**|`string`|SecretAccessKey for cloud providers<br/>||
+|**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
@@ -1345,7 +1345,7 @@ ProviderCredentials contains credentials for a storage provider
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
-|**accessKeySecret**|`string`|SecretAccessKey for cloud providers<br/>||
+|**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
@@ -1389,7 +1389,7 @@ ProviderCredentials contains credentials for a storage provider
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
-|**accessKeySecret**|`string`|SecretAccessKey for cloud providers<br/>||
+|**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
@@ -1433,7 +1433,7 @@ ProviderCredentials contains credentials for a storage provider
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
-|**accessKeySecret**|`string`|SecretAccessKey for cloud providers<br/>||
+|**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
@@ -1477,7 +1477,7 @@ ProviderCredentials contains credentials for a storage provider
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
-|**accessKeySecret**|`string`|SecretAccessKey for cloud providers<br/>||
+|**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||

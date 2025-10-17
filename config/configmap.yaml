@@ -324,7 +324,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_S3_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.accessKeyID | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCESSKEYSECRET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.accessKeySecret | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.secretAccessKey | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.projectID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.accountID | quote }}
@@ -335,7 +335,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.accessKeyID | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCESSKEYSECRET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.accessKeySecret | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.secretAccessKey | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.projectID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.accountID | quote }}
@@ -346,7 +346,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.accessKeyID | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYSECRET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.accessKeySecret | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.secretAccessKey | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.projectID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.accountID | quote }}
@@ -357,7 +357,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.accessKeyID | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYSECRET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.accessKeySecret | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.secretAccessKey | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.projectID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.accountID | quote }}
@@ -368,7 +368,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.accessKeyID | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYSECRET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.accessKeySecret | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.secretAccessKey | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.endpoint | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.projectID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.accountID | quote }}

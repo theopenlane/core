@@ -1244,7 +1244,7 @@
           "type": "string",
           "description": "AccessKeyID for cloud providers"
         },
-        "accessKeySecret": {
+        "secretAccessKey": {
           "type": "string",
           "description": "SecretAccessKey for cloud providers"
         },
