@@ -131,6 +131,8 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.Name, tokens.IDTokenClaims.Email, enums.AuthProviderOIDC, tokens.IDTokenClaims.Picture)
 	if err != nil {
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			log.Error().Err(err).Str("email", tokens.IDTokenClaims.Email).Msg("email not allowed")
+
 			return h.InvalidInput(ctx, err, openapi)
 		}
 
