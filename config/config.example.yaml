@@ -190,7 +190,7 @@ objectStorage:
     devMode: false
     enabled: true
     keys:
-        - '"uploadFile"'
+        - uploadFile
     maxMemoryMB: 0
     maxSizeMB: 0
     providers:
