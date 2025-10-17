@@ -129,7 +129,7 @@ type ProviderCredentials struct {
 	// AccessKeyID for cloud providers
 	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID"`
 	// SecretAccessKey for cloud providers
-	SecretAccessKey string `json:"secretAccessKey" koanf:"accessKeySecret"`
+	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey"`
 	// Endpoint for custom endpoints
 	Endpoint string `json:"endpoint" koanf:"endpoint"`
 	// ProjectID for GCS
