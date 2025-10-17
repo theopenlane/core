@@ -58,11 +58,12 @@ type ExportContentArgs struct {
 	OrganizationID string `json:"organization_id,omitempty"`
 }
 
+// ExportWorkerConfig configuration for the export content worker
 type ExportWorkerConfig struct {
-	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the export worker is enabled"`
+	// embed OpenlaneConfig to reuse validation and client creation logic
+	OpenlaneConfig
 
-	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
-	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
+	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the export worker is enabled"`
 }
 
 // Kind satisfies the river.Job interface
@@ -99,10 +100,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	}
 
 	if w.olClient == nil {
-		cl, err := getOpenlaneClient(CustomDomainConfig{
-			OpenlaneAPIHost:  w.Config.OpenlaneAPIHost,
-			OpenlaneAPIToken: w.Config.OpenlaneAPIToken,
-		})
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			return err
 		}
