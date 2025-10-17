@@ -83,7 +83,7 @@ type ProviderConfig struct {
 	// Enabled indicates if object storage is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
 	// Keys are the form field keys that will be processed for uploads
-	Keys []string `json:"keys" koanf:"keys" default:"[\"uploadFile\"]"`
+	Keys []string `json:"keys" koanf:"keys" default:"[uploadFile]"`
 	// MaxSizeMB is the maximum file size allowed in MB
 	MaxSizeMB int64 `json:"maxSizeMB" koanf:"maxSizeMB"`
 	// MaxMemoryMB is the maximum memory to use for file uploads in MB

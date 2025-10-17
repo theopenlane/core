@@ -314,7 +314,7 @@ data:
   CORE_RATELIMIT_BURST: {{ .Values.openlane.coreConfiguration.ratelimit.burst | quote | default "30" }}
   CORE_RATELIMIT_EXPIRES: {{ .Values.openlane.coreConfiguration.ratelimit.expires | quote | default "10m" }}
   CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.enabled | quote | default "true" }}
-  CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default ""uploadFile"" }}
+  CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB | quote }}
   CORE_OBJECTSTORAGE_DEVMODE: {{ .Values.openlane.coreConfiguration.objectStorage.devMode | quote | default "false" }}
