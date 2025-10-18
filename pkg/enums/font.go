@@ -10,36 +10,32 @@ import (
 type Font string
 
 var (
-	// FontArial represents the Arial font
-	FontArial Font = "arial"
-	// FontHelvetica represents the Helvetica font
-	FontHelvetica Font = "helvetica"
-	// FontTimes represents the Times font
-	FontTimes Font = "times"
-	// FontTimesNewRoman represents the Times New Roman font
-	FontTimesNewRoman Font = "times_new_roman"
-	// FontGeorgia represents the Georgia font
-	FontGeorgia Font = "georgia"
-	// FontVerdana represents the Verdana font
-	FontVerdana Font = "verdana"
 	// FontCourier represents the Courier font
-	FontCourier Font = "courier"
-	// FontCourierNew represents the Courier New font
-	FontCourierNew Font = "courier_new"
-	// FontTrebuchetMS represents the Trebuchet MS font
-	FontTrebuchetMS Font = "trebuchet_ms"
-	// FontComicSansMS represents the Comic Sans MS font
-	FontComicSansMS Font = "comic_sans_ms"
-	// FontImpact represents the Impact font
-	FontImpact Font = "impact"
-	// FontPalatino represents the Palatino font
-	FontPalatino Font = "palatino"
-	// FontGaramond represents the Garamond font
-	FontGaramond Font = "garamond"
-	// FontBookman represents the Bookman font
-	FontBookman Font = "bookman"
-	// FontAvantGarde represents the Avant Garde font
-	FontAvantGarde Font = "avant_garde"
+	FontCourier Font = "COURIER"
+	// FontCourierBold represents the Courier-Bold font
+	FontCourierBold Font = "COURIER_BOLD"
+	// FontCourierBoldOblique represents the Courier-BoldOblique font
+	FontCourierBoldOblique Font = "COURIER_BOLDOBLIQUE"
+	// FontCourierOblique represents the Courier-Oblique font
+	FontCourierOblique Font = "COURIER_OBLIQUE"
+	// FontHelvetica represents the Helvetica font
+	FontHelvetica Font = "HELVETICA"
+	// FontHelveticaBold represents the Helvetica-Bold font
+	FontHelveticaBold Font = "HELVETICA_BOLD"
+	// FontHelveticaBoldOblique represents the Helvetica-BoldOblique font
+	FontHelveticaBoldOblique Font = "HELVETICA_BOLDOBLIQUE"
+	// FontHelveticaOblique represents the Helvetica-Oblique font
+	FontHelveticaOblique Font = "HELVETICA_OBLIQUE"
+	// FontSymbol represents the Symbol font
+	FontSymbol Font = "SYMBOL"
+	// FontTimesBold represents the Times-Bold font
+	FontTimesBold Font = "TIMES_BOLD"
+	// FontTimesBoldItalic represents the Times-BoldItalic font
+	FontTimesBoldItalic Font = "TIMES_BOLDITALIC"
+	// FontTimesItalic represents the Times-Italic font
+	FontTimesItalic Font = "TIMES_ITALIC"
+	// FontTimesRoman represents the Times-Roman font
+	FontTimesRoman Font = "TIMES_ROMAN"
 	// FontInvalid indicates that the font is invalid
 	FontInvalid Font = "FONT_INVALID"
 )
@@ -47,9 +43,9 @@ var (
 // Values returns a slice of strings that represents all the possible values of the Font enum.
 func (Font) Values() (kinds []string) {
 	for _, s := range []Font{
-		FontArial, FontHelvetica, FontTimes, FontTimesNewRoman, FontGeorgia,
-		FontVerdana, FontCourier, FontCourierNew, FontTrebuchetMS, FontComicSansMS,
-		FontImpact, FontPalatino, FontGaramond, FontBookman, FontAvantGarde,
+		FontCourier, FontCourierBold, FontCourierBoldOblique, FontCourierOblique,
+		FontHelvetica, FontHelveticaBold, FontHelveticaBoldOblique, FontHelveticaOblique,
+		FontSymbol, FontTimesBold, FontTimesBoldItalic, FontTimesItalic, FontTimesRoman,
 	} {
 		kinds = append(kinds, string(s))
 	}
@@ -62,39 +58,69 @@ func (r Font) String() string {
 	return string(r)
 }
 
+// ToFontStr converts the enum to the supported font string format
+func (r Font) ToFontStr() string {
+	switch r {
+	case FontCourier:
+		return "Courier"
+	case FontCourierBold:
+		return "Courier-Bold"
+	case FontCourierBoldOblique:
+		return "Courier-BoldOblique"
+	case FontCourierOblique:
+		return "Courier-Oblique"
+	case FontHelvetica:
+		return "Helvetica"
+	case FontHelveticaBold:
+		return "Helvetica-Bold"
+	case FontHelveticaBoldOblique:
+		return "Helvetica-BoldOblique"
+	case FontHelveticaOblique:
+		return "Helvetica-Oblique"
+	case FontSymbol:
+		return "Symbol"
+	case FontTimesBold:
+		return "Times-Bold"
+	case FontTimesBoldItalic:
+		return "Times-BoldItalic"
+	case FontTimesItalic:
+		return "Times-Italic"
+	case FontTimesRoman:
+		return "Times-Roman"
+	default:
+		return ""
+	}
+}
+
 // ToFont returns the font enum based on string input
 func ToFont(r string) *Font {
-	switch r := strings.ToLower(r); r {
-	case FontArial.String():
-		return &FontArial
-	case FontHelvetica.String():
-		return &FontHelvetica
-	case FontTimes.String():
-		return &FontTimes
-	case FontTimesNewRoman.String():
-		return &FontTimesNewRoman
-	case FontGeorgia.String():
-		return &FontGeorgia
-	case FontVerdana.String():
-		return &FontVerdana
+	switch r := strings.ToUpper(r); r {
 	case FontCourier.String():
 		return &FontCourier
-	case FontCourierNew.String():
-		return &FontCourierNew
-	case FontTrebuchetMS.String():
-		return &FontTrebuchetMS
-	case FontComicSansMS.String():
-		return &FontComicSansMS
-	case FontImpact.String():
-		return &FontImpact
-	case FontPalatino.String():
-		return &FontPalatino
-	case FontGaramond.String():
-		return &FontGaramond
-	case FontBookman.String():
-		return &FontBookman
-	case FontAvantGarde.String():
-		return &FontAvantGarde
+	case FontCourierBold.String():
+		return &FontCourierBold
+	case FontCourierBoldOblique.String():
+		return &FontCourierBoldOblique
+	case FontCourierOblique.String():
+		return &FontCourierOblique
+	case FontHelvetica.String():
+		return &FontHelvetica
+	case FontHelveticaBold.String():
+		return &FontHelveticaBold
+	case FontHelveticaBoldOblique.String():
+		return &FontHelveticaBoldOblique
+	case FontHelveticaOblique.String():
+		return &FontHelveticaOblique
+	case FontSymbol.String():
+		return &FontSymbol
+	case FontTimesBold.String():
+		return &FontTimesBold
+	case FontTimesBoldItalic.String():
+		return &FontTimesBoldItalic
+	case FontTimesItalic.String():
+		return &FontTimesItalic
+	case FontTimesRoman.String():
+		return &FontTimesRoman
 	default:
 		return nil
 	}
