@@ -104,7 +104,7 @@ func TestQueryPersonalAccessTokens(t *testing.T) {
 }
 
 func TestMutationCreatePersonalAccessToken(t *testing.T) {
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
 	testCases := []struct {
@@ -229,7 +229,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 		client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).
 		MustNew(testUser2.UserCtx, t)
 
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	tokenName := gofakeit.Word()
 
 	testCases := []struct {

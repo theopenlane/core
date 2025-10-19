@@ -27,15 +27,15 @@ func TestLLM_Summarize(t *testing.T) {
 		},
 		{
 			name:     "short string",
-			sentence: gofakeit.Sentence(200),
+			sentence: gofakeit.LoremIpsumSentence(200),
 		},
 		{
 			name:     "long string",
-			sentence: gofakeit.Sentence(1000),
+			sentence: gofakeit.LoremIpsumSentence(1000),
 		},
 		{
 			name:     "really long string",
-			sentence: gofakeit.Sentence(10000),
+			sentence: gofakeit.LoremIpsumSentence(10000),
 		},
 	}
 

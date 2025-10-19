@@ -295,7 +295,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateControlImplementationInput{
-				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:            lo.ToPtr(gofakeit.Paragraph()),
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
 				Verified:           lo.ToPtr(true),
@@ -310,7 +310,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
@@ -319,7 +319,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -327,7 +327,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -336,7 +336,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user authorized because they have editor permissions to all the parent control",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: controlIDs,
 			},
 			client: suite.client.api,
@@ -345,7 +345,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions to one of the parent controls",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: allControlIDs,
 			},
 			client:      suite.client.api,
@@ -355,7 +355,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "no access to linked control",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: controlIDs,
 			},
 			client:      suite.client.api,
@@ -484,7 +484,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
@@ -495,7 +495,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			request: testclient.UpdateControlImplementationInput{
 				AddControlIDs:      controlIDs,
 				AddSubcontrolIDs:   subcontrolIDs,
-				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:            lo.ToPtr(gofakeit.Paragraph()),
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
 				Verified:           lo.ToPtr(true),
