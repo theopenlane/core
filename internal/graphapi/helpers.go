@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 	sliceutil "github.com/theopenlane/utils/slice"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -170,6 +171,18 @@ func (r *mutationResolver) withPool() *soiree.PondPool {
 	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
 
 	return r.pool
+}
+
+// extendedMappedControlInput is an extended version of the CreateMappedControlInput that is used for
+// bulk operations and CSV uploads to allow mapping by reference codes
+// when using the regular create operations the resolvers will parse the ref codes directly
+type extendedMappedControlInput struct {
+	generated.CreateMappedControlInput
+
+	FromControlRefCodes    []string `json:"fromControlRefCodes"`
+	FromSubcontrolRefCodes []string `json:"fromSubcontrolRefCodes"`
+	ToControlRefCodes      []string `json:"toControlRefCodes"`
+	ToSubcontrolRefCodes   []string `json:"toSubcontrolRefCodes"`
 }
 
 // unmarshalBulkData unmarshals the input bulk data into a slice of the given type

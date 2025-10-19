@@ -647,6 +647,7 @@ func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input [
 // bulkCreateMappedControl uses the CreateBulk function to create multiple MappedControl entities
 func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
+
 	builders := make([]*generated.MappedControlCreate, len(input))
 	for i, data := range input {
 		builders[i] = c.MappedControl.Create().SetInput(*data)
