@@ -102,7 +102,7 @@ func TestQueryAPITokens(t *testing.T) {
 }
 
 func TestMutationCreateAPIToken(t *testing.T) {
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
 	testCases := []struct {
@@ -198,7 +198,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 func TestMutationUpdateAPIToken(t *testing.T) {
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	tokenName := gofakeit.Word()
 
 	testCases := []struct {

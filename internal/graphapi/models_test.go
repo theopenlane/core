@@ -470,7 +470,7 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	}
 
 	if o.Description == nil {
-		desc := gofakeit.HipsterSentence(10)
+		desc := gofakeit.HipsterSentence()
 		o.Description = &desc
 	}
 
@@ -723,7 +723,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 	}
 
 	if pat.Description == "" {
-		pat.Description = gofakeit.HipsterSentence(5)
+		pat.Description = gofakeit.HipsterSentence()
 	}
 
 	if pat.OrganizationIDs == nil {
@@ -755,7 +755,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 	}
 
 	if at.Description == "" {
-		at.Description = gofakeit.HipsterSentence(5)
+		at.Description = gofakeit.HipsterSentence()
 	}
 
 	if at.Scopes == nil {
@@ -840,7 +840,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 	}
 
 	if e.Description == "" {
-		e.Description = gofakeit.HipsterSentence(5)
+		e.Description = gofakeit.HipsterSentence()
 	}
 
 	if e.TypeID == "" {
@@ -910,7 +910,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	if c.Details == "" {
-		c.Details = gofakeit.HipsterSentence(5)
+		c.Details = gofakeit.HipsterSentence()
 	}
 
 	taskCreate := c.client.db.Task.Create().
@@ -1137,7 +1137,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	}
 
 	if c.Title == "" {
-		c.Title = gofakeit.HipsterSentence(3)
+		c.Title = gofakeit.HipsterSentence()
 	}
 
 	mutation := c.client.db.Control.Create().
@@ -1167,7 +1167,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	}
 
 	if c.AllFields {
-		mutation.SetDescription(gofakeit.HipsterSentence(5)).
+		mutation.SetDescription(gofakeit.HipsterSentence()).
 			// add a unique string to ensure we know the number of controls created per category is singular
 			// this field doesn't actually need to be unique, but is an easy way to do the tests
 			SetCategory(gofakeit.Adjective() + ulids.New().String()).
@@ -1177,15 +1177,15 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			SetExampleEvidence([]models.ExampleEvidence{
 				{
 					DocumentationType: "Documentation",
-					Description:       gofakeit.HipsterSentence(5),
+					Description:       gofakeit.HipsterSentence(),
 				},
 			}).
 			SetImplementationGuidance([]models.ImplementationGuidance{
 				{
 					ReferenceID: ulids.New().String(),
 					Guidance: []string{
-						gofakeit.HipsterSentence(5),
-						gofakeit.HipsterSentence(5),
+						gofakeit.HipsterSentence(),
+						gofakeit.HipsterSentence(),
 					},
 				},
 			}).
@@ -1193,14 +1193,14 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 				{
 					ID:     ulids.New().String(),
 					Type:   "test",
-					Method: gofakeit.HipsterSentence(5),
+					Method: gofakeit.HipsterSentence(),
 				},
 			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
 			SetReferences([]models.Reference{
 				{
-					Name: gofakeit.HipsterSentence(5),
+					Name: gofakeit.HipsterSentence(),
 					URL:  gofakeit.URL(),
 				},
 			}).
@@ -1359,7 +1359,7 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	ctx = setContext(ctx, n.client.db)
 
 	if n.Text == "" {
-		n.Text = gofakeit.HipsterSentence(10)
+		n.Text = gofakeit.HipsterSentence()
 	}
 
 	mutation := n.client.db.Note.Create().
@@ -1384,7 +1384,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 	ctx = setContext(ctx, e.client.db)
 
 	if e.Details == "" {
-		e.Details = gofakeit.Paragraph(3, 4, 300, "<br />")
+		e.Details = gofakeit.Paragraph()
 	}
 
 	if e.ImplementationDate.IsZero() {
@@ -1828,7 +1828,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	if tcs.Overview == "" {
-		tcs.Overview = gofakeit.Sentence(10)
+		tcs.Overview = gofakeit.Sentence()
 	}
 
 	if tcs.PrimaryColor == "" {
@@ -2053,7 +2053,7 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 	}
 
 	if tb.Description == "" {
-		tb.Description = gofakeit.HipsterSentence(5)
+		tb.Description = gofakeit.HipsterSentence()
 	}
 
 	if tb.JSONConfig == nil {
@@ -2119,7 +2119,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	userCtx := ctx
 
 	if tcdb.Title == "" {
-		tcdb.Title = gofakeit.Sentence(3)
+		tcdb.Title = gofakeit.Sentence()
 	}
 
 	if tcdb.Category == "" {

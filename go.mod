@@ -28,7 +28,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.17
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.13
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.5
-	github.com/brianvoe/gofakeit/v7 v7.7.3
+	github.com/brianvoe/gofakeit/v7 v7.8.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.1.0
 	github.com/didasy/tldr v0.7.0
@@ -76,7 +76,7 @@ require (
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
-	github.com/redis/go-redis/v9 v9.14.0
+	github.com/redis/go-redis/v9 v9.14.1
 	github.com/riverqueue/river v0.26.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.26.0
 	github.com/riverqueue/river/rivertype v0.26.0
@@ -94,9 +94,9 @@ require (
 	github.com/theopenlane/entx v0.15.0
 	github.com/theopenlane/gqlgen-plugins v0.10.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.17.5
+	github.com/theopenlane/iam v0.18.0
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.4.2
+	github.com/theopenlane/riverboat v0.4.3
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
@@ -120,6 +120,7 @@ require (
 
 require (
 	github.com/sebdah/goldie/v2 v2.8.0 // indirect
+	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	google.golang.org/api v0.252.0 // indirect
 )
@@ -306,8 +307,8 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.1 // indirect
 	github.com/openfga/api/proto v0.0.0-20250909172242-b4b2a12f5c67 // indirect
-	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20250919191407-efa08b02a76a // indirect
-	github.com/openfga/openfga v1.10.2 // indirect
+	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251003203216-7c0d09a1cc5a // indirect
+	github.com/openfga/openfga v1.10.3 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect

@@ -199,7 +199,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:                     "happy path organization",
 			orgName:                  ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:              gofakeit.LetterN(50),
-			orgDescription:           gofakeit.HipsterSentence(10),
+			orgDescription:           gofakeit.HipsterSentence(),
 			expectedDefaultOrgUpdate: true, // only the first org created should update the default org
 			parentOrgID:              "",   // root org
 			client:                   suite.client.api,
@@ -209,7 +209,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "happy path organization with settings and avatar",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    gofakeit.LetterN(50),
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			avatarFile: &graphql.Upload{
 				File:        avatarFile.RawFile,
 				Filename:    avatarFile.OriginalName,
@@ -236,7 +236,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization settings with free email domain not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    gofakeit.LetterN(50),
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			settings: &testclient.CreateOrganizationSettingInput{
 				AllowedEmailDomains: []string{"gmail.com"},
 			},
@@ -248,7 +248,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "happy path organization with parent org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			parentOrgID:    orgUser.OrganizationID,
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -256,7 +256,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "organization with parent org, no access",
 			orgName:        gofakeit.Name(),
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			parentOrgID:    testUser2.OrganizationID,
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -265,7 +265,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "organization with parent org using personal access token, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			parentOrgID:    orgUser.OrganizationID,
 			client:         patClient,
 			ctx:            context.Background(),
@@ -274,7 +274,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "organization with parent org using personal access token, no access to parent, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			parentOrgID:    testUser2.OrganizationID,
 			client:         patClient,
 			ctx:            context.Background(),
@@ -283,7 +283,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "organization create with api token not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			client:         tokenClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
@@ -291,7 +291,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "organization with parent personal org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			parentOrgID:    orgUser.PersonalOrgID,
 			errorMsg:       "personal organizations are not allowed to have child organizations",
 			client:         suite.client.api,
@@ -300,7 +300,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "empty organization name",
 			orgName:        "",
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -308,7 +308,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "long organization name",
 			orgName:        gofakeit.LetterN(161),
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is greater than the required length",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -324,7 +324,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "duplicate organization name",
 			orgName:        parentOrg.Organization.Name,
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -332,7 +332,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "duplicate organization name, case insensitive",
 			orgName:        strings.ToUpper(parentOrg.Organization.Name),
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -340,21 +340,21 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "organization name with trailing space should work with trailing space removed",
 			orgName:        "orgname ",
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "invalid organization name, too short",
 			orgName:        "ab",
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -363,7 +363,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			name:           "invalid organization name with special characters",
 			orgName:        "orgn!me$",
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "invalid or unparsable field: name, field cannot contain special characters",
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
@@ -372,15 +372,15 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "duplicate display name, should be allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    parentOrg.Organization.DisplayName,
-			orgDescription: gofakeit.HipsterSentence(10),
+			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "display name with spaces should pass",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
-			displayName:    gofakeit.Sentence(3),
-			orgDescription: gofakeit.HipsterSentence(10),
+			displayName:    gofakeit.Sentence(),
+			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
 		},
@@ -557,7 +557,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 
 	nameUpdate := ulids.New().String()
 	displayNameUpdate := gofakeit.LetterN(40)
-	descriptionUpdate := gofakeit.HipsterSentence(10)
+	descriptionUpdate := gofakeit.HipsterSentence()
 	nameUpdateLong := gofakeit.LetterN(200)
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)

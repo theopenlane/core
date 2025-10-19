@@ -275,7 +275,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			name:        "happy path group",
 			groupName:   name,
 			displayName: gofakeit.LetterN(50),
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 		},
@@ -283,7 +283,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			name:        "duplicate group name, case insensitive",
 			groupName:   strings.ToUpper(name),
 			displayName: gofakeit.LetterN(50),
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			errorMsg:    "group already exists",
@@ -292,7 +292,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			name:        "happy path group using api token",
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			client:      suite.client.apiWithToken,
 			ctx:         context.Background(),
 		},
@@ -301,7 +301,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
 			owner:       testUser1.OrganizationID,
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
 		},
@@ -309,7 +309,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			name:        "happy path group with settings",
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			settings: &testclient.CreateGroupSettingInput{
 				JoinPolicy: &enums.JoinPolicyInviteOnly,
 			},
@@ -334,7 +334,7 @@ func TestMutationCreateGroup(t *testing.T) {
 			name:        "no access to owner, should ignore the input org",
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
-			description: gofakeit.HipsterSentence(10),
+			description: gofakeit.HipsterSentence(),
 			owner:       testUser2.OrganizationID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -738,7 +738,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 func TestMutationUpdateGroup(t *testing.T) {
 	nameUpdate := gofakeit.Name()
 	displayNameUpdate := gofakeit.LetterN(40)
-	descriptionUpdate := gofakeit.HipsterSentence(10)
+	descriptionUpdate := gofakeit.HipsterSentence()
 	gravatarURLUpdate := gofakeit.URL()
 
 	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -1112,7 +1112,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 				assert.Assert(t, programResp != nil)
 
 				// ensure user can now access the control (they have editor access and should be able to make changes)
-				description := gofakeit.HipsterSentence(10)
+				description := gofakeit.HipsterSentence()
 				controlResp, err := suite.client.api.UpdateControl(gmCtx, control.ID, testclient.UpdateControlInput{
 					Description: &description,
 				})
