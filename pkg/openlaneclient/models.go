@@ -6457,7 +6457,7 @@ type CreateTrustCenterSettingInput struct {
 	AccentColor *string `json:"accentColor,omitempty"`
 	// secondary background color for the trust center
 	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor *string  `json:"secondaryForegroundColor,omitempty"`
 	TrustCenterID            *string  `json:"trustCenterID,omitempty"`
 	FileIDs                  []string `json:"fileIDs,omitempty"`
@@ -29986,7 +29986,7 @@ type TrustCenterSetting struct {
 	AccentColor *string `json:"accentColor,omitempty"`
 	// secondary background color for the trust center
 	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor *string         `json:"secondaryForegroundColor,omitempty"`
 	TrustCenter              *TrustCenter    `json:"trustCenter,omitempty"`
 	Files                    *FileConnection `json:"files"`
@@ -30069,7 +30069,7 @@ type TrustCenterSettingHistory struct {
 	AccentColor *string `json:"accentColor,omitempty"`
 	// secondary background color for the trust center
 	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
 }
 
@@ -34444,7 +34444,7 @@ type UpdateTrustCenterSettingInput struct {
 	// secondary background color for the trust center
 	SecondaryBackgroundColor      *string `json:"secondaryBackgroundColor,omitempty"`
 	ClearSecondaryBackgroundColor *bool   `json:"clearSecondaryBackgroundColor,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor      *string  `json:"secondaryForegroundColor,omitempty"`
 	ClearSecondaryForegroundColor *bool    `json:"clearSecondaryForegroundColor,omitempty"`
 	TrustCenterID                 *string  `json:"trustCenterID,omitempty"`

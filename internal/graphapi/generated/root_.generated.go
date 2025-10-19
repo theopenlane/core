@@ -49113,7 +49113,7 @@ input CreateTrustCenterSettingInput {
   """
   secondaryBackgroundColor: String
   """
-  seconday foreground color for the trust center
+  secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
   trustCenterID: ID
@@ -90351,7 +90351,7 @@ type TrustCenterSetting implements Node {
   """
   secondaryBackgroundColor: String
   """
-  seconday foreground color for the trust center
+  secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
   trustCenter: TrustCenter
@@ -90485,7 +90485,7 @@ type TrustCenterSettingHistory implements Node {
   """
   secondaryBackgroundColor: String
   """
-  seconday foreground color for the trust center
+  secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
 }
@@ -96115,7 +96115,7 @@ input UpdateTrustCenterSettingInput {
   secondaryBackgroundColor: String
   clearSecondaryBackgroundColor: Boolean
   """
-  seconday foreground color for the trust center
+  secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
   clearSecondaryForegroundColor: Boolean

@@ -108,7 +108,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("secondary background color for the trust center").
 			Optional(),
 		field.String("secondary_foreground_color").
-			Comment("seconday foreground color for the trust center").
+			Comment("secondary foreground color for the trust center").
 			Optional(),
 	}
 }

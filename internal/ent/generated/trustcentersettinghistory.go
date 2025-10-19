@@ -65,7 +65,7 @@ type TrustCenterSettingHistory struct {
 	AccentColor string `json:"accent_color,omitempty"`
 	// secondary background color for the trust center
 	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	selectValues             sql.SelectValues
 }
