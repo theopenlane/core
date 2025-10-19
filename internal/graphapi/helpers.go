@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 	sliceutil "github.com/theopenlane/utils/slice"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -177,7 +176,7 @@ func (r *mutationResolver) withPool() *soiree.PondPool {
 // bulk operations and CSV uploads to allow mapping by reference codes
 // when using the regular create operations the resolvers will parse the ref codes directly
 type extendedMappedControlInput struct {
-	generated.CreateMappedControlInput
+	ent.CreateMappedControlInput
 
 	FromControlRefCodes    []string `json:"fromControlRefCodes"`
 	FromSubcontrolRefCodes []string `json:"fromSubcontrolRefCodes"`

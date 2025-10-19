@@ -139,7 +139,7 @@ func getStandardRefCodes(data []string) (map[string][]string, error) {
 
 	for _, controlData := range data {
 		parts := strings.Split(controlData, "::")
-		if len(parts) != 2 {
+		if len(parts) != 2 { //nolint:mnd
 			return nil, fmt.Errorf("%w: expected format 'standard_short_name::control_ref_code'", ErrInvalidInput)
 		}
 
