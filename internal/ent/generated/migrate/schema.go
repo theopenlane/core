@@ -398,8 +398,8 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "aliases", Type: field.TypeJSON, Nullable: true},
-		{Name: "reference_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "auditor_reference_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "reference_id", Type: field.TypeString, Nullable: true},
+		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
@@ -504,6 +504,16 @@ var (
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{ControlsColumns[37], ControlsColumns[5], ControlsColumns[36]},
+			},
+			{
+				Name:    "control_reference_id_deleted_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlsColumns[12], ControlsColumns[5], ControlsColumns[36]},
+			},
+			{
+				Name:    "control_auditor_reference_id_deleted_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlsColumns[13], ControlsColumns[5], ControlsColumns[36]},
 			},
 		},
 	}
@@ -4397,6 +4407,16 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+			{
+				Name:    "subcontrol_reference_id_deleted_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolsColumns[12], SubcontrolsColumns[5], SubcontrolsColumns[34]},
+			},
+			{
+				Name:    "subcontrol_auditor_reference_id_deleted_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolsColumns[13], SubcontrolsColumns[5], SubcontrolsColumns[34]},
 			},
 		},
 	}
