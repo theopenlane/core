@@ -233,9 +233,11 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		{
 			name: "happy path, using ref codes instead of IDs",
 			request: testclient.CreateMappedControlInput{
-				MappingType:         &enums.MappingTypeEqual,
-				FromControlRefCodes: []string{"CUSTOM::" + fromControl.RefCode},
-				ToControlRefCodes:   []string{"CUSTOM::" + toControl.RefCode},
+				MappingType:            &enums.MappingTypeEqual,
+				FromControlRefCodes:    []string{"CUSTOM::" + fromControl.RefCode},
+				ToControlRefCodes:      []string{"CUSTOM::" + toControl.RefCode},
+				FromSubcontrolRefCodes: []string{"CUSTOM::" + fromSubcontrol.RefCode},
+				ToSubcontrolRefCodes:   []string{"CUSTOM::" + toSubcontrol.RefCode},
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -418,7 +420,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 						return edge.Node.ID == toSubcontrolID
 					}), "expected toSubcontrol with ID %s to be present in the response", toSubcontrolID)
 				}
-
+			} else if tc.request.ToSubcontrolRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, len(tc.request.ToSubcontrolRefCodes)))
+				for _, toSubcontrolRefCode := range tc.request.ToSubcontrolRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
+						return strings.Contains(toSubcontrolRefCode, edge.Node.RefCode)
+					}), "expected toSubcontrol with RefCode %s to be present in the response", toSubcontrolRefCode)
+				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, 0), "expected no toSubcontrols in the response")
 			}
@@ -429,6 +437,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
 						return edge.Node.ID == fromSubcontrolID
 					}), "expected fromSubcontrol with ID %s to be present in the response", fromSubcontrolID)
+				}
+			} else if tc.request.FromSubcontrolRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, len(tc.request.FromSubcontrolRefCodes)))
+				for _, fromSubcontrolRefCode := range tc.request.FromSubcontrolRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
+						return strings.Contains(fromSubcontrolRefCode, edge.Node.RefCode)
+					}), "expected fromSubcontrol with RefCode %s to be present in the response", fromSubcontrolRefCode)
 				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, 0), "expected no fromSubcontrols in the response")
