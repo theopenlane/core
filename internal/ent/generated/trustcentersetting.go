@@ -60,7 +60,7 @@ type TrustCenterSetting struct {
 	AccentColor string `json:"accent_color,omitempty"`
 	// secondary background color for the trust center
 	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
-	// seconday foreground color for the trust center
+	// secondary foreground color for the trust center
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
