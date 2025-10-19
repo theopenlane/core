@@ -78,7 +78,7 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 	}
 
 	if w.olClient == nil {
-		cl, err := getOpenlaneClient(w.Config)
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			return err
 		}
