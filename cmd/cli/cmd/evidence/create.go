@@ -32,7 +32,7 @@ func init() {
 	createCmd.Flags().StringArrayP("programs", "p", []string{}, "program of the evidence")
 	createCmd.Flags().StringArray("controls", []string{}, "ids of controls to link to the evidence")
 	createCmd.Flags().StringArray("subcontrols", []string{}, "ids of subcontrols to link to the evidence")
-	createCmd.Flags().StringArray("controlRefs", []string{}, "standard short name and ref code, e.g. (SOC2::CC1.1) of controls to link to the evidence")
+	createCmd.Flags().StringArray("controlRefs", []string{}, "standard short name and ref code, e.g. (SOC2:CC1.1) of controls to link to the evidence")
 	createCmd.Flags().StringArray("subcontrolRefs", []string{}, "standard short name and ref code, e.g. (SOC2:CC1.POF1) of subcontrols to link to the evidence")
 	createCmd.Flags().StringArray("control-objectives", []string{}, "ids of control objectives to link to the evidence")
 	createCmd.Flags().StringP("collection-procedure", "c", "", "steps taken to collect the evidence")
