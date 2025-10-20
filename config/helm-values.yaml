@@ -416,16 +416,8 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- AccessKeyID for cloud providers
-          accessKeyID: ""  # @schema type:string
-          # -- SecretAccessKey for cloud providers
-          secretAccessKey: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
-          # -- AccountID for Cloudflare R2
-          accountID: ""  # @schema type:string
-          # -- APIToken for Cloudflare R2
-          apiToken: ""  # @schema type:string
       # -- CloudflareR2 provider configuration
       cloudflareR2:
         # -- Enabled indicates if this provider is enabled
@@ -444,16 +436,8 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- AccessKeyID for cloud providers
-          accessKeyID: ""  # @schema type:string
-          # -- SecretAccessKey for cloud providers
-          secretAccessKey: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
-          # -- AccountID for Cloudflare R2
-          accountID: ""  # @schema type:string
-          # -- APIToken for Cloudflare R2
-          apiToken: ""  # @schema type:string
       # -- GCS provider configuration
       gcs:
         # -- Enabled indicates if this provider is enabled
@@ -472,16 +456,8 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- AccessKeyID for cloud providers
-          accessKeyID: ""  # @schema type:string
-          # -- SecretAccessKey for cloud providers
-          secretAccessKey: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
-          # -- AccountID for Cloudflare R2
-          accountID: ""  # @schema type:string
-          # -- APIToken for Cloudflare R2
-          apiToken: ""  # @schema type:string
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -500,16 +476,8 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- AccessKeyID for cloud providers
-          accessKeyID: ""  # @schema type:string
-          # -- SecretAccessKey for cloud providers
-          secretAccessKey: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
-          # -- AccountID for Cloudflare R2
-          accountID: ""  # @schema type:string
-          # -- APIToken for Cloudflare R2
-          apiToken: ""  # @schema type:string
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -528,16 +496,8 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- AccessKeyID for cloud providers
-          accessKeyID: ""  # @schema type:string
-          # -- SecretAccessKey for cloud providers
-          secretAccessKey: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
-          # -- AccountID for Cloudflare R2
-          accountID: ""  # @schema type:string
-          # -- APIToken for Cloudflare R2
-          apiToken: ""  # @schema type:string
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -697,6 +657,166 @@ externalSecrets:
       secretKey: "CORE_TOTP_SECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-totp-secret"  # @schema type:string
+    # -- core-objectstorage-providers-s3-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-s3-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.s3.credentials.accessKeyID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-s3-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-s3-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.s3.credentials.secretAccessKey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-s3-credentials-accountid secret configuration
+    core-objectstorage-providers-s3-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.s3.credentials.accountID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-s3-credentials-apitoken secret configuration
+    core-objectstorage-providers-s3-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.s3.credentials.apiToken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-cloudflarer2-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-cloudflarer2-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.accessKeyID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.secretAccessKey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-cloudflarer2-credentials-accountid secret configuration
+    core-objectstorage-providers-cloudflarer2-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.accountID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-cloudflarer2-credentials-apitoken secret configuration
+    core-objectstorage-providers-cloudflarer2-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.apiToken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-gcs-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-gcs-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.gcs.credentials.accessKeyID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-gcs-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-gcs-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-gcs-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.gcs.credentials.secretAccessKey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-gcs-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-gcs-credentials-accountid secret configuration
+    core-objectstorage-providers-gcs-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.gcs.credentials.accountID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-gcs-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-gcs-credentials-apitoken secret configuration
+    core-objectstorage-providers-gcs-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.gcs.credentials.apiToken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-gcs-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-disk-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-disk-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.disk.credentials.accessKeyID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-disk-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-disk-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.disk.credentials.secretAccessKey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-disk-credentials-accountid secret configuration
+    core-objectstorage-providers-disk-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.disk.credentials.accountID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-disk-credentials-apitoken secret configuration
+    core-objectstorage-providers-disk-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.disk.credentials.apiToken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-database-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-database-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.database.credentials.accessKeyID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-database-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-database-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.database.credentials.secretAccessKey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-database-credentials-accountid secret configuration
+    core-objectstorage-providers-database-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.database.credentials.accountID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-database-credentials-apitoken secret configuration
+    core-objectstorage-providers-database-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.database.credentials.apiToken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-credentials-apitoken"  # @schema type:string
     # -- core-subscription-privatestripekey secret configuration
     core-subscription-privatestripekey:
       # -- Enable this external secret
