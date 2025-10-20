@@ -416,8 +416,6 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- ProjectID for GCS
-          projectID: ""  # @schema type:string
       # -- CloudflareR2 provider configuration
       cloudflareR2:
         # -- Enabled indicates if this provider is enabled
@@ -436,8 +434,6 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- ProjectID for GCS
-          projectID: ""  # @schema type:string
       # -- GCS provider configuration
       gcs:
         # -- Enabled indicates if this provider is enabled
@@ -456,8 +452,6 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- ProjectID for GCS
-          projectID: ""  # @schema type:string
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -476,8 +470,6 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- ProjectID for GCS
-          projectID: ""  # @schema type:string
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -496,8 +488,6 @@ coreConfiguration:
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
-          # -- ProjectID for GCS
-          projectID: ""  # @schema type:string
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -673,6 +663,14 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-s3-credentials-projectid secret configuration
+    core-objectstorage-providers-s3-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.s3.credentials.projectID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-s3-credentials-accountid secret configuration
     core-objectstorage-providers-s3-credentials-accountid:
       # -- Enable this external secret
@@ -705,6 +703,14 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-cloudflarer2-credentials-projectid secret configuration
+    core-objectstorage-providers-cloudflarer2-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.projectID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-cloudflarer2-credentials-accountid secret configuration
     core-objectstorage-providers-cloudflarer2-credentials-accountid:
       # -- Enable this external secret
@@ -737,6 +743,14 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-gcs-credentials-projectid secret configuration
+    core-objectstorage-providers-gcs-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.gcs.credentials.projectID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-gcs-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-gcs-credentials-accountid secret configuration
     core-objectstorage-providers-gcs-credentials-accountid:
       # -- Enable this external secret
@@ -769,6 +783,14 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-disk-credentials-projectid secret configuration
+    core-objectstorage-providers-disk-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.disk.credentials.projectID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-disk-credentials-accountid secret configuration
     core-objectstorage-providers-disk-credentials-accountid:
       # -- Enable this external secret
@@ -801,6 +823,14 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-database-credentials-projectid secret configuration
+    core-objectstorage-providers-database-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.providers.database.credentials.projectID
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-database-credentials-accountid secret configuration
     core-objectstorage-providers-database-credentials-accountid:
       # -- Enable this external secret
