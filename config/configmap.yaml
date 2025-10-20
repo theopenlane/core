@@ -323,7 +323,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_S3_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.region | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.endpoint | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_S3_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.proxyPresignEnabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.proxyPresignEnabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_BASEURL: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.baseURL | quote | default "http://localhost:17608/v1/files" }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.accessKeyID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentials.secretAccessKey | quote }}
@@ -335,7 +335,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.region | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.endpoint | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.proxyPresignEnabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.proxyPresignEnabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_BASEURL: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.baseURL | quote | default "http://localhost:17608/v1/files" }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.accessKeyID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentials.secretAccessKey | quote }}
@@ -347,7 +347,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.region | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.endpoint | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_GCS_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.proxyPresignEnabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.proxyPresignEnabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_BASEURL: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.baseURL | quote | default "http://localhost:17608/v1/files" }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.accessKeyID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentials.secretAccessKey | quote }}
@@ -359,7 +359,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.region | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.endpoint | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_DISK_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.proxyPresignEnabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.proxyPresignEnabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_BASEURL: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.baseURL | quote | default "http://localhost:17608/v1/files" }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.accessKeyID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentials.secretAccessKey | quote }}
@@ -371,7 +371,7 @@ data:
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.region | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.bucket | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.endpoint | quote }}
-  CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.proxyPresignEnabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_PROXYPRESIGNENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.proxyPresignEnabled | quote | default "false" }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BASEURL: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.baseURL | quote | default "http://localhost:17608/v1/files" }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.accessKeyID | quote }}
   CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.database.credentials.secretAccessKey | quote }}

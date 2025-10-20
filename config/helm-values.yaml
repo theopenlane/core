@@ -411,7 +411,7 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean
+        proxyPresignEnabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
@@ -439,7 +439,7 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean
+        proxyPresignEnabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
@@ -467,7 +467,7 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean
+        proxyPresignEnabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
@@ -495,7 +495,7 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean
+        proxyPresignEnabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
@@ -523,7 +523,7 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean
+        proxyPresignEnabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider

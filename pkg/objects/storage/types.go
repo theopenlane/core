@@ -126,7 +126,7 @@ type ProviderConfigs struct {
 	// Endpoint for custom endpoints
 	Endpoint string `json:"endpoint" koanf:"endpoint"`
 	// ProxyPresignEnabled toggles proxy-signed download URL generation
-	ProxyPresignEnabled bool `json:"proxyPresignEnabled" koanf:"proxyPresignEnabled"`
+	ProxyPresignEnabled bool `json:"proxyPresignEnabled" koanf:"proxyPresignEnabled" default:"false"`
 	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
 	BaseURL string `json:"baseURL" koanf:"baseURL" default:"http://localhost:17608/v1/files"`
 	// Credentials contains the credentials for accessing the provider
