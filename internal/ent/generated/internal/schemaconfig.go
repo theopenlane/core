@@ -69,6 +69,7 @@ type SchemaConfig struct {
 	File                               string // File table.
 	FileEvents                         string // File-events->Event table.
 	FileSecrets                        string // File-secrets->Hush table.
+	FileDownloadToken                  string // FileDownloadToken table.
 	FileHistory                        string // FileHistory table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.

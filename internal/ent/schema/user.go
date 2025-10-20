@@ -188,6 +188,14 @@ func (u User) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         u,
+			edgeSchema:         FileDownloadToken{},
+			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
 			edgeSchema:         PasswordResetToken{},
 			cascadeDeleteOwner: true,
 			annotations: []schema.Annotation{

@@ -22,7 +22,7 @@ func HookFileDelete() ent.Hook {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
 
-				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
+				if m.ObjectManager == nil || !isDeleteOp(ctx, m) {
 					return next.Mutate(ctx, m)
 				}
 
@@ -37,7 +37,7 @@ func HookFileDelete() ent.Hook {
 
 					ids = append(ids, dbIDs...)
 
-				case ent.OpDeleteOne, ent.OpUpdateOne:
+				case ent.OpDeleteOne:
 
 					id, ok := m.ID()
 					if !ok {
@@ -105,5 +105,5 @@ func HookFileDelete() ent.Hook {
 
 				return v, err
 			})
-	}, ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne)
+	}, ent.OpDelete|ent.OpDeleteOne)
 }

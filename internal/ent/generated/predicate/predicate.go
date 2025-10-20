@@ -93,6 +93,9 @@ type Export func(*sql.Selector)
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
 
+// FileDownloadToken is the predicate function for filedownloadtoken builders.
+type FileDownloadToken func(*sql.Selector)
+
 // FileHistory is the predicate function for filehistory builders.
 type FileHistory func(*sql.Selector)
 

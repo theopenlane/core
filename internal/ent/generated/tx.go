@@ -70,6 +70,8 @@ type Tx struct {
 	Export *ExportClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
+	// FileDownloadToken is the client for interacting with the FileDownloadToken builders.
+	FileDownloadToken *FileDownloadTokenClient
 	// FileHistory is the client for interacting with the FileHistory builders.
 	FileHistory *FileHistoryClient
 	// Group is the client for interacting with the Group builders.
@@ -400,6 +402,7 @@ func (tx *Tx) init() {
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
 	tx.Export = NewExportClient(tx.config)
 	tx.File = NewFileClient(tx.config)
+	tx.FileDownloadToken = NewFileDownloadTokenClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
 	tx.GroupHistory = NewGroupHistoryClient(tx.config)

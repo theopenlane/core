@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -2105,6 +2106,52 @@ func init() {
 	fileDescID := fileMixinFields3[0].Descriptor()
 	// file.DefaultID holds the default value on creation for the id field.
 	file.DefaultID = fileDescID.Default.(func() string)
+	filedownloadtokenMixin := schema.FileDownloadToken{}.Mixin()
+	filedownloadtoken.Policy = privacy.NewPolicies(schema.FileDownloadToken{})
+	filedownloadtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := filedownloadtoken.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	filedownloadtokenMixinHooks0 := filedownloadtokenMixin[0].Hooks()
+	filedownloadtokenMixinHooks2 := filedownloadtokenMixin[2].Hooks()
+	filedownloadtokenMixinHooks3 := filedownloadtokenMixin[3].Hooks()
+	filedownloadtokenHooks := schema.FileDownloadToken{}.Hooks()
+
+	filedownloadtoken.Hooks[1] = filedownloadtokenMixinHooks0[0]
+
+	filedownloadtoken.Hooks[2] = filedownloadtokenMixinHooks2[0]
+
+	filedownloadtoken.Hooks[3] = filedownloadtokenMixinHooks3[0]
+
+	filedownloadtoken.Hooks[4] = filedownloadtokenHooks[0]
+	filedownloadtokenMixinInters2 := filedownloadtokenMixin[2].Interceptors()
+	filedownloadtokenMixinInters3 := filedownloadtokenMixin[3].Interceptors()
+	filedownloadtoken.Interceptors[0] = filedownloadtokenMixinInters2[0]
+	filedownloadtoken.Interceptors[1] = filedownloadtokenMixinInters3[0]
+	filedownloadtokenMixinFields0 := filedownloadtokenMixin[0].Fields()
+	_ = filedownloadtokenMixinFields0
+	filedownloadtokenMixinFields1 := filedownloadtokenMixin[1].Fields()
+	_ = filedownloadtokenMixinFields1
+	filedownloadtokenFields := schema.FileDownloadToken{}.Fields()
+	_ = filedownloadtokenFields
+	// filedownloadtokenDescCreatedAt is the schema descriptor for created_at field.
+	filedownloadtokenDescCreatedAt := filedownloadtokenMixinFields0[0].Descriptor()
+	// filedownloadtoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	filedownloadtoken.DefaultCreatedAt = filedownloadtokenDescCreatedAt.Default.(func() time.Time)
+	// filedownloadtokenDescUpdatedAt is the schema descriptor for updated_at field.
+	filedownloadtokenDescUpdatedAt := filedownloadtokenMixinFields0[1].Descriptor()
+	// filedownloadtoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	filedownloadtoken.DefaultUpdatedAt = filedownloadtokenDescUpdatedAt.Default.(func() time.Time)
+	// filedownloadtoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	filedownloadtoken.UpdateDefaultUpdatedAt = filedownloadtokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// filedownloadtokenDescID is the schema descriptor for id field.
+	filedownloadtokenDescID := filedownloadtokenMixinFields1[0].Descriptor()
+	// filedownloadtoken.DefaultID holds the default value on creation for the id field.
+	filedownloadtoken.DefaultID = filedownloadtokenDescID.Default.(func() string)
 	filehistory.Policy = privacy.NewPolicies(schema.FileHistory{})
 	filehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
