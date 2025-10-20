@@ -70,7 +70,7 @@ func TestGlobalSearch(t *testing.T) {
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "con",
+			query:            "a1cd2d con",
 			expectedResults:  10, // this is total count of all objects searched
 			expectedContacts: 10,
 			expectedPrograms: 0,
@@ -88,7 +88,7 @@ func TestGlobalSearch(t *testing.T) {
 			name:            "no results",
 			client:          suite.client.api,
 			ctx:             testSearchUser.UserCtx,
-			query:           "NonExistent",
+			query:           "NonExistent RAnD0M Str!ng F0r Sanity",
 			expectedResults: 0,
 		},
 		{
