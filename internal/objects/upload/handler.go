@@ -3,6 +3,7 @@ package upload
 import (
 	"context"
 	"io"
+	"path"
 	"strings"
 	"time"
 
@@ -54,6 +55,10 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 			return ctx, nil, err
 		}
+
+		folderPath := path.Join(orgID, entFile.ID)
+		uploadOpts.FolderDestination = folderPath
+		file.Folder = folderPath
 
 		if uploadOpts.ProviderHints == nil {
 			uploadOpts.ProviderHints = &pkgobjects.ProviderHints{}

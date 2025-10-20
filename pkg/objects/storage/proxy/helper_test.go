@@ -27,8 +27,9 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 	file := &storagetypes.File{
 		ID: "01HZZTESTFILE00000000000000",
 		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "path/to/object.txt",
+			Bucket:  "test-bucket",
+			Key:     "path/to/object.txt",
+			FullURI: "database://test-bucket/path/to/object.txt",
 		},
 	}
 

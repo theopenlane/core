@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
@@ -66,6 +67,10 @@ func InterceptorPresignedURL() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.FileFunc(func(ctx context.Context, q *generated.FileQuery) (generated.Value, error) {
 			zerolog.Ctx(ctx).Debug().Msg("InterceptorPresignedURL")
+
+			if proxy.ShouldBypassPresignInterceptor(ctx) {
+				return next.Query(ctx, q)
+			}
 
 			v, err := next.Query(ctx, q)
 			if err != nil {
@@ -133,6 +138,7 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 			ContentType:  file.DetectedContentType,
 			Size:         file.PersistedFileSize,
 			ProviderType: storagetypes.ProviderType(file.StorageProvider),
+			FullURI:      file.URI,
 			ProviderHints: &storagetypes.ProviderHints{
 				KnownProvider: storagetypes.ProviderType(file.StorageProvider),
 			},

@@ -12,7 +12,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/labstack/gommon/log"
-	"github.com/stretchr/testify/mock"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
@@ -21,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/auth"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -257,23 +255,6 @@ func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.
 		mockProvider = &mock_shared.MockProvider{}
 	}
 
-	// Provide safe default stubs so tests that forget explicit expectations don't panic
-	// Explicit expectUpload calls still take precedence with Once()
-	mockScheme := "file://"
-	mockProvider.On("GetScheme").Return(&mockScheme).Maybe()
-	mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
-	mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-		FileMetadata: pkgobjects.FileMetadata{
-			Key:          "test-key",
-			ProviderType: storage.DiskProvider,
-		},
-	}, nil).Maybe()
-	mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-		File: []byte("test content"),
-		Size: 12,
-	}, nil).Maybe()
-	mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("http://localhost/presigned", nil).Maybe()
-
 	// Create eddy components
 	pool := eddy.NewClientPool[storage.Provider](time.Minute)
 	clientService := eddy.NewClientService(pool, eddy.WithConfigClone[
@@ -313,9 +294,6 @@ func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.
 		Resolver:       resolver,
 		ClientService:  clientService,
 		ValidationFunc: validationFunc,
-		TokenManager:   nil,
-		TokenIssuer:    "",
-		TokenAudience:  "",
 	})
 
 	// Return service and provider for test setup

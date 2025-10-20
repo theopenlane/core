@@ -36,6 +36,7 @@ type ruleCoordinator struct {
 	resolver *providerResolver
 	config   storage.ProviderConfig
 	builders providerBuilders
+	runtime  serviceOptions
 }
 
 // newRuleCoordinator returns a helper for building provider rules
@@ -76,6 +77,13 @@ func WithProviderConfig(config storage.ProviderConfig) RuleOption {
 func WithProviderBuilders(builders providerBuilders) RuleOption {
 	return func(rc *ruleCoordinator) {
 		rc.builders = builders
+	}
+}
+
+// WithRuntimeOptions supplies runtime configuration such as token manager hooks.
+func WithRuntimeOptions(runtime serviceOptions) RuleOption {
+	return func(rc *ruleCoordinator) {
+		rc.runtime = runtime
 	}
 }
 

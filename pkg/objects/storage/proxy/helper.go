@@ -13,18 +13,18 @@ import (
 	"github.com/oklog/ulid/v2"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/ulids"
 	"github.com/vmihailenco/msgpack/v5"
 )
 
 var (
 	// ErrTokenManagerRequired indicates proxy signing is impossible without a token manager.
 	ErrTokenManagerRequired = errors.New("proxy presign requires token manager")
-	// ErrEntClientRequired indicates storing secrets requires an ent client
+	// ErrEntClientRequired indicates storing secrets requires an ent client.
 	ErrEntClientRequired = errors.New("storing secrets requires ent client")
 )
 
@@ -69,38 +69,42 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		}
 	}
 
-	_, err := tokens.NewDownloadToken(objectURI, options...)
+	downloadToken, err := tokens.NewDownloadToken(objectURI, options...)
 	if err != nil {
 		return "", err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	_, err = client.File.Get(allowCtx, file.ID)
+	tokenString, secret, err := downloadToken.Sign()
 	if err != nil {
-		return "", fmt.Errorf("failed to retrieve file: %w", err)
+		return "", err
 	}
 
-	//	if len(fileEntity.Secret) == 0 {
-	//		return "", errors.New("file secret not generated")
-	//	}
-	//
-	//	secret := fileEntity.Secret
-	//
-	//	tokenString, secret, err := downloadToken.Sign()
-	//	if err != nil {
-	//		return "", err
-	//	}
+	create := client.FileDownloadToken.Create().
+		SetToken(tokenString).
+		SetFileID(file.ID).
+		SetSecret(secret)
 
-	//	if err := client.File.UpdateOneID(file.ID).
-	//		SetToken(tokenString).
-	//		SetSecret(secret).
-	//		SetTTL(downloadToken.ExpiresAt).
-	//		Exec(allowCtx); err != nil {
-	//		return "", fmt.Errorf("failed to store token: %w", err)
-	//	}
+	if authUser, ok := auth.AuthenticatedUserFromContext(ctx); ok && authUser != nil && authUser.SubjectID != "" {
+		create.SetOwnerID(authUser.SubjectID)
+	}
 
-	return composeDownloadURL(cfg.BaseURL, file.ID, ""), nil
+	if !downloadToken.SigningInfo.ExpiresAt.IsZero() {
+		create.SetTTL(downloadToken.SigningInfo.ExpiresAt.UTC().Truncate(time.Microsecond))
+	}
+
+	if !ulids.IsZero(downloadToken.UserID) {
+		create.SetUserID(downloadToken.UserID.String())
+	}
+
+	if !ulids.IsZero(downloadToken.OrgID) {
+		create.SetOrganizationID(downloadToken.OrgID.String())
+	}
+
+	if _, err := create.Save(ctx); err != nil {
+		return "", fmt.Errorf("failed to store download token: %w", err)
+	}
+
+	return composeDownloadURL(cfg.BaseURL, file.ID, url.QueryEscape(tokenString)), nil
 }
 
 // GenerateDownloadURLWithSecret builds a proxy download URL using the provided secret for testing.

@@ -117,6 +117,8 @@ var (
 	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
 	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
 	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
+	// ErrObjectStoreUnavailable indicates that the object store is not configured
+	ErrObjectStoreUnavailable = errors.New("object store unavailable")
 )
 
 var (
