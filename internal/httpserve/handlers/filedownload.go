@@ -140,6 +140,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	return ctx.Blob(http.StatusOK, downloadFile.DetectedContentType, download.File)
 }
 
+// buildObjectURI builds the object URI from the storagetypes.File or ent.File
 func buildObjectURI(file *storagetypes.File, entFile *ent.File) string {
 	if entFile != nil && entFile.URI != "" {
 		return entFile.URI
@@ -152,6 +153,7 @@ func buildObjectURI(file *storagetypes.File, entFile *ent.File) string {
 	return ""
 }
 
+// validateTokenAuthorization checks if the token's user ID matches the authenticated user in the request context
 func validateTokenAuthorization(requestCtx context.Context, downloadToken *tokens.DownloadToken) error {
 	if !ulids.IsZero(downloadToken.UserID) {
 		user, ok := auth.AuthenticatedUserFromContext(requestCtx)
@@ -168,6 +170,7 @@ func validateTokenAuthorization(requestCtx context.Context, downloadToken *token
 	return nil
 }
 
+// buildStorageFile constructs a storagetypes.File from an ent.File entity
 func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
 	storFile := &storagetypes.File{
 		ID:           fileEntity.ID,
@@ -187,6 +190,7 @@ func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
 	return storFile
 }
 
+// setDownloadTokens sets the download token details from the database record
 func (d *Download) setDownloadTokens(tokenRecord *ent.FileDownloadToken, downloadToken string) error {
 	if tokenRecord == nil || tokenRecord.Token != downloadToken {
 		return ErrNotFound
@@ -208,6 +212,7 @@ func (d *Download) setDownloadTokens(tokenRecord *ent.FileDownloadToken, downloa
 	return nil
 }
 
+// GetDownloadToken returns the download token string
 func (d *Download) GetDownloadToken() string {
 	if d.DownloadToken.Token.Valid {
 		return d.DownloadToken.Token.String
@@ -216,6 +221,7 @@ func (d *Download) GetDownloadToken() string {
 	return ""
 }
 
+// GetDownloadExpires returns the expiration time of the download token
 func (d *Download) GetDownloadExpires() (time.Time, error) {
 	if d.Expires.Valid {
 		return time.Parse(time.RFC3339Nano, d.Expires.String)
