@@ -82,7 +82,7 @@ func generateCredentials() (email, password string) {
 	rand.Read(randomBytes)
 	randomHex := hex.EncodeToString(randomBytes)
 
-	email = fmt.Sprintf("example-%d-%s@openlane.io", timestamp, randomHex[:8])
+	email = fmt.Sprintf("example-%d-%s@theopenlane.io", timestamp, randomHex[:8])
 	password = generatePassword()
 
 	return email, password
