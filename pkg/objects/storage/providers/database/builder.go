@@ -51,16 +51,31 @@ func (b *Builder) WithOptions(opts ...Option) *Builder {
 }
 
 // Build implements eddy.Builder.
-func (b *Builder) Build(_ context.Context, _ storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(ctx context.Context, credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}
 
+	options := config.Clone()
+	if !options.ProxyPresignEnabled {
+		options.ProxyPresignEnabled = true
+	}
+
+	options.ProxyPresignConfig = storage.ApplyProxyPresignOptions(options.ProxyPresignConfig)
+
+	if options.ProxyPresignConfig.TokenManager == nil && b.tokenManager != nil {
+		options.ProxyPresignConfig.TokenManager = b.tokenManager
+	}
+	if options.ProxyPresignConfig.TokenIssuer == "" && b.tokenIssuer != "" {
+		options.ProxyPresignConfig.TokenIssuer = b.tokenIssuer
+	}
+	if options.ProxyPresignConfig.TokenAudience == "" && b.tokenAudience != "" {
+		options.ProxyPresignConfig.TokenAudience = b.tokenAudience
+	}
+
 	provider := &Provider{
-		options:       config.Clone(),
-		tokenManager:  b.tokenManager,
-		tokenAudience: b.tokenAudience,
-		tokenIssuer:   b.tokenIssuer,
+		options:     options,
+		proxyConfig: options.ProxyPresignConfig,
 	}
 
 	return provider, nil

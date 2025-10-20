@@ -133,6 +133,78 @@ _ = svc.Delete(ctx, provider, &storage.File{ FileMetadata: storage.FileMetadata{
 exists, _ := provider.Exists(ctx, &storage.File{ FileMetadata: storage.FileMetadata{ Key: file.Key, Bucket: file.Folder } })
 ```
 
+## Storage Structure
+
+Files are stored with the following pattern:
+```
+s3://bucket-name/organization-id/parent-id/file-id/filename.ext
+r2://bucket-name/organization-id/parent-id/file-id/filename.ext
+database://default/file-id (database provider uses file ID, not paths)
+```
+
+### Example
+
+For organization `01HYQZ5YTVJ0P2R2HF7N3W3MQZ`, parent object `01J1PARENTXYZABCD1234`, and file record `01J1FILEXYZABCD5678` uploading `report.pdf`:
+```
+s3://my-bucket/01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1PARENTXYZABCD1234/01J1FILEXYZABCD5678/report.pdf
+```
+If a file has no explicit parent, the parent segment reuses the organization ID so the directory depth remains consistent.
+
+### Implementation
+
+When a file is uploaded through `HandleUploads`:
+
+1. The organization ID is derived from the authenticated context or the persisted file record.
+2. Metadata is persisted, returning the stored file record (including its database ID) and owning organization.
+3. A folder path is built as `orgID/parentID/fileID` using the file's parent or correlated object (falling back to the organization ID when necessary).
+4. The computed folder is passed as `FolderDestination` in upload options.
+5. Storage providers use `path.Join(FolderDestination, FileName)` to construct the object key.
+
+**Code:** `internal/objects/upload/handler.go`
+```go
+entFile, ownerOrgID, err := store.CreateFileRecord(ctx, file)
+// ...
+folderPath := buildStorageFolderPath(ownerOrgID, file, entFile.ID)
+if folderPath != "" {
+    uploadOpts.FolderDestination = folderPath
+    file.Folder = folderPath
+}
+```
+
+### Provider Implementation
+
+**S3 Provider:** `pkg/objects/storage/providers/s3/provider.go`
+```go
+func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
+    objectKey := opts.FileName
+    if opts.FolderDestination != "" {
+        objectKey = path.Join(opts.FolderDestination, opts.FileName)
+    }
+    // Upload with objectKey as the full path
+}
+```
+
+**R2 Provider:** `pkg/objects/storage/providers/r2/provider.go`
+- Same implementation as S3
+
+**Database Provider:** `pkg/objects/storage/providers/database/provider.go`
+- Stores files by file ID directly in database
+- No folder structure concept (files are stored as binary blobs)
+
+### Download Flow
+
+When downloading files, the full key (including organization prefix) is stored in the database and used for retrieval:
+
+```go
+// File record in database
+StoragePath: "01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1PARENTXYZABCD1234/01J1FILEXYZABCD5678/report.pdf"
+
+// Used for download
+provider.Download(ctx, &storagetypes.File{
+    Key: file.StoragePath,  // Full path including organization and parent directories
+})
+```
+
 ## Provider Hints and Dynamic Selection
 
 `storage.ProviderHints` lets you carry metadata that a resolver can use to choose a storage backend at runtime. Common fields include:

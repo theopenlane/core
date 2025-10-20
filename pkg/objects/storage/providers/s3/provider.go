@@ -3,7 +3,9 @@ package s3
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
+	"path"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -19,6 +21,7 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/objects"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
@@ -33,15 +36,17 @@ const (
 
 // Provider implements the storagetypes.Provider interface for Amazon S3
 type Provider struct {
-	client             *s3.Client
-	options            *storage.ProviderOptions
-	presignClient      *s3.PresignClient
-	downloader         *manager.Downloader
-	uploader           *manager.Uploader
-	objExistsWaiter    *s3.ObjectExistsWaiter
-	objNotExistsWaiter *s3.ObjectNotExistsWaiter
-	acl                types.ObjectCannedACL
-	region             string
+	client              *s3.Client
+	options             *storage.ProviderOptions
+	presignClient       *s3.PresignClient
+	downloader          *manager.Downloader
+	uploader            *manager.Uploader
+	objExistsWaiter     *s3.ObjectExistsWaiter
+	objNotExistsWaiter  *s3.ObjectNotExistsWaiter
+	acl                 types.ObjectCannedACL
+	region              string
+	proxyPresignEnabled bool
+	proxyConfig         *storage.ProxyPresignConfig
 }
 
 // providerConfig holds configuration for the S3 provider
@@ -184,6 +189,9 @@ func createS3Provider(cfg providerConfig) mo.Result[*Provider] {
 		region:             awsConfig.Region,
 	}
 
+	provider.proxyPresignEnabled = cfg.options.ProxyPresignEnabled
+	provider.proxyConfig = cfg.options.ProxyPresignConfig
+
 	return mo.Ok(provider)
 }
 
@@ -221,9 +229,14 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		}
 	}
 
+	objectKey := opts.FileName
+	if opts.FolderDestination != "" {
+		objectKey = path.Join(opts.FolderDestination, opts.FileName)
+	}
+
 	_, err = p.client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String(p.options.Bucket),
-		Key:         aws.String(opts.FileName),
+		Key:         aws.String(objectKey),
 		Body:        seeker,
 		ContentType: aws.String(opts.ContentType),
 		ACL:         p.acl,
@@ -232,13 +245,17 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
-	metrics.RecordStorageUpload("s3", size)
+	metrics.RecordStorageUpload(string(storagetypes.S3Provider), size)
 
 	return &storagetypes.UploadedFileMetadata{
 		FileMetadata: storagetypes.FileMetadata{
-			Key:    opts.FileName,
-			Size:   size,
-			Folder: opts.FolderDestination,
+			Key:          objectKey,
+			Size:         size,
+			Folder:       opts.FolderDestination,
+			Bucket:       p.options.Bucket,
+			ContentType:  opts.ContentType,
+			ProviderType: storagetypes.S3Provider,
+			FullURI:      fmt.Sprintf("s3://%s/%s", p.options.Bucket, objectKey),
 		},
 	}, nil
 }
@@ -268,7 +285,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 	}
 
 	downloadedSize := int64(len(w.Bytes()))
-	metrics.RecordStorageDownload("s3", downloadedSize)
+	metrics.RecordStorageDownload(string(storagetypes.S3Provider), downloadedSize)
 
 	return &storagetypes.DownloadedFileMetadata{
 		File: w.Bytes(),
@@ -293,6 +310,23 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 
 // GetPresignedURL implements storagetypes.Provider
 func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	if opts == nil {
+		opts = &storagetypes.PresignedURLOptions{}
+	}
+
+	if p.proxyPresignEnabled && p.proxyConfig != nil && p.proxyConfig.TokenManager != nil {
+		dur := opts.Duration
+
+		url, err := proxy.GenerateDownloadURL(ctx, file, dur, storagetypes.S3Provider, p.proxyConfig)
+		if err == nil {
+			return url, nil
+		}
+
+		if !errors.Is(err, proxy.ErrTokenManagerRequired) && !errors.Is(err, proxy.ErrEntClientRequired) {
+			return "", err
+		}
+	}
+
 	if opts.Duration == 0 {
 		opts.Duration = DefaultPresignedURLExpiry
 	}

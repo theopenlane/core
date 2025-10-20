@@ -23,14 +23,9 @@ func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentia
 	}
 
 	cfg := config.Clone()
-	cfg.Credentials = credentials
 
 	if cfg.Bucket == "" {
 		cfg.Bucket = "./storage"
-	}
-
-	if cfg.LocalURL == "" {
-		cfg.LocalURL = credentials.Endpoint
 	}
 
 	provider, err := NewDiskProvider(cfg)
@@ -51,7 +46,6 @@ func NewDiskProviderFromCredentials(credentials storage.ProviderCredentials) mo.
 	options := storage.NewProviderOptions(
 		storage.WithCredentials(credentials),
 		storage.WithBucket("./storage"),
-		storage.WithLocalURL(credentials.Endpoint),
 	)
 	provider, err := NewDiskProvider(options)
 	if err != nil {

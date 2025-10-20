@@ -410,14 +410,16 @@ coreConfiguration:
         bucket: ""  # @schema type:string
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxyPresignEnabled: false  # @schema type:boolean
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
           # -- AccessKeyID for cloud providers
           accessKeyID: ""  # @schema type:string
           # -- SecretAccessKey for cloud providers
           secretAccessKey: ""  # @schema type:string
-          # -- Endpoint for custom endpoints
-          endpoint: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
           # -- AccountID for Cloudflare R2
@@ -436,14 +438,16 @@ coreConfiguration:
         bucket: ""  # @schema type:string
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxyPresignEnabled: false  # @schema type:boolean
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
           # -- AccessKeyID for cloud providers
           accessKeyID: ""  # @schema type:string
           # -- SecretAccessKey for cloud providers
           secretAccessKey: ""  # @schema type:string
-          # -- Endpoint for custom endpoints
-          endpoint: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
           # -- AccountID for Cloudflare R2
@@ -462,14 +466,16 @@ coreConfiguration:
         bucket: ""  # @schema type:string
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxyPresignEnabled: false  # @schema type:boolean
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
           # -- AccessKeyID for cloud providers
           accessKeyID: ""  # @schema type:string
           # -- SecretAccessKey for cloud providers
           secretAccessKey: ""  # @schema type:string
-          # -- Endpoint for custom endpoints
-          endpoint: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
           # -- AccountID for Cloudflare R2
@@ -488,14 +494,16 @@ coreConfiguration:
         bucket: ""  # @schema type:string
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxyPresignEnabled: false  # @schema type:boolean
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
           # -- AccessKeyID for cloud providers
           accessKeyID: ""  # @schema type:string
           # -- SecretAccessKey for cloud providers
           secretAccessKey: ""  # @schema type:string
-          # -- Endpoint for custom endpoints
-          endpoint: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
           # -- AccountID for Cloudflare R2
@@ -514,14 +522,16 @@ coreConfiguration:
         bucket: ""  # @schema type:string
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxyPresignEnabled: false  # @schema type:boolean
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
           # -- AccessKeyID for cloud providers
           accessKeyID: ""  # @schema type:string
           # -- SecretAccessKey for cloud providers
           secretAccessKey: ""  # @schema type:string
-          # -- Endpoint for custom endpoints
-          endpoint: ""  # @schema type:string
           # -- ProjectID for GCS
           projectID: ""  # @schema type:string
           # -- AccountID for Cloudflare R2
