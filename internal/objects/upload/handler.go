@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // HandleUploads persists metadata, uploads files to storage, and enriches the request context with uploaded file details.
@@ -110,6 +111,37 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 	ctx = pkgobjects.WriteFilesToContext(ctx, contextFilesMap)
 	return ctx, uploadedFiles, nil
+}
+
+// HandleRollback removes uploaded files from storage in case of an error during processing the rest of the request.
+func HandleRollback(ctx context.Context, svc *objects.Service, files []pkgobjects.File) {
+	if len(files) == 0 {
+		return
+	}
+
+	// rollback the file uploads in case of an error
+	for _, file := range files {
+		if err := svc.Delete(ctx, &storagetypes.File{
+			ID:                file.ID,
+			ProviderType:      file.ProviderType,
+			OriginalName:      file.OriginalName,
+			MD5:               file.MD5,
+			ProvidedExtension: file.ProvidedExtension,
+			Parent:            file.Parent,
+			FileMetadata: storagetypes.FileMetadata{
+				Bucket:       file.Bucket,
+				Key:          file.Key,
+				Folder:       file.Folder,
+				ProviderType: file.ProviderType,
+			},
+		}, &storagetypes.DeleteFileOptions{
+			Reason: "rolling back file upload due to mutation error",
+		}); err != nil {
+			// intentionally continue deleting other files even if one fails because this
+			// is a best-effort cleanup process for a failed request
+			log.Error().Err(err).Msg("failed to delete uploaded file during rollback")
+		}
+	}
 }
 
 // BuildUploadOptions prepares upload options enriched with provider hints and ensures

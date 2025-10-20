@@ -359,6 +359,10 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.file})
 			}
 
+			if tc.expectedErr != "" {
+				expectDelete(t, suite.client.mockProvider, []graphql.Upload{*tc.file})
+			}
+
 			resp, err := tc.client.CreateTrustCenterDoc(tc.ctx, tc.input, *tc.file)
 
 			if tc.expectedErr != "" {

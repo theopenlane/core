@@ -268,6 +268,18 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 	}
 }
 
+// expectDelete sets up the mock object store to expect a delete and related operations
+func expectDelete(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
+	assert.Assert(t, mockProvider != nil)
+
+	mockScheme := "file://"
+
+	for range expectedUploads {
+		mockProvider.On("GetScheme").Return(&mockScheme).Once()
+		mockProvider.On("Delete", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+	}
+}
+
 // expectUploadNillable sets up the mock object store to expect an upload and related operations
 func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []*graphql.Upload) {
 	assert.Check(t, mockProvider != nil)
