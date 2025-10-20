@@ -167,7 +167,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, fileRef *storagetypes.Fi
 		dur = opts.Duration
 	}
 
-	return proxy.GenerateDownloadURL(ctx, fileRef, dur, storagetypes.DatabaseProvider, cfg)
+	return proxy.GenerateDownloadURL(ctx, fileRef, dur, cfg)
 }
 
 // ListBuckets returns the configured logical bucket for the provider.

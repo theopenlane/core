@@ -119,6 +119,8 @@ var (
 	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
 	// ErrObjectStoreUnavailable indicates that the object store is not configured
 	ErrObjectStoreUnavailable = errors.New("object store unavailable")
+	// ErrDownloadTokenMissingFile indicates that the download token does not have an associated file
+	ErrDownloadTokenMissingFile = errors.New("download token missing associated file")
 )
 
 var (

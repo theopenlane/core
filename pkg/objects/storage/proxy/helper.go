@@ -21,6 +21,13 @@ import (
 	"github.com/vmihailenco/msgpack/v5"
 )
 
+const (
+	// DefaultPresignDuration is the default duration for presigned URLs
+	DefaultPresignDuration = 15
+	// SecretDivisor is used to split the secret into nonce and key components
+	SecretDivisor = 2
+)
+
 var (
 	// ErrTokenManagerRequired indicates proxy signing is impossible without a token manager.
 	ErrTokenManagerRequired = errors.New("proxy presign requires token manager")
@@ -29,9 +36,9 @@ var (
 )
 
 // GenerateDownloadURL builds a proxy download URL and persists the signing secret for validation.
-func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration time.Duration, provider storagetypes.ProviderType, cfg *storage.ProxyPresignConfig) (string, error) {
+func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration time.Duration, cfg *storage.ProxyPresignConfig) (string, error) {
 	if file == nil || file.ID == "" {
-		return "", errors.New("missing file id")
+		return "", ErrMissingFileID
 	}
 
 	if cfg == nil || cfg.TokenManager == nil {
@@ -46,12 +53,12 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 	}
 
 	if duration <= 0 {
-		duration = 15 * time.Minute
+		duration = DefaultPresignDuration * time.Minute
 	}
 
-	objectURI := file.FileMetadata.FullURI
+	objectURI := file.FullURI
 	if objectURI == "" {
-		return "", errors.New("file metadata missing object URI")
+		return "", ErrMissingObjectURI
 	}
 
 	options := []tokens.DownloadTokenOption{
@@ -88,8 +95,8 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		create.SetOwnerID(authUser.SubjectID)
 	}
 
-	if !downloadToken.SigningInfo.ExpiresAt.IsZero() {
-		create.SetTTL(downloadToken.SigningInfo.ExpiresAt.UTC().Truncate(time.Microsecond))
+	if !downloadToken.ExpiresAt.IsZero() {
+		create.SetTTL(downloadToken.ExpiresAt.UTC().Truncate(time.Microsecond))
 	}
 
 	if !ulids.IsZero(downloadToken.UserID) {
@@ -108,9 +115,9 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 }
 
 // GenerateDownloadURLWithSecret builds a proxy download URL using the provided secret for testing.
-func GenerateDownloadURLWithSecret(file *storagetypes.File, secret []byte, duration time.Duration, provider storagetypes.ProviderType, cfg *storage.ProxyPresignConfig) (string, error) {
+func GenerateDownloadURLWithSecret(file *storagetypes.File, secret []byte, duration time.Duration, cfg *storage.ProxyPresignConfig) (string, error) {
 	if file == nil || file.ID == "" {
-		return "", errors.New("missing file id")
+		return "", ErrMissingFileID
 	}
 
 	if cfg == nil || cfg.TokenManager == nil {
@@ -118,26 +125,16 @@ func GenerateDownloadURLWithSecret(file *storagetypes.File, secret []byte, durat
 	}
 
 	if len(secret) != 0 && len(secret) != 128 {
-		return "", errors.New("secret must be 128 bytes when provided")
+		return "", ErrInvalidSecretLength
 	}
 
 	if duration <= 0 {
-		duration = 15 * time.Minute
+		duration = DefaultPresignDuration * time.Minute
 	}
 
-	bucket := file.FileMetadata.Bucket
-	if bucket == "" {
-		bucket = file.FileMetadata.Folder
-	}
-
-	key := file.FileMetadata.Key
-	if key == "" {
-		key = file.ID
-	}
-
-	objectURI := file.FileMetadata.FullURI
+	objectURI := file.FullURI
 	if objectURI == "" {
-		return "", errors.New("file metadata missing object URI")
+		return "", ErrMissingObjectURI
 	}
 
 	options := []tokens.DownloadTokenOption{
@@ -160,7 +157,7 @@ func GenerateDownloadURLWithSecret(file *storagetypes.File, secret []byte, durat
 			return "", err
 		}
 	default:
-		nonceLen := len(secret) / 2
+		nonceLen := len(secret) / SecretDivisor
 		downloadToken.SetNonce(secret[:nonceLen])
 
 		payload, err := msgpack.Marshal(downloadToken)

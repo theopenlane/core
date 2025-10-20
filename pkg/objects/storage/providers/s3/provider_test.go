@@ -372,8 +372,9 @@ func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
 	file := &storagetypes.File{
 		ID: "01HZZTESTFILE00000000000000",
 		FileMetadata: storagetypes.FileMetadata{
-			Bucket: minioBucket,
-			Key:    "folder/object.txt",
+			Bucket:  minioBucket,
+			Key:     "folder/object.txt",
+			FullURI: "s3://" + minioBucket + "/folder/object.txt",
 		},
 	}
 
@@ -381,7 +382,7 @@ func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
 	_, err = rand.Read(secret)
 	require.NoError(t, err)
 
-	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, storagetypes.S3Provider, &storage.ProxyPresignConfig{
+	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, &storage.ProxyPresignConfig{
 		TokenManager: tm,
 		BaseURL:      baseURL,
 	})

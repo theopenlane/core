@@ -63,7 +63,7 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 				storage.WithProxyPresignBaseURL(tc.base),
 			)
 
-			downloadURL, err := GenerateDownloadURLWithSecret(file, secret, time.Minute, storagetypes.DatabaseProvider, cfg)
+			downloadURL, err := GenerateDownloadURLWithSecret(file, secret, time.Minute, cfg)
 			require.NoError(t, err)
 			require.NotEmpty(t, downloadURL)
 

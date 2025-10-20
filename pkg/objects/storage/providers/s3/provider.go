@@ -317,7 +317,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 	if p.proxyPresignEnabled && p.proxyConfig != nil && p.proxyConfig.TokenManager != nil {
 		dur := opts.Duration
 
-		url, err := proxy.GenerateDownloadURL(ctx, file, dur, storagetypes.S3Provider, p.proxyConfig)
+		url, err := proxy.GenerateDownloadURL(ctx, file, dur, p.proxyConfig)
 		if err == nil {
 			return url, nil
 		}

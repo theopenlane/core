@@ -232,7 +232,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 	}
 
 	if p.proxyPresignEnabled && p.proxyConfig != nil && p.proxyConfig.TokenManager != nil {
-		url, err := proxy.GenerateDownloadURL(ctx, file, opts.Duration, storagetypes.R2Provider, p.proxyConfig)
+		url, err := proxy.GenerateDownloadURL(ctx, file, opts.Duration, p.proxyConfig)
 		if err == nil {
 			return url, nil
 		}

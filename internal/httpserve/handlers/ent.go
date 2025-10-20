@@ -175,7 +175,7 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 	if tokenRecord.FileID == nil || *tokenRecord.FileID == "" {
 		log.Error().Msg("file download token missing file id")
 
-		return nil, nil, fmt.Errorf("download token missing associated file")
+		return nil, nil, ErrDownloadTokenMissingFile
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)

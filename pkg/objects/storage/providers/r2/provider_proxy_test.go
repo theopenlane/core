@@ -31,12 +31,13 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	file := &storagetypes.File{
 		ID: "01HZZTESTFILER2AAAAAAA",
 		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "object.txt",
+			Bucket:  "test-bucket",
+			Key:     "object.txt",
+			FullURI: "r2://test-bucket/object.txt",
 		},
 	}
 
-	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, storagetypes.R2Provider, cfg)
+	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, cfg)
 	require.NoError(t, err)
 	require.NotEmpty(t, url)
 
@@ -52,13 +53,8 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	unescaped = strings.ReplaceAll(unescaped, "%2F", "/")
 	unescaped = strings.ReplaceAll(unescaped, "%3D", "=")
 
-	tokenParts := strings.Split(unescaped, ".")
-	require.Len(t, tokenParts, 2, "token should have signature.payload format")
-
-	_, err = base64.RawURLEncoding.DecodeString(tokenParts[0])
-	require.NoError(t, err, "signature should be valid base64")
-	_, err = base64.RawURLEncoding.DecodeString(tokenParts[1])
-	require.NoError(t, err, "payload should be valid base64")
+	_, err = base64.RawURLEncoding.DecodeString(unescaped)
+	require.NoError(t, err, "token should be valid base64")
 }
 
 func TestProvider_GetPresignedURL_FallbackToNative(t *testing.T) {

@@ -12,7 +12,6 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -53,7 +52,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 
 	downloadFile, downloadTokenRecord, err := h.getFilebyDownloadToken(ctxWithToken, in.Token)
 	if err != nil {
-		if generated.IsNotFound(err) {
+		if ent.IsNotFound(err) {
 			return h.BadRequest(ctx, err, openapi)
 		}
 
@@ -147,7 +146,7 @@ func buildObjectURI(file *storagetypes.File, entFile *ent.File) string {
 	}
 
 	if file != nil {
-		return file.FileMetadata.FullURI
+		return file.FullURI
 	}
 
 	return ""
@@ -218,8 +217,8 @@ func (d *Download) GetDownloadToken() string {
 }
 
 func (d *Download) GetDownloadExpires() (time.Time, error) {
-	if d.DownloadToken.Expires.Valid {
-		return time.Parse(time.RFC3339Nano, d.DownloadToken.Expires.String)
+	if d.Expires.Valid {
+		return time.Parse(time.RFC3339Nano, d.Expires.String)
 	}
 
 	return time.Time{}, nil
