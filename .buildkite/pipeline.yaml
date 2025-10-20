@@ -340,7 +340,7 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
           - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
+              image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -372,7 +372,7 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
           - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
+              image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
