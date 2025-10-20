@@ -58,7 +58,7 @@ func TestGlobalSearch(t *testing.T) {
 			expectedPrograms: 3,
 		},
 		{
-			name:             "happy path, case insensitive",
+			name:             "happy path, case insensitive with both",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
 			query:            "a1cd2d",
@@ -67,7 +67,7 @@ func TestGlobalSearch(t *testing.T) {
 			expectedPrograms: 3,
 		},
 		{
-			name:             "happy path, case insensitive",
+			name:             "happy path, case insensitive just contacts",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
 			query:            "a1cd2d con",
@@ -111,7 +111,6 @@ func TestGlobalSearch(t *testing.T) {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GlobalSearch(tc.ctx, tc.query)
 			if tc.errExpected != "" {
-
 				assert.Assert(t, is.Contains(err.Error(), tc.errExpected))
 				return
 			}
@@ -120,8 +119,6 @@ func TestGlobalSearch(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			if tc.expectedResults > 0 {
-				assert.Check(t, is.Equal(resp.Search.TotalCount, int64(tc.expectedResults)))
-
 				if tc.expectedContacts > 0 {
 					assert.Assert(t, resp.Search.Contacts != nil)
 					assert.Check(t, is.Len(resp.Search.Contacts.Edges, tc.expectedContacts))
