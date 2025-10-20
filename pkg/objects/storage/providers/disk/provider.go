@@ -2,6 +2,7 @@ package disk
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/objects"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
@@ -26,9 +28,11 @@ const (
 
 // Provider implements the storagetypes.Provider interface for local filesystem storage
 type Provider struct {
-	options           *storage.ProviderOptions
-	Scheme            string
-	destinationFolder string
+	options             *storage.ProviderOptions
+	Scheme              string
+	destinationFolder   string
+	proxyPresignEnabled bool
+	proxyConfig         *storage.ProxyPresignConfig
 }
 
 // NewDiskProvider creates a new disk provider instance
@@ -41,6 +45,9 @@ func NewDiskProvider(options *storage.ProviderOptions) (*Provider, error) {
 		options: options.Clone(),
 		Scheme:  "file://",
 	}
+
+	disk.proxyPresignEnabled = options.ProxyPresignEnabled
+	disk.proxyConfig = options.ProxyPresignConfig
 
 	if _, err := disk.ListBuckets(); os.IsNotExist(err) {
 		log.Info().Str("folder", options.Bucket).Msg("directory does not exist, creating directory")
@@ -60,7 +67,18 @@ func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetype
 	// Try to infer size from reader if available for metadata purposes
 	size, sizeKnown := objects.InferReaderSize(reader)
 
-	f, err := os.Create(filepath.Join(p.options.Bucket, opts.FileName))
+	objectKey := opts.FileName
+	if opts.FolderDestination != "" {
+		objectKey = filepath.Join(opts.FolderDestination, opts.FileName)
+	}
+
+	targetPath := filepath.Join(p.options.Bucket, objectKey)
+
+	if err := os.MkdirAll(filepath.Dir(targetPath), DefaultDirPermissions); err != nil {
+		return nil, err
+	}
+
+	f, err := os.Create(targetPath)
 	if err != nil {
 		return nil, err
 	}
@@ -81,9 +99,13 @@ func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetype
 
 	return &storagetypes.UploadedFileMetadata{
 		FileMetadata: storagetypes.FileMetadata{
-			Key:    opts.FileName,
-			Size:   size,
-			Folder: opts.FolderDestination,
+			Key:          filepath.ToSlash(objectKey),
+			Size:         size,
+			Folder:       filepath.ToSlash(opts.FolderDestination),
+			Bucket:       p.options.Bucket,
+			ContentType:  opts.ContentType,
+			ProviderType: storagetypes.DiskProvider,
+			FullURI:      fmt.Sprintf("%s%s", p.Scheme, filepath.ToSlash(targetPath)),
 		},
 	}, nil
 }
@@ -97,7 +119,7 @@ func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *stora
 	}
 
 	downloadedSize := int64(len(fileData))
-	metrics.RecordStorageDownload("disk", downloadedSize)
+	metrics.RecordStorageDownload(string(storagetypes.DiskProvider), downloadedSize)
 
 	return &storagetypes.DownloadedFileMetadata{
 		File: fileData,
@@ -109,20 +131,34 @@ func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *stora
 func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
 	err := os.Remove(filepath.Join(p.options.Bucket, file.Key))
 	if os.IsNotExist(err) {
-		metrics.RecordStorageDelete("disk")
+		metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 		return nil
 	}
 	if err != nil {
 		return err
 	}
 
-	metrics.RecordStorageDelete("disk")
+	metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 
 	return nil
 }
 
 // GetPresignedURL implements storagetypes.Provider
-func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, _ *storagetypes.PresignedURLOptions) (string, error) {
+func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	if opts == nil {
+		opts = &storagetypes.PresignedURLOptions{}
+	}
+
+	if p.proxyPresignEnabled && p.proxyConfig != nil && p.proxyConfig.TokenManager != nil {
+		url, err := proxy.GenerateDownloadURL(ctx, file, opts.Duration, p.proxyConfig)
+		if err == nil {
+			return url, nil
+		}
+		if !errors.Is(err, proxy.ErrTokenManagerRequired) && !errors.Is(err, proxy.ErrEntClientRequired) {
+			return "", err
+		}
+	}
+
 	if p.options.LocalURL == "" {
 		return "", ErrMissingLocalURL
 	}

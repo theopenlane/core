@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
@@ -423,6 +424,21 @@ func (_u *UserUpdate) AddEmailVerificationTokens(v ...*EmailVerificationToken) *
 	return _u.AddEmailVerificationTokenIDs(ids...)
 }
 
+// AddFileDownloadTokenIDs adds the "file_download_tokens" edge to the FileDownloadToken entity by IDs.
+func (_u *UserUpdate) AddFileDownloadTokenIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddFileDownloadTokenIDs(ids...)
+	return _u
+}
+
+// AddFileDownloadTokens adds the "file_download_tokens" edges to the FileDownloadToken entity.
+func (_u *UserUpdate) AddFileDownloadTokens(v ...*FileDownloadToken) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileDownloadTokenIDs(ids...)
+}
+
 // AddPasswordResetTokenIDs adds the "password_reset_tokens" edge to the PasswordResetToken entity by IDs.
 func (_u *UserUpdate) AddPasswordResetTokenIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddPasswordResetTokenIDs(ids...)
@@ -773,6 +789,27 @@ func (_u *UserUpdate) RemoveEmailVerificationTokens(v ...*EmailVerificationToken
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEmailVerificationTokenIDs(ids...)
+}
+
+// ClearFileDownloadTokens clears all "file_download_tokens" edges to the FileDownloadToken entity.
+func (_u *UserUpdate) ClearFileDownloadTokens() *UserUpdate {
+	_u.mutation.ClearFileDownloadTokens()
+	return _u
+}
+
+// RemoveFileDownloadTokenIDs removes the "file_download_tokens" edge to FileDownloadToken entities by IDs.
+func (_u *UserUpdate) RemoveFileDownloadTokenIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveFileDownloadTokenIDs(ids...)
+	return _u
+}
+
+// RemoveFileDownloadTokens removes "file_download_tokens" edges to FileDownloadToken entities.
+func (_u *UserUpdate) RemoveFileDownloadTokens(v ...*FileDownloadToken) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileDownloadTokenIDs(ids...)
 }
 
 // ClearPasswordResetTokens clears all "password_reset_tokens" edges to the PasswordResetToken entity.
@@ -1519,6 +1556,54 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileDownloadTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFileDownloadTokensIDs(); len(nodes) > 0 && !_u.mutation.FileDownloadTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileDownloadTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2813,6 +2898,21 @@ func (_u *UserUpdateOne) AddEmailVerificationTokens(v ...*EmailVerificationToken
 	return _u.AddEmailVerificationTokenIDs(ids...)
 }
 
+// AddFileDownloadTokenIDs adds the "file_download_tokens" edge to the FileDownloadToken entity by IDs.
+func (_u *UserUpdateOne) AddFileDownloadTokenIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddFileDownloadTokenIDs(ids...)
+	return _u
+}
+
+// AddFileDownloadTokens adds the "file_download_tokens" edges to the FileDownloadToken entity.
+func (_u *UserUpdateOne) AddFileDownloadTokens(v ...*FileDownloadToken) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileDownloadTokenIDs(ids...)
+}
+
 // AddPasswordResetTokenIDs adds the "password_reset_tokens" edge to the PasswordResetToken entity by IDs.
 func (_u *UserUpdateOne) AddPasswordResetTokenIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddPasswordResetTokenIDs(ids...)
@@ -3163,6 +3263,27 @@ func (_u *UserUpdateOne) RemoveEmailVerificationTokens(v ...*EmailVerificationTo
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEmailVerificationTokenIDs(ids...)
+}
+
+// ClearFileDownloadTokens clears all "file_download_tokens" edges to the FileDownloadToken entity.
+func (_u *UserUpdateOne) ClearFileDownloadTokens() *UserUpdateOne {
+	_u.mutation.ClearFileDownloadTokens()
+	return _u
+}
+
+// RemoveFileDownloadTokenIDs removes the "file_download_tokens" edge to FileDownloadToken entities by IDs.
+func (_u *UserUpdateOne) RemoveFileDownloadTokenIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveFileDownloadTokenIDs(ids...)
+	return _u
+}
+
+// RemoveFileDownloadTokens removes "file_download_tokens" edges to FileDownloadToken entities.
+func (_u *UserUpdateOne) RemoveFileDownloadTokens(v ...*FileDownloadToken) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileDownloadTokenIDs(ids...)
 }
 
 // ClearPasswordResetTokens clears all "password_reset_tokens" edges to the PasswordResetToken entity.
@@ -3939,6 +4060,54 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileDownloadTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFileDownloadTokensIDs(); len(nodes) > 0 && !_u.mutation.FileDownloadTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileDownloadTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileDownloadToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

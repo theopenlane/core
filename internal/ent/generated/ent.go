@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -215,6 +216,7 @@ func checkColumn(t, c string) error {
 			evidencehistory.Table:                   evidencehistory.ValidColumn,
 			export.Table:                            export.ValidColumn,
 			file.Table:                              file.ValidColumn,
+			filedownloadtoken.Table:                 filedownloadtoken.ValidColumn,
 			filehistory.Table:                       filehistory.ValidColumn,
 			group.Table:                             group.ValidColumn,
 			grouphistory.Table:                      grouphistory.ValidColumn,

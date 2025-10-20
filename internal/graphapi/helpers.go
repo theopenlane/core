@@ -137,6 +137,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		// process the rest of the resolver
 		field, err := next(ctx)
 		if err != nil {
+			// rollback the uploaded files in case of an error
+			upload.HandleRollback(ctx, u, uploads)
 			return nil, err
 		}
 

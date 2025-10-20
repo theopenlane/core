@@ -9,11 +9,19 @@ import (
 )
 
 // Builder creates R2 providers for the client pool
-type Builder struct{}
+type Builder struct {
+	options []Option
+}
 
 // NewR2Builder creates a new R2Builder
 func NewR2Builder() *Builder {
 	return &Builder{}
+}
+
+// WithOptions sets provider options for the builder
+func (b *Builder) WithOptions(opts ...Option) *Builder {
+	b.options = append(b.options, opts...)
+	return b
 }
 
 // Build implements eddy.Builder
@@ -25,11 +33,11 @@ func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentia
 	cfg := config.Clone()
 	cfg.Credentials = credentials
 
-	if cfg.Bucket == "" || cfg.Credentials.AccountID == "" || cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
+	if cfg.Bucket == "" || cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
 		return nil, ErrR2CredentialsRequired
 	}
 
-	return NewR2Provider(cfg)
+	return NewR2Provider(cfg, b.options...)
 }
 
 // ProviderType implements eddy.Builder

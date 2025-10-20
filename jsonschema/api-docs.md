@@ -1279,6 +1279,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**region**|`string`|Region for cloud providers<br/>||
 |**bucket**|`string`|Bucket name for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxyPresignEnabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseURL**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
@@ -1302,7 +1304,6 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
 |**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
 |**apiToken**|`string`|APIToken for Cloudflare R2<br/>||
@@ -1323,6 +1324,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**region**|`string`|Region for cloud providers<br/>||
 |**bucket**|`string`|Bucket name for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxyPresignEnabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseURL**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageproviderscloudflarer2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
@@ -1346,7 +1349,6 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
 |**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
 |**apiToken**|`string`|APIToken for Cloudflare R2<br/>||
@@ -1367,6 +1369,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**region**|`string`|Region for cloud providers<br/>||
 |**bucket**|`string`|Bucket name for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxyPresignEnabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseURL**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersgcscredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
@@ -1390,7 +1394,6 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
 |**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
 |**apiToken**|`string`|APIToken for Cloudflare R2<br/>||
@@ -1411,6 +1414,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**region**|`string`|Region for cloud providers<br/>||
 |**bucket**|`string`|Bucket name for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxyPresignEnabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseURL**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
@@ -1434,7 +1439,6 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
 |**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
 |**apiToken**|`string`|APIToken for Cloudflare R2<br/>||
@@ -1455,6 +1459,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**region**|`string`|Region for cloud providers<br/>||
 |**bucket**|`string`|Bucket name for cloud providers<br/>||
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxyPresignEnabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseURL**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
@@ -1478,7 +1484,6 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**accessKeyID**|`string`|AccessKeyID for cloud providers<br/>||
 |**secretAccessKey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**projectID**|`string`|ProjectID for GCS<br/>||
 |**accountID**|`string`|AccountID for Cloudflare R2<br/>||
 |**apiToken**|`string`|APIToken for Cloudflare R2<br/>||

@@ -54,6 +54,7 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 			disk: diskBuilder,
 			db:   &stubBuilder{providerType: "db"},
 		}),
+		WithRuntimeOptions(serviceOptions{}),
 	)
 
 	option := resolver.Resolve(context.Background())
@@ -93,6 +94,7 @@ func TestKnownProviderRule(t *testing.T) {
 			disk: diskBuilder,
 			db:   &stubBuilder{providerType: "db"},
 		}),
+		WithRuntimeOptions(serviceOptions{}),
 	)
 
 	option := resolver.Resolve(ctx)
@@ -128,6 +130,7 @@ func TestModuleRules(t *testing.T) {
 			disk: &stubBuilder{providerType: "disk"},
 			db:   &stubBuilder{providerType: "db"},
 		}),
+		WithRuntimeOptions(serviceOptions{}),
 	)
 
 	option := resolver.Resolve(ctx)
@@ -165,6 +168,7 @@ func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 			disk: &stubBuilder{providerType: "disk"},
 			db:   &stubBuilder{providerType: "db"},
 		}),
+		WithRuntimeOptions(serviceOptions{}),
 	)
 
 	option := resolver.Resolve(context.Background())
@@ -197,6 +201,7 @@ func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
 			disk: &stubBuilder{providerType: "disk"},
 			db:   &stubBuilder{providerType: "db"},
 		}),
+		WithRuntimeOptions(serviceOptions{}),
 	)
 
 	option := resolver.Resolve(context.Background())
@@ -263,7 +268,7 @@ func TestProviderResolveFromConfigDisabled(t *testing.T) {
 		Providers: storage.Providers{
 			S3: storage.ProviderConfigs{Enabled: false},
 		},
-	})
+	}, serviceOptions{})
 	require.Error(t, err)
 }
 

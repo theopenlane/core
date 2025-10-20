@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -962,6 +963,33 @@ func (f TraverseFile) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.FileQuery", q)
+}
+
+// The FileDownloadTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
+type FileDownloadTokenFunc func(context.Context, *generated.FileDownloadTokenQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f FileDownloadTokenFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.FileDownloadTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.FileDownloadTokenQuery", q)
+}
+
+// The TraverseFileDownloadToken type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseFileDownloadToken func(context.Context, *generated.FileDownloadTokenQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseFileDownloadToken) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseFileDownloadToken) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.FileDownloadTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.FileDownloadTokenQuery", q)
 }
 
 // The FileHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3320,6 +3348,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ExportQuery, predicate.Export, export.OrderOption]{typ: generated.TypeExport, tq: q}, nil
 	case *generated.FileQuery:
 		return &query[*generated.FileQuery, predicate.File, file.OrderOption]{typ: generated.TypeFile, tq: q}, nil
+	case *generated.FileDownloadTokenQuery:
+		return &query[*generated.FileDownloadTokenQuery, predicate.FileDownloadToken, filedownloadtoken.OrderOption]{typ: generated.TypeFileDownloadToken, tq: q}, nil
 	case *generated.FileHistoryQuery:
 		return &query[*generated.FileHistoryQuery, predicate.FileHistory, filehistory.OrderOption]{typ: generated.TypeFileHistory, tq: q}, nil
 	case *generated.GroupQuery:
