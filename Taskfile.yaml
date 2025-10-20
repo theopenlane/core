@@ -287,6 +287,20 @@ tasks:
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage.out -tags test
 
+  go:testsum:ci:graph:
+    desc: runs tests only graph tests using gotestsum for CI
+    silent: true
+    aliases: ['testsum:ci:graph']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-graph.out -tags test
+
+  go:testsum:ci:no-graph:
+    desc: runs tests using gotestsum for CI
+    silent: true
+    aliases: ['testsum:ci:no-graph']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --junitfile junit-no-graph.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi)" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-graph.out -tags test
+
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
     silent: true
