@@ -161,6 +161,8 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 	switch v := parsedContent.(type) {
 	case string:
 		detailsStr = v
+	case []byte:
+		detailsStr = string(v)
 	default:
 		detailsStr = fmt.Sprintf("%v", v)
 	}
