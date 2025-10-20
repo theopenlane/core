@@ -1491,6 +1491,47 @@ var (
 			},
 		},
 	}
+	// FileDownloadTokensColumns holds the columns for the "file_download_tokens" table.
+	FileDownloadTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "token", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "ttl", Type: field.TypeTime, Nullable: true},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "secret", Type: field.TypeBytes, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+	}
+	// FileDownloadTokensTable holds the schema information for the "file_download_tokens" table.
+	FileDownloadTokensTable = &schema.Table{
+		Name:       "file_download_tokens",
+		Columns:    FileDownloadTokensColumns,
+		PrimaryKey: []*schema.Column{FileDownloadTokensColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "file_download_tokens_users_file_download_tokens",
+				Columns:    []*schema.Column{FileDownloadTokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "filedownloadtoken_token",
+				Unique:  true,
+				Columns: []*schema.Column{FileDownloadTokensColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -8410,6 +8451,7 @@ var (
 		EvidenceHistoryTable,
 		ExportsTable,
 		FilesTable,
+		FileDownloadTokensTable,
 		FileHistoryTable,
 		GroupsTable,
 		GroupHistoryTable,
@@ -8687,6 +8729,7 @@ func init() {
 	FilesTable.ForeignKeys[0].RefTable = ExportsTable
 	FilesTable.ForeignKeys[1].RefTable = IntegrationsTable
 	FilesTable.ForeignKeys[2].RefTable = NotesTable
+	FileDownloadTokensTable.ForeignKeys[0].RefTable = UsersTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}

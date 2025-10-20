@@ -19,11 +19,22 @@ import (
 )
 
 type fakeProvider struct {
-	id string
+	id               string
+	presignURL       string
+	presignErr       error
+	presignCallCount int
+	uploadMetadata   *storagetypes.UploadedFileMetadata
+	uploadErr        error
 }
 
 func (f *fakeProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
-	return nil, nil
+	if f.uploadErr != nil {
+		return nil, f.uploadErr
+	}
+	if f.uploadMetadata != nil {
+		return f.uploadMetadata, nil
+	}
+	return &storagetypes.UploadedFileMetadata{}, nil
 }
 
 func (f *fakeProvider) Download(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
@@ -35,7 +46,11 @@ func (f *fakeProvider) Delete(context.Context, *storagetypes.File, *storagetypes
 }
 
 func (f *fakeProvider) GetPresignedURL(context.Context, *storagetypes.File, *storagetypes.PresignedURLOptions) (string, error) {
-	return "", nil
+	f.presignCallCount++
+	if f.presignErr != nil {
+		return "", f.presignErr
+	}
+	return f.presignURL, nil
 }
 
 func (f *fakeProvider) Exists(context.Context, *storagetypes.File) (bool, error) {
@@ -62,69 +77,6 @@ func TestProviderCacheKeyString(t *testing.T) {
 	key := ProviderCacheKey{TenantID: "tenant", IntegrationType: "s3"}
 	if got := key.String(); got != "tenant:s3" {
 		t.Fatalf("expected cache key to be %q, got %q", "tenant:s3", got)
-	}
-}
-
-func TestBuildDownloadObjectURI(t *testing.T) {
-	got := buildDownloadObjectURI(storagetypes.S3Provider, "bucket", "key")
-	if got != "s3:bucket:key" {
-		t.Fatalf("expected URI %q, got %q", "s3:bucket:key", got)
-	}
-}
-
-func TestServiceStoreAndLookupDownloadSecret(t *testing.T) {
-	svc := &Service{}
-	tokenID := ulid.Make()
-	secret := []byte("super-secret")
-
-	svc.storeDownloadSecret(tokenID, secret, time.Now().Add(time.Minute))
-
-	retrieved, ok := svc.LookupDownloadSecret(tokenID)
-	if !ok {
-		t.Fatal("expected secret to be found")
-	}
-
-	if string(retrieved) != string(secret) {
-		t.Fatalf("expected secret %q, got %q", string(secret), string(retrieved))
-	}
-
-	// original slice mutation should not affect stored secret
-	secret[0] = 'x'
-	retrievedAgain, ok := svc.LookupDownloadSecret(tokenID)
-	if !ok || string(retrievedAgain) != "super-secret" {
-		t.Fatal("expected stored secret to be independent of original slice")
-	}
-}
-
-func TestServiceStoreDownloadSecretExpires(t *testing.T) {
-	svc := &Service{}
-	tokenID := ulid.Make()
-	svc.storeDownloadSecret(tokenID, []byte("secret"), time.Now().Add(30*time.Millisecond))
-
-	if _, ok := svc.LookupDownloadSecret(tokenID); !ok {
-		t.Fatal("expected secret to be present immediately after storing")
-	}
-
-	time.Sleep(60 * time.Millisecond)
-
-	if _, ok := svc.LookupDownloadSecret(tokenID); ok {
-		t.Fatal("expected secret to be purged after expiration")
-	}
-}
-
-func TestServiceStoreDownloadSecretIgnoresInvalidInput(t *testing.T) {
-	svc := &Service{}
-	svc.storeDownloadSecret(ulid.ULID{}, []byte("secret"), time.Now().Add(time.Minute))
-	svc.storeDownloadSecret(ulid.Make(), nil, time.Now().Add(time.Minute))
-
-	stored := false
-	svc.downloadSecrets.Range(func(key, value any) bool {
-		stored = true
-		return false
-	})
-
-	if stored {
-		t.Fatal("expected invalid inputs to be ignored and not stored")
 	}
 }
 
@@ -311,6 +263,59 @@ func TestServiceResolveDownloadProvider(t *testing.T) {
 
 	if provider != expectedProvider {
 		t.Fatal("expected resolved provider to match builder result")
+	}
+}
+
+func TestServiceGetPresignedURL_ProviderMode(t *testing.T) {
+	pool := eddy.NewClientPool[storage.Provider](time.Minute)
+	clientService := eddy.NewClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions](pool)
+
+	trackedProvider := &fakeProvider{
+		id:         string(storagetypes.S3Provider),
+		presignURL: "provider-url",
+	}
+
+	builder := &eddy.BuilderFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Type: string(storagetypes.S3Provider),
+		Func: func(context.Context, storage.ProviderCredentials, *storage.ProviderOptions) (storage.Provider, error) {
+			return trackedProvider, nil
+		},
+	}
+
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+	resolver.AddRule(&eddy.RuleFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		EvaluateFunc: func(context.Context) mo.Option[eddy.Result[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]] {
+			return mo.Some(eddy.Result[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+				Builder: builder,
+				Output:  storage.ProviderCredentials{},
+				Config:  storage.NewProviderOptions(),
+			})
+		},
+	})
+
+	service := NewService(Config{
+		Resolver:      resolver,
+		ClientService: clientService,
+	})
+
+	file := &storagetypes.File{
+		ProviderType: storagetypes.S3Provider,
+		FileMetadata: storagetypes.FileMetadata{
+			ProviderType: storagetypes.S3Provider,
+		},
+	}
+
+	url, err := service.GetPresignedURL(context.Background(), file, time.Minute)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if url != trackedProvider.presignURL {
+		t.Fatalf("expected provider URL, got %q", url)
+	}
+
+	if trackedProvider.presignCallCount != 1 {
+		t.Fatalf("expected provider GetPresignedURL to be called once, got %d", trackedProvider.presignCallCount)
 	}
 }
 

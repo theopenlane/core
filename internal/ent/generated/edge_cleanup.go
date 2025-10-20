@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -251,6 +252,12 @@ func ExportEdgeCleanup(ctx context.Context, id string) error {
 
 func FileEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func FileDownloadTokenEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filedownloadtoken edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1196,6 +1203,13 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).EmailVerificationToken.Query().Where((emailverificationtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if emailverificationtokenCount, err := FromContext(ctx).EmailVerificationToken.Delete().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", emailverificationtokenCount).Msg("deleting emailverificationtoken")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).FileDownloadToken.Query().Where((filedownloadtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if filedownloadtokenCount, err := FromContext(ctx).FileDownloadToken.Delete().Where(filedownloadtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", filedownloadtokenCount).Msg("deleting filedownloadtoken")
 			return err
 		}
 	}

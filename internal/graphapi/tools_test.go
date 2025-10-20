@@ -245,23 +245,39 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 
 	mockScheme := "file://"
 
-    for _, upload := range expectedUploads {
-        mockProvider.On("GetScheme").Return(&mockScheme).Once()
-        mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
-        mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-            FileMetadata: pkgobjects.FileMetadata{
-                Key:          "test-key",
-                Size:         upload.Size,
-                ProviderType: storage.DiskProvider,
-            },
-        }, nil).Once()
+	for _, upload := range expectedUploads {
+		mockProvider.On("GetScheme").Return(&mockScheme).Once()
+		mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+		mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+			FileMetadata: pkgobjects.FileMetadata{
+				Key:          "test-key",
+				Size:         upload.Size,
+				Folder:       "test-folder",
+				Bucket:       "test-bucket",
+				ContentType:  upload.ContentType,
+				ProviderType: storage.DiskProvider,
+				FullURI:      "file:///tmp/test-file",
+			},
+		}, nil).Once()
 
-        // Allow document hooks to download the just-uploaded content for parsing
-        mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-            File: []byte("test content"),
-            Size: upload.Size,
-        }, nil).Maybe()
-    }
+		// Allow document hooks to download the just-uploaded content for parsing
+		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+			File: []byte("test content"),
+			Size: upload.Size,
+		}, nil).Maybe()
+	}
+}
+
+// expectDelete sets up the mock object store to expect a delete and related operations
+func expectDelete(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
+	assert.Assert(t, mockProvider != nil)
+
+	mockScheme := "file://"
+
+	for range expectedUploads {
+		mockProvider.On("GetScheme").Return(&mockScheme).Once()
+		mockProvider.On("Delete", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+	}
 }
 
 // expectUploadNillable sets up the mock object store to expect an upload and related operations
@@ -270,25 +286,29 @@ func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, 
 
 	mockScheme := "file://"
 
-    for _, upload := range expectedUploads {
-        if upload != nil {
-            mockProvider.On("GetScheme").Return(&mockScheme).Once()
-            mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
-            mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-                FileMetadata: pkgobjects.FileMetadata{
-                    Key:          "test-key",
-                    Size:         upload.Size,
-                    ProviderType: storage.DiskProvider,
-                },
-            }, nil).Once()
+	for _, upload := range expectedUploads {
+		if upload != nil {
+			mockProvider.On("GetScheme").Return(&mockScheme).Once()
+			mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+			mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+				FileMetadata: pkgobjects.FileMetadata{
+					Key:          "test-key",
+					Size:         upload.Size,
+					Folder:       "test-folder",
+					Bucket:       "test-bucket",
+					ContentType:  upload.ContentType,
+					ProviderType: storage.DiskProvider,
+					FullURI:      "file:///tmp/test-file",
+				},
+			}, nil).Once()
 
-            // Allow document hooks to download the just-uploaded content for parsing
-            mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-                File: []byte("test content"),
-                Size: upload.Size,
-            }, nil).Maybe()
-        }
-    }
+			// Allow document hooks to download the just-uploaded content for parsing
+			mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+				File: []byte("test content"),
+				Size: upload.Size,
+			}, nil).Maybe()
+		}
+	}
 }
 
 // expectUploadCheckOnly sets up the mock object store to expect an upload check only operation

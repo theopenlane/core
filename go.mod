@@ -94,7 +94,7 @@ require (
 	github.com/theopenlane/entx v0.15.0
 	github.com/theopenlane/gqlgen-plugins v0.10.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.18.0
+	github.com/theopenlane/iam v0.18.1
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.3
 	github.com/theopenlane/utils v0.5.2
@@ -217,7 +217,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.8 // indirect
-	github.com/testcontainers/testcontainers-go v0.39.0 // indirect
+	github.com/testcontainers/testcontainers-go v0.39.0
 	github.com/testcontainers/testcontainers-go/modules/openfga v0.39.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect

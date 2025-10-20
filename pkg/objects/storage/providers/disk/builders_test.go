@@ -24,9 +24,8 @@ func TestDiskBuilderBuild(t *testing.T) {
 		expectError bool
 	}{
 		{
-			name:        "valid configuration",
-			credentials: storage.ProviderCredentials{Endpoint: "http://localhost:8080/files"},
-			options:     storage.NewProviderOptions(storage.WithBucket("/tmp/test-storage")),
+			name:    "valid configuration",
+			options: storage.NewProviderOptions(storage.WithBucket("/tmp/test-storage"), storage.WithLocalURL("http://localhost:8080/files")),
 		},
 		{
 			name:        "missing bucket uses default",

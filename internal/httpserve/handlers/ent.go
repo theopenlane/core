@@ -10,10 +10,12 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -118,6 +120,7 @@ func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) 
 	return meowtoken, nil
 }
 
+// createPasswordResetToken creates a new password reset token for the user
 func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*ent.PasswordResetToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.PasswordResetExpires.String)
 	if err != nil {
@@ -156,6 +159,35 @@ func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User
 	}
 
 	return user, nil
+}
+
+// getFilebyDownloadToken returns the ent file and download token based on the token in the request
+func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*ent.File, *ent.FileDownloadToken, error) {
+	tokenRecord, err := transaction.FromContext(ctx).FileDownloadToken.Query().
+		Where(filedownloadtoken.Token(token)).
+		Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining file download token")
+
+		return nil, nil, err
+	}
+
+	if tokenRecord.FileID == nil || *tokenRecord.FileID == "" {
+		log.Error().Msg("file download token missing file id")
+
+		return nil, nil, ErrDownloadTokenMissingFile
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	fileRecord, err := transaction.FromContext(ctx).File.Get(allowCtx, *tokenRecord.FileID)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining file from download token")
+
+		return nil, nil, err
+	}
+
+	return fileRecord, tokenRecord, nil
 }
 
 // getUserByResetToken returns the ent user with the user settings and password reset tokens based on the

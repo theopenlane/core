@@ -46,6 +46,30 @@ const (
 	DatabaseProvider ProviderType = "database"
 )
 
+// PresignMode determines how presigned URLs are generated for a provider
+type PresignMode string
+
+const (
+	// PresignModeProvider uses the upstream storage provider to generate presigned URLs
+	PresignModeProvider PresignMode = "provider"
+	// PresignModeProxy uses the internal token-based proxy for presigned URLs
+	PresignModeProxy PresignMode = "proxy"
+)
+
+// Valid reports whether the presign mode is recognized
+func (m PresignMode) Valid() bool {
+	return m == PresignModeProvider || m == PresignModeProxy
+}
+
+// ResolvePresignMode returns a valid presign mode, falling back to the provided default when necessary.
+func ResolvePresignMode(value PresignMode, fallback PresignMode) PresignMode {
+	if value.Valid() {
+		return value
+	}
+
+	return fallback
+}
+
 // File represents a consolidated file object in the system that combines upload, storage, and metadata information
 // This is the objects package representation of the file schema we use in ent
 type File struct {

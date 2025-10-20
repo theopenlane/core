@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -90,6 +91,9 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	}
 
 	testUser.UserInfo, err = builder.Save(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to create test user")
+	}
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID

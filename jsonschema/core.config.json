@@ -1229,6 +1229,14 @@
           "type": "string",
           "description": "Endpoint for custom endpoints"
         },
+        "proxyPresignEnabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseURL": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)."
+        },
         "credentials": {
           "$ref": "#/$defs/storage.ProviderCredentials",
           "description": "Credentials contains the credentials for accessing the provider"
@@ -1247,10 +1255,6 @@
         "secretAccessKey": {
           "type": "string",
           "description": "SecretAccessKey for cloud providers"
-        },
-        "endpoint": {
-          "type": "string",
-          "description": "Endpoint for custom endpoints"
         },
         "projectID": {
           "type": "string",
