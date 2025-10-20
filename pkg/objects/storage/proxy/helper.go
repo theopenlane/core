@@ -23,7 +23,7 @@ import (
 
 const (
 	// DefaultPresignDuration is the default duration for presigned URLs
-	DefaultPresignDuration = 15
+	DefaultPresignDurationMinutes = 15
 	// SecretDivisor is used to split the secret into nonce and key components
 	SecretDivisor = 2
 )
@@ -53,7 +53,7 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 	}
 
 	if duration <= 0 {
-		duration = DefaultPresignDuration * time.Minute
+		duration = DefaultPresignDurationMinutes * time.Minute
 	}
 
 	objectURI := file.FullURI
@@ -65,15 +65,17 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		tokens.WithDownloadTokenExpiresIn(duration),
 	}
 
-	if authUser, ok := auth.AuthenticatedUserFromContext(ctx); ok && authUser != nil {
-		if userID, err := ulid.Parse(authUser.SubjectID); err == nil {
-			options = append(options, tokens.WithDownloadTokenUserID(userID))
-		}
-		if authUser.OrganizationID != "" {
-			if orgID, err := ulid.Parse(authUser.OrganizationID); err == nil {
-				options = append(options, tokens.WithDownloadTokenOrgID(orgID))
-			}
-		}
+	authUser, ok := auth.AuthenticatedUserFromContext(ctx)
+	if !ok {
+		return "", ErrAuthenticatedUserRequired
+	}
+
+	if userID, err := ulid.Parse(authUser.SubjectID); err == nil {
+		options = append(options, tokens.WithDownloadTokenUserID(userID))
+	}
+
+	if orgID, err := ulid.Parse(authUser.OrganizationID); err == nil {
+		options = append(options, tokens.WithDownloadTokenOrgID(orgID))
 	}
 
 	downloadToken, err := tokens.NewDownloadToken(objectURI, options...)
@@ -91,9 +93,7 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		SetFileID(file.ID).
 		SetSecret(secret)
 
-	if authUser, ok := auth.AuthenticatedUserFromContext(ctx); ok && authUser != nil && authUser.SubjectID != "" {
-		create.SetOwnerID(authUser.SubjectID)
-	}
+	create.SetOwnerID(authUser.SubjectID)
 
 	if !downloadToken.ExpiresAt.IsZero() {
 		create.SetTTL(downloadToken.ExpiresAt.UTC().Truncate(time.Microsecond))
@@ -107,7 +107,7 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		create.SetOrganizationID(downloadToken.OrgID.String())
 	}
 
-	if _, err := create.Save(ctx); err != nil {
+	if err := create.Exec(ctx); err != nil {
 		return "", fmt.Errorf("failed to store download token: %w", err)
 	}
 
@@ -129,7 +129,7 @@ func GenerateDownloadURLWithSecret(file *storagetypes.File, secret []byte, durat
 	}
 
 	if duration <= 0 {
-		duration = DefaultPresignDuration * time.Minute
+		duration = DefaultPresignDurationMinutes * time.Minute
 	}
 
 	objectURI := file.FullURI

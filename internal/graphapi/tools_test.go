@@ -252,7 +252,11 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 			FileMetadata: pkgobjects.FileMetadata{
 				Key:          "test-key",
 				Size:         upload.Size,
+				Folder:       "test-folder",
+				Bucket:       "test-bucket",
+				ContentType:  upload.ContentType,
 				ProviderType: storage.DiskProvider,
+				FullURI:      "file:///tmp/test-file",
 			},
 		}, nil).Once()
 
@@ -278,7 +282,11 @@ func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, 
 				FileMetadata: pkgobjects.FileMetadata{
 					Key:          "test-key",
 					Size:         upload.Size,
+					Folder:       "test-folder",
+					Bucket:       "test-bucket",
+					ContentType:  upload.ContentType,
 					ProviderType: storage.DiskProvider,
+					FullURI:      "file:///tmp/test-file",
 				},
 			}, nil).Once()
 

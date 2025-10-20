@@ -93,7 +93,7 @@ func (p FileDownloadToken) Mixin() []ent.Mixin {
 // Indexes of the FileDownloadToken
 func (FileDownloadToken) Indexes() []ent.Index {
 	return []ent.Index{
-		// PasswordResetTokens should be unique, but ignore deleted PasswordResetTokens
+		// FileDownloadToken should be unique, but ignore deleted PasswordResetTokens
 		index.Fields("token").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}

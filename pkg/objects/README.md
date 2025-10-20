@@ -137,18 +137,17 @@ exists, _ := provider.Exists(ctx, &storage.File{ FileMetadata: storage.FileMetad
 
 Files are stored with the following pattern:
 ```
-s3://bucket-name/organization-id/parent-id/file-id/filename.ext
-r2://bucket-name/organization-id/parent-id/file-id/filename.ext
+s3://bucket-name/organization-id/file-id/filename.ext
+r2://bucket-name/organization-id/file-id/filename.ext
 database://default/file-id (database provider uses file ID, not paths)
 ```
 
 ### Example
 
-For organization `01HYQZ5YTVJ0P2R2HF7N3W3MQZ`, parent object `01J1PARENTXYZABCD1234`, and file record `01J1FILEXYZABCD5678` uploading `report.pdf`:
+For organization `01HYQZ5YTVJ0P2R2HF7N3W3MQZ`, and file record `01J1FILEXYZABCD5678` uploading `report.pdf`:
 ```
-s3://my-bucket/01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1PARENTXYZABCD1234/01J1FILEXYZABCD5678/report.pdf
+s3://my-bucket/01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1FILEXYZABCD5678/report.pdf
 ```
-If a file has no explicit parent, the parent segment reuses the organization ID so the directory depth remains consistent.
 
 ### Implementation
 
@@ -156,7 +155,7 @@ When a file is uploaded through `HandleUploads`:
 
 1. The organization ID is derived from the authenticated context or the persisted file record.
 2. Metadata is persisted, returning the stored file record (including its database ID) and owning organization.
-3. A folder path is built as `orgID/parentID/fileID` using the file's parent or correlated object (falling back to the organization ID when necessary).
+3. A folder path is built as `orgID/fileID`
 4. The computed folder is passed as `FolderDestination` in upload options.
 5. Storage providers use `path.Join(FolderDestination, FileName)` to construct the object key.
 
@@ -197,11 +196,11 @@ When downloading files, the full key (including organization prefix) is stored i
 
 ```go
 // File record in database
-StoragePath: "01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1PARENTXYZABCD1234/01J1FILEXYZABCD5678/report.pdf"
+StoragePath: "01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1FILEXYZABCD5678/report.pdf"
 
 // Used for download
 provider.Download(ctx, &storagetypes.File{
-    Key: file.StoragePath,  // Full path including organization and parent directories
+    Key: file.StoragePath,  // Full path including organization
 })
 ```
 

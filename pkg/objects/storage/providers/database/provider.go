@@ -154,7 +154,7 @@ func (p *Provider) Exists(ctx context.Context, fileRef *storagetypes.File) (bool
 // GetPresignedURL returns a signed URL that proxies through the application for download.
 func (p *Provider) GetPresignedURL(ctx context.Context, fileRef *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
 	if !p.options.ProxyPresignEnabled {
-		return "", ErrTokenManagerRequired
+		return "", ErrDatabaseProviderRequiresProxyPresign
 	}
 
 	cfg := p.proxyConfig

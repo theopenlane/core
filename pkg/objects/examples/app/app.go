@@ -1,3 +1,5 @@
+//go:build examples
+
 package app
 
 import "github.com/urfave/cli/v3"
