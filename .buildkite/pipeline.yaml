@@ -328,7 +328,7 @@ steps:
               variables:
                 SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
-              download: coverage-no-graph.out
+              download: "coverage-no-graph.out"
               step: "go_test_no_graph"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
@@ -337,8 +337,8 @@ steps:
               download: "junit-no-graph.xml"
               step: "go_test_no_graph"
           - artifacts#v1.9.4:
-            download: "junit-graph.xml"
-            step: "go_test_graph"
+              download: "junit-graph.xml"
+              step: "go_test_graph"
           - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
               propagate-environment: true
@@ -360,7 +360,7 @@ steps:
               variables:
                 SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
-              download: coverage-no-graph.out
+              download: "coverage-no-graph.out"
               step: "go_test_no_graph"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
