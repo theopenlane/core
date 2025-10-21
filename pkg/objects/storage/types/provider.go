@@ -141,6 +141,8 @@ type FileMetadata struct {
 	Key string `json:"key"`
 	// Bucket is the bucket where the file is stored
 	Bucket string `json:"bucket,omitempty"`
+	// Region is the region where the file is stored
+	Region string `json:"region,omitempty"`
 	// Folder is the folder/path within the bucket the file is stored
 	Folder string `json:"folder,omitempty"`
 	// FullURI is the full URI to access the file which would include the storage scheme, e.g. s3://bucket/folder/file

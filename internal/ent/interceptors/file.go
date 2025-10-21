@@ -135,6 +135,7 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 		FileMetadata: storagetypes.FileMetadata{
 			Key:          file.StoragePath,
 			Bucket:       file.StorageVolume,
+			Region:       file.StorageRegion,
 			ContentType:  file.DetectedContentType,
 			Size:         file.PersistedFileSize,
 			ProviderType: storagetypes.ProviderType(file.StorageProvider),

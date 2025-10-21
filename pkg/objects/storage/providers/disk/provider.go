@@ -103,6 +103,7 @@ func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetype
 			Size:         size,
 			Folder:       filepath.ToSlash(opts.FolderDestination),
 			Bucket:       p.options.Bucket,
+			Region:       p.options.Region,
 			ContentType:  opts.ContentType,
 			ProviderType: storagetypes.DiskProvider,
 			FullURI:      fmt.Sprintf("%s%s", p.Scheme, filepath.ToSlash(targetPath)),
@@ -129,7 +130,12 @@ func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *stora
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	err := os.Remove(filepath.Join(p.options.Bucket, file.Key))
+	bucket := file.Bucket
+	if bucket == "" {
+		bucket = p.options.Bucket
+	}
+
+	err := os.Remove(filepath.Join(bucket, file.Key))
 	if os.IsNotExist(err) {
 		metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 		return nil

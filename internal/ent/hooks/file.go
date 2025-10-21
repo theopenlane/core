@@ -61,6 +61,7 @@ func HookFileDelete() ent.Hook {
 						file.FieldPersistedFileSize,
 						file.FieldMetadata,
 						file.FieldStorageVolume,
+						file.FieldStorageRegion,
 					).All(ctx)
 				if err != nil {
 					return nil, err
@@ -78,6 +79,8 @@ func HookFileDelete() ent.Hook {
 								Key:           f.StoragePath,
 								ContentType:   f.DetectedContentType,
 								Size:          f.PersistedFileSize,
+								Bucket:        f.StorageVolume,
+								Region:        f.StorageRegion,
 								ProviderHints: &storagetypes.ProviderHints{},
 							},
 						}

@@ -75,6 +75,7 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 		FileMetadata: FileMetadata{
 			Key:           opts.Key,
 			Bucket:        opts.Bucket,
+			Region:        opts.Region,
 			ProviderHints: opts.ProviderHints,
 		},
 	}
@@ -95,6 +96,7 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 		ContentType:   metadata.ContentType,
 		Folder:        metadata.Folder,
 		Bucket:        metadata.Bucket,
+		Region:        metadata.Region,
 		FullURI:       metadata.FullURI,
 		ProviderType:  metadata.ProviderType,
 		PresignedURL:  metadata.PresignedURL,
@@ -114,6 +116,11 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 	if fileMetadata.Bucket == "" {
 		fileMetadata.Bucket = storageOpts.Bucket
 	}
+
+	if fileMetadata.Region == "" {
+		fileMetadata.Region = storageOpts.Region
+	}
+
 	if fileMetadata.ProviderType == "" {
 		fileMetadata.ProviderType = provider.ProviderType()
 	}
