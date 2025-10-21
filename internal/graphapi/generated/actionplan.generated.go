@@ -24,28 +24,33 @@ type MutationResolver interface {
 	UpdateBulkActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error)
 	UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error)
 	DeleteActionPlan(ctx context.Context, id string) (*model.ActionPlanDeletePayload, error)
+	DeleteBulkActionPlan(ctx context.Context, ids []string) (*model.ActionPlanBulkDeletePayload, error)
 	CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error)
 	CreateBulkAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error)
 	CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error)
 	UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error)
 	DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error)
+	DeleteBulkAPIToken(ctx context.Context, ids []string) (*model.APITokenBulkDeletePayload, error)
 	CreateAsset(ctx context.Context, input generated.CreateAssetInput) (*model.AssetCreatePayload, error)
 	CreateBulkAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error)
 	CreateBulkCSVAsset(ctx context.Context, input graphql.Upload) (*model.AssetBulkCreatePayload, error)
 	UpdateAsset(ctx context.Context, id string, input generated.UpdateAssetInput) (*model.AssetUpdatePayload, error)
 	DeleteAsset(ctx context.Context, id string) (*model.AssetDeletePayload, error)
+	DeleteBulkAsset(ctx context.Context, ids []string) (*model.AssetBulkDeletePayload, error)
 	CreateContact(ctx context.Context, input generated.CreateContactInput) (*model.ContactCreatePayload, error)
 	CreateBulkContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*model.ContactBulkCreatePayload, error)
 	UpdateBulkContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error)
 	UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error)
 	DeleteContact(ctx context.Context, id string) (*model.ContactDeletePayload, error)
+	DeleteBulkContact(ctx context.Context, ids []string) (*model.ContactBulkDeletePayload, error)
 	CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error)
 	CreateBulkControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error)
 	CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error)
 	UpdateBulkControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error)
 	UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error)
 	DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error)
+	DeleteBulkControl(ctx context.Context, ids []string) (*model.ControlBulkDeletePayload, error)
 	CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error)
 	CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error)
 	CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error)
@@ -53,41 +58,49 @@ type MutationResolver interface {
 	CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error)
 	UpdateControlImplementation(ctx context.Context, id string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationUpdatePayload, error)
 	DeleteControlImplementation(ctx context.Context, id string) (*model.ControlImplementationDeletePayload, error)
+	DeleteBulkControlImplementation(ctx context.Context, ids []string) (*model.ControlImplementationBulkDeletePayload, error)
 	CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error)
 	CreateBulkControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error)
 	CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error)
 	UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error)
 	DeleteControlObjective(ctx context.Context, id string) (*model.ControlObjectiveDeletePayload, error)
+	DeleteBulkControlObjective(ctx context.Context, ids []string) (*model.ControlObjectiveBulkDeletePayload, error)
 	CreateCustomDomain(ctx context.Context, input generated.CreateCustomDomainInput) (*model.CustomDomainCreatePayload, error)
 	CreateBulkCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error)
 	CreateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload) (*model.CustomDomainBulkCreatePayload, error)
 	UpdateCustomDomain(ctx context.Context, id string, input generated.UpdateCustomDomainInput) (*model.CustomDomainUpdatePayload, error)
 	DeleteCustomDomain(ctx context.Context, id string) (*model.CustomDomainDeletePayload, error)
+	DeleteBulkCustomDomain(ctx context.Context, ids []string) (*model.CustomDomainBulkDeletePayload, error)
 	CreateDNSVerification(ctx context.Context, input generated.CreateDNSVerificationInput) (*model.DNSVerificationCreatePayload, error)
 	CreateBulkDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error)
 	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkCreatePayload, error)
 	UpdateDNSVerification(ctx context.Context, id string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationUpdatePayload, error)
 	DeleteDNSVerification(ctx context.Context, id string) (*model.DNSVerificationDeletePayload, error)
+	DeleteBulkDNSVerification(ctx context.Context, ids []string) (*model.DNSVerificationBulkDeletePayload, error)
 	CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error)
 	CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error)
 	CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error)
 	UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error)
 	DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error)
+	DeleteBulkDocumentData(ctx context.Context, ids []string) (*model.DocumentDataBulkDeletePayload, error)
 	CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error)
 	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error)
 	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error)
 	DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error)
+	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
 	CreateEntityType(ctx context.Context, input generated.CreateEntityTypeInput) (*model.EntityTypeCreatePayload, error)
 	CreateBulkEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*model.EntityTypeBulkCreatePayload, error)
 	CreateBulkCSVEntityType(ctx context.Context, input graphql.Upload) (*model.EntityTypeBulkCreatePayload, error)
 	UpdateEntityType(ctx context.Context, id string, input generated.UpdateEntityTypeInput) (*model.EntityTypeUpdatePayload, error)
 	DeleteEntityType(ctx context.Context, id string) (*model.EntityTypeDeletePayload, error)
+	DeleteBulkEntityType(ctx context.Context, ids []string) (*model.EntityTypeBulkDeletePayload, error)
 	CreateEvent(ctx context.Context, input generated.CreateEventInput) (*model.EventCreatePayload, error)
 	CreateBulkEvent(ctx context.Context, input []*generated.CreateEventInput) (*model.EventBulkCreatePayload, error)
 	CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error)
 	UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*model.EventUpdatePayload, error)
 	DeleteEvent(ctx context.Context, id string) (*model.EventDeletePayload, error)
+	DeleteBulkEvent(ctx context.Context, ids []string) (*model.EventBulkDeletePayload, error)
 	CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error)
 	UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
 	DeleteEvidence(ctx context.Context, id string) (*model.EvidenceDeletePayload, error)
@@ -101,6 +114,7 @@ type MutationResolver interface {
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
 	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error)
 	DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error)
+	DeleteBulkGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error)
 	CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error)
 	CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error)
 	CreateGroupMembership(ctx context.Context, input generated.CreateGroupMembershipInput) (*model.GroupMembershipCreatePayload, error)
@@ -108,17 +122,20 @@ type MutationResolver interface {
 	CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkCreatePayload, error)
 	UpdateGroupMembership(ctx context.Context, id string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipUpdatePayload, error)
 	DeleteGroupMembership(ctx context.Context, id string) (*model.GroupMembershipDeletePayload, error)
+	DeleteBulkGroupMembership(ctx context.Context, ids []string) (*model.GroupMembershipBulkDeletePayload, error)
 	CreateGroupSetting(ctx context.Context, input generated.CreateGroupSettingInput) (*model.GroupSettingCreatePayload, error)
 	CreateBulkGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*model.GroupSettingBulkCreatePayload, error)
 	CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkCreatePayload, error)
 	UpdateGroupSetting(ctx context.Context, id string, input generated.UpdateGroupSettingInput) (*model.GroupSettingUpdatePayload, error)
 	DeleteGroupSetting(ctx context.Context, id string) (*model.GroupSettingDeletePayload, error)
+	DeleteBulkGroupSetting(ctx context.Context, ids []string) (*model.GroupSettingBulkDeletePayload, error)
 	CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error)
 	CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error)
 	CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error)
 	UpdateBulkHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error)
 	UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error)
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
+	DeleteBulkHush(ctx context.Context, ids []string) (*model.HushBulkDeletePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
 	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
@@ -127,11 +144,13 @@ type MutationResolver interface {
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
 	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error)
 	DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error)
+	DeleteBulkInternalPolicy(ctx context.Context, ids []string) (*model.InternalPolicyBulkDeletePayload, error)
 	CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error)
 	CreateBulkInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error)
 	CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error)
 	UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error)
 	DeleteInvite(ctx context.Context, id string) (*model.InviteDeletePayload, error)
+	DeleteBulkInvite(ctx context.Context, ids []string) (*model.InviteBulkDeletePayload, error)
 	CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error)
 	UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error)
 	DeleteJobResult(ctx context.Context, id string) (*model.JobResultDeletePayload, error)
@@ -147,21 +166,25 @@ type MutationResolver interface {
 	CreateBulkCSVJobTemplate(ctx context.Context, input graphql.Upload) (*model.JobTemplateBulkCreatePayload, error)
 	UpdateJobTemplate(ctx context.Context, id string, input generated.UpdateJobTemplateInput) (*model.JobTemplateUpdatePayload, error)
 	DeleteJobTemplate(ctx context.Context, id string) (*model.JobTemplateDeletePayload, error)
+	DeleteBulkJobTemplate(ctx context.Context, ids []string) (*model.JobTemplateBulkDeletePayload, error)
 	CreateMappableDomain(ctx context.Context, input generated.CreateMappableDomainInput) (*model.MappableDomainCreatePayload, error)
 	CreateBulkMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error)
 	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkCreatePayload, error)
 	UpdateMappableDomain(ctx context.Context, id string, input generated.UpdateMappableDomainInput) (*model.MappableDomainUpdatePayload, error)
 	DeleteMappableDomain(ctx context.Context, id string) (*model.MappableDomainDeletePayload, error)
+	DeleteBulkMappableDomain(ctx context.Context, ids []string) (*model.MappableDomainBulkDeletePayload, error)
 	CreateMappedControl(ctx context.Context, input generated.CreateMappedControlInput) (*model.MappedControlCreatePayload, error)
 	CreateBulkMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error)
 	CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkCreatePayload, error)
 	UpdateMappedControl(ctx context.Context, id string, input generated.UpdateMappedControlInput) (*model.MappedControlUpdatePayload, error)
 	DeleteMappedControl(ctx context.Context, id string) (*model.MappedControlDeletePayload, error)
+	DeleteBulkMappedControl(ctx context.Context, ids []string) (*model.MappedControlBulkDeletePayload, error)
 	CreateNarrative(ctx context.Context, input generated.CreateNarrativeInput) (*model.NarrativeCreatePayload, error)
 	CreateBulkNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*model.NarrativeBulkCreatePayload, error)
 	CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error)
 	UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error)
 	DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error)
+	DeleteBulkNarrative(ctx context.Context, ids []string) (*model.NarrativeBulkDeletePayload, error)
 	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error)
 	UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error)
 	UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error)
@@ -174,12 +197,14 @@ type MutationResolver interface {
 	CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error)
 	UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error)
 	DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error)
+	DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error)
 	CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
 	CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error)
 	CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error)
 	CreateBulkCSVOrgMembership(ctx context.Context, input graphql.Upload) (*model.OrgMembershipBulkCreatePayload, error)
 	UpdateOrgMembership(ctx context.Context, id string, input generated.UpdateOrgMembershipInput) (*model.OrgMembershipUpdatePayload, error)
 	DeleteOrgMembership(ctx context.Context, id string) (*model.OrgMembershipDeletePayload, error)
+	DeleteBulkOrgMembership(ctx context.Context, ids []string) (*model.OrgMembershipBulkDeletePayload, error)
 	CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error)
 	UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error)
 	DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error)
@@ -196,6 +221,7 @@ type MutationResolver interface {
 	CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error)
 	UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error)
 	DeleteProgram(ctx context.Context, id string) (*model.ProgramDeletePayload, error)
+	DeleteBulkProgram(ctx context.Context, ids []string) (*model.ProgramBulkDeletePayload, error)
 	CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error)
 	CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error)
 	CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error)
@@ -204,23 +230,27 @@ type MutationResolver interface {
 	CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkCreatePayload, error)
 	UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipUpdatePayload, error)
 	DeleteProgramMembership(ctx context.Context, id string) (*model.ProgramMembershipDeletePayload, error)
+	DeleteBulkProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error)
 	CreateRisk(ctx context.Context, input generated.CreateRiskInput) (*model.RiskCreatePayload, error)
 	CreateBulkRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkCreatePayload, error)
 	UpdateBulkRisk(ctx context.Context, ids []string, input generated.UpdateRiskInput) (*model.RiskBulkUpdatePayload, error)
 	UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error)
 	DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error)
+	DeleteBulkRisk(ctx context.Context, ids []string) (*model.RiskBulkDeletePayload, error)
 	CreateScan(ctx context.Context, input generated.CreateScanInput) (*model.ScanCreatePayload, error)
 	CreateBulkScan(ctx context.Context, input []*generated.CreateScanInput) (*model.ScanBulkCreatePayload, error)
 	CreateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkCreatePayload, error)
 	UpdateBulkScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error)
 	UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error)
 	DeleteScan(ctx context.Context, id string) (*model.ScanDeletePayload, error)
+	DeleteBulkScan(ctx context.Context, ids []string) (*model.ScanBulkDeletePayload, error)
 	CreateScheduledJob(ctx context.Context, input generated.CreateScheduledJobInput) (*model.ScheduledJobCreatePayload, error)
 	CreateBulkScheduledJob(ctx context.Context, input []*generated.CreateScheduledJobInput) (*model.ScheduledJobBulkCreatePayload, error)
 	CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Upload) (*model.ScheduledJobBulkCreatePayload, error)
 	UpdateScheduledJob(ctx context.Context, id string, input generated.UpdateScheduledJobInput) (*model.ScheduledJobUpdatePayload, error)
 	DeleteScheduledJob(ctx context.Context, id string) (*model.ScheduledJobDeletePayload, error)
+	DeleteBulkScheduledJob(ctx context.Context, ids []string) (*model.ScheduledJobBulkDeletePayload, error)
 	CreateScheduledJobRun(ctx context.Context, input generated.CreateScheduledJobRunInput) (*model.ScheduledJobRunCreatePayload, error)
 	UpdateScheduledJobRun(ctx context.Context, id string, input generated.UpdateScheduledJobRunInput) (*model.ScheduledJobRunUpdatePayload, error)
 	DeleteScheduledJobRun(ctx context.Context, id string) (*model.ScheduledJobRunDeletePayload, error)
@@ -232,11 +262,13 @@ type MutationResolver interface {
 	CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error)
 	UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error)
 	DeleteSubcontrol(ctx context.Context, id string) (*model.SubcontrolDeletePayload, error)
+	DeleteBulkSubcontrol(ctx context.Context, ids []string) (*model.SubcontrolBulkDeletePayload, error)
 	CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorCreatePayload, error)
 	CreateBulkSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload) (*model.SubprocessorBulkCreatePayload, error)
 	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error)
 	DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error)
+	DeleteBulkSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error)
 	CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error)
 	CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error)
@@ -248,11 +280,13 @@ type MutationResolver interface {
 	UpdateBulkTask(ctx context.Context, ids []string, input generated.UpdateTaskInput) (*model.TaskBulkUpdatePayload, error)
 	UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error)
 	DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error)
+	DeleteBulkTask(ctx context.Context, ids []string) (*model.TaskBulkDeletePayload, error)
 	CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateCreatePayload, error)
 	CreateBulkTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*model.TemplateBulkCreatePayload, error)
 	CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*model.TemplateBulkCreatePayload, error)
 	UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateUpdatePayload, error)
 	DeleteTemplate(ctx context.Context, id string) (*model.TemplateDeletePayload, error)
+	DeleteBulkTemplate(ctx context.Context, ids []string) (*model.TemplateBulkDeletePayload, error)
 	CreateTFASetting(ctx context.Context, input generated.CreateTFASettingInput) (*model.TFASettingCreatePayload, error)
 	UpdateTFASetting(ctx context.Context, input generated.UpdateTFASettingInput) (*model.TFASettingUpdatePayload, error)
 	CreateTrustCenter(ctx context.Context, input generated.CreateTrustCenterInput) (*model.TrustCenterCreatePayload, error)
@@ -263,11 +297,13 @@ type MutationResolver interface {
 	CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkCreatePayload, error)
 	UpdateTrustCenterCompliance(ctx context.Context, id string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceUpdatePayload, error)
 	DeleteTrustCenterCompliance(ctx context.Context, id string) (*model.TrustCenterComplianceDeletePayload, error)
+	DeleteBulkTrustCenterCompliance(ctx context.Context, ids []string) (*model.TrustCenterComplianceBulkDeletePayload, error)
 	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error)
 	CreateBulkTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error)
 	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error)
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
+	DeleteBulkTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
 	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
 	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error)
@@ -281,6 +317,7 @@ type MutationResolver interface {
 	CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkCreatePayload, error)
 	UpdateTrustCenterSubprocessor(ctx context.Context, id string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorUpdatePayload, error)
 	DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error)
+	DeleteBulkTrustCenterSubprocessor(ctx context.Context, ids []string) (*model.TrustCenterSubprocessorBulkDeletePayload, error)
 	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error)
 	UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error)
 	DeleteTrustCenterWatermarkConfig(ctx context.Context, id string) (*model.TrustCenterWatermarkConfigDeletePayload, error)
@@ -291,6 +328,7 @@ type MutationResolver interface {
 	CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error)
 	CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error)
 	UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error)
+	DeleteBulkUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error)
 	DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error)
 }
 
@@ -2054,6 +2092,149 @@ func (ec *executionContext) field_Mutation_deleteAsset_args(ctx context.Context,
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteBulkAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteBulkExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2065,7 +2246,282 @@ func (ec *executionContext) field_Mutation_deleteBulkExport_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkTrustCenterDoc_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
@@ -3929,6 +4385,35 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 	return fc, nil
 }
 
+func (ec *executionContext) _ActionPlanBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActionPlanBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionPlanBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ActionPlanBulkUpdatePayload_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4586,6 +5071,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteActionPlan(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkActionPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkActionPlan,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkActionPlan(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkActionPlan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ActionPlanBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ActionPlanBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkActionPlan_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createAPIToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4811,6 +5341,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteAPIToken(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkAPIToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkAPIToken,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkAPIToken(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkAPIToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_APITokenBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type APITokenBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkAPIToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createAsset(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -5030,6 +5605,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteAsset(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteAsset_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkAsset(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkAsset,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkAsset(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkAsset(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_AssetBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssetBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkAsset_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -5308,6 +5928,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteContact(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkContact(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkContact,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkContact(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNContactBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkContact(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ContactBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ContactBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkContact_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createControl(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -5574,6 +6239,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteControl(ctx context.Cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkControl(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkControl,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkControl(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkControl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ControlBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -5895,6 +6605,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteControlImplementation(ct
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkControlImplementation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkControlImplementation,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkControlImplementation(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNControlImplementationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkControlImplementation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ControlImplementationBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlImplementationBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkControlImplementation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createControlObjective(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -6114,6 +6869,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteControlObjective(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteControlObjective_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkControlObjective(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkControlObjective,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkControlObjective(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNControlObjectiveBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkControlObjective(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ControlObjectiveBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkControlObjective_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -6345,6 +7145,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteCustomDomain(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkCustomDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkCustomDomain,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkCustomDomain(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkCustomDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_CustomDomainBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomDomainBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkCustomDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -6564,6 +7409,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteDNSVerification(ctx cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteDNSVerification_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkDNSVerification,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkDNSVerification(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkDNSVerification_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -6795,6 +7685,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteDocumentData(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkDocumentData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkDocumentData,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkDocumentData(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkDocumentData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_DocumentDataBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DocumentDataBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkDocumentData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -7014,6 +7949,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteEntity(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkEntity,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkEntity(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNEntityBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_EntityBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EntityBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -7245,6 +8225,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteEntityType(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkEntityType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkEntityType,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkEntityType(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNEntityTypeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkEntityType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_EntityTypeBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EntityTypeBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkEntityType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -7464,6 +8489,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteEvent(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteEvent_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkEvent,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkEvent(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNEventBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkEvent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_EventBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkEvent_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8055,6 +9125,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteGroup(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkGroup,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkGroup(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkGroup(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_GroupBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkGroup_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createGroupWithMembers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -8370,6 +9485,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteGroupMembership(ctx cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkGroupMembership,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkGroupMembership(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNGroupMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_GroupMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkGroupMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createGroupSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -8589,6 +9749,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteGroupSetting(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteGroupSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkGroupSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkGroupSetting,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkGroupSetting(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNGroupSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkGroupSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_GroupSettingBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupSettingBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkGroupSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8861,6 +10066,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteHush(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteHush_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkHush(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkHush,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkHush(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNHushBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkHush(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_HushBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type HushBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkHush_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -9229,6 +10479,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteInternalPolicy(ctx conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkInternalPolicy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkInternalPolicy,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkInternalPolicy(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNInternalPolicyBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkInternalPolicy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_InternalPolicyBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type InternalPolicyBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkInternalPolicy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createInvite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -9448,6 +10743,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteInvite(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteInvite_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkInvite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkInvite,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkInvite(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkInvite(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_InviteBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type InviteBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkInvite_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -10129,6 +11469,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteJobTemplate(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkJobTemplate(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkJobTemplate,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkJobTemplate(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNJobTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkJobTemplate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_JobTemplateBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkJobTemplate_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -10348,6 +11733,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteMappableDomain(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteMappableDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkMappableDomain,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkMappableDomain(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkMappableDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -10579,6 +12009,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteMappedControl(ctx contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkMappedControl(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkMappedControl,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkMappedControl(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNMappedControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkMappedControl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_MappedControlBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MappedControlBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkMappedControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createNarrative(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -10798,6 +12273,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteNarrative(ctx context.Co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteNarrative_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkNarrative(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkNarrative,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkNarrative(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkNarrative(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_NarrativeBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NarrativeBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkNarrative_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -11344,6 +12864,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteOrganizationSetting(ctx 
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkOrganizationSetting,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkOrganizationSetting(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkOrganizationSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createOrganizationWithMembers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -11608,6 +13173,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteOrgMembership(ctx contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteOrgMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkOrgMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkOrgMembership,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkOrgMembership(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNOrgMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkOrgMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_OrgMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrgMembershipBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkOrgMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -12336,6 +13946,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteProgram(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkProgram(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkProgram,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkProgram(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNProgramBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkProgram(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ProgramBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProgramBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkProgram_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createProgramWithMembers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -12696,6 +14351,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteProgramMembership(ctx co
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkProgramMembership,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkProgramMembership(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkProgramMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createRisk(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -12962,6 +14662,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteRisk(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteRisk_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkRisk(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkRisk,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkRisk(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNRiskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkRisk(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_RiskBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RiskBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkRisk_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13240,6 +14985,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteScan(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkScan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkScan,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkScan(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkScan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ScanBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ScanBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkScan_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createScheduledJob(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -13459,6 +15249,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteScheduledJob(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteScheduledJob_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkScheduledJob(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkScheduledJob,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkScheduledJob(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNScheduledJobBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkScheduledJob(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkScheduledJob_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13960,6 +15795,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteSubcontrol(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkSubcontrol(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkSubcontrol,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkSubcontrol(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNSubcontrolBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkSubcontrol(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_SubcontrolBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SubcontrolBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkSubcontrol_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -14179,6 +16059,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteSubprocessor(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkSubprocessor,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkSubprocessor(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkSubprocessor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_SubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SubprocessorBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -14682,6 +16607,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteTask(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkTask(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkTask,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkTask(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNTaskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkTask(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_TaskBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TaskBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkTask_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createTemplate(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -14901,6 +16871,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteTemplate(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteTemplate_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkTemplate(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkTemplate,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkTemplate(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkTemplate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_TemplateBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TemplateBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkTemplate_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -15367,6 +17382,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrustCenterCompliance(ct
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkTrustCenterCompliance(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkTrustCenterCompliance,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkTrustCenterCompliance(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNTrustCenterComplianceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterCompliance(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_TrustCenterComplianceBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkTrustCenterCompliance_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createTrustCenterDoc(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -15586,6 +17646,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrustCenterDoc(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteTrustCenterDoc_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkTrustCenterDoc(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkTrustCenterDoc,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNTrustCenterDocBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterDoc(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_TrustCenterDocBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkTrustCenterDoc_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16177,6 +18282,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrustCenterSubprocessor(
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkTrustCenterSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkTrustCenterSubprocessor,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNTrustCenterSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterSubprocessor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkTrustCenterSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createTrustCenterWatermarkConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -16627,6 +18777,51 @@ func (ec *executionContext) fieldContext_Mutation_updateUserSetting(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkUserSetting,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkUserSetting(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNUserSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkUserSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_deleteWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -16697,6 +18892,45 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("ActionPlanBulkCreatePayload")
 		case "actionPlans":
 			out.Values[i] = ec._ActionPlanBulkCreatePayload_actionPlans(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var actionPlanBulkDeletePayloadImplementors = []string{"ActionPlanBulkDeletePayload"}
+
+func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ActionPlanBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ActionPlanBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ActionPlanBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -16936,6 +19170,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkActionPlan":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkActionPlan(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createAPIToken":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAPIToken(ctx, field)
@@ -16971,6 +19212,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkAPIToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkAPIToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createAsset":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAsset(ctx, field)
@@ -17002,6 +19250,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteAsset":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteAsset(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkAsset":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkAsset(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17048,6 +19303,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkContact":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkContact(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createControl":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createControl(ctx, field)
@@ -17086,6 +19348,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteControl":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteControl(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkControl":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkControl(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17139,6 +19408,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkControlImplementation":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkControlImplementation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createControlObjective":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createControlObjective(ctx, field)
@@ -17170,6 +19446,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteControlObjective":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteControlObjective(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkControlObjective":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkControlObjective(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17209,6 +19492,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkCustomDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkCustomDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createDNSVerification":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createDNSVerification(ctx, field)
@@ -17240,6 +19530,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteDNSVerification":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteDNSVerification(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkDNSVerification":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkDNSVerification(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17279,6 +19576,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkDocumentData":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkDocumentData(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createEntity(ctx, field)
@@ -17310,6 +19614,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteEntity(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkEntity":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17349,6 +19660,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkEntityType":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkEntityType(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createEvent":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createEvent(ctx, field)
@@ -17380,6 +19698,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteEvent":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteEvent(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkEvent":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkEvent(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17475,6 +19800,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkGroup":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkGroup(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createGroupWithMembers":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createGroupWithMembers(ctx, field)
@@ -17524,6 +19856,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkGroupMembership":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkGroupMembership(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createGroupSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createGroupSetting(ctx, field)
@@ -17555,6 +19894,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteGroupSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteGroupSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkGroupSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkGroupSetting(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17597,6 +19943,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteHush":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteHush(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkHush":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkHush(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17657,6 +20010,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkInternalPolicy":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkInternalPolicy(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createInvite":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createInvite(ctx, field)
@@ -17688,6 +20048,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteInvite":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteInvite(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkInvite":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkInvite(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17797,6 +20164,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkJobTemplate":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkJobTemplate(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createMappableDomain":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createMappableDomain(ctx, field)
@@ -17828,6 +20202,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteMappableDomain":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteMappableDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkMappableDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkMappableDomain(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17867,6 +20248,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkMappedControl":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkMappedControl(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createNarrative":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createNarrative(ctx, field)
@@ -17898,6 +20286,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteNarrative":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteNarrative(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkNarrative":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkNarrative(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -17986,6 +20381,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkOrganizationSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkOrganizationSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createOrganizationWithMembers":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createOrganizationWithMembers(ctx, field)
@@ -18024,6 +20426,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteOrgMembership":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteOrgMembership(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkOrgMembership":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkOrgMembership(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18140,6 +20549,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkProgram":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkProgram(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createProgramWithMembers":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createProgramWithMembers(ctx, field)
@@ -18196,6 +20612,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkProgramMembership":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkProgramMembership(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createRisk":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createRisk(ctx, field)
@@ -18234,6 +20657,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteRisk":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteRisk(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkRisk":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkRisk(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18280,6 +20710,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkScan":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkScan(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createScheduledJob":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createScheduledJob(ctx, field)
@@ -18311,6 +20748,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteScheduledJob":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteScheduledJob(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkScheduledJob":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkScheduledJob(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18392,6 +20836,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkSubcontrol":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkSubcontrol(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createSubprocessor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createSubprocessor(ctx, field)
@@ -18423,6 +20874,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteSubprocessor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteSubprocessor(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkSubprocessor":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkSubprocessor(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18504,6 +20962,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkTask":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkTask(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createTemplate":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createTemplate(ctx, field)
@@ -18535,6 +21000,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteTemplate":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteTemplate(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkTemplate":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkTemplate(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18609,6 +21081,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkTrustCenterCompliance":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkTrustCenterCompliance(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createTrustCenterDoc":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createTrustCenterDoc(ctx, field)
@@ -18640,6 +21119,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteTrustCenterDoc":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteTrustCenterDoc(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkTrustCenterDoc":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkTrustCenterDoc(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18735,6 +21221,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkTrustCenterSubprocessor":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkTrustCenterSubprocessor(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createTrustCenterWatermarkConfig":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createTrustCenterWatermarkConfig(ctx, field)
@@ -18805,6 +21298,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteBulkUserSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkUserSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "deleteWebauthn":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteWebauthn(ctx, field)
@@ -18851,6 +21351,20 @@ func (ec *executionContext) marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNActionPlanBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanBulkDeletePayload) graphql.Marshaler {
+	return ec._ActionPlanBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ActionPlanBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanBulkUpdatePayload) graphql.Marshaler {

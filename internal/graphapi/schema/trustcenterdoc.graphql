@@ -63,6 +63,15 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterDocDeletePayload!
+    """
+    Delete multiple trustCenterDocs
+    """
+    deleteBulkTrustCenterDoc(
+        """
+        IDs of the trustCenterDocs to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterDocBulkDeletePayload!
 }
 
 """
@@ -103,4 +112,14 @@ type TrustCenterDocBulkCreatePayload {
     Created trustCenterDocs
     """
     trustCenterDocs: [TrustCenterDoc!]
+}
+
+"""
+Return response for deleteBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkDeletePayload {
+    """
+    Deleted trustCenterDoc IDs
+    """
+    deletedIDs: [ID!]!
 }

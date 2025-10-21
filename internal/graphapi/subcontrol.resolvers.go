@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*mo
 	}, nil
 }
 
+// DeleteBulkSubcontrol is the resolver for the deleteBulkSubcontrol field.
+func (r *mutationResolver) DeleteBulkSubcontrol(ctx context.Context, ids []string) (*model.SubcontrolBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteSubcontrol(ctx, ids)
+}
+
 // Subcontrol is the resolver for the subcontrol field.
 func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.Subcontrol, error) {
 	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id)).CollectFields(ctx)

@@ -131,6 +131,35 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _RiskBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_RiskBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RiskBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -546,6 +575,45 @@ func (ec *executionContext) _RiskBulkCreatePayload(ctx context.Context, sel ast.
 	return out
 }
 
+var riskBulkDeletePayloadImplementors = []string{"RiskBulkDeletePayload"}
+
+func (ec *executionContext) _RiskBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RiskBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, riskBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RiskBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._RiskBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var riskBulkUpdatePayloadImplementors = []string{"RiskBulkUpdatePayload"}
 
 func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RiskBulkUpdatePayload) graphql.Marshaler {
@@ -717,6 +785,20 @@ func (ec *executionContext) marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._RiskBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNRiskBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkDeletePayload) graphql.Marshaler {
+	return ec._RiskBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRiskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RiskBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNRiskBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkUpdatePayload) graphql.Marshaler {

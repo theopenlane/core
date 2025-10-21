@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): ScanDeletePayload!
+    """
+    Delete multiple scans
+    """
+    deleteBulkScan(
+        """
+        IDs of the scans to delete
+        """
+        ids: [ID!]!
+    ): ScanBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type ScanBulkUpdatePayload {
     IDs of the updated scans
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkScan mutation
+"""
+type ScanBulkDeletePayload {
+    """
+    Deleted scan IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): EventDeletePayload!
+    """
+    Delete multiple events
+    """
+    deleteBulkEvent(
+        """
+        IDs of the events to delete
+        """
+        ids: [ID!]!
+    ): EventBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type EventBulkCreatePayload {
     Created events
     """
     events: [Event!]
+}
+
+"""
+Return response for deleteBulkEvent mutation
+"""
+type EventBulkDeletePayload {
+    """
+    Deleted event IDs
+    """
+    deletedIDs: [ID!]!
 }

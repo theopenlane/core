@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlDeletePayload!
+    """
+    Delete multiple controls
+    """
+    deleteBulkControl(
+        """
+        IDs of the controls to delete
+        """
+        ids: [ID!]!
+    ): ControlBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type ControlBulkUpdatePayload {
     IDs of the updated controls
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkControl mutation
+"""
+type ControlBulkDeletePayload {
+    """
+    Deleted control IDs
+    """
+    deletedIDs: [ID!]!
 }

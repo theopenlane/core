@@ -149,6 +149,35 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 	return fc, nil
 }
 
+func (ec *executionContext) _InternalPolicyBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_InternalPolicyBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InternalPolicyBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -618,6 +647,45 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload(ctx context.Context
 	return out
 }
 
+var internalPolicyBulkDeletePayloadImplementors = []string{"InternalPolicyBulkDeletePayload"}
+
+func (ec *executionContext) _InternalPolicyBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.InternalPolicyBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, internalPolicyBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InternalPolicyBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._InternalPolicyBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var internalPolicyBulkUpdatePayloadImplementors = []string{"InternalPolicyBulkUpdatePayload"}
 
 func (ec *executionContext) _InternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
@@ -789,6 +857,20 @@ func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._InternalPolicyBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNInternalPolicyBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkDeletePayload) graphql.Marshaler {
+	return ec._InternalPolicyBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNInternalPolicyBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._InternalPolicyBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
