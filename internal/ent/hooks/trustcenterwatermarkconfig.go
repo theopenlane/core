@@ -7,6 +7,8 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -25,9 +27,39 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 				}
 
 				m.SetFileID(fileIDs[0])
+				m.ClearText()
+			} else if text, textSet := m.Text(); textSet && text != "" {
+				m.ClearLogoID()
+				m.ClearFile()
 			}
 
-			return next.Mutate(ctx, m)
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return v, err
+			}
+
+			config, ok := v.(*generated.TrustCenterWatermarkConfig)
+			if !ok {
+				return v, nil
+			}
+
+			// trigger updates of all the TrustCenterDocs that have watermarking enabled
+			docs, err := m.Client().TrustCenterDoc.Query().
+				Where(trustcenterdoc.WatermarkingEnabled(true)).
+				Where(trustcenterdoc.TrustCenterID(config.TrustCenterID)).All(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			for _, doc := range docs {
+				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+					TrustCenterDocumentID: doc.ID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
+			return v, nil
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
 }

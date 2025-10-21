@@ -14,7 +14,7 @@ tool (
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/secretmanager v1.15.1
+	cloud.google.com/go/secretmanager v1.16.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.81
@@ -69,6 +69,7 @@ require (
 	github.com/nyaruka/phonenumbers v1.6.6
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.3
+	github.com/pdfcpu/pdfcpu v0.11.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -100,9 +101,9 @@ require (
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.13
-	github.com/urfave/cli/v3 v3.4.1
+	github.com/urfave/cli/v3 v3.5.0
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.562.0
+	github.com/windmill-labs/windmill-go-client v1.563.4
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
@@ -122,7 +123,9 @@ require (
 	github.com/sebdah/goldie/v2 v2.8.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	golang.org/x/image v0.27.0 // indirect
 	google.golang.org/api v0.252.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
@@ -275,6 +278,9 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hbollon/go-edlib v1.7.0 // indirect
+	github.com/hhrutter/lzw v1.0.0 // indirect
+	github.com/hhrutter/pkcs7 v0.2.0 // indirect
+	github.com/hhrutter/tiff v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect

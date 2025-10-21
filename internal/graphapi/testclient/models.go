@@ -5714,6 +5714,14 @@ type CreateMappedControlInput struct {
 	ToControlIDs      []string             `json:"toControlIDs,omitempty"`
 	FromSubcontrolIDs []string             `json:"fromSubcontrolIDs,omitempty"`
 	ToSubcontrolIDs   []string             `json:"toSubcontrolIDs,omitempty"`
+	// the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
+	FromControlRefCodes []string `json:"fromControlRefCodes,omitempty"`
+	// the ref code(s) of the subcontrol(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1-POF1
+	FromSubcontrolRefCodes []string `json:"fromSubcontrolRefCodes,omitempty"`
+	// the ref code(s) of the control(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1
+	ToControlRefCodes []string `json:"toControlRefCodes,omitempty"`
+	// the ref code(s) of the subcontrol(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1-POF1
+	ToSubcontrolRefCodes []string `json:"toSubcontrolRefCodes,omitempty"`
 }
 
 type CreateMemberWithProgramInput struct {

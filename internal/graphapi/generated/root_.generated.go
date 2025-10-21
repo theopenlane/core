@@ -42,6 +42,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
+	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
@@ -92119,21 +92120,19 @@ type TrustCenterWatermarkConfigEdge {
 TrustCenterWatermarkConfigFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -92215,21 +92214,19 @@ type TrustCenterWatermarkConfigHistoryEdge {
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
@@ -100886,6 +100883,24 @@ type MappedControlBulkCreatePayload {
     Created mappedControls
     """
     mappedControls: [MappedControl!]
+}`, BuiltIn: false},
+	{Name: "../schema/mappedcontrolextended.graphql", Input: `extend input CreateMappedControlInput {
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
+    """
+    fromControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    fromSubcontrolRefCodes: [String!]
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1
+    """
+    toControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    toSubcontrolRefCodes: [String!]
 }`, BuiltIn: false},
 	{Name: "../schema/narrative.graphql", Input: `extend type Query {
     """

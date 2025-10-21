@@ -1,6 +1,7 @@
 package route
 
 import (
+	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -29,6 +30,12 @@ func registerUploadsHandler(router *Router) (err error) {
 
 			p := ctx.PathParam("name")
 			name := filepath.ToSlash(filepath.Clean(strings.TrimPrefix(p, "/")))
+
+			// Detect and set the correct content type based on file extension
+			ext := filepath.Ext(name)
+			if contentType := mime.TypeByExtension(ext); contentType != "" {
+				ctx.Response().Header().Set(echo.HeaderContentType, contentType)
+			}
 
 			return ctx.FileFS(name, fileSystem)
 		},
