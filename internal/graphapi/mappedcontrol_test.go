@@ -199,6 +199,10 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	systemToControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 	systemFromControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
+	// create standard for controls with a standard name
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlWithStandard := (&ControlBuilder{client: suite.client, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateMappedControlInput
@@ -238,6 +242,16 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				ToControlRefCodes:      []string{"CUSTOM::" + toControl.RefCode},
 				FromSubcontrolRefCodes: []string{"CUSTOM::" + fromSubcontrol.RefCode},
 				ToSubcontrolRefCodes:   []string{"CUSTOM::" + toSubcontrol.RefCode},
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "happy path, using ref codes instead of IDs with multiple different standard controls",
+			request: testclient.CreateMappedControlInput{
+				MappingType:         &enums.MappingTypeEqual,
+				FromControlRefCodes: []string{"CUSTOM::" + fromControl.RefCode},
+				ToControlRefCodes:   []string{*controlWithStandard.ReferenceFramework + "::" + controlWithStandard.RefCode, "CUSTOM::" + toControl.RefCode},
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -469,10 +483,12 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	}
 
 	// cleanup the controls created for the mappedControl
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID, controlWithStandard.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{toSubcontrol.ID, fromSubcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
 	// cleanup system owned controls
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	// clean up standard
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateMappedControl(t *testing.T) {

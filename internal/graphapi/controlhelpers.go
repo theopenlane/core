@@ -167,7 +167,6 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 	systemOwned := auth.IsSystemAdminFromContext(ctx)
 
 	for standardShortName, refCodes := range standardRefCodes {
-
 		switch any(*new(T)).(type) {
 		case predicate.Control:
 			if standardShortName == "CUSTOM" {
@@ -182,9 +181,6 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 				)).(T))
 			}
 
-			predicates = append(predicates, any(
-				control.SystemOwned(systemOwned),
-			).(T))
 		case predicate.Subcontrol:
 			if standardShortName == "CUSTOM" {
 				predicates = append(predicates, any(subcontrol.And(
@@ -198,10 +194,36 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 				)).(T))
 			}
 
-			predicates = append(predicates, any(
-				subcontrol.SystemOwned(systemOwned),
-			).(T))
 		}
+	}
+
+	// wrap all predicates in an OR clause
+	if len(predicates) > 1 {
+		switch any(*new(T)).(type) {
+		case predicate.Control:
+			orPredicates := make([]predicate.Control, len(predicates))
+			for i, p := range predicates {
+				orPredicates[i] = any(p).(predicate.Control)
+			}
+			predicates = []T{any(control.Or(orPredicates...)).(T)}
+		case predicate.Subcontrol:
+			orPredicates := make([]predicate.Subcontrol, len(predicates))
+			for i, p := range predicates {
+				orPredicates[i] = any(p).(predicate.Subcontrol)
+			}
+			predicates = []T{any(subcontrol.Or(orPredicates...)).(T)}
+		}
+	}
+
+	switch any(*new(T)).(type) {
+	case predicate.Control:
+		predicates = append(predicates, any(
+			control.SystemOwned(systemOwned),
+		).(T))
+	case predicate.Subcontrol:
+		predicates = append(predicates, any(
+			subcontrol.SystemOwned(systemOwned),
+		).(T))
 	}
 
 	return predicates
