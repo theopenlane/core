@@ -2,7 +2,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -46,8 +45,6 @@ var (
 	graphPath               = "query"
 	defaultComplexityLimit  = 100
 	introspectionComplexity = 200
-
-	graphFullPath = fmt.Sprintf("/%s", graphPath)
 )
 
 // Resolver provides a graph response resolver
