@@ -42,6 +42,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
+	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
@@ -100637,6 +100638,24 @@ type MappedControlBulkCreatePayload {
     Created mappedControls
     """
     mappedControls: [MappedControl!]
+}`, BuiltIn: false},
+	{Name: "../schema/mappedcontrolextended.graphql", Input: `extend input CreateMappedControlInput {
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
+    """
+    fromControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    fromSubcontrolRefCodes: [String!]
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1
+    """
+    toControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    toSubcontrolRefCodes: [String!]
 }`, BuiltIn: false},
 	{Name: "../schema/narrative.graphql", Input: `extend type Query {
     """

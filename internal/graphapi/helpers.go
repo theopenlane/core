@@ -174,6 +174,18 @@ func (r *mutationResolver) withPool() *soiree.PondPool {
 	return r.pool
 }
 
+// extendedMappedControlInput is an extended version of the CreateMappedControlInput that is used for
+// bulk operations and CSV uploads to allow mapping by reference codes
+// when using the regular create operations the resolvers will parse the ref codes directly
+type extendedMappedControlInput struct {
+	ent.CreateMappedControlInput
+
+	FromControlRefCodes    []string `json:"fromControlRefCodes"`
+	FromSubcontrolRefCodes []string `json:"fromSubcontrolRefCodes"`
+	ToControlRefCodes      []string `json:"toControlRefCodes"`
+	ToSubcontrolRefCodes   []string `json:"toSubcontrolRefCodes"`
+}
+
 // unmarshalBulkData unmarshals the input bulk data into a slice of the given type
 func unmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 	// read the csv file
