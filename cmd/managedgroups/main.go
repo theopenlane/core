@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -15,6 +19,7 @@ import (
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx/consolelog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -100,6 +105,9 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 }
 
 func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
+	// setup logging
+	setupLogging(c.Bool("debug"))
+
 	// allow this internal tool to bypass privacy checks
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -131,7 +139,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 	addedMemberships := 0
 
 	for _, org := range orgs {
-		fmt.Printf("Processing organization: %s (%s)\n", org.Name, org.ID)
+		log.Info().Str("org_id", org.ID).Str("org_name", org.Name).Msg("processing organization")
 
 		memberships, err := db.OrgMembership.Query().
 			Where(orgmembership.OrganizationID(org.ID)).
@@ -140,10 +148,10 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 			return err
 		}
 
-		fmt.Printf("Found %d memberships in org %s\n", len(memberships), org.Name)
+		log.Debug().Str("org", org.Name).Int("memberships", len(memberships)).Msg("fetched organization memberships")
 
 		for _, m := range memberships {
-			fmt.Printf("Processing user membership: %s in org %s\n", m.UserID, m.OrganizationID)
+			log.Debug().Str("user_id", m.UserID).Str("org_id", m.OrganizationID).Msg("processing org membership")
 
 			newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
 				SubjectID:       m.UserID,
@@ -156,13 +164,18 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 				return err
 			}
 
-			fmt.Printf("User: %s (display name: %s)\n", user.ID, user.DisplayName)
+			log.Debug().Str("user_id", user.ID).Str("display_name", user.DisplayName).Msg("fetching user for org membership")
 
 			existing, err := db.Group.Query().
 				Where(
 					group.OwnerID(org.ID),
 					group.IsManaged(true),
-					group.Name(user.DisplayName),
+					group.DisplayNameEqualFold(user.DisplayName),
+					func(s *sql.Selector) {
+						s.Where(
+							sqljson.ValueContains(group.FieldTags, user.ID),
+						)
+					},
 				).
 				Only(newCtx)
 			if err != nil && !generated.IsNotFound(err) {
@@ -170,18 +183,19 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 			}
 
 			if existing == nil {
-				fmt.Printf("No existing managed group found for user '%s' in org '%s'\n", user.DisplayName, org.ID)
+				log.Info().Str("user_id", user.ID).Str("display_name", user.DisplayName).Str("org_id", org.ID).Msg("no existing managed group found for user, creating")
 
 				if dryRun {
-					fmt.Printf("[DRY-RUN] create managed group '%s' in org '%s' for user '%s'\n", user.DisplayName, org.ID, user.ID)
+					log.Info().Str("user_id", user.ID).Str("display_name", user.DisplayName).Str("org_id", org.ID).Msg("[DRY-RUN] create managed group for user")
 				} else {
 					groupName := fmt.Sprintf("%s - %s", user.DisplayName, user.ID)
 
 					g, err := db.Group.Create().
 						SetInput(generated.CreateGroupInput{
 							Name:        groupName,
+							DisplayName: &user.DisplayName,
 							Description: &groupName,
-							Tags:        []string{"managed", user.DisplayName},
+							Tags:        []string{"managed", user.DisplayName, user.ID},
 						}).
 						SetIsManaged(true).
 						SetOwnerID(org.ID).
@@ -192,9 +206,11 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 
 					existing = g
 					createdGroups++
+
+					log.Info().Str("group_id", g.ID).Str("user_id", user.ID).Str("org_id", org.ID).Msg("created managed group for user")
 				}
 			} else {
-				fmt.Printf("Found existing managed group '%s' for user '%s' in org '%s'\n", existing.Name, user.DisplayName, org.ID)
+				log.Debug().Str("group_name", existing.Name).Str("user_id", user.DisplayName).Str("org_id", org.ID).Msg("found existing managed group for user")
 			}
 
 			if existing != nil {
@@ -211,7 +227,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 
 				if cnt == 0 {
 					if dryRun {
-						fmt.Printf("[DRY-RUN] add user '%s' to managed group '%s' in org '%s'\n", user.ID, existing.Name, org.ID)
+						log.Info().Str("group_id", existing.ID).Str("group_name", existing.Name).Str("user_id", user.ID).Str("org_id", org.ID).Msg("[DRY-RUN] add user to managed group")
 					} else {
 						role := enums.RoleMember
 						if err := db.GroupMembership.Create().
@@ -225,17 +241,37 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 						}
 
 						addedMemberships++
+						log.Info().Str("group_id", existing.ID).Str("group_name", existing.Name).Str("user_id", user.ID).Str("org_id", org.ID).Msg("added user to managed group")
 					}
 				}
 			}
 		}
 	}
 
-	fmt.Printf("Done. Created %d groups and added %d memberships\n", createdGroups, addedMemberships)
+	log.Info().Int("created_groups", createdGroups).Int("added_memberships", addedMemberships).Msg("managed groups reconciliation complete")
 
 	if dryRun {
-		fmt.Println("(dry-run) No changes were persisted.")
+		log.Info().Msg("[DRY-RUN] No changes were persisted.")
 	}
 
 	return nil
+}
+
+func setupLogging(debug bool) {
+	output := consolelog.NewConsoleWriter()
+	log.Logger = zerolog.New(os.Stderr).
+		With().
+		Logger()
+
+	// make pretty logging output
+	log.Logger = log.Output(&output)
+
+	// set the log level
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+
+	// set the log level to debug if the debug flag is set and add additional information
+	if debug {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+
 }
