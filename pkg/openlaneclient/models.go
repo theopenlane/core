@@ -20925,6 +20925,12 @@ type ProcedureBulkCreatePayload struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 }
 
+// Return response for deleteBulkProcedure mutation
+type ProcedureBulkDeletePayload struct {
+	// Deleted export IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // Return response for updateBulkProcedure mutation
 type ProcedureBulkUpdatePayload struct {
 	// Updated procedures

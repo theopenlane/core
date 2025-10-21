@@ -30115,6 +30115,15 @@ type Mutation {
 		id: ID!
 	): ProcedureDeletePayload!
 	"""
+	Delete multiple procedures
+	"""
+	deleteBulkProcedure(
+		"""
+		IDs of the procedures to delete
+		"""
+		ids: [ID!]!
+	): ProcedureBulkDeletePayload!
+	"""
 	Create a new program
 	"""
 	createProgram(
@@ -38803,6 +38812,15 @@ type ProcedureBulkCreatePayload {
 	Created procedures
 	"""
 	procedures: [Procedure!]
+}
+"""
+Return response for deleteBulkProcedure mutation
+"""
+type ProcedureBulkDeletePayload {
+	"""
+	Deleted export IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkProcedure mutation

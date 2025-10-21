@@ -2618,6 +2618,7 @@ type ComplexityRoot struct {
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAsset                          func(childComplexity int, id string) int
 		DeleteBulkExport                     func(childComplexity int, ids []string) int
+		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
 		DeleteContact                        func(childComplexity int, id string) int
 		DeleteControl                        func(childComplexity int, id string) int
 		DeleteControlImplementation          func(childComplexity int, id string) int
@@ -3375,6 +3376,10 @@ type ComplexityRoot struct {
 
 	ProcedureBulkCreatePayload struct {
 		Procedures func(childComplexity int) int
+	}
+
+	ProcedureBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ProcedureBulkUpdatePayload struct {
@@ -18918,6 +18923,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkExport(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkProcedure":
+		if e.complexity.Mutation.DeleteBulkProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkProcedure(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
 			break
@@ -23892,6 +23909,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureBulkCreatePayload.Procedures(childComplexity), true
+
+	case "ProcedureBulkDeletePayload.deletedIDs":
+		if e.complexity.ProcedureBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProcedureBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ProcedureBulkUpdatePayload.procedures":
 		if e.complexity.ProcedureBulkUpdatePayload.Procedures == nil {
@@ -101389,6 +101413,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProcedureDeletePayload!
+    """
+    Delete multiple procedures
+    """
+    deleteBulkProcedure(
+        """
+        IDs of the procedures to delete
+        """
+        ids: [ID!]!
+    ): ProcedureBulkDeletePayload!
 }
 
 """
@@ -101443,7 +101476,18 @@ type ProcedureBulkUpdatePayload {
     IDs of the updated procedures
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+
+"""
+Return response for deleteBulkProcedure mutation
+"""
+type ProcedureBulkDeletePayload {
+    """
+    Deleted export IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
 	{Name: "../schema/program.graphql", Input: `extend type Query {
     """
     Look up program by ID

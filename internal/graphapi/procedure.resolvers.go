@@ -150,6 +150,15 @@ func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*mod
 	}, nil
 }
 
+// DeleteBulkProcedure is the resolver for the deleteBulkProcedure field.
+func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteProcedure(ctx, ids)
+}
+
 // Procedure is the resolver for the procedure field.
 func (r *queryResolver) Procedure(ctx context.Context, id string) (*generated.Procedure, error) {
 	query, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.ID(id)).CollectFields(ctx)

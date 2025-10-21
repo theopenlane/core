@@ -190,6 +190,7 @@ type MutationResolver interface {
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
 	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error)
 	DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error)
+	DeleteBulkProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error)
 	CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error)
 	CreateBulkProgram(ctx context.Context, input []*generated.CreateProgramInput) (*model.ProgramBulkCreatePayload, error)
 	CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error)
@@ -2054,6 +2055,17 @@ func (ec *executionContext) field_Mutation_deleteAsset_args(ctx context.Context,
 }
 
 func (ec *executionContext) field_Mutation_deleteBulkExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
@@ -12054,6 +12066,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteProcedure(ctx context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkProcedure(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkProcedure,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBulkProcedure(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNProcedureBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkProcedure(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ProcedureBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProcedureBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkProcedure_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createProgram(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -18037,6 +18094,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteProcedure":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteProcedure(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkProcedure":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkProcedure(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

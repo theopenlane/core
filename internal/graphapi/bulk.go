@@ -4,6 +4,7 @@ package graphapi
 
 import (
 	"context"
+	"sync"
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -388,21 +389,40 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
 
-	// delete each export individually to ensure proper cleanup
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
-		if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
-			log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
-			continue
-		}
+		funcs = append(funcs, func() {
+			// delete each export individually to ensure proper cleanup
+			if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
 
-		// call edge cleanup if the function exists
-		if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
-			log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
-			continue
-		}
+			if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
 
-		deletedIDs = append(deletedIDs, id)
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
 	}
 
 	return &model.ExportBulkDeletePayload{
@@ -647,7 +667,6 @@ func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input [
 // bulkCreateMappedControl uses the CreateBulk function to create multiple MappedControl entities
 func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
-
 	builders := make([]*generated.MappedControlCreate, len(input))
 	for i, data := range input {
 		builders[i] = c.MappedControl.Create().SetInput(*data)
@@ -778,6 +797,54 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 	return &model.ProcedureBulkUpdatePayload{
 		Procedures: results,
 		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkDeleteProcedure deletes multiple Procedure entities by their IDs
+func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each procedure individually to ensure proper cleanup
+			if err := withTransactionalMutation(ctx).Procedure.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
+	}
+
+	return &model.ProcedureBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
