@@ -349,7 +349,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			file:        createPDFUpload(),
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 

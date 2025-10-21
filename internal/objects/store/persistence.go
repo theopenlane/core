@@ -14,12 +14,9 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -125,11 +122,6 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		return "", nil
 	}
 
-	// For trust center docs, we need to get the organization through the trust center
-	if strings.EqualFold(f.CorrelatedObjectType, "TrustCenterDoc") {
-		return getOrgIDFromTrustCenterDoc(ctx, f.CorrelatedObjectID)
-	}
-
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
@@ -178,67 +170,6 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	return "", ErrMissingOrganizationID
-}
-
-// getOrgIDFromTrustCenterDoc gets the organization ID for a trust center doc by querying through the trust center
-func getOrgIDFromTrustCenterDoc(ctx context.Context, trustCenterDocID string) (string, error) {
-	txClient := txClientFromContext(ctx)
-
-	// If trustCenterDocID is empty (during creation), try to get the trust center ID from GraphQL variables
-	if trustCenterDocID == "" {
-		trustCenterID, err := getTrustCenterIDFromGraphQLInput(ctx)
-		if err != nil {
-			return "", err
-		}
-		if trustCenterID != "" {
-			// Query the trust center directly by ID
-			// Note: This query will respect privacy policies and return an error if the user doesn't have access
-			trustCenter, err := txClient.TrustCenter.
-				Query().
-				Where(trustcenter.ID(trustCenterID)).
-				Select(trustcenter.FieldOwnerID).
-				Only(ctx)
-			if err != nil {
-				// If we can't access the trust center, return the original error
-				// This preserves the existing behavior for authorization failures
-				return "", err
-			}
-			return trustCenter.OwnerID, nil
-		}
-		// If we can't extract trust center ID from input, return empty string
-		// This allows the file to be created without an organization ID
-		// The GraphQL resolver will handle validation and proper error handling
-		return "", nil
-	}
-
-	// Original logic for when we have a trust center document ID
-	trustCenter, err := txClient.TrustCenter.
-		Query().
-		Where(
-			trustcenter.HasTrustCenterDocsWith(trustcenterdoc.ID(trustCenterDocID)),
-		).
-		Select(trustcenter.FieldOwnerID).
-		Only(ctx)
-	if err != nil {
-		return "", err
-	}
-	return trustCenter.OwnerID, nil
-}
-
-// getTrustCenterIDFromGraphQLInput extracts the trust center ID from GraphQL input variables
-func getTrustCenterIDFromGraphQLInput(ctx context.Context) (string, error) {
-	requestInput := graphutils.GetMapInputVariableByName(ctx, "input")
-	if requestInput != nil {
-		i := *requestInput
-		trustCenterID, ok := i["trustCenterID"].(string)
-		if ok && trustCenterID != "" {
-			return trustCenterID, nil
-		}
-	}
-
-	// Return empty string if trustCenterID is not provided or is empty
-	// This is not an error condition - some operations may not require a trust center ID
-	return "", nil
 }
 
 func txFileClientFromContext(ctx context.Context) *ent.FileClient {
