@@ -77,5 +77,56 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): SubcontrolUpdatePayload!
+    """
+    Update an existing procedure comment
+    """
+    updateProcedureComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ProcedureUpdatePayload!
+    """
+    Update an existing risk comment
+    """
+    updateRiskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): RiskUpdatePayload!
+    """
+    Update an existing internal policy comment
+    """
+    updateInternalPolicyComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): InternalPolicyUpdatePayload!
 }
 

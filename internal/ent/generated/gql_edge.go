@@ -3317,6 +3317,27 @@ func (_m *InternalPolicy) File(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *InternalPolicy) Comments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*NoteOrder, where *NoteWhereInput,
+) (*NoteConnection, error) {
+	opts := []NotePaginateOption{
+		WithNoteOrder(orderBy),
+		WithNoteFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
+	if nodes, err := _m.NamedComments(alias); err == nil || hasTotalCount {
+		pager, err := newNotePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &NoteConnection{Edges: []*NoteEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryComments().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Invite) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -3836,6 +3857,30 @@ func (_m *Note) Subcontrol(ctx context.Context) (*Subcontrol, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Procedure(ctx context.Context) (*Procedure, error) {
+	result, err := _m.Edges.ProcedureOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryProcedure().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Note) Risk(ctx context.Context) (*Risk, error) {
+	result, err := _m.Edges.RiskOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryRisk().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Note) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
+	result, err := _m.Edges.InternalPolicyOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryInternalPolicy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) Files(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
 ) (*FileConnection, error) {
@@ -3844,7 +3889,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {
@@ -5540,6 +5585,27 @@ func (_m *Procedure) Tasks(
 	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Procedure) Comments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*NoteOrder, where *NoteWhereInput,
+) (*NoteConnection, error) {
+	opts := []NotePaginateOption{
+		WithNoteOrder(orderBy),
+		WithNoteFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	if nodes, err := _m.NamedComments(alias); err == nil || hasTotalCount {
+		pager, err := newNotePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &NoteConnection{Edges: []*NoteEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryComments().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Procedure) File(ctx context.Context) (*File, error) {
 	result, err := _m.Edges.FileOrErr()
 	if IsNotLoaded(err) {
@@ -6232,6 +6298,27 @@ func (_m *Risk) Delegate(ctx context.Context) (*Group, error) {
 		result, err = _m.QueryDelegate().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (_m *Risk) Comments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*NoteOrder, where *NoteWhereInput,
+) (*NoteConnection, error) {
+	opts := []NotePaginateOption{
+		WithNoteOrder(orderBy),
+		WithNoteFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
+	if nodes, err := _m.NamedComments(alias); err == nil || hasTotalCount {
+		pager, err := newNotePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &NoteConnection{Edges: []*NoteEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryComments().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Scan) Owner(ctx context.Context) (*Organization, error) {
