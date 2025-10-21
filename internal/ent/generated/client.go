@@ -10850,6 +10850,25 @@ func (c *InternalPolicyClient) QueryFile(_m *InternalPolicy) *FileQuery {
 	return query
 }
 
+// QueryComments queries the comments edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryComments(_m *InternalPolicy) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.CommentsTable, internalpolicy.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *InternalPolicyClient) Hooks() []Hook {
 	hooks := c.hooks.InternalPolicy
@@ -13514,6 +13533,63 @@ func (c *NoteClient) QuerySubcontrol(_m *Note) *SubcontrolQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedure queries the procedure edge of a Note.
+func (c *NoteClient) QueryProcedure(_m *Note) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ProcedureTable, note.ProcedureColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisk queries the risk edge of a Note.
+func (c *NoteClient) QueryRisk(_m *Note) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.RiskTable, note.RiskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a Note.
+func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.InternalPolicyTable, note.InternalPolicyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -17750,6 +17826,25 @@ func (c *ProcedureClient) QueryTasks(_m *Procedure) *TaskQuery {
 	return query
 }
 
+// QueryComments queries the comments edge of a Procedure.
+func (c *ProcedureClient) QueryComments(_m *Procedure) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.CommentsTable, procedure.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFile queries the file edge of a Procedure.
 func (c *ProcedureClient) QueryFile(_m *Procedure) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
@@ -19295,6 +19390,25 @@ func (c *RiskClient) QueryDelegate(_m *Risk) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Risk.
+func (c *RiskClient) QueryComments(_m *Risk) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.CommentsTable, risk.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

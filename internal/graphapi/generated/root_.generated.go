@@ -1900,6 +1900,7 @@ type ComplexityRoot struct {
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlSuggestions              func(childComplexity int) int
@@ -2824,19 +2825,22 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		Control    func(childComplexity int) int
-		CreatedAt  func(childComplexity int) int
-		CreatedBy  func(childComplexity int) int
-		DisplayID  func(childComplexity int) int
-		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID         func(childComplexity int) int
-		Owner      func(childComplexity int) int
-		OwnerID    func(childComplexity int) int
-		Subcontrol func(childComplexity int) int
-		Task       func(childComplexity int) int
-		Text       func(childComplexity int) int
-		UpdatedAt  func(childComplexity int) int
-		UpdatedBy  func(childComplexity int) int
+		Control        func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		DisplayID      func(childComplexity int) int
+		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID             func(childComplexity int) int
+		InternalPolicy func(childComplexity int) int
+		Owner          func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Procedure      func(childComplexity int) int
+		Risk           func(childComplexity int) int
+		Subcontrol     func(childComplexity int) int
+		Task           func(childComplexity int) int
+		Text           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -3331,6 +3335,7 @@ type ComplexityRoot struct {
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlSuggestions              func(childComplexity int) int
 		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                       func(childComplexity int) int
@@ -3904,6 +3909,7 @@ type ComplexityRoot struct {
 		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BusinessCosts    func(childComplexity int) int
 		Category         func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
@@ -14540,6 +14546,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "InternalPolicy.comments":
+		if e.complexity.InternalPolicy.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
 	case "InternalPolicy.controlImplementations":
 		if e.complexity.InternalPolicy.ControlImplementations == nil {
 			break
@@ -20822,6 +20840,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.ID(childComplexity), true
 
+	case "Note.internalPolicy":
+		if e.complexity.Note.InternalPolicy == nil {
+			break
+		}
+
+		return e.complexity.Note.InternalPolicy(childComplexity), true
+
 	case "Note.owner":
 		if e.complexity.Note.Owner == nil {
 			break
@@ -20835,6 +20860,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.procedure":
+		if e.complexity.Note.Procedure == nil {
+			break
+		}
+
+		return e.complexity.Note.Procedure(childComplexity), true
+
+	case "Note.risk":
+		if e.complexity.Note.Risk == nil {
+			break
+		}
+
+		return e.complexity.Note.Risk(childComplexity), true
 
 	case "Note.subcontrol":
 		if e.complexity.Note.Subcontrol == nil {
@@ -23571,6 +23610,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Procedure.comments":
+		if e.complexity.Procedure.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Procedure.controlSuggestions":
 		if e.complexity.Procedure.ControlSuggestions == nil {
@@ -28380,6 +28431,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Category(childComplexity), true
+
+	case "Risk.comments":
+		if e.complexity.Risk.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Risk.controls":
 		if e.complexity.Risk.Controls == nil {
@@ -47754,6 +47817,7 @@ input CreateInternalPolicyInput {
   riskIDs: [ID!]
   programIDs: [ID!]
   fileID: ID
+  commentIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -48054,6 +48118,9 @@ input CreateNoteInput {
   taskID: ID
   controlID: ID
   subcontrolID: ID
+  procedureID: ID
+  riskID: ID
+  internalPolicyID: ID
   fileIDs: [ID!]
 }
 """
@@ -48413,6 +48480,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
+  commentIDs: [ID!]
   fileID: ID
 }
 """
@@ -48568,6 +48636,7 @@ input CreateRiskInput {
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
+  commentIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -61048,6 +61117,37 @@ type InternalPolicy implements Node {
     where: ProgramWhereInput
   ): ProgramConnection!
   file: File
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -62105,6 +62205,11 @@ input InternalPolicyWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -66728,6 +66833,9 @@ type Note implements Node {
   task: Task
   control: Control
   subcontrol: Subcontrol
+  procedure: Procedure
+  risk: Risk
+  internalPolicy: InternalPolicy
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67214,6 +67322,21 @@ input NoteWhereInput {
   """
   hasSubcontrol: Boolean
   hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
+  risk edge predicates
+  """
+  hasRisk: Boolean
+  hasRiskWith: [RiskWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
   """
   files edge predicates
   """
@@ -73207,6 +73330,37 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   file: File
 }
 """
@@ -74250,6 +74404,11 @@ input ProcedureWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   file edge predicates
   """
@@ -80039,6 +80198,37 @@ type Risk implements Node {
   temporary delegates for the risk, used for temporary ownership
   """
   delegate: Group
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -81004,6 +81194,11 @@ input RiskWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Scan implements Node {
   id: ID!
@@ -94257,6 +94452,9 @@ input UpdateInternalPolicyInput {
   clearPrograms: Boolean
   fileID: ID
   clearFile: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -94612,6 +94810,12 @@ input UpdateNoteInput {
   clearControl: Boolean
   subcontrolID: ID
   clearSubcontrol: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
+  riskID: ID
+  clearRisk: Boolean
+  internalPolicyID: ID
+  clearInternalPolicy: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -95148,6 +95352,9 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   fileID: ID
   clearFile: Boolean
 }
@@ -95381,6 +95588,9 @@ input UpdateRiskInput {
   clearStakeholder: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.

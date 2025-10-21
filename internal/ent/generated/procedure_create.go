@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -557,6 +558,21 @@ func (_c *ProcedureCreate) AddTasks(v ...*Task) *ProcedureCreate {
 	return _c.AddTaskIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_c *ProcedureCreate) AddCommentIDs(ids ...string) *ProcedureCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_c *ProcedureCreate) AddComments(v ...*Note) *ProcedureCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCommentIDs(ids...)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_c *ProcedureCreate) SetFile(v *File) *ProcedureCreate {
 	return _c.SetFileID(v.ID)
@@ -1054,6 +1070,23 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
