@@ -165,6 +165,9 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			}
 
 			emit := func() {
+				var mutations []ClearedMutation
+				ctx, mutations = ConsumeClearedMutations(ctx)
+
 				eventID := &EventID{}
 				if op == SoftDeleteOne {
 					eventID, err = parseSoftDeleteEventID(mutation)
@@ -189,22 +192,36 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				name := fmt.Sprintf("%s.%s", mutation.Type(), op)
 				event := soiree.NewBaseEvent(name, mutation)
 
-				event.Properties().Set("ID", eventID.ID)
+				props := event.Properties()
+				props.Set("ID", eventID.ID)
 
 				for _, field := range mutation.Fields() {
 					value, exists := mutation.Field(field)
 					if exists {
-						event.Properties().Set(field, value)
+						props.Set(field, value)
 					}
 				}
+
+				if len(mutations) > 0 {
+					if ids := fileIDsFromMutations(mutations); len(ids) > 0 {
+						props.Set("file_ids", append([]string(nil), ids...))
+					}
+				}
+
+				event.SetProperties(props)
 
 				zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 					return c.Str("mutation_id", eventID.ID)
 				})
 
-				event.SetContext(context.WithoutCancel(ctx))
+				eventCtx := context.WithoutCancel(ctx)
+				event.SetContext(eventCtx)
 				event.SetClient(e.Emitter.GetClient())
 				e.Emitter.Emit(event.Topic(), event)
+
+				if len(mutations) > 0 && hasFileClears(mutations) {
+					emitFileDetachedEvent(e, mutation, event, mutations)
+				}
 			}
 
 			if tx := transactionFromContext(ctx); tx != nil {
@@ -254,6 +271,10 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 // based on the mutation type and operation and fields that were updated
 func emitEventOn() func(context.Context, entgen.Mutation) bool {
 	return func(ctx context.Context, m entgen.Mutation) bool {
+		if HasClearedFileRelations(ctx) {
+			return true
+		}
+
 		switch m.Type() {
 		case entgen.TypeOrgSubscription:
 			if m.Op().Is(ent.OpCreate) {
@@ -309,6 +330,7 @@ var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
 
 // RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
+	client.Use(HookCaptureClearedIDs())
 	client.Use(EmitEventHook(e))
 }
 
@@ -359,6 +381,10 @@ func RegisterListeners(e *Eventer) error {
 	_, err = e.Emitter.On(UserCreate, handleUserCreate)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	if err := registerFileListeners(e); err != nil {
 		return err
 	}
 
