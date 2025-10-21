@@ -16,11 +16,9 @@ import (
 	"github.com/alitto/pond/v2"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
-	"github.com/wundergraph/graphql-go-tools/pkg/playground"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/directives"
@@ -46,7 +44,6 @@ const (
 
 var (
 	graphPath               = "query"
-	playgroundPath          = "playground"
 	defaultComplexityLimit  = 100
 	introspectionComplexity = 200
 
@@ -119,12 +116,11 @@ func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 type Handler struct {
 	r              *Resolver
 	graphqlHandler *handler.Server
-	playground     *playground.Playground
 	middleware     []echo.MiddlewareFunc
 }
 
 // Handler returns an http handler for a graph resolver
-func (r *Resolver) Handler(withPlayground bool) *Handler {
+func (r *Resolver) Handler() *Handler {
 	c := &gqlgenerated.Config{Resolvers: r}
 
 	directives.ImplementAllDirectives(c)
@@ -192,14 +188,6 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	h := &Handler{
 		r:              r,
 		graphqlHandler: srv,
-	}
-
-	if withPlayground {
-		h.playground = playground.New(playground.Config{
-			PathPrefix:          "/",
-			PlaygroundPath:      playgroundPath,
-			GraphqlEndpointPath: graphFullPath,
-		})
 	}
 
 	return h
@@ -311,25 +299,4 @@ func (h *Handler) Routes(e *echo.Group) {
 		h.graphqlHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})
-
-	if h.playground != nil {
-		handlers, err := h.playground.Handlers()
-		if err != nil {
-			log.Fatal().Err(err).Msg("error configuring playground handlers")
-
-			return
-		}
-
-		for i := range handlers {
-			// with the function we need to dereference the handler so that it remains
-			// the same in the function below
-			hCopy := handlers[i].Handler
-
-			e.GET(handlers[i].Path, func(c echo.Context) error {
-				hCopy.ServeHTTP(c.Response(), c.Request())
-
-				return nil
-			})
-		}
-	}
 }

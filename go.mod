@@ -104,7 +104,6 @@ require (
 	github.com/urfave/cli/v3 v3.5.0
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/windmill-labs/windmill-go-client v1.563.4
-	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	gocloud.dev v0.43.0
@@ -120,7 +119,6 @@ require (
 )
 
 require (
-	github.com/sebdah/goldie/v2 v2.8.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.27.0 // indirect
