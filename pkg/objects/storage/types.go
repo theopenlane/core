@@ -136,15 +136,15 @@ type ProviderConfigs struct {
 // ProviderCredentials contains credentials for a storage provider
 type ProviderCredentials struct {
 	// AccessKeyID for cloud providers
-	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID"`
+	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID" sensitive:"true"`
 	// SecretAccessKey for cloud providers
-	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey"`
+	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey" sensitive:"true"`
 	// ProjectID for GCS
-	ProjectID string `json:"projectID" koanf:"projectID"`
+	ProjectID string `json:"projectID" koanf:"projectID" sensitive:"true"`
 	// AccountID for Cloudflare R2
-	AccountID string `json:"accountID" koanf:"accountID"`
+	AccountID string `json:"accountID" koanf:"accountID" sensitive:"true"`
 	// APIToken for Cloudflare R2
-	APIToken string `json:"apiToken" koanf:"apiToken"`
+	APIToken string `json:"apiToken" koanf:"apiToken" sensitive:"true"`
 }
 
 // ProviderOption configures runtime provider options
