@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
@@ -63,6 +64,10 @@ Examples:
 			&cli.BoolFlag{
 				Name:  "debug",
 				Usage: "enable debug logging",
+			},
+			&cli.StringSliceFlag{
+				Name:  "orgs",
+				Usage: "specific organization IDs to process (if not set, all non-personal orgs are processed)",
 			},
 		},
 		Action: reconcileManagedGroups,
@@ -116,11 +121,20 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 
+	orgIds := c.StringSlice("orgs")
+	where := []predicate.Organization{
+		organization.DeletedAtIsNil(),
+		// only process non-personal organizations
+		organization.PersonalOrg(false),
+	}
+
+	if len(orgIds) > 0 {
+		where = append(where, organization.IDIn(orgIds...))
+	}
+
 	orgs, err := db.Organization.Query().
 		Where(
-			organization.DeletedAtIsNil(),
-			// only process non-personal organizations
-			organization.PersonalOrg(false),
+			where...,
 		).
 		All(ctx)
 	if err != nil {
@@ -128,15 +142,19 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 	}
 
 	if len(orgs) == 0 {
-		fmt.Println("No non-personal organizations found")
+		log.Info().Msg("no non-personal organizations found, nothing to do")
 		return nil
 	}
-
-	fmt.Printf("Found %d non-personal organizations to process\n", len(orgs))
 
 	dryRun := c.Root().Bool("dry-run")
 	createdGroups := 0
 	addedMemberships := 0
+
+	msg := "starting managed groups reconciliation"
+	if dryRun {
+		msg = "[DRY-RUN] " + msg
+	}
+	log.Info().Int("org_count", len(orgs)).Msg(msg)
 
 	for _, org := range orgs {
 		log.Info().Str("org_id", org.ID).Str("org_name", org.Name).Msg("processing organization")
@@ -190,11 +208,13 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 				} else {
 					groupName := fmt.Sprintf("%s - %s", user.DisplayName, user.ID)
 
+					desc := fmt.Sprintf("Group for %s", user.DisplayName)
+
 					g, err := db.Group.Create().
 						SetInput(generated.CreateGroupInput{
 							Name:        groupName,
 							DisplayName: &user.DisplayName,
-							Description: &groupName,
+							Description: &desc,
 							Tags:        []string{"managed", user.DisplayName, user.ID},
 						}).
 						SetIsManaged(true).
