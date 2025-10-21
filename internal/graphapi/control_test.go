@@ -11,6 +11,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -18,8 +21,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryControl(t *testing.T) {
@@ -1742,6 +1743,62 @@ func TestMutationDeleteControl(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteControl.DeletedID))
+		})
+	}
+}
+
+func TestMutationDeleteBulkControl(t *testing.T) {
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name                 string
+		idsToDelete          []string
+		client               *testclient.TestClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedDeletedCount int
+	}{
+		{
+			name:                 "happy path, delete multiple controls",
+			idsToDelete:          []string{control1.ID, control2.ID, control3.ID},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedDeletedCount: 3,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteBulkControl(tc.ctx, tc.idsToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.DeleteBulkControl.DeletedIDs, tc.expectedDeletedCount))
+
+			// verify that the returned IDs match the ones that were actually deleted
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				found := false
+				for _, expectedID := range tc.idsToDelete {
+					if expectedID == deletedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Deleted ID %s should be in the original request", deletedID)
+			}
+
+			// verify that the controls are actually deleted by trying to query them
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				_, err := tc.client.GetControlByID(tc.ctx, deletedID)
+				assert.ErrorContains(t, err, notFoundErrorMsg)
+			}
 		})
 	}
 }

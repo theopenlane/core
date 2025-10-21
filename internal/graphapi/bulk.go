@@ -7,9 +7,10 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
