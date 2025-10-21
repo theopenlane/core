@@ -253,6 +253,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Size:         size,
 			Folder:       opts.FolderDestination,
 			Bucket:       p.options.Bucket,
+			Region:       p.options.Region,
 			ContentType:  opts.ContentType,
 			ProviderType: storagetypes.S3Provider,
 			FullURI:      fmt.Sprintf("s3://%s/%s", p.options.Bucket, objectKey),
@@ -295,8 +296,13 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
+	bucket := file.Bucket
+	if bucket == "" {
+		bucket = p.options.Bucket
+	}
+
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
@@ -331,8 +337,13 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 		opts.Duration = DefaultPresignedURLExpiry
 	}
 
+	region := file.Region
+	if region == "" {
+		region = p.region
+	}
+
 	presignURL, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
-		Bucket:                     aws.String(p.options.Bucket),
+		Bucket:                     aws.String(file.Bucket),
 		Key:                        aws.String(file.Key),
 		ResponseContentType:        lo.ToPtr("application/octet-stream"),
 		ResponseContentDisposition: lo.ToPtr("attachment"),
@@ -340,7 +351,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 		s3opts.Expires = opts.Duration
 		s3opts.ClientOptions = []func(*s3.Options){
 			func(o *s3.Options) {
-				o.Region = p.region
+				o.Region = region
 			},
 		}
 	})

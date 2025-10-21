@@ -35,6 +35,7 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 		SetURI(fileData.FileMetadata.FullURI).
 		SetStoragePath(fileData.Key).
 		SetStorageVolume(fileData.Bucket).
+		SetStorageRegion(fileData.Region).
 		SetStorageProvider(string(fileData.ProviderType))
 
 	if len(fileData.Metadata) > 0 {

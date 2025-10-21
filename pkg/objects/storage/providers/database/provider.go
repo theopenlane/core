@@ -98,6 +98,7 @@ func (p *Provider) Download(ctx context.Context, fileRef *storagetypes.File, _ *
 		FileMetadata: storagetypes.FileMetadata{
 			Key:          fileID,
 			Bucket:       p.bucket(),
+			Region:       p.options.Region,
 			ContentType:  record.DetectedContentType,
 			Name:         record.ProvidedFileName,
 			ProviderType: storagetypes.DatabaseProvider,
