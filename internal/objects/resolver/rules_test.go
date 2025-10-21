@@ -141,6 +141,40 @@ func TestModuleRules(t *testing.T) {
 	require.Equal(t, "tc-bucket", result.Config.Bucket)
 }
 
+func TestModuleRulesCompliance(t *testing.T) {
+	ctx := contextx.With(context.Background(), objects.ModuleHint(models.CatalogComplianceModule))
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+	s3Builder := &stubBuilder{providerType: "s3"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			S3: storage.ProviderConfigs{
+				Enabled: true,
+				Bucket:  "compliance-bucket",
+			},
+		},
+	}
+
+	configureProviderRules(
+		resolver,
+		WithProviderConfig(config),
+		WithProviderBuilders(providerBuilders{
+			s3:   s3Builder,
+			r2:   &stubBuilder{providerType: "r2"},
+			disk: &stubBuilder{providerType: "disk"},
+			db:   &stubBuilder{providerType: "db"},
+		}),
+		WithRuntimeOptions(serviceOptions{}),
+	)
+
+	option := resolver.Resolve(ctx)
+	require.True(t, option.IsPresent(), "expected compliance module rule to resolve")
+
+	result := option.MustGet()
+	require.Equal(t, s3Builder, result.Builder)
+	require.Equal(t, "compliance-bucket", result.Config.Bucket)
+}
+
 func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 

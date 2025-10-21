@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	defaultConfigFilePath = "./config/.config.yaml"
+	defaultConfigFilePath = "pkg/objects/examples/config/.config.yaml"
 )
 
 // Config contains the configuration for object storage examples

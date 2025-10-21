@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/models"
@@ -120,4 +121,71 @@ func TestMergeUploadedFileMetadata(t *testing.T) {
 	require.Equal(t, src.CorrelatedObjectID, dest.CorrelatedObjectID)
 	require.Equal(t, src.CorrelatedObjectType, dest.CorrelatedObjectType)
 	require.NotEmpty(t, dest.Metadata)
+}
+
+func TestEnsureOrganizationContextPreservesExistingType(t *testing.T) {
+	file := &pkgobjects.File{
+		CorrelatedObjectType: "TrustCenterDoc",
+		FieldName:            "trustCenterDocFile",
+	}
+
+	ensureOrganizationContext(file, "org-123")
+
+	require.Equal(t, "TrustCenterDoc", file.CorrelatedObjectType)
+	require.Equal(t, "org-123", file.CorrelatedObjectID)
+	require.Empty(t, file.Parent.Type)
+}
+
+func TestEnsureOrganizationContextBackfillsOrganization(t *testing.T) {
+	file := &pkgobjects.File{FieldName: "genericFile"}
+
+	ensureOrganizationContext(file, "org-123")
+
+	require.Equal(t, "org-123", file.CorrelatedObjectID)
+	require.Equal(t, organizationType, file.CorrelatedObjectType)
+	require.Empty(t, file.Parent.Type)
+}
+
+func TestBuildUploadOptionsRetainsModuleForTrustCenterCreate(t *testing.T) {
+	file := &pkgobjects.File{
+		OriginalName:         "doc.pdf",
+		FieldName:            "trustCenterDocFile",
+		CorrelatedObjectType: "TrustCenterDoc",
+	}
+
+	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		OrganizationID: "org-123",
+	})
+
+	ensureOrganizationContext(file, "org-123")
+
+	opts := BuildUploadOptions(ctx, file)
+	require.NotNil(t, opts.ProviderHints)
+
+	module, ok := opts.ProviderHints.Module.(models.OrgModule)
+	require.True(t, ok)
+	require.Equal(t, models.CatalogTrustCenterModule, module)
+	assert.Equal(t, "TrustCenterDoc", file.CorrelatedObjectType)
+}
+
+func TestBuildUploadOptionsRetainsModuleForComplianceCreate(t *testing.T) {
+	file := &pkgobjects.File{
+		OriginalName:         "evidence.pdf",
+		FieldName:            "evidenceFiles",
+		CorrelatedObjectType: "Evidence",
+	}
+
+	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		OrganizationID: "org-123",
+	})
+
+	ensureOrganizationContext(file, "org-123")
+
+	opts := BuildUploadOptions(ctx, file)
+	require.NotNil(t, opts.ProviderHints)
+
+	module, ok := opts.ProviderHints.Module.(models.OrgModule)
+	require.True(t, ok)
+	require.Equal(t, models.CatalogComplianceModule, module)
+	assert.Equal(t, "Evidence", file.CorrelatedObjectType)
 }

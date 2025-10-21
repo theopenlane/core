@@ -36,14 +36,8 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 			pkgobjects.DoneUpload()
 		}
 
-		// we are intentionally swallowing this error because if we can't get the org ID
-		// we just won't populate the provider hints with it. The upload can still proceed
-		// without it - failing at this stage prevents the upload from ever progressing
 		orgID, _ := auth.GetOrganizationIDFromContext(ctx)
-		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" {
-			file.CorrelatedObjectID = orgID
-			file.CorrelatedObjectType = "organization"
-		}
+		ensureOrganizationContext(&file, orgID)
 
 		// Normalize metadata (content type, hints) before we persist the file record so
 		// downstream storage providers see consistent values.
@@ -199,5 +193,26 @@ func mergeUploadedFileMetadata(dest *pkgobjects.File, entFileID string, src pkgo
 	dest.CorrelatedObjectType = src.CorrelatedObjectType
 	if len(dest.Metadata) == 0 && len(src.Metadata) > 0 {
 		dest.Metadata = src.Metadata
+	}
+}
+
+const organizationType = "organization"
+
+// ensureOrganizationContext backfills the correlated object details with the organization context
+// when the upload has not been associated with a parent entity. This preserves any explicit
+// associations (e.g. TrustCenterDoc) that were already established upstream.
+func ensureOrganizationContext(file *pkgobjects.File, orgID string) {
+	if file == nil || orgID == "" {
+		return
+	}
+
+	if file.Parent.ID != "" || file.CorrelatedObjectID != "" {
+		return
+	}
+
+	file.CorrelatedObjectID = orgID
+
+	if file.CorrelatedObjectType == "" {
+		file.CorrelatedObjectType = organizationType
 	}
 }
