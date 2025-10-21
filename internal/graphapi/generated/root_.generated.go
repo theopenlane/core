@@ -91886,21 +91886,19 @@ type TrustCenterWatermarkConfigEdge {
 TrustCenterWatermarkConfigFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -91982,21 +91980,19 @@ type TrustCenterWatermarkConfigHistoryEdge {
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
