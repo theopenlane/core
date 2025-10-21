@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -580,6 +581,21 @@ func (_u *RiskUpdate) SetDelegate(v *Group) *RiskUpdate {
 	return _u.SetDelegateID(v.ID)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *RiskUpdate) AddCommentIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *RiskUpdate) AddComments(v ...*Note) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_u *RiskUpdate) Mutation() *RiskMutation {
 	return _u.mutation
@@ -868,6 +884,27 @@ func (_u *RiskUpdate) ClearStakeholder() *RiskUpdate {
 func (_u *RiskUpdate) ClearDelegate() *RiskUpdate {
 	_u.mutation.ClearDelegate()
 	return _u
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *RiskUpdate) ClearComments() *RiskUpdate {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *RiskUpdate) RemoveCommentIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *RiskUpdate) RemoveComments(v ...*Note) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1742,6 +1779,54 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Risk
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2302,6 +2387,21 @@ func (_u *RiskUpdateOne) SetDelegate(v *Group) *RiskUpdateOne {
 	return _u.SetDelegateID(v.ID)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *RiskUpdateOne) AddCommentIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *RiskUpdateOne) AddComments(v ...*Note) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_u *RiskUpdateOne) Mutation() *RiskMutation {
 	return _u.mutation
@@ -2590,6 +2690,27 @@ func (_u *RiskUpdateOne) ClearStakeholder() *RiskUpdateOne {
 func (_u *RiskUpdateOne) ClearDelegate() *RiskUpdateOne {
 	_u.mutation.ClearDelegate()
 	return _u
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *RiskUpdateOne) ClearComments() *RiskUpdateOne {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *RiskUpdateOne) RemoveCommentIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *RiskUpdateOne) RemoveComments(v ...*Note) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
@@ -3489,6 +3610,54 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.CommentsTable,
+			Columns: []string{risk.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

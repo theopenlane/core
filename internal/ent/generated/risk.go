@@ -104,11 +104,13 @@ type RiskEdges struct {
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
 	Delegate *Group `json:"delegate,omitempty"`
+	// conversations related to the risk
+	Comments []*Note `json:"comments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -123,6 +125,7 @@ type RiskEdges struct {
 	namedAssets           map[string][]*Asset
 	namedEntities         map[string][]*Entity
 	namedScans            map[string][]*Scan
+	namedComments         map[string][]*Note
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -273,6 +276,15 @@ func (e RiskEdges) DelegateOrErr() (*Group, error) {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
+}
+
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[16] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -537,6 +549,11 @@ func (_m *Risk) QueryStakeholder() *GroupQuery {
 // QueryDelegate queries the "delegate" edge of the Risk entity.
 func (_m *Risk) QueryDelegate() *GroupQuery {
 	return NewRiskClient(_m.config).QueryDelegate(_m)
+}
+
+// QueryComments queries the "comments" edge of the Risk entity.
+func (_m *Risk) QueryComments() *NoteQuery {
+	return NewRiskClient(_m.config).QueryComments(_m)
 }
 
 // Update returns a builder for updating this Risk.
@@ -937,6 +954,30 @@ func (_m *Risk) appendNamedScans(name string, edges ...*Scan) {
 		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
 		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
+	}
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedComments(name string) ([]*Note, error) {
+	if _m.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedComments(name string, edges ...*Note) {
+	if _m.Edges.namedComments == nil {
+		_m.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedComments[name] = []*Note{}
+	} else {
+		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
 	}
 }
 
