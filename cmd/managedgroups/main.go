@@ -121,15 +121,15 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 
-	orgIds := c.StringSlice("orgs")
+	orgIDs := c.StringSlice("orgs")
 	where := []predicate.Organization{
 		organization.DeletedAtIsNil(),
 		// only process non-personal organizations
 		organization.PersonalOrg(false),
 	}
 
-	if len(orgIds) > 0 {
-		where = append(where, organization.IDIn(orgIds...))
+	if len(orgIDs) > 0 {
+		where = append(where, organization.IDIn(orgIDs...))
 	}
 
 	orgs, err := db.Organization.Query().
