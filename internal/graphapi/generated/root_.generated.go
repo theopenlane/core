@@ -2703,6 +2703,7 @@ type ComplexityRoot struct {
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
+		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
@@ -2715,9 +2716,11 @@ type ComplexityRoot struct {
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
 		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput) int
+		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
@@ -19955,6 +19958,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput)), true
 
+	case "Mutation.updateInternalPolicyComment":
+		if e.complexity.Mutation.UpdateInternalPolicyComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateInternalPolicyComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateInternalPolicyComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateInvite":
 		if e.complexity.Mutation.UpdateInvite == nil {
 			break
@@ -20099,6 +20114,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput)), true
 
+	case "Mutation.updateProcedureComment":
+		if e.complexity.Mutation.UpdateProcedureComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProcedureComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProcedureComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateProgram":
 		if e.complexity.Mutation.UpdateProgram == nil {
 			break
@@ -20134,6 +20161,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateRisk(childComplexity, args["id"].(string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateRiskComment":
+		if e.complexity.Mutation.UpdateRiskComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateRiskComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateRiskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateScan":
 		if e.complexity.Mutation.UpdateScan == nil {
@@ -101030,6 +101069,57 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): SubcontrolUpdatePayload!
+    """
+    Update an existing procedure comment
+    """
+    updateProcedureComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ProcedureUpdatePayload!
+    """
+    Update an existing risk comment
+    """
+    updateRiskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): RiskUpdatePayload!
+    """
+    Update an existing internal policy comment
+    """
+    updateInternalPolicyComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): InternalPolicyUpdatePayload!
 }
 
 `, BuiltIn: false},
