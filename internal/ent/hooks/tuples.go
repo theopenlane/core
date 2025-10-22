@@ -99,9 +99,6 @@ func skipDeleteHook(ctx context.Context) bool {
 	return false
 }
 
-// userRoles are the roles that can be assigned to a user or service (api token)
-var userRoles = []string{"admin", "user", "owner"}
-
 // getTupleKeyFromRole creates a Tuple key with the provided subject, object, and role
 func getTupleKeyFromRole(req fgax.TupleRequest, role enums.Role) (fgax.TupleKey, error) {
 	fgaRelation, err := roleToRelation(role)
