@@ -10,11 +10,12 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryGroup(t *testing.T) {
@@ -278,6 +279,15 @@ func TestMutationCreateGroup(t *testing.T) {
 			description: gofakeit.HipsterSentence(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
+		},
+		{
+			name:        "invalid group name",
+			groupName:   name + "!@",
+			displayName: gofakeit.LetterN(50),
+			description: gofakeit.HipsterSentence(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			errorMsg:    "field cannot contain special character",
 		},
 		{
 			name:        "duplicate group name, case insensitive",

@@ -103,6 +103,35 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 	return fc, nil
 }
 
+func (ec *executionContext) _NarrativeBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_NarrativeBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NarrativeBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NarrativeCreatePayload_narrative(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -330,6 +359,45 @@ func (ec *executionContext) _NarrativeBulkCreatePayload(ctx context.Context, sel
 	return out
 }
 
+var narrativeBulkDeletePayloadImplementors = []string{"NarrativeBulkDeletePayload"}
+
+func (ec *executionContext) _NarrativeBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.NarrativeBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, narrativeBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NarrativeBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._NarrativeBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var narrativeCreatePayloadImplementors = []string{"NarrativeCreatePayload"}
 
 func (ec *executionContext) _NarrativeCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.NarrativeCreatePayload) graphql.Marshaler {
@@ -463,6 +531,20 @@ func (ec *executionContext) marshalNNarrativeBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._NarrativeBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNNarrativeBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeBulkDeletePayload) graphql.Marshaler {
+	return ec._NarrativeBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NarrativeBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNNarrativeCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeCreatePayload) graphql.Marshaler {

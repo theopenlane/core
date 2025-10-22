@@ -88,6 +88,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProcedureDeletePayload!
+    """
+    Delete multiple procedures
+    """
+    deleteBulkProcedure(
+        """
+        IDs of the procedures to delete
+        """
+        ids: [ID!]!
+    ): ProcedureBulkDeletePayload!
 }
 
 """
@@ -142,4 +151,14 @@ type ProcedureBulkUpdatePayload {
     IDs of the updated procedures
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkProcedure mutation
+"""
+type ProcedureBulkDeletePayload {
+    """
+    Deleted export IDs
+    """
+    deletedIDs: [ID!]!
 }

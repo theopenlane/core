@@ -77,6 +77,35 @@ func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappabl
 	return fc, nil
 }
 
+func (ec *executionContext) _MappableDomainBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_MappableDomainBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MappableDomainBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -252,6 +281,45 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload(ctx context.Context
 	return out
 }
 
+var mappableDomainBulkDeletePayloadImplementors = []string{"MappableDomainBulkDeletePayload"}
+
+func (ec *executionContext) _MappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mappableDomainBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MappableDomainBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._MappableDomainBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var mappableDomainCreatePayloadImplementors = []string{"MappableDomainCreatePayload"}
 
 func (ec *executionContext) _MappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappableDomainCreatePayload) graphql.Marshaler {
@@ -385,6 +453,20 @@ func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._MappableDomainBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkDeletePayload) graphql.Marshaler {
+	return ec._MappableDomainBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MappableDomainBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMappableDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainCreatePayload) graphql.Marshaler {

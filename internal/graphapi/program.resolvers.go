@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model
 	}, nil
 }
 
+// DeleteBulkProgram is the resolver for the deleteBulkProgram field.
+func (r *mutationResolver) DeleteBulkProgram(ctx context.Context, ids []string) (*model.ProgramBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteProgram(ctx, ids)
+}
+
 // Program is the resolver for the program field.
 func (r *queryResolver) Program(ctx context.Context, id string) (*generated.Program, error) {
 	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx)

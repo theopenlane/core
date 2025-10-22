@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): ActionPlanDeletePayload!
+    """
+    Delete multiple actionPlans
+    """
+    deleteBulkActionPlan(
+        """
+        IDs of the actionPlans to delete
+        """
+        ids: [ID!]!
+    ): ActionPlanBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type ActionPlanBulkUpdatePayload {
     IDs of the updated actionPlans
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkActionPlan mutation
+"""
+type ActionPlanBulkDeletePayload {
+    """
+    Deleted actionPlan IDs
+    """
+    deletedIDs: [ID!]!
 }

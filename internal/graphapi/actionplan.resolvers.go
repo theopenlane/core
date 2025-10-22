@@ -127,6 +127,15 @@ func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*mo
 	}, nil
 }
 
+// DeleteBulkActionPlan is the resolver for the deleteBulkActionPlan field.
+func (r *mutationResolver) DeleteBulkActionPlan(ctx context.Context, ids []string) (*model.ActionPlanBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteActionPlan(ctx, ids)
+}
+
 // ActionPlan is the resolver for the actionPlan field.
 func (r *queryResolver) ActionPlan(ctx context.Context, id string) (*generated.ActionPlan, error) {
 	query, err := withTransactionalMutation(ctx).ActionPlan.Query().Where(actionplan.ID(id)).CollectFields(ctx)

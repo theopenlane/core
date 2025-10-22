@@ -154,7 +154,7 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	p := bluemonday.UGCPolicy()
 
-	m.SetName(file[0].OriginalName)
+	m.SetName(filenameToTitle(file[0].OriginalName))
 	m.SetFileID(file[0].ID)
 
 	var detailsStr string
@@ -246,4 +246,19 @@ func importURLToSchema(m importSchemaMutation) error {
 	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
+}
+
+func filenameToTitle(filename string) string {
+	// remove file extension if present
+	filename = strings.TrimSpace(filename)
+	if dotIdx := strings.LastIndex(filename, "."); dotIdx != -1 {
+		filename = filename[:dotIdx]
+	}
+
+	// replace underscores and hyphens with spaces
+	filename = strings.ReplaceAll(filename, "_", " ")
+	filename = strings.ReplaceAll(filename, "-", " ")
+
+	// capitalize first letter of each word
+	return caser.String(filename)
 }

@@ -2,7 +2,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -16,11 +15,9 @@ import (
 	"github.com/alitto/pond/v2"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
-	"github.com/wundergraph/graphql-go-tools/pkg/playground"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/directives"
@@ -46,11 +43,8 @@ const (
 
 var (
 	graphPath               = "query"
-	playgroundPath          = "playground"
 	defaultComplexityLimit  = 100
 	introspectionComplexity = 200
-
-	graphFullPath = fmt.Sprintf("/%s", graphPath)
 )
 
 // Resolver provides a graph response resolver
@@ -119,12 +113,11 @@ func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 type Handler struct {
 	r              *Resolver
 	graphqlHandler *handler.Server
-	playground     *playground.Playground
 	middleware     []echo.MiddlewareFunc
 }
 
 // Handler returns an http handler for a graph resolver
-func (r *Resolver) Handler(withPlayground bool) *Handler {
+func (r *Resolver) Handler() *Handler {
 	c := &gqlgenerated.Config{Resolvers: r}
 
 	directives.ImplementAllDirectives(c)
@@ -194,38 +187,28 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 		graphqlHandler: srv,
 	}
 
-	if withPlayground {
-		h.playground = playground.New(playground.Config{
-			PathPrefix:          "/",
-			PlaygroundPath:      playgroundPath,
-			GraphqlEndpointPath: graphFullPath,
-		})
-	}
-
 	return h
 }
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query
-	h.Use(&extension.ComplexityLimit{
-		Func: func(_ context.Context, rc *graphql.OperationContext) int {
-			if rc != nil && rc.OperationName == "IntrospectionQuery" {
-				return introspectionComplexity
-			}
+	h.Use(newComplexityLimitWithMetrics(func(_ context.Context, rc *graphql.OperationContext) int {
+		if rc != nil && rc.OperationName == "IntrospectionQuery" {
+			return introspectionComplexity
+		}
 
-			if rc.OperationName == "GlobalSearch" {
-				// allow more complexity for the global search
-				// e.g. if the complexity limit is 100, we allow 500 for the global search
-				return r.complexityLimit * 5 //nolint:mnd
-			}
+		if rc.OperationName == "GlobalSearch" {
+			// allow more complexity for the global search
+			// e.g. if the complexity limit is 100, we allow 500 for the global search
+			return r.complexityLimit * 5 //nolint:mnd
+		}
 
-			if r.complexityLimit > 0 {
-				return r.complexityLimit
-			}
+		if r.complexityLimit > 0 {
+			return r.complexityLimit
+		}
 
-			return defaultComplexityLimit
-		},
-	})
+		return defaultComplexityLimit
+	}))
 }
 
 // WithTransactions adds the transactioner to the ent db client
@@ -311,25 +294,4 @@ func (h *Handler) Routes(e *echo.Group) {
 		h.graphqlHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})
-
-	if h.playground != nil {
-		handlers, err := h.playground.Handlers()
-		if err != nil {
-			log.Fatal().Err(err).Msg("error configuring playground handlers")
-
-			return
-		}
-
-		for i := range handlers {
-			// with the function we need to dereference the handler so that it remains
-			// the same in the function below
-			hCopy := handlers[i].Handler
-
-			e.GET(handlers[i].Path, func(c echo.Context) error {
-				hCopy.ServeHTTP(c.Response(), c.Request())
-
-				return nil
-			})
-		}
-	}
 }

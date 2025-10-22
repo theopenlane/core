@@ -51,6 +51,15 @@ extend type Mutation{
         """
         input: UpdateUserSettingInput!
     ): UserSettingUpdatePayload!
+    """
+    Delete multiple userSettings
+    """
+    deleteBulkUserSetting(
+        """
+        IDs of the userSettings to delete
+        """
+        ids: [ID!]!
+    ): UserSettingBulkDeletePayload!
 }
 
 """
@@ -81,4 +90,14 @@ type UserSettingBulkCreatePayload {
     Created userSettings
     """
     userSettings: [UserSetting!]
+}
+
+"""
+Return response for deleteBulkUserSetting mutation
+"""
+type UserSettingBulkDeletePayload {
+    """
+    Deleted userSetting IDs
+    """
+    deletedIDs: [ID!]!
 }

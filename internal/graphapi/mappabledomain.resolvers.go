@@ -87,6 +87,15 @@ func (r *mutationResolver) DeleteMappableDomain(ctx context.Context, id string) 
 	}, nil
 }
 
+// DeleteBulkMappableDomain is the resolver for the deleteBulkMappableDomain field.
+func (r *mutationResolver) DeleteBulkMappableDomain(ctx context.Context, ids []string) (*model.MappableDomainBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteMappableDomain(ctx, ids)
+}
+
 // MappableDomain is the resolver for the mappableDomain field.
 func (r *queryResolver) MappableDomain(ctx context.Context, id string) (*generated.MappableDomain, error) {
 	query, err := withTransactionalMutation(ctx).MappableDomain.Query().Where(mappabledomain.ID(id)).CollectFields(ctx)
