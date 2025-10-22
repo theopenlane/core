@@ -1753,6 +1753,8 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
 	testCases := []struct {
 		name                 string
 		idsToDelete          []string
@@ -1767,6 +1769,14 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedDeletedCount: 3,
+		},
+		{
+			name:        "not authorized, delete controls from another user",
+			idsToDelete: []string{control1.ID, controlAnotherUser.ID},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			// since none exists
+			expectedDeletedCount: 0,
 		},
 	}
 
