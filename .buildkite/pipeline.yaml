@@ -29,8 +29,7 @@ steps:
           size: $RUNNER_LARGE
           location: "NYC"
         cancel_on_build_failing: true
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "^(go\.mod|go\.sum|internal/|pkg/)"
+        if_changed: "{go.{mod,sum},internal/**,pkg/**}"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -46,8 +45,8 @@ steps:
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "^(go\.mod|go\.sum|config/|internal/|pkg/)"
+        if_changed:
+          "{go.{mod,sum},internal/**,pkg/**,config/**}"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -193,11 +192,8 @@ steps:
     key: "tests"
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
-        if: |
-          build.branch !~ /^renovate\// && (
-            git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "\.go$$" ||
-            git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -q "^\.golangci\.yaml$$"
-          )
+        if: build.branch !~ /^renovate\//
+        if_changed: "{**.go,**.golangci.yaml}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -224,8 +220,7 @@ steps:
           location: "NYC"
         key: "go_test"
         cancel_on_build_failing: true
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -q "\.go$$"
+        if_changed:  "**.go"
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
@@ -251,10 +246,8 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage.out", "junit.xml"]
       - label: ":auth0: fga model test"
-        if: |
-          build.branch !~ /^renovate\// && (
-            git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -q "^fga/"
-          )
+        if: build.branch !~ /^renovate\//
+        if_changed: "{fga/**}"
         agents:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
@@ -356,8 +349,7 @@ steps:
         key: "gobuild-server"
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "(\.go$$|^go\.(mod|sum)$$|^cmd/)"
+        if_changed: "{**.go,go.{mod,sum},cmd/**}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -381,8 +373,7 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "(\.go$$|^go\.(mod|sum)$$|^cmd/cli/)"
+        if_changed: "{**.go,go.{mod,sum},cmd/cli/**}"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -402,8 +393,7 @@ steps:
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -qE "(^db/|^internal/ent/schema/)"
+        if_changed: "{db/**,internal/ent/schema/**}"
         soft_fail:
           - exit_status: 1
         plugins:
@@ -418,8 +408,7 @@ steps:
               step: lint
       - label: ":graphql: lint graphql schema"
         key: "apollo-lint-schema"
-        if: |
-          git diff --name-only $$(git merge-base HEAD origin/$${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}) | grep -q "\.graphql$$"
+        if_changed: "**.graphql"
         skip: "false"
         soft_fail:
           - exit_status: 1
