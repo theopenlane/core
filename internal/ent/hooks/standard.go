@@ -333,27 +333,26 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 	if systemOwned || public {
 		var updatedIDs []string
 
-		updatedIDs, err := m.IDs(ctx)
-		if err != nil || len(updatedIDs) == 0 {
-			return false, false, err
+		updatedIDs = getMutationIDs(ctx, m)
+		if len(updatedIDs) == 0 {
+			return false, false, nil
 		}
 
 		// check if the systemOwned or isPublic fields have changed
-		for _, id := range updatedIDs {
-			var std *generated.Standard
+		stds, err := m.Client().Standard.Query().
+			Select(standard.FieldIsPublic, standard.FieldSystemOwned).
+			Where(standard.IDIn(updatedIDs...)).
+			All(ctx)
+		if err != nil {
+			return false, false, err
+		}
 
-			std, err = m.Client().Standard.Query().
-				Select(standard.FieldIsPublic, standard.FieldSystemOwned).
-				Where(standard.ID(id)).
-				Only(ctx)
-			if err != nil {
-				return false, false, err
-			}
-
+		for _, std := range stds {
 			if std.SystemOwned && std.IsPublic {
 				return true, false, nil
 			}
 		}
+
 	}
 
 	return false, false, nil
