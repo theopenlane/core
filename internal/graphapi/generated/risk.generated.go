@@ -124,6 +124,8 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Risk_delegate(ctx, field)
+			case "comments":
+				return ec.fieldContext_Risk_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -227,6 +229,8 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Risk_delegate(ctx, field)
+			case "comments":
+				return ec.fieldContext_Risk_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -359,6 +363,8 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Risk_delegate(ctx, field)
+			case "comments":
+				return ec.fieldContext_Risk_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -491,6 +497,8 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Risk_delegate(ctx, field)
+			case "comments":
+				return ec.fieldContext_Risk_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},

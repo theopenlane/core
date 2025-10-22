@@ -56,7 +56,7 @@ included. Please see the associated documentation.
 
 ### Installing the CLI
 
-You can install the Openlane CLI by running `brew install theopenlane/tap/openlane`
+You can install the Openlane CLI by running `brew install --cask theopenlane/tap/openlane`
 
 ### Updating Configuration Settings
 

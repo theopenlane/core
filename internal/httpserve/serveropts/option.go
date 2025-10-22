@@ -242,7 +242,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			true, // include metrics collectors
 		)
 
-		handler := r.Handler(s.Config.Settings.Server.Dev)
+		handler := r.Handler()
 
 		// Add Graph Handler
 		srv.AddHandler(handler)
