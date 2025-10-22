@@ -262,7 +262,7 @@ func filenameToTitle(filename string) string {
 	// capitalize first letter of each word
 	words := strings.Fields(filename)
 	for i, word := range words {
-		words[i] = strings.Title(word)
+		words[i] = caser.String(word)
 	}
 
 	filename = strings.Join(words, " ")
