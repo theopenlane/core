@@ -192,25 +192,23 @@ func (r *Resolver) Handler() *Handler {
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query
-	h.Use(&extension.ComplexityLimit{
-		Func: func(_ context.Context, rc *graphql.OperationContext) int {
-			if rc != nil && rc.OperationName == "IntrospectionQuery" {
-				return introspectionComplexity
-			}
+	h.Use(newComplexityLimitWithMetrics(func(_ context.Context, rc *graphql.OperationContext) int {
+		if rc != nil && rc.OperationName == "IntrospectionQuery" {
+			return introspectionComplexity
+		}
 
-			if rc.OperationName == "GlobalSearch" {
-				// allow more complexity for the global search
-				// e.g. if the complexity limit is 100, we allow 500 for the global search
-				return r.complexityLimit * 5 //nolint:mnd
-			}
+		if rc.OperationName == "GlobalSearch" {
+			// allow more complexity for the global search
+			// e.g. if the complexity limit is 100, we allow 500 for the global search
+			return r.complexityLimit * 5 //nolint:mnd
+		}
 
-			if r.complexityLimit > 0 {
-				return r.complexityLimit
-			}
+		if r.complexityLimit > 0 {
+			return r.complexityLimit
+		}
 
-			return defaultComplexityLimit
-		},
-	})
+		return defaultComplexityLimit
+	}))
 }
 
 // WithTransactions adds the transactioner to the ent db client
