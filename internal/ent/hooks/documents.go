@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/iam/auth"
 )
 
 type detailsMutation interface {
@@ -167,6 +168,12 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 		detailsStr = fmt.Sprintf("%v", v)
 	}
 
+	details := p.Sanitize(detailsStr)
+
+	au, _ := auth.GetAuthenticatedUserFromContext(ctx)
+
+	details = updatePlaceholderText(details, au.OrganizationName)
+
 	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
@@ -261,4 +268,17 @@ func filenameToTitle(filename string) string {
 
 	// capitalize first letter of each word
 	return caser.String(filename)
+}
+
+const (
+	companyPlaceholder = "{{company_name}}"
+)
+
+// updatePlaceholderText replaces the company placeholder in details with the provided organization name
+func updatePlaceholderText(details string, orgName string) string {
+	if orgName == "" {
+		orgName = "[Company Name]"
+	}
+
+	return strings.ReplaceAll(details, companyPlaceholder, orgName)
 }
