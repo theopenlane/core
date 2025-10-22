@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -52,6 +53,14 @@ func HookGroup() ent.Hook {
 
 				url := gravatar.New(name, nil)
 				m.SetGravatarLogoURL(url)
+
+				// if managed, the user's name ( and thus group name )
+				// may include special characters. this makes sure to clean them
+				// up as they will fail otherwise
+				isManaged, _ := m.IsManaged()
+				if isManaged {
+					m.SetName(stripInvalidChars(name))
+				}
 			}
 
 			return next.Mutate(ctx, m)
@@ -280,4 +289,14 @@ func defaultGroupSettings(ctx context.Context, m *generated.GroupMutation) (stri
 	}
 
 	return groupSetting.ID, nil
+}
+
+func stripInvalidChars(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		if !strings.ContainsRune(validator.InvalidChars, r) {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
 }
