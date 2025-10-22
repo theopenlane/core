@@ -174,7 +174,7 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	details = updatePlaceholderText(details, au.OrganizationName)
 
-	m.SetDetails(p.Sanitize(detailsStr))
+	m.SetDetails(p.Sanitize(details))
 
 	return nil
 }
