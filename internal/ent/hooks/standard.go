@@ -331,9 +331,7 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 
 	// see if we need to add the tuples because one of the two fields was set
 	if systemOwned || public {
-		var updatedIDs []string
-
-		updatedIDs = getMutationIDs(ctx, m)
+		updatedIDs := getMutationIDs(ctx, m)
 		if len(updatedIDs) == 0 {
 			return false, false, nil
 		}

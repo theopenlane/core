@@ -26,9 +26,7 @@ func HookFileDelete() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				var ids []string
-
-				ids = getMutationIDs(ctx, m)
+				ids := getMutationIDs(ctx, m)
 				if len(ids) == 0 {
 					return nil, errInvalidStoragePath
 				}
