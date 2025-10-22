@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v82"
+import "github.com/stripe/stripe-go/v83"
 
 // FeatureCreateOption allows customizing EntitlementsFeatureCreateParams
 type FeatureCreateOption func(params *stripe.EntitlementsFeatureCreateParams)
