@@ -170,9 +170,18 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	details := p.Sanitize(detailsStr)
 
-	au, _ := auth.GetAuthenticatedUserFromContext(ctx)
+	orgName := ""
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
+		org, err := m.Client().Organization.Get(ctx, orgID)
+		if err != nil {
+			return err
+		}
 
-	details = updatePlaceholderText(details, au.OrganizationName)
+		orgName = org.Name
+	}
+
+	details = updatePlaceholderText(details, orgName)
 
 	m.SetDetails(p.Sanitize(details))
 
@@ -277,6 +286,7 @@ const (
 // updatePlaceholderText replaces the company placeholder in details with the provided organization name
 func updatePlaceholderText(details string, orgName string) string {
 	if orgName == "" {
+		log.Warn().Msg("organization name is empty, using default placeholder value")
 		orgName = "[Company Name]"
 	}
 
