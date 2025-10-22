@@ -58,7 +58,7 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 		return nil
 	}
 
-	if skipDeleteHook(ctx) {
+	if skipDeleteHook(ctx, m) {
 		zerolog.Ctx(ctx).Debug().Msg("skipping delete permissions hook")
 
 		return nil
@@ -90,9 +90,14 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 }
 
 // skipDeleteHook checks if the delete hook should be skipped based on the context and mutation
-func skipDeleteHook(ctx context.Context) bool {
+func skipDeleteHook(ctx context.Context, m utils.GenericMutation) bool {
 	// skip if internal request
 	if rule.IsInternalRequest(ctx) {
+		return true
+	}
+
+	// memberships go through the auth from mutation hooks as a special case
+	if strings.Contains(m.Type(), "Membership") {
 		return true
 	}
 
