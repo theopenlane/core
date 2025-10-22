@@ -107,9 +107,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 				// Record authentication metric based on token type
-				if au.AuthenticationType == auth.PATAuthentication {
+				switch au.AuthenticationType {
+				case auth.PATAuthentication:
 					metrics.RecordAuthentication(metrics.AuthTypePAT)
-				} else if au.AuthenticationType == auth.APITokenAuthentication {
+				case auth.APITokenAuthentication:
 					metrics.RecordAuthentication(metrics.AuthTypeAPIToken)
 				}
 
