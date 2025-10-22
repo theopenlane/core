@@ -84,6 +84,8 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    billing:
+        requirePaymentMethod: false
     emailValidation:
         allowedEmailTypes:
             disposable: false
