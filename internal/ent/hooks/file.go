@@ -38,7 +38,6 @@ func HookFileDelete() ent.Hook {
 					ids = append(ids, dbIDs...)
 
 				case ent.OpDeleteOne:
-
 					id, ok := m.ID()
 					if !ok {
 						return nil, errInvalidStoragePath

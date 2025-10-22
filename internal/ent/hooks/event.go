@@ -307,11 +307,6 @@ var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
 
-// RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
-func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
-	client.Use(EmitEventHook(e))
-}
-
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
 	if e.Emitter == nil {

@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -172,9 +171,6 @@ func HookGroupAuthz() ent.Hook {
 			if m.Op().Is(ent.OpCreate) {
 				// create the group member admin and relationship tuple for parent org
 				err = groupCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
-				// delete all relationship tuples on delete, or soft delete (Update Op)
-				err = groupDeleteHook(ctx, m)
 			}
 
 			return retValue, err
@@ -272,34 +268,6 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) ([]fgax.TupleK
 	tuples = append(tuples, fgax.GetTupleKey(reqOwner))
 
 	return tuples, nil
-}
-
-// groupDeleteHook deletes all relationship tuples for a group on delete
-// with the exception of the user, those are handled by the cascade delete of the group membership
-func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
-	// Add relationship tuples if authz is enabled
-	objID, ok := m.ID()
-	if !ok {
-		// TODO (sfunk): ensure tuples get cascade deleted
-		// continue for now
-		return nil
-	}
-
-	objType := GetObjectTypeFromEntMutation(m)
-	object := fmt.Sprintf("%s:%s", objType, objID)
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
-
-	// delete all relationship tuples except for the user, those are handled by the cascade delete of the group membership
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("object", object).Msg("failed to delete relationship tuples")
-
-		return ErrInternalServerError
-	}
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
-
-	return nil
 }
 
 // defaultGroupSettings creates the default group settings for a new group
