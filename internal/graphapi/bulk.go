@@ -7,10 +7,9 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
@@ -88,7 +87,7 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each actionplan individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -155,7 +154,7 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each apitoken individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).APIToken.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.APIToken.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -222,7 +221,7 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each asset individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Asset.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Asset.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -330,7 +329,7 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each contact individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Contact.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Contact.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -438,7 +437,7 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each control individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Control.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Control.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -505,7 +504,7 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each controlimplementation individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -572,7 +571,7 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each controlobjective individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -639,7 +638,7 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each customdomain individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -706,7 +705,7 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each dnsverification individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -773,7 +772,7 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each documentdata individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -840,7 +839,7 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each entity individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Entity.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Entity.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -907,7 +906,7 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each entitytype individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).EntityType.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.EntityType.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -974,7 +973,7 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each event individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Event.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Event.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1022,7 +1021,7 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each export individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Export.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1089,7 +1088,7 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each group individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Group.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Group.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1156,7 +1155,7 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each groupmembership individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1223,7 +1222,7 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each groupsetting individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1331,7 +1330,7 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each hush individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Hush.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Hush.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1439,7 +1438,7 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each internalpolicy individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1506,7 +1505,7 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each invite individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Invite.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Invite.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1573,7 +1572,7 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each jobtemplate individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).JobTemplate.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.JobTemplate.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1640,7 +1639,7 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each mappabledomain individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1707,7 +1706,7 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each mappedcontrol individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1774,7 +1773,7 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each narrative individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Narrative.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Narrative.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1841,7 +1840,7 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each organizationsetting individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -1908,7 +1907,7 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each orgmembership individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2016,7 +2015,7 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each procedure individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Procedure.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Procedure.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2083,7 +2082,7 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each program individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Program.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Program.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2150,7 +2149,7 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each programmembership individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2258,7 +2257,7 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each risk individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Risk.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Risk.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2366,7 +2365,7 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each scan individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Scan.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Scan.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2433,7 +2432,7 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each scheduledjob individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2500,7 +2499,7 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each subcontrol individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2567,7 +2566,7 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each subprocessor individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2694,7 +2693,7 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each task individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Task.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Task.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2761,7 +2760,7 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each template individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).Template.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.Template.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2828,7 +2827,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each trustcentercompliance individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2895,7 +2894,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each trustcenterdoc individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -2962,7 +2961,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each trustcentersubprocessor individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
@@ -3029,7 +3028,7 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 	for _, id := range ids {
 		funcs = append(funcs, func() {
 			// delete each usersetting individually to ensure proper cleanup
-			if err := withTransactionalMutation(ctx).UserSetting.DeleteOneID(id).Exec(ctx); err != nil {
+			if err := r.db.UserSetting.DeleteOneID(id).Exec(ctx); err != nil {
 				log.Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)

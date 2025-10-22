@@ -1771,12 +1771,11 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 			expectedDeletedCount: 3,
 		},
 		{
-			name:        "not authorized, delete controls from another user",
-			idsToDelete: []string{control1.ID, controlAnotherUser.ID},
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			// since none exists
-			expectedDeletedCount: 0,
+			name:                 "not authorized, delete controls from another user",
+			idsToDelete:          []string{control1.ID, controlAnotherUser.ID},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedDeletedCount: 1,
 		},
 	}
 
