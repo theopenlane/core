@@ -75,6 +75,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - paused subscription",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionPaused,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -86,8 +87,9 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		{
 			name: "invalid payload, missing api_version",
 			payload: &stripe.Event{
-				ID:   "evt_test_webhook",
-				Type: stripe.EventTypeCustomerSubscriptionUpdated,
+				ID:     "evt_test_webhook",
+				Object: "event",
+				Type:   stripe.EventTypeCustomerSubscriptionUpdated,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
@@ -98,6 +100,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - subscription updated",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -110,6 +113,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - trial will end",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionTrialWillEnd,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -122,6 +126,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - payment method attached",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypePaymentMethodAttached,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -134,8 +139,12 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "unsupported event type",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerUpdated,
 				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(`{"id":"cus_test","object":"customer"}`),
+				},
 			},
 			expectedStatus: http.StatusOK,
 		},
