@@ -203,8 +203,8 @@ func RecordQueueTaskProcessed(taskName string, duration float64, err error) {
 	}
 }
 
-// RecordGraphQLOperation records a GraphQL operation
-func RecordGraphQLOperation(operation string, duration float64, err error) {
+// RecordGraphQLOperation records a GraphQL operation with complexity
+func RecordGraphQLOperation(operation string, duration float64, complexity int, err error) {
 	successStr := LabelSuccess
 	if err != nil {
 		successStr = LabelFailure
@@ -212,6 +212,12 @@ func RecordGraphQLOperation(operation string, duration float64, err error) {
 
 	GraphQLOperationTotal.WithLabelValues(operation, successStr).Inc()
 	GraphQLOperationDuration.WithLabelValues(operation).Observe(duration)
+	GraphQLQueryComplexity.WithLabelValues(operation).Observe(float64(complexity))
+}
+
+// RecordGraphQLRejection records a rejected GraphQL query
+func RecordGraphQLRejection(reason string) {
+	GraphQLQueryRejected.WithLabelValues(reason).Inc()
 }
 
 // StartFileUpload records the start of a file upload
