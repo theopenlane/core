@@ -77,7 +77,7 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 
 		zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
-		if err := client.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
+		if err := client.DeleteAllObjectRelations(ctx, object, []string{}); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 			return ErrInternalServerError

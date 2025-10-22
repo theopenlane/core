@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -64,21 +63,14 @@ func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 
 // getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases
 func getMutationIDs(ctx context.Context, m utils.GenericMutation) []string {
-	switch m.Op() {
-	case ent.OpDelete, ent.OpUpdate:
-		objIDs, err := m.IDs(ctx)
-		if err == nil {
-			return objIDs
-		}
+	objID, ok := m.ID()
+	if ok && objID != "" {
+		return []string{objID}
+	}
 
-		log.Error().Err(err).Msg("failed to get IDs from mutation")
-	case ent.OpDeleteOne, ent.OpUpdateOne:
-		objID, ok := m.ID()
-		if ok && objID != "" {
-			return []string{objID}
-		}
-
-		log.Error().Msg("failed to get object IDs from mutation")
+	objIDs, err := m.IDs(ctx)
+	if err == nil {
+		return objIDs
 	}
 
 	return nil

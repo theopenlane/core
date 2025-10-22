@@ -116,16 +116,16 @@ func tableOutput(out []openlaneclient.Task) {
 
 		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.Category, assignee, assigner, i.Status, dueDate)
 
-		if i.Comments != nil {
+		if i.Comments != nil && len(i.Comments.Edges) > 0 {
 			writer.AddRow("----------------------------------------")
 			writer.AddRow("COMMENTS", "CREATEDBY", "CREATEDAT")
 			writer.AddRow("----------------------------------------")
 			for _, c := range i.Comments.Edges {
 				writer.AddRow(c.Node.Text, *c.Node.CreatedBy, *c.Node.CreatedAt)
 			}
-		}
 
-		writer.AddRow("") // blank row
+			writer.AddRow("") // blank row
+		}
 	}
 
 	writer.Render()
