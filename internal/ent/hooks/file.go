@@ -26,25 +26,9 @@ func HookFileDelete() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				var ids []string
-
-				switch m.Op() {
-				case ent.OpDelete:
-					dbIDs, err := m.IDs(ctx)
-					if err != nil {
-						return nil, err
-					}
-
-					ids = append(ids, dbIDs...)
-
-				case ent.OpDeleteOne:
-
-					id, ok := m.ID()
-					if !ok {
-						return nil, errInvalidStoragePath
-					}
-
-					ids = append(ids, id)
+				ids := getMutationIDs(ctx, m)
+				if len(ids) == 0 {
+					return nil, errInvalidStoragePath
 				}
 
 				v, err := next.Mutate(ctx, m)

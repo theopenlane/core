@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -101,7 +102,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 // updateMembershipCheck is a helper function to check if a user is trying to update themselves in a membership
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
-	memberIDs := getMutationMemberIDs(ctx, m)
+	mut := m.(utils.GenericMutation)
+	memberIDs := getMutationIDs(ctx, mut)
 	if len(memberIDs) == 0 {
 		return nil
 	}
@@ -134,23 +136,6 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 	}
 
 	return nil
-}
-
-// getMutationMemberIDs is a helper function to get the member IDs from a mutation
-// this can be used for group, program, and org membership mutations because
-// they all implement the MutationMember interface
-func getMutationMemberIDs(ctx context.Context, m MutationMember) []string {
-	id, ok := m.ID()
-	if ok {
-		return []string{id}
-	}
-
-	ids, err := m.IDs(ctx)
-	if err == nil && len(ids) > 0 {
-		return ids
-	}
-
-	return ids
 }
 
 func checkMutation(ctx context.Context) bool {
