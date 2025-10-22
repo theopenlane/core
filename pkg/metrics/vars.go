@@ -133,6 +133,11 @@ var (
 		Help: "Total number of files deleted per storage provider",
 	}, []string{"provider"})
 
+	AuthenticationAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_authentication_attempts_total",
+		Help: "The total number of authentication attempts by type (jwt, jwt_anonymous, pat, api_token)",
+	}, []string{"type"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -156,6 +161,7 @@ var (
 		StorageProviderDownloads,
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
+		AuthenticationAttempts,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{
