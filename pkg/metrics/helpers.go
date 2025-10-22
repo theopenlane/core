@@ -115,6 +115,12 @@ const (
 	TaskEmailVerification = "verification_email"
 	TaskEmailReset        = "reset_email"
 	TaskWebhookDelivery   = "webhook_delivery"
+
+	// Authentication types
+	AuthTypeJWT          = "jwt"
+	AuthTypeJWTAnonymous = "jwt_anonymous"
+	AuthTypePAT          = "pat"
+	AuthTypeAPIToken     = "api_token"
 )
 
 // RecordWorkerExecution records a worker execution with appropriate labels
@@ -247,4 +253,9 @@ func RecordStorageDownload(provider string, bytes int64) {
 // RecordStorageDelete records a delete operation for a storage provider
 func RecordStorageDelete(provider string) {
 	StorageProviderDeletes.WithLabelValues(provider).Inc()
+}
+
+// RecordAuthentication records an authentication attempt by type
+func RecordAuthentication(authType string) {
+	AuthenticationAttempts.WithLabelValues(authType).Inc()
 }

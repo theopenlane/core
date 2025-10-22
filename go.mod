@@ -14,7 +14,7 @@ tool (
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/secretmanager v1.15.1
+	cloud.google.com/go/secretmanager v1.16.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.81
@@ -103,8 +103,7 @@ require (
 	github.com/tmc/langchaingo v0.1.13
 	github.com/urfave/cli/v3 v3.5.0
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.562.0
-	github.com/wundergraph/graphql-go-tools v1.67.4
+	github.com/windmill-labs/windmill-go-client v1.563.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	gocloud.dev v0.43.0
@@ -120,10 +119,11 @@ require (
 )
 
 require (
-	github.com/sebdah/goldie/v2 v2.8.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	golang.org/x/image v0.27.0 // indirect
 	google.golang.org/api v0.252.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
