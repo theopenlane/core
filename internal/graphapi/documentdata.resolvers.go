@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*
 	}, nil
 }
 
+// DeleteBulkDocumentData is the resolver for the deleteBulkDocumentData field.
+func (r *mutationResolver) DeleteBulkDocumentData(ctx context.Context, ids []string) (*model.DocumentDataBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteDocumentData(ctx, ids)
+}
+
 // DocumentData is the resolver for the documentData field.
 func (r *queryResolver) DocumentData(ctx context.Context, id string) (*generated.DocumentData, error) {
 	query, err := withTransactionalMutation(ctx).DocumentData.Query().Where(documentdata.ID(id)).CollectFields(ctx)

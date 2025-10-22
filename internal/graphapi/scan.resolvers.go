@@ -126,6 +126,15 @@ func (r *mutationResolver) DeleteScan(ctx context.Context, id string) (*model.Sc
 	}, nil
 }
 
+// DeleteBulkScan is the resolver for the deleteBulkScan field.
+func (r *mutationResolver) DeleteBulkScan(ctx context.Context, ids []string) (*model.ScanBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteScan(ctx, ids)
+}
+
 // Scan is the resolver for the scan field.
 func (r *queryResolver) Scan(ctx context.Context, id string) (*generated.Scan, error) {
 	query, err := withTransactionalMutation(ctx).Scan.Query().Where(scan.ID(id)).CollectFields(ctx)

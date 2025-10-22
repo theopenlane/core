@@ -85,6 +85,35 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 	return fc, nil
 }
 
+func (ec *executionContext) _DocumentDataBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DocumentDataBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DocumentDataBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -276,6 +305,45 @@ func (ec *executionContext) _DocumentDataBulkCreatePayload(ctx context.Context, 
 	return out
 }
 
+var documentDataBulkDeletePayloadImplementors = []string{"DocumentDataBulkDeletePayload"}
+
+func (ec *executionContext) _DocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DocumentDataBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, documentDataBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DocumentDataBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._DocumentDataBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var documentDataCreatePayloadImplementors = []string{"DocumentDataCreatePayload"}
 
 func (ec *executionContext) _DocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DocumentDataCreatePayload) graphql.Marshaler {
@@ -409,6 +477,20 @@ func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._DocumentDataBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkDeletePayload) graphql.Marshaler {
+	return ec._DocumentDataBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DocumentDataBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNDocumentDataCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataCreatePayload) graphql.Marshaler {

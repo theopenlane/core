@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): ContactDeletePayload!
+    """
+    Delete multiple contacts
+    """
+    deleteBulkContact(
+        """
+        IDs of the contacts to delete
+        """
+        ids: [ID!]!
+    ): ContactBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type ContactBulkUpdatePayload {
     IDs of the updated contacts
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkContact mutation
+"""
+type ContactBulkDeletePayload {
+    """
+    Deleted contact IDs
+    """
+    deletedIDs: [ID!]!
 }

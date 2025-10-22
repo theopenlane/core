@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteScheduledJob(ctx context.Context, id string) (*
 	}, nil
 }
 
+// DeleteBulkScheduledJob is the resolver for the deleteBulkScheduledJob field.
+func (r *mutationResolver) DeleteBulkScheduledJob(ctx context.Context, ids []string) (*model.ScheduledJobBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteScheduledJob(ctx, ids)
+}
+
 // ScheduledJob is the resolver for the scheduledJob field.
 func (r *queryResolver) ScheduledJob(ctx context.Context, id string) (*generated.ScheduledJob, error) {
 	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().Where(scheduledjob.ID(id)).CollectFields(ctx)

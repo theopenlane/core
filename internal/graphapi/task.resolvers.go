@@ -126,6 +126,15 @@ func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.Ta
 	}, nil
 }
 
+// DeleteBulkTask is the resolver for the deleteBulkTask field.
+func (r *mutationResolver) DeleteBulkTask(ctx context.Context, ids []string) (*model.TaskBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTask(ctx, ids)
+}
+
 // Task is the resolver for the task field.
 func (r *queryResolver) Task(ctx context.Context, id string) (*generated.Task, error) {
 	query, err := withTransactionalMutation(ctx).Task.Query().Where(task.ID(id)).CollectFields(ctx)

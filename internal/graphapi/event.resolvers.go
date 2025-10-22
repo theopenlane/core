@@ -87,6 +87,15 @@ func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*model.E
 	}, nil
 }
 
+// DeleteBulkEvent is the resolver for the deleteBulkEvent field.
+func (r *mutationResolver) DeleteBulkEvent(ctx context.Context, ids []string) (*model.EventBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteEvent(ctx, ids)
+}
+
 // Event is the resolver for the event field.
 func (r *queryResolver) Event(ctx context.Context, id string) (*generated.Event, error) {
 	query, err := withTransactionalMutation(ctx).Event.Query().Where(event.ID(id)).CollectFields(ctx)

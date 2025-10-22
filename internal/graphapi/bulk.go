@@ -4,6 +4,7 @@ package graphapi
 
 import (
 	"context"
+	"sync"
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -71,6 +72,54 @@ func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []strin
 	}, nil
 }
 
+// bulkDeleteActionPlan deletes multiple ActionPlan entities by their IDs
+func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []string) (*model.ActionPlanBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each actionplan individually to ensure proper cleanup
+			if err := r.db.ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ActionPlanEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("actionplan_id", id).Msg("failed to cleanup actionplan edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some actionplan deletions failed")
+	}
+
+	return &model.ActionPlanBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateAPIToken uses the CreateBulk function to create multiple APIToken entities
 func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -90,6 +139,54 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 	}, nil
 }
 
+// bulkDeleteAPIToken deletes multiple APIToken entities by their IDs
+func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string) (*model.APITokenBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each apitoken individually to ensure proper cleanup
+			if err := r.db.APIToken.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("apitoken_id", id).Msg("failed to cleanup apitoken edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some apitoken deletions failed")
+	}
+
+	return &model.APITokenBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateAsset uses the CreateBulk function to create multiple Asset entities
 func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -106,6 +203,54 @@ func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generat
 	// return response
 	return &model.AssetBulkCreatePayload{
 		Assets: res,
+	}, nil
+}
+
+// bulkDeleteAsset deletes multiple Asset entities by their IDs
+func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*model.AssetBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each asset individually to ensure proper cleanup
+			if err := r.db.Asset.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.AssetEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("asset_id", id).Msg("failed to cleanup asset edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some asset deletions failed")
+	}
+
+	return &model.AssetBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -169,6 +314,54 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 	}, nil
 }
 
+// bulkDeleteContact deletes multiple Contact entities by their IDs
+func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) (*model.ContactBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each contact individually to ensure proper cleanup
+			if err := r.db.Contact.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ContactEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("contact_id", id).Msg("failed to cleanup contact edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some contact deletions failed")
+	}
+
+	return &model.ContactBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateControl uses the CreateBulk function to create multiple Control entities
 func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -229,6 +422,54 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 	}, nil
 }
 
+// bulkDeleteControl deletes multiple Control entities by their IDs
+func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) (*model.ControlBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each control individually to ensure proper cleanup
+			if err := r.db.Control.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ControlEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("control_id", id).Msg("failed to cleanup control edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some control deletions failed")
+	}
+
+	return &model.ControlBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateControlImplementation uses the CreateBulk function to create multiple ControlImplementation entities
 func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, input []*generated.CreateControlImplementationInput) (*model.ControlImplementationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -245,6 +486,54 @@ func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, 
 	// return response
 	return &model.ControlImplementationBulkCreatePayload{
 		ControlImplementations: res,
+	}, nil
+}
+
+// bulkDeleteControlImplementation deletes multiple ControlImplementation entities by their IDs
+func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, ids []string) (*model.ControlImplementationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each controlimplementation individually to ensure proper cleanup
+			if err := r.db.ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ControlImplementationEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("controlimplementation_id", id).Msg("failed to cleanup controlimplementation edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlimplementation deletions failed")
+	}
+
+	return &model.ControlImplementationBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -267,6 +556,54 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}, nil
 }
 
+// bulkDeleteControlObjective deletes multiple ControlObjective entities by their IDs
+func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids []string) (*model.ControlObjectiveBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each controlobjective individually to ensure proper cleanup
+			if err := r.db.ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ControlObjectiveEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("controlobjective_id", id).Msg("failed to cleanup controlobjective edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlobjective deletions failed")
+	}
+
+	return &model.ControlObjectiveBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateCustomDomain uses the CreateBulk function to create multiple CustomDomain entities
 func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -283,6 +620,54 @@ func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*
 	// return response
 	return &model.CustomDomainBulkCreatePayload{
 		CustomDomains: res,
+	}, nil
+}
+
+// bulkDeleteCustomDomain deletes multiple CustomDomain entities by their IDs
+func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []string) (*model.CustomDomainBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each customdomain individually to ensure proper cleanup
+			if err := r.db.CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.CustomDomainEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("customdomain_id", id).Msg("failed to cleanup customdomain edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some customdomain deletions failed")
+	}
+
+	return &model.CustomDomainBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -305,6 +690,54 @@ func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input 
 	}, nil
 }
 
+// bulkDeleteDNSVerification deletes multiple DNSVerification entities by their IDs
+func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []string) (*model.DNSVerificationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each dnsverification individually to ensure proper cleanup
+			if err := r.db.DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.DNSVerificationEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("dnsverification_id", id).Msg("failed to cleanup dnsverification edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some dnsverification deletions failed")
+	}
+
+	return &model.DNSVerificationBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -321,6 +754,54 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 	// return response
 	return &model.DocumentDataBulkCreatePayload{
 		DocumentData: res,
+	}, nil
+}
+
+// bulkDeleteDocumentData deletes multiple DocumentData entities by their IDs
+func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []string) (*model.DocumentDataBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each documentdata individually to ensure proper cleanup
+			if err := r.db.DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("documentdata_id", id).Msg("failed to cleanup documentdata edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some documentdata deletions failed")
+	}
+
+	return &model.DocumentDataBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -343,6 +824,54 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkDeleteEntity deletes multiple Entity entities by their IDs
+func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each entity individually to ensure proper cleanup
+			if err := r.db.Entity.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EntityEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("entity_id", id).Msg("failed to cleanup entity edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entity deletions failed")
+	}
+
+	return &model.EntityBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateEntityType uses the CreateBulk function to create multiple EntityType entities
 func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*model.EntityTypeBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -359,6 +888,54 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 	// return response
 	return &model.EntityTypeBulkCreatePayload{
 		EntityTypes: res,
+	}, nil
+}
+
+// bulkDeleteEntityType deletes multiple EntityType entities by their IDs
+func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []string) (*model.EntityTypeBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each entitytype individually to ensure proper cleanup
+			if err := r.db.EntityType.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EntityTypeEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("entitytype_id", id).Msg("failed to cleanup entitytype edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entitytype deletions failed")
+	}
+
+	return &model.EntityTypeBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -381,6 +958,54 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	}, nil
 }
 
+// bulkDeleteEvent deletes multiple Event entities by their IDs
+func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*model.EventBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each event individually to ensure proper cleanup
+			if err := r.db.Event.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EventEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("event_id", id).Msg("failed to cleanup event edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some event deletions failed")
+	}
+
+	return &model.EventBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkDeleteExport deletes multiple Export entities by their IDs
 func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
 	if len(ids) == 0 {
@@ -388,21 +1013,40 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
 
-	// delete each export individually to ensure proper cleanup
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
-		if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
-			log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
-			continue
-		}
+		funcs = append(funcs, func() {
+			// delete each export individually to ensure proper cleanup
+			if err := r.db.Export.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
 
-		// call edge cleanup if the function exists
-		if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
-			log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
-			continue
-		}
+			if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
 
-		deletedIDs = append(deletedIDs, id)
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
 	}
 
 	return &model.ExportBulkDeletePayload{
@@ -429,6 +1073,54 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 	}, nil
 }
 
+// bulkDeleteGroup deletes multiple Group entities by their IDs
+func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each group individually to ensure proper cleanup
+			if err := r.db.Group.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.GroupEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("group_id", id).Msg("failed to cleanup group edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some group deletions failed")
+	}
+
+	return &model.GroupBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateGroupMembership uses the CreateBulk function to create multiple GroupMembership entities
 func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input []*generated.CreateGroupMembershipInput) (*model.GroupMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -448,6 +1140,54 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 	}, nil
 }
 
+// bulkDeleteGroupMembership deletes multiple GroupMembership entities by their IDs
+func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []string) (*model.GroupMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each groupmembership individually to ensure proper cleanup
+			if err := r.db.GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.GroupMembershipEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("groupmembership_id", id).Msg("failed to cleanup groupmembership edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupmembership deletions failed")
+	}
+
+	return &model.GroupMembershipBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateGroupSetting uses the CreateBulk function to create multiple GroupSetting entities
 func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*model.GroupSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -464,6 +1204,54 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 	// return response
 	return &model.GroupSettingBulkCreatePayload{
 		GroupSettings: res,
+	}, nil
+}
+
+// bulkDeleteGroupSetting deletes multiple GroupSetting entities by their IDs
+func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []string) (*model.GroupSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each groupsetting individually to ensure proper cleanup
+			if err := r.db.GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.GroupSettingEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("groupsetting_id", id).Msg("failed to cleanup groupsetting edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupsetting deletions failed")
+	}
+
+	return &model.GroupSettingBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -527,6 +1315,54 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 	}, nil
 }
 
+// bulkDeleteHush deletes multiple Hush entities by their IDs
+func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*model.HushBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each hush individually to ensure proper cleanup
+			if err := r.db.Hush.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.HushEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("hush_id", id).Msg("failed to cleanup hush edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some hush deletions failed")
+	}
+
+	return &model.HushBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
 func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -587,6 +1423,54 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 	}, nil
 }
 
+// bulkDeleteInternalPolicy deletes multiple InternalPolicy entities by their IDs
+func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []string) (*model.InternalPolicyBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each internalpolicy individually to ensure proper cleanup
+			if err := r.db.InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.InternalPolicyEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to cleanup internalpolicy edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some internalpolicy deletions failed")
+	}
+
+	return &model.InternalPolicyBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
 func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -603,6 +1487,54 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	// return response
 	return &model.InviteBulkCreatePayload{
 		Invites: res,
+	}, nil
+}
+
+// bulkDeleteInvite deletes multiple Invite entities by their IDs
+func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (*model.InviteBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each invite individually to ensure proper cleanup
+			if err := r.db.Invite.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.InviteEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("invite_id", id).Msg("failed to cleanup invite edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some invite deletions failed")
+	}
+
+	return &model.InviteBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -625,6 +1557,54 @@ func (r *mutationResolver) bulkCreateJobTemplate(ctx context.Context, input []*g
 	}, nil
 }
 
+// bulkDeleteJobTemplate deletes multiple JobTemplate entities by their IDs
+func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []string) (*model.JobTemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each jobtemplate individually to ensure proper cleanup
+			if err := r.db.JobTemplate.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.JobTemplateEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("jobtemplate_id", id).Msg("failed to cleanup jobtemplate edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some jobtemplate deletions failed")
+	}
+
+	return &model.JobTemplateBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateMappableDomain uses the CreateBulk function to create multiple MappableDomain entities
 func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -644,10 +1624,57 @@ func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input [
 	}, nil
 }
 
+// bulkDeleteMappableDomain deletes multiple MappableDomain entities by their IDs
+func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []string) (*model.MappableDomainBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each mappabledomain individually to ensure proper cleanup
+			if err := r.db.MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.MappableDomainEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("mappabledomain_id", id).Msg("failed to cleanup mappabledomain edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappabledomain deletions failed")
+	}
+
+	return &model.MappableDomainBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateMappedControl uses the CreateBulk function to create multiple MappedControl entities
 func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
-
 	builders := make([]*generated.MappedControlCreate, len(input))
 	for i, data := range input {
 		builders[i] = c.MappedControl.Create().SetInput(*data)
@@ -661,6 +1688,54 @@ func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []
 	// return response
 	return &model.MappedControlBulkCreatePayload{
 		MappedControls: res,
+	}, nil
+}
+
+// bulkDeleteMappedControl deletes multiple MappedControl entities by their IDs
+func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []string) (*model.MappedControlBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each mappedcontrol individually to ensure proper cleanup
+			if err := r.db.MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.MappedControlEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to cleanup mappedcontrol edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappedcontrol deletions failed")
+	}
+
+	return &model.MappedControlBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -683,6 +1758,54 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	}, nil
 }
 
+// bulkDeleteNarrative deletes multiple Narrative entities by their IDs
+func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string) (*model.NarrativeBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each narrative individually to ensure proper cleanup
+			if err := r.db.Narrative.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.NarrativeEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("narrative_id", id).Msg("failed to cleanup narrative edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some narrative deletions failed")
+	}
+
+	return &model.NarrativeBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
 func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -702,6 +1825,54 @@ func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, in
 	}, nil
 }
 
+// bulkDeleteOrganizationSetting deletes multiple OrganizationSetting entities by their IDs
+func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each organizationsetting individually to ensure proper cleanup
+			if err := r.db.OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.OrganizationSettingEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("organizationsetting_id", id).Msg("failed to cleanup organizationsetting edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationsetting deletions failed")
+	}
+
+	return &model.OrganizationSettingBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateOrgMembership uses the CreateBulk function to create multiple OrgMembership entities
 func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -718,6 +1889,54 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	// return response
 	return &model.OrgMembershipBulkCreatePayload{
 		OrgMemberships: res,
+	}, nil
+}
+
+// bulkDeleteOrgMembership deletes multiple OrgMembership entities by their IDs
+func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []string) (*model.OrgMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each orgmembership individually to ensure proper cleanup
+			if err := r.db.OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.OrgMembershipEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("orgmembership_id", id).Msg("failed to cleanup orgmembership edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some orgmembership deletions failed")
+	}
+
+	return &model.OrgMembershipBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -781,6 +2000,54 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 	}, nil
 }
 
+// bulkDeleteProcedure deletes multiple Procedure entities by their IDs
+func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each procedure individually to ensure proper cleanup
+			if err := r.db.Procedure.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
+	}
+
+	return &model.ProcedureBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateProgram uses the CreateBulk function to create multiple Program entities
 func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*generated.CreateProgramInput) (*model.ProgramBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -800,6 +2067,54 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkDeleteProgram deletes multiple Program entities by their IDs
+func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) (*model.ProgramBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each program individually to ensure proper cleanup
+			if err := r.db.Program.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("program_id", id).Msg("failed to cleanup program edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some program deletions failed")
+	}
+
+	return &model.ProgramBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateProgramMembership uses the CreateBulk function to create multiple ProgramMembership entities
 func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*model.ProgramMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -816,6 +2131,54 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 	// return response
 	return &model.ProgramMembershipBulkCreatePayload{
 		ProgramMemberships: res,
+	}, nil
+}
+
+// bulkDeleteProgramMembership deletes multiple ProgramMembership entities by their IDs
+func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each programmembership individually to ensure proper cleanup
+			if err := r.db.ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ProgramMembershipEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("programmembership_id", id).Msg("failed to cleanup programmembership edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some programmembership deletions failed")
+	}
+
+	return &model.ProgramMembershipBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -879,6 +2242,54 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 	}, nil
 }
 
+// bulkDeleteRisk deletes multiple Risk entities by their IDs
+func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*model.RiskBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each risk individually to ensure proper cleanup
+			if err := r.db.Risk.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.RiskEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("risk_id", id).Msg("failed to cleanup risk edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some risk deletions failed")
+	}
+
+	return &model.RiskBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateScan uses the CreateBulk function to create multiple Scan entities
 func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generated.CreateScanInput) (*model.ScanBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -939,6 +2350,54 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 	}, nil
 }
 
+// bulkDeleteScan deletes multiple Scan entities by their IDs
+func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*model.ScanBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each scan individually to ensure proper cleanup
+			if err := r.db.Scan.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ScanEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("scan_id", id).Msg("failed to cleanup scan edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scan deletions failed")
+	}
+
+	return &model.ScanBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateScheduledJob uses the CreateBulk function to create multiple ScheduledJob entities
 func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*generated.CreateScheduledJobInput) (*model.ScheduledJobBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -955,6 +2414,54 @@ func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*
 	// return response
 	return &model.ScheduledJobBulkCreatePayload{
 		ScheduledJobs: res,
+	}, nil
+}
+
+// bulkDeleteScheduledJob deletes multiple ScheduledJob entities by their IDs
+func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []string) (*model.ScheduledJobBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each scheduledjob individually to ensure proper cleanup
+			if err := r.db.ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ScheduledJobEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("scheduledjob_id", id).Msg("failed to cleanup scheduledjob edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scheduledjob deletions failed")
+	}
+
+	return &model.ScheduledJobBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -977,6 +2484,54 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkDeleteSubcontrol deletes multiple Subcontrol entities by their IDs
+func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []string) (*model.SubcontrolBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each subcontrol individually to ensure proper cleanup
+			if err := r.db.Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.SubcontrolEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("subcontrol_id", id).Msg("failed to cleanup subcontrol edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subcontrol deletions failed")
+	}
+
+	return &model.SubcontrolBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateSubprocessor uses the CreateBulk function to create multiple Subprocessor entities
 func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -993,6 +2548,54 @@ func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*
 	// return response
 	return &model.SubprocessorBulkCreatePayload{
 		Subprocessors: res,
+	}, nil
+}
+
+// bulkDeleteSubprocessor deletes multiple Subprocessor entities by their IDs
+func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each subprocessor individually to ensure proper cleanup
+			if err := r.db.Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.SubprocessorEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("subprocessor_id", id).Msg("failed to cleanup subprocessor edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subprocessor deletions failed")
+	}
+
+	return &model.SubprocessorBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1075,6 +2678,54 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 	}, nil
 }
 
+// bulkDeleteTask deletes multiple Task entities by their IDs
+func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*model.TaskBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each task individually to ensure proper cleanup
+			if err := r.db.Task.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TaskEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("task_id", id).Msg("failed to cleanup task edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some task deletions failed")
+	}
+
+	return &model.TaskBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateTemplate uses the CreateBulk function to create multiple Template entities
 func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*model.TemplateBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -1091,6 +2742,54 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	// return response
 	return &model.TemplateBulkCreatePayload{
 		Templates: res,
+	}, nil
+}
+
+// bulkDeleteTemplate deletes multiple Template entities by their IDs
+func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string) (*model.TemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each template individually to ensure proper cleanup
+			if err := r.db.Template.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TemplateEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("template_id", id).Msg("failed to cleanup template edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some template deletions failed")
+	}
+
+	return &model.TemplateBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1113,6 +2812,54 @@ func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, 
 	}, nil
 }
 
+// bulkDeleteTrustCenterCompliance deletes multiple TrustCenterCompliance entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, ids []string) (*model.TrustCenterComplianceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each trustcentercompliance individually to ensure proper cleanup
+			if err := r.db.TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterComplianceEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to cleanup trustcentercompliance edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentercompliance deletions failed")
+	}
+
+	return &model.TrustCenterComplianceBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateTrustCenterDoc uses the CreateBulk function to create multiple TrustCenterDoc entities
 func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -1129,6 +2876,54 @@ func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input [
 	// return response
 	return &model.TrustCenterDocBulkCreatePayload{
 		TrustCenterDocs: res,
+	}, nil
+}
+
+// bulkDeleteTrustCenterDoc deletes multiple TrustCenterDoc entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each trustcenterdoc individually to ensure proper cleanup
+			if err := r.db.TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterDocEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to cleanup trustcenterdoc edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterdoc deletions failed")
+	}
+
+	return &model.TrustCenterDocBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1151,6 +2946,54 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 	}, nil
 }
 
+// bulkDeleteTrustCenterSubprocessor deletes multiple TrustCenterSubprocessor entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context, ids []string) (*model.TrustCenterSubprocessorBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each trustcentersubprocessor individually to ensure proper cleanup
+			if err := r.db.TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterSubprocessorEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to cleanup trustcentersubprocessor edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentersubprocessor deletions failed")
+	}
+
+	return &model.TrustCenterSubprocessorBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateUserSetting uses the CreateBulk function to create multiple UserSetting entities
 func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -1167,5 +3010,53 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 	// return response
 	return &model.UserSettingBulkCreatePayload{
 		UserSettings: res,
+	}, nil
+}
+
+// bulkDeleteUserSetting deletes multiple UserSetting entities by their IDs
+func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each usersetting individually to ensure proper cleanup
+			if err := r.db.UserSetting.DeleteOneID(id).Exec(ctx); err != nil {
+				log.Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.UserSettingEdgeCleanup(ctx, id); err != nil {
+				log.Error().Err(err).Str("usersetting_id", id).Msg("failed to cleanup usersetting edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some usersetting deletions failed")
+	}
+
+	return &model.UserSettingBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }

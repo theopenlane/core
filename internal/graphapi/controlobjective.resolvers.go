@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string
 	}, nil
 }
 
+// DeleteBulkControlObjective is the resolver for the deleteBulkControlObjective field.
+func (r *mutationResolver) DeleteBulkControlObjective(ctx context.Context, ids []string) (*model.ControlObjectiveBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteControlObjective(ctx, ids)
+}
+
 // ControlObjective is the resolver for the controlObjective field.
 func (r *queryResolver) ControlObjective(ctx context.Context, id string) (*generated.ControlObjective, error) {
 	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx)

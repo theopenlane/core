@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): OrgMembershipDeletePayload!
+    """
+    Delete multiple orgMemberships
+    """
+    deleteBulkOrgMembership(
+        """
+        IDs of the orgMemberships to delete
+        """
+        ids: [ID!]!
+    ): OrgMembershipBulkDeletePayload!
 }
 
 """
@@ -100,6 +109,16 @@ type OrgMembershipBulkCreatePayload {
     Created orgMemberships
     """
     orgMemberships: [OrgMembership!]
+}
+
+"""
+Return response for deleteBulkOrgMembership mutation
+"""
+type OrgMembershipBulkDeletePayload {
+    """
+    Deleted orgMembership IDs
+    """
+    deletedIDs: [ID!]!
 }
 
 extend input OrgMembershipWhereInput {

@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlObjectiveDeletePayload!
+    """
+    Delete multiple controlObjectives
+    """
+    deleteBulkControlObjective(
+        """
+        IDs of the controlObjectives to delete
+        """
+        ids: [ID!]!
+    ): ControlObjectiveBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type ControlObjectiveBulkCreatePayload {
     Created controlObjectives
     """
     controlObjectives: [ControlObjective!]
+}
+
+"""
+Return response for deleteBulkControlObjective mutation
+"""
+type ControlObjectiveBulkDeletePayload {
+    """
+    Deleted controlObjective IDs
+    """
+    deletedIDs: [ID!]!
 }
