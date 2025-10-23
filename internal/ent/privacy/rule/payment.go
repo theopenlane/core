@@ -14,12 +14,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 var (
-	errNoPaymentMethodAttached = errors.New("a valid payment method is required to create tokens. Contact your organization admin to add one in billing")
+	errNoPaymentMethodAttached = errors.New("A valid payment method is required to create tokens. Contact your organization admin to add one in billing.") //nolint:staticcheck,revive
 )
 
 // RequirePaymentMethod makes sure the organization has a payment mehod ( card or any other)
@@ -52,22 +51,7 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return privacy.Skip
 		}
 
-		// via graphql requests, org should already have their card added
-		// else they have to set it in the ui first. Once they have it,
-		// new requests from graph should skip on the paymentmenthod check just above this
-		if au.AuthenticationType != auth.JWTAuthentication {
-			return errNoPaymentMethodAttached
-		}
-
-		user, err := client.User.Query().
-			Where(user.ID(au.SubjectID)).
-			Select(user.FieldEmail).
-			Only(ctx)
-		if err != nil {
-			return err
-		}
-
-		emailDomain := strings.SplitAfter(user.Email, "@")[1]
+		emailDomain := strings.SplitAfter(au.SubjectEmail, "@")[1]
 
 		if slices.Contains(client.EntConfig.Billing.BypassEmailDomains, emailDomain) {
 			return privacy.Skip
