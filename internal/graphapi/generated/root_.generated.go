@@ -2774,6 +2774,7 @@ type ComplexityRoot struct {
 		DeleteMappableDomain                 func(childComplexity int, id string) int
 		DeleteMappedControl                  func(childComplexity int, id string) int
 		DeleteNarrative                      func(childComplexity int, id string) int
+		DeleteNote                           func(childComplexity int, id string) int
 		DeleteOrgMembership                  func(childComplexity int, id string) int
 		DeleteOrganization                   func(childComplexity int, id string) int
 		DeleteOrganizationSetting            func(childComplexity int, id string) int
@@ -2982,6 +2983,10 @@ type ComplexityRoot struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	NoteDeletePayload struct {
+		DeletedID func(childComplexity int) int
 	}
 
 	NoteEdge struct {
@@ -20092,6 +20097,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteNarrative(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteNote":
+		if e.complexity.Mutation.DeleteNote == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNote_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNote(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteOrgMembership":
 		if e.complexity.Mutation.DeleteOrgMembership == nil {
 			break
@@ -21794,6 +21811,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteConnection.TotalCount(childComplexity), true
+
+	case "NoteDeletePayload.deletedID":
+		if e.complexity.NoteDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.NoteDeletePayload.DeletedID(childComplexity), true
 
 	case "NoteEdge.cursor":
 		if e.complexity.NoteEdge.Cursor == nil {
@@ -102508,8 +102532,26 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): InternalPolicyUpdatePayload!
+    """
+    Delete an existing note
+    """
+    deleteNote(
+        """
+        ID of the note/comment
+        """
+        id: ID!
+    ): NoteDeletePayload!
 }
 
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+    """
+    Deleted comment ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """

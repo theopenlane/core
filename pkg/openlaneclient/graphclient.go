@@ -294,6 +294,7 @@ type OpenlaneGraphClient interface {
 	UpdateNarrative(ctx context.Context, updateNarrativeID string, input UpdateNarrativeInput, interceptors ...clientv2.RequestInterceptor) (*UpdateNarrative, error)
 	GetAllNarrativeHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNarrativeHistories, error)
 	GetNarrativeHistories(ctx context.Context, first *int64, last *int64, where *NarrativeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNarrativeHistories, error)
+	DeleteNote(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*DeleteNote, error)
 	GetAllNoteHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNoteHistories, error)
 	GetNoteHistories(ctx context.Context, first *int64, last *int64, where *NoteHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNoteHistories, error)
 	CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error)
@@ -38973,6 +38974,17 @@ func (t *GetNarrativeHistories_NarrativeHistories) GetTotalCount() int64 {
 		t = &GetNarrativeHistories_NarrativeHistories{}
 	}
 	return t.TotalCount
+}
+
+type DeleteNote_DeleteNote struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteNote_DeleteNote) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteNote_DeleteNote{}
+	}
+	return t.DeletedID
 }
 
 type GetAllNoteHistories_NoteHistories_PageInfo struct {
@@ -82112,6 +82124,17 @@ func (t *GetNarrativeHistories) GetNarrativeHistories() *GetNarrativeHistories_N
 	return &t.NarrativeHistories
 }
 
+type DeleteNote struct {
+	DeleteNote DeleteNote_DeleteNote "json:\"deleteNote\" graphql:\"deleteNote\""
+}
+
+func (t *DeleteNote) GetDeleteNote() *DeleteNote_DeleteNote {
+	if t == nil {
+		t = &DeleteNote{}
+	}
+	return &t.DeleteNote
+}
+
 type GetAllNoteHistories struct {
 	NoteHistories GetAllNoteHistories_NoteHistories "json:\"noteHistories\" graphql:\"noteHistories\""
 }
@@ -96874,6 +96897,30 @@ func (c *Client) GetNarrativeHistories(ctx context.Context, first *int64, last *
 	return &res, nil
 }
 
+const DeleteNoteDocument = `mutation DeleteNote ($noteID: ID!) {
+	deleteNote(id: $noteID) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteNote(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*DeleteNote, error) {
+	vars := map[string]any{
+		"noteID": noteID,
+	}
+
+	var res DeleteNote
+	if err := c.Client.Post(ctx, "DeleteNote", DeleteNoteDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllNoteHistoriesDocument = `query GetAllNoteHistories {
 	noteHistories {
 		totalCount
@@ -108698,6 +108745,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateNarrativeDocument:                           "UpdateNarrative",
 	GetAllNarrativeHistoriesDocument:                  "GetAllNarrativeHistories",
 	GetNarrativeHistoriesDocument:                     "GetNarrativeHistories",
+	DeleteNoteDocument:                                "DeleteNote",
 	GetAllNoteHistoriesDocument:                       "GetAllNoteHistories",
 	GetNoteHistoriesDocument:                          "GetNoteHistories",
 	CreateOnboardingDocument:                          "CreateOnboarding",

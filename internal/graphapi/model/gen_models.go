@@ -1134,6 +1134,12 @@ type NarrativeUpdatePayload struct {
 	Narrative *generated.Narrative `json:"narrative"`
 }
 
+// Return response for deleteComment mutation
+type NoteDeletePayload struct {
+	// Deleted comment ID
+	DeletedID string `json:"deletedID"`
+}
+
 // Return response for createOnboarding mutation
 type OnboardingCreatePayload struct {
 	// Created onboarding

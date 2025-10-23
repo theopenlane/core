@@ -52,3 +52,49 @@ func TestFilenameToTitle(t *testing.T) {
 		})
 	}
 }
+func TestUpdatePlaceholderText(t *testing.T) {
+	tests := []struct {
+		name     string
+		details  string
+		orgName  string
+		expected string
+	}{
+		{
+			name:     "replace with organization name",
+			details:  "Welcome to {{company_name}}, we're glad to have you!",
+			orgName:  "Openlane",
+			expected: "Welcome to Openlane, we're glad to have you!",
+		},
+		{
+			name:     "multiple replacements",
+			details:  "{{company_name}} is great! Visit {{company_name}} today.",
+			orgName:  "Openlane",
+			expected: "Openlane is great! Visit Openlane today.",
+		},
+		{
+			name:     "empty organization name",
+			details:  "Welcome to {{company_name}}!",
+			orgName:  "",
+			expected: "Welcome to [Company Name]!",
+		},
+		{
+			name:     "no placeholders",
+			details:  "Just a regular string with no placeholders.",
+			orgName:  "Openlane",
+			expected: "Just a regular string with no placeholders.",
+		},
+		{
+			name:     "empty details",
+			details:  "",
+			orgName:  "Openlane",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := updatePlaceholderText(tt.details, tt.orgName)
+			assert.Check(t, is.Equal(result, tt.expected))
+		})
+	}
+}
