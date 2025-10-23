@@ -62,7 +62,7 @@ type Modules struct {
 
 // Billing settings for feature access
 type Billing struct {
-	// RequirePaymentMethod indiscates whether to check if a payment method
+	// RequirePaymentMethod indicates whether to check if a payment method
 	// exists for orgs before they can access some resource
 	RequirePaymentMethod bool `json:"requirePaymentMethod" koanf:"requirePaymentMethod"`
 }
