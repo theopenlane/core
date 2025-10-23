@@ -42,11 +42,6 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			log.Err(err).Msg("failed to fetch organization from db")
 			return err
 		}
-		orgSetting, err := org.Setting(ctx)
-		if err != nil {
-			log.Err(err).Msg("could not fetch organization settings")
-			return err
-		}
 
 		if orgSetting.PaymentMethodAdded {
 			// evaluate next rule
