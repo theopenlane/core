@@ -17883,6 +17883,12 @@ type NoteConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for deleteComment mutation
+type NoteDeletePayload struct {
+	// Deleted comment ID
+	DeletedID string `json:"deletedID"`
+}
+
 // An edge in a connection.
 type NoteEdge struct {
 	// The item at the end of the edge.
