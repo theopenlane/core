@@ -23,6 +23,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -107,6 +108,8 @@ type Handler struct {
 	Windmill *windmill.Client
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string
+	// ObjectStore handles file storage operations
+	ObjectStore *objects.Service
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

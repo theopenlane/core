@@ -68,12 +68,14 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 	}
 
 	storageOpts := &UploadOptions{
-		FileName:    fileName,
-		ContentType: contentType,
-		Bucket:      opts.Bucket,
+		FileName:          fileName,
+		ContentType:       contentType,
+		Bucket:            opts.Bucket,
+		FolderDestination: opts.FolderDestination,
 		FileMetadata: FileMetadata{
 			Key:           opts.Key,
 			Bucket:        opts.Bucket,
+			Region:        opts.Region,
 			ProviderHints: opts.ProviderHints,
 		},
 	}
@@ -88,18 +90,55 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 		return nil, err
 	}
 
+	fileMetadata := FileMetadata{
+		Key:           metadata.Key,
+		Size:          metadata.Size,
+		ContentType:   metadata.ContentType,
+		Folder:        metadata.Folder,
+		Bucket:        metadata.Bucket,
+		Region:        metadata.Region,
+		FullURI:       metadata.FullURI,
+		ProviderType:  metadata.ProviderType,
+		PresignedURL:  metadata.PresignedURL,
+		Name:          metadata.Name,
+		ProviderHints: metadata.ProviderHints,
+	}
+
+	if fileMetadata.Key == "" {
+		fileMetadata.Key = storageOpts.Key
+	}
+	if fileMetadata.ContentType == "" {
+		fileMetadata.ContentType = contentType
+	}
+	if fileMetadata.Folder == "" {
+		fileMetadata.Folder = storageOpts.FolderDestination
+	}
+	if fileMetadata.Bucket == "" {
+		fileMetadata.Bucket = storageOpts.Bucket
+	}
+
+	if fileMetadata.Region == "" {
+		fileMetadata.Region = storageOpts.Region
+	}
+
+	if fileMetadata.ProviderType == "" {
+		fileMetadata.ProviderType = provider.ProviderType()
+	}
+	if fileMetadata.Name == "" {
+		fileMetadata.Name = fileName
+	}
+	if fileMetadata.ProviderHints == nil {
+		fileMetadata.ProviderHints = storageOpts.ProviderHints
+	}
+
 	// Create file object with complete metadata
 	file := &File{
 		OriginalName: fileName,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
-		ProviderType: provider.ProviderType(),
-		FileMetadata: FileMetadata{
-			Key:         metadata.Key,
-			Size:        metadata.Size,
-			ContentType: contentType,
-			Folder:      storageOpts.Bucket,
-		},
+		ProviderType: fileMetadata.ProviderType,
+		FieldName:    opts.Key,
+		FileMetadata: fileMetadata,
 	}
 
 	return file, nil

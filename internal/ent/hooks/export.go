@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/corejobs"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -74,7 +74,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 }
 
 func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next ent.Mutator) (generated.Value, error) {
-	fileIDs := objects.GetFileIDsFromContext(ctx)
+	fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 	if len(fileIDs) > 0 {
 		var err error
 
@@ -93,24 +93,15 @@ func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next e
 func checkExportFiles(ctx context.Context, m *generated.ExportMutation) (context.Context, error) {
 	key := "exportFiles"
 
-	// get the file from the context, if it exists
-	file, err := objects.FilesFromContextWithKey(ctx, key)
-	if err != nil {
-		return ctx, err
-	}
-
-	if file == nil {
+	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
+	if len(files) == 0 {
 		return ctx, nil
 	}
 
-	for i, f := range file {
-		if f.FieldName == key {
-			file[i].Parent.ID, _ = m.ID()
-			file[i].Parent.Type = m.Type()
+	adapter := pkgobjects.NewGenericMutationAdapter(m,
+		func(mut *generated.ExportMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.ExportMutation) string { return mut.Type() },
+	)
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file[i])
-		}
-	}
-
-	return ctx, nil
+	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
 }

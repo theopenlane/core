@@ -61,6 +61,15 @@ extend type Mutation{
         """
         id: ID!
     ): APITokenDeletePayload!
+    """
+    Delete multiple apiTokens
+    """
+    deleteBulkAPIToken(
+        """
+        IDs of the apiTokens to delete
+        """
+        ids: [ID!]!
+    ): APITokenBulkDeletePayload!
 }
 
 """
@@ -101,5 +110,15 @@ type APITokenBulkCreatePayload {
     Created apiTokens
     """
     apiTokens: [APIToken!]
+}
+
+"""
+Return response for deleteBulkAPIToken mutation
+"""
+type APITokenBulkDeletePayload {
+    """
+    Deleted apiToken IDs
+    """
+    deletedIDs: [ID!]!
 }
 

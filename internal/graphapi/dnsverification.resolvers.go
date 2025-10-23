@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteDNSVerification(ctx context.Context, id string)
 	}, nil
 }
 
+// DeleteBulkDNSVerification is the resolver for the deleteBulkDNSVerification field.
+func (r *mutationResolver) DeleteBulkDNSVerification(ctx context.Context, ids []string) (*model.DNSVerificationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteDNSVerification(ctx, ids)
+}
+
 // DNSVerification is the resolver for the dnsVerification field.
 func (r *queryResolver) DNSVerification(ctx context.Context, id string) (*generated.DNSVerification, error) {
 	query, err := withTransactionalMutation(ctx).DNSVerification.Query().Where(dnsverification.ID(id)).CollectFields(ctx)

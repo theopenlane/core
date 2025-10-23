@@ -93,6 +93,9 @@ type Export func(*sql.Selector)
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
 
+// FileDownloadToken is the predicate function for filedownloadtoken builders.
+type FileDownloadToken func(*sql.Selector)
+
 // FileHistory is the predicate function for filehistory builders.
 type FileHistory func(*sql.Selector)
 
@@ -119,6 +122,9 @@ type Hush func(*sql.Selector)
 
 // HushHistory is the predicate function for hushhistory builders.
 type HushHistory func(*sql.Selector)
+
+// ImpersonationEvent is the predicate function for impersonationevent builders.
+type ImpersonationEvent func(*sql.Selector)
 
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)

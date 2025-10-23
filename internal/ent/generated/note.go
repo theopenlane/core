@@ -9,8 +9,13 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
@@ -39,13 +44,16 @@ type Note struct {
 	Text string `json:"text,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
-	Edges               NoteEdges `json:"edges"`
-	control_comments    *string
-	entity_notes        *string
-	program_notes       *string
-	subcontrol_comments *string
-	task_comments       *string
-	selectValues        sql.SelectValues
+	Edges                    NoteEdges `json:"edges"`
+	control_comments         *string
+	entity_notes             *string
+	internal_policy_comments *string
+	procedure_comments       *string
+	program_notes            *string
+	risk_comments            *string
+	subcontrol_comments      *string
+	task_comments            *string
+	selectValues             sql.SelectValues
 }
 
 // NoteEdges holds the relations/edges for other nodes in the graph.
@@ -54,13 +62,23 @@ type NoteEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Task holds the value of the task edge.
 	Task *Task `json:"task,omitempty"`
+	// Control holds the value of the control edge.
+	Control *Control `json:"control,omitempty"`
+	// Subcontrol holds the value of the subcontrol edge.
+	Subcontrol *Subcontrol `json:"subcontrol,omitempty"`
+	// Procedure holds the value of the procedure edge.
+	Procedure *Procedure `json:"procedure,omitempty"`
+	// Risk holds the value of the risk edge.
+	Risk *Risk `json:"risk,omitempty"`
+	// InternalPolicy holds the value of the internal_policy edge.
+	InternalPolicy *InternalPolicy `json:"internal_policy,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [8]map[string]int
 
 	namedFiles map[string][]*File
 }
@@ -87,10 +105,65 @@ func (e NoteEdges) TaskOrErr() (*Task, error) {
 	return nil, &NotLoadedError{edge: "task"}
 }
 
+// ControlOrErr returns the Control value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) ControlOrErr() (*Control, error) {
+	if e.Control != nil {
+		return e.Control, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: control.Label}
+	}
+	return nil, &NotLoadedError{edge: "control"}
+}
+
+// SubcontrolOrErr returns the Subcontrol value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) SubcontrolOrErr() (*Subcontrol, error) {
+	if e.Subcontrol != nil {
+		return e.Subcontrol, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: subcontrol.Label}
+	}
+	return nil, &NotLoadedError{edge: "subcontrol"}
+}
+
+// ProcedureOrErr returns the Procedure value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) ProcedureOrErr() (*Procedure, error) {
+	if e.Procedure != nil {
+		return e.Procedure, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: procedure.Label}
+	}
+	return nil, &NotLoadedError{edge: "procedure"}
+}
+
+// RiskOrErr returns the Risk value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) RiskOrErr() (*Risk, error) {
+	if e.Risk != nil {
+		return e.Risk, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: risk.Label}
+	}
+	return nil, &NotLoadedError{edge: "risk"}
+}
+
+// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) InternalPolicyOrErr() (*InternalPolicy, error) {
+	if e.InternalPolicy != nil {
+		return e.InternalPolicy, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: internalpolicy.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_policy"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[7] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -109,11 +182,17 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case note.ForeignKeys[1]: // entity_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[2]: // program_notes
+		case note.ForeignKeys[2]: // internal_policy_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[3]: // subcontrol_comments
+		case note.ForeignKeys[3]: // procedure_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[4]: // task_comments
+		case note.ForeignKeys[4]: // program_notes
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[5]: // risk_comments
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[6]: // subcontrol_comments
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[7]: // task_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -206,19 +285,40 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			}
 		case note.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_comments", values[i])
+			} else if value.Valid {
+				_m.internal_policy_comments = new(string)
+				*_m.internal_policy_comments = value.String
+			}
+		case note.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_comments", values[i])
+			} else if value.Valid {
+				_m.procedure_comments = new(string)
+				*_m.procedure_comments = value.String
+			}
+		case note.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
 			} else if value.Valid {
 				_m.program_notes = new(string)
 				*_m.program_notes = value.String
 			}
-		case note.ForeignKeys[3]:
+		case note.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_comments", values[i])
+			} else if value.Valid {
+				_m.risk_comments = new(string)
+				*_m.risk_comments = value.String
+			}
+		case note.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_comments", values[i])
 			} else if value.Valid {
 				_m.subcontrol_comments = new(string)
 				*_m.subcontrol_comments = value.String
 			}
-		case note.ForeignKeys[4]:
+		case note.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
 			} else if value.Valid {
@@ -246,6 +346,31 @@ func (_m *Note) QueryOwner() *OrganizationQuery {
 // QueryTask queries the "task" edge of the Note entity.
 func (_m *Note) QueryTask() *TaskQuery {
 	return NewNoteClient(_m.config).QueryTask(_m)
+}
+
+// QueryControl queries the "control" edge of the Note entity.
+func (_m *Note) QueryControl() *ControlQuery {
+	return NewNoteClient(_m.config).QueryControl(_m)
+}
+
+// QuerySubcontrol queries the "subcontrol" edge of the Note entity.
+func (_m *Note) QuerySubcontrol() *SubcontrolQuery {
+	return NewNoteClient(_m.config).QuerySubcontrol(_m)
+}
+
+// QueryProcedure queries the "procedure" edge of the Note entity.
+func (_m *Note) QueryProcedure() *ProcedureQuery {
+	return NewNoteClient(_m.config).QueryProcedure(_m)
+}
+
+// QueryRisk queries the "risk" edge of the Note entity.
+func (_m *Note) QueryRisk() *RiskQuery {
+	return NewNoteClient(_m.config).QueryRisk(_m)
+}
+
+// QueryInternalPolicy queries the "internal_policy" edge of the Note entity.
+func (_m *Note) QueryInternalPolicy() *InternalPolicyQuery {
+	return NewNoteClient(_m.config).QueryInternalPolicy(_m)
 }
 
 // QueryFiles queries the "files" edge of the Note entity.

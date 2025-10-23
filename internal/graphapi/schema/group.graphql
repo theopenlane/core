@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): GroupDeletePayload!
+    """
+    Delete multiple groups
+    """
+    deleteBulkGroup(
+        """
+        IDs of the groups to delete
+        """
+        ids: [ID!]!
+    ): GroupBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type GroupBulkCreatePayload {
     Created groups
     """
     groups: [Group!]
+}
+
+"""
+Return response for deleteBulkGroup mutation
+"""
+type GroupBulkDeletePayload {
+    """
+    Deleted group IDs
+    """
+    deletedIDs: [ID!]!
 }

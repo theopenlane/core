@@ -603,3 +603,9 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
     }
   }
 }
+
+mutation DeleteBulkControl($ids: [ID!]!) {
+  deleteBulkControl(ids: $ids) {
+    deletedIDs
+  }
+}

@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*mode
 	}, nil
 }
 
+// DeleteBulkAPIToken is the resolver for the deleteBulkAPIToken field.
+func (r *mutationResolver) DeleteBulkAPIToken(ctx context.Context, ids []string) (*model.APITokenBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteAPIToken(ctx, ids)
+}
+
 // APIToken is the resolver for the apiToken field.
 func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.APIToken, error) {
 	query, err := withTransactionalMutation(ctx).APIToken.Query().Where(apitoken.ID(id)).CollectFields(ctx)

@@ -21,6 +21,8 @@ type Config struct {
 	MaxSchemaImportSize int `json:"maxSchemaImportSize" koanf:"maxSchemaImportSize" default:"262144" description:"maximum size allowed for schema imports (256KB)"`
 	// EmailValidation contains configuration for email validation
 	EmailValidation validator.EmailVerificationConfig `json:"emailValidation" koanf:"emailValidation"`
+	// Billing contains configuration for billing related features
+	Billing Billing `json:"billing" koanf:"billing"`
 }
 
 // Windmill holds configuration for the Windmill workflow automation platform
@@ -56,4 +58,14 @@ type Modules struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
 	// UseSandbox indicates whether to use the sandbox catalog for module access checks
 	UseSandbox bool `json:"useSandbox" koanf:"useSandbox" default:"false"`
+}
+
+// Billing settings for feature access
+type Billing struct {
+	// RequirePaymentMethod indicates whether to check if a payment method
+	// exists for orgs before they can access some resource
+	RequirePaymentMethod bool `json:"requirePaymentMethod" koanf:"requirePaymentMethod"`
+	// BypassEmailDomains is a list of domains that should be allowed to bypass
+	// the checks if RequirePaymentMethod above is enabled
+	BypassEmailDomains []string `json:"bypassEmailDomains" koanf:"bypassEmailDomains"`
 }

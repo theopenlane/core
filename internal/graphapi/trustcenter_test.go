@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -927,21 +927,21 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 
 			// Create file upload if logoPath is provided
 			if tc.logoPath != "" {
-				uploadFile, err := objects.NewUploadFile(tc.logoPath)
+				uploadFile, err := storage.NewUploadFile(tc.logoPath)
 				assert.NilError(t, err)
 
 				logoFile = &graphql.Upload{
-					File:        uploadFile.File,
-					Filename:    uploadFile.Filename,
+					File:        uploadFile.RawFile,
+					Filename:    uploadFile.OriginalName,
 					Size:        uploadFile.Size,
 					ContentType: uploadFile.ContentType,
 				}
 
 				// Set up mock expectations based on whether we expect an error
 				if tc.expectedErr == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*logoFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 

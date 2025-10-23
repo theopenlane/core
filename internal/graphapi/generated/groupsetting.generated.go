@@ -81,6 +81,35 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 	return fc, nil
 }
 
+func (ec *executionContext) _GroupSettingBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupSettingBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_GroupSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupSettingBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -264,6 +293,45 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload(ctx context.Context, 
 	return out
 }
 
+var groupSettingBulkDeletePayloadImplementors = []string{"GroupSettingBulkDeletePayload"}
+
+func (ec *executionContext) _GroupSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupSettingBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupSettingBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GroupSettingBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._GroupSettingBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var groupSettingCreatePayloadImplementors = []string{"GroupSettingCreatePayload"}
 
 func (ec *executionContext) _GroupSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupSettingCreatePayload) graphql.Marshaler {
@@ -397,6 +465,20 @@ func (ec *executionContext) marshalNGroupSettingBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._GroupSettingBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNGroupSettingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingBulkDeletePayload) graphql.Marshaler {
+	return ec._GroupSettingBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNGroupSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._GroupSettingBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNGroupSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingCreatePayload) graphql.Marshaler {

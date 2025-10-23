@@ -87,6 +87,15 @@ func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id str
 	}, nil
 }
 
+// DeleteBulkOrganizationSetting is the resolver for the deleteBulkOrganizationSetting field.
+func (r *mutationResolver) DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteOrganizationSetting(ctx, ids)
+}
+
 // OrganizationSetting is the resolver for the organizationSetting field.
 func (r *queryResolver) OrganizationSetting(ctx context.Context, id string) (*generated.OrganizationSetting, error) {
 	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().Where(organizationsetting.ID(id)).CollectFields(ctx)

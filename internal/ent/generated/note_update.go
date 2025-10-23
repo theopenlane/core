@@ -11,9 +11,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -138,6 +143,101 @@ func (_u *NoteUpdate) SetTask(v *Task) *NoteUpdate {
 	return _u.SetTaskID(v.ID)
 }
 
+// SetControlID sets the "control" edge to the Control entity by ID.
+func (_u *NoteUpdate) SetControlID(id string) *NoteUpdate {
+	_u.mutation.SetControlID(id)
+	return _u
+}
+
+// SetNillableControlID sets the "control" edge to the Control entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableControlID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetControlID(*id)
+	}
+	return _u
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_u *NoteUpdate) SetControl(v *Control) *NoteUpdate {
+	return _u.SetControlID(v.ID)
+}
+
+// SetSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID.
+func (_u *NoteUpdate) SetSubcontrolID(id string) *NoteUpdate {
+	_u.mutation.SetSubcontrolID(id)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableSubcontrolID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetSubcontrolID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdate) SetSubcontrol(v *Subcontrol) *NoteUpdate {
+	return _u.SetSubcontrolID(v.ID)
+}
+
+// SetProcedureID sets the "procedure" edge to the Procedure entity by ID.
+func (_u *NoteUpdate) SetProcedureID(id string) *NoteUpdate {
+	_u.mutation.SetProcedureID(id)
+	return _u
+}
+
+// SetNillableProcedureID sets the "procedure" edge to the Procedure entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableProcedureID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetProcedureID(*id)
+	}
+	return _u
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_u *NoteUpdate) SetProcedure(v *Procedure) *NoteUpdate {
+	return _u.SetProcedureID(v.ID)
+}
+
+// SetRiskID sets the "risk" edge to the Risk entity by ID.
+func (_u *NoteUpdate) SetRiskID(id string) *NoteUpdate {
+	_u.mutation.SetRiskID(id)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk" edge to the Risk entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableRiskID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetRiskID(*id)
+	}
+	return _u
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_u *NoteUpdate) SetRisk(v *Risk) *NoteUpdate {
+	return _u.SetRiskID(v.ID)
+}
+
+// SetInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID.
+func (_u *NoteUpdate) SetInternalPolicyID(id string) *NoteUpdate {
+	_u.mutation.SetInternalPolicyID(id)
+	return _u
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableInternalPolicyID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetInternalPolicyID(*id)
+	}
+	return _u
+}
+
+// SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
+func (_u *NoteUpdate) SetInternalPolicy(v *InternalPolicy) *NoteUpdate {
+	return _u.SetInternalPolicyID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -161,6 +261,36 @@ func (_u *NoteUpdate) Mutation() *NoteMutation {
 // ClearTask clears the "task" edge to the Task entity.
 func (_u *NoteUpdate) ClearTask() *NoteUpdate {
 	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearControl clears the "control" edge to the Control entity.
+func (_u *NoteUpdate) ClearControl() *NoteUpdate {
+	_u.mutation.ClearControl()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdate) ClearSubcontrol() *NoteUpdate {
+	_u.mutation.ClearSubcontrol()
+	return _u
+}
+
+// ClearProcedure clears the "procedure" edge to the Procedure entity.
+func (_u *NoteUpdate) ClearProcedure() *NoteUpdate {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearRisk clears the "risk" edge to the Risk entity.
+func (_u *NoteUpdate) ClearRisk() *NoteUpdate {
+	_u.mutation.ClearRisk()
+	return _u
+}
+
+// ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
+func (_u *NoteUpdate) ClearInternalPolicy() *NoteUpdate {
+	_u.mutation.ClearInternalPolicy()
 	return _u
 }
 
@@ -311,6 +441,161 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ProcedureTable,
+			Columns: []string{note.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ProcedureTable,
+			Columns: []string{note.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.RiskTable,
+			Columns: []string{note.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.RiskTable,
+			Columns: []string{note.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.InternalPolicyTable,
+			Columns: []string{note.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.InternalPolicyTable,
+			Columns: []string{note.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
@@ -496,6 +781,101 @@ func (_u *NoteUpdateOne) SetTask(v *Task) *NoteUpdateOne {
 	return _u.SetTaskID(v.ID)
 }
 
+// SetControlID sets the "control" edge to the Control entity by ID.
+func (_u *NoteUpdateOne) SetControlID(id string) *NoteUpdateOne {
+	_u.mutation.SetControlID(id)
+	return _u
+}
+
+// SetNillableControlID sets the "control" edge to the Control entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableControlID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetControlID(*id)
+	}
+	return _u
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_u *NoteUpdateOne) SetControl(v *Control) *NoteUpdateOne {
+	return _u.SetControlID(v.ID)
+}
+
+// SetSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID.
+func (_u *NoteUpdateOne) SetSubcontrolID(id string) *NoteUpdateOne {
+	_u.mutation.SetSubcontrolID(id)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableSubcontrolID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetSubcontrolID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdateOne) SetSubcontrol(v *Subcontrol) *NoteUpdateOne {
+	return _u.SetSubcontrolID(v.ID)
+}
+
+// SetProcedureID sets the "procedure" edge to the Procedure entity by ID.
+func (_u *NoteUpdateOne) SetProcedureID(id string) *NoteUpdateOne {
+	_u.mutation.SetProcedureID(id)
+	return _u
+}
+
+// SetNillableProcedureID sets the "procedure" edge to the Procedure entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableProcedureID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetProcedureID(*id)
+	}
+	return _u
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_u *NoteUpdateOne) SetProcedure(v *Procedure) *NoteUpdateOne {
+	return _u.SetProcedureID(v.ID)
+}
+
+// SetRiskID sets the "risk" edge to the Risk entity by ID.
+func (_u *NoteUpdateOne) SetRiskID(id string) *NoteUpdateOne {
+	_u.mutation.SetRiskID(id)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk" edge to the Risk entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableRiskID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetRiskID(*id)
+	}
+	return _u
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_u *NoteUpdateOne) SetRisk(v *Risk) *NoteUpdateOne {
+	return _u.SetRiskID(v.ID)
+}
+
+// SetInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID.
+func (_u *NoteUpdateOne) SetInternalPolicyID(id string) *NoteUpdateOne {
+	_u.mutation.SetInternalPolicyID(id)
+	return _u
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableInternalPolicyID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetInternalPolicyID(*id)
+	}
+	return _u
+}
+
+// SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
+func (_u *NoteUpdateOne) SetInternalPolicy(v *InternalPolicy) *NoteUpdateOne {
+	return _u.SetInternalPolicyID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -519,6 +899,36 @@ func (_u *NoteUpdateOne) Mutation() *NoteMutation {
 // ClearTask clears the "task" edge to the Task entity.
 func (_u *NoteUpdateOne) ClearTask() *NoteUpdateOne {
 	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearControl clears the "control" edge to the Control entity.
+func (_u *NoteUpdateOne) ClearControl() *NoteUpdateOne {
+	_u.mutation.ClearControl()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *NoteUpdateOne) ClearSubcontrol() *NoteUpdateOne {
+	_u.mutation.ClearSubcontrol()
+	return _u
+}
+
+// ClearProcedure clears the "procedure" edge to the Procedure entity.
+func (_u *NoteUpdateOne) ClearProcedure() *NoteUpdateOne {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearRisk clears the "risk" edge to the Risk entity.
+func (_u *NoteUpdateOne) ClearRisk() *NoteUpdateOne {
+	_u.mutation.ClearRisk()
+	return _u
+}
+
+// ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
+func (_u *NoteUpdateOne) ClearInternalPolicy() *NoteUpdateOne {
+	_u.mutation.ClearInternalPolicy()
 	return _u
 }
 
@@ -699,6 +1109,161 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ProcedureTable,
+			Columns: []string{note.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ProcedureTable,
+			Columns: []string{note.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.RiskTable,
+			Columns: []string{note.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.RiskTable,
+			Columns: []string{note.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.InternalPolicyTable,
+			Columns: []string{note.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.InternalPolicyTable,
+			Columns: []string{note.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): JobTemplateDeletePayload!
+    """
+    Delete multiple jobTemplates
+    """
+    deleteBulkJobTemplate(
+        """
+        IDs of the jobTemplates to delete
+        """
+        ids: [ID!]!
+    ): JobTemplateBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type JobTemplateBulkCreatePayload {
     Created jobTemplates
     """
     jobTemplates: [JobTemplate!]
+}
+
+"""
+Return response for deleteBulkJobTemplate mutation
+"""
+type JobTemplateBulkDeletePayload {
+    """
+    Deleted jobTemplate IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*mod
 	}, nil
 }
 
+// DeleteBulkNarrative is the resolver for the deleteBulkNarrative field.
+func (r *mutationResolver) DeleteBulkNarrative(ctx context.Context, ids []string) (*model.NarrativeBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteNarrative(ctx, ids)
+}
+
 // Narrative is the resolver for the narrative field.
 func (r *queryResolver) Narrative(ctx context.Context, id string) (*generated.Narrative, error) {
 	query, err := withTransactionalMutation(ctx).Narrative.Query().Where(narrative.ID(id)).CollectFields(ctx)

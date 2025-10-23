@@ -101,6 +101,35 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 	return fc, nil
 }
 
+func (ec *executionContext) _TemplateBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -324,6 +353,45 @@ func (ec *executionContext) _TemplateBulkCreatePayload(ctx context.Context, sel 
 	return out
 }
 
+var templateBulkDeletePayloadImplementors = []string{"TemplateBulkDeletePayload"}
+
+func (ec *executionContext) _TemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TemplateBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, templateBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TemplateBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._TemplateBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var templateCreatePayloadImplementors = []string{"TemplateCreatePayload"}
 
 func (ec *executionContext) _TemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TemplateCreatePayload) graphql.Marshaler {
@@ -457,6 +525,20 @@ func (ec *executionContext) marshalNTemplateBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._TemplateBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTemplateBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TemplateBulkDeletePayload) graphql.Marshaler {
+	return ec._TemplateBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TemplateBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TemplateBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TemplateCreatePayload) graphql.Marshaler {

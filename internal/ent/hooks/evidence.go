@@ -54,24 +54,12 @@ func HookEvidenceFiles() ent.Hook {
 func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "evidenceFiles"
 
-	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
+	// Create adapter for the existing mutation interface
+	adapter := objects.NewGenericMutationAdapter(m,
+		func(mut T) (string, bool) { return mut.ID() },
+		func(mut T) string { return mut.Type() },
+	)
 
-	// return early if no file is provided
-	if file == nil {
-		return ctx, nil
-	}
-
-	// set the parent ID and type for the file(s)
-	for i, f := range file {
-		// this should always be true, but check just in case
-		if f.FieldName == key {
-			file[i].Parent.ID, _ = m.ID()
-			file[i].Parent.Type = m.Type()
-
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file[i])
-		}
-	}
-
-	return ctx, nil
+	// Use the generic helper to process files
+	return objects.ProcessFilesForMutation(ctx, adapter, key)
 }

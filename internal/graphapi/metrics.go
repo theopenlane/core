@@ -25,14 +25,23 @@ func WithMetrics(h *handler.Server) {
 		}
 
 		start := opCtx.Stats.OperationStart
+		duration := time.Since(start).Seconds()
 
-		success := "false"
-		if resp != nil && len(resp.Errors) == 0 {
-			success = "true"
+		// Get complexity from extensions if available, otherwise default to 0
+		complexity := 0
+		if complexityExt := opCtx.Stats.GetExtension("ComplexityLimit"); complexityExt != nil {
+			if stats, ok := complexityExt.(*ComplexityStats); ok {
+				complexity = stats.Complexity
+			}
 		}
 
-		metrics.GraphQLOperationTotal.WithLabelValues(opName, success).Inc()
-		metrics.GraphQLOperationDuration.WithLabelValues(opName).Observe(time.Since(start).Seconds())
+		var err error
+		if resp != nil && len(resp.Errors) > 0 {
+			err = resp.Errors[0]
+		}
+
+		// Use the helper function for consistency
+		metrics.RecordGraphQLOperation(opName, duration, complexity, err)
 
 		return resp
 	})

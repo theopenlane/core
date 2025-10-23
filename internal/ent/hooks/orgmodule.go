@@ -163,12 +163,12 @@ func handleOrgModuleDelete(ctx context.Context, omm *generated.OrgModuleMutation
 }
 
 func handleOrgModuleBulkDelete(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
-	ids, err := omm.IDs(ctx)
-	if err != nil {
-		return nil, err
+	if !entx.CheckIsSoftDelete(ctx) {
+		return next.Mutate(ctx, omm)
 	}
 
-	if !entx.CheckIsSoftDelete(ctx) {
+	ids := getMutationIDs(ctx, omm)
+	if len(ids) == 0 {
 		return next.Mutate(ctx, omm)
 	}
 

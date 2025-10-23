@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"

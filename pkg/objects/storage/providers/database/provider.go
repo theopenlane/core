@@ -4,21 +4,15 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"net/url"
-	"strings"
 	"time"
-
-	jwt "github.com/golang-jwt/jwt/v5"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/metrics"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/ulids"
 )
 
 const (
@@ -27,10 +21,8 @@ const (
 
 // Provider persists file bytes directly into the database.
 type Provider struct {
-	options       *storage.ProviderOptions
-	tokenManager  *tokens.TokenManager
-	tokenAudience string
-	tokenIssuer   string
+	options     *storage.ProviderOptions
+	proxyConfig *storage.ProxyPresignConfig
 }
 
 // Upload stores file contents in the database for the ent file identified by provider hints.
@@ -106,6 +98,7 @@ func (p *Provider) Download(ctx context.Context, fileRef *storagetypes.File, _ *
 		FileMetadata: storagetypes.FileMetadata{
 			Key:          fileID,
 			Bucket:       p.bucket(),
+			Region:       p.options.Region,
 			ContentType:  record.DetectedContentType,
 			Name:         record.ProvidedFileName,
 			ProviderType: storagetypes.DatabaseProvider,
@@ -161,65 +154,21 @@ func (p *Provider) Exists(ctx context.Context, fileRef *storagetypes.File) (bool
 
 // GetPresignedURL returns a signed URL that proxies through the application for download.
 func (p *Provider) GetPresignedURL(ctx context.Context, fileRef *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
-	if p.tokenManager == nil {
+	if !p.options.ProxyPresignEnabled {
+		return "", ErrDatabaseProviderRequiresProxyPresign
+	}
+
+	cfg := p.proxyConfig
+	if cfg == nil || cfg.TokenManager == nil {
 		return "", ErrTokenManagerRequired
 	}
 
-	fileID := fileRef.ID
-	if fileID == "" {
-		return "", ErrMissingFileIdentifier
+	dur := time.Duration(0)
+	if opts != nil {
+		dur = opts.Duration
 	}
 
-	duration := opts.Duration
-	if duration <= 0 {
-		duration = 15 * time.Minute // nolint:mnd
-	}
-
-	now := time.Now()
-	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			IssuedAt:  jwt.NewNumericDate(now),
-			NotBefore: jwt.NewNumericDate(now),
-			ExpiresAt: jwt.NewNumericDate(now.Add(duration)),
-			ID:        ulids.New().String(),
-			Subject:   fileID,
-		},
-		Scopes: tokens.PermissionScopes{
-			Read: []string{fileID},
-		},
-	}
-
-	if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil && orgID != "" {
-		claims.OrgID = orgID
-	}
-
-	if user, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && user != nil {
-		claims.UserID = user.SubjectID
-	}
-
-	if p.tokenAudience != "" {
-		claims.Audience = jwt.ClaimStrings{p.tokenAudience}
-	}
-	if p.tokenIssuer != "" {
-		claims.Issuer = p.tokenIssuer
-	}
-
-	token := p.tokenManager.CreateToken(claims)
-	signed, err := p.tokenManager.Sign(token)
-	if err != nil {
-		return "", err
-	}
-
-	encodedToken := url.QueryEscape(signed)
-
-	base := strings.TrimRight(p.options.Endpoint, "/")
-	path := fmt.Sprintf("/v1/files/%s/download", url.PathEscape(fileID))
-
-	if base == "" {
-		return fmt.Sprintf("%s?token=%s", path, encodedToken), nil
-	}
-
-	return fmt.Sprintf("%s%s?token=%s", base, path, encodedToken), nil
+	return proxy.GenerateDownloadURL(ctx, fileRef, dur, cfg)
 }
 
 // ListBuckets returns the configured logical bucket for the provider.

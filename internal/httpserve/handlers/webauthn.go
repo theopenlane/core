@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/go-webauthn/webauthn/protocol"
@@ -48,6 +49,8 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProviderCredentials, "")
 	if err != nil {
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			log.Error().Err(err).Str("email", r.Email).Msg("email not allowed")
+
 			return h.InvalidInput(ctx, err, openapi)
 		}
 

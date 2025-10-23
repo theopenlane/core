@@ -16,12 +16,12 @@ type DeleteExportContentArgs struct {
 }
 
 type DeleteExportWorkerConfig struct {
+	// embed OpenlaneConfig to reuse validation and client creation logic
+	OpenlaneConfig
+
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the delete export worker is enabled"`
 
 	Interval time.Duration `koanf:"interval" json:"interval" jsonschema:"required,default=10m description=the interval at which to run the delete export worker"`
-
-	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
-	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
 
 	// CutoffDuration defines the tolerance for exports. If you set 30 minutes, all exports older than 30 minutes
 	// at the time of job execution will be deleted
@@ -56,10 +56,7 @@ func (w *DeleteExportContentWorker) WithOpenlaneClient(cl olclient.OpenlaneClien
 // it deletes exports that are older than the configured cutoff duration
 func (w *DeleteExportContentWorker) Work(ctx context.Context, _ *river.Job[DeleteExportContentArgs]) error {
 	if w.olClient == nil {
-		cl, err := getOpenlaneClient(CustomDomainConfig{
-			OpenlaneAPIHost:  w.Config.OpenlaneAPIHost,
-			OpenlaneAPIToken: w.Config.OpenlaneAPIToken,
-		})
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			return err
 		}

@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -57,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -133,9 +135,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
@@ -215,6 +217,8 @@ type Client struct {
 	Export *ExportClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
+	// FileDownloadToken is the client for interacting with the FileDownloadToken builders.
+	FileDownloadToken *FileDownloadTokenClient
 	// FileHistory is the client for interacting with the FileHistory builders.
 	FileHistory *FileHistoryClient
 	// Group is the client for interacting with the Group builders.
@@ -233,6 +237,8 @@ type Client struct {
 	Hush *HushClient
 	// HushHistory is the client for interacting with the HushHistory builders.
 	HushHistory *HushHistoryClient
+	// ImpersonationEvent is the client for interacting with the ImpersonationEvent builders.
+	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
 	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
@@ -432,6 +438,7 @@ func (c *Client) init() {
 	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
 	c.Export = NewExportClient(c.config)
 	c.File = NewFileClient(c.config)
+	c.FileDownloadToken = NewFileDownloadTokenClient(c.config)
 	c.FileHistory = NewFileHistoryClient(c.config)
 	c.Group = NewGroupClient(c.config)
 	c.GroupHistory = NewGroupHistoryClient(c.config)
@@ -441,6 +448,7 @@ func (c *Client) init() {
 	c.GroupSettingHistory = NewGroupSettingHistoryClient(c.config)
 	c.Hush = NewHushClient(c.config)
 	c.HushHistory = NewHushHistoryClient(c.config)
+	c.ImpersonationEvent = NewImpersonationEventClient(c.config)
 	c.Integration = NewIntegrationClient(c.config)
 	c.IntegrationHistory = NewIntegrationHistoryClient(c.config)
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
@@ -539,7 +547,7 @@ type (
 		Emailer            *emailtemplates.Config
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
-		ObjectManager      *objects.Objects
+		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
 		Windmill           *windmill.Client
 		PondPool           *soiree.PondPool
@@ -649,7 +657,7 @@ func EntitlementManager(v *entitlements.StripeClient) Option {
 }
 
 // ObjectManager configures the ObjectManager.
-func ObjectManager(v *objects.Objects) Option {
+func ObjectManager(v *objects.Service) Option {
 	return func(c *config) {
 		c.ObjectManager = v
 	}
@@ -746,6 +754,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
 		Export:                            NewExportClient(cfg),
 		File:                              NewFileClient(cfg),
+		FileDownloadToken:                 NewFileDownloadTokenClient(cfg),
 		FileHistory:                       NewFileHistoryClient(cfg),
 		Group:                             NewGroupClient(cfg),
 		GroupHistory:                      NewGroupHistoryClient(cfg),
@@ -755,6 +764,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
 		Hush:                              NewHushClient(cfg),
 		HushHistory:                       NewHushHistoryClient(cfg),
+		ImpersonationEvent:                NewImpersonationEventClient(cfg),
 		Integration:                       NewIntegrationClient(cfg),
 		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
 		InternalPolicy:                    NewInternalPolicyClient(cfg),
@@ -878,6 +888,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
 		Export:                            NewExportClient(cfg),
 		File:                              NewFileClient(cfg),
+		FileDownloadToken:                 NewFileDownloadTokenClient(cfg),
 		FileHistory:                       NewFileHistoryClient(cfg),
 		Group:                             NewGroupClient(cfg),
 		GroupHistory:                      NewGroupHistoryClient(cfg),
@@ -887,6 +898,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
 		Hush:                              NewHushClient(cfg),
 		HushHistory:                       NewHushHistoryClient(cfg),
+		ImpersonationEvent:                NewImpersonationEventClient(cfg),
 		Integration:                       NewIntegrationClient(cfg),
 		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
 		InternalPolicy:                    NewInternalPolicyClient(cfg),
@@ -998,29 +1010,29 @@ func (c *Client) Use(hooks ...Hook) {
 		c.DNSVerification, c.DNSVerificationHistory, c.DocumentData,
 		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
 		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
-		c.Export, c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
-		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
-		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
-		c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
-		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
+		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
+		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
+		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
+		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory,
+		c.Subscriber, c.TFASetting, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -1037,29 +1049,29 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.DNSVerification, c.DNSVerificationHistory, c.DocumentData,
 		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
 		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
-		c.Export, c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
-		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
-		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
-		c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
-		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
+		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
+		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
+		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
+		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory,
+		c.Subscriber, c.TFASetting, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1198,6 +1210,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Export.mutate(ctx, m)
 	case *FileMutation:
 		return c.File.mutate(ctx, m)
+	case *FileDownloadTokenMutation:
+		return c.FileDownloadToken.mutate(ctx, m)
 	case *FileHistoryMutation:
 		return c.FileHistory.mutate(ctx, m)
 	case *GroupMutation:
@@ -1216,6 +1230,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Hush.mutate(ctx, m)
 	case *HushHistoryMutation:
 		return c.HushHistory.mutate(ctx, m)
+	case *ImpersonationEventMutation:
+		return c.ImpersonationEvent.mutate(ctx, m)
 	case *IntegrationMutation:
 		return c.Integration.mutate(ctx, m)
 	case *IntegrationHistoryMutation:
@@ -7641,6 +7657,160 @@ func (c *FileClient) mutate(ctx context.Context, m *FileMutation) (Value, error)
 	}
 }
 
+// FileDownloadTokenClient is a client for the FileDownloadToken schema.
+type FileDownloadTokenClient struct {
+	config
+}
+
+// NewFileDownloadTokenClient returns a client for the FileDownloadToken from the given config.
+func NewFileDownloadTokenClient(c config) *FileDownloadTokenClient {
+	return &FileDownloadTokenClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `filedownloadtoken.Hooks(f(g(h())))`.
+func (c *FileDownloadTokenClient) Use(hooks ...Hook) {
+	c.hooks.FileDownloadToken = append(c.hooks.FileDownloadToken, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `filedownloadtoken.Intercept(f(g(h())))`.
+func (c *FileDownloadTokenClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FileDownloadToken = append(c.inters.FileDownloadToken, interceptors...)
+}
+
+// Create returns a builder for creating a FileDownloadToken entity.
+func (c *FileDownloadTokenClient) Create() *FileDownloadTokenCreate {
+	mutation := newFileDownloadTokenMutation(c.config, OpCreate)
+	return &FileDownloadTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FileDownloadToken entities.
+func (c *FileDownloadTokenClient) CreateBulk(builders ...*FileDownloadTokenCreate) *FileDownloadTokenCreateBulk {
+	return &FileDownloadTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FileDownloadTokenClient) MapCreateBulk(slice any, setFunc func(*FileDownloadTokenCreate, int)) *FileDownloadTokenCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FileDownloadTokenCreateBulk{err: fmt.Errorf("calling to FileDownloadTokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FileDownloadTokenCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FileDownloadTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FileDownloadToken.
+func (c *FileDownloadTokenClient) Update() *FileDownloadTokenUpdate {
+	mutation := newFileDownloadTokenMutation(c.config, OpUpdate)
+	return &FileDownloadTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FileDownloadTokenClient) UpdateOne(_m *FileDownloadToken) *FileDownloadTokenUpdateOne {
+	mutation := newFileDownloadTokenMutation(c.config, OpUpdateOne, withFileDownloadToken(_m))
+	return &FileDownloadTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FileDownloadTokenClient) UpdateOneID(id string) *FileDownloadTokenUpdateOne {
+	mutation := newFileDownloadTokenMutation(c.config, OpUpdateOne, withFileDownloadTokenID(id))
+	return &FileDownloadTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FileDownloadToken.
+func (c *FileDownloadTokenClient) Delete() *FileDownloadTokenDelete {
+	mutation := newFileDownloadTokenMutation(c.config, OpDelete)
+	return &FileDownloadTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FileDownloadTokenClient) DeleteOne(_m *FileDownloadToken) *FileDownloadTokenDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FileDownloadTokenClient) DeleteOneID(id string) *FileDownloadTokenDeleteOne {
+	builder := c.Delete().Where(filedownloadtoken.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FileDownloadTokenDeleteOne{builder}
+}
+
+// Query returns a query builder for FileDownloadToken.
+func (c *FileDownloadTokenClient) Query() *FileDownloadTokenQuery {
+	return &FileDownloadTokenQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFileDownloadToken},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FileDownloadToken entity by its id.
+func (c *FileDownloadTokenClient) Get(ctx context.Context, id string) (*FileDownloadToken, error) {
+	return c.Query().Where(filedownloadtoken.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FileDownloadTokenClient) GetX(ctx context.Context, id string) *FileDownloadToken {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a FileDownloadToken.
+func (c *FileDownloadTokenClient) QueryOwner(_m *FileDownloadToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(filedownloadtoken.Table, filedownloadtoken.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, filedownloadtoken.OwnerTable, filedownloadtoken.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.FileDownloadToken
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FileDownloadTokenClient) Hooks() []Hook {
+	hooks := c.hooks.FileDownloadToken
+	return append(hooks[:len(hooks):len(hooks)], filedownloadtoken.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FileDownloadTokenClient) Interceptors() []Interceptor {
+	inters := c.inters.FileDownloadToken
+	return append(inters[:len(inters):len(inters)], filedownloadtoken.Interceptors[:]...)
+}
+
+func (c *FileDownloadTokenClient) mutate(ctx context.Context, m *FileDownloadTokenMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FileDownloadTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FileDownloadTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FileDownloadTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FileDownloadTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown FileDownloadToken mutation op: %q", m.Op())
+	}
+}
+
 // FileHistoryClient is a client for the FileHistory schema.
 type FileHistoryClient struct {
 	config
@@ -9749,6 +9919,198 @@ func (c *HushHistoryClient) mutate(ctx context.Context, m *HushHistoryMutation) 
 	}
 }
 
+// ImpersonationEventClient is a client for the ImpersonationEvent schema.
+type ImpersonationEventClient struct {
+	config
+}
+
+// NewImpersonationEventClient returns a client for the ImpersonationEvent from the given config.
+func NewImpersonationEventClient(c config) *ImpersonationEventClient {
+	return &ImpersonationEventClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `impersonationevent.Hooks(f(g(h())))`.
+func (c *ImpersonationEventClient) Use(hooks ...Hook) {
+	c.hooks.ImpersonationEvent = append(c.hooks.ImpersonationEvent, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `impersonationevent.Intercept(f(g(h())))`.
+func (c *ImpersonationEventClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ImpersonationEvent = append(c.inters.ImpersonationEvent, interceptors...)
+}
+
+// Create returns a builder for creating a ImpersonationEvent entity.
+func (c *ImpersonationEventClient) Create() *ImpersonationEventCreate {
+	mutation := newImpersonationEventMutation(c.config, OpCreate)
+	return &ImpersonationEventCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ImpersonationEvent entities.
+func (c *ImpersonationEventClient) CreateBulk(builders ...*ImpersonationEventCreate) *ImpersonationEventCreateBulk {
+	return &ImpersonationEventCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ImpersonationEventClient) MapCreateBulk(slice any, setFunc func(*ImpersonationEventCreate, int)) *ImpersonationEventCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ImpersonationEventCreateBulk{err: fmt.Errorf("calling to ImpersonationEventClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ImpersonationEventCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ImpersonationEventCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ImpersonationEvent.
+func (c *ImpersonationEventClient) Update() *ImpersonationEventUpdate {
+	mutation := newImpersonationEventMutation(c.config, OpUpdate)
+	return &ImpersonationEventUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ImpersonationEventClient) UpdateOne(_m *ImpersonationEvent) *ImpersonationEventUpdateOne {
+	mutation := newImpersonationEventMutation(c.config, OpUpdateOne, withImpersonationEvent(_m))
+	return &ImpersonationEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ImpersonationEventClient) UpdateOneID(id string) *ImpersonationEventUpdateOne {
+	mutation := newImpersonationEventMutation(c.config, OpUpdateOne, withImpersonationEventID(id))
+	return &ImpersonationEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ImpersonationEvent.
+func (c *ImpersonationEventClient) Delete() *ImpersonationEventDelete {
+	mutation := newImpersonationEventMutation(c.config, OpDelete)
+	return &ImpersonationEventDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ImpersonationEventClient) DeleteOne(_m *ImpersonationEvent) *ImpersonationEventDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ImpersonationEventClient) DeleteOneID(id string) *ImpersonationEventDeleteOne {
+	builder := c.Delete().Where(impersonationevent.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ImpersonationEventDeleteOne{builder}
+}
+
+// Query returns a query builder for ImpersonationEvent.
+func (c *ImpersonationEventClient) Query() *ImpersonationEventQuery {
+	return &ImpersonationEventQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeImpersonationEvent},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ImpersonationEvent entity by its id.
+func (c *ImpersonationEventClient) Get(ctx context.Context, id string) (*ImpersonationEvent, error) {
+	return c.Query().Where(impersonationevent.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ImpersonationEventClient) GetX(ctx context.Context, id string) *ImpersonationEvent {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a ImpersonationEvent.
+func (c *ImpersonationEventClient) QueryUser(_m *ImpersonationEvent) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(impersonationevent.Table, impersonationevent.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, impersonationevent.UserTable, impersonationevent.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTargetUser queries the target_user edge of a ImpersonationEvent.
+func (c *ImpersonationEventClient) QueryTargetUser(_m *ImpersonationEvent) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(impersonationevent.Table, impersonationevent.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, impersonationevent.TargetUserTable, impersonationevent.TargetUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a ImpersonationEvent.
+func (c *ImpersonationEventClient) QueryOrganization(_m *ImpersonationEvent) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(impersonationevent.Table, impersonationevent.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, impersonationevent.OrganizationTable, impersonationevent.OrganizationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ImpersonationEventClient) Hooks() []Hook {
+	hooks := c.hooks.ImpersonationEvent
+	return append(hooks[:len(hooks):len(hooks)], impersonationevent.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ImpersonationEventClient) Interceptors() []Interceptor {
+	inters := c.inters.ImpersonationEvent
+	return append(inters[:len(inters):len(inters)], impersonationevent.Interceptors[:]...)
+}
+
+func (c *ImpersonationEventClient) mutate(ctx context.Context, m *ImpersonationEventMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ImpersonationEventCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ImpersonationEventUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ImpersonationEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ImpersonationEventDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ImpersonationEvent mutation op: %q", m.Op())
+	}
+}
+
 // IntegrationClient is a client for the Integration schema.
 type IntegrationClient struct {
 	config
@@ -10482,6 +10844,25 @@ func (c *InternalPolicyClient) QueryFile(_m *InternalPolicy) *FileQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryComments(_m *InternalPolicy) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.CommentsTable, internalpolicy.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13114,6 +13495,101 @@ func (c *NoteClient) QueryTask(_m *Note) *TaskQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControl queries the control edge of a Note.
+func (c *NoteClient) QueryControl(_m *Note) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ControlTable, note.ControlColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrol queries the subcontrol edge of a Note.
+func (c *NoteClient) QuerySubcontrol(_m *Note) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.SubcontrolTable, note.SubcontrolColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedure queries the procedure edge of a Note.
+func (c *NoteClient) QueryProcedure(_m *Note) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ProcedureTable, note.ProcedureColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisk queries the risk edge of a Note.
+func (c *NoteClient) QueryRisk(_m *Note) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.RiskTable, note.RiskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a Note.
+func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.InternalPolicyTable, note.InternalPolicyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -16160,6 +16636,25 @@ func (c *OrganizationClient) QueryTrustCenterWatermarkConfigs(_m *Organization) 
 	return query
 }
 
+// QueryImpersonationEvents queries the impersonation_events edge of a Organization.
+func (c *OrganizationClient) QueryImpersonationEvents(_m *Organization) *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ImpersonationEventsTable, organization.ImpersonationEventsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -17325,6 +17820,25 @@ func (c *ProcedureClient) QueryTasks(_m *Procedure) *TaskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Procedure.
+func (c *ProcedureClient) QueryComments(_m *Procedure) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.CommentsTable, procedure.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -18876,6 +19390,25 @@ func (c *RiskClient) QueryDelegate(_m *Risk) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Risk.
+func (c *RiskClient) QueryComments(_m *Risk) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.CommentsTable, risk.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -24701,6 +25234,25 @@ func (c *UserClient) QueryEmailVerificationTokens(_m *User) *EmailVerificationTo
 	return query
 }
 
+// QueryFileDownloadTokens queries the file_download_tokens edge of a User.
+func (c *UserClient) QueryFileDownloadTokens(_m *User) *FileDownloadTokenQuery {
+	query := (&FileDownloadTokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(filedownloadtoken.Table, filedownloadtoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.FileDownloadTokensTable, user.FileDownloadTokensColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.FileDownloadToken
+		step.Edge.Schema = schemaConfig.FileDownloadToken
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPasswordResetTokens queries the password_reset_tokens edge of a User.
 func (c *UserClient) QueryPasswordResetTokens(_m *User) *PasswordResetTokenQuery {
 	query := (&PasswordResetTokenClient{config: c.config}).Query()
@@ -24942,6 +25494,44 @@ func (c *UserClient) QueryProgramOwner(_m *User) *ProgramQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryImpersonationEvents queries the impersonation_events edge of a User.
+func (c *UserClient) QueryImpersonationEvents(_m *User) *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ImpersonationEventsTable, user.ImpersonationEventsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTargetedImpersonations queries the targeted_impersonations edge of a User.
+func (c *UserClient) QueryTargetedImpersonations(_m *User) *ImpersonationEventQuery {
+	query := (&ImpersonationEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.TargetedImpersonationsTable, user.TargetedImpersonationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -25657,26 +26247,27 @@ type (
 		CustomDomain, CustomDomainHistory, DNSVerification, DNSVerificationHistory,
 		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
 		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
-		Export, File, FileHistory, Group, GroupHistory, GroupMembership,
-		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
-		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
-		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
-		SubprocessorHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
-		TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
-		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		Export, File, FileDownloadToken, FileHistory, Group, GroupHistory,
+		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
+		Hush, HushHistory, ImpersonationEvent, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
+		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
+		TrustCenterWatermarkConfigHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
@@ -25685,26 +26276,27 @@ type (
 		CustomDomain, CustomDomainHistory, DNSVerification, DNSVerificationHistory,
 		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
 		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
-		Export, File, FileHistory, Group, GroupHistory, GroupMembership,
-		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
-		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
-		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
-		SubprocessorHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
-		TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
-		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		Export, File, FileDownloadToken, FileHistory, Group, GroupHistory,
+		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
+		Hush, HushHistory, ImpersonationEvent, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
+		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
+		TrustCenterWatermarkConfigHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

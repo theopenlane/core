@@ -1,0 +1,33 @@
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: objects-examples-minio
+    ports:
+      - "19000:9000"
+      - "19001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: adminsecretpassword
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - minio_data:/data
+
+  fake-gcs:
+    image: fsouza/fake-gcs-server:latest
+    container_name: objects-examples-gcs
+    ports:
+      - "4443:4443"
+    command: -scheme http -port 4443 -external-url http://localhost:4443
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4443/storage/v1/b"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  minio_data:

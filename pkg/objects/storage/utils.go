@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gabriel-vasile/mimetype"
+	"github.com/nguyenthenguyen/docx"
 	"gopkg.in/yaml.v3"
 )
 
@@ -62,10 +64,30 @@ func ParseDocument(reader io.Reader, mimeType string) (any, error) {
 
 	case strings.Contains(mimeType, "text/plain"):
 		return string(data), nil
+	case strings.Contains(mimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"):
+		text, err := parseDocx(data)
+		if err != nil {
+			return nil, err
+		}
 
+		return text, nil
 	default:
 		return data, nil
 	}
+}
+
+// parseDocx extracts and returns the text content from a DOCX file
+func parseDocx(content []byte) (string, error) {
+	reader := bytes.NewReader(content)
+
+	doc, err := docx.ReadDocxFromMemory(reader, int64(len(content)))
+	if err != nil {
+		return "", fmt.Errorf("failed to read docx file: %w", err) // nolint:err113
+	}
+
+	defer doc.Close()
+
+	return strings.TrimSpace(doc.Editable().GetContent()), nil
 }
 
 // NewUploadFile creates a new File from a file path

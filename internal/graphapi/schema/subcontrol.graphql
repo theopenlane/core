@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): SubcontrolDeletePayload!
+    """
+    Delete multiple subcontrols
+    """
+    deleteBulkSubcontrol(
+        """
+        IDs of the subcontrols to delete
+        """
+        ids: [ID!]!
+    ): SubcontrolBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type SubcontrolBulkCreatePayload {
     Created subcontrols
     """
     subcontrols: [Subcontrol!]
+}
+
+"""
+Return response for deleteBulkSubcontrol mutation
+"""
+type SubcontrolBulkDeletePayload {
+    """
+    Deleted subcontrol IDs
+    """
+    deletedIDs: [ID!]!
 }

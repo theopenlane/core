@@ -56,6 +56,10 @@ const (
 	FieldBackgroundColor = "background_color"
 	// FieldAccentColor holds the string denoting the accent_color field in the database.
 	FieldAccentColor = "accent_color"
+	// FieldSecondaryBackgroundColor holds the string denoting the secondary_background_color field in the database.
+	FieldSecondaryBackgroundColor = "secondary_background_color"
+	// FieldSecondaryForegroundColor holds the string denoting the secondary_foreground_color field in the database.
+	FieldSecondaryForegroundColor = "secondary_foreground_color"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -116,6 +120,8 @@ var Columns = []string{
 	FieldForegroundColor,
 	FieldBackgroundColor,
 	FieldAccentColor,
+	FieldSecondaryBackgroundColor,
+	FieldSecondaryForegroundColor,
 }
 
 var (
@@ -276,6 +282,16 @@ func ByBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
 // ByAccentColor orders the results by the accent_color field.
 func ByAccentColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAccentColor, opts...).ToFunc()
+}
+
+// BySecondaryBackgroundColor orders the results by the secondary_background_color field.
+func BySecondaryBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecondaryBackgroundColor, opts...).ToFunc()
+}
+
+// BySecondaryForegroundColor orders the results by the secondary_foreground_color field.
+func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecondaryForegroundColor, opts...).ToFunc()
 }
 
 // ByTrustCenterField orders the results by trust_center field.

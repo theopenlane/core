@@ -62,6 +62,10 @@ const (
 	FieldBackgroundColor = "background_color"
 	// FieldAccentColor holds the string denoting the accent_color field in the database.
 	FieldAccentColor = "accent_color"
+	// FieldSecondaryBackgroundColor holds the string denoting the secondary_background_color field in the database.
+	FieldSecondaryBackgroundColor = "secondary_background_color"
+	// FieldSecondaryForegroundColor holds the string denoting the secondary_foreground_color field in the database.
+	FieldSecondaryForegroundColor = "secondary_foreground_color"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -91,6 +95,8 @@ var Columns = []string{
 	FieldForegroundColor,
 	FieldBackgroundColor,
 	FieldAccentColor,
+	FieldSecondaryBackgroundColor,
+	FieldSecondaryForegroundColor,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -262,6 +268,16 @@ func ByBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
 // ByAccentColor orders the results by the accent_color field.
 func ByAccentColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAccentColor, opts...).ToFunc()
+}
+
+// BySecondaryBackgroundColor orders the results by the secondary_background_color field.
+func BySecondaryBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecondaryBackgroundColor, opts...).ToFunc()
+}
+
+// BySecondaryForegroundColor orders the results by the secondary_foreground_color field.
+func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecondaryForegroundColor, opts...).ToFunc()
 }
 
 var (

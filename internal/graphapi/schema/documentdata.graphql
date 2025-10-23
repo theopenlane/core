@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): DocumentDataDeletePayload!
+    """
+    Delete multiple documentData
+    """
+    deleteBulkDocumentData(
+        """
+        IDs of the documentData to delete
+        """
+        ids: [ID!]!
+    ): DocumentDataBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type DocumentDataBulkCreatePayload {
     Created documentData
     """
     documentData: [DocumentData!]
+}
+
+"""
+Return response for deleteBulkDocumentData mutation
+"""
+type DocumentDataBulkDeletePayload {
+    """
+    Deleted documentData IDs
+    """
+    deletedIDs: [ID!]!
 }

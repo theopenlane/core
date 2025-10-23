@@ -6,16 +6,18 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/pkg/models"
+
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // Risk defines the risk schema.
@@ -150,6 +152,16 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "temporary delegates for the risk, used for temporary ownership",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Group{}.Name()),
+			},
+		}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the risk",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
 	}

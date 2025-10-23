@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterSubprocessorDeletePayload!
+    """
+    Delete multiple trustCenterSubprocessors
+    """
+    deleteBulkTrustCenterSubprocessor(
+        """
+        IDs of the trustCenterSubprocessors to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterSubprocessorBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+
+"""
+Return response for deleteBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkDeletePayload {
+    """
+    Deleted trustCenterSubprocessor IDs
+    """
+    deletedIDs: [ID!]!
 }

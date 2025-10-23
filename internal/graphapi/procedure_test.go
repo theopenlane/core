@@ -229,7 +229,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
 				OwnerID: &testUser1.OrganizationID,
-				Details: lo.ToPtr(gofakeit.Sentence(1000)),
+				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -441,7 +441,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update allowed, details updated",
 			request: testclient.UpdateProcedureInput{
-				Details: lo.ToPtr(gofakeit.Sentence(1000)),
+				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
 			client: suite.client.api,
 			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions

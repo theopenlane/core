@@ -22,19 +22,19 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 		},
 		{
 			name:     "extremely short string",
-			sentence: gofakeit.Sentence(2),
+			sentence: gofakeit.LoremIpsumSentence(2),
 		},
 		{
 			name:     "short string",
-			sentence: gofakeit.Sentence(200),
+			sentence: gofakeit.Sentence(),
 		},
 		{
 			name:     "long string",
-			sentence: gofakeit.Sentence(1000),
+			sentence: gofakeit.Paragraph(),
 		},
 		{
 			name:     "really long string",
-			sentence: gofakeit.Sentence(10000),
+			sentence: gofakeit.LoremIpsumSentence(10000),
 		},
 	}
 

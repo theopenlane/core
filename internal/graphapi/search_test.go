@@ -19,25 +19,22 @@ func TestGlobalSearch(t *testing.T) {
 	testViewOnlyUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(testSearchUser.UserCtx, t, &testViewOnlyUser, enums.RoleMember, testSearchUser.OrganizationID)
 
-	// create multiple objects to be searched by testSearchUser
-	numGroups := 12
-	groupIDs := []string{}
-	for i := range numGroups {
-		group := (&GroupBuilder{client: suite.client, Name: fmt.Sprintf("Test Group %d", i)}).MustNew(testSearchUser.UserCtx, t)
-		groupIDs = append(groupIDs, group.ID)
-	}
+	testAnotherUser := suite.userBuilder(context.Background(), t)
 
-	numContacts := 3
+	// create multiple objects to be searched by testSearchUser
+	// dont use objects that might be created by the system, that could be returned such as system owned controls, policies, etc
+	// also don't use objects that are created automatically, like groups
+	numContacts := 10
 	contactIDs := []string{}
 	for i := range numContacts {
-		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		contactIDs = append(contactIDs, contact.ID)
 	}
 
 	numPrograms := 3
 	programIDs := []string{}
 	for i := range numPrograms {
-		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		programIDs = append(programIDs, program.ID)
 	}
 
@@ -46,8 +43,7 @@ func TestGlobalSearch(t *testing.T) {
 		client           *testclient.TestClient
 		ctx              context.Context
 		query            string
-		expectedResults  int
-		expectedGroups   int
+		expectResults    bool
 		expectedContacts int
 		expectedPrograms int
 		errExpected      string
@@ -56,55 +52,51 @@ func TestGlobalSearch(t *testing.T) {
 			name:             "happy path",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "Test",
-			expectedResults:  18, // this is total count of all objects searched
-			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
-			expectedContacts: 3,
+			query:            "A1CD2D",
+			expectResults:    true,
+			expectedContacts: 10,
 			expectedPrograms: 3,
 		},
 		{
-			name:             "happy path, case insensitive",
+			name:             "happy path, case insensitive with both",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "TEST",
-			expectedResults:  18, // this is total count of all objects searched
-			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
-			expectedContacts: 3,
+			query:            "a1cd2d",
+			expectResults:    true,
+			expectedContacts: 10,
 			expectedPrograms: 3,
 		},
 		{
-			name:             "happy path, case insensitive",
+			name:             "happy path, case insensitive just contacts",
 			client:           suite.client.api,
 			ctx:              testSearchUser.UserCtx,
-			query:            "con",
-			expectedResults:  3, // this is total count of all objects searched
-			expectedGroups:   0,
-			expectedContacts: 3,
+			query:            "a1cd2d con",
+			expectResults:    true,
+			expectedContacts: 10,
 			expectedPrograms: 0,
 		},
 		{
 			name:             "happy path, view only user",
 			client:           suite.client.api,
 			ctx:              testViewOnlyUser.UserCtx,
-			query:            "Test",
-			expectedResults:  15, // this is total count of all objects searched
-			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
-			expectedContacts: 3,
+			query:            "A1CD2D",
+			expectResults:    true,
+			expectedContacts: 10,
 			expectedPrograms: 0, // no access to the programs by the view only user
 		},
 		{
-			name:            "no results",
-			client:          suite.client.api,
-			ctx:             testSearchUser.UserCtx,
-			query:           "NonExistent",
-			expectedResults: 0,
+			name:          "no results",
+			client:        suite.client.api,
+			ctx:           testSearchUser.UserCtx,
+			query:         "NonExistent RAnD0M Str!ng F0r Sanity",
+			expectResults: false,
 		},
 		{
-			name:            "no results, another user",
-			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			query:           "Test",
-			expectedResults: 0,
+			name:          "no results, another user",
+			client:        suite.client.api,
+			ctx:           testAnotherUser.UserCtx,
+			query:         "A1CD2D",
+			expectResults: false,
 		},
 		{
 			name:        "empty query",
@@ -119,7 +111,6 @@ func TestGlobalSearch(t *testing.T) {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GlobalSearch(tc.ctx, tc.query)
 			if tc.errExpected != "" {
-
 				assert.Assert(t, is.Contains(err.Error(), tc.errExpected))
 				return
 			}
@@ -127,19 +118,7 @@ func TestGlobalSearch(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			if tc.expectedResults > 0 {
-				assert.Check(t, is.Equal(resp.Search.TotalCount, int64(tc.expectedResults)))
-
-				if tc.expectedGroups > 0 {
-					assert.Assert(t, resp.Search.Groups != nil)
-					assert.Check(t, is.Len(resp.Search.Groups.Edges, tc.expectedGroups))
-					assert.Check(t, is.Equal(resp.Search.Groups.TotalCount, int64(numGroups)))
-					assert.Check(t, resp.Search.Groups.PageInfo.HasNextPage)
-					assert.Check(t, !resp.Search.Groups.PageInfo.HasPreviousPage)
-				} else {
-					assert.Check(t, is.Nil(resp.Search.Groups))
-				}
-
+			if tc.expectResults {
 				if tc.expectedContacts > 0 {
 					assert.Assert(t, resp.Search.Contacts != nil)
 					assert.Check(t, is.Len(resp.Search.Contacts.Edges, tc.expectedContacts))
@@ -155,16 +134,13 @@ func TestGlobalSearch(t *testing.T) {
 				}
 
 			} else {
-				assert.Check(t, is.Nil(resp.Search.Groups))
 				assert.Check(t, is.Nil(resp.Search.Contacts))
 				assert.Check(t, is.Nil(resp.Search.Programs))
-				assert.Check(t, is.Nil(resp.Search.Controls))
 			}
 		})
 	}
 
 	// clean up the created objects
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: groupIDs}).MustDelete(testSearchUser.UserCtx, t)
 	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: contactIDs}).MustDelete(testSearchUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDs}).MustDelete(testSearchUser.UserCtx, t)
 }

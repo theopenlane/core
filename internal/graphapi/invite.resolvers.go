@@ -119,6 +119,15 @@ func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*model.
 	}, nil
 }
 
+// DeleteBulkInvite is the resolver for the deleteBulkInvite field.
+func (r *mutationResolver) DeleteBulkInvite(ctx context.Context, ids []string) (*model.InviteBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteInvite(ctx, ids)
+}
+
 // Invite is the resolver for the invite field.
 func (r *queryResolver) Invite(ctx context.Context, id string) (*generated.Invite, error) {
 	query, err := withTransactionalMutation(ctx).Invite.Query().Where(invite.ID(id)).CollectFields(ctx)

@@ -87,6 +87,15 @@ func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id strin
 	}, nil
 }
 
+// DeleteBulkProgramMembership is the resolver for the deleteBulkProgramMembership field.
+func (r *mutationResolver) DeleteBulkProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteProgramMembership(ctx, ids)
+}
+
 // ProgramMembership is the resolver for the programMembership field.
 func (r *queryResolver) ProgramMembership(ctx context.Context, id string) (*generated.ProgramMembership, error) {
 	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).CollectFields(ctx)

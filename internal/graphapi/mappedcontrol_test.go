@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -198,6 +199,10 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	systemToControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 	systemFromControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
+	// create standard for controls with a standard name
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlWithStandard := (&ControlBuilder{client: suite.client, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateMappedControlInput
@@ -228,6 +233,28 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, using ref codes instead of IDs",
+			request: testclient.CreateMappedControlInput{
+				MappingType:            &enums.MappingTypeEqual,
+				FromControlRefCodes:    []string{"CUSTOM::" + fromControl.RefCode},
+				ToControlRefCodes:      []string{"CUSTOM::" + toControl.RefCode},
+				FromSubcontrolRefCodes: []string{"CUSTOM::" + fromSubcontrol.RefCode},
+				ToSubcontrolRefCodes:   []string{"CUSTOM::" + toSubcontrol.RefCode},
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "happy path, using ref codes instead of IDs with multiple different standard controls",
+			request: testclient.CreateMappedControlInput{
+				MappingType:         &enums.MappingTypeEqual,
+				FromControlRefCodes: []string{"CUSTOM::" + fromControl.RefCode},
+				ToControlRefCodes:   []string{*controlWithStandard.ReferenceFramework + "::" + controlWithStandard.RefCode, "CUSTOM::" + toControl.RefCode},
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -371,6 +398,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 						return edge.Node.ID == toControlID
 					}), "expected toControl with ID %s to be present in the response", toControlID)
 				}
+			} else if tc.request.ToControlRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToControls.Edges, len(tc.request.ToControlRefCodes)))
+				for _, toControlRefCode := range tc.request.ToControlRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToControls.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_ToControls_Edges) bool {
+						return strings.Contains(toControlRefCode, edge.Node.RefCode)
+					}), "expected toControl with RefCode %s to be present in the response", toControlRefCode)
+				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToControls.Edges, 0), "expected no toControls in the response")
 			}
@@ -381,6 +415,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromControls_Edges) bool {
 						return edge.Node.ID == fromControlID
 					}), "expected fromControl with ID %s to be present in the response", fromControlID)
+				}
+			} else if tc.request.FromControlRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromControls.Edges, len(tc.request.FromControlRefCodes)))
+				for _, fromControlRefCode := range tc.request.FromControlRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromControls_Edges) bool {
+						return strings.Contains(fromControlRefCode, edge.Node.RefCode)
+					}), "expected fromControl with RefCode %s to be present in the response", fromControlRefCode)
 				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromControls.Edges, 0), "expected no fromControls in the response")
@@ -393,7 +434,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 						return edge.Node.ID == toSubcontrolID
 					}), "expected toSubcontrol with ID %s to be present in the response", toSubcontrolID)
 				}
-
+			} else if tc.request.ToSubcontrolRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, len(tc.request.ToSubcontrolRefCodes)))
+				for _, toSubcontrolRefCode := range tc.request.ToSubcontrolRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
+						return strings.Contains(toSubcontrolRefCode, edge.Node.RefCode)
+					}), "expected toSubcontrol with RefCode %s to be present in the response", toSubcontrolRefCode)
+				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, 0), "expected no toSubcontrols in the response")
 			}
@@ -404,6 +451,13 @@ func TestMutationCreateMappedControl(t *testing.T) {
 					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
 						return edge.Node.ID == fromSubcontrolID
 					}), "expected fromSubcontrol with ID %s to be present in the response", fromSubcontrolID)
+				}
+			} else if tc.request.FromSubcontrolRefCodes != nil {
+				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, len(tc.request.FromSubcontrolRefCodes)))
+				for _, fromSubcontrolRefCode := range tc.request.FromSubcontrolRefCodes {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
+						return strings.Contains(fromSubcontrolRefCode, edge.Node.RefCode)
+					}), "expected fromSubcontrol with RefCode %s to be present in the response", fromSubcontrolRefCode)
 				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, 0), "expected no fromSubcontrols in the response")
@@ -429,10 +483,12 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	}
 
 	// cleanup the controls created for the mappedControl
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID, controlWithStandard.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{toSubcontrol.ID, fromSubcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
 	// cleanup system owned controls
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	// clean up standard
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateMappedControl(t *testing.T) {

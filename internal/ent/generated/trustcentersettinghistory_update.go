@@ -364,6 +364,46 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearAccentColor() *TrustCenterSettin
 	return _u
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetSecondaryBackgroundColor(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetSecondaryBackgroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSecondaryBackgroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearSecondaryBackgroundColor() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearSecondaryBackgroundColor()
+	return _u
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetSecondaryForegroundColor(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetSecondaryForegroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSecondaryForegroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearSecondaryForegroundColor() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearSecondaryForegroundColor()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -549,6 +589,18 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryBackgroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryForegroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -906,6 +958,46 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ClearAccentColor() *TrustCenterSet
 	return _u
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetSecondaryBackgroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetSecondaryBackgroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecondaryBackgroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecondaryBackgroundColor() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearSecondaryBackgroundColor()
+	return _u
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetSecondaryForegroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetSecondaryForegroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecondaryForegroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecondaryForegroundColor() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearSecondaryForegroundColor()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdateOne) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -1121,6 +1213,18 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryBackgroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryForegroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -16,7 +16,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -306,11 +306,6 @@ var OrganizationSoftDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, So
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
-
-// RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
-func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
-	client.Use(EmitEventHook(e))
-}
 
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {

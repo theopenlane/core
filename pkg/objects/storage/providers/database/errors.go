@@ -11,4 +11,6 @@ var (
 	ErrTokenManagerRequired = errors.New("token manager required for database presigned urls")
 	// ErrFileNotFound is returned when the requested file does not exist or has no stored bytes.
 	ErrFileNotFound = errors.New("file not found in database storage")
+	// ErrDatabaseProviderRequiresProxyPresign indicates that the database storage provider requires proxy presigning to be enabled.
+	ErrDatabaseProviderRequiresProxyPresign = errors.New("database storage provider requires proxy presign to be enabled")
 )

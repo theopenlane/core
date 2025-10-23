@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): DNSVerificationDeletePayload!
+    """
+    Delete multiple dnsVerifications
+    """
+    deleteBulkDNSVerification(
+        """
+        IDs of the dnsVerifications to delete
+        """
+        ids: [ID!]!
+    ): DNSVerificationBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type DNSVerificationBulkCreatePayload {
     Created dnsVerifications
     """
     dnsVerifications: [DNSVerification!]
+}
+
+"""
+Return response for deleteBulkDNSVerification mutation
+"""
+type DNSVerificationBulkDeletePayload {
+    """
+    Deleted dnsVerification IDs
+    """
+    deletedIDs: [ID!]!
 }

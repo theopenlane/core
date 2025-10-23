@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): EntityTypeDeletePayload!
+    """
+    Delete multiple entityTypes
+    """
+    deleteBulkEntityType(
+        """
+        IDs of the entityTypes to delete
+        """
+        ids: [ID!]!
+    ): EntityTypeBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type EntityTypeBulkCreatePayload {
     Created entityTypes
     """
     entityTypes: [EntityType!]
+}
+
+"""
+Return response for deleteBulkEntityType mutation
+"""
+type EntityTypeBulkDeletePayload {
+    """
+    Deleted entityType IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): RiskDeletePayload!
+    """
+    Delete multiple risks
+    """
+    deleteBulkRisk(
+        """
+        IDs of the risks to delete
+        """
+        ids: [ID!]!
+    ): RiskBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type RiskBulkUpdatePayload {
     IDs of the updated risks
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkRisk mutation
+"""
+type RiskBulkDeletePayload {
+    """
+    Deleted risk IDs
+    """
+    deletedIDs: [ID!]!
 }

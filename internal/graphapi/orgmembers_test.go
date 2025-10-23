@@ -4,15 +4,16 @@ import (
 	"context"
 	"testing"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryOrgMembers(t *testing.T) {
@@ -190,6 +191,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	user3 := (&UserBuilder{client: suite.client, Email: "mitb2@anderson.io", FirstName: "FirstName!@"}).MustNew(testUser.UserCtx, t)
 
 	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(testUser.UserCtx, t)
 	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser.UserCtx, t)
@@ -216,6 +218,14 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			name:   "happy path, add member",
 			orgID:  orgWithRestrictions.ID,
 			userID: userWithValidDomain.ID,
+			ctx:    otherOrgCtx,
+			role:   enums.RoleMember,
+		},
+		{
+			// it will be a managed group so it passes
+			name:   "happy path, add member with invalid name",
+			orgID:  orgWithRestrictions.ID,
+			userID: user3.ID,
 			ctx:    otherOrgCtx,
 			role:   enums.RoleMember,
 		},

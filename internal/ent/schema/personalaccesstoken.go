@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
-
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // PersonalAccessToken holds the schema definition for the PersonalAccessToken entity.
@@ -67,7 +66,6 @@ func (PersonalAccessToken) Fields() []ent.Field {
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationUpdateInput),
 				entgql.OrderField("expires_at"),
 			).
 			Optional().
@@ -191,6 +189,7 @@ func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
+			rule.RequirePaymentMethod(),
 			rule.AllowIfContextAllowRule(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),

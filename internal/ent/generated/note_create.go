@@ -10,9 +10,14 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
@@ -169,6 +174,101 @@ func (_c *NoteCreate) SetNillableTaskID(id *string) *NoteCreate {
 // SetTask sets the "task" edge to the Task entity.
 func (_c *NoteCreate) SetTask(v *Task) *NoteCreate {
 	return _c.SetTaskID(v.ID)
+}
+
+// SetControlID sets the "control" edge to the Control entity by ID.
+func (_c *NoteCreate) SetControlID(id string) *NoteCreate {
+	_c.mutation.SetControlID(id)
+	return _c
+}
+
+// SetNillableControlID sets the "control" edge to the Control entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableControlID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetControlID(*id)
+	}
+	return _c
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_c *NoteCreate) SetControl(v *Control) *NoteCreate {
+	return _c.SetControlID(v.ID)
+}
+
+// SetSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID.
+func (_c *NoteCreate) SetSubcontrolID(id string) *NoteCreate {
+	_c.mutation.SetSubcontrolID(id)
+	return _c
+}
+
+// SetNillableSubcontrolID sets the "subcontrol" edge to the Subcontrol entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableSubcontrolID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetSubcontrolID(*id)
+	}
+	return _c
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_c *NoteCreate) SetSubcontrol(v *Subcontrol) *NoteCreate {
+	return _c.SetSubcontrolID(v.ID)
+}
+
+// SetProcedureID sets the "procedure" edge to the Procedure entity by ID.
+func (_c *NoteCreate) SetProcedureID(id string) *NoteCreate {
+	_c.mutation.SetProcedureID(id)
+	return _c
+}
+
+// SetNillableProcedureID sets the "procedure" edge to the Procedure entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableProcedureID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetProcedureID(*id)
+	}
+	return _c
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_c *NoteCreate) SetProcedure(v *Procedure) *NoteCreate {
+	return _c.SetProcedureID(v.ID)
+}
+
+// SetRiskID sets the "risk" edge to the Risk entity by ID.
+func (_c *NoteCreate) SetRiskID(id string) *NoteCreate {
+	_c.mutation.SetRiskID(id)
+	return _c
+}
+
+// SetNillableRiskID sets the "risk" edge to the Risk entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableRiskID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetRiskID(*id)
+	}
+	return _c
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_c *NoteCreate) SetRisk(v *Risk) *NoteCreate {
+	return _c.SetRiskID(v.ID)
+}
+
+// SetInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID.
+func (_c *NoteCreate) SetInternalPolicyID(id string) *NoteCreate {
+	_c.mutation.SetInternalPolicyID(id)
+	return _c
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy" edge to the InternalPolicy entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableInternalPolicyID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetInternalPolicyID(*id)
+	}
+	return _c
+}
+
+// SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
+func (_c *NoteCreate) SetInternalPolicy(v *InternalPolicy) *NoteCreate {
+	return _c.SetInternalPolicyID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -372,6 +472,96 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.task_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlTable,
+			Columns: []string{note.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.control_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.SubcontrolTable,
+			Columns: []string{note.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.subcontrol_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ProcedureTable,
+			Columns: []string{note.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.procedure_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.RiskTable,
+			Columns: []string{note.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.risk_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.InternalPolicyTable,
+			Columns: []string{note.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.internal_policy_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {

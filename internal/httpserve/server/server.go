@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"os"
 
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
@@ -14,10 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/logx/consolelog"
 	"github.com/theopenlane/core/pkg/metrics"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // Server is a struct that holds the configuration for the server
@@ -46,28 +43,7 @@ func ConfigureEcho(c LogConfig) *echo.Echo {
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
 	e.Use(middleware.Recover())
 
-	var logger *logx.Logger
-
-	setters := []logx.ConfigSetter{
-		logx.WithLevel(c.LogLevel),
-		logx.WithTimestamp(),
-		logx.WithCaller(),
-	}
-
-	// if PrettyLog is enabled, use the console writer for pretty logging
-	// otherwise, use the default stdout writer (json format)
-	if c.PrettyLog {
-		cw := consolelog.NewConsoleWriter()
-		logger = logx.New(
-			&cw,
-			setters...,
-		)
-	} else {
-		logger = logx.New(
-			os.Stdout,
-			setters...,
-		)
-	}
+	logger := logx.CreateLogger(c.LogLevel, c.PrettyLog)
 
 	e.Logger = logger
 
@@ -155,12 +131,6 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	}
 
 	s.Router.Handler = &s.config.Handler
-
-	// Set the local file path if the object storage provider is disk
-	// this allows us to serve up the files during testing
-	if s.config.Settings.ObjectStorage.Provider == storage.ProviderDisk {
-		s.Router.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
-	}
 
 	// Add base routes to the server
 	if err := route.RegisterRoutes(s.Router); err != nil {

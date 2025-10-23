@@ -366,6 +366,46 @@ func (_u *TrustCenterSettingUpdate) ClearAccentColor() *TrustCenterSettingUpdate
 	return _u
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_u *TrustCenterSettingUpdate) SetSecondaryBackgroundColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetSecondaryBackgroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetSecondaryBackgroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
+func (_u *TrustCenterSettingUpdate) ClearSecondaryBackgroundColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearSecondaryBackgroundColor()
+	return _u
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingUpdate) SetSecondaryForegroundColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetSecondaryForegroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetSecondaryForegroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingUpdate) ClearSecondaryForegroundColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearSecondaryForegroundColor()
+	return _u
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (_u *TrustCenterSettingUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdate {
 	return _u.SetTrustCenterID(v.ID)
@@ -652,6 +692,18 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryBackgroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryBackgroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecondaryBackgroundColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryForegroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1150,6 +1202,46 @@ func (_u *TrustCenterSettingUpdateOne) ClearAccentColor() *TrustCenterSettingUpd
 	return _u
 }
 
+// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
+func (_u *TrustCenterSettingUpdateOne) SetSecondaryBackgroundColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetSecondaryBackgroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetSecondaryBackgroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
+func (_u *TrustCenterSettingUpdateOne) ClearSecondaryBackgroundColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearSecondaryBackgroundColor()
+	return _u
+}
+
+// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingUpdateOne) SetSecondaryForegroundColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetSecondaryForegroundColor(v)
+	return _u
+}
+
+// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetSecondaryForegroundColor(*v)
+	}
+	return _u
+}
+
+// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
+func (_u *TrustCenterSettingUpdateOne) ClearSecondaryForegroundColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearSecondaryForegroundColor()
+	return _u
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (_u *TrustCenterSettingUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdateOne {
 	return _u.SetTrustCenterID(v.ID)
@@ -1466,6 +1558,18 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryBackgroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryBackgroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecondaryBackgroundColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString, value)
+	}
+	if _u.mutation.SecondaryForegroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{

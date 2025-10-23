@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 )
 
 // SupportedEventTypes defines the Stripe events the webhook handler listens for.

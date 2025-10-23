@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -43,14 +43,14 @@ func createValidation() (input openlaneclient.CreateProcedureInput, detailsFile 
 	// output the input struct with the required fields and optional fields based on the command line flags
 	detailsFileLoc := cmd.Config.String("file")
 	if detailsFileLoc != "" {
-		file, err := objects.NewUploadFile(detailsFileLoc)
+		file, err := storage.NewUploadFile(detailsFileLoc)
 		if err != nil {
 			return input, nil, err
 		}
 
 		detailsFile = &graphql.Upload{
-			File:        file.File,
-			Filename:    file.Filename,
+			File:        file.RawFile,
+			Filename:    file.OriginalName,
 			Size:        file.Size,
 			ContentType: file.ContentType,
 		}

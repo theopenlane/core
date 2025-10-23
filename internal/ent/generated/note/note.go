@@ -37,6 +37,16 @@ const (
 	EdgeOwner = "owner"
 	// EdgeTask holds the string denoting the task edge name in mutations.
 	EdgeTask = "task"
+	// EdgeControl holds the string denoting the control edge name in mutations.
+	EdgeControl = "control"
+	// EdgeSubcontrol holds the string denoting the subcontrol edge name in mutations.
+	EdgeSubcontrol = "subcontrol"
+	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
+	EdgeProcedure = "procedure"
+	// EdgeRisk holds the string denoting the risk edge name in mutations.
+	EdgeRisk = "risk"
+	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
+	EdgeInternalPolicy = "internal_policy"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the note in the database.
@@ -55,6 +65,41 @@ const (
 	TaskInverseTable = "tasks"
 	// TaskColumn is the table column denoting the task relation/edge.
 	TaskColumn = "task_comments"
+	// ControlTable is the table that holds the control relation/edge.
+	ControlTable = "notes"
+	// ControlInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlInverseTable = "controls"
+	// ControlColumn is the table column denoting the control relation/edge.
+	ControlColumn = "control_comments"
+	// SubcontrolTable is the table that holds the subcontrol relation/edge.
+	SubcontrolTable = "notes"
+	// SubcontrolInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolInverseTable = "subcontrols"
+	// SubcontrolColumn is the table column denoting the subcontrol relation/edge.
+	SubcontrolColumn = "subcontrol_comments"
+	// ProcedureTable is the table that holds the procedure relation/edge.
+	ProcedureTable = "notes"
+	// ProcedureInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureInverseTable = "procedures"
+	// ProcedureColumn is the table column denoting the procedure relation/edge.
+	ProcedureColumn = "procedure_comments"
+	// RiskTable is the table that holds the risk relation/edge.
+	RiskTable = "notes"
+	// RiskInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RiskInverseTable = "risks"
+	// RiskColumn is the table column denoting the risk relation/edge.
+	RiskColumn = "risk_comments"
+	// InternalPolicyTable is the table that holds the internal_policy relation/edge.
+	InternalPolicyTable = "notes"
+	// InternalPolicyInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPolicyInverseTable = "internal_policies"
+	// InternalPolicyColumn is the table column denoting the internal_policy relation/edge.
+	InternalPolicyColumn = "internal_policy_comments"
 	// FilesTable is the table that holds the files relation/edge.
 	FilesTable = "files"
 	// FilesInverseTable is the table name for the File entity.
@@ -83,7 +128,10 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"control_comments",
 	"entity_notes",
+	"internal_policy_comments",
+	"procedure_comments",
 	"program_notes",
+	"risk_comments",
 	"subcontrol_comments",
 	"task_comments",
 }
@@ -195,6 +243,41 @@ func ByTaskField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByControlField orders the results by control field.
+func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySubcontrolField orders the results by subcontrol field.
+func BySubcontrolField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProcedureField orders the results by procedure field.
+func ByProcedureField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRiskField orders the results by risk field.
+func ByRiskField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalPolicyField orders the results by internal_policy field.
+func ByInternalPolicyField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -220,6 +303,41 @@ func newTaskStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TaskInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, TaskTable, TaskColumn),
+	)
+}
+func newControlStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ControlTable, ControlColumn),
+	)
+}
+func newSubcontrolStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubcontrolTable, SubcontrolColumn),
+	)
+}
+func newProcedureStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProcedureTable, ProcedureColumn),
+	)
+}
+func newRiskStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RiskTable, RiskColumn),
+	)
+}
+func newInternalPolicyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, InternalPolicyTable, InternalPolicyColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

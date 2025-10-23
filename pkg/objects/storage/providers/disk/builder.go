@@ -1,6 +1,8 @@
 package disk
 
 import (
+	"context"
+
 	"github.com/samber/mo"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
@@ -15,20 +17,15 @@ func NewDiskBuilder() *Builder {
 }
 
 // Build implements eddy.Builder
-func (b *Builder) Build(credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(_ context.Context, _ storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}
 
 	cfg := config.Clone()
-	cfg.Credentials = credentials
 
 	if cfg.Bucket == "" {
 		cfg.Bucket = "./storage"
-	}
-
-	if cfg.LocalURL == "" {
-		cfg.LocalURL = credentials.Endpoint
 	}
 
 	provider, err := NewDiskProvider(cfg)
@@ -49,7 +46,6 @@ func NewDiskProviderFromCredentials(credentials storage.ProviderCredentials) mo.
 	options := storage.NewProviderOptions(
 		storage.WithCredentials(credentials),
 		storage.WithBucket("./storage"),
-		storage.WithLocalURL(credentials.Endpoint),
 	)
 	provider, err := NewDiskProvider(options)
 	if err != nil {

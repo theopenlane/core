@@ -60,7 +60,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 
 	// Initialize Openlane client if not already set
 	if w.olClient == nil {
-		cl, err := getOpenlaneClient(w.Config)
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			return err
 		}

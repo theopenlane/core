@@ -164,18 +164,30 @@ func TestQueryControlImplementation(t *testing.T) {
 }
 
 func TestQueryControlImplementations(t *testing.T) {
-	// create multiple controlImplementations to be queried using testUser1
+	// create a new user cause its a count test and we don't want to interfere with other tests
+	testUser := suite.userBuilder(context.Background(), t)
+	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+	patClient := suite.setupPatClient(testUser, t)
+	viewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
+
+	anotherUser := suite.userBuilder(context.Background(), t)
+
+	// create multiple controlImplementations to be queried using testUser
 	numCIs := 5
+	ciIDs := []string{}
 	for range numCIs {
-		(&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		ciIDs = append(ciIDs, ci.ID)
 	}
 
 	// view only users should be able to see these because they are associated with a control
 	numCIsWithAssociatedControls := 2
 	controlIDs := []string{}
 	for range numCIsWithAssociatedControls {
-		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
+		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser.UserCtx, t)
+		ciIDs = append(ciIDs, ci.ID)
 
 		controlIDs = append(controlIDs, control1.ID)
 	}
@@ -189,38 +201,43 @@ func TestQueryControlImplementations(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewUser.UserCtx,
 			expectedResults: numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          apiClient,
 			ctx:             context.Background(),
 			expectedResults: numCIsWithAssociatedControls, // only the ones with linked controls will be returned
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          patClient,
 			ctx:             context.Background(),
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "another user, no controlImplementations should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             anotherUser.UserCtx,
 			expectedResults: 0,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllControlImplementations(tc.ctx)
+			// ensure we don't conflict with other tests
+			where := &testclient.ControlImplementationWhereInput{
+				IDIn: ciIDs,
+			}
+
+			resp, err := tc.client.GetControlImplementations(tc.ctx, where)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
@@ -229,8 +246,8 @@ func TestQueryControlImplementations(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: ciIDs}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestMutationCreateControlImplementation(t *testing.T) {
@@ -278,7 +295,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateControlImplementationInput{
-				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:            lo.ToPtr(gofakeit.Paragraph()),
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
 				Verified:           lo.ToPtr(true),
@@ -293,7 +310,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 				OwnerID: &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
@@ -302,7 +319,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -310,7 +327,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -319,7 +336,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user authorized because they have editor permissions to all the parent control",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: controlIDs,
 			},
 			client: suite.client.api,
@@ -328,7 +345,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions to one of the parent controls",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: allControlIDs,
 			},
 			client:      suite.client.api,
@@ -338,7 +355,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		{
 			name: "no access to linked control",
 			request: testclient.CreateControlImplementationInput{
-				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:    lo.ToPtr(gofakeit.Paragraph()),
 				ControlIDs: controlIDs,
 			},
 			client:      suite.client.api,
@@ -467,7 +484,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateControlImplementationInput{
-				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
@@ -478,7 +495,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			request: testclient.UpdateControlImplementationInput{
 				AddControlIDs:      controlIDs,
 				AddSubcontrolIDs:   subcontrolIDs,
-				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
+				Details:            lo.ToPtr(gofakeit.Paragraph()),
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
 				Verified:           lo.ToPtr(true),

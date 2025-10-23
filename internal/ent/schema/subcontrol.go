@@ -137,6 +137,8 @@ func (Subcontrol) Indexes() []ent.Index {
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
 			),
+		index.Fields("reference_id", "deleted_at", "owner_id"),
+		index.Fields("auditor_reference_id", "deleted_at", "owner_id"),
 	}
 }
 

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -742,6 +743,21 @@ func (_u *InternalPolicyUpdate) SetFile(v *File) *InternalPolicyUpdate {
 	return _u.SetFileID(v.ID)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *InternalPolicyUpdate) AddCommentIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *InternalPolicyUpdate) AddComments(v ...*Note) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (_u *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return _u.mutation
@@ -1000,6 +1016,27 @@ func (_u *InternalPolicyUpdate) RemovePrograms(v ...*Program) *InternalPolicyUpd
 func (_u *InternalPolicyUpdate) ClearFile() *InternalPolicyUpdate {
 	_u.mutation.ClearFile()
 	return _u
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *InternalPolicyUpdate) ClearComments() *InternalPolicyUpdate {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveCommentIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *InternalPolicyUpdate) RemoveComments(v ...*Note) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1918,6 +1955,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicy
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2639,6 +2724,21 @@ func (_u *InternalPolicyUpdateOne) SetFile(v *File) *InternalPolicyUpdateOne {
 	return _u.SetFileID(v.ID)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddCommentIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *InternalPolicyUpdateOne) AddComments(v ...*Note) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (_u *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return _u.mutation
@@ -2897,6 +2997,27 @@ func (_u *InternalPolicyUpdateOne) RemovePrograms(v ...*Program) *InternalPolicy
 func (_u *InternalPolicyUpdateOne) ClearFile() *InternalPolicyUpdateOne {
 	_u.mutation.ClearFile()
 	return _u
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *InternalPolicyUpdateOne) ClearComments() *InternalPolicyUpdateOne {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveCommentIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *InternalPolicyUpdateOne) RemoveComments(v ...*Note) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -3840,6 +3961,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

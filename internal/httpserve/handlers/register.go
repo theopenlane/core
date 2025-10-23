@@ -75,6 +75,8 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		}
 
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			log.Error().Err(err).Str("email", input.Email).Msg("email not allowed")
+
 			return h.InvalidInput(ctx, err, openapi)
 		}
 

@@ -163,6 +163,35 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 	return fc, nil
 }
 
+func (ec *executionContext) _SubcontrolBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubcontrolBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SubcontrolCreatePayload_subcontrol(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -510,6 +539,45 @@ func (ec *executionContext) _SubcontrolBulkCreatePayload(ctx context.Context, se
 	return out
 }
 
+var subcontrolBulkDeletePayloadImplementors = []string{"SubcontrolBulkDeletePayload"}
+
+func (ec *executionContext) _SubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._SubcontrolBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var subcontrolCreatePayloadImplementors = []string{"SubcontrolCreatePayload"}
 
 func (ec *executionContext) _SubcontrolCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubcontrolCreatePayload) graphql.Marshaler {
@@ -643,6 +711,20 @@ func (ec *executionContext) marshalNSubcontrolBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._SubcontrolBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	return ec._SubcontrolBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SubcontrolBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSubcontrolCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolCreatePayload) graphql.Marshaler {

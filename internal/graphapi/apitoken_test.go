@@ -6,11 +6,13 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
@@ -100,7 +102,7 @@ func TestQueryAPITokens(t *testing.T) {
 }
 
 func TestMutationCreateAPIToken(t *testing.T) {
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
 	testCases := []struct {
@@ -115,6 +117,15 @@ func TestMutationCreateAPIToken(t *testing.T) {
 				Description: &tokenDescription,
 				Scopes:      []string{"read", "write"},
 			},
+		},
+		{
+			name: "bad path, set expire to the past",
+			input: testclient.CreateAPITokenInput{
+				Name:        "forthethingz",
+				Description: &tokenDescription,
+				ExpiresAt:   lo.ToPtr(time.Now().Add(-time.Hour)),
+			},
+			errorMsg: hooks.ErrPastTimeNotAllowed.Error(),
 		},
 		{
 			name: "happy path, set expire",
@@ -187,7 +198,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 func TestMutationUpdateAPIToken(t *testing.T) {
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	tokenName := gofakeit.Word()
 
 	testCases := []struct {
@@ -202,6 +213,15 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 			tokenID: token.ID,
 			input: testclient.UpdateAPITokenInput{
 				Name: &tokenName,
+			},
+			ctx: testUser1.UserCtx,
+		},
+		{
+			name:    "happy path, update expiration",
+			tokenID: token.ID,
+			input: testclient.UpdateAPITokenInput{
+				Name:      &tokenName,
+				ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
 			},
 			ctx: testUser1.UserCtx,
 		},

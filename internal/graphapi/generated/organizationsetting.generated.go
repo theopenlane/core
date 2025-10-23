@@ -125,6 +125,35 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 	return fc, nil
 }
 
+func (ec *executionContext) _OrganizationSettingBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrganizationSettingBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSetting(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -396,6 +425,45 @@ func (ec *executionContext) _OrganizationSettingBulkCreatePayload(ctx context.Co
 	return out
 }
 
+var organizationSettingBulkDeletePayloadImplementors = []string{"OrganizationSettingBulkDeletePayload"}
+
+func (ec *executionContext) _OrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, organizationSettingBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OrganizationSettingBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var organizationSettingCreatePayloadImplementors = []string{"OrganizationSettingCreatePayload"}
 
 func (ec *executionContext) _OrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingCreatePayload) graphql.Marshaler {
@@ -529,6 +597,20 @@ func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2ᚖgith
 		return graphql.Null
 	}
 	return ec._OrganizationSettingBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
+	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNOrganizationSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingCreatePayload) graphql.Marshaler {

@@ -13,8 +13,6 @@ type CredentialSet struct {
 	AccessKeyID string `json:"accessKeyID"`
 	// SecretAccessKey for cloud providers
 	SecretAccessKey string `json:"secretAccessKey"`
-	// Endpoint for custom endpoints
-	Endpoint string `json:"endpoint"`
 	// ProjectID for GCS
 	ProjectID string `json:"projectID"`
 	// AccountID for Cloudflare R2
@@ -33,10 +31,6 @@ func (c CredentialSet) String() string {
 
 	if c.SecretAccessKey != "" {
 		masked["secretAccessKey"] = "***"
-	}
-
-	if c.Endpoint != "" {
-		masked["endpoint"] = c.Endpoint
 	}
 
 	if c.ProjectID != "" {

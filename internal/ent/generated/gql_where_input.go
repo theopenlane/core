@@ -37913,6 +37913,10 @@ type InternalPolicyWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39054,6 +39058,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasFileWith(with...))
+	}
+	if i.HasComments != nil {
+		p := internalpolicy.HasComments()
+		if !*i.HasComments {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasCommentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -50317,6 +50339,26 @@ type NoteWhereInput struct {
 	HasTask     *bool             `json:"hasTask,omitempty"`
 	HasTaskWith []*TaskWhereInput `json:"hasTaskWith,omitempty"`
 
+	// "control" edge predicates.
+	HasControl     *bool                `json:"hasControl,omitempty"`
+	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+
+	// "subcontrol" edge predicates.
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+
+	// "procedure" edge predicates.
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
+
+	// "risk" edge predicates.
+	HasRisk     *bool             `json:"hasRisk,omitempty"`
+	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
+
+	// "internal_policy" edge predicates.
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -50732,6 +50774,96 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasTaskWith(with...))
+	}
+	if i.HasControl != nil {
+		p := note.HasControl()
+		if !*i.HasControl {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		for _, w := range i.HasControlWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasControlWith(with...))
+	}
+	if i.HasSubcontrol != nil {
+		p := note.HasSubcontrol()
+		if !*i.HasSubcontrol {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		for _, w := range i.HasSubcontrolWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasSubcontrolWith(with...))
+	}
+	if i.HasProcedure != nil {
+		p := note.HasProcedure()
+		if !*i.HasProcedure {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProcedureWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		for _, w := range i.HasProcedureWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProcedureWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasProcedureWith(with...))
+	}
+	if i.HasRisk != nil {
+		p := note.HasRisk()
+		if !*i.HasRisk {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRiskWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRiskWith))
+		for _, w := range i.HasRiskWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRiskWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasRiskWith(with...))
+	}
+	if i.HasInternalPolicy != nil {
+		p := note.HasInternalPolicy()
+		if !*i.HasInternalPolicy {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalPolicyWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		for _, w := range i.HasInternalPolicyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasInternalPolicyWith(with...))
 	}
 	if i.HasFiles != nil {
 		p := note.HasFiles()
@@ -61016,6 +61148,10 @@ type ProcedureWhereInput struct {
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
@@ -62106,6 +62242,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasTasksWith(with...))
+	}
+	if i.HasComments != nil {
+		p := procedure.HasComments()
+		if !*i.HasComments {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasCommentsWith(with...))
 	}
 	if i.HasFile != nil {
 		p := procedure.HasFile()
@@ -67475,6 +67629,10 @@ type RiskWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -68538,6 +68696,24 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasDelegateWith(with...))
+	}
+	if i.HasComments != nil {
+		p := risk.HasComments()
+		if !*i.HasComments {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasCommentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -90110,6 +90286,40 @@ type TrustCenterSettingWhereInput struct {
 	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
 	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
 
+	// "secondary_background_color" field predicates.
+	SecondaryBackgroundColor             *string  `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryBackgroundColorNEQ          *string  `json:"secondaryBackgroundColorNEQ,omitempty"`
+	SecondaryBackgroundColorIn           []string `json:"secondaryBackgroundColorIn,omitempty"`
+	SecondaryBackgroundColorNotIn        []string `json:"secondaryBackgroundColorNotIn,omitempty"`
+	SecondaryBackgroundColorGT           *string  `json:"secondaryBackgroundColorGT,omitempty"`
+	SecondaryBackgroundColorGTE          *string  `json:"secondaryBackgroundColorGTE,omitempty"`
+	SecondaryBackgroundColorLT           *string  `json:"secondaryBackgroundColorLT,omitempty"`
+	SecondaryBackgroundColorLTE          *string  `json:"secondaryBackgroundColorLTE,omitempty"`
+	SecondaryBackgroundColorContains     *string  `json:"secondaryBackgroundColorContains,omitempty"`
+	SecondaryBackgroundColorHasPrefix    *string  `json:"secondaryBackgroundColorHasPrefix,omitempty"`
+	SecondaryBackgroundColorHasSuffix    *string  `json:"secondaryBackgroundColorHasSuffix,omitempty"`
+	SecondaryBackgroundColorIsNil        bool     `json:"secondaryBackgroundColorIsNil,omitempty"`
+	SecondaryBackgroundColorNotNil       bool     `json:"secondaryBackgroundColorNotNil,omitempty"`
+	SecondaryBackgroundColorEqualFold    *string  `json:"secondaryBackgroundColorEqualFold,omitempty"`
+	SecondaryBackgroundColorContainsFold *string  `json:"secondaryBackgroundColorContainsFold,omitempty"`
+
+	// "secondary_foreground_color" field predicates.
+	SecondaryForegroundColor             *string  `json:"secondaryForegroundColor,omitempty"`
+	SecondaryForegroundColorNEQ          *string  `json:"secondaryForegroundColorNEQ,omitempty"`
+	SecondaryForegroundColorIn           []string `json:"secondaryForegroundColorIn,omitempty"`
+	SecondaryForegroundColorNotIn        []string `json:"secondaryForegroundColorNotIn,omitempty"`
+	SecondaryForegroundColorGT           *string  `json:"secondaryForegroundColorGT,omitempty"`
+	SecondaryForegroundColorGTE          *string  `json:"secondaryForegroundColorGTE,omitempty"`
+	SecondaryForegroundColorLT           *string  `json:"secondaryForegroundColorLT,omitempty"`
+	SecondaryForegroundColorLTE          *string  `json:"secondaryForegroundColorLTE,omitempty"`
+	SecondaryForegroundColorContains     *string  `json:"secondaryForegroundColorContains,omitempty"`
+	SecondaryForegroundColorHasPrefix    *string  `json:"secondaryForegroundColorHasPrefix,omitempty"`
+	SecondaryForegroundColorHasSuffix    *string  `json:"secondaryForegroundColorHasSuffix,omitempty"`
+	SecondaryForegroundColorIsNil        bool     `json:"secondaryForegroundColorIsNil,omitempty"`
+	SecondaryForegroundColorNotNil       bool     `json:"secondaryForegroundColorNotNil,omitempty"`
+	SecondaryForegroundColorEqualFold    *string  `json:"secondaryForegroundColorEqualFold,omitempty"`
+	SecondaryForegroundColorContainsFold *string  `json:"secondaryForegroundColorContainsFold,omitempty"`
+
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -90936,6 +91146,96 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	if i.AccentColorContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.AccentColorContainsFold(*i.AccentColorContainsFold))
 	}
+	if i.SecondaryBackgroundColor != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorEQ(*i.SecondaryBackgroundColor))
+	}
+	if i.SecondaryBackgroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorNEQ(*i.SecondaryBackgroundColorNEQ))
+	}
+	if len(i.SecondaryBackgroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorIn(i.SecondaryBackgroundColorIn...))
+	}
+	if len(i.SecondaryBackgroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorNotIn(i.SecondaryBackgroundColorNotIn...))
+	}
+	if i.SecondaryBackgroundColorGT != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorGT(*i.SecondaryBackgroundColorGT))
+	}
+	if i.SecondaryBackgroundColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorGTE(*i.SecondaryBackgroundColorGTE))
+	}
+	if i.SecondaryBackgroundColorLT != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorLT(*i.SecondaryBackgroundColorLT))
+	}
+	if i.SecondaryBackgroundColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorLTE(*i.SecondaryBackgroundColorLTE))
+	}
+	if i.SecondaryBackgroundColorContains != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorContains(*i.SecondaryBackgroundColorContains))
+	}
+	if i.SecondaryBackgroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorHasPrefix(*i.SecondaryBackgroundColorHasPrefix))
+	}
+	if i.SecondaryBackgroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorHasSuffix(*i.SecondaryBackgroundColorHasSuffix))
+	}
+	if i.SecondaryBackgroundColorIsNil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorIsNil())
+	}
+	if i.SecondaryBackgroundColorNotNil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorNotNil())
+	}
+	if i.SecondaryBackgroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorEqualFold(*i.SecondaryBackgroundColorEqualFold))
+	}
+	if i.SecondaryBackgroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryBackgroundColorContainsFold(*i.SecondaryBackgroundColorContainsFold))
+	}
+	if i.SecondaryForegroundColor != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorEQ(*i.SecondaryForegroundColor))
+	}
+	if i.SecondaryForegroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorNEQ(*i.SecondaryForegroundColorNEQ))
+	}
+	if len(i.SecondaryForegroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorIn(i.SecondaryForegroundColorIn...))
+	}
+	if len(i.SecondaryForegroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorNotIn(i.SecondaryForegroundColorNotIn...))
+	}
+	if i.SecondaryForegroundColorGT != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorGT(*i.SecondaryForegroundColorGT))
+	}
+	if i.SecondaryForegroundColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorGTE(*i.SecondaryForegroundColorGTE))
+	}
+	if i.SecondaryForegroundColorLT != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorLT(*i.SecondaryForegroundColorLT))
+	}
+	if i.SecondaryForegroundColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorLTE(*i.SecondaryForegroundColorLTE))
+	}
+	if i.SecondaryForegroundColorContains != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorContains(*i.SecondaryForegroundColorContains))
+	}
+	if i.SecondaryForegroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorHasPrefix(*i.SecondaryForegroundColorHasPrefix))
+	}
+	if i.SecondaryForegroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorHasSuffix(*i.SecondaryForegroundColorHasSuffix))
+	}
+	if i.SecondaryForegroundColorIsNil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorIsNil())
+	}
+	if i.SecondaryForegroundColorNotNil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorNotNil())
+	}
+	if i.SecondaryForegroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorEqualFold(*i.SecondaryForegroundColorEqualFold))
+	}
+	if i.SecondaryForegroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.SecondaryForegroundColorContainsFold(*i.SecondaryForegroundColorContainsFold))
+	}
 
 	if i.HasTrustCenter != nil {
 		p := trustcentersetting.HasTrustCenter()
@@ -91340,6 +91640,40 @@ type TrustCenterSettingHistoryWhereInput struct {
 	AccentColorNotNil       bool     `json:"accentColorNotNil,omitempty"`
 	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
 	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
+
+	// "secondary_background_color" field predicates.
+	SecondaryBackgroundColor             *string  `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryBackgroundColorNEQ          *string  `json:"secondaryBackgroundColorNEQ,omitempty"`
+	SecondaryBackgroundColorIn           []string `json:"secondaryBackgroundColorIn,omitempty"`
+	SecondaryBackgroundColorNotIn        []string `json:"secondaryBackgroundColorNotIn,omitempty"`
+	SecondaryBackgroundColorGT           *string  `json:"secondaryBackgroundColorGT,omitempty"`
+	SecondaryBackgroundColorGTE          *string  `json:"secondaryBackgroundColorGTE,omitempty"`
+	SecondaryBackgroundColorLT           *string  `json:"secondaryBackgroundColorLT,omitempty"`
+	SecondaryBackgroundColorLTE          *string  `json:"secondaryBackgroundColorLTE,omitempty"`
+	SecondaryBackgroundColorContains     *string  `json:"secondaryBackgroundColorContains,omitempty"`
+	SecondaryBackgroundColorHasPrefix    *string  `json:"secondaryBackgroundColorHasPrefix,omitempty"`
+	SecondaryBackgroundColorHasSuffix    *string  `json:"secondaryBackgroundColorHasSuffix,omitempty"`
+	SecondaryBackgroundColorIsNil        bool     `json:"secondaryBackgroundColorIsNil,omitempty"`
+	SecondaryBackgroundColorNotNil       bool     `json:"secondaryBackgroundColorNotNil,omitempty"`
+	SecondaryBackgroundColorEqualFold    *string  `json:"secondaryBackgroundColorEqualFold,omitempty"`
+	SecondaryBackgroundColorContainsFold *string  `json:"secondaryBackgroundColorContainsFold,omitempty"`
+
+	// "secondary_foreground_color" field predicates.
+	SecondaryForegroundColor             *string  `json:"secondaryForegroundColor,omitempty"`
+	SecondaryForegroundColorNEQ          *string  `json:"secondaryForegroundColorNEQ,omitempty"`
+	SecondaryForegroundColorIn           []string `json:"secondaryForegroundColorIn,omitempty"`
+	SecondaryForegroundColorNotIn        []string `json:"secondaryForegroundColorNotIn,omitempty"`
+	SecondaryForegroundColorGT           *string  `json:"secondaryForegroundColorGT,omitempty"`
+	SecondaryForegroundColorGTE          *string  `json:"secondaryForegroundColorGTE,omitempty"`
+	SecondaryForegroundColorLT           *string  `json:"secondaryForegroundColorLT,omitempty"`
+	SecondaryForegroundColorLTE          *string  `json:"secondaryForegroundColorLTE,omitempty"`
+	SecondaryForegroundColorContains     *string  `json:"secondaryForegroundColorContains,omitempty"`
+	SecondaryForegroundColorHasPrefix    *string  `json:"secondaryForegroundColorHasPrefix,omitempty"`
+	SecondaryForegroundColorHasSuffix    *string  `json:"secondaryForegroundColorHasSuffix,omitempty"`
+	SecondaryForegroundColorIsNil        bool     `json:"secondaryForegroundColorIsNil,omitempty"`
+	SecondaryForegroundColorNotNil       bool     `json:"secondaryForegroundColorNotNil,omitempty"`
+	SecondaryForegroundColorEqualFold    *string  `json:"secondaryForegroundColorEqualFold,omitempty"`
+	SecondaryForegroundColorContainsFold *string  `json:"secondaryForegroundColorContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -92231,6 +92565,96 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.AccentColorContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.AccentColorContainsFold(*i.AccentColorContainsFold))
+	}
+	if i.SecondaryBackgroundColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorEQ(*i.SecondaryBackgroundColor))
+	}
+	if i.SecondaryBackgroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorNEQ(*i.SecondaryBackgroundColorNEQ))
+	}
+	if len(i.SecondaryBackgroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorIn(i.SecondaryBackgroundColorIn...))
+	}
+	if len(i.SecondaryBackgroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorNotIn(i.SecondaryBackgroundColorNotIn...))
+	}
+	if i.SecondaryBackgroundColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorGT(*i.SecondaryBackgroundColorGT))
+	}
+	if i.SecondaryBackgroundColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorGTE(*i.SecondaryBackgroundColorGTE))
+	}
+	if i.SecondaryBackgroundColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorLT(*i.SecondaryBackgroundColorLT))
+	}
+	if i.SecondaryBackgroundColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorLTE(*i.SecondaryBackgroundColorLTE))
+	}
+	if i.SecondaryBackgroundColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorContains(*i.SecondaryBackgroundColorContains))
+	}
+	if i.SecondaryBackgroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorHasPrefix(*i.SecondaryBackgroundColorHasPrefix))
+	}
+	if i.SecondaryBackgroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorHasSuffix(*i.SecondaryBackgroundColorHasSuffix))
+	}
+	if i.SecondaryBackgroundColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorIsNil())
+	}
+	if i.SecondaryBackgroundColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorNotNil())
+	}
+	if i.SecondaryBackgroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorEqualFold(*i.SecondaryBackgroundColorEqualFold))
+	}
+	if i.SecondaryBackgroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryBackgroundColorContainsFold(*i.SecondaryBackgroundColorContainsFold))
+	}
+	if i.SecondaryForegroundColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorEQ(*i.SecondaryForegroundColor))
+	}
+	if i.SecondaryForegroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorNEQ(*i.SecondaryForegroundColorNEQ))
+	}
+	if len(i.SecondaryForegroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorIn(i.SecondaryForegroundColorIn...))
+	}
+	if len(i.SecondaryForegroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorNotIn(i.SecondaryForegroundColorNotIn...))
+	}
+	if i.SecondaryForegroundColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorGT(*i.SecondaryForegroundColorGT))
+	}
+	if i.SecondaryForegroundColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorGTE(*i.SecondaryForegroundColorGTE))
+	}
+	if i.SecondaryForegroundColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorLT(*i.SecondaryForegroundColorLT))
+	}
+	if i.SecondaryForegroundColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorLTE(*i.SecondaryForegroundColorLTE))
+	}
+	if i.SecondaryForegroundColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorContains(*i.SecondaryForegroundColorContains))
+	}
+	if i.SecondaryForegroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorHasPrefix(*i.SecondaryForegroundColorHasPrefix))
+	}
+	if i.SecondaryForegroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorHasSuffix(*i.SecondaryForegroundColorHasSuffix))
+	}
+	if i.SecondaryForegroundColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorIsNil())
+	}
+	if i.SecondaryForegroundColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorNotNil())
+	}
+	if i.SecondaryForegroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorEqualFold(*i.SecondaryForegroundColorEqualFold))
+	}
+	if i.SecondaryForegroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.SecondaryForegroundColorContainsFold(*i.SecondaryForegroundColorContainsFold))
 	}
 
 	switch len(predicates) {

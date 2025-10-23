@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestMutationUpdateNote(t *testing.T) {
@@ -91,6 +92,26 @@ func TestMutationUpdateNote(t *testing.T) {
 }
 
 func TestMutationDeleteNote(t *testing.T) {
+
+	userTask := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, userTask.ID, testclient.UpdateTaskInput{
+		AddComment: &testclient.CreateNoteInput{
+			Text: "Here is my comment",
+		},
+	})
+
+	assert.NilError(t, err)
+
+	assert.Assert(t, createResp != nil)
+	assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
+	noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
+
+	_, err = suite.client.api.DeleteNote(testUser1.UserCtx, noteID)
+	assert.NilError(t, err)
+}
+
+func TestMutationDeleteTaskNotes(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {

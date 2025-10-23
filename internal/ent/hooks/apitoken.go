@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -14,6 +15,23 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
+func validateExpirationTime(m mutationWithExpirationTime) error {
+	t, ok := m.ExpiresAt()
+	if !ok {
+		return nil
+	}
+
+	if t.Before(time.Now()) {
+		return ErrPastTimeNotAllowed
+	}
+
+	return nil
+}
+
+type mutationWithExpirationTime interface {
+	ExpiresAt() (time.Time, bool)
+}
+
 // HookCreateAPIToken runs on api token mutations and sets the owner id
 func HookCreateAPIToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -25,6 +43,10 @@ func HookCreateAPIToken() ent.Hook {
 
 			// set organization on the token
 			m.SetOwnerID(orgID)
+
+			if err := validateExpirationTime(m); err != nil {
+				return nil, err
+			}
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {

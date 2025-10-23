@@ -141,6 +141,35 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 	return fc, nil
 }
 
+func (ec *executionContext) _ProgramBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProgramBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProgramBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProgramCreatePayload_program(ctx context.Context, field graphql.CollectedField, obj *model.ProgramCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -444,6 +473,45 @@ func (ec *executionContext) _ProgramBulkCreatePayload(ctx context.Context, sel a
 	return out
 }
 
+var programBulkDeletePayloadImplementors = []string{"ProgramBulkDeletePayload"}
+
+func (ec *executionContext) _ProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ProgramBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, programBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProgramBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ProgramBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var programCreatePayloadImplementors = []string{"ProgramCreatePayload"}
 
 func (ec *executionContext) _ProgramCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ProgramCreatePayload) graphql.Marshaler {
@@ -577,6 +645,20 @@ func (ec *executionContext) marshalNProgramBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ProgramBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProgramBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramBulkDeletePayload) graphql.Marshaler {
+	return ec._ProgramBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProgramBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProgramBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProgramCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramCreatePayload) graphql.Marshaler {

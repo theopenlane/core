@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
 	api "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/permissioncache"
@@ -46,6 +47,13 @@ const (
 // due to the request being a PAT or API Token auth request
 var SessionSkipperFunc = func(c echo.Context) bool {
 	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
+}
+
+// AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
+// based on the presence of impersonation token
+var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
+	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
+	return ok
 }
 
 // Authenticate is a middleware function that is used to authenticate requests - it is not applied to all routes so be cognizant of that
@@ -98,6 +106,14 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					return unauthorized(c, err, conf, validator)
 				}
 
+				// Record authentication metric based on token type
+				switch au.AuthenticationType {
+				case auth.PATAuthentication:
+					metrics.RecordAuthentication(metrics.AuthTypePAT)
+				case auth.APITokenAuthentication:
+					metrics.RecordAuthentication(metrics.AuthTypeAPIToken)
+				}
+
 			default:
 				claims, err := validator.Verify(bearerToken)
 				if err != nil {
@@ -116,6 +132,9 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 					auth.SetAnonymousTrustCenterUserContext(c, an)
 
+					// Record anonymous JWT authentication
+					metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
+
 					return next(c)
 				}
 
@@ -126,6 +145,9 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
+
+				// Record regular JWT authentication
+				metrics.RecordAuthentication(metrics.AuthTypeJWT)
 			}
 
 			auth.SetAuthenticatedUserContext(c, au)

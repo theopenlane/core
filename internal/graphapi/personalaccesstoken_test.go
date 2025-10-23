@@ -11,6 +11,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -103,7 +104,7 @@ func TestQueryPersonalAccessTokens(t *testing.T) {
 }
 
 func TestMutationCreatePersonalAccessToken(t *testing.T) {
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
 	testCases := []struct {
@@ -117,6 +118,15 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 			},
+		},
+		{
+			name: "bad path, set expire to the past",
+			input: testclient.CreatePersonalAccessTokenInput{
+				Name:        "forthethingz",
+				Description: &tokenDescription,
+				ExpiresAt:   lo.ToPtr(time.Now().Add(-time.Hour)),
+			},
+			errorMsg: hooks.ErrPastTimeNotAllowed.Error(),
 		},
 		{
 			name: "happy path, set expire",
@@ -219,7 +229,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 		client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).
 		MustNew(testUser2.UserCtx, t)
 
-	tokenDescription := gofakeit.Sentence(5)
+	tokenDescription := gofakeit.Sentence()
 	tokenName := gofakeit.Word()
 
 	testCases := []struct {
@@ -317,6 +327,12 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 			assert.Check(t, is.Equal(redacted, resp.UpdatePersonalAccessToken.PersonalAccessToken.Token))
 		})
 	}
+
+	// update expiration date
+	_, err := suite.client.api.UpdatePersonalAccessToken(testUser1.UserCtx, token.ID, testclient.UpdatePersonalAccessTokenInput{
+		ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
+	})
+	assert.NilError(t, err)
 
 	// cleanup
 	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{

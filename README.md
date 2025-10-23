@@ -56,7 +56,7 @@ included. Please see the associated documentation.
 
 ### Installing the CLI
 
-You can install the Openlane CLI by running `brew install theopenlane/tap/openlane`
+You can install the Openlane CLI by running `brew install --cask theopenlane/tap/openlane`
 
 ### Updating Configuration Settings
 
@@ -232,7 +232,7 @@ We have additionally open-sourced the [Openlane UI](https://github.com/theopenla
 
 ## Features
 
-At it's core, this repo is a collection of services built on top of an entity
+At its core, this repo is a collection of services built on top of an entity
 framework which allows us to:
 
 - Model database schemas as graph structures

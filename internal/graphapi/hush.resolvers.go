@@ -96,6 +96,15 @@ func (r *mutationResolver) DeleteHush(ctx context.Context, id string) (*model.Hu
 	}, nil
 }
 
+// DeleteBulkHush is the resolver for the deleteBulkHush field.
+func (r *mutationResolver) DeleteBulkHush(ctx context.Context, ids []string) (*model.HushBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteHush(ctx, ids)
+}
+
 // Hush is the resolver for the hush field.
 func (r *queryResolver) Hush(ctx context.Context, id string) (*generated.Hush, error) {
 	query, err := withTransactionalMutation(ctx).Hush.Query().Where(hush.ID(id)).CollectFields(ctx)

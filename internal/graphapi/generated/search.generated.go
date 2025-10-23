@@ -1798,6 +1798,45 @@ func (ec *executionContext) fieldContext_SearchResults_webauthns(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_searchContext(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_searchContext,
+		func(ctx context.Context) (any, error) {
+			return obj.SearchContext, nil
+		},
+		nil,
+		ec.marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContextᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_searchContext(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "entityID":
+				return ec.fieldContext_SearchContext_entityID(ctx, field)
+			case "entityType":
+				return ec.fieldContext_SearchContext_entityType(ctx, field)
+			case "matchedFields":
+				return ec.fieldContext_SearchContext_matchedFields(ctx, field)
+			case "snippets":
+				return ec.fieldContext_SearchContext_snippets(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SearchContext", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -1923,6 +1962,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_userSettings(ctx, field, obj)
 		case "webauthns":
 			out.Values[i] = ec._SearchResults_webauthns(ctx, field, obj)
+		case "searchContext":
+			out.Values[i] = ec._SearchResults_searchContext(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

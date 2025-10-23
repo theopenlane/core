@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramDeletePayload!
+    """
+    Delete multiple programs
+    """
+    deleteBulkProgram(
+        """
+        IDs of the programs to delete
+        """
+        ids: [ID!]!
+    ): ProgramBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type ProgramBulkCreatePayload {
     Created programs
     """
     programs: [Program!]
+}
+
+"""
+Return response for deleteBulkProgram mutation
+"""
+type ProgramBulkDeletePayload {
+    """
+    Deleted program IDs
+    """
+    deletedIDs: [ID!]!
 }

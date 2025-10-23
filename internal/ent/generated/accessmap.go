@@ -524,6 +524,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "file_download_token": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+},
 }, "group": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -716,6 +721,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "impersonation_event": {"user": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "target_user": {
+	ObjectType:      "target_user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "organization": {
+	ObjectType:      "organization",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "integration": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -791,6 +809,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "file": {
 	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -929,6 +951,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "task": {
 	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "control": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "subcontrol": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "procedure": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risk": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "internal_policy": {
+	ObjectType:      "internal_policy",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "files": {
@@ -1294,6 +1336,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_watermark_config",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "impersonation_events": {
+	ObjectType:      "impersonation_event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1372,6 +1418,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "tasks": {
 	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "file": {
@@ -1533,6 +1583,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "scan": {"owner": {
 	ObjectType:      "owner",
@@ -1894,6 +1948,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "email_verification_token",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "file_download_tokens": {
+	ObjectType:      "file_download_token",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "password_reset_tokens": {
 	ObjectType:      "password_reset_token",
 	SkipEditCheck:   false,
@@ -1944,6 +2002,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "program_owner": {
 	ObjectType:      "program_owner",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "impersonation_events": {
+	ObjectType:      "impersonation_event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "targeted_impersonations": {
+	ObjectType:      "targeted_impersonation",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "group_memberships": {

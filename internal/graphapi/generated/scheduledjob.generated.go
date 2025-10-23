@@ -93,6 +93,35 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 	return fc, nil
 }
 
+func (ec *executionContext) _ScheduledJobBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ScheduledJobBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -300,6 +329,45 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload(ctx context.Context, 
 	return out
 }
 
+var scheduledJobBulkDeletePayloadImplementors = []string{"ScheduledJobBulkDeletePayload"}
+
+func (ec *executionContext) _ScheduledJobBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ScheduledJobBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, scheduledJobBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ScheduledJobBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ScheduledJobBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var scheduledJobCreatePayloadImplementors = []string{"ScheduledJobCreatePayload"}
 
 func (ec *executionContext) _ScheduledJobCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ScheduledJobCreatePayload) graphql.Marshaler {
@@ -433,6 +501,20 @@ func (ec *executionContext) marshalNScheduledJobBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._ScheduledJobBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNScheduledJobBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScheduledJobBulkDeletePayload) graphql.Marshaler {
+	return ec._ScheduledJobBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNScheduledJobBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ScheduledJobBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNScheduledJobCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScheduledJobCreatePayload) graphql.Marshaler {

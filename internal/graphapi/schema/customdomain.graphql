@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): CustomDomainDeletePayload!
+    """
+    Delete multiple customDomains
+    """
+    deleteBulkCustomDomain(
+        """
+        IDs of the customDomains to delete
+        """
+        ids: [ID!]!
+    ): CustomDomainBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type CustomDomainBulkCreatePayload {
     Created customDomains
     """
     customDomains: [CustomDomain!]
+}
+
+"""
+Return response for deleteBulkCustomDomain mutation
+"""
+type CustomDomainBulkDeletePayload {
+    """
+    Deleted customDomain IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -69,6 +69,8 @@ var (
 	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.
 	// future being any second/minute past the current time of validation
 	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
+	// ErrPastTimeNotAllowed is returned when you try to set a time into the past.
+	ErrPastTimeNotAllowed = errors.New("time cannot be in the past")
 	// ErrFieldRequired is returned when a field is required but not provided
 	ErrFieldRequired = errors.New("field is required but not provided")
 	// ErrOwnerIDNotExists is returned when an owner_id cannot be found

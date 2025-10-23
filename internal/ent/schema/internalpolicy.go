@@ -4,9 +4,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -65,6 +67,16 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			fromSchema: i,
 			edgeSchema: File{},
 			field:      "file_id",
+		}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the policy",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
 		}),
 	}
 }

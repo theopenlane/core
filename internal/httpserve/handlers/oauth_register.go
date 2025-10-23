@@ -43,6 +43,8 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	user, err := h.CheckAndCreateUser(ctxWithToken, in.Name, in.Email, enums.AuthProvider(strings.ToUpper(in.AuthProvider)), in.Image)
 	if err != nil {
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
+			log.Error().Err(err).Str("email", in.Email).Msg("email not allowed during registration")
+
 			return h.InvalidInput(ctx, err, openapi)
 		}
 

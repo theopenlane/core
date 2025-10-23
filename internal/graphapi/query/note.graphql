@@ -19,3 +19,10 @@ query GetNoteByID($noteId: ID!) {
     }
   }
 }
+
+mutation DeleteNote($noteID: ID!) {
+  deleteNote(id: $noteID) {
+    deletedID
+  }
+}
+

@@ -45,7 +45,7 @@ func HookEmailValidation() ent.Hook {
 			// if email validation is enabled, verify the email address
 			verified, res, err := mut.Client().EmailVerifier.VerifyEmailAddress(email)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("error verifying email address")
+				zerolog.Ctx(ctx).Error().Err(err).Str("email", email).Msg("error verifying email address")
 
 				return nil, validator.ErrEmailNotAllowed
 			}

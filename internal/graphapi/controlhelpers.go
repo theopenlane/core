@@ -3,10 +3,15 @@ package graphapi
 import (
 	"cmp"
 	"context"
+	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
@@ -120,4 +125,138 @@ func getControlWherePredicate(where *generated.ControlWhereInput) (predicate.Con
 	}
 
 	return whereP, nil
+}
+
+// getStandardRefCodes processes a slice of strings formatted as "standard_short_name::control_ref_code"
+// and returns a map where the keys are standard short names and the values are slices of control reference codes.
+// If the input slice is empty, it returns nil.
+func getStandardRefCodes(data []string) (map[string][]string, error) {
+	if len(data) == 0 {
+		return nil, nil
+	}
+
+	result := make(map[string][]string)
+
+	for _, controlData := range data {
+		parts := strings.Split(controlData, "::")
+		if len(parts) != 2 { //nolint:mnd
+			return nil, fmt.Errorf("%w: expected format 'standard_short_name::control_ref_code'", ErrInvalidInput)
+		}
+
+		standardShortName := parts[0]
+		controlRefCode := parts[1]
+
+		// add the mapping to the result
+		if _, ok := result[standardShortName]; !ok {
+			result[standardShortName] = []string{}
+		}
+
+		result[standardShortName] = append(result[standardShortName], controlRefCode)
+	}
+
+	return result, nil
+}
+
+// constructWherePredicatesFromStandardRefCodes constructs a slice of predicates based on the provided
+// standard reference codes map. The map keys are standard short names and the values are slices of control reference codes.
+// It returns a slice of predicates that can be used in queries to filter controls or subcontrols.
+func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicate.Subcontrol](ctx context.Context, standardRefCodes map[string][]string) []T {
+	predicates := []T{}
+
+	// use to determine if we should filter by system owned controls
+	systemOwned := auth.IsSystemAdminFromContext(ctx)
+
+	for standardShortName, refCodes := range standardRefCodes {
+		switch any(*new(T)).(type) {
+		case predicate.Control:
+			if standardShortName == "CUSTOM" {
+				predicates = append(predicates, any(control.And(
+					control.ReferenceFrameworkIsNil(),
+					control.RefCodeIn(refCodes...),
+				)).(T))
+			} else {
+				predicates = append(predicates, any(control.And(
+					control.ReferenceFrameworkEqualFold(standardShortName),
+					control.RefCodeIn(refCodes...),
+				)).(T))
+			}
+
+		case predicate.Subcontrol:
+			if standardShortName == "CUSTOM" {
+				predicates = append(predicates, any(subcontrol.And(
+					subcontrol.ReferenceFrameworkIsNil(),
+					subcontrol.RefCodeIn(refCodes...),
+				)).(T))
+			} else {
+				predicates = append(predicates, any(subcontrol.And(
+					subcontrol.ReferenceFrameworkEqualFold(standardShortName),
+					subcontrol.RefCodeIn(refCodes...),
+				)).(T))
+			}
+
+		}
+	}
+
+	// wrap all predicates in an OR clause
+	if len(predicates) > 1 {
+		switch any(*new(T)).(type) {
+		case predicate.Control:
+			orPredicates := make([]predicate.Control, len(predicates))
+			for i, p := range predicates {
+				orPredicates[i] = any(p).(predicate.Control)
+			}
+			predicates = []T{any(control.Or(orPredicates...)).(T)}
+		case predicate.Subcontrol:
+			orPredicates := make([]predicate.Subcontrol, len(predicates))
+			for i, p := range predicates {
+				orPredicates[i] = any(p).(predicate.Subcontrol)
+			}
+			predicates = []T{any(subcontrol.Or(orPredicates...)).(T)}
+		}
+	}
+
+	switch any(*new(T)).(type) {
+	case predicate.Control:
+		predicates = append(predicates, any(
+			control.SystemOwned(systemOwned),
+		).(T))
+	case predicate.Subcontrol:
+		predicates = append(predicates, any(
+			subcontrol.SystemOwned(systemOwned),
+		).(T))
+	}
+
+	return predicates
+}
+
+// getControlIDsFromRefCodes retrieves control or subcontrol IDs based on the provided reference codes which include standard short names
+// for example "ISO27001::A.5.1.1"
+func getControlIDsFromRefCodes[T predicate.Control | predicate.Subcontrol](ctx context.Context, data []string) ([]string, error) {
+	if len(data) == 0 {
+		return nil, nil
+	}
+
+	mappedData, err := getStandardRefCodes(data)
+	if err != nil {
+		return nil, err
+	}
+
+	where := constructWherePredicatesFromStandardRefCodes[T](ctx, mappedData)
+
+	switch any(*new(T)).(type) {
+	case predicate.Control:
+		whereControl := make([]predicate.Control, len(where))
+		for i, w := range where {
+			whereControl[i] = any(w).(predicate.Control)
+		}
+		return withTransactionalMutation(ctx).Control.Query().Where(whereControl...).IDs(ctx)
+	case predicate.Subcontrol:
+		whereSubcontrol := make([]predicate.Subcontrol, len(where))
+		for i, w := range where {
+			whereSubcontrol[i] = any(w).(predicate.Subcontrol)
+		}
+		return withTransactionalMutation(ctx).Subcontrol.Query().Where(whereSubcontrol...).IDs(ctx)
+	}
+
+	return nil, nil
 }

@@ -12126,6 +12126,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetAccentColor(accentColor)
 	}
 
+	if secondaryBackgroundColor, exists := m.SecondaryBackgroundColor(); exists {
+		create = create.SetSecondaryBackgroundColor(secondaryBackgroundColor)
+	}
+
+	if secondaryForegroundColor, exists := m.SecondaryForegroundColor(); exists {
+		create = create.SetSecondaryForegroundColor(secondaryForegroundColor)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -12271,6 +12279,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetAccentColor(trustcentersetting.AccentColor)
 		}
 
+		if secondaryBackgroundColor, exists := m.SecondaryBackgroundColor(); exists {
+			create = create.SetSecondaryBackgroundColor(secondaryBackgroundColor)
+		} else {
+			create = create.SetSecondaryBackgroundColor(trustcentersetting.SecondaryBackgroundColor)
+		}
+
+		if secondaryForegroundColor, exists := m.SecondaryForegroundColor(); exists {
+			create = create.SetSecondaryForegroundColor(secondaryForegroundColor)
+		} else {
+			create = create.SetSecondaryForegroundColor(trustcentersetting.SecondaryForegroundColor)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12325,6 +12345,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetForegroundColor(trustcentersetting.ForegroundColor).
 			SetBackgroundColor(trustcentersetting.BackgroundColor).
 			SetAccentColor(trustcentersetting.AccentColor).
+			SetSecondaryBackgroundColor(trustcentersetting.SecondaryBackgroundColor).
+			SetSecondaryForegroundColor(trustcentersetting.SecondaryForegroundColor).
 			Save(ctx)
 		if err != nil {
 			return err

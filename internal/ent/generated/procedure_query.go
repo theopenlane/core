@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -48,6 +49,7 @@ type ProcedureQuery struct {
 	withNarratives            *NarrativeQuery
 	withRisks                 *RiskQuery
 	withTasks                 *TaskQuery
+	withComments              *NoteQuery
 	withFile                  *FileQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Procedure) error
@@ -61,6 +63,7 @@ type ProcedureQuery struct {
 	withNamedNarratives       map[string]*NarrativeQuery
 	withNamedRisks            map[string]*RiskQuery
 	withNamedTasks            map[string]*TaskQuery
+	withNamedComments         map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -397,6 +400,31 @@ func (_q *ProcedureQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *ProcedureQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.CommentsTable, procedure.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFile chains the current query on the "file" edge.
 func (_q *ProcedureQuery) QueryFile() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
@@ -626,6 +654,7 @@ func (_q *ProcedureQuery) Clone() *ProcedureQuery {
 		withNarratives:       _q.withNarratives.Clone(),
 		withRisks:            _q.withRisks.Clone(),
 		withTasks:            _q.withTasks.Clone(),
+		withComments:         _q.withComments.Clone(),
 		withFile:             _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -766,6 +795,17 @@ func (_q *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithComments(opts ...func(*NoteQuery)) *ProcedureQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // WithFile tells the query-builder to eager-load the nodes that are connected to
 // the "file" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ProcedureQuery) WithFile(opts ...func(*FileQuery)) *ProcedureQuery {
@@ -862,7 +902,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -875,6 +915,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			_q.withNarratives != nil,
 			_q.withRisks != nil,
 			_q.withTasks != nil,
+			_q.withComments != nil,
 			_q.withFile != nil,
 		}
 	)
@@ -985,6 +1026,13 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Comments = []*Note{} },
+			func(n *Procedure, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *Procedure, e *File) { n.Edges.File = e }); err != nil {
@@ -1051,6 +1099,13 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedTasks(name) },
 			func(n *Procedure, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedComments(name) },
+			func(n *Procedure, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1707,6 +1762,37 @@ func (_q *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 	}
 	return nil
 }
+func (_q *ProcedureQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Procedure)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(procedure.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.procedure_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "procedure_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "procedure_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ProcedureQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
@@ -1973,6 +2059,20 @@ func (_q *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) 
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *ProcedureQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 

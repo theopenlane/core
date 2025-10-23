@@ -154,11 +154,9 @@ var controlFields = []ent.Field{
 		Comment("additional names (ref_codes) for the control"),
 	field.String("reference_id").
 		Optional().
-		Unique().
 		Comment("internal reference id of the control, can be used for internal tracking"),
 	field.String("auditor_reference_id").
 		Optional().
-		Unique().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	field.String("responsible_party_id").
 		Optional().

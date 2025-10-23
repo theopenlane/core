@@ -3060,6 +3060,35 @@ func HasTrustCenterWatermarkConfigsWith(preds ...predicate.TrustCenterWatermarkC
 	})
 }
 
+// HasImpersonationEvents applies the HasEdge predicate on the "impersonation_events" edge.
+func HasImpersonationEvents() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasImpersonationEventsWith applies the HasEdge predicate on the "impersonation_events" edge with a given conditions (other predicates).
+func HasImpersonationEventsWith(preds ...predicate.ImpersonationEvent) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newImpersonationEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ImpersonationEvent
+		step.Edge.Schema = schemaConfig.ImpersonationEvent
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

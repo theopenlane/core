@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): NarrativeDeletePayload!
+    """
+    Delete multiple narratives
+    """
+    deleteBulkNarrative(
+        """
+        IDs of the narratives to delete
+        """
+        ids: [ID!]!
+    ): NarrativeBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type NarrativeBulkCreatePayload {
     Created narratives
     """
     narratives: [Narrative!]
+}
+
+"""
+Return response for deleteBulkNarrative mutation
+"""
+type NarrativeBulkDeletePayload {
+    """
+    Deleted narrative IDs
+    """
+    deletedIDs: [ID!]!
 }

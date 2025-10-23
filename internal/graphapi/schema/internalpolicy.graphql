@@ -88,6 +88,15 @@ extend type Mutation{
         """
         id: ID!
     ): InternalPolicyDeletePayload!
+    """
+    Delete multiple internalPolicys
+    """
+    deleteBulkInternalPolicy(
+        """
+        IDs of the internalPolicys to delete
+        """
+        ids: [ID!]!
+    ): InternalPolicyBulkDeletePayload!
 }
 
 """
@@ -142,4 +151,14 @@ type InternalPolicyBulkUpdatePayload {
     IDs of the updated internalPolicys
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkDeletePayload {
+    """
+    Deleted internalPolicy IDs
+    """
+    deletedIDs: [ID!]!
 }

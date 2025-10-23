@@ -4,9 +4,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -57,6 +59,16 @@ func (p Procedure) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		defaultEdgeToWithPagination(p, Risk{}),
 		defaultEdgeToWithPagination(p, Task{}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the procedure",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: p,

@@ -807,6 +807,30 @@ func (f FileMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Muta
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.FileMutation", m)
 }
 
+// The FileDownloadTokenQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type FileDownloadTokenQueryRuleFunc func(context.Context, *generated.FileDownloadTokenQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f FileDownloadTokenQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.FileDownloadTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.FileDownloadTokenQuery", q)
+}
+
+// The FileDownloadTokenMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type FileDownloadTokenMutationRuleFunc func(context.Context, *generated.FileDownloadTokenMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f FileDownloadTokenMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.FileDownloadTokenMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.FileDownloadTokenMutation", m)
+}
+
 // The FileHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FileHistoryQueryRuleFunc func(context.Context, *generated.FileHistoryQuery) error
@@ -1021,6 +1045,30 @@ func (f HushHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.HushHistoryMutation", m)
+}
+
+// The ImpersonationEventQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ImpersonationEventQueryRuleFunc func(context.Context, *generated.ImpersonationEventQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ImpersonationEventQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ImpersonationEventQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ImpersonationEventQuery", q)
+}
+
+// The ImpersonationEventMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ImpersonationEventMutationRuleFunc func(context.Context, *generated.ImpersonationEventMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ImpersonationEventMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ImpersonationEventMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ImpersonationEventMutation", m)
 }
 
 // The IntegrationQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2916,6 +2964,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.FileQuery:
 		return q.Filter(), nil
+	case *generated.FileDownloadTokenQuery:
+		return q.Filter(), nil
 	case *generated.FileHistoryQuery:
 		return q.Filter(), nil
 	case *generated.GroupQuery:
@@ -2933,6 +2983,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.HushQuery:
 		return q.Filter(), nil
 	case *generated.HushHistoryQuery:
+		return q.Filter(), nil
+	case *generated.ImpersonationEventQuery:
 		return q.Filter(), nil
 	case *generated.IntegrationQuery:
 		return q.Filter(), nil
@@ -3149,6 +3201,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.FileMutation:
 		return m.Filter(), nil
+	case *generated.FileDownloadTokenMutation:
+		return m.Filter(), nil
 	case *generated.FileHistoryMutation:
 		return m.Filter(), nil
 	case *generated.GroupMutation:
@@ -3166,6 +3220,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.HushMutation:
 		return m.Filter(), nil
 	case *generated.HushHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ImpersonationEventMutation:
 		return m.Filter(), nil
 	case *generated.IntegrationMutation:
 		return m.Filter(), nil

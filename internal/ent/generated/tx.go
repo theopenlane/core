@@ -70,6 +70,8 @@ type Tx struct {
 	Export *ExportClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
+	// FileDownloadToken is the client for interacting with the FileDownloadToken builders.
+	FileDownloadToken *FileDownloadTokenClient
 	// FileHistory is the client for interacting with the FileHistory builders.
 	FileHistory *FileHistoryClient
 	// Group is the client for interacting with the Group builders.
@@ -88,6 +90,8 @@ type Tx struct {
 	Hush *HushClient
 	// HushHistory is the client for interacting with the HushHistory builders.
 	HushHistory *HushHistoryClient
+	// ImpersonationEvent is the client for interacting with the ImpersonationEvent builders.
+	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
 	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
@@ -398,6 +402,7 @@ func (tx *Tx) init() {
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
 	tx.Export = NewExportClient(tx.config)
 	tx.File = NewFileClient(tx.config)
+	tx.FileDownloadToken = NewFileDownloadTokenClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
 	tx.GroupHistory = NewGroupHistoryClient(tx.config)
@@ -407,6 +412,7 @@ func (tx *Tx) init() {
 	tx.GroupSettingHistory = NewGroupSettingHistoryClient(tx.config)
 	tx.Hush = NewHushClient(tx.config)
 	tx.HushHistory = NewHushHistoryClient(tx.config)
+	tx.ImpersonationEvent = NewImpersonationEventClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
 	tx.IntegrationHistory = NewIntegrationHistoryClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)

@@ -101,6 +101,35 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 	return fc, nil
 }
 
+func (ec *executionContext) _MappedControlBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappedControlBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_MappedControlBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MappedControlBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -324,6 +353,45 @@ func (ec *executionContext) _MappedControlBulkCreatePayload(ctx context.Context,
 	return out
 }
 
+var mappedControlBulkDeletePayloadImplementors = []string{"MappedControlBulkDeletePayload"}
+
+func (ec *executionContext) _MappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappedControlBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mappedControlBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MappedControlBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._MappedControlBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var mappedControlCreatePayloadImplementors = []string{"MappedControlCreatePayload"}
 
 func (ec *executionContext) _MappedControlCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.MappedControlCreatePayload) graphql.Marshaler {
@@ -457,6 +525,20 @@ func (ec *executionContext) marshalNMappedControlBulkCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._MappedControlBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMappedControlBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlBulkDeletePayload) graphql.Marshaler {
+	return ec._MappedControlBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMappedControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._MappedControlBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMappedControlCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlCreatePayload) graphql.Marshaler {

@@ -261,7 +261,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Status:     &enums.DocumentDraft,
 				PolicyType: lo.ToPtr("sop"),
 				Revision:   lo.ToPtr("v1.1.0"),
-				Details:    lo.ToPtr(gofakeit.Sentence(1000)),
+				Details:    lo.ToPtr(gofakeit.Sentence()),
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
@@ -523,7 +523,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "happy path, update details field",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Details: lo.ToPtr(gofakeit.Sentence(200)),
+				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -532,7 +532,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "happy path, update details field on policy created by another user",
 			policyID: internalPolicyAdminUser.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Details: lo.ToPtr(gofakeit.Sentence(200)),
+				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx, // org owner should always be able to update the policy

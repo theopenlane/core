@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*mo
 	}, nil
 }
 
+// DeleteBulkEntityType is the resolver for the deleteBulkEntityType field.
+func (r *mutationResolver) DeleteBulkEntityType(ctx context.Context, ids []string) (*model.EntityTypeBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteEntityType(ctx, ids)
+}
+
 // EntityType is the resolver for the entityType field.
 func (r *queryResolver) EntityType(ctx context.Context, id string) (*generated.EntityType, error) {
 	query, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.ID(id)).CollectFields(ctx)

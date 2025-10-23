@@ -1902,6 +1902,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.Risk {
 	})
 }
 
+// HasComments applies the HasEdge predicate on the "comments" edge.
+func HasComments() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCommentsWith applies the HasEdge predicate on the "comments" edge with a given conditions (other predicates).
+func HasCommentsWith(preds ...predicate.Note) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newCommentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Risk) predicate.Risk {
 	return predicate.Risk(sql.AndPredicates(predicates...))

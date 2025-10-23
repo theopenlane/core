@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 
 	"github.com/theopenlane/utils/passwd"
 )
@@ -453,6 +454,47 @@ var ExampleVerifySuccessResponse = VerifyReply{
 		Session:      "session",
 		TokenType:    "bearer",
 	},
+}
+
+// =========
+// FILEDOWNLOAD
+// =========
+
+type File = storagetypes.File
+
+type FileDownload struct {
+	ID    string `param:"id" description:"the file ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
+}
+
+// Validate ensures the required fields are set on the VerifyRequest request
+func (r *FileDownload) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	return nil
+}
+
+// ExampleVerifySuccessRequest is an example of a successful verify request for OpenAPI documentation
+var ExampleFileDownloadRequest = FileDownload{
+	Token: "token",
+}
+
+// UploadFilesReply holds the fields that are sent on a response to the `/upload` endpoint
+type FileDownloadReply struct {
+	rout.Reply
+	Message string `json:"message,omitempty"`
+	File    File   `json:"file" description:"The files that were uploaded"`
+}
+
+// ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
+func (r *FileDownloadReply) ExampleResponse() any {
+	return FileDownloadReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Files uploaded successfully",
+		File:    File{OriginalName: "example1.pdf"}, // nolint:mnd
+	}
 }
 
 // =========
@@ -1201,23 +1243,10 @@ func (r *UploadFilesReply) ExampleResponse() any {
 		Message:   "Files uploaded successfully",
 		FileCount: 2, // nolint:mnd
 		Files: []File{
-			{Name: "example1.pdf", Size: 1024}, // nolint:mnd
-			{Name: "example2.jpg", Size: 2048}, // nolint:mnd
+			{OriginalName: "example1.pdf"}, // nolint:mnd
+			{OriginalName: "example2.jpg"}, // nolint:mnd
 		},
 	}
-}
-
-// File holds the fields that are sent on a response to the `/upload` endpoint
-type File struct {
-	ID           string    `json:"id,omitempty" description:"The ID of the uploaded file"`
-	Name         string    `json:"name,omitempty" description:"The name of the uploaded file"`
-	Size         int64     `json:"size,omitempty" description:"The size of the uploaded file in bytes"`
-	MimeType     string    `json:"mime_type,omitempty" description:"The mime type of the uploaded file"`
-	ContentType  string    `json:"content_type,omitempty" description:"The content type of the uploaded file"`
-	PresignedURL string    `json:"presigned_url,omitempty" description:"The presigned URL to download the file"`
-	MD5          []byte    `json:"md5,omitempty" description:"The MD5 hash of the uploaded file"`
-	CreatedAt    time.Time `json:"created_at,omitempty" description:"The time the file was uploaded"`
-	UpdatedAt    time.Time `json:"updated_at,omitempty" description:"The time the file was last updated"`
 }
 
 // ExampleUploadFileRequest is an example of a successful upload request for OpenAPI documentation
@@ -1241,11 +1270,7 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 	Files: []File{
 		{
 			ID:           "1234",
-			Name:         "file.txt",
-			Size:         1024, // nolint:mnd
-			MimeType:     "text/plain",
-			ContentType:  "text/plain",
-			PresignedURL: "https://example.com/file.txt",
+			OriginalName: "file.txt",
 			MD5:          []byte("1234"),
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),

@@ -109,6 +109,15 @@ func (r *mutationResolver) DeleteTrustCenterCompliance(ctx context.Context, id s
 	}, nil
 }
 
+// DeleteBulkTrustCenterCompliance is the resolver for the deleteBulkTrustCenterCompliance field.
+func (r *mutationResolver) DeleteBulkTrustCenterCompliance(ctx context.Context, ids []string) (*model.TrustCenterComplianceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTrustCenterCompliance(ctx, ids)
+}
+
 // TrustCenterCompliance is the resolver for the trustCenterCompliance field.
 func (r *queryResolver) TrustCenterCompliance(ctx context.Context, id string) (*generated.TrustCenterCompliance, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterCompliance.Query().Where(trustcentercompliance.ID(id)).CollectFields(ctx)

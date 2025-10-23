@@ -72,6 +72,15 @@ func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, inp
 	}, nil
 }
 
+// DeleteBulkUserSetting is the resolver for the deleteBulkUserSetting field.
+func (r *mutationResolver) DeleteBulkUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteUserSetting(ctx, ids)
+}
+
 // UserSetting is the resolver for the userSetting field.
 func (r *queryResolver) UserSetting(ctx context.Context, id string) (*generated.UserSetting, error) {
 	query, err := withTransactionalMutation(ctx).UserSetting.Query().Where(usersetting.ID(id)).CollectFields(ctx)

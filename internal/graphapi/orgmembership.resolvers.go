@@ -108,6 +108,15 @@ func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (
 	}, nil
 }
 
+// DeleteBulkOrgMembership is the resolver for the deleteBulkOrgMembership field.
+func (r *mutationResolver) DeleteBulkOrgMembership(ctx context.Context, ids []string) (*model.OrgMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteOrgMembership(ctx, ids)
+}
+
 // OrgMembership is the resolver for the orgMembership field.
 func (r *queryResolver) OrgMembership(ctx context.Context, id string) (*generated.OrgMembership, error) {
 	query, err := withTransactionalMutation(ctx).OrgMembership.Query().Where(orgmembership.ID(id)).CollectFields(ctx)

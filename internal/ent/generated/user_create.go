@@ -14,8 +14,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -370,6 +372,21 @@ func (_c *UserCreate) AddEmailVerificationTokens(v ...*EmailVerificationToken) *
 	return _c.AddEmailVerificationTokenIDs(ids...)
 }
 
+// AddFileDownloadTokenIDs adds the "file_download_tokens" edge to the FileDownloadToken entity by IDs.
+func (_c *UserCreate) AddFileDownloadTokenIDs(ids ...string) *UserCreate {
+	_c.mutation.AddFileDownloadTokenIDs(ids...)
+	return _c
+}
+
+// AddFileDownloadTokens adds the "file_download_tokens" edges to the FileDownloadToken entity.
+func (_c *UserCreate) AddFileDownloadTokens(v ...*FileDownloadToken) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileDownloadTokenIDs(ids...)
+}
+
 // AddPasswordResetTokenIDs adds the "password_reset_tokens" edge to the PasswordResetToken entity by IDs.
 func (_c *UserCreate) AddPasswordResetTokenIDs(ids ...string) *UserCreate {
 	_c.mutation.AddPasswordResetTokenIDs(ids...)
@@ -571,6 +588,36 @@ func (_c *UserCreate) SetNillableProgramOwnerID(id *string) *UserCreate {
 // SetProgramOwner sets the "program_owner" edge to the Program entity.
 func (_c *UserCreate) SetProgramOwner(v *Program) *UserCreate {
 	return _c.SetProgramOwnerID(v.ID)
+}
+
+// AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
+func (_c *UserCreate) AddImpersonationEventIDs(ids ...string) *UserCreate {
+	_c.mutation.AddImpersonationEventIDs(ids...)
+	return _c
+}
+
+// AddImpersonationEvents adds the "impersonation_events" edges to the ImpersonationEvent entity.
+func (_c *UserCreate) AddImpersonationEvents(v ...*ImpersonationEvent) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddImpersonationEventIDs(ids...)
+}
+
+// AddTargetedImpersonationIDs adds the "targeted_impersonations" edge to the ImpersonationEvent entity by IDs.
+func (_c *UserCreate) AddTargetedImpersonationIDs(ids ...string) *UserCreate {
+	_c.mutation.AddTargetedImpersonationIDs(ids...)
+	return _c
+}
+
+// AddTargetedImpersonations adds the "targeted_impersonations" edges to the ImpersonationEvent entity.
+func (_c *UserCreate) AddTargetedImpersonations(v ...*ImpersonationEvent) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTargetedImpersonationIDs(ids...)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -944,6 +991,23 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.FileDownloadTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.FileDownloadTokensTable,
+			Columns: []string{user.FileDownloadTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FileDownloadToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.PasswordResetTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1182,6 +1246,40 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ImpersonationEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ImpersonationEventsTable,
+			Columns: []string{user.ImpersonationEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ImpersonationEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TargetedImpersonationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.TargetedImpersonationsTable,
+			Columns: []string{user.TargetedImpersonationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

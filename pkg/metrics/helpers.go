@@ -115,6 +115,12 @@ const (
 	TaskEmailVerification = "verification_email"
 	TaskEmailReset        = "reset_email"
 	TaskWebhookDelivery   = "webhook_delivery"
+
+	// Authentication types
+	AuthTypeJWT          = "jwt"
+	AuthTypeJWTAnonymous = "jwt_anonymous"
+	AuthTypePAT          = "pat"
+	AuthTypeAPIToken     = "api_token"
 )
 
 // RecordWorkerExecution records a worker execution with appropriate labels
@@ -197,8 +203,8 @@ func RecordQueueTaskProcessed(taskName string, duration float64, err error) {
 	}
 }
 
-// RecordGraphQLOperation records a GraphQL operation
-func RecordGraphQLOperation(operation string, duration float64, err error) {
+// RecordGraphQLOperation records a GraphQL operation with complexity
+func RecordGraphQLOperation(operation string, duration float64, complexity int, err error) {
 	successStr := LabelSuccess
 	if err != nil {
 		successStr = LabelFailure
@@ -206,6 +212,12 @@ func RecordGraphQLOperation(operation string, duration float64, err error) {
 
 	GraphQLOperationTotal.WithLabelValues(operation, successStr).Inc()
 	GraphQLOperationDuration.WithLabelValues(operation).Observe(duration)
+	GraphQLQueryComplexity.WithLabelValues(operation).Observe(float64(complexity))
+}
+
+// RecordGraphQLRejection records a rejected GraphQL query
+func RecordGraphQLRejection(reason string) {
+	GraphQLQueryRejected.WithLabelValues(reason).Inc()
 }
 
 // StartFileUpload records the start of a file upload
@@ -241,4 +253,9 @@ func RecordStorageDownload(provider string, bytes int64) {
 // RecordStorageDelete records a delete operation for a storage provider
 func RecordStorageDelete(provider string) {
 	StorageProviderDeletes.WithLabelValues(provider).Inc()
+}
+
+// RecordAuthentication records an authentication attempt by type
+func RecordAuthentication(authType string) {
+	AuthenticationAttempts.WithLabelValues(authType).Inc()
 }

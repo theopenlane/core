@@ -76,6 +76,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		webauthnResults                   *generated.WebauthnConnection
 	)
 
+	highlightTracker := newContextTracker(query)
+
 	r.withPool().SubmitMultipleAndWait([]func(){
 		func() {
 			var err error
@@ -83,6 +85,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, apitokenResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -90,6 +94,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, actionplanResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -97,6 +103,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, assetResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -104,6 +112,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, contactResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -111,6 +121,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, controlResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -118,6 +130,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, controlimplementationResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -125,6 +139,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, controlobjectiveResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -132,6 +148,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, customdomainResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -139,6 +157,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, dnsverificationResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -146,6 +166,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, documentdataResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -153,6 +175,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, entityResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -160,6 +184,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, entitytypeResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -167,6 +193,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, eventResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -174,6 +202,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, evidenceResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -181,6 +211,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, fileResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -188,6 +220,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, groupResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -195,6 +229,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, integrationResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -202,6 +238,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, internalpolicyResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -209,6 +247,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, inviteResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -216,6 +256,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, jobrunnerResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -223,6 +265,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, jobrunnerregistrationtokenResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -230,6 +274,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, jobrunnertokenResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -237,6 +283,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, jobtemplateResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -244,6 +292,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, mappabledomainResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -251,6 +301,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, mappedcontrolResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -258,6 +310,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, narrativeResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -265,6 +319,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, orgsubscriptionResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -272,6 +328,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, organizationResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -279,6 +337,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, organizationsettingResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -286,6 +346,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, personalaccesstokenResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -293,6 +355,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, procedureResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -300,6 +364,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, programResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -307,6 +373,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, riskResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -314,6 +382,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, scanResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -321,6 +391,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, standardResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -328,6 +400,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, subcontrolResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -335,6 +409,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, subprocessorResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -342,6 +418,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, subscriberResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -349,6 +427,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, taskResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -356,6 +436,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, templateResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -363,6 +445,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, trustcenterResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -370,6 +454,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, trustcentercomplianceResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -377,6 +463,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, trustcenterdocResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -384,6 +472,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, userResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -391,6 +481,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, usersettingResults, highlightTracker)
 		},
 		func() {
 			var err error
@@ -398,6 +490,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 			if err != nil {
 				errors = append(errors, err)
 			}
+
+			highlightSearchContext(ctx, query, webauthnResults, highlightTracker)
 		},
 	})
 
@@ -408,7 +502,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 	// return the results
 	res := &model.SearchResults{
-		TotalCount: 0,
+		TotalCount:    0,
+		SearchContext: highlightTracker.getContexts(),
 	}
 	if apitokenResults != nil && len(apitokenResults.Edges) > 0 {
 		res.APITokens = apitokenResults

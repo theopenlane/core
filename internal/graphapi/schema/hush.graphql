@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): HushDeletePayload!
+    """
+    Delete multiple hushs
+    """
+    deleteBulkHush(
+        """
+        IDs of the hushs to delete
+        """
+        ids: [ID!]!
+    ): HushBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type HushBulkUpdatePayload {
     IDs of the updated hushs
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkHush mutation
+"""
+type HushBulkDeletePayload {
+    """
+    Deleted hush IDs
+    """
+    deletedIDs: [ID!]!
 }

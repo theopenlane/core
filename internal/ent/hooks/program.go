@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -36,9 +35,6 @@ func HookProgramAuthz() ent.Hook {
 			if m.Op().Is(ent.OpCreate) {
 				// create the program member admin and relationship tuple for parent org
 				err = programCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
-				// delete all relationship tuples on delete, or soft delete (Update Op)
-				err = programDeleteHook(ctx, m)
 			}
 
 			return retValue, err
@@ -111,30 +107,6 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 
 		return err
 	}
-
-	return nil
-}
-
-func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error {
-	objID, ok := m.ID()
-	if !ok {
-		// TODO (sfunk): ensure tuples get cascade deleted
-		// continue for now
-		return nil
-	}
-
-	objType := GetObjectTypeFromEntMutation(m)
-	object := fmt.Sprintf("%s:%s", objType, objID)
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
-
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Str("object", object).Err(err).Msg("failed to delete relationship tuples")
-
-		return ErrInternalServerError
-	}
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
 
 	return nil
 }

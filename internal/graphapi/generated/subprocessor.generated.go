@@ -95,6 +95,35 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 	return fc, nil
 }
 
+func (ec *executionContext) _SubprocessorBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubprocessorBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubprocessorBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubprocessorBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SubprocessorCreatePayload_subprocessor(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -306,6 +335,45 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload(ctx context.Context, 
 	return out
 }
 
+var subprocessorBulkDeletePayloadImplementors = []string{"SubprocessorBulkDeletePayload"}
+
+func (ec *executionContext) _SubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubprocessorBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subprocessorBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubprocessorBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._SubprocessorBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var subprocessorCreatePayloadImplementors = []string{"SubprocessorCreatePayload"}
 
 func (ec *executionContext) _SubprocessorCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubprocessorCreatePayload) graphql.Marshaler {
@@ -439,6 +507,20 @@ func (ec *executionContext) marshalNSubprocessorBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._SubprocessorBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubprocessorBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubprocessorBulkDeletePayload) graphql.Marshaler {
+	return ec._SubprocessorBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubprocessorBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SubprocessorBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSubprocessorCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubprocessorCreatePayload) graphql.Marshaler {

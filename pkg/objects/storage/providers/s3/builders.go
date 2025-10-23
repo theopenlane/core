@@ -1,6 +1,8 @@
 package s3
 
 import (
+	"context"
+
 	"github.com/samber/mo"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
@@ -24,7 +26,7 @@ func (b *Builder) WithOptions(opts ...Option) *Builder {
 }
 
 // Build implements eddy.Builder
-func (b *Builder) Build(credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
+func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentials, config *storage.ProviderOptions) (storagetypes.Provider, error) {
 	if config == nil {
 		config = storage.NewProviderOptions()
 	}
@@ -32,7 +34,7 @@ func (b *Builder) Build(credentials storage.ProviderCredentials, config *storage
 	cfg := config.Clone()
 	cfg.Credentials = credentials
 
-	if cfg.Bucket == "" || cfg.Region == "" {
+	if cfg.Bucket == "" || cfg.Region == "" || cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
 		return nil, ErrS3CredentialsRequired
 	}
 

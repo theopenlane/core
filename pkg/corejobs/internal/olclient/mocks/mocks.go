@@ -14127,6 +14127,89 @@ func (_c *MockOpenlaneGraphClient_DeleteNarrative_Call) RunAndReturn(run func(ct
 	return _c
 }
 
+// DeleteNote provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteNote(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteNote, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, noteID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, noteID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteNote")
+	}
+
+	var r0 *openlaneclient.DeleteNote
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteNote, error)); ok {
+		return returnFunc(ctx, noteID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteNote); ok {
+		r0 = returnFunc(ctx, noteID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteNote)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, noteID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteNote_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteNote'
+type MockOpenlaneGraphClient_DeleteNote_Call struct {
+	*mock.Call
+}
+
+// DeleteNote is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteNote(ctx interface{}, noteID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteNote_Call {
+	return &MockOpenlaneGraphClient_DeleteNote_Call{Call: _e.mock.On("DeleteNote",
+		append([]interface{}{ctx, noteID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteNote_Call) Run(run func(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteNote_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteNote_Call) Return(deleteNote *openlaneclient.DeleteNote, err error) *MockOpenlaneGraphClient_DeleteNote_Call {
+	_c.Call.Return(deleteNote, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteNote_Call) RunAndReturn(run func(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteNote, error)) *MockOpenlaneGraphClient_DeleteNote_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteOrgMembership provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) DeleteOrgMembership(ctx context.Context, deleteOrgMembershipID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteOrgMembership, error) {
 	var tmpRet mock.Arguments

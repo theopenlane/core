@@ -11,15 +11,16 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryControl(t *testing.T) {
@@ -1030,10 +1031,13 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
-	validFile, err := objects.NewUploadFile("testdata/uploads/clone.csv")
+	validFile, err := storage.NewUploadFile("testdata/uploads/clone.csv")
 	assert.NilError(t, err)
 
-	missingControlsFile, err := objects.NewUploadFile("testdata/uploads/all_missing_clone.csv")
+	missingControlsFile, err := storage.NewUploadFile("testdata/uploads/all_missing_clone.csv")
+	assert.NilError(t, err)
+
+	updateControlsFile, err := storage.NewUploadFile("testdata/uploads/update.csv")
 	assert.NilError(t, err)
 
 	// create the standard and controls to be cloned
@@ -1041,6 +1045,8 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
 
+	controlsToDelete := []string{}
+	implementationsToDelete := []string{}
 	testCases := []struct {
 		name                  string
 		fileInput             graphql.Upload
@@ -1052,8 +1058,8 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		{
 			name: "happy path, clone controls from csv",
 			fileInput: graphql.Upload{
-				File:        validFile.File,
-				Filename:    validFile.Filename,
+				File:        validFile.RawFile,
+				Filename:    validFile.OriginalName,
 				Size:        validFile.Size,
 				ContentType: validFile.ContentType,
 			},
@@ -1062,10 +1068,22 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 			expectedCountControls: 2,
 		},
 		{
+			name: "update existing controls, no new controls cloned",
+			fileInput: graphql.Upload{
+				File:        updateControlsFile.RawFile,
+				Filename:    updateControlsFile.OriginalName,
+				Size:        updateControlsFile.Size,
+				ContentType: updateControlsFile.ContentType,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectedCountControls: 2,
+		},
+		{
 			name: "controls missing from system, no controls cloned",
 			fileInput: graphql.Upload{
-				File:        missingControlsFile.File,
-				Filename:    missingControlsFile.Filename,
+				File:        missingControlsFile.RawFile,
+				Filename:    missingControlsFile.OriginalName,
 				Size:        missingControlsFile.Size,
 				ContentType: missingControlsFile.ContentType,
 			},
@@ -1096,7 +1114,11 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 
 				switch control.RefCode {
 				case "AA-1":
-					assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+					if tc.fileInput.Filename == updateControlsFile.OriginalName {
+						assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
+					} else {
+						assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+					}
 					assert.Check(t, is.Equal("INT-0001", *control.ReferenceID))
 				case "AA-2":
 					assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
@@ -1105,17 +1127,27 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				}
 
 				assert.Check(t, control.ImplementationGuidance != nil)
-				assert.Check(t, len(control.ControlImplementations.Edges) == 1)
 
-				// cleanup controls
-				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
-				// cleanup control implementation
-				(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: control.ControlImplementations.Edges[0].Node.ID}).MustDelete(tc.ctx, t)
+				switch tc.fileInput.Filename {
+				case updateControlsFile.OriginalName:
+					assert.Check(t, len(control.ControlImplementations.Edges) == 2)
+				case validFile.OriginalName:
+					assert.Check(t, len(control.ControlImplementations.Edges) == 1)
+				}
 
+				controlsToDelete = append(controlsToDelete, control.ID)
+				implementationsToDelete = append(implementationsToDelete, control.ControlImplementations.Edges[0].Node.ID)
 			}
 		})
 	}
 
+	controlsToDelete = lo.Uniq(controlsToDelete)
+	implementationsToDelete = lo.Uniq(implementationsToDelete)
+
+	// cleanup controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToDelete}).MustDelete(testUser1.UserCtx, t)
+	// cleanup control implementation
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: implementationsToDelete}).MustDelete(testUser1.UserCtx, t)
 	// cleanup created controls and standards
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
@@ -1711,6 +1743,71 @@ func TestMutationDeleteControl(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteControl.DeletedID))
+		})
+	}
+}
+
+func TestMutationDeleteBulkControl(t *testing.T) {
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name                 string
+		idsToDelete          []string
+		client               *testclient.TestClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedDeletedCount int
+	}{
+		{
+			name:                 "happy path, delete multiple controls",
+			idsToDelete:          []string{control1.ID, control2.ID, control3.ID},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedDeletedCount: 3,
+		},
+		{
+			name:                 "not authorized, delete controls from another user",
+			idsToDelete:          []string{control1.ID, controlAnotherUser.ID},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedDeletedCount: 1,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteBulkControl(tc.ctx, tc.idsToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.DeleteBulkControl.DeletedIDs, tc.expectedDeletedCount))
+
+			// verify that the returned IDs match the ones that were actually deleted
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				found := false
+				for _, expectedID := range tc.idsToDelete {
+					if expectedID == deletedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Deleted ID %s should be in the original request", deletedID)
+			}
+
+			// verify that the controls are actually deleted by trying to query them
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				_, err := tc.client.GetControlByID(tc.ctx, deletedID)
+				assert.ErrorContains(t, err, notFoundErrorMsg)
+			}
 		})
 	}
 }

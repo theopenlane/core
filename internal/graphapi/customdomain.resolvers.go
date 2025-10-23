@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteCustomDomain(ctx context.Context, id string) (*
 	}, nil
 }
 
+// DeleteBulkCustomDomain is the resolver for the deleteBulkCustomDomain field.
+func (r *mutationResolver) DeleteBulkCustomDomain(ctx context.Context, ids []string) (*model.CustomDomainBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteCustomDomain(ctx, ids)
+}
+
 // CustomDomain is the resolver for the customDomain field.
 func (r *queryResolver) CustomDomain(ctx context.Context, id string) (*generated.CustomDomain, error) {
 	query, err := withTransactionalMutation(ctx).CustomDomain.Query().Where(customdomain.ID(id)).CollectFields(ctx)

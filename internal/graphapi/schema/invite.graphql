@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): InviteDeletePayload!
+    """
+    Delete multiple invites
+    """
+    deleteBulkInvite(
+        """
+        IDs of the invites to delete
+        """
+        ids: [ID!]!
+    ): InviteBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type InviteBulkCreatePayload {
     Created invites
     """
     invites: [Invite!]
+}
+
+"""
+Return response for deleteBulkInvite mutation
+"""
+type InviteBulkDeletePayload {
+    """
+    Deleted invite IDs
+    """
+    deletedIDs: [ID!]!
 }

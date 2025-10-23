@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
@@ -58,4 +59,19 @@ func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 			return v, err
 		})
 	})
+}
+
+// getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases
+func getMutationIDs(ctx context.Context, m utils.GenericMutation) []string {
+	objID, ok := m.ID()
+	if ok && objID != "" {
+		return []string{objID}
+	}
+
+	objIDs, err := m.IDs(ctx)
+	if err == nil {
+		return objIDs
+	}
+
+	return nil
 }

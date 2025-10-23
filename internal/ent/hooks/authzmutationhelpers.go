@@ -232,7 +232,7 @@ func GetObjectIDsFromMutation(ctx context.Context, m utils.GenericMutation, v en
 		return []string{id}, nil
 	}
 
-	return m.IDs(ctx)
+	return getMutationIDs(ctx, m), nil
 }
 
 // GetObjectIDFromEntValue extracts the object id from a generic ent value return type

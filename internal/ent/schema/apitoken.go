@@ -67,7 +67,6 @@ func (APIToken) Fields() []ent.Field {
 			Comment("when the token expires").
 			Annotations(
 				entgql.OrderField("expires_at"),
-				entgql.Skip(entgql.SkipMutationUpdateInput),
 			).
 			Optional().
 			Nillable(),
@@ -165,6 +164,7 @@ func (a APIToken) Interceptors() []ent.Interceptor {
 func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.RequirePaymentMethod(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckOrgWriteAccess(),
 		),

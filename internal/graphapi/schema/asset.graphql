@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): AssetDeletePayload!
+    """
+    Delete multiple assets
+    """
+    deleteBulkAsset(
+        """
+        IDs of the assets to delete
+        """
+        ids: [ID!]!
+    ): AssetBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type AssetBulkCreatePayload {
     Created assets
     """
     assets: [Asset!]
+}
+
+"""
+Return response for deleteBulkAsset mutation
+"""
+type AssetBulkDeletePayload {
+    """
+    Deleted asset IDs
+    """
+    deletedIDs: [ID!]!
 }

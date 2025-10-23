@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): MappedControlDeletePayload!
+    """
+    Delete multiple mappedControls
+    """
+    deleteBulkMappedControl(
+        """
+        IDs of the mappedControls to delete
+        """
+        ids: [ID!]!
+    ): MappedControlBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type MappedControlBulkCreatePayload {
     Created mappedControls
     """
     mappedControls: [MappedControl!]
+}
+
+"""
+Return response for deleteBulkMappedControl mutation
+"""
+type MappedControlBulkDeletePayload {
+    """
+    Deleted mappedControl IDs
+    """
+    deletedIDs: [ID!]!
 }

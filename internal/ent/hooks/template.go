@@ -26,6 +26,7 @@ func HookTemplate() ent.Hook {
 				if !auth.IsSystemAdminFromContext(ctx) {
 					return nil, fmt.Errorf("%w: only system admins can create or update root templates", ErrInvalidInput)
 				}
+
 			}
 
 			return next.Mutate(ctx, m)
@@ -41,20 +42,19 @@ func HookTemplate() ent.Hook {
 func HookTemplateAuthz() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return hook.TemplateFunc(func(ctx context.Context, m *generated.TemplateMutation) (ent.Value, error) {
-			// do the mutation, and then create/delete the relationship
+			if !m.Op().Is(ent.OpCreate) {
+				return next.Mutate(ctx, m)
+			}
+
+			// do the mutation, and then create the relationship
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
-				// if we error, do not attempt to create the relationships
 				return retValue, err
 			}
 
-			if m.Op().Is(ent.OpCreate) {
-				createdTemplate := retValue.(*generated.Template)
-				if createdTemplate.SystemOwned {
-					err = templateCreateHook(ctx, m)
-				}
-			} else if isDeleteOp(ctx, m) {
-				err = templateDeleteHook(ctx, m)
+			createdTemplate := retValue.(*generated.Template)
+			if createdTemplate.SystemOwned {
+				err = templateCreateHook(ctx, m)
 			}
 
 			return retValue, err
@@ -86,24 +86,17 @@ func HookTemplateFiles() ent.Hook {
 func checkTemplateFiles(ctx context.Context, m *generated.TemplateMutation) (context.Context, error) {
 	key := "templateFiles"
 
-	// get the file from the context, if it exists
 	files, _ := objects.FilesFromContextWithKey(ctx, key)
-
-	// return early if no file is provided
-	if files == nil {
+	if len(files) == 0 {
 		return ctx, nil
 	}
 
-	for _, file := range files {
-		if file.FieldName == key {
-			file.Parent.ID, _ = m.ID()
-			file.Parent.Type = m.Type()
+	adapter := objects.NewGenericMutationAdapter(m,
+		func(mut *generated.TemplateMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TemplateMutation) string { return mut.Type() },
+	)
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file)
-		}
-	}
-
-	return ctx, nil
+	return objects.ProcessFilesForMutation(ctx, adapter, key)
 }
 
 func templateCreateHook(ctx context.Context, m *generated.TemplateMutation) error {
@@ -119,28 +112,6 @@ func templateCreateHook(ctx context.Context, m *generated.TemplateMutation) erro
 	if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
 		return err
 	}
-
-	return nil
-}
-
-func templateDeleteHook(ctx context.Context, m *generated.TemplateMutation) error {
-	objID, ok := m.ID()
-	if !ok {
-		return nil
-	}
-
-	objType := GetObjectTypeFromEntMutation(m)
-	object := fmt.Sprintf("%s:%s", objType, objID)
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
-
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
-
-		return ErrInternalServerError
-	}
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
 
 	return nil
 }

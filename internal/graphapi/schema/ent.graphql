@@ -8639,6 +8639,7 @@ input CreateInternalPolicyInput {
   riskIDs: [ID!]
   programIDs: [ID!]
   fileID: ID
+  commentIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -8937,6 +8938,11 @@ input CreateNoteInput {
   text: String!
   ownerID: ID
   taskID: ID
+  controlID: ID
+  subcontrolID: ID
+  procedureID: ID
+  riskID: ID
+  internalPolicyID: ID
   fileIDs: [ID!]
 }
 """
@@ -9075,6 +9081,7 @@ input CreateOrganizationInput {
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
+  impersonationEventIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -9295,6 +9302,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
+  commentIDs: [ID!]
   fileID: ID
 }
 """
@@ -9450,6 +9458,7 @@ input CreateRiskInput {
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
+  commentIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -9990,6 +9999,14 @@ input CreateTrustCenterSettingInput {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
@@ -10111,6 +10128,8 @@ input CreateUserInput {
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
   programOwnerID: ID
+  impersonationEventIDs: [ID!]
+  targetedImpersonationIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -21920,6 +21939,37 @@ type InternalPolicy implements Node {
     where: ProgramWhereInput
   ): ProgramConnection!
   file: File
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -22977,6 +23027,11 @@ input InternalPolicyWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -27598,6 +27653,11 @@ type Note implements Node {
   text: String!
   owner: Organization
   task: Task
+  control: Control
+  subcontrol: Subcontrol
+  procedure: Procedure
+  risk: Risk
+  internalPolicy: InternalPolicy
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -28074,6 +28134,31 @@ input NoteWhereInput {
   """
   hasTask: Boolean
   hasTaskWith: [TaskWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
+  risk edge predicates
+  """
+  hasRisk: Boolean
+  hasRiskWith: [RiskWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
   """
   files edge predicates
   """
@@ -34067,6 +34152,37 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   file: File
 }
 """
@@ -35110,6 +35226,11 @@ input ProcedureWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   file edge predicates
   """
@@ -40899,6 +41020,37 @@ type Risk implements Node {
   temporary delegates for the risk, used for temporary ownership
   """
   delegate: Group
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -41864,6 +42016,11 @@ input RiskWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Scan implements Node {
   id: ID!
@@ -51206,6 +51363,14 @@ type TrustCenterSetting implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   trustCenter: TrustCenter
   files(
     """
@@ -51332,6 +51497,14 @@ type TrustCenterSettingHistory implements Node {
   accent/brand color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
 }
 """
 A connection to a list of items.
@@ -51743,6 +51916,42 @@ input TrustCenterSettingHistoryWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -52079,6 +52288,42 @@ input TrustCenterSettingWhereInput {
   accentColorNotNil: Boolean
   accentColorEqualFold: String
   accentColorContainsFold: String
+  """
+  secondary_background_color field predicates
+  """
+  secondaryBackgroundColor: String
+  secondaryBackgroundColorNEQ: String
+  secondaryBackgroundColorIn: [String!]
+  secondaryBackgroundColorNotIn: [String!]
+  secondaryBackgroundColorGT: String
+  secondaryBackgroundColorGTE: String
+  secondaryBackgroundColorLT: String
+  secondaryBackgroundColorLTE: String
+  secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
+  secondaryBackgroundColorHasSuffix: String
+  secondaryBackgroundColorIsNil: Boolean
+  secondaryBackgroundColorNotNil: Boolean
+  secondaryBackgroundColorEqualFold: String
+  secondaryBackgroundColorContainsFold: String
+  """
+  secondary_foreground_color field predicates
+  """
+  secondaryForegroundColor: String
+  secondaryForegroundColorNEQ: String
+  secondaryForegroundColorIn: [String!]
+  secondaryForegroundColorNotIn: [String!]
+  secondaryForegroundColorGT: String
+  secondaryForegroundColorGTE: String
+  secondaryForegroundColorLT: String
+  secondaryForegroundColorLTE: String
+  secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
+  secondaryForegroundColorHasSuffix: String
+  secondaryForegroundColorIsNil: Boolean
+  secondaryForegroundColorNotNil: Boolean
+  secondaryForegroundColorEqualFold: String
+  secondaryForegroundColorContainsFold: String
   """
   trust_center edge predicates
   """
@@ -52657,21 +52902,19 @@ type TrustCenterWatermarkConfigEdge {
 TrustCenterWatermarkConfigFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -52753,21 +52996,19 @@ type TrustCenterWatermarkConfigHistoryEdge {
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
@@ -53506,6 +53747,11 @@ input UpdateAPITokenInput {
   the name associated with the token
   """
   name: String
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   """
   a description of the token's purpose
   """
@@ -55024,6 +55270,9 @@ input UpdateInternalPolicyInput {
   clearPrograms: Boolean
   fileID: ID
   clearFile: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -55375,6 +55624,16 @@ input UpdateNoteInput {
   text: String
   taskID: ID
   clearTask: Boolean
+  controlID: ID
+  clearControl: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
+  riskID: ID
+  clearRisk: Boolean
+  internalPolicyID: ID
+  clearInternalPolicy: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -55604,6 +55863,9 @@ input UpdateOrganizationInput {
   addTrustCenterWatermarkConfigIDs: [ID!]
   removeTrustCenterWatermarkConfigIDs: [ID!]
   clearTrustCenterWatermarkConfigs: Boolean
+  addImpersonationEventIDs: [ID!]
+  removeImpersonationEventIDs: [ID!]
+  clearImpersonationEvents: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -55747,6 +56009,11 @@ input UpdatePersonalAccessTokenInput {
   the name associated with the token
   """
   name: String
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   """
   a description of the token's purpose
   """
@@ -55903,6 +56170,9 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   fileID: ID
   clearFile: Boolean
 }
@@ -56136,6 +56406,9 @@ input UpdateRiskInput {
   clearStakeholder: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -56864,6 +57137,16 @@ input UpdateTrustCenterSettingInput {
   """
   accentColor: String
   clearAccentColor: Boolean
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  clearSecondaryBackgroundColor: Boolean
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
+  clearSecondaryForegroundColor: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -57039,6 +57322,12 @@ input UpdateUserInput {
   clearPrograms: Boolean
   programOwnerID: ID
   clearProgramOwner: Boolean
+  addImpersonationEventIDs: [ID!]
+  removeImpersonationEventIDs: [ID!]
+  clearImpersonationEvents: Boolean
+  addTargetedImpersonationIDs: [ID!]
+  removeTargetedImpersonationIDs: [ID!]
+  clearTargetedImpersonations: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.

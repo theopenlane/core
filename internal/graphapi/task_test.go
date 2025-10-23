@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -860,10 +860,10 @@ func TestMutationUpdateTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	group := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(adminUser.UserCtx, t)
 
-	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 	assert.NilError(t, err)
 
 	taskCommentID := ""
@@ -928,8 +928,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			},
 			files: []*graphql.Upload{
 				{
-					File:        pngFile.File,
-					Filename:    pngFile.Filename,
+					File:        pngFile.RawFile,
+					Filename:    pngFile.OriginalName,
 					Size:        pngFile.Size,
 					ContentType: pngFile.ContentType,
 				},
@@ -945,8 +945,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			},
 			files: []*graphql.Upload{
 				{
-					File:        pdfFile.File,
-					Filename:    pdfFile.Filename,
+					File:        pdfFile.RawFile,
+					Filename:    pdfFile.OriginalName,
 					Size:        pdfFile.Size,
 					ContentType: pdfFile.ContentType,
 				},
@@ -1069,7 +1069,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				resp, err = tc.client.UpdateTask(tc.ctx, tc.taskID, *tc.request)
 			} else if tc.updateCommentRequest != nil {
 				if len(tc.files) > 0 {
-					expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
+					expectUploadNillable(t, suite.client.mockProvider, tc.files)
 				}
 
 				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)

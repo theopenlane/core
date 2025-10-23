@@ -71,6 +71,8 @@ type UpdateAPITokenInput struct {
 	Tags               []string
 	AppendTags         []string
 	Name               *string
+	ClearExpiresAt     bool
+	ExpiresAt          *time.Time
 	ClearDescription   bool
 	Description        *string
 	ClearScopes        bool
@@ -103,6 +105,12 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -5192,6 +5200,7 @@ type CreateInternalPolicyInput struct {
 	RiskIDs                         []string
 	ProgramIDs                      []string
 	FileID                          *string
+	CommentIDs                      []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -5293,6 +5302,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -5386,6 +5398,9 @@ type UpdateInternalPolicyInput struct {
 	RemoveProgramIDs                      []string
 	ClearFile                             bool
 	FileID                                *string
+	ClearComments                         bool
+	AddCommentIDs                         []string
+	RemoveCommentIDs                      []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -5638,6 +5653,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
 	}
 }
 
@@ -6913,10 +6937,15 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Text    string
-	OwnerID *string
-	TaskID  *string
-	FileIDs []string
+	Text             string
+	OwnerID          *string
+	TaskID           *string
+	ControlID        *string
+	SubcontrolID     *string
+	ProcedureID      *string
+	RiskID           *string
+	InternalPolicyID *string
+	FileIDs          []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -6927,6 +6956,21 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -6941,12 +6985,22 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	Text          *string
-	ClearTask     bool
-	TaskID        *string
-	ClearFiles    bool
-	AddFileIDs    []string
-	RemoveFileIDs []string
+	Text                *string
+	ClearTask           bool
+	TaskID              *string
+	ClearControl        bool
+	ControlID           *string
+	ClearSubcontrol     bool
+	SubcontrolID        *string
+	ClearProcedure      bool
+	ProcedureID         *string
+	ClearRisk           bool
+	RiskID              *string
+	ClearInternalPolicy bool
+	InternalPolicyID    *string
+	ClearFiles          bool
+	AddFileIDs          []string
+	RemoveFileIDs       []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -6959,6 +7013,36 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearSubcontrol {
+		m.ClearSubcontrol()
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if i.ClearRisk {
+		m.ClearRisk()
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -7153,6 +7237,7 @@ type CreateOrganizationInput struct {
 	SubprocessorIDs                 []string
 	ExportIDs                       []string
 	TrustCenterWatermarkConfigIDs   []string
+	ImpersonationEventIDs           []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -7365,6 +7450,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TrustCenterWatermarkConfigIDs; len(v) > 0 {
 		m.AddTrustCenterWatermarkConfigIDs(v...)
 	}
+	if v := i.ImpersonationEventIDs; len(v) > 0 {
+		m.AddImpersonationEventIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7567,6 +7655,9 @@ type UpdateOrganizationInput struct {
 	ClearTrustCenterWatermarkConfigs      bool
 	AddTrustCenterWatermarkConfigIDs      []string
 	RemoveTrustCenterWatermarkConfigIDs   []string
+	ClearImpersonationEvents              bool
+	AddImpersonationEventIDs              []string
+	RemoveImpersonationEventIDs           []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8147,6 +8238,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveTrustCenterWatermarkConfigIDs; len(v) > 0 {
 		m.RemoveTrustCenterWatermarkConfigIDs(v...)
 	}
+	if i.ClearImpersonationEvents {
+		m.ClearImpersonationEvents()
+	}
+	if v := i.AddImpersonationEventIDs; len(v) > 0 {
+		m.AddImpersonationEventIDs(v...)
+	}
+	if v := i.RemoveImpersonationEventIDs; len(v) > 0 {
+		m.RemoveImpersonationEventIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -8557,6 +8657,8 @@ type UpdatePersonalAccessTokenInput struct {
 	Tags                  []string
 	AppendTags            []string
 	Name                  *string
+	ClearExpiresAt        bool
+	ExpiresAt             *time.Time
 	ClearDescription      bool
 	Description           *string
 	ClearScopes           bool
@@ -8587,6 +8689,12 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -8679,6 +8787,7 @@ type CreateProcedureInput struct {
 	NarrativeIDs                    []string
 	RiskIDs                         []string
 	TaskIDs                         []string
+	CommentIDs                      []string
 	FileID                          *string
 }
 
@@ -8772,6 +8881,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
 	}
@@ -8860,6 +8972,9 @@ type UpdateProcedureInput struct {
 	ClearTasks                            bool
 	AddTaskIDs                            []string
 	RemoveTaskIDs                         []string
+	ClearComments                         bool
+	AddCommentIDs                         []string
+	RemoveCommentIDs                      []string
 	ClearFile                             bool
 	FileID                                *string
 }
@@ -9090,6 +9205,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
 	}
 	if i.ClearFile {
 		m.ClearFile()
@@ -9630,6 +9754,7 @@ type CreateRiskInput struct {
 	ScanIDs           []string
 	StakeholderID     *string
 	DelegateID        *string
+	CommentIDs        []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -9713,6 +9838,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -9788,6 +9916,9 @@ type UpdateRiskInput struct {
 	StakeholderID           *string
 	ClearDelegate           bool
 	DelegateID              *string
+	ClearComments           bool
+	AddCommentIDs           []string
+	RemoveCommentIDs        []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -9986,6 +10117,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.DelegateID; v != nil {
 		m.SetDelegateID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
 	}
 }
 
@@ -12389,20 +12529,22 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	Title            *string
-	Overview         *string
-	LogoRemoteURL    *string
-	FaviconRemoteURL *string
-	ThemeMode        *enums.TrustCenterThemeMode
-	PrimaryColor     *string
-	Font             *string
-	ForegroundColor  *string
-	BackgroundColor  *string
-	AccentColor      *string
-	TrustCenterID    *string
-	FileIDs          []string
-	LogoFileID       *string
-	FaviconFileID    *string
+	Title                    *string
+	Overview                 *string
+	LogoRemoteURL            *string
+	FaviconRemoteURL         *string
+	ThemeMode                *enums.TrustCenterThemeMode
+	PrimaryColor             *string
+	Font                     *string
+	ForegroundColor          *string
+	BackgroundColor          *string
+	AccentColor              *string
+	SecondaryBackgroundColor *string
+	SecondaryForegroundColor *string
+	TrustCenterID            *string
+	FileIDs                  []string
+	LogoFileID               *string
+	FaviconFileID            *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -12437,6 +12579,12 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.AccentColor; v != nil {
 		m.SetAccentColor(*v)
 	}
+	if v := i.SecondaryBackgroundColor; v != nil {
+		m.SetSecondaryBackgroundColor(*v)
+	}
+	if v := i.SecondaryForegroundColor; v != nil {
+		m.SetSecondaryForegroundColor(*v)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
@@ -12459,35 +12607,39 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTitle            bool
-	Title                 *string
-	ClearOverview         bool
-	Overview              *string
-	ClearLogoRemoteURL    bool
-	LogoRemoteURL         *string
-	ClearFaviconRemoteURL bool
-	FaviconRemoteURL      *string
-	ClearThemeMode        bool
-	ThemeMode             *enums.TrustCenterThemeMode
-	ClearPrimaryColor     bool
-	PrimaryColor          *string
-	ClearFont             bool
-	Font                  *string
-	ClearForegroundColor  bool
-	ForegroundColor       *string
-	ClearBackgroundColor  bool
-	BackgroundColor       *string
-	ClearAccentColor      bool
-	AccentColor           *string
-	ClearTrustCenter      bool
-	TrustCenterID         *string
-	ClearFiles            bool
-	AddFileIDs            []string
-	RemoveFileIDs         []string
-	ClearLogoFile         bool
-	LogoFileID            *string
-	ClearFaviconFile      bool
-	FaviconFileID         *string
+	ClearTitle                    bool
+	Title                         *string
+	ClearOverview                 bool
+	Overview                      *string
+	ClearLogoRemoteURL            bool
+	LogoRemoteURL                 *string
+	ClearFaviconRemoteURL         bool
+	FaviconRemoteURL              *string
+	ClearThemeMode                bool
+	ThemeMode                     *enums.TrustCenterThemeMode
+	ClearPrimaryColor             bool
+	PrimaryColor                  *string
+	ClearFont                     bool
+	Font                          *string
+	ClearForegroundColor          bool
+	ForegroundColor               *string
+	ClearBackgroundColor          bool
+	BackgroundColor               *string
+	ClearAccentColor              bool
+	AccentColor                   *string
+	ClearSecondaryBackgroundColor bool
+	SecondaryBackgroundColor      *string
+	ClearSecondaryForegroundColor bool
+	SecondaryForegroundColor      *string
+	ClearTrustCenter              bool
+	TrustCenterID                 *string
+	ClearFiles                    bool
+	AddFileIDs                    []string
+	RemoveFileIDs                 []string
+	ClearLogoFile                 bool
+	LogoFileID                    *string
+	ClearFaviconFile              bool
+	FaviconFileID                 *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -12551,6 +12703,18 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.AccentColor; v != nil {
 		m.SetAccentColor(*v)
+	}
+	if i.ClearSecondaryBackgroundColor {
+		m.ClearSecondaryBackgroundColor()
+	}
+	if v := i.SecondaryBackgroundColor; v != nil {
+		m.SetSecondaryBackgroundColor(*v)
+	}
+	if i.ClearSecondaryForegroundColor {
+		m.ClearSecondaryForegroundColor()
+	}
+	if v := i.SecondaryForegroundColor; v != nil {
+		m.SetSecondaryForegroundColor(*v)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
@@ -12819,34 +12983,36 @@ func (c *TrustCenterWatermarkConfigUpdateOne) SetInput(i UpdateTrustCenterWaterm
 
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
-	Tags                   []string
-	Email                  string
-	FirstName              *string
-	LastName               *string
-	DisplayName            string
-	AvatarRemoteURL        *string
-	AvatarUpdatedAt        *time.Time
-	LastSeen               *time.Time
-	LastLoginProvider      *enums.AuthProvider
-	Password               *string
-	Sub                    *string
-	AuthProvider           *enums.AuthProvider
-	Role                   *enums.Role
-	PersonalAccessTokenIDs []string
-	TfaSettingIDs          []string
-	SettingID              string
-	GroupIDs               []string
-	OrganizationIDs        []string
-	WebauthnIDs            []string
-	FileIDs                []string
-	AvatarFileID           *string
-	EventIDs               []string
-	ActionPlanIDs          []string
-	SubcontrolIDs          []string
-	AssignerTaskIDs        []string
-	AssigneeTaskIDs        []string
-	ProgramIDs             []string
-	ProgramOwnerID         *string
+	Tags                     []string
+	Email                    string
+	FirstName                *string
+	LastName                 *string
+	DisplayName              string
+	AvatarRemoteURL          *string
+	AvatarUpdatedAt          *time.Time
+	LastSeen                 *time.Time
+	LastLoginProvider        *enums.AuthProvider
+	Password                 *string
+	Sub                      *string
+	AuthProvider             *enums.AuthProvider
+	Role                     *enums.Role
+	PersonalAccessTokenIDs   []string
+	TfaSettingIDs            []string
+	SettingID                string
+	GroupIDs                 []string
+	OrganizationIDs          []string
+	WebauthnIDs              []string
+	FileIDs                  []string
+	AvatarFileID             *string
+	EventIDs                 []string
+	ActionPlanIDs            []string
+	SubcontrolIDs            []string
+	AssignerTaskIDs          []string
+	AssigneeTaskIDs          []string
+	ProgramIDs               []string
+	ProgramOwnerID           *string
+	ImpersonationEventIDs    []string
+	TargetedImpersonationIDs []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -12929,6 +13095,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.ProgramOwnerID; v != nil {
 		m.SetProgramOwnerID(*v)
 	}
+	if v := i.ImpersonationEventIDs; len(v) > 0 {
+		m.AddImpersonationEventIDs(v...)
+	}
+	if v := i.TargetedImpersonationIDs; len(v) > 0 {
+		m.AddTargetedImpersonationIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserInput on the UserCreate builder.
@@ -12939,71 +13111,77 @@ func (c *UserCreate) SetInput(i CreateUserInput) *UserCreate {
 
 // UpdateUserInput represents a mutation input for updating users.
 type UpdateUserInput struct {
-	ClearTags                    bool
-	Tags                         []string
-	AppendTags                   []string
-	Email                        *string
-	ClearFirstName               bool
-	FirstName                    *string
-	ClearLastName                bool
-	LastName                     *string
-	DisplayName                  *string
-	ClearAvatarRemoteURL         bool
-	AvatarRemoteURL              *string
-	ClearAvatarUpdatedAt         bool
-	AvatarUpdatedAt              *time.Time
-	ClearLastSeen                bool
-	LastSeen                     *time.Time
-	ClearLastLoginProvider       bool
-	LastLoginProvider            *enums.AuthProvider
-	ClearPassword                bool
-	Password                     *string
-	ClearSub                     bool
-	Sub                          *string
-	AuthProvider                 *enums.AuthProvider
-	ClearRole                    bool
-	Role                         *enums.Role
-	ClearPersonalAccessTokens    bool
-	AddPersonalAccessTokenIDs    []string
-	RemovePersonalAccessTokenIDs []string
-	ClearTfaSettings             bool
-	AddTfaSettingIDs             []string
-	RemoveTfaSettingIDs          []string
-	SettingID                    *string
-	ClearGroups                  bool
-	AddGroupIDs                  []string
-	RemoveGroupIDs               []string
-	ClearOrganizations           bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
-	ClearWebauthns               bool
-	AddWebauthnIDs               []string
-	RemoveWebauthnIDs            []string
-	ClearFiles                   bool
-	AddFileIDs                   []string
-	RemoveFileIDs                []string
-	ClearAvatarFile              bool
-	AvatarFileID                 *string
-	ClearEvents                  bool
-	AddEventIDs                  []string
-	RemoveEventIDs               []string
-	ClearActionPlans             bool
-	AddActionPlanIDs             []string
-	RemoveActionPlanIDs          []string
-	ClearSubcontrols             bool
-	AddSubcontrolIDs             []string
-	RemoveSubcontrolIDs          []string
-	ClearAssignerTasks           bool
-	AddAssignerTaskIDs           []string
-	RemoveAssignerTaskIDs        []string
-	ClearAssigneeTasks           bool
-	AddAssigneeTaskIDs           []string
-	RemoveAssigneeTaskIDs        []string
-	ClearPrograms                bool
-	AddProgramIDs                []string
-	RemoveProgramIDs             []string
-	ClearProgramOwner            bool
-	ProgramOwnerID               *string
+	ClearTags                      bool
+	Tags                           []string
+	AppendTags                     []string
+	Email                          *string
+	ClearFirstName                 bool
+	FirstName                      *string
+	ClearLastName                  bool
+	LastName                       *string
+	DisplayName                    *string
+	ClearAvatarRemoteURL           bool
+	AvatarRemoteURL                *string
+	ClearAvatarUpdatedAt           bool
+	AvatarUpdatedAt                *time.Time
+	ClearLastSeen                  bool
+	LastSeen                       *time.Time
+	ClearLastLoginProvider         bool
+	LastLoginProvider              *enums.AuthProvider
+	ClearPassword                  bool
+	Password                       *string
+	ClearSub                       bool
+	Sub                            *string
+	AuthProvider                   *enums.AuthProvider
+	ClearRole                      bool
+	Role                           *enums.Role
+	ClearPersonalAccessTokens      bool
+	AddPersonalAccessTokenIDs      []string
+	RemovePersonalAccessTokenIDs   []string
+	ClearTfaSettings               bool
+	AddTfaSettingIDs               []string
+	RemoveTfaSettingIDs            []string
+	SettingID                      *string
+	ClearGroups                    bool
+	AddGroupIDs                    []string
+	RemoveGroupIDs                 []string
+	ClearOrganizations             bool
+	AddOrganizationIDs             []string
+	RemoveOrganizationIDs          []string
+	ClearWebauthns                 bool
+	AddWebauthnIDs                 []string
+	RemoveWebauthnIDs              []string
+	ClearFiles                     bool
+	AddFileIDs                     []string
+	RemoveFileIDs                  []string
+	ClearAvatarFile                bool
+	AvatarFileID                   *string
+	ClearEvents                    bool
+	AddEventIDs                    []string
+	RemoveEventIDs                 []string
+	ClearActionPlans               bool
+	AddActionPlanIDs               []string
+	RemoveActionPlanIDs            []string
+	ClearSubcontrols               bool
+	AddSubcontrolIDs               []string
+	RemoveSubcontrolIDs            []string
+	ClearAssignerTasks             bool
+	AddAssignerTaskIDs             []string
+	RemoveAssignerTaskIDs          []string
+	ClearAssigneeTasks             bool
+	AddAssigneeTaskIDs             []string
+	RemoveAssigneeTaskIDs          []string
+	ClearPrograms                  bool
+	AddProgramIDs                  []string
+	RemoveProgramIDs               []string
+	ClearProgramOwner              bool
+	ProgramOwnerID                 *string
+	ClearImpersonationEvents       bool
+	AddImpersonationEventIDs       []string
+	RemoveImpersonationEventIDs    []string
+	ClearTargetedImpersonations    bool
+	AddTargetedImpersonationIDs    []string
+	RemoveTargetedImpersonationIDs []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -13202,6 +13380,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.ProgramOwnerID; v != nil {
 		m.SetProgramOwnerID(*v)
+	}
+	if i.ClearImpersonationEvents {
+		m.ClearImpersonationEvents()
+	}
+	if v := i.AddImpersonationEventIDs; len(v) > 0 {
+		m.AddImpersonationEventIDs(v...)
+	}
+	if v := i.RemoveImpersonationEventIDs; len(v) > 0 {
+		m.RemoveImpersonationEventIDs(v...)
+	}
+	if i.ClearTargetedImpersonations {
+		m.ClearTargetedImpersonations()
+	}
+	if v := i.AddTargetedImpersonationIDs; len(v) > 0 {
+		m.AddTargetedImpersonationIDs(v...)
+	}
+	if v := i.RemoveTargetedImpersonationIDs; len(v) > 0 {
+		m.RemoveTargetedImpersonationIDs(v...)
 	}
 }
 

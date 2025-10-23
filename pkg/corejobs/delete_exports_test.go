@@ -39,9 +39,11 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "happy path - delete exports",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-				CutoffDuration:   cutoffDuration,
+				OpenlaneConfig: corejobs.OpenlaneConfig{
+					OpenlaneAPIHost:  "https://api.example.com",
+					OpenlaneAPIToken: "tolp_test-token",
+				},
+				CutoffDuration: cutoffDuration,
 			},
 			getExportsResponse: &openlaneclient.GetExports{
 				Exports: openlaneclient.GetExports_Exports{
@@ -66,9 +68,11 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "happy path - no exports to delete",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-				CutoffDuration:   cutoffDuration,
+				OpenlaneConfig: corejobs.OpenlaneConfig{
+					OpenlaneAPIHost:  "https://api.example.com",
+					OpenlaneAPIToken: "test-token",
+				},
+				CutoffDuration: cutoffDuration,
 			},
 			getExportsResponse: &openlaneclient.GetExports{
 				Exports: openlaneclient.GetExports_Exports{
@@ -81,9 +85,11 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "error getting exports",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-				CutoffDuration:   cutoffDuration,
+				OpenlaneConfig: corejobs.OpenlaneConfig{
+					OpenlaneAPIHost:  "https://api.example.com",
+					OpenlaneAPIToken: "test-token",
+				},
+				CutoffDuration: cutoffDuration,
 			},
 			getExportsError:        assert.AnError,
 			expectedError:          "assert.AnError",
@@ -93,9 +99,11 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "error during bulk delete",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-				CutoffDuration:   cutoffDuration,
+				OpenlaneConfig: corejobs.OpenlaneConfig{
+					OpenlaneAPIHost:  "https://api.example.com",
+					OpenlaneAPIToken: "test-token",
+				},
+				CutoffDuration: cutoffDuration,
 			},
 			getExportsResponse: &openlaneclient.GetExports{
 				Exports: openlaneclient.GetExports_Exports{

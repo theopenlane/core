@@ -81,6 +81,35 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 	return fc, nil
 }
 
+func (ec *executionContext) _GroupMembershipBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupMembershipBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_GroupMembershipBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupMembershipBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _GroupMembershipCreatePayload_groupMembership(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -264,6 +293,45 @@ func (ec *executionContext) _GroupMembershipBulkCreatePayload(ctx context.Contex
 	return out
 }
 
+var groupMembershipBulkDeletePayloadImplementors = []string{"GroupMembershipBulkDeletePayload"}
+
+func (ec *executionContext) _GroupMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupMembershipBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupMembershipBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GroupMembershipBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._GroupMembershipBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var groupMembershipCreatePayloadImplementors = []string{"GroupMembershipCreatePayload"}
 
 func (ec *executionContext) _GroupMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.GroupMembershipCreatePayload) graphql.Marshaler {
@@ -397,6 +465,20 @@ func (ec *executionContext) marshalNGroupMembershipBulkCreatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._GroupMembershipBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNGroupMembershipBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupMembershipBulkDeletePayload) graphql.Marshaler {
+	return ec._GroupMembershipBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNGroupMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupMembershipBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._GroupMembershipBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNGroupMembershipCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupMembershipCreatePayload) graphql.Marshaler {

@@ -122,11 +122,13 @@ type InternalPolicyEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
+	// conversations related to the policy
+	Comments []*Note `json:"comments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -139,6 +141,7 @@ type InternalPolicyEdges struct {
 	namedTasks                  map[string][]*Task
 	namedRisks                  map[string][]*Risk
 	namedPrograms               map[string][]*Program
+	namedComments               map[string][]*Note
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -282,6 +285,15 @@ func (e InternalPolicyEdges) FileOrErr() (*File, error) {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
+}
+
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[15] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -608,6 +620,11 @@ func (_m *InternalPolicy) QueryPrograms() *ProgramQuery {
 // QueryFile queries the "file" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryFile() *FileQuery {
 	return NewInternalPolicyClient(_m.config).QueryFile(_m)
+}
+
+// QueryComments queries the "comments" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryComments() *NoteQuery {
+	return NewInternalPolicyClient(_m.config).QueryComments(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -998,6 +1015,30 @@ func (_m *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
 		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedComments(name string) ([]*Note, error) {
+	if _m.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedComments(name string, edges ...*Note) {
+	if _m.Edges.namedComments == nil {
+		_m.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedComments[name] = []*Note{}
+	} else {
+		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
 	}
 }
 

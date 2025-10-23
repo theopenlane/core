@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteAsset(ctx context.Context, id string) (*model.A
 	}, nil
 }
 
+// DeleteBulkAsset is the resolver for the deleteBulkAsset field.
+func (r *mutationResolver) DeleteBulkAsset(ctx context.Context, ids []string) (*model.AssetBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteAsset(ctx, ids)
+}
+
 // Asset is the resolver for the asset field.
 func (r *queryResolver) Asset(ctx context.Context, id string) (*generated.Asset, error) {
 	query, err := withTransactionalMutation(ctx).Asset.Query().Where(asset.ID(id)).CollectFields(ctx)

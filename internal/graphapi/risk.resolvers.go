@@ -126,6 +126,15 @@ func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*model.Ri
 	}, nil
 }
 
+// DeleteBulkRisk is the resolver for the deleteBulkRisk field.
+func (r *mutationResolver) DeleteBulkRisk(ctx context.Context, ids []string) (*model.RiskBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteRisk(ctx, ids)
+}
+
 // Risk is the resolver for the risk field.
 func (r *queryResolver) Risk(ctx context.Context, id string) (*generated.Risk, error) {
 	query, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.ID(id)).CollectFields(ctx)

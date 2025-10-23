@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*mode
 	}, nil
 }
 
+// DeleteBulkTemplate is the resolver for the deleteBulkTemplate field.
+func (r *mutationResolver) DeleteBulkTemplate(ctx context.Context, ids []string) (*model.TemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTemplate(ctx, ids)
+}
+
 // Template is the resolver for the template field.
 func (r *queryResolver) Template(ctx context.Context, id string) (*generated.Template, error) {
 	query, err := withTransactionalMutation(ctx).Template.Query().Where(template.ID(id)).CollectFields(ctx)

@@ -5,9 +5,11 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 var (
@@ -19,28 +21,14 @@ func HookFileDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
-				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
+
+				if m.ObjectManager == nil || !isDeleteOp(ctx, m) {
 					return next.Mutate(ctx, m)
 				}
 
-				var ids []string
-
-				switch m.Op() {
-				case ent.OpDelete:
-					dbIDs, err := m.IDs(ctx)
-					if err != nil {
-						return nil, err
-					}
-
-					ids = append(ids, dbIDs...)
-
-				case ent.OpDeleteOne:
-					id, ok := m.ID()
-					if !ok {
-						return nil, errInvalidStoragePath
-					}
-
-					ids = append(ids, id)
+				ids := getMutationIDs(ctx, m)
+				if len(ids) == 0 {
+					return nil, errInvalidStoragePath
 				}
 
 				v, err := next.Mutate(ctx, m)
@@ -49,15 +37,54 @@ func HookFileDelete() ent.Hook {
 				}
 
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
-					Select(file.FieldStoragePath).
-					All(ctx)
+					Select(
+						file.FieldID,
+						file.FieldStoragePath,
+						file.FieldStorageProvider,
+						file.FieldDetectedContentType,
+						file.FieldPersistedFileSize,
+						file.FieldMetadata,
+						file.FieldStorageVolume,
+						file.FieldStorageRegion,
+					).All(ctx)
 				if err != nil {
 					return nil, err
 				}
 
-				for _, file := range files {
-					if file.StoragePath != "" {
-						if err := m.ObjectManager.Storage.Delete(ctx, file.StoragePath); err != nil {
+				log.Debug().Interface("files", files).Msg("deleting files from object storage")
+
+				for _, f := range files {
+					if f.StoragePath != "" && m.ObjectManager != nil {
+						// Convert ent File to storagetypes.File
+						storageFile := &storagetypes.File{
+							ID:           f.ID,
+							OriginalName: f.ProvidedFileName,
+							FileMetadata: storagetypes.FileMetadata{
+								Key:           f.StoragePath,
+								ContentType:   f.DetectedContentType,
+								Size:          f.PersistedFileSize,
+								Bucket:        f.StorageVolume,
+								Region:        f.StorageRegion,
+								ProviderHints: &storagetypes.ProviderHints{},
+							},
+						}
+
+						if f.Metadata != nil {
+							metadata := make(map[string]string)
+							for k, v := range f.Metadata {
+								if str, ok := v.(string); ok {
+									metadata[k] = str
+								}
+							}
+							storageFile.Metadata = metadata
+						}
+
+						// Set provider-specific fields if available
+						if f.StorageProvider != "" {
+							storageFile.ProviderType = storagetypes.ProviderType(f.StorageProvider)
+						}
+
+						if err := m.ObjectManager.Delete(ctx, storageFile, nil); err != nil {
 							return nil, err
 						}
 					}
@@ -65,5 +92,5 @@ func HookFileDelete() ent.Hook {
 
 				return v, err
 			})
-	}, ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne)
+	}, ent.OpDelete|ent.OpDeleteOne)
 }

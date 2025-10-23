@@ -183,6 +183,8 @@ const (
 	EdgeExports = "exports"
 	// EdgeTrustCenterWatermarkConfigs holds the string denoting the trust_center_watermark_configs edge name in mutations.
 	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
+	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
+	EdgeImpersonationEvents = "impersonation_events"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -642,6 +644,13 @@ const (
 	TrustCenterWatermarkConfigsInverseTable = "trust_center_watermark_configs"
 	// TrustCenterWatermarkConfigsColumn is the table column denoting the trust_center_watermark_configs relation/edge.
 	TrustCenterWatermarkConfigsColumn = "owner_id"
+	// ImpersonationEventsTable is the table that holds the impersonation_events relation/edge.
+	ImpersonationEventsTable = "impersonation_events"
+	// ImpersonationEventsInverseTable is the table name for the ImpersonationEvent entity.
+	// It exists in this package in order to avoid circular dependency with the "impersonationevent" package.
+	ImpersonationEventsInverseTable = "impersonation_events"
+	// ImpersonationEventsColumn is the table column denoting the impersonation_events relation/edge.
+	ImpersonationEventsColumn = "organization_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1740,6 +1749,20 @@ func ByTrustCenterWatermarkConfigs(term sql.OrderTerm, terms ...sql.OrderTerm) O
 	}
 }
 
+// ByImpersonationEventsCount orders the results by impersonation_events count.
+func ByImpersonationEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newImpersonationEventsStep(), opts...)
+	}
+}
+
+// ByImpersonationEvents orders the results by impersonation_events terms.
+func ByImpersonationEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newImpersonationEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2220,6 +2243,13 @@ func newTrustCenterWatermarkConfigsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterWatermarkConfigsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterWatermarkConfigsTable, TrustCenterWatermarkConfigsColumn),
+	)
+}
+func newImpersonationEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ImpersonationEventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {
