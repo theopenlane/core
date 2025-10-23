@@ -128,5 +128,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): InternalPolicyUpdatePayload!
+    """
+    Delete an existing note
+    """
+    deleteNote(
+        """
+        ID of the note/comment
+        """
+        id: ID!
+    ): NoteDeletePayload!
 }
 
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+    """
+    Deleted comment ID
+    """
+    deletedID: ID!
+}

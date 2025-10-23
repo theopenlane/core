@@ -30349,6 +30349,15 @@ type Mutation {
 		noteFiles: [Upload!]
 	): InternalPolicyUpdatePayload!
 	"""
+	Delete an existing note
+	"""
+	deleteNote(
+		"""
+		ID of the note/comment
+		"""
+		id: ID!
+	): NoteDeletePayload!
+	"""
 	Create a new onboarding
 	"""
 	createOnboarding(
@@ -32844,6 +32853,15 @@ type NoteConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+	"""
+	Deleted comment ID
+	"""
+	deletedID: ID!
 }
 """
 An edge in a connection.

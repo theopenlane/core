@@ -174,6 +174,21 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 	}, nil
 }
 
+// DeleteNote is the resolver for the deleteNote field.
+func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(id).Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "note"})
+	}
+
+	if err := generated.NoteEdgeCleanup(ctx, id); err != nil {
+		return nil, newCascadeDeleteError(err)
+	}
+
+	return &model.NoteDeletePayload{
+		DeletedID: id,
+	}, nil
+}
+
 // Note is the resolver for the note field.
 func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, error) {
 	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx)
