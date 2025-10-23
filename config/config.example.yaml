@@ -85,6 +85,7 @@ email:
     year: 0
 entConfig:
     billing:
+        bypassEmailDomains: null
         requirePaymentMethod: false
     emailValidation:
         allowedEmailTypes:

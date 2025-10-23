@@ -440,7 +440,11 @@
       "properties": {
         "requirePaymentMethod": {
           "type": "boolean",
-          "description": "RequirePaymentMethod indiscates whether to check if a payment method\nexists for orgs before they can access some resource"
+          "description": "RequirePaymentMethod indicates whether to check if a payment method\nexists for orgs before they can access some resource"
+        },
+        "bypassEmailDomains": {
+          "$ref": "#/$defs/[]string",
+          "description": "BypassEmailDomains is a list of domains that should be allowed to bypass\nthe checks if RequirePaymentMethod above is enabled"
         }
       },
       "additionalProperties": false,

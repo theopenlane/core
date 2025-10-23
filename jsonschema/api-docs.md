@@ -630,9 +630,16 @@ Billing settings for feature access
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**requirePaymentMethod**|`boolean`|RequirePaymentMethod indiscates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
+|**requirePaymentMethod**|`boolean`|RequirePaymentMethod indicates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
+|[**bypassEmailDomains**](#entconfigbillingbypassemaildomains)|`string[]`|||
 
 **Additional Properties:** not allowed  
+<a name="entconfigbillingbypassemaildomains"></a>
+#### entConfig\.billing\.bypassEmailDomains: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="auth"></a>
 ## auth: object
 

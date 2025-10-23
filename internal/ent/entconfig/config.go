@@ -65,4 +65,7 @@ type Billing struct {
 	// RequirePaymentMethod indicates whether to check if a payment method
 	// exists for orgs before they can access some resource
 	RequirePaymentMethod bool `json:"requirePaymentMethod" koanf:"requirePaymentMethod"`
+	// BypassEmailDomains is a list of domains that should be allowed to bypass
+	// the checks if RequirePaymentMethod above is enabled
+	BypassEmailDomains []string `json:"bypassEmailDomains" koanf:"bypassEmailDomains"`
 }
