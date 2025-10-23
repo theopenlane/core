@@ -22,7 +22,7 @@ var (
 // RequirePaymentMethod makes sure the organization has a payment mehod ( card or any other)
 // added to stripe already
 func RequirePaymentMethod() privacy.MutationRuleFunc {
-	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 
 		client := generated.FromContext(ctx)
 
