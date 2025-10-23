@@ -164,6 +164,7 @@ func (a APIToken) Interceptors() []ent.Interceptor {
 func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.RequirePaymentMethod(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckOrgWriteAccess(),
 		),

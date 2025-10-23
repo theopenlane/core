@@ -91,6 +91,8 @@ data:
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_DISPOSABLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.disposable | quote | default "false" }}
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_FREE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.free | quote | default "false" }}
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_ROLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.role | quote | default "false" }}
+  CORE_ENTCONFIG_BILLING_REQUIREPAYMENTMETHOD: {{ .Values.openlane.coreConfiguration.entConfig.billing.requirePaymentMethod | quote }}
+  CORE_ENTCONFIG_BILLING_BYPASSEMAILDOMAINS: {{ join "," .Values.openlane.coreConfiguration.entConfig.billing.bypassEmailDomains | quote }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | quote | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid | quote }}
 {{- if .Values.openlane.coreConfiguration.auth.token.audience }}
