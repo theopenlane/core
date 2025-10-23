@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	errNoPaymentMethodAttached = errors.New("you do not have a payment method attached. please add one in billing")
+	errNoPaymentMethodAttached = errors.New("A valid payment method is required to create tokens. Contact your organization admin to add one in billing.")
 )
 
 // RequirePaymentMethod makes sure the organization has a payment mehod ( card or any other)
