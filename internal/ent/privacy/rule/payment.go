@@ -35,15 +35,13 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return err
 		}
 
-		org, err := client.Organization.Query().
-			Where(organization.ID(orgID)).
-			WithSetting().
-			Only(ctx)
+		orgSetting, err := client.OrganizationSetting.Query().Where(
+				organizationsetting.HasOrganizationWith(organization.ID("")),
+			).Select(organizationsetting.FieldPaymentMethodAdded).Only(ctx)
 		if err != nil {
 			log.Err(err).Msg("failed to fetch organization from db")
 			return err
 		}
-
 		orgSetting, err := org.Setting(ctx)
 		if err != nil {
 			log.Err(err).Msg("could not fetch organization settings")
