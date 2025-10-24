@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
 )
 
 type detailsMutation interface {
@@ -353,6 +352,8 @@ func HookStatusApproval() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
+}
+
 func filenameToTitle(filename string) string {
 	// remove file extension if present
 	filename = strings.TrimSpace(filename)
