@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlImplementationDeletePayload!
+    """
+    Delete multiple controlImplementations
+    """
+    deleteBulkControlImplementation(
+        """
+        IDs of the controlImplementations to delete
+        """
+        ids: [ID!]!
+    ): ControlImplementationBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type ControlImplementationBulkCreatePayload {
     Created controlImplementations
     """
     controlImplementations: [ControlImplementation!]
+}
+
+"""
+Return response for deleteBulkControlImplementation mutation
+"""
+type ControlImplementationBulkDeletePayload {
+    """
+    Deleted controlImplementation IDs
+    """
+    deletedIDs: [ID!]!
 }

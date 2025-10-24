@@ -211,6 +211,14 @@ coreConfiguration:
         free: false  # @schema type:boolean; default:false
         # -- Role indicates whether role-based email addresses are allowed
         role: false  # @schema type:boolean; default:false
+    # -- Billing contains configuration for billing related features
+    billing:
+      # -- RequirePaymentMethod indicates whether to check if a payment method
+      # exists for orgs before they can access some resource
+      requirePaymentMethod: false  # @schema type:boolean
+      # -- BypassEmailDomains is a list of domains that should be allowed to bypass
+      # the checks if RequirePaymentMethod above is enabled
+      bypassEmailDomains: []
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable

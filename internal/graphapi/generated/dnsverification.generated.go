@@ -95,6 +95,35 @@ func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVer
 	return fc, nil
 }
 
+func (ec *executionContext) _DNSVerificationBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DNSVerificationBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -306,6 +335,45 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload(ctx context.Contex
 	return out
 }
 
+var dNSVerificationBulkDeletePayloadImplementors = []string{"DNSVerificationBulkDeletePayload"}
+
+func (ec *executionContext) _DNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DNSVerificationBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._DNSVerificationBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var dNSVerificationCreatePayloadImplementors = []string{"DNSVerificationCreatePayload"}
 
 func (ec *executionContext) _DNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DNSVerificationCreatePayload) graphql.Marshaler {
@@ -439,6 +507,20 @@ func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
+	return ec._DNSVerificationBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DNSVerificationBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationCreatePayload) graphql.Marshaler {

@@ -126,6 +126,15 @@ func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*model
 	}, nil
 }
 
+// DeleteBulkContact is the resolver for the deleteBulkContact field.
+func (r *mutationResolver) DeleteBulkContact(ctx context.Context, ids []string) (*model.ContactBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteContact(ctx, ids)
+}
+
 // Contact is the resolver for the contact field.
 func (r *queryResolver) Contact(ctx context.Context, id string) (*generated.Contact, error) {
 	query, err := withTransactionalMutation(ctx).Contact.Query().Where(contact.ID(id)).CollectFields(ctx)

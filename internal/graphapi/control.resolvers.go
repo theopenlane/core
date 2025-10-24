@@ -126,6 +126,15 @@ func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model
 	}, nil
 }
 
+// DeleteBulkControl is the resolver for the deleteBulkControl field.
+func (r *mutationResolver) DeleteBulkControl(ctx context.Context, ids []string) (*model.ControlBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteControl(ctx, ids)
+}
+
 // Control is the resolver for the control field.
 func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Control, error) {
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id)).CollectFields(ctx)

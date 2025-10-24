@@ -97,6 +97,35 @@ func (ec *executionContext) fieldContext_JobTemplateBulkCreatePayload_jobTemplat
 	return fc, nil
 }
 
+func (ec *executionContext) _JobTemplateBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.JobTemplateBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobTemplateBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_JobTemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "JobTemplateBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _JobTemplateCreatePayload_jobTemplate(ctx context.Context, field graphql.CollectedField, obj *model.JobTemplateCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -312,6 +341,45 @@ func (ec *executionContext) _JobTemplateBulkCreatePayload(ctx context.Context, s
 	return out
 }
 
+var jobTemplateBulkDeletePayloadImplementors = []string{"JobTemplateBulkDeletePayload"}
+
+func (ec *executionContext) _JobTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.JobTemplateBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, jobTemplateBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("JobTemplateBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._JobTemplateBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var jobTemplateCreatePayloadImplementors = []string{"JobTemplateCreatePayload"}
 
 func (ec *executionContext) _JobTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.JobTemplateCreatePayload) graphql.Marshaler {
@@ -445,6 +513,20 @@ func (ec *executionContext) marshalNJobTemplateBulkCreatePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._JobTemplateBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNJobTemplateBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.JobTemplateBulkDeletePayload) graphql.Marshaler {
+	return ec._JobTemplateBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNJobTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobTemplateBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._JobTemplateBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNJobTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.JobTemplateCreatePayload) graphql.Marshaler {

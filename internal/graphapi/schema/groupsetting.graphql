@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): GroupSettingDeletePayload!
+    """
+    Delete multiple groupSettings
+    """
+    deleteBulkGroupSetting(
+        """
+        IDs of the groupSettings to delete
+        """
+        ids: [ID!]!
+    ): GroupSettingBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type GroupSettingBulkCreatePayload {
     Created groupSettings
     """
     groupSettings: [GroupSetting!]
+}
+
+"""
+Return response for deleteBulkGroupSetting mutation
+"""
+type GroupSettingBulkDeletePayload {
+    """
+    Deleted groupSetting IDs
+    """
+    deletedIDs: [ID!]!
 }

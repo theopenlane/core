@@ -87,6 +87,15 @@ type APITokenBulkCreatePayload {
 	apiTokens: [APIToken!]
 }
 """
+Return response for deleteBulkAPIToken mutation
+"""
+type APITokenBulkDeletePayload {
+	"""
+	Deleted apiToken IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type APITokenConnection {
@@ -595,6 +604,15 @@ type ActionPlanBulkCreatePayload {
 	Created actionPlans
 	"""
 	actionPlans: [ActionPlan!]
+}
+"""
+Return response for deleteBulkActionPlan mutation
+"""
+type ActionPlanBulkDeletePayload {
+	"""
+	Deleted actionPlan IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkActionPlan mutation
@@ -2012,6 +2030,15 @@ type AssetBulkCreatePayload {
 	assets: [Asset!]
 }
 """
+Return response for deleteBulkAsset mutation
+"""
+type AssetBulkDeletePayload {
+	"""
+	Deleted asset IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type AssetConnection {
@@ -3025,6 +3052,15 @@ type ContactBulkCreatePayload {
 	Created contacts
 	"""
 	contacts: [Contact!]
+}
+"""
+Return response for deleteBulkContact mutation
+"""
+type ContactBulkDeletePayload {
+	"""
+	Deleted contact IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkContact mutation
@@ -4414,6 +4450,15 @@ type ControlBulkCreatePayload {
 	controls: [Control!]
 }
 """
+Return response for deleteBulkControl mutation
+"""
+type ControlBulkDeletePayload {
+	"""
+	Deleted control IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 Return response for updateBulkControl mutation
 """
 type ControlBulkUpdatePayload {
@@ -5512,6 +5557,15 @@ type ControlImplementationBulkCreatePayload {
 	Created controlImplementations
 	"""
 	controlImplementations: [ControlImplementation!]
+}
+"""
+Return response for deleteBulkControlImplementation mutation
+"""
+type ControlImplementationBulkDeletePayload {
+	"""
+	Deleted controlImplementation IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -6652,6 +6706,15 @@ type ControlObjectiveBulkCreatePayload {
 	Created controlObjectives
 	"""
 	controlObjectives: [ControlObjective!]
+}
+"""
+Return response for deleteBulkControlObjective mutation
+"""
+type ControlObjectiveBulkDeletePayload {
+	"""
+	Deleted controlObjective IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -9234,6 +9297,7 @@ input CreateInternalPolicyInput {
 	riskIDs: [ID!]
 	programIDs: [ID!]
 	fileID: ID
+	commentIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -9554,6 +9618,9 @@ input CreateNoteInput {
 	taskID: ID
 	controlID: ID
 	subcontrolID: ID
+	procedureID: ID
+	riskID: ID
+	internalPolicyID: ID
 	fileIDs: [ID!]
 }
 """
@@ -9914,6 +9981,7 @@ input CreateProcedureInput {
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
 	taskIDs: [ID!]
+	commentIDs: [ID!]
 	fileID: ID
 }
 """
@@ -10095,6 +10163,7 @@ input CreateRiskInput {
 	scanIDs: [ID!]
 	stakeholderID: ID
 	delegateID: ID
+	commentIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -10885,6 +10954,15 @@ type CustomDomainBulkCreatePayload {
 	customDomains: [CustomDomain!]
 }
 """
+Return response for deleteBulkCustomDomain mutation
+"""
+type CustomDomainBulkDeletePayload {
+	"""
+	Deleted customDomain IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type CustomDomainConnection {
@@ -11596,6 +11674,15 @@ type DNSVerificationBulkCreatePayload {
 	Created dnsVerifications
 	"""
 	dnsVerifications: [DNSVerification!]
+}
+"""
+Return response for deleteBulkDNSVerification mutation
+"""
+type DNSVerificationBulkDeletePayload {
+	"""
+	Deleted dnsVerification IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -12500,6 +12587,15 @@ type DocumentDataBulkCreatePayload {
 	documentData: [DocumentData!]
 }
 """
+Return response for deleteBulkDocumentData mutation
+"""
+type DocumentDataBulkDeletePayload {
+	"""
+	Deleted documentData IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type DocumentDataConnection {
@@ -13295,6 +13391,15 @@ type EntityBulkCreatePayload {
 	entities: [Entity!]
 }
 """
+Return response for deleteBulkEntity mutation
+"""
+type EntityBulkDeletePayload {
+	"""
+	Deleted entity IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type EntityConnection {
@@ -13805,6 +13910,15 @@ type EntityTypeBulkCreatePayload {
 	Created entityTypes
 	"""
 	entityTypes: [EntityType!]
+}
+"""
+Return response for deleteBulkEntityType mutation
+"""
+type EntityTypeBulkDeletePayload {
+	"""
+	Deleted entityType IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -15022,6 +15136,15 @@ type EventBulkCreatePayload {
 	Created events
 	"""
 	events: [Event!]
+}
+"""
+Return response for deleteBulkEvent mutation
+"""
+type EventBulkDeletePayload {
+	"""
+	Deleted event IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -19293,6 +19416,15 @@ type GroupBulkCreatePayload {
 	groups: [Group!]
 }
 """
+Return response for deleteBulkGroup mutation
+"""
+type GroupBulkDeletePayload {
+	"""
+	Deleted group IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type GroupConnection {
@@ -19699,6 +19831,15 @@ type GroupMembershipBulkCreatePayload {
 	Created groupMemberships
 	"""
 	groupMemberships: [GroupMembership!]
+}
+"""
+Return response for deleteBulkGroupMembership mutation
+"""
+type GroupMembershipBulkDeletePayload {
+	"""
+	Deleted groupMembership IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -20313,6 +20454,15 @@ type GroupSettingBulkCreatePayload {
 	Created groupSettings
 	"""
 	groupSettings: [GroupSetting!]
+}
+"""
+Return response for deleteBulkGroupSetting mutation
+"""
+type GroupSettingBulkDeletePayload {
+	"""
+	Deleted groupSetting IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -21318,6 +21468,15 @@ type HushBulkCreatePayload {
 	Created hushs
 	"""
 	hushes: [Hush!]
+}
+"""
+Return response for deleteBulkHush mutation
+"""
+type HushBulkDeletePayload {
+	"""
+	Deleted hush IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkHush mutation
@@ -23256,6 +23415,37 @@ type InternalPolicy implements Node {
 		where: ProgramWhereInput
 	): ProgramConnection!
 	file: File
+	comments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
+		Filtering options for Notes returned from the connection.
+		"""
+		where: NoteWhereInput
+	): NoteConnection!
 }
 """
 Return response for createBulkInternalPolicy mutation
@@ -23265,6 +23455,15 @@ type InternalPolicyBulkCreatePayload {
 	Created internalPolicys
 	"""
 	internalPolicies: [InternalPolicy!]
+}
+"""
+Return response for deleteBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkDeletePayload {
+	"""
+	Deleted internalPolicy IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkInternalPolicy mutation
@@ -24362,6 +24561,11 @@ input InternalPolicyWhereInput {
 	"""
 	hasFile: Boolean
 	hasFileWith: [FileWhereInput!]
+	"""
+	comments edge predicates
+	"""
+	hasComments: Boolean
+	hasCommentsWith: [NoteWhereInput!]
 }
 type Invite implements Node {
 	id: ID!
@@ -24466,6 +24670,15 @@ type InviteBulkCreatePayload {
 	Created invites
 	"""
 	invites: [Invite!]
+}
+"""
+Return response for deleteBulkInvite mutation
+"""
+type InviteBulkDeletePayload {
+	"""
+	Deleted invite IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -26220,6 +26433,15 @@ type JobTemplateBulkCreatePayload {
 	jobTemplates: [JobTemplate!]
 }
 """
+Return response for deleteBulkJobTemplate mutation
+"""
+type JobTemplateBulkDeletePayload {
+	"""
+	Deleted jobTemplate IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type JobTemplateConnection {
@@ -26945,6 +27167,15 @@ type MappableDomainBulkCreatePayload {
 	mappableDomains: [MappableDomain!]
 }
 """
+Return response for deleteBulkMappableDomain mutation
+"""
+type MappableDomainBulkDeletePayload {
+	"""
+	Deleted mappableDomain IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type MappableDomainConnection {
@@ -27615,6 +27846,15 @@ type MappedControlBulkCreatePayload {
 	Created mappedControls
 	"""
 	mappedControls: [MappedControl!]
+}
+"""
+Return response for deleteBulkMappedControl mutation
+"""
+type MappedControlBulkDeletePayload {
+	"""
+	Deleted mappedControl IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -28359,6 +28599,15 @@ type Mutation {
 		id: ID!
 	): ActionPlanDeletePayload!
 	"""
+	Delete multiple actionPlans
+	"""
+	deleteBulkActionPlan(
+		"""
+		IDs of the actionPlans to delete
+		"""
+		ids: [ID!]!
+	): ActionPlanBulkDeletePayload!
+	"""
 	Create a new apiToken
 	"""
 	createAPIToken(
@@ -28409,6 +28658,15 @@ type Mutation {
 		id: ID!
 	): APITokenDeletePayload!
 	"""
+	Delete multiple apiTokens
+	"""
+	deleteBulkAPIToken(
+		"""
+		IDs of the apiTokens to delete
+		"""
+		ids: [ID!]!
+	): APITokenBulkDeletePayload!
+	"""
 	Create a new asset
 	"""
 	createAsset(
@@ -28458,6 +28716,15 @@ type Mutation {
 		"""
 		id: ID!
 	): AssetDeletePayload!
+	"""
+	Delete multiple assets
+	"""
+	deleteBulkAsset(
+		"""
+		IDs of the assets to delete
+		"""
+		ids: [ID!]!
+	): AssetBulkDeletePayload!
 	"""
 	Create a new contact
 	"""
@@ -28523,6 +28790,15 @@ type Mutation {
 		id: ID!
 	): ContactDeletePayload!
 	"""
+	Delete multiple contacts
+	"""
+	deleteBulkContact(
+		"""
+		IDs of the contacts to delete
+		"""
+		ids: [ID!]!
+	): ContactBulkDeletePayload!
+	"""
 	Create a new control
 	"""
 	createControl(
@@ -28587,6 +28863,15 @@ type Mutation {
 		id: ID!
 	): ControlDeletePayload!
 	"""
+	Delete multiple controls
+	"""
+	deleteBulkControl(
+		"""
+		IDs of the controls to delete
+		"""
+		ids: [ID!]!
+	): ControlBulkDeletePayload!
+	"""
 	Create a new controls based on existing control ID(s)
 	"""
 	createControlsByClone(input: CloneControlInput): ControlBulkCreatePayload!
@@ -28650,6 +28935,15 @@ type Mutation {
 		id: ID!
 	): ControlImplementationDeletePayload!
 	"""
+	Delete multiple controlImplementations
+	"""
+	deleteBulkControlImplementation(
+		"""
+		IDs of the controlImplementations to delete
+		"""
+		ids: [ID!]!
+	): ControlImplementationBulkDeletePayload!
+	"""
 	Create a new controlObjective
 	"""
 	createControlObjective(
@@ -28699,6 +28993,15 @@ type Mutation {
 		"""
 		id: ID!
 	): ControlObjectiveDeletePayload!
+	"""
+	Delete multiple controlObjectives
+	"""
+	deleteBulkControlObjective(
+		"""
+		IDs of the controlObjectives to delete
+		"""
+		ids: [ID!]!
+	): ControlObjectiveBulkDeletePayload!
 	"""
 	Create a new customDomain
 	"""
@@ -28750,6 +29053,15 @@ type Mutation {
 		id: ID!
 	): CustomDomainDeletePayload!
 	"""
+	Delete multiple customDomains
+	"""
+	deleteBulkCustomDomain(
+		"""
+		IDs of the customDomains to delete
+		"""
+		ids: [ID!]!
+	): CustomDomainBulkDeletePayload!
+	"""
 	Create a new dnsVerification
 	"""
 	createDNSVerification(
@@ -28799,6 +29111,15 @@ type Mutation {
 		"""
 		id: ID!
 	): DNSVerificationDeletePayload!
+	"""
+	Delete multiple dnsVerifications
+	"""
+	deleteBulkDNSVerification(
+		"""
+		IDs of the dnsVerifications to delete
+		"""
+		ids: [ID!]!
+	): DNSVerificationBulkDeletePayload!
 	"""
 	Create a new documentData
 	"""
@@ -28850,6 +29171,15 @@ type Mutation {
 		id: ID!
 	): DocumentDataDeletePayload!
 	"""
+	Delete multiple documentData
+	"""
+	deleteBulkDocumentData(
+		"""
+		IDs of the documentData to delete
+		"""
+		ids: [ID!]!
+	): DocumentDataBulkDeletePayload!
+	"""
 	Create a new entity
 	"""
 	createEntity(
@@ -28899,6 +29229,15 @@ type Mutation {
 		"""
 		id: ID!
 	): EntityDeletePayload!
+	"""
+	Delete multiple entities
+	"""
+	deleteBulkEntity(
+		"""
+		IDs of the entities to delete
+		"""
+		ids: [ID!]!
+	): EntityBulkDeletePayload!
 	"""
 	Create a new entityType
 	"""
@@ -28950,6 +29289,15 @@ type Mutation {
 		id: ID!
 	): EntityTypeDeletePayload!
 	"""
+	Delete multiple entityTypes
+	"""
+	deleteBulkEntityType(
+		"""
+		IDs of the entityTypes to delete
+		"""
+		ids: [ID!]!
+	): EntityTypeBulkDeletePayload!
+	"""
 	Create a new event
 	"""
 	createEvent(
@@ -28999,6 +29347,15 @@ type Mutation {
 		"""
 		id: ID!
 	): EventDeletePayload!
+	"""
+	Delete multiple events
+	"""
+	deleteBulkEvent(
+		"""
+		IDs of the events to delete
+		"""
+		ids: [ID!]!
+	): EventBulkDeletePayload!
 	"""
 	Create a new evidence
 	"""
@@ -29137,6 +29494,15 @@ type Mutation {
 		id: ID!
 	): GroupDeletePayload!
 	"""
+	Delete multiple groups
+	"""
+	deleteBulkGroup(
+		"""
+		IDs of the groups to delete
+		"""
+		ids: [ID!]!
+	): GroupBulkDeletePayload!
+	"""
 	Create a new group with members
 	"""
 	createGroupWithMembers(
@@ -29227,6 +29593,15 @@ type Mutation {
 		id: ID!
 	): GroupMembershipDeletePayload!
 	"""
+	Delete multiple groupMemberships
+	"""
+	deleteBulkGroupMembership(
+		"""
+		IDs of the groupMemberships to delete
+		"""
+		ids: [ID!]!
+	): GroupMembershipBulkDeletePayload!
+	"""
 	Create a new groupSetting
 	"""
 	createGroupSetting(
@@ -29276,6 +29651,15 @@ type Mutation {
 		"""
 		id: ID!
 	): GroupSettingDeletePayload!
+	"""
+	Delete multiple groupSettings
+	"""
+	deleteBulkGroupSetting(
+		"""
+		IDs of the groupSettings to delete
+		"""
+		ids: [ID!]!
+	): GroupSettingBulkDeletePayload!
 	"""
 	Create a new hush
 	"""
@@ -29340,6 +29724,15 @@ type Mutation {
 		"""
 		id: ID!
 	): HushDeletePayload!
+	"""
+	Delete multiple hushs
+	"""
+	deleteBulkHush(
+		"""
+		IDs of the hushs to delete
+		"""
+		ids: [ID!]!
+	): HushBulkDeletePayload!
 	"""
 	Delete an existing integration
 	"""
@@ -29428,6 +29821,15 @@ type Mutation {
 		id: ID!
 	): InternalPolicyDeletePayload!
 	"""
+	Delete multiple internalPolicys
+	"""
+	deleteBulkInternalPolicy(
+		"""
+		IDs of the internalPolicys to delete
+		"""
+		ids: [ID!]!
+	): InternalPolicyBulkDeletePayload!
+	"""
 	Create a new invite
 	"""
 	createInvite(
@@ -29477,6 +29879,15 @@ type Mutation {
 		"""
 		id: ID!
 	): InviteDeletePayload!
+	"""
+	Delete multiple invites
+	"""
+	deleteBulkInvite(
+		"""
+		IDs of the invites to delete
+		"""
+		ids: [ID!]!
+	): InviteBulkDeletePayload!
 	"""
 	Create a new jobResult
 	"""
@@ -29638,6 +30049,15 @@ type Mutation {
 		id: ID!
 	): JobTemplateDeletePayload!
 	"""
+	Delete multiple jobTemplates
+	"""
+	deleteBulkJobTemplate(
+		"""
+		IDs of the jobTemplates to delete
+		"""
+		ids: [ID!]!
+	): JobTemplateBulkDeletePayload!
+	"""
 	Create a new mappableDomain
 	"""
 	createMappableDomain(
@@ -29687,6 +30107,15 @@ type Mutation {
 		"""
 		id: ID!
 	): MappableDomainDeletePayload!
+	"""
+	Delete multiple mappableDomains
+	"""
+	deleteBulkMappableDomain(
+		"""
+		IDs of the mappableDomains to delete
+		"""
+		ids: [ID!]!
+	): MappableDomainBulkDeletePayload!
 	"""
 	Create a new mappedControl
 	"""
@@ -29738,6 +30167,15 @@ type Mutation {
 		id: ID!
 	): MappedControlDeletePayload!
 	"""
+	Delete multiple mappedControls
+	"""
+	deleteBulkMappedControl(
+		"""
+		IDs of the mappedControls to delete
+		"""
+		ids: [ID!]!
+	): MappedControlBulkDeletePayload!
+	"""
 	Create a new narrative
 	"""
 	createNarrative(
@@ -29787,6 +30225,15 @@ type Mutation {
 		"""
 		id: ID!
 	): NarrativeDeletePayload!
+	"""
+	Delete multiple narratives
+	"""
+	deleteBulkNarrative(
+		"""
+		IDs of the narratives to delete
+		"""
+		ids: [ID!]!
+	): NarrativeBulkDeletePayload!
 	"""
 	Update an existing task comment
 	"""
@@ -29844,6 +30291,72 @@ type Mutation {
 		"""
 		noteFiles: [Upload!]
 	): SubcontrolUpdatePayload!
+	"""
+	Update an existing procedure comment
+	"""
+	updateProcedureComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): ProcedureUpdatePayload!
+	"""
+	Update an existing risk comment
+	"""
+	updateRiskComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): RiskUpdatePayload!
+	"""
+	Update an existing internal policy comment
+	"""
+	updateInternalPolicyComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): InternalPolicyUpdatePayload!
+	"""
+	Delete an existing note
+	"""
+	deleteNote(
+		"""
+		ID of the note/comment
+		"""
+		id: ID!
+	): NoteDeletePayload!
 	"""
 	Create a new onboarding
 	"""
@@ -29936,6 +30449,15 @@ type Mutation {
 		id: ID!
 	): OrganizationSettingDeletePayload!
 	"""
+	Delete multiple organizationSettings
+	"""
+	deleteBulkOrganizationSetting(
+		"""
+		IDs of the organizationSettings to delete
+		"""
+		ids: [ID!]!
+	): OrganizationSettingBulkDeletePayload!
+	"""
 	Create a new organization with members
 	"""
 	createOrganizationWithMembers(
@@ -30004,6 +30526,15 @@ type Mutation {
 		"""
 		id: ID!
 	): OrgMembershipDeletePayload!
+	"""
+	Delete multiple orgMemberships
+	"""
+	deleteBulkOrgMembership(
+		"""
+		IDs of the orgMemberships to delete
+		"""
+		ids: [ID!]!
+	): OrgMembershipBulkDeletePayload!
 	"""
 	Create a new personalAccessToken
 	"""
@@ -30115,6 +30646,15 @@ type Mutation {
 		id: ID!
 	): ProcedureDeletePayload!
 	"""
+	Delete multiple procedures
+	"""
+	deleteBulkProcedure(
+		"""
+		IDs of the procedures to delete
+		"""
+		ids: [ID!]!
+	): ProcedureBulkDeletePayload!
+	"""
 	Create a new program
 	"""
 	createProgram(
@@ -30164,6 +30704,15 @@ type Mutation {
 		"""
 		id: ID!
 	): ProgramDeletePayload!
+	"""
+	Delete multiple programs
+	"""
+	deleteBulkProgram(
+		"""
+		IDs of the programs to delete
+		"""
+		ids: [ID!]!
+	): ProgramBulkDeletePayload!
 	"""
 	Create a new program with members
 	"""
@@ -30242,6 +30791,15 @@ type Mutation {
 		id: ID!
 	): ProgramMembershipDeletePayload!
 	"""
+	Delete multiple programMemberships
+	"""
+	deleteBulkProgramMembership(
+		"""
+		IDs of the programMemberships to delete
+		"""
+		ids: [ID!]!
+	): ProgramMembershipBulkDeletePayload!
+	"""
 	Create a new risk
 	"""
 	createRisk(
@@ -30305,6 +30863,15 @@ type Mutation {
 		"""
 		id: ID!
 	): RiskDeletePayload!
+	"""
+	Delete multiple risks
+	"""
+	deleteBulkRisk(
+		"""
+		IDs of the risks to delete
+		"""
+		ids: [ID!]!
+	): RiskBulkDeletePayload!
 	"""
 	Create a new scan
 	"""
@@ -30370,6 +30937,15 @@ type Mutation {
 		id: ID!
 	): ScanDeletePayload!
 	"""
+	Delete multiple scans
+	"""
+	deleteBulkScan(
+		"""
+		IDs of the scans to delete
+		"""
+		ids: [ID!]!
+	): ScanBulkDeletePayload!
+	"""
 	Create a new scheduledJob
 	"""
 	createScheduledJob(
@@ -30419,6 +30995,15 @@ type Mutation {
 		"""
 		id: ID!
 	): ScheduledJobDeletePayload!
+	"""
+	Delete multiple scheduledJobs
+	"""
+	deleteBulkScheduledJob(
+		"""
+		IDs of the scheduledJobs to delete
+		"""
+		ids: [ID!]!
+	): ScheduledJobBulkDeletePayload!
 	"""
 	Create a new scheduledJobRun
 	"""
@@ -30534,6 +31119,15 @@ type Mutation {
 		id: ID!
 	): SubcontrolDeletePayload!
 	"""
+	Delete multiple subcontrols
+	"""
+	deleteBulkSubcontrol(
+		"""
+		IDs of the subcontrols to delete
+		"""
+		ids: [ID!]!
+	): SubcontrolBulkDeletePayload!
+	"""
 	Create a new subprocessor
 	"""
 	createSubprocessor(
@@ -30583,6 +31177,15 @@ type Mutation {
 		"""
 		id: ID!
 	): SubprocessorDeletePayload!
+	"""
+	Delete multiple subprocessors
+	"""
+	deleteBulkSubprocessor(
+		"""
+		IDs of the subprocessors to delete
+		"""
+		ids: [ID!]!
+	): SubprocessorBulkDeletePayload!
 	"""
 	Create a new subscriber
 	"""
@@ -30703,6 +31306,15 @@ type Mutation {
 		id: ID!
 	): TaskDeletePayload!
 	"""
+	Delete multiple tasks
+	"""
+	deleteBulkTask(
+		"""
+		IDs of the tasks to delete
+		"""
+		ids: [ID!]!
+	): TaskBulkDeletePayload!
+	"""
 	Create a new template
 	"""
 	createTemplate(
@@ -30752,6 +31364,15 @@ type Mutation {
 		"""
 		id: ID!
 	): TemplateDeletePayload!
+	"""
+	Delete multiple templates
+	"""
+	deleteBulkTemplate(
+		"""
+		IDs of the templates to delete
+		"""
+		ids: [ID!]!
+	): TemplateBulkDeletePayload!
 	"""
 	Create a new tfaSetting
 	"""
@@ -30853,6 +31474,15 @@ type Mutation {
 		id: ID!
 	): TrustCenterComplianceDeletePayload!
 	"""
+	Delete multiple trustCenterCompliances
+	"""
+	deleteBulkTrustCenterCompliance(
+		"""
+		IDs of the trustCenterCompliances to delete
+		"""
+		ids: [ID!]!
+	): TrustCenterComplianceBulkDeletePayload!
+	"""
 	Create a new trustCenterDoc
 	"""
 	createTrustCenterDoc(
@@ -30902,6 +31532,15 @@ type Mutation {
 		"""
 		id: ID!
 	): TrustCenterDocDeletePayload!
+	"""
+	Delete multiple trustCenterDocs
+	"""
+	deleteBulkTrustCenterDoc(
+		"""
+		IDs of the trustCenterDocs to delete
+		"""
+		ids: [ID!]!
+	): TrustCenterDocBulkDeletePayload!
 	"""
 	Create a new trustCenterSetting
 	"""
@@ -31034,6 +31673,15 @@ type Mutation {
 		id: ID!
 	): TrustCenterSubprocessorDeletePayload!
 	"""
+	Delete multiple trustCenterSubprocessors
+	"""
+	deleteBulkTrustCenterSubprocessor(
+		"""
+		IDs of the trustCenterSubprocessors to delete
+		"""
+		ids: [ID!]!
+	): TrustCenterSubprocessorBulkDeletePayload!
+	"""
 	Create a new trustCenterWatermarkConfig
 	"""
 	createTrustCenterWatermarkConfig(
@@ -31138,6 +31786,15 @@ type Mutation {
 		"""
 		input: UpdateUserSettingInput!
 	): UserSettingUpdatePayload!
+	"""
+	Delete multiple userSettings
+	"""
+	deleteBulkUserSetting(
+		"""
+		IDs of the userSettings to delete
+		"""
+		ids: [ID!]!
+	): UserSettingBulkDeletePayload!
 	"""
 	Delete an existing webauthn
 	"""
@@ -31417,6 +32074,15 @@ type NarrativeBulkCreatePayload {
 	Created narratives
 	"""
 	narratives: [Narrative!]
+}
+"""
+Return response for deleteBulkNarrative mutation
+"""
+type NarrativeBulkDeletePayload {
+	"""
+	Deleted narrative IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -32136,6 +32802,9 @@ type Note implements Node {
 	task: Task
 	control: Control
 	subcontrol: Subcontrol
+	procedure: Procedure
+	risk: Risk
+	internalPolicy: InternalPolicy
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -32184,6 +32853,15 @@ type NoteConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+	"""
+	Deleted comment ID
+	"""
+	deletedID: ID!
 }
 """
 An edge in a connection.
@@ -32623,6 +33301,21 @@ input NoteWhereInput {
 	hasSubcontrol: Boolean
 	hasSubcontrolWith: [SubcontrolWhereInput!]
 	"""
+	procedure edge predicates
+	"""
+	hasProcedure: Boolean
+	hasProcedureWith: [ProcedureWhereInput!]
+	"""
+	risk edge predicates
+	"""
+	hasRisk: Boolean
+	hasRiskWith: [RiskWhereInput!]
+	"""
+	internal_policy edge predicates
+	"""
+	hasInternalPolicy: Boolean
+	hasInternalPolicyWith: [InternalPolicyWhereInput!]
+	"""
 	files edge predicates
 	"""
 	hasFiles: Boolean
@@ -32795,6 +33488,15 @@ type OrgMembershipBulkCreatePayload {
 	Created orgMemberships
 	"""
 	orgMemberships: [OrgMembership!]
+}
+"""
+Return response for deleteBulkOrgMembership mutation
+"""
+type OrgMembershipBulkDeletePayload {
+	"""
+	Deleted orgMembership IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -36364,6 +37066,15 @@ type OrganizationSettingBulkCreatePayload {
 	organizationSettings: [OrganizationSetting!]
 }
 """
+Return response for deleteBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkDeletePayload {
+	"""
+	Deleted organizationSetting IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type OrganizationSettingConnection {
@@ -38793,6 +39504,37 @@ type Procedure implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	comments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
+		Filtering options for Notes returned from the connection.
+		"""
+		where: NoteWhereInput
+	): NoteConnection!
 	file: File
 }
 """
@@ -38803,6 +39545,15 @@ type ProcedureBulkCreatePayload {
 	Created procedures
 	"""
 	procedures: [Procedure!]
+}
+"""
+Return response for deleteBulkProcedure mutation
+"""
+type ProcedureBulkDeletePayload {
+	"""
+	Deleted export IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkProcedure mutation
@@ -39886,6 +40637,11 @@ input ProcedureWhereInput {
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
 	"""
+	comments edge predicates
+	"""
+	hasComments: Boolean
+	hasCommentsWith: [NoteWhereInput!]
+	"""
 	file edge predicates
 	"""
 	hasFile: Boolean
@@ -40505,6 +41261,15 @@ type ProgramBulkCreatePayload {
 	programs: [Program!]
 }
 """
+Return response for deleteBulkProgram mutation
+"""
+type ProgramBulkDeletePayload {
+	"""
+	Deleted program IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type ProgramConnection {
@@ -41068,6 +41833,15 @@ type ProgramMembershipBulkCreatePayload {
 	Created programMemberships
 	"""
 	programMemberships: [ProgramMembership!]
+}
+"""
+Return response for deleteBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkDeletePayload {
+	"""
+	Deleted programMembership IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -49119,6 +49893,37 @@ type Risk implements Node {
 	temporary delegates for the risk, used for temporary ownership
 	"""
 	delegate: Group
+	comments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
+		Filtering options for Notes returned from the connection.
+		"""
+		where: NoteWhereInput
+	): NoteConnection!
 }
 """
 Return response for createBulkRisk mutation
@@ -49128,6 +49933,15 @@ type RiskBulkCreatePayload {
 	Created risks
 	"""
 	risks: [Risk!]
+}
+"""
+Return response for deleteBulkRisk mutation
+"""
+type RiskBulkDeletePayload {
+	"""
+	Deleted risk IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkRisk mutation
@@ -50133,6 +50947,11 @@ input RiskWhereInput {
 	"""
 	hasDelegate: Boolean
 	hasDelegateWith: [GroupWhereInput!]
+	"""
+	comments edge predicates
+	"""
+	hasComments: Boolean
+	hasCommentsWith: [NoteWhereInput!]
 }
 """
 SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
@@ -50334,6 +51153,15 @@ type ScanBulkCreatePayload {
 	Created scans
 	"""
 	scans: [Scan!]
+}
+"""
+Return response for deleteBulkScan mutation
+"""
+type ScanBulkDeletePayload {
+	"""
+	Deleted scan IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 Return response for updateBulkScan mutation
@@ -50996,6 +51824,15 @@ type ScheduledJobBulkCreatePayload {
 	Created scheduledJobs
 	"""
 	scheduledJobs: [ScheduledJob!]
+}
+"""
+Return response for deleteBulkScheduledJob mutation
+"""
+type ScheduledJobBulkDeletePayload {
+	"""
+	Deleted scheduledJob IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -53599,6 +54436,15 @@ type SubcontrolBulkCreatePayload {
 	subcontrols: [Subcontrol!]
 }
 """
+Return response for deleteBulkSubcontrol mutation
+"""
+type SubcontrolBulkDeletePayload {
+	"""
+	Deleted subcontrol IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type SubcontrolConnection {
@@ -55063,6 +55909,15 @@ type SubprocessorBulkCreatePayload {
 	Created subprocessors
 	"""
 	subprocessors: [Subprocessor!]
+}
+"""
+Return response for deleteBulkSubprocessor mutation
+"""
+type SubprocessorBulkDeletePayload {
+	"""
+	Deleted subprocessor IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -56671,6 +57526,15 @@ type TaskBulkCreatePayload {
 	tasks: [Task!]
 }
 """
+Return response for deleteBulkTask mutation
+"""
+type TaskBulkDeletePayload {
+	"""
+	Deleted task IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 Return response for updateBulkTask mutation
 """
 type TaskBulkUpdatePayload {
@@ -57616,6 +58480,15 @@ type TemplateBulkCreatePayload {
 	templates: [Template!]
 }
 """
+Return response for deleteBulkTemplate mutation
+"""
+type TemplateBulkDeletePayload {
+	"""
+	Deleted template IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type TemplateConnection {
@@ -58511,6 +59384,15 @@ type TrustCenterComplianceBulkCreatePayload {
 	trustCenterCompliances: [TrustCenterCompliance!]
 }
 """
+Return response for deleteBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkDeletePayload {
+	"""
+	Deleted trustCenterCompliance IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type TrustCenterComplianceConnection {
@@ -59045,6 +59927,15 @@ type TrustCenterDocBulkCreatePayload {
 	Created trustCenterDocs
 	"""
 	trustCenterDocs: [TrustCenterDoc!]
+}
+"""
+Return response for deleteBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkDeletePayload {
+	"""
+	Deleted trustCenterDoc IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -61114,6 +62005,15 @@ type TrustCenterSubprocessorBulkCreatePayload {
 	Created trustCenterSubprocessors
 	"""
 	trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+"""
+Return response for deleteBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkDeletePayload {
+	"""
+	Deleted trustCenterSubprocessor IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.
@@ -64100,6 +65000,9 @@ input UpdateInternalPolicyInput {
 	clearPrograms: Boolean
 	fileID: ID
 	clearFile: Boolean
+	addCommentIDs: [ID!]
+	removeCommentIDs: [ID!]
+	clearComments: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -64456,6 +65359,12 @@ input UpdateNoteInput {
 	clearControl: Boolean
 	subcontrolID: ID
 	clearSubcontrol: Boolean
+	procedureID: ID
+	clearProcedure: Boolean
+	riskID: ID
+	clearRisk: Boolean
+	internalPolicyID: ID
+	clearInternalPolicy: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
@@ -64995,6 +65904,9 @@ input UpdateProcedureInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	addCommentIDs: [ID!]
+	removeCommentIDs: [ID!]
+	clearComments: Boolean
 	fileID: ID
 	clearFile: Boolean
 	RevisionBump: VersionBump
@@ -65231,6 +66143,9 @@ input UpdateRiskInput {
 	clearStakeholder: Boolean
 	delegateID: ID
 	clearDelegate: Boolean
+	addCommentIDs: [ID!]
+	removeCommentIDs: [ID!]
+	clearComments: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -67362,6 +68277,15 @@ type UserSettingBulkCreatePayload {
 	Created userSettings
 	"""
 	userSettings: [UserSetting!]
+}
+"""
+Return response for deleteBulkUserSetting mutation
+"""
+type UserSettingBulkDeletePayload {
+	"""
+	Deleted userSetting IDs
+	"""
+	deletedIDs: [ID!]!
 }
 """
 A connection to a list of items.

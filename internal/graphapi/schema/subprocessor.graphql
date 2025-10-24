@@ -62,6 +62,15 @@ extend type Mutation{
         """
         id: ID!
     ): SubprocessorDeletePayload!
+    """
+    Delete multiple subprocessors
+    """
+    deleteBulkSubprocessor(
+        """
+        IDs of the subprocessors to delete
+        """
+        ids: [ID!]!
+    ): SubprocessorBulkDeletePayload!
 }
 
 """
@@ -102,4 +111,14 @@ type SubprocessorBulkCreatePayload {
     Created subprocessors
     """
     subprocessors: [Subprocessor!]
+}
+
+"""
+Return response for deleteBulkSubprocessor mutation
+"""
+type SubprocessorBulkDeletePayload {
+    """
+    Deleted subprocessor IDs
+    """
+    deletedIDs: [ID!]!
 }

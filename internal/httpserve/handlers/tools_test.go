@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"

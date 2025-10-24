@@ -11,7 +11,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -96,6 +99,93 @@ func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id strin
 
 	return &model.SubcontrolUpdatePayload{
 		Subcontrol: objectRes,
+	}, nil
+}
+
+// UpdateProcedureComment is the resolver for the updateProcedureComment field.
+func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ProcedureUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+	}
+
+	return &model.ProcedureUpdatePayload{
+		Procedure: objectRes,
+	}, nil
+}
+
+// UpdateRiskComment is the resolver for the updateRiskComment field.
+func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.RiskUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+	}
+
+	return &model.RiskUpdatePayload{
+		Risk: objectRes,
+	}, nil
+}
+
+// UpdateInternalPolicyComment is the resolver for the updateInternalPolicyComment field.
+func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.InternalPolicyUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+	}
+
+	return &model.InternalPolicyUpdatePayload{
+		InternalPolicy: objectRes,
+	}, nil
+}
+
+// DeleteNote is the resolver for the deleteNote field.
+func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(id).Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "note"})
+	}
+
+	if err := generated.NoteEdgeCleanup(ctx, id); err != nil {
+		return nil, newCascadeDeleteError(err)
+	}
+
+	return &model.NoteDeletePayload{
+		DeletedID: id,
 	}, nil
 }
 

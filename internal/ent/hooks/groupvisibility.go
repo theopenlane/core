@@ -112,24 +112,9 @@ func getGroupIDFromSettingMutation(ctx context.Context, m *generated.GroupSettin
 		settingIDs []string
 	)
 
-	switch m.Op() {
-	case ent.OpCreate:
-		settingID, err := GetObjectIDFromEntValue(retVal)
-		if err != nil {
-			return []string{}, err
-		}
-
-		settingIDs = []string{settingID}
-	case ent.OpUpdateOne, ent.OpUpdate:
-		settingID, ok := m.ID()
-		if ok {
-			settingIDs = []string{settingID}
-		} else {
-			settingIDs, err = m.IDs(ctx)
-			if err != nil {
-				return []string{}, err
-			}
-		}
+	settingIDs, err = GetObjectIDsFromMutation(ctx, m, retVal)
+	if err != nil {
+		return nil, err
 	}
 
 	return m.Client().Group.Query().

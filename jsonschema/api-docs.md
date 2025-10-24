@@ -61,7 +61,8 @@ Config contains the configuration for the core server
         "modules": {},
         "emailValidation": {
             "allowedEmailTypes": {}
-        }
+        },
+        "billing": {}
     },
     "auth": {
         "token": {
@@ -414,6 +415,7 @@ Config holds the configuration for the ent server
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxSchemaImportSize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
 |[**emailValidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
+|[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -431,7 +433,8 @@ Config holds the configuration for the ent server
     "modules": {},
     "emailValidation": {
         "allowedEmailTypes": {}
-    }
+    },
+    "billing": {}
 }
 ```
 
@@ -617,6 +620,26 @@ AllowedEmailTypes defines the allowed email types for verification
 |**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
 
 **Additional Properties:** not allowed  
+<a name="entconfigbilling"></a>
+### entConfig\.billing: object
+
+Billing settings for feature access
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**requirePaymentMethod**|`boolean`|RequirePaymentMethod indicates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
+|[**bypassEmailDomains**](#entconfigbillingbypassemaildomains)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigbillingbypassemaildomains"></a>
+#### entConfig\.billing\.bypassEmailDomains: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="auth"></a>
 ## auth: object
 

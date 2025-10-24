@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -54,6 +55,7 @@ type RiskQuery struct {
 	withScans                 *ScanQuery
 	withStakeholder           *GroupQuery
 	withDelegate              *GroupQuery
+	withComments              *NoteQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Risk) error
 	modifiers                 []func(*sql.Selector)
@@ -70,6 +72,7 @@ type RiskQuery struct {
 	withNamedAssets           map[string]*AssetQuery
 	withNamedEntities         map[string]*EntityQuery
 	withNamedScans            map[string]*ScanQuery
+	withNamedComments         map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -506,6 +509,31 @@ func (_q *RiskQuery) QueryDelegate() *GroupQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *RiskQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.CommentsTable, risk.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Risk entity from the query.
 // Returns a *NotFoundError when no Risk was found.
 func (_q *RiskQuery) First(ctx context.Context) (*Risk, error) {
@@ -714,6 +742,7 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		withScans:            _q.withScans.Clone(),
 		withStakeholder:      _q.withStakeholder.Clone(),
 		withDelegate:         _q.withDelegate.Clone(),
+		withComments:         _q.withComments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -897,6 +926,17 @@ func (_q *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithComments(opts ...func(*NoteQuery)) *RiskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -982,7 +1022,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [17]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -999,6 +1039,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			_q.withScans != nil,
 			_q.withStakeholder != nil,
 			_q.withDelegate != nil,
+			_q.withComments != nil,
 		}
 	)
 	if withFKs {
@@ -1136,6 +1177,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Comments = []*Note{} },
+			func(n *Risk, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedBlockedGroups(name) },
@@ -1224,6 +1272,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedScans(name) },
 			func(n *Risk, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedComments(name) },
+			func(n *Risk, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2035,6 +2090,37 @@ func (_q *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes 
 	}
 	return nil
 }
+func (_q *RiskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.risk_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "risk_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *RiskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2322,6 +2408,20 @@ func (_q *RiskQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *Risk
 		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedScans[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *RiskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 
