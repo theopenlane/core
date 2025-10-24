@@ -3583,6 +3583,11 @@ func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
 	return &createGroupInputResolver{r}
 }
 
+// CreateMappedControlInput returns gqlgenerated.CreateMappedControlInputResolver implementation.
+func (r *Resolver) CreateMappedControlInput() gqlgenerated.CreateMappedControlInputResolver {
+	return &createMappedControlInputResolver{r}
+}
+
 // CreateOrganizationInput returns gqlgenerated.CreateOrganizationInputResolver implementation.
 func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInputResolver {
 	return &createOrganizationInputResolver{r}
@@ -3667,6 +3672,7 @@ type groupResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
+type createMappedControlInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }

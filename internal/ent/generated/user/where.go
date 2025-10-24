@@ -1509,6 +1509,35 @@ func HasEmailVerificationTokensWith(preds ...predicate.EmailVerificationToken) p
 	})
 }
 
+// HasFileDownloadTokens applies the HasEdge predicate on the "file_download_tokens" edge.
+func HasFileDownloadTokens() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FileDownloadTokensTable, FileDownloadTokensColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FileDownloadToken
+		step.Edge.Schema = schemaConfig.FileDownloadToken
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileDownloadTokensWith applies the HasEdge predicate on the "file_download_tokens" edge with a given conditions (other predicates).
+func HasFileDownloadTokensWith(preds ...predicate.FileDownloadToken) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newFileDownloadTokensStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FileDownloadToken
+		step.Edge.Schema = schemaConfig.FileDownloadToken
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPasswordResetTokens applies the HasEdge predicate on the "password_reset_tokens" edge.
 func HasPasswordResetTokens() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

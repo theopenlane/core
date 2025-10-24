@@ -808,6 +808,93 @@ func HasSubcontrolWith(preds ...predicate.Subcontrol) predicate.Note {
 	})
 }
 
+// HasProcedure applies the HasEdge predicate on the "procedure" edge.
+func HasProcedure() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ProcedureTable, ProcedureColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProcedureWith applies the HasEdge predicate on the "procedure" edge with a given conditions (other predicates).
+func HasProcedureWith(preds ...predicate.Procedure) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newProcedureStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRisk applies the HasEdge predicate on the "risk" edge.
+func HasRisk() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RiskTable, RiskColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskWith applies the HasEdge predicate on the "risk" edge with a given conditions (other predicates).
+func HasRiskWith(preds ...predicate.Risk) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newRiskStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
+func HasInternalPolicy() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, InternalPolicyTable, InternalPolicyColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
+func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newInternalPolicyStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {

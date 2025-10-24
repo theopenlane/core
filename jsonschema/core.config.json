@@ -436,6 +436,21 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "entconfig.Billing": {
+      "properties": {
+        "requirePaymentMethod": {
+          "type": "boolean",
+          "description": "RequirePaymentMethod indicates whether to check if a payment method\nexists for orgs before they can access some resource"
+        },
+        "bypassEmailDomains": {
+          "$ref": "#/$defs/[]string",
+          "description": "BypassEmailDomains is a list of domains that should be allowed to bypass\nthe checks if RequirePaymentMethod above is enabled"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Billing settings for feature access"
+    },
     "entconfig.Config": {
       "properties": {
         "entityTypes": {
@@ -465,6 +480,10 @@
         "emailValidation": {
           "$ref": "#/$defs/validator.EmailVerificationConfig",
           "description": "EmailValidation contains configuration for email validation"
+        },
+        "billing": {
+          "$ref": "#/$defs/entconfig.Billing",
+          "description": "Billing contains configuration for billing related features"
         }
       },
       "additionalProperties": false,
@@ -1229,6 +1248,14 @@
           "type": "string",
           "description": "Endpoint for custom endpoints"
         },
+        "proxyPresignEnabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseURL": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)."
+        },
         "credentials": {
           "$ref": "#/$defs/storage.ProviderCredentials",
           "description": "Credentials contains the credentials for accessing the provider"
@@ -1247,10 +1274,6 @@
         "secretAccessKey": {
           "type": "string",
           "description": "SecretAccessKey for cloud providers"
-        },
-        "endpoint": {
-          "type": "string",
-          "description": "Endpoint for custom endpoints"
         },
         "projectID": {
           "type": "string",

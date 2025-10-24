@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/iam/auth"
 )
 
 type detailsMutation interface {
@@ -154,18 +155,35 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	p := bluemonday.UGCPolicy()
 
-	m.SetName(file[0].OriginalName)
+	m.SetName(filenameToTitle(file[0].OriginalName))
 	m.SetFileID(file[0].ID)
 
 	var detailsStr string
 	switch v := parsedContent.(type) {
 	case string:
 		detailsStr = v
+	case []byte:
+		detailsStr = string(v)
 	default:
 		detailsStr = fmt.Sprintf("%v", v)
 	}
 
-	m.SetDetails(p.Sanitize(detailsStr))
+	details := p.Sanitize(detailsStr)
+
+	orgName := ""
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
+		org, err := m.Client().Organization.Get(ctx, orgID)
+		if err != nil {
+			return err
+		}
+
+		orgName = org.Name
+	}
+
+	details = updatePlaceholderText(details, orgName)
+
+	m.SetDetails(p.Sanitize(details))
 
 	return nil
 }
@@ -244,4 +262,33 @@ func importURLToSchema(m importSchemaMutation) error {
 	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
+}
+
+func filenameToTitle(filename string) string {
+	// remove file extension if present
+	filename = strings.TrimSpace(filename)
+	if dotIdx := strings.LastIndex(filename, "."); dotIdx != -1 {
+		filename = filename[:dotIdx]
+	}
+
+	// replace underscores and hyphens with spaces
+	filename = strings.ReplaceAll(filename, "_", " ")
+	filename = strings.ReplaceAll(filename, "-", " ")
+
+	// capitalize first letter of each word
+	return caser.String(filename)
+}
+
+const (
+	companyPlaceholder = "{{company_name}}"
+)
+
+// updatePlaceholderText replaces the company placeholder in details with the provided organization name
+func updatePlaceholderText(details string, orgName string) string {
+	if orgName == "" {
+		log.Warn().Msg("organization name is empty, using default placeholder value")
+		orgName = "[Company Name]"
+	}
+
+	return strings.ReplaceAll(details, companyPlaceholder, orgName)
 }

@@ -81,6 +81,35 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayloa
 	return fc, nil
 }
 
+func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterSubprocessorBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -264,6 +293,45 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload(ctx contex
 	return out
 }
 
+var trustCenterSubprocessorBulkDeletePayloadImplementors = []string{"TrustCenterSubprocessorBulkDeletePayload"}
+
+func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterSubprocessorBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterSubprocessorBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._TrustCenterSubprocessorBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var trustCenterSubprocessorCreatePayloadImplementors = []string{"TrustCenterSubprocessorCreatePayload"}
 
 func (ec *executionContext) _TrustCenterSubprocessorCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterSubprocessorCreatePayload) graphql.Marshaler {
@@ -397,6 +465,20 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorBulkCreatePayload2ᚖ
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTrustCenterSubprocessorBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSubprocessorBulkDeletePayload) graphql.Marshaler {
+	return ec._TrustCenterSubprocessorBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTrustCenterSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterSubprocessorBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSubprocessorCreatePayload) graphql.Marshaler {

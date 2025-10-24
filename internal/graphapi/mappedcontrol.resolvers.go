@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
@@ -53,7 +54,7 @@ func (r *mutationResolver) CreateBulkMappedControl(ctx context.Context, input []
 
 // CreateBulkCSVMappedControl is the resolver for the createBulkCSVMappedControl field.
 func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateMappedControlInput](input)
+	data, err := unmarshalBulkData[extendedMappedControlInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -72,7 +73,42 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	return r.bulkCreateMappedControl(ctx, data)
+	var inputData []*generated.CreateMappedControlInput
+
+	for _, obj := range data {
+		ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, obj.FromControlRefCodes)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		}
+
+		obj.FromControlIDs = ids
+
+		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.FromSubcontrolRefCodes)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		}
+
+		obj.FromSubcontrolIDs = ids
+
+		ids, err = getControlIDsFromRefCodes[predicate.Control](ctx, obj.ToControlRefCodes)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		}
+
+		obj.ToControlIDs = ids
+
+		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.ToSubcontrolRefCodes)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		}
+
+		obj.ToSubcontrolIDs = ids
+
+		inputData = append(inputData, &obj.CreateMappedControlInput)
+
+	}
+
+	return r.bulkCreateMappedControl(ctx, inputData)
 }
 
 // UpdateMappedControl is the resolver for the updateMappedControl field.
@@ -115,6 +151,15 @@ func (r *mutationResolver) DeleteMappedControl(ctx context.Context, id string) (
 	return &model.MappedControlDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// DeleteBulkMappedControl is the resolver for the deleteBulkMappedControl field.
+func (r *mutationResolver) DeleteBulkMappedControl(ctx context.Context, ids []string) (*model.MappedControlBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteMappedControl(ctx, ids)
 }
 
 // MappedControl is the resolver for the mappedControl field.

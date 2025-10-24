@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"path"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/objects"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
@@ -31,36 +33,66 @@ const (
 
 // Provider implements the storagetypes.Provider interface for Cloudflare R2
 type Provider struct {
-	client             *s3.Client
-	options            *storage.ProviderOptions
-	presignClient      *s3.PresignClient
-	downloader         *manager.Downloader
-	uploader           *manager.Uploader
-	objExistsWaiter    *s3.ObjectExistsWaiter
-	objNotExistsWaiter *s3.ObjectNotExistsWaiter
+	client              *s3.Client
+	options             *storage.ProviderOptions
+	presignClient       *s3.PresignClient
+	downloader          *manager.Downloader
+	uploader            *manager.Uploader
+	objExistsWaiter     *s3.ObjectExistsWaiter
+	objNotExistsWaiter  *s3.ObjectNotExistsWaiter
+	proxyPresignEnabled bool
+	proxyConfig         *storage.ProxyPresignConfig
+}
+
+// providerConfig holds configuration for the R2 provider
+type providerConfig struct {
+	options      *storage.ProviderOptions
+	usePathStyle bool
+}
+
+// Option configures the R2 provider during construction
+type Option func(*providerConfig)
+
+// WithUsePathStyle configures the R2 client to use path-style addressing
+func WithUsePathStyle(use bool) Option {
+	return func(cfg *providerConfig) {
+		cfg.usePathStyle = use
+	}
 }
 
 // NewR2Provider creates a new R2 provider instance
-func NewR2Provider(options *storage.ProviderOptions) (*Provider, error) {
-	if options == nil {
+func NewR2Provider(options *storage.ProviderOptions, opts ...Option) (*Provider, error) {
+	config := providerConfig{
+		options: options,
+	}
+	for _, opt := range opts {
+		if opt != nil {
+			opt(&config)
+		}
+	}
+
+	if config.options == nil {
 		return nil, ErrR2BucketRequired
 	}
-	if options.Bucket == "" {
+
+	if config.options.Bucket == "" {
 		return nil, ErrR2BucketRequired
 	}
-	if options.Credentials.AccountID == "" {
+
+	if config.options.Credentials.AccountID == "" && config.options.Endpoint == "" {
 		return nil, ErrR2AccountIDRequired
 	}
-	if options.Credentials.AccessKeyID == "" || options.Credentials.SecretAccessKey == "" {
+
+	if config.options.Credentials.AccessKeyID == "" || config.options.Credentials.SecretAccessKey == "" {
 		return nil, ErrR2CredentialsMissing
 	}
 
-	endpoint := options.Endpoint
-	if endpoint == "" {
-		endpoint = fmt.Sprintf("https://%s.r2.cloudflarestorage.com", options.Credentials.AccountID)
+	endpoint := config.options.Endpoint
+	if endpoint == "" && config.options.Credentials.AccountID != "" {
+		endpoint = fmt.Sprintf("https://%s.r2.cloudflarestorage.com", config.options.Credentials.AccountID)
 	}
 
-	creds := credentials.NewStaticCredentialsProvider(options.Credentials.AccessKeyID, options.Credentials.SecretAccessKey, "")
+	creds := credentials.NewStaticCredentialsProvider(config.options.Credentials.AccessKeyID, config.options.Credentials.SecretAccessKey, "")
 
 	awsConfig := aws.Config{
 		Region:       "auto",
@@ -72,16 +104,19 @@ func NewR2Provider(options *storage.ProviderOptions) (*Provider, error) {
 		o.BaseEndpoint = aws.String(endpoint)
 		o.Region = "auto"
 		o.Credentials = creds
+		o.UsePathStyle = config.usePathStyle
 	})
 
 	return &Provider{
-		client:             client,
-		options:            options.Clone(),
-		downloader:         manager.NewDownloader(client),
-		uploader:           manager.NewUploader(client),
-		presignClient:      s3.NewPresignClient(client),
-		objExistsWaiter:    s3.NewObjectExistsWaiter(client),
-		objNotExistsWaiter: s3.NewObjectNotExistsWaiter(client),
+		client:              client,
+		options:             config.options.Clone(),
+		downloader:          manager.NewDownloader(client),
+		uploader:            manager.NewUploader(client),
+		presignClient:       s3.NewPresignClient(client),
+		objExistsWaiter:     s3.NewObjectExistsWaiter(client),
+		objNotExistsWaiter:  s3.NewObjectNotExistsWaiter(client),
+		proxyPresignEnabled: config.options.ProxyPresignEnabled,
+		proxyConfig:         config.options.ProxyPresignConfig,
 	}, nil
 }
 
@@ -115,9 +150,14 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		}
 	}
 
+	objectKey := opts.FileName
+	if opts.FolderDestination != "" {
+		objectKey = path.Join(opts.FolderDestination, opts.FileName)
+	}
+
 	_, err = p.client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String(p.options.Bucket),
-		Key:         aws.String(opts.FileName),
+		Key:         aws.String(objectKey),
 		Body:        seeker,
 		ContentType: aws.String(opts.ContentType),
 	})
@@ -125,13 +165,18 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
-	metrics.RecordStorageUpload("r2", size)
+	metrics.RecordStorageUpload(string(storagetypes.R2Provider), size)
 
 	return &storagetypes.UploadedFileMetadata{
 		FileMetadata: storagetypes.FileMetadata{
-			Key:    opts.FileName,
-			Size:   size,
-			Folder: opts.FolderDestination,
+			Key:          objectKey,
+			Size:         size,
+			Folder:       opts.FolderDestination,
+			Bucket:       p.options.Bucket,
+			Region:       p.options.Region,
+			ContentType:  opts.ContentType,
+			ProviderType: storagetypes.R2Provider,
+			FullURI:      fmt.Sprintf("r2://%s/%s", p.options.Bucket, objectKey),
 		},
 	}, nil
 }
@@ -168,8 +213,13 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
+	bucket := file.Bucket
+	if bucket == "" {
+		bucket = p.options.Bucket
+	}
+
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
@@ -183,6 +233,20 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 
 // GetPresignedURL implements storagetypes.Provider
 func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	if opts == nil {
+		opts = &storagetypes.PresignedURLOptions{}
+	}
+
+	if p.proxyPresignEnabled && p.proxyConfig != nil && p.proxyConfig.TokenManager != nil {
+		url, err := proxy.GenerateDownloadURL(ctx, file, opts.Duration, p.proxyConfig)
+		if err == nil {
+			return url, nil
+		}
+		if !errors.Is(err, proxy.ErrTokenManagerRequired) && !errors.Is(err, proxy.ErrEntClientRequired) {
+			return "", err
+		}
+	}
+
 	expires := opts.Duration
 	if expires == 0 {
 		expires = DefaultPresignedURLExpiry

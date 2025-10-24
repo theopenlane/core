@@ -152,6 +152,9 @@ func TestQueryFile(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.queryID, resp.File.ID))
+			assert.Check(t, resp.File.StoragePath != nil)
+			assert.Check(t, resp.File.StorageProvider != nil)
+			assert.Check(t, resp.File.StorageRegion != nil)
 		})
 	}
 

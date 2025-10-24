@@ -31,11 +31,11 @@ type providerResolution struct {
 
 // resolveProvider returns provider credentials from system integrations or config fallback
 func (rc *ruleCoordinator) resolveProvider(provider storage.ProviderType) (*providerResolution, error) {
-	return resolveProviderFromConfig(provider, rc.config)
+	return resolveProviderFromConfig(provider, rc.config, rc.runtime)
 }
 
-func resolveProviderFromConfig(provider storage.ProviderType, config storage.ProviderConfig) (*providerResolution, error) {
-	options, creds, err := providerOptionsFromConfig(provider, config)
+func resolveProviderFromConfig(provider storage.ProviderType, config storage.ProviderConfig, runtime serviceOptions) (*providerResolution, error) {
+	options, creds, err := providerOptionsFromConfig(provider, config, runtime)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func resolveProviderFromConfig(provider storage.ProviderType, config storage.Pro
 	}, nil
 }
 
-func providerOptionsFromConfig(provider storage.ProviderType, config storage.ProviderConfig) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+func providerOptionsFromConfig(provider storage.ProviderType, config storage.ProviderConfig, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
 	var providerCfg storage.ProviderConfigs
 
 	switch provider {
@@ -69,6 +69,27 @@ func providerOptionsFromConfig(provider storage.ProviderType, config storage.Pro
 	}
 
 	options := storage.NewProviderOptions(storage.WithCredentials(providerCfg.Credentials))
+	options.Apply(storage.WithProxyPresignEnabled(providerCfg.ProxyPresignEnabled))
+
+	if runtime.tokenManagerFunc != nil {
+		if tm := runtime.tokenManagerFunc(); tm != nil {
+			presignOptions := []storage.ProxyPresignOption{
+				storage.WithProxyPresignTokenManager(tm),
+				storage.WithProxyPresignTokenIssuer(runtime.tokenIssuer),
+				storage.WithProxyPresignTokenAudience(runtime.tokenAudience),
+			}
+
+			if providerCfg.BaseURL != "" {
+				presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(providerCfg.BaseURL))
+			}
+
+			if runtime.baseURL != "" {
+				presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(runtime.baseURL))
+			}
+
+			options.Apply(storage.WithProxyPresignConfig(storage.NewProxyPresignConfig(presignOptions...)))
+		}
+	}
 
 	switch provider {
 	case storage.S3Provider:

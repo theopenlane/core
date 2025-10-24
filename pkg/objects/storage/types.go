@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	"github.com/theopenlane/iam/tokens"
 )
 
 // Alias types from storage/types to maintain clean imports
@@ -13,6 +14,7 @@ import (
 type (
 	Provider           = storagetypes.Provider
 	ProviderType       = storagetypes.ProviderType
+	PresignMode        = storagetypes.PresignMode
 	File               = storagetypes.File
 	UploadOptions      = storagetypes.UploadFileOptions
 	UploadedMetadata   = storagetypes.UploadedFileMetadata
@@ -30,6 +32,9 @@ const (
 	GCSProvider      = storagetypes.GCSProvider
 	DiskProvider     = storagetypes.DiskProvider
 	DatabaseProvider = storagetypes.DatabaseProvider
+	// Presign mode constants
+	PresignModeProvider = storagetypes.PresignModeProvider
+	PresignModeProxy    = storagetypes.PresignModeProxy
 )
 
 // Configuration constants
@@ -120,6 +125,10 @@ type ProviderConfigs struct {
 	Bucket string `json:"bucket" koanf:"bucket"`
 	// Endpoint for custom endpoints
 	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// ProxyPresignEnabled toggles proxy-signed download URL generation
+	ProxyPresignEnabled bool `json:"proxyPresignEnabled" koanf:"proxyPresignEnabled" default:"false"`
+	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+	BaseURL string `json:"baseURL" koanf:"baseURL" default:"http://localhost:17608/v1/files"`
 	// Credentials contains the credentials for accessing the provider
 	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
 }
@@ -127,17 +136,15 @@ type ProviderConfigs struct {
 // ProviderCredentials contains credentials for a storage provider
 type ProviderCredentials struct {
 	// AccessKeyID for cloud providers
-	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID"`
+	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID" sensitive:"true"`
 	// SecretAccessKey for cloud providers
-	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey"`
-	// Endpoint for custom endpoints
-	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey" sensitive:"true"`
 	// ProjectID for GCS
-	ProjectID string `json:"projectID" koanf:"projectID"`
+	ProjectID string `json:"projectID" koanf:"projectID" sensitive:"true"`
 	// AccountID for Cloudflare R2
-	AccountID string `json:"accountID" koanf:"accountID"`
+	AccountID string `json:"accountID" koanf:"accountID" sensitive:"true"`
 	// APIToken for Cloudflare R2
-	APIToken string `json:"apiToken" koanf:"apiToken"`
+	APIToken string `json:"apiToken" koanf:"apiToken" sensitive:"true"`
 }
 
 // ProviderOption configures runtime provider options
@@ -145,13 +152,91 @@ type ProviderOption func(*ProviderOptions)
 
 // ProviderOptions captures runtime configuration shared across storage providers
 type ProviderOptions struct {
-	Credentials ProviderCredentials
-	Bucket      string
-	Region      string
-	Endpoint    string
-	BasePath    string
-	LocalURL    string
-	extras      map[string]any
+	Credentials         ProviderCredentials
+	Bucket              string
+	Region              string
+	Endpoint            string
+	BasePath            string
+	LocalURL            string
+	ProxyPresignEnabled bool
+	ProxyPresignConfig  *ProxyPresignConfig
+	extras              map[string]any
+}
+
+// ProxyPresignConfig carries runtime dependencies for proxy download URL generation.
+type ProxyPresignConfig struct {
+	TokenManager  *tokens.TokenManager
+	TokenIssuer   string
+	TokenAudience string
+	BaseURL       string
+}
+
+// ProxyPresignOption configures a ProxyPresignConfig.
+type ProxyPresignOption func(*ProxyPresignConfig)
+
+// NewProxyPresignConfig builds a ProxyPresignConfig applying the supplied options.
+func NewProxyPresignConfig(opts ...ProxyPresignOption) *ProxyPresignConfig {
+	return ApplyProxyPresignOptions(nil, opts...)
+}
+
+// Apply applies the supplied options to the existing ProxyPresignConfig.
+func (p *ProxyPresignConfig) Apply(opts ...ProxyPresignOption) *ProxyPresignConfig {
+	if p == nil {
+		return ApplyProxyPresignOptions(nil, opts...)
+	}
+
+	return ApplyProxyPresignOptions(p, opts...)
+}
+
+// ApplyProxyPresignOptions applies options to the provided config, allocating one if needed.
+func ApplyProxyPresignOptions(cfg *ProxyPresignConfig, opts ...ProxyPresignOption) *ProxyPresignConfig {
+	if cfg == nil {
+		cfg = &ProxyPresignConfig{}
+	}
+
+	for _, opt := range opts {
+		if opt != nil {
+			opt(cfg)
+		}
+	}
+
+	return cfg
+}
+
+// WithProxyPresignTokenManager sets the token manager when provided.
+func WithProxyPresignTokenManager(tm *tokens.TokenManager) ProxyPresignOption {
+	return func(cfg *ProxyPresignConfig) {
+		if tm != nil {
+			cfg.TokenManager = tm
+		}
+	}
+}
+
+// WithProxyPresignTokenIssuer sets the token issuer when provided.
+func WithProxyPresignTokenIssuer(issuer string) ProxyPresignOption {
+	return func(cfg *ProxyPresignConfig) {
+		if issuer != "" {
+			cfg.TokenIssuer = issuer
+		}
+	}
+}
+
+// WithProxyPresignTokenAudience sets the token audience when provided.
+func WithProxyPresignTokenAudience(audience string) ProxyPresignOption {
+	return func(cfg *ProxyPresignConfig) {
+		if audience != "" {
+			cfg.TokenAudience = audience
+		}
+	}
+}
+
+// WithProxyPresignBaseURL sets the base URL for generated download links.
+func WithProxyPresignBaseURL(baseURL string) ProxyPresignOption {
+	return func(cfg *ProxyPresignConfig) {
+		if baseURL != "" {
+			cfg.BaseURL = baseURL
+		}
+	}
 }
 
 // NewProviderOptions constructs ProviderOptions applying the supplied options
@@ -178,12 +263,31 @@ func (p *ProviderOptions) Clone() *ProviderOptions {
 
 	clone := *p
 
+	if p.ProxyPresignConfig != nil {
+		cfg := *p.ProxyPresignConfig
+		clone.ProxyPresignConfig = &cfg
+	}
+
 	if len(p.extras) > 0 {
 		clone.extras = make(map[string]any, len(p.extras))
 		maps.Copy(clone.extras, p.extras)
 	}
 
 	return &clone
+}
+
+// WithProxyPresignEnabled toggles proxy URL generation.
+func WithProxyPresignEnabled(enabled bool) ProviderOption {
+	return func(p *ProviderOptions) {
+		p.ProxyPresignEnabled = enabled
+	}
+}
+
+// WithProxyPresignConfig sets proxy presign runtime dependencies.
+func WithProxyPresignConfig(cfg *ProxyPresignConfig) ProviderOption {
+	return func(p *ProviderOptions) {
+		p.ProxyPresignConfig = cfg
+	}
 }
 
 // WithCredentials sets provider credentials

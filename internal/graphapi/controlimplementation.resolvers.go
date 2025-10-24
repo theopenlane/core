@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteControlImplementation(ctx context.Context, id s
 	}, nil
 }
 
+// DeleteBulkControlImplementation is the resolver for the deleteBulkControlImplementation field.
+func (r *mutationResolver) DeleteBulkControlImplementation(ctx context.Context, ids []string) (*model.ControlImplementationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteControlImplementation(ctx, ids)
+}
+
 // ControlImplementation is the resolver for the controlImplementation field.
 func (r *queryResolver) ControlImplementation(ctx context.Context, id string) (*generated.ControlImplementation, error) {
 	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.ID(id)).CollectFields(ctx)

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
@@ -48,6 +49,7 @@ type UserQuery struct {
 	withTfaSettings                  *TFASettingQuery
 	withSetting                      *UserSettingQuery
 	withEmailVerificationTokens      *EmailVerificationTokenQuery
+	withFileDownloadTokens           *FileDownloadTokenQuery
 	withPasswordResetTokens          *PasswordResetTokenQuery
 	withGroups                       *GroupQuery
 	withOrganizations                *OrganizationQuery
@@ -71,6 +73,7 @@ type UserQuery struct {
 	withNamedPersonalAccessTokens    map[string]*PersonalAccessTokenQuery
 	withNamedTfaSettings             map[string]*TFASettingQuery
 	withNamedEmailVerificationTokens map[string]*EmailVerificationTokenQuery
+	withNamedFileDownloadTokens      map[string]*FileDownloadTokenQuery
 	withNamedPasswordResetTokens     map[string]*PasswordResetTokenQuery
 	withNamedGroups                  map[string]*GroupQuery
 	withNamedOrganizations           map[string]*OrganizationQuery
@@ -217,6 +220,31 @@ func (_q *UserQuery) QueryEmailVerificationTokens() *EmailVerificationTokenQuery
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.EmailVerificationToken
 		step.Edge.Schema = schemaConfig.EmailVerificationToken
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFileDownloadTokens chains the current query on the "file_download_tokens" edge.
+func (_q *UserQuery) QueryFileDownloadTokens() *FileDownloadTokenQuery {
+	query := (&FileDownloadTokenClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(filedownloadtoken.Table, filedownloadtoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.FileDownloadTokensTable, user.FileDownloadTokensColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.FileDownloadToken
+		step.Edge.Schema = schemaConfig.FileDownloadToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -869,6 +897,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withTfaSettings:             _q.withTfaSettings.Clone(),
 		withSetting:                 _q.withSetting.Clone(),
 		withEmailVerificationTokens: _q.withEmailVerificationTokens.Clone(),
+		withFileDownloadTokens:      _q.withFileDownloadTokens.Clone(),
 		withPasswordResetTokens:     _q.withPasswordResetTokens.Clone(),
 		withGroups:                  _q.withGroups.Clone(),
 		withOrganizations:           _q.withOrganizations.Clone(),
@@ -935,6 +964,17 @@ func (_q *UserQuery) WithEmailVerificationTokens(opts ...func(*EmailVerification
 		opt(query)
 	}
 	_q.withEmailVerificationTokens = query
+	return _q
+}
+
+// WithFileDownloadTokens tells the query-builder to eager-load the nodes that are connected to
+// the "file_download_tokens" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithFileDownloadTokens(opts ...func(*FileDownloadTokenQuery)) *UserQuery {
+	query := (&FileDownloadTokenClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFileDownloadTokens = query
 	return _q
 }
 
@@ -1220,11 +1260,12 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [22]bool{
+		loadedTypes = [23]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
 			_q.withEmailVerificationTokens != nil,
+			_q.withFileDownloadTokens != nil,
 			_q.withPasswordResetTokens != nil,
 			_q.withGroups != nil,
 			_q.withOrganizations != nil,
@@ -1295,6 +1336,15 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.EmailVerificationTokens = []*EmailVerificationToken{} },
 			func(n *User, e *EmailVerificationToken) {
 				n.Edges.EmailVerificationTokens = append(n.Edges.EmailVerificationTokens, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFileDownloadTokens; query != nil {
+		if err := _q.loadFileDownloadTokens(ctx, query, nodes,
+			func(n *User) { n.Edges.FileDownloadTokens = []*FileDownloadToken{} },
+			func(n *User, e *FileDownloadToken) {
+				n.Edges.FileDownloadTokens = append(n.Edges.FileDownloadTokens, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -1449,6 +1499,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadEmailVerificationTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedEmailVerificationTokens(name) },
 			func(n *User, e *EmailVerificationToken) { n.appendNamedEmailVerificationTokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFileDownloadTokens {
+		if err := _q.loadFileDownloadTokens(ctx, query, nodes,
+			func(n *User) { n.appendNamedFileDownloadTokens(name) },
+			func(n *User, e *FileDownloadToken) { n.appendNamedFileDownloadTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1675,6 +1732,36 @@ func (_q *UserQuery) loadEmailVerificationTokens(ctx context.Context, query *Ema
 	}
 	query.Where(predicate.EmailVerificationToken(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.EmailVerificationTokensColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadFileDownloadTokens(ctx context.Context, query *FileDownloadTokenQuery, nodes []*User, init func(*User), assign func(*User, *FileDownloadToken)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(filedownloadtoken.FieldOwnerID)
+	}
+	query.Where(predicate.FileDownloadToken(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.FileDownloadTokensColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -2534,6 +2621,20 @@ func (_q *UserQuery) WithNamedEmailVerificationTokens(name string, opts ...func(
 		_q.withNamedEmailVerificationTokens = make(map[string]*EmailVerificationTokenQuery)
 	}
 	_q.withNamedEmailVerificationTokens[name] = query
+	return _q
+}
+
+// WithNamedFileDownloadTokens tells the query-builder to eager-load the nodes that are connected to the "file_download_tokens"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedFileDownloadTokens(name string, opts ...func(*FileDownloadTokenQuery)) *UserQuery {
+	query := (&FileDownloadTokenClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFileDownloadTokens == nil {
+		_q.withNamedFileDownloadTokens = make(map[string]*FileDownloadTokenQuery)
+	}
+	_q.withNamedFileDownloadTokens[name] = query
 	return _q
 }
 

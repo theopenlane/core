@@ -68,6 +68,8 @@ const (
 	EdgeSetting = "setting"
 	// EdgeEmailVerificationTokens holds the string denoting the email_verification_tokens edge name in mutations.
 	EdgeEmailVerificationTokens = "email_verification_tokens"
+	// EdgeFileDownloadTokens holds the string denoting the file_download_tokens edge name in mutations.
+	EdgeFileDownloadTokens = "file_download_tokens"
 	// EdgePasswordResetTokens holds the string denoting the password_reset_tokens edge name in mutations.
 	EdgePasswordResetTokens = "password_reset_tokens"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
@@ -134,6 +136,13 @@ const (
 	EmailVerificationTokensInverseTable = "email_verification_tokens"
 	// EmailVerificationTokensColumn is the table column denoting the email_verification_tokens relation/edge.
 	EmailVerificationTokensColumn = "owner_id"
+	// FileDownloadTokensTable is the table that holds the file_download_tokens relation/edge.
+	FileDownloadTokensTable = "file_download_tokens"
+	// FileDownloadTokensInverseTable is the table name for the FileDownloadToken entity.
+	// It exists in this package in order to avoid circular dependency with the "filedownloadtoken" package.
+	FileDownloadTokensInverseTable = "file_download_tokens"
+	// FileDownloadTokensColumn is the table column denoting the file_download_tokens relation/edge.
+	FileDownloadTokensColumn = "owner_id"
 	// PasswordResetTokensTable is the table that holds the password_reset_tokens relation/edge.
 	PasswordResetTokensTable = "password_reset_tokens"
 	// PasswordResetTokensInverseTable is the table name for the PasswordResetToken entity.
@@ -536,6 +545,20 @@ func ByEmailVerificationTokens(term sql.OrderTerm, terms ...sql.OrderTerm) Order
 	}
 }
 
+// ByFileDownloadTokensCount orders the results by file_download_tokens count.
+func ByFileDownloadTokensCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFileDownloadTokensStep(), opts...)
+	}
+}
+
+// ByFileDownloadTokens orders the results by file_download_tokens terms.
+func ByFileDownloadTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileDownloadTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPasswordResetTokensCount orders the results by password_reset_tokens count.
 func ByPasswordResetTokensCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -799,6 +822,13 @@ func newEmailVerificationTokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailVerificationTokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EmailVerificationTokensTable, EmailVerificationTokensColumn),
+	)
+}
+func newFileDownloadTokensStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileDownloadTokensInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FileDownloadTokensTable, FileDownloadTokensColumn),
 	)
 }
 func newPasswordResetTokensStep() *sqlgraph.Step {

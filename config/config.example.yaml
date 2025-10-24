@@ -84,6 +84,9 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    billing:
+        bypassEmailDomains: null
+        requirePaymentMethod: false
     emailValidation:
         allowedEmailTypes:
             disposable: false
@@ -195,69 +198,74 @@ objectStorage:
     maxSizeMB: 0
     providers:
         cloudflareR2:
+            baseURL: http://localhost:17608/v1/files
             bucket: ""
             credentials:
                 accessKeyID: ""
                 accountID: ""
                 apiToken: ""
-                endpoint: ""
                 projectID: ""
                 secretAccessKey: ""
             enabled: false
             endpoint: ""
             ensureAvailable: false
+            proxyPresignEnabled: false
             region: ""
         database:
+            baseURL: http://localhost:17608/v1/files
             bucket: ""
             credentials:
                 accessKeyID: ""
                 accountID: ""
                 apiToken: ""
-                endpoint: ""
                 projectID: ""
                 secretAccessKey: ""
             enabled: false
             endpoint: ""
             ensureAvailable: false
+            proxyPresignEnabled: false
             region: ""
         disk:
+            baseURL: http://localhost:17608/v1/files
             bucket: ""
             credentials:
                 accessKeyID: ""
                 accountID: ""
                 apiToken: ""
-                endpoint: ""
                 projectID: ""
                 secretAccessKey: ""
             enabled: false
             endpoint: ""
             ensureAvailable: false
+            proxyPresignEnabled: false
             region: ""
         gcs:
+            baseURL: http://localhost:17608/v1/files
             bucket: ""
             credentials:
                 accessKeyID: ""
                 accountID: ""
                 apiToken: ""
-                endpoint: ""
                 projectID: ""
                 secretAccessKey: ""
             enabled: false
             endpoint: ""
             ensureAvailable: false
+            proxyPresignEnabled: false
             region: ""
         s3:
+            baseURL: http://localhost:17608/v1/files
             bucket: ""
             credentials:
                 accessKeyID: ""
                 accountID: ""
                 apiToken: ""
-                endpoint: ""
                 projectID: ""
                 secretAccessKey: ""
             enabled: false
             endpoint: ""
             ensureAvailable: false
+            proxyPresignEnabled: false
             region: ""
 ratelimit:
     burst: 30

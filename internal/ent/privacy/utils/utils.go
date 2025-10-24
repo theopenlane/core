@@ -132,3 +132,17 @@ func ModulesEnabled(client *generated.Client) bool {
 
 	return client.EntConfig.Modules.Enabled
 }
+
+// PaymentMethodCheckRequired checks if the config requires
+// orgs to have a valid payment method in stripe
+func PaymentMethodCheckRequired(client *generated.Client) bool {
+	if client == nil {
+		return false
+	}
+
+	if client.EntConfig == nil {
+		return false
+	}
+
+	return client.EntConfig.Billing.RequirePaymentMethod
+}

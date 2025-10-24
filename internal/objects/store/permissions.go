@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/rs/zerolog/log"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -41,7 +42,7 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 
 			req := fgax.GetTupleKey(fgax.TupleRequest{
 				SubjectID:   f.Parent.ID,
-				SubjectType: f.Parent.Type,
+				SubjectType: strcase.SnakeCase(f.Parent.Type),
 				ObjectID:    f.ID,
 				ObjectType:  generated.TypeFile,
 				Relation:    parentRelation,

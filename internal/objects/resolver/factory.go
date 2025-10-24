@@ -18,6 +18,7 @@ type serviceOptions struct {
 	tokenManagerFunc func() *tokens.TokenManager
 	tokenAudience    string
 	tokenIssuer      string
+	baseURL          string
 }
 
 // providerResolver simplifies references to the eddy resolver used for object providers
@@ -32,6 +33,13 @@ func WithPresignConfig(tokenManager func() *tokens.TokenManager, issuer, audienc
 		opts.tokenManagerFunc = tokenManager
 		opts.tokenIssuer = issuer
 		opts.tokenAudience = audience
+	}
+}
+
+// WithPresignBaseURL configures the base URL for presigned download URLs.
+func WithPresignBaseURL(baseURL string) Option {
+	return func(opts *serviceOptions) {
+		opts.baseURL = baseURL
 	}
 }
 
@@ -50,9 +58,6 @@ func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) *object
 		Resolver:       resolver,
 		ClientService:  clientService,
 		ValidationFunc: validators.MimeTypeValidator,
-		TokenManager:   runtime.tokenManagerFunc,
-		TokenIssuer:    runtime.tokenIssuer,
-		TokenAudience:  runtime.tokenAudience,
 	})
 
 	return service
@@ -95,6 +100,7 @@ func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*p
 		resolver,
 		WithProviderConfig(config),
 		WithProviderBuilders(builderSet),
+		WithRuntimeOptions(runtime),
 	)
 
 	return clientService, resolver

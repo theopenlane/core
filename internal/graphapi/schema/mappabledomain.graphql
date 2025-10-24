@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): MappableDomainDeletePayload!
+    """
+    Delete multiple mappableDomains
+    """
+    deleteBulkMappableDomain(
+        """
+        IDs of the mappableDomains to delete
+        """
+        ids: [ID!]!
+    ): MappableDomainBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type MappableDomainBulkCreatePayload {
     Created mappableDomains
     """
     mappableDomains: [MappableDomain!]
+}
+
+"""
+Return response for deleteBulkMappableDomain mutation
+"""
+type MappableDomainBulkDeletePayload {
+    """
+    Deleted mappableDomain IDs
+    """
+    deletedIDs: [ID!]!
 }

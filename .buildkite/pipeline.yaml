@@ -213,12 +213,12 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
-      - label: ":golang: go test - {{matrix.version}}"
+      - label: ":golang: go test graphapi"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        key: "go_test"
+        key: "go_test_graph"
         cancel_on_build_failing: true
         if_changed:  "**.go"
         env:
@@ -231,7 +231,7 @@ steps:
           - docker#v5.13.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
-              command: ["task", "go:testsum:ci"]
+              command: ["task", "go:testsum:ci:graph"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -244,7 +244,38 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-        artifact_paths: ["coverage.out", "junit.xml"]
+        artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
+      - label: ":golang: go test - all except graphapi"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        key: "go_test_no_graph"
+        cancel_on_build_failing: true
+        env:
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+        matrix:
+          setup:
+            version:
+              - 17-alpine
+        plugins:
+          - docker#v5.13.0:
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
+              command: ["task", "go:testsum:ci:no-graph"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - "/var/run/docker.sock:/var/run/docker.sock"
+              environment:
+                - "ANALYTICS_KEY"
+                - "GOMAXPROCS=16"
+                - "TEST_DB_URL"
+                - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
+                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+        artifact_paths: ["coverage-no-graph.out", "junit-no-graph.xml"]
       - label: ":auth0: fga model test"
         if: build.branch !~ /^renovate\//
         if_changed: "{fga/**}"
@@ -265,14 +296,15 @@ steps:
         key: "test-analytics"
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
-        depends_on: ["go_test"]
+        depends_on: ["go_test_graph", "go_test_no_graph"]
         commands: |
           #!/bin/bash
           curl \
             -X POST \
             --fail-with-body \
             -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
-            -F "data=@junit.xml" \
+            -F "data=@junit-no-graph.xml" \
+            -F "data=@junit-graph.xml" \
             -F "format=junit" \
             -F "run_env[CI]=buildkite" \
             -F "run_env[key]=$BUILDKITE_BUILD_ID" \
@@ -288,25 +320,34 @@ steps:
               variables:
                 ANALYTICS_KEY: ANALYTICS_KEY
           - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
+              download: "junit-graph.xml"
+              step: "go_test_graph"
+          - artifacts#v1.9.4:
+              download: "junit-no-graph.xml"
+              step: "go_test_no_graph"
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         if: build.pull_request.id != null
-        depends_on: ["go_test"]
+        depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
-              download: "coverage.out"
-              step: "go_test"
+              download: "coverage-no-graph.out"
+              step: "go_test_no_graph"
           - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
+              download: "coverage-graph.out"
+              step: "go_test_graph"
+          - artifacts#v1.9.4:
+              download: "junit-no-graph.xml"
+              step: "go_test_no_graph"
+          - artifacts#v1.9.4:
+              download: "junit-graph.xml"
+              step: "go_test_graph"
           - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
+              image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -320,19 +361,25 @@ steps:
         key: "scan-upload"
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test"]
+        depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
-              download: coverage.out
-              step: "go_test"
+              download: "coverage-no-graph.out"
+              step: "go_test_no_graph"
           - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
+              download: "coverage-graph.out"
+              step: "go_test_graph"
+          - artifacts#v1.9.4:
+              download: "junit-no-graph.xml"
+              step: "go_test_no_graph"
+          - artifacts#v1.9.4:
+              download: "junit-graph.xml"
+              step: "go_test_graph"
           - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
+              image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE

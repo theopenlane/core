@@ -137,6 +137,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		// process the rest of the resolver
 		field, err := next(ctx)
 		if err != nil {
+			// rollback the uploaded files in case of an error
+			upload.HandleRollback(ctx, u, uploads)
 			return nil, err
 		}
 
@@ -170,6 +172,18 @@ func (r *mutationResolver) withPool() *soiree.PondPool {
 	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
 
 	return r.pool
+}
+
+// extendedMappedControlInput is an extended version of the CreateMappedControlInput that is used for
+// bulk operations and CSV uploads to allow mapping by reference codes
+// when using the regular create operations the resolvers will parse the ref codes directly
+type extendedMappedControlInput struct {
+	ent.CreateMappedControlInput
+
+	FromControlRefCodes    []string `json:"fromControlRefCodes"`
+	FromSubcontrolRefCodes []string `json:"fromSubcontrolRefCodes"`
+	ToControlRefCodes      []string `json:"toControlRefCodes"`
+	ToSubcontrolRefCodes   []string `json:"toSubcontrolRefCodes"`
 }
 
 // unmarshalBulkData unmarshals the input bulk data into a slice of the given type

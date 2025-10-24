@@ -94,6 +94,15 @@ func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string)
 	}, nil
 }
 
+// DeleteBulkGroupMembership is the resolver for the deleteBulkGroupMembership field.
+func (r *mutationResolver) DeleteBulkGroupMembership(ctx context.Context, ids []string) (*model.GroupMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteGroupMembership(ctx, ids)
+}
+
 // GroupMembership is the resolver for the groupMembership field.
 func (r *queryResolver) GroupMembership(ctx context.Context, id string) (*generated.GroupMembership, error) {
 	query, err := withTransactionalMutation(ctx).GroupMembership.Query().Where(groupmembership.ID(id)).CollectFields(ctx)

@@ -524,6 +524,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "file_download_token": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+},
 }, "group": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -806,6 +811,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "invite": {"owner": {
 	ObjectType:      "owner",
@@ -950,6 +959,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "subcontrol": {
 	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "procedure": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risk": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "internal_policy": {
+	ObjectType:      "internal_policy",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "files": {
@@ -1399,6 +1420,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "file": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
@@ -1558,6 +1583,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "scan": {"owner": {
 	ObjectType:      "owner",
@@ -1917,6 +1946,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "email_verification_tokens": {
 	ObjectType:      "email_verification_token",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "file_download_tokens": {
+	ObjectType:      "file_download_token",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "password_reset_tokens": {

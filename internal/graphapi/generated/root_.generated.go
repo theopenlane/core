@@ -42,6 +42,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
+	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
@@ -92,6 +93,10 @@ type ComplexityRoot struct {
 
 	APITokenBulkCreatePayload struct {
 		APITokens func(childComplexity int) int
+	}
+
+	APITokenBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	APITokenConnection struct {
@@ -161,6 +166,10 @@ type ComplexityRoot struct {
 
 	ActionPlanBulkCreatePayload struct {
 		ActionPlans func(childComplexity int) int
+	}
+
+	ActionPlanBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ActionPlanBulkUpdatePayload struct {
@@ -271,6 +280,10 @@ type ComplexityRoot struct {
 		Assets func(childComplexity int) int
 	}
 
+	AssetBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	AssetConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -370,6 +383,10 @@ type ComplexityRoot struct {
 
 	ContactBulkCreatePayload struct {
 		Contacts func(childComplexity int) int
+	}
+
+	ContactBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ContactBulkUpdatePayload struct {
@@ -494,6 +511,10 @@ type ComplexityRoot struct {
 
 	ControlBulkCreatePayload struct {
 		Controls func(childComplexity int) int
+	}
+
+	ControlBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ControlBulkUpdatePayload struct {
@@ -631,6 +652,10 @@ type ComplexityRoot struct {
 		ControlImplementations func(childComplexity int) int
 	}
 
+	ControlImplementationBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	ControlImplementationConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -725,6 +750,10 @@ type ComplexityRoot struct {
 		ControlObjectives func(childComplexity int) int
 	}
 
+	ControlObjectiveBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	ControlObjectiveConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -811,6 +840,10 @@ type ComplexityRoot struct {
 		CustomDomains func(childComplexity int) int
 	}
 
+	CustomDomainBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	CustomDomainConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -889,6 +922,10 @@ type ComplexityRoot struct {
 		DNSVerifications func(childComplexity int) int
 	}
 
+	DNSVerificationBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	DNSVerificationConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -963,6 +1000,10 @@ type ComplexityRoot struct {
 
 	DocumentDataBulkCreatePayload struct {
 		DocumentData func(childComplexity int) int
+	}
+
+	DocumentDataBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	DocumentDataConnection struct {
@@ -1048,6 +1089,10 @@ type ComplexityRoot struct {
 		Entities func(childComplexity int) int
 	}
 
+	EntityBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	EntityConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1118,6 +1163,10 @@ type ComplexityRoot struct {
 
 	EntityTypeBulkCreatePayload struct {
 		EntityTypes func(childComplexity int) int
+	}
+
+	EntityTypeBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	EntityTypeConnection struct {
@@ -1202,6 +1251,10 @@ type ComplexityRoot struct {
 
 	EventBulkCreatePayload struct {
 		Events func(childComplexity int) int
+	}
+
+	EventBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	EventConnection struct {
@@ -1529,6 +1582,10 @@ type ComplexityRoot struct {
 		Groups func(childComplexity int) int
 	}
 
+	GroupBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	GroupConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1595,6 +1652,10 @@ type ComplexityRoot struct {
 
 	GroupMembershipBulkCreatePayload struct {
 		GroupMemberships func(childComplexity int) int
+	}
+
+	GroupMembershipBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	GroupMembershipConnection struct {
@@ -1682,6 +1743,10 @@ type ComplexityRoot struct {
 		GroupSettings func(childComplexity int) int
 	}
 
+	GroupSettingBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	GroupSettingConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1762,6 +1827,10 @@ type ComplexityRoot struct {
 
 	HushBulkCreatePayload struct {
 		Hushes func(childComplexity int) int
+	}
+
+	HushBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	HushBulkUpdatePayload struct {
@@ -1900,6 +1969,7 @@ type ComplexityRoot struct {
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlSuggestions              func(childComplexity int) int
@@ -1945,6 +2015,10 @@ type ComplexityRoot struct {
 
 	InternalPolicyBulkCreatePayload struct {
 		InternalPolicies func(childComplexity int) int
+	}
+
+	InternalPolicyBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	InternalPolicyBulkUpdatePayload struct {
@@ -2042,6 +2116,10 @@ type ComplexityRoot struct {
 
 	InviteBulkCreatePayload struct {
 		Invites func(childComplexity int) int
+	}
+
+	InviteBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	InviteConnection struct {
@@ -2261,6 +2339,10 @@ type ComplexityRoot struct {
 		JobTemplates func(childComplexity int) int
 	}
 
+	JobTemplateBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	JobTemplateConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2332,6 +2414,10 @@ type ComplexityRoot struct {
 
 	MappableDomainBulkCreatePayload struct {
 		MappableDomains func(childComplexity int) int
+	}
+
+	MappableDomainBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	MappableDomainConnection struct {
@@ -2408,6 +2494,10 @@ type ComplexityRoot struct {
 
 	MappedControlBulkCreatePayload struct {
 		MappedControls func(childComplexity int) int
+	}
+
+	MappedControlBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	MappedControlConnection struct {
@@ -2616,7 +2706,46 @@ type ComplexityRoot struct {
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAsset                          func(childComplexity int, id string) int
+		DeleteBulkAPIToken                   func(childComplexity int, ids []string) int
+		DeleteBulkActionPlan                 func(childComplexity int, ids []string) int
+		DeleteBulkAsset                      func(childComplexity int, ids []string) int
+		DeleteBulkContact                    func(childComplexity int, ids []string) int
+		DeleteBulkControl                    func(childComplexity int, ids []string) int
+		DeleteBulkControlImplementation      func(childComplexity int, ids []string) int
+		DeleteBulkControlObjective           func(childComplexity int, ids []string) int
+		DeleteBulkCustomDomain               func(childComplexity int, ids []string) int
+		DeleteBulkDNSVerification            func(childComplexity int, ids []string) int
+		DeleteBulkDocumentData               func(childComplexity int, ids []string) int
+		DeleteBulkEntity                     func(childComplexity int, ids []string) int
+		DeleteBulkEntityType                 func(childComplexity int, ids []string) int
+		DeleteBulkEvent                      func(childComplexity int, ids []string) int
 		DeleteBulkExport                     func(childComplexity int, ids []string) int
+		DeleteBulkGroup                      func(childComplexity int, ids []string) int
+		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
+		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
+		DeleteBulkHush                       func(childComplexity int, ids []string) int
+		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
+		DeleteBulkInvite                     func(childComplexity int, ids []string) int
+		DeleteBulkJobTemplate                func(childComplexity int, ids []string) int
+		DeleteBulkMappableDomain             func(childComplexity int, ids []string) int
+		DeleteBulkMappedControl              func(childComplexity int, ids []string) int
+		DeleteBulkNarrative                  func(childComplexity int, ids []string) int
+		DeleteBulkOrgMembership              func(childComplexity int, ids []string) int
+		DeleteBulkOrganizationSetting        func(childComplexity int, ids []string) int
+		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
+		DeleteBulkProgram                    func(childComplexity int, ids []string) int
+		DeleteBulkProgramMembership          func(childComplexity int, ids []string) int
+		DeleteBulkRisk                       func(childComplexity int, ids []string) int
+		DeleteBulkScan                       func(childComplexity int, ids []string) int
+		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
+		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
+		DeleteBulkSubprocessor               func(childComplexity int, ids []string) int
+		DeleteBulkTask                       func(childComplexity int, ids []string) int
+		DeleteBulkTemplate                   func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterCompliance      func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterDoc             func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
+		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
 		DeleteContact                        func(childComplexity int, id string) int
 		DeleteControl                        func(childComplexity int, id string) int
 		DeleteControlImplementation          func(childComplexity int, id string) int
@@ -2645,6 +2774,7 @@ type ComplexityRoot struct {
 		DeleteMappableDomain                 func(childComplexity int, id string) int
 		DeleteMappedControl                  func(childComplexity int, id string) int
 		DeleteNarrative                      func(childComplexity int, id string) int
+		DeleteNote                           func(childComplexity int, id string) int
 		DeleteOrgMembership                  func(childComplexity int, id string) int
 		DeleteOrganization                   func(childComplexity int, id string) int
 		DeleteOrganizationSetting            func(childComplexity int, id string) int
@@ -2702,6 +2832,7 @@ type ComplexityRoot struct {
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
+		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
@@ -2714,9 +2845,11 @@ type ComplexityRoot struct {
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
 		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput) int
+		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
@@ -2767,6 +2900,10 @@ type ComplexityRoot struct {
 
 	NarrativeBulkCreatePayload struct {
 		Narratives func(childComplexity int) int
+	}
+
+	NarrativeBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	NarrativeConnection struct {
@@ -2824,25 +2961,32 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		Control    func(childComplexity int) int
-		CreatedAt  func(childComplexity int) int
-		CreatedBy  func(childComplexity int) int
-		DisplayID  func(childComplexity int) int
-		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID         func(childComplexity int) int
-		Owner      func(childComplexity int) int
-		OwnerID    func(childComplexity int) int
-		Subcontrol func(childComplexity int) int
-		Task       func(childComplexity int) int
-		Text       func(childComplexity int) int
-		UpdatedAt  func(childComplexity int) int
-		UpdatedBy  func(childComplexity int) int
+		Control        func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		DisplayID      func(childComplexity int) int
+		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID             func(childComplexity int) int
+		InternalPolicy func(childComplexity int) int
+		Owner          func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Procedure      func(childComplexity int) int
+		Risk           func(childComplexity int) int
+		Subcontrol     func(childComplexity int) int
+		Task           func(childComplexity int) int
+		Text           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	NoteConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	NoteDeletePayload struct {
+		DeletedID func(childComplexity int) int
 	}
 
 	NoteEdge struct {
@@ -2906,6 +3050,10 @@ type ComplexityRoot struct {
 
 	OrgMembershipBulkCreatePayload struct {
 		OrgMemberships func(childComplexity int) int
+	}
+
+	OrgMembershipBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	OrgMembershipConnection struct {
@@ -3194,6 +3342,10 @@ type ComplexityRoot struct {
 		OrganizationSettings func(childComplexity int) int
 	}
 
+	OrganizationSettingBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	OrganizationSettingConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3331,6 +3483,7 @@ type ComplexityRoot struct {
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlSuggestions              func(childComplexity int) int
 		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                       func(childComplexity int) int
@@ -3374,6 +3527,10 @@ type ComplexityRoot struct {
 
 	ProcedureBulkCreatePayload struct {
 		Procedures func(childComplexity int) int
+	}
+
+	ProcedureBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ProcedureBulkUpdatePayload struct {
@@ -3499,6 +3656,10 @@ type ComplexityRoot struct {
 		Programs func(childComplexity int) int
 	}
 
+	ProgramBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	ProgramConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3572,6 +3733,10 @@ type ComplexityRoot struct {
 
 	ProgramMembershipBulkCreatePayload struct {
 		ProgramMemberships func(childComplexity int) int
+	}
+
+	ProgramMembershipBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ProgramMembershipConnection struct {
@@ -3904,6 +4069,7 @@ type ComplexityRoot struct {
 		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BusinessCosts    func(childComplexity int) int
 		Category         func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
@@ -3939,6 +4105,10 @@ type ComplexityRoot struct {
 
 	RiskBulkCreatePayload struct {
 		Risks func(childComplexity int) int
+	}
+
+	RiskBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	RiskBulkUpdatePayload struct {
@@ -4030,6 +4200,10 @@ type ComplexityRoot struct {
 		Scans func(childComplexity int) int
 	}
 
+	ScanBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	ScanBulkUpdatePayload struct {
 		Scans      func(childComplexity int) int
 		UpdatedIDs func(childComplexity int) int
@@ -4108,6 +4282,10 @@ type ComplexityRoot struct {
 
 	ScheduledJobBulkCreatePayload struct {
 		ScheduledJobs func(childComplexity int) int
+	}
+
+	ScheduledJobBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ScheduledJobConnection struct {
@@ -4427,6 +4605,10 @@ type ComplexityRoot struct {
 		Subcontrols func(childComplexity int) int
 	}
 
+	SubcontrolBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	SubcontrolConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -4530,6 +4712,10 @@ type ComplexityRoot struct {
 
 	SubprocessorBulkCreatePayload struct {
 		Subprocessors func(childComplexity int) int
+	}
+
+	SubprocessorBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	SubprocessorConnection struct {
@@ -4704,6 +4890,10 @@ type ComplexityRoot struct {
 		Tasks func(childComplexity int) int
 	}
 
+	TaskBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	TaskBulkUpdatePayload struct {
 		Tasks      func(childComplexity int) int
 		UpdatedIDs func(childComplexity int) int
@@ -4791,6 +4981,10 @@ type ComplexityRoot struct {
 
 	TemplateBulkCreatePayload struct {
 		Templates func(childComplexity int) int
+	}
+
+	TemplateBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	TemplateConnection struct {
@@ -4887,6 +5081,10 @@ type ComplexityRoot struct {
 		TrustCenterCompliances func(childComplexity int) int
 	}
 
+	TrustCenterComplianceBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	TrustCenterComplianceConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -4971,6 +5169,10 @@ type ComplexityRoot struct {
 
 	TrustCenterDocBulkCreatePayload struct {
 		TrustCenterDocs func(childComplexity int) int
+	}
+
+	TrustCenterDocBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	TrustCenterDocConnection struct {
@@ -5177,6 +5379,10 @@ type ComplexityRoot struct {
 
 	TrustCenterSubprocessorBulkCreatePayload struct {
 		TrustCenterSubprocessors func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	TrustCenterSubprocessorConnection struct {
@@ -5433,6 +5639,10 @@ type ComplexityRoot struct {
 		UserSettings func(childComplexity int) int
 	}
 
+	UserSettingBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	UserSettingConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5674,6 +5884,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APITokenBulkCreatePayload.APITokens(childComplexity), true
+
+	case "APITokenBulkDeletePayload.deletedIDs":
+		if e.complexity.APITokenBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.APITokenBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "APITokenConnection.edges":
 		if e.complexity.APITokenConnection.Edges == nil {
@@ -6025,6 +6242,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanBulkCreatePayload.ActionPlans(childComplexity), true
+
+	case "ActionPlanBulkDeletePayload.deletedIDs":
+		if e.complexity.ActionPlanBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ActionPlanBulkUpdatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkUpdatePayload.ActionPlans == nil {
@@ -6581,6 +6805,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetBulkCreatePayload.Assets(childComplexity), true
 
+	case "AssetBulkDeletePayload.deletedIDs":
+		if e.complexity.AssetBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.AssetBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "AssetConnection.edges":
 		if e.complexity.AssetConnection.Edges == nil {
 			break
@@ -7024,6 +7255,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ContactBulkCreatePayload.Contacts(childComplexity), true
+
+	case "ContactBulkDeletePayload.deletedIDs":
+		if e.complexity.ContactBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ContactBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ContactBulkUpdatePayload.contacts":
 		if e.complexity.ContactBulkUpdatePayload.Contacts == nil {
@@ -7747,6 +7985,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlBulkCreatePayload.Controls(childComplexity), true
 
+	case "ControlBulkDeletePayload.deletedIDs":
+		if e.complexity.ControlBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ControlBulkUpdatePayload.controls":
 		if e.complexity.ControlBulkUpdatePayload.Controls == nil {
 			break
@@ -8386,6 +8631,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementationBulkCreatePayload.ControlImplementations(childComplexity), true
 
+	case "ControlImplementationBulkDeletePayload.deletedIDs":
+		if e.complexity.ControlImplementationBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ControlImplementationConnection.edges":
 		if e.complexity.ControlImplementationConnection.Edges == nil {
 			break
@@ -8894,6 +9146,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveBulkCreatePayload.ControlObjectives(childComplexity), true
 
+	case "ControlObjectiveBulkDeletePayload.deletedIDs":
+		if e.complexity.ControlObjectiveBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ControlObjectiveConnection.edges":
 		if e.complexity.ControlObjectiveConnection.Edges == nil {
 			break
@@ -9265,6 +9524,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainBulkCreatePayload.CustomDomains(childComplexity), true
 
+	case "CustomDomainBulkDeletePayload.deletedIDs":
+		if e.complexity.CustomDomainBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "CustomDomainConnection.edges":
 		if e.complexity.CustomDomainConnection.Edges == nil {
 			break
@@ -9606,6 +9872,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DNSVerificationBulkCreatePayload.DNSVerifications(childComplexity), true
 
+	case "DNSVerificationBulkDeletePayload.deletedIDs":
+		if e.complexity.DNSVerificationBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "DNSVerificationConnection.edges":
 		if e.complexity.DNSVerificationConnection.Edges == nil {
 			break
@@ -9937,6 +10210,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentDataBulkCreatePayload.DocumentData(childComplexity), true
+
+	case "DocumentDataBulkDeletePayload.deletedIDs":
+		if e.complexity.DocumentDataBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "DocumentDataConnection.edges":
 		if e.complexity.DocumentDataConnection.Edges == nil {
@@ -10354,6 +10634,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityBulkCreatePayload.Entities(childComplexity), true
 
+	case "EntityBulkDeletePayload.deletedIDs":
+		if e.complexity.EntityBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EntityBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "EntityConnection.edges":
 		if e.complexity.EntityConnection.Edges == nil {
 			break
@@ -10673,6 +10960,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityTypeBulkCreatePayload.EntityTypes(childComplexity), true
+
+	case "EntityTypeBulkDeletePayload.deletedIDs":
+		if e.complexity.EntityTypeBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "EntityTypeConnection.edges":
 		if e.complexity.EntityTypeConnection.Edges == nil {
@@ -11090,6 +11384,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EventBulkCreatePayload.Events(childComplexity), true
+
+	case "EventBulkDeletePayload.deletedIDs":
+		if e.complexity.EventBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EventBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "EventConnection.edges":
 		if e.complexity.EventConnection.Edges == nil {
@@ -12939,6 +13240,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupBulkCreatePayload.Groups(childComplexity), true
 
+	case "GroupBulkDeletePayload.deletedIDs":
+		if e.complexity.GroupBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "GroupConnection.edges":
 		if e.complexity.GroupConnection.Edges == nil {
 			break
@@ -13230,6 +13538,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupMembershipBulkCreatePayload.GroupMemberships(childComplexity), true
+
+	case "GroupMembershipBulkDeletePayload.deletedIDs":
+		if e.complexity.GroupMembershipBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "GroupMembershipConnection.edges":
 		if e.complexity.GroupMembershipConnection.Edges == nil {
@@ -13552,6 +13867,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupSettingBulkCreatePayload.GroupSettings(childComplexity), true
+
+	case "GroupSettingBulkDeletePayload.deletedIDs":
+		if e.complexity.GroupSettingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "GroupSettingConnection.edges":
 		if e.complexity.GroupSettingConnection.Edges == nil {
@@ -13910,6 +14232,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.HushBulkCreatePayload.Hushes(childComplexity), true
+
+	case "HushBulkDeletePayload.deletedIDs":
+		if e.complexity.HushBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.HushBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "HushBulkUpdatePayload.hushes":
 		if e.complexity.HushBulkUpdatePayload.Hushes == nil {
@@ -14540,6 +14869,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "InternalPolicy.comments":
+		if e.complexity.InternalPolicy.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
 	case "InternalPolicy.controlImplementations":
 		if e.complexity.InternalPolicy.ControlImplementations == nil {
 			break
@@ -14883,6 +15224,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyBulkCreatePayload.InternalPolicies(childComplexity), true
+
+	case "InternalPolicyBulkDeletePayload.deletedIDs":
+		if e.complexity.InternalPolicyBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "InternalPolicyBulkUpdatePayload.internalPolicies":
 		if e.complexity.InternalPolicyBulkUpdatePayload.InternalPolicies == nil {
@@ -15341,6 +15689,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InviteBulkCreatePayload.Invites(childComplexity), true
+
+	case "InviteBulkDeletePayload.deletedIDs":
+		if e.complexity.InviteBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.InviteBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "InviteConnection.edges":
 		if e.complexity.InviteConnection.Edges == nil {
@@ -16225,6 +16580,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplateBulkCreatePayload.JobTemplates(childComplexity), true
 
+	case "JobTemplateBulkDeletePayload.deletedIDs":
+		if e.complexity.JobTemplateBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "JobTemplateConnection.edges":
 		if e.complexity.JobTemplateConnection.Edges == nil {
 			break
@@ -16530,6 +16892,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappableDomainBulkCreatePayload.MappableDomains(childComplexity), true
+
+	case "MappableDomainBulkDeletePayload.deletedIDs":
+		if e.complexity.MappableDomainBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "MappableDomainConnection.edges":
 		if e.complexity.MappableDomainConnection.Edges == nil {
@@ -16882,6 +17251,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlBulkCreatePayload.MappedControls(childComplexity), true
+
+	case "MappedControlBulkDeletePayload.deletedIDs":
+		if e.complexity.MappedControlBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.MappedControlBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "MappedControlConnection.edges":
 		if e.complexity.MappedControlConnection.Edges == nil {
@@ -18905,6 +19281,162 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteAsset(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteBulkAPIToken":
+		if e.complexity.Mutation.DeleteBulkAPIToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAPIToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkAPIToken(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkActionPlan":
+		if e.complexity.Mutation.DeleteBulkActionPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkActionPlan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkActionPlan(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkAsset":
+		if e.complexity.Mutation.DeleteBulkAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkAsset(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkContact":
+		if e.complexity.Mutation.DeleteBulkContact == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkContact_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkContact(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkControl":
+		if e.complexity.Mutation.DeleteBulkControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkControl(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkControlImplementation":
+		if e.complexity.Mutation.DeleteBulkControlImplementation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkControlImplementation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkControlImplementation(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkControlObjective":
+		if e.complexity.Mutation.DeleteBulkControlObjective == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkControlObjective_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkControlObjective(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkCustomDomain":
+		if e.complexity.Mutation.DeleteBulkCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkCustomDomain(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkDNSVerification":
+		if e.complexity.Mutation.DeleteBulkDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkDNSVerification(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkDocumentData":
+		if e.complexity.Mutation.DeleteBulkDocumentData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkDocumentData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkDocumentData(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkEntity":
+		if e.complexity.Mutation.DeleteBulkEntity == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEntity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEntity(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkEntityType":
+		if e.complexity.Mutation.DeleteBulkEntityType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEntityType_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEntityType(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkEvent":
+		if e.complexity.Mutation.DeleteBulkEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEvent(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkExport":
 		if e.complexity.Mutation.DeleteBulkExport == nil {
 			break
@@ -18916,6 +19448,318 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteBulkExport(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkGroup":
+		if e.complexity.Mutation.DeleteBulkGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkGroup(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkGroupMembership":
+		if e.complexity.Mutation.DeleteBulkGroupMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkGroupMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkGroupMembership(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkGroupSetting":
+		if e.complexity.Mutation.DeleteBulkGroupSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkGroupSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkGroupSetting(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkHush":
+		if e.complexity.Mutation.DeleteBulkHush == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkHush_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkHush(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkInternalPolicy":
+		if e.complexity.Mutation.DeleteBulkInternalPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkInternalPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkInternalPolicy(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkInvite":
+		if e.complexity.Mutation.DeleteBulkInvite == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkInvite_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkInvite(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkJobTemplate":
+		if e.complexity.Mutation.DeleteBulkJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkJobTemplate(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkMappableDomain":
+		if e.complexity.Mutation.DeleteBulkMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkMappableDomain(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkMappedControl":
+		if e.complexity.Mutation.DeleteBulkMappedControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkMappedControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkMappedControl(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkNarrative":
+		if e.complexity.Mutation.DeleteBulkNarrative == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkNarrative_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkNarrative(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkOrgMembership":
+		if e.complexity.Mutation.DeleteBulkOrgMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkOrgMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkOrgMembership(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkOrganizationSetting":
+		if e.complexity.Mutation.DeleteBulkOrganizationSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkOrganizationSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkOrganizationSetting(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkProcedure":
+		if e.complexity.Mutation.DeleteBulkProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkProcedure(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkProgram":
+		if e.complexity.Mutation.DeleteBulkProgram == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkProgram_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkProgram(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkProgramMembership":
+		if e.complexity.Mutation.DeleteBulkProgramMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkProgramMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkProgramMembership(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkRisk":
+		if e.complexity.Mutation.DeleteBulkRisk == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkRisk_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkRisk(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkScan":
+		if e.complexity.Mutation.DeleteBulkScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkScan(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkScheduledJob":
+		if e.complexity.Mutation.DeleteBulkScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkScheduledJob(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkSubcontrol":
+		if e.complexity.Mutation.DeleteBulkSubcontrol == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkSubcontrol_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkSubcontrol(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkSubprocessor":
+		if e.complexity.Mutation.DeleteBulkSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkSubprocessor(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkTask":
+		if e.complexity.Mutation.DeleteBulkTask == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTask_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTask(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkTemplate":
+		if e.complexity.Mutation.DeleteBulkTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTemplate(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkTrustCenterCompliance":
+		if e.complexity.Mutation.DeleteBulkTrustCenterCompliance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTrustCenterCompliance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTrustCenterCompliance(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkTrustCenterDoc":
+		if e.complexity.Mutation.DeleteBulkTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTrustCenterDoc(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkTrustCenterSubprocessor":
+		if e.complexity.Mutation.DeleteBulkTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkUserSetting":
+		if e.complexity.Mutation.DeleteBulkUserSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkUserSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkUserSetting(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
@@ -19252,6 +20096,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteNarrative(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteNote":
+		if e.complexity.Mutation.DeleteNote == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNote_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNote(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteOrgMembership":
 		if e.complexity.Mutation.DeleteOrgMembership == nil {
@@ -19937,6 +20793,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput)), true
 
+	case "Mutation.updateInternalPolicyComment":
+		if e.complexity.Mutation.UpdateInternalPolicyComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateInternalPolicyComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateInternalPolicyComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateInvite":
 		if e.complexity.Mutation.UpdateInvite == nil {
 			break
@@ -20081,6 +20949,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput)), true
 
+	case "Mutation.updateProcedureComment":
+		if e.complexity.Mutation.UpdateProcedureComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProcedureComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProcedureComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateProgram":
 		if e.complexity.Mutation.UpdateProgram == nil {
 			break
@@ -20116,6 +20996,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateRisk(childComplexity, args["id"].(string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateRiskComment":
+		if e.complexity.Mutation.UpdateRiskComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateRiskComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateRiskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateScan":
 		if e.complexity.Mutation.UpdateScan == nil {
@@ -20565,6 +21457,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeBulkCreatePayload.Narratives(childComplexity), true
 
+	case "NarrativeBulkDeletePayload.deletedIDs":
+		if e.complexity.NarrativeBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.NarrativeBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "NarrativeConnection.edges":
 		if e.complexity.NarrativeConnection.Edges == nil {
 			break
@@ -20822,6 +21721,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.ID(childComplexity), true
 
+	case "Note.internalPolicy":
+		if e.complexity.Note.InternalPolicy == nil {
+			break
+		}
+
+		return e.complexity.Note.InternalPolicy(childComplexity), true
+
 	case "Note.owner":
 		if e.complexity.Note.Owner == nil {
 			break
@@ -20835,6 +21741,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.OwnerID(childComplexity), true
+
+	case "Note.procedure":
+		if e.complexity.Note.Procedure == nil {
+			break
+		}
+
+		return e.complexity.Note.Procedure(childComplexity), true
+
+	case "Note.risk":
+		if e.complexity.Note.Risk == nil {
+			break
+		}
+
+		return e.complexity.Note.Risk(childComplexity), true
 
 	case "Note.subcontrol":
 		if e.complexity.Note.Subcontrol == nil {
@@ -20891,6 +21811,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteConnection.TotalCount(childComplexity), true
+
+	case "NoteDeletePayload.deletedID":
+		if e.complexity.NoteDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.NoteDeletePayload.DeletedID(childComplexity), true
 
 	case "NoteEdge.cursor":
 		if e.complexity.NoteEdge.Cursor == nil {
@@ -21169,6 +22096,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgMembershipBulkCreatePayload.OrgMemberships(childComplexity), true
+
+	case "OrgMembershipBulkDeletePayload.deletedIDs":
+		if e.complexity.OrgMembershipBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "OrgMembershipConnection.edges":
 		if e.complexity.OrgMembershipConnection.Edges == nil {
@@ -22962,6 +23896,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSettingBulkCreatePayload.OrganizationSettings(childComplexity), true
 
+	case "OrganizationSettingBulkDeletePayload.deletedIDs":
+		if e.complexity.OrganizationSettingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "OrganizationSettingConnection.edges":
 		if e.complexity.OrganizationSettingConnection.Edges == nil {
 			break
@@ -23572,6 +24513,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Procedure.comments":
+		if e.complexity.Procedure.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
 	case "Procedure.controlSuggestions":
 		if e.complexity.Procedure.ControlSuggestions == nil {
 			break
@@ -23891,6 +24844,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureBulkCreatePayload.Procedures(childComplexity), true
+
+	case "ProcedureBulkDeletePayload.deletedIDs":
+		if e.complexity.ProcedureBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProcedureBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ProcedureBulkUpdatePayload.procedures":
 		if e.complexity.ProcedureBulkUpdatePayload.Procedures == nil {
@@ -24607,6 +25567,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramBulkCreatePayload.Programs(childComplexity), true
 
+	case "ProgramBulkDeletePayload.deletedIDs":
+		if e.complexity.ProgramBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProgramBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ProgramConnection.edges":
 		if e.complexity.ProgramConnection.Edges == nil {
 			break
@@ -24942,6 +25909,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramMembershipBulkCreatePayload.ProgramMemberships(childComplexity), true
+
+	case "ProgramMembershipBulkDeletePayload.deletedIDs":
+		if e.complexity.ProgramMembershipBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ProgramMembershipConnection.edges":
 		if e.complexity.ProgramMembershipConnection.Edges == nil {
@@ -28381,6 +29355,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Category(childComplexity), true
 
+	case "Risk.comments":
+		if e.complexity.Risk.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
 	case "Risk.controls":
 		if e.complexity.Risk.Controls == nil {
 			break
@@ -28654,6 +29640,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskBulkCreatePayload.Risks(childComplexity), true
+
+	case "RiskBulkDeletePayload.deletedIDs":
+		if e.complexity.RiskBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.RiskBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "RiskBulkUpdatePayload.risks":
 		if e.complexity.RiskBulkUpdatePayload.Risks == nil {
@@ -29072,6 +30065,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanBulkCreatePayload.Scans(childComplexity), true
 
+	case "ScanBulkDeletePayload.deletedIDs":
+		if e.complexity.ScanBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ScanBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ScanBulkUpdatePayload.scans":
 		if e.complexity.ScanBulkUpdatePayload.Scans == nil {
 			break
@@ -29410,6 +30410,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs(childComplexity), true
+
+	case "ScheduledJobBulkDeletePayload.deletedIDs":
+		if e.complexity.ScheduledJobBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ScheduledJobConnection.edges":
 		if e.complexity.ScheduledJobConnection.Edges == nil {
@@ -31065,6 +32072,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolBulkCreatePayload.Subcontrols(childComplexity), true
 
+	case "SubcontrolBulkDeletePayload.deletedIDs":
+		if e.complexity.SubcontrolBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "SubcontrolConnection.edges":
 		if e.complexity.SubcontrolConnection.Edges == nil {
 			break
@@ -31578,6 +32592,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubprocessorBulkCreatePayload.Subprocessors(childComplexity), true
+
+	case "SubprocessorBulkDeletePayload.deletedIDs":
+		if e.complexity.SubprocessorBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "SubprocessorConnection.edges":
 		if e.complexity.SubprocessorConnection.Edges == nil {
@@ -32381,6 +33402,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskBulkCreatePayload.Tasks(childComplexity), true
 
+	case "TaskBulkDeletePayload.deletedIDs":
+		if e.complexity.TaskBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TaskBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "TaskBulkUpdatePayload.tasks":
 		if e.complexity.TaskBulkUpdatePayload.Tasks == nil {
 			break
@@ -32782,6 +33810,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateBulkCreatePayload.Templates(childComplexity), true
+
+	case "TemplateBulkDeletePayload.deletedIDs":
+		if e.complexity.TemplateBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TemplateBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "TemplateConnection.edges":
 		if e.complexity.TemplateConnection.Edges == nil {
@@ -33230,6 +34265,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterComplianceBulkCreatePayload.TrustCenterCompliances(childComplexity), true
 
+	case "TrustCenterComplianceBulkDeletePayload.deletedIDs":
+		if e.complexity.TrustCenterComplianceBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterComplianceBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "TrustCenterComplianceConnection.edges":
 		if e.complexity.TrustCenterComplianceConnection.Edges == nil {
 			break
@@ -33558,6 +34600,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocBulkCreatePayload.TrustCenterDocs(childComplexity), true
+
+	case "TrustCenterDocBulkDeletePayload.deletedIDs":
+		if e.complexity.TrustCenterDocBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "TrustCenterDocConnection.edges":
 		if e.complexity.TrustCenterDocConnection.Edges == nil {
@@ -34438,6 +35487,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSubprocessorBulkCreatePayload.TrustCenterSubprocessors(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkDeletePayload.deletedIDs":
+		if e.complexity.TrustCenterSubprocessorBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "TrustCenterSubprocessorConnection.edges":
 		if e.complexity.TrustCenterSubprocessorConnection.Edges == nil {
@@ -35667,6 +36723,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserSettingBulkCreatePayload.UserSettings(childComplexity), true
 
+	case "UserSettingBulkDeletePayload.deletedIDs":
+		if e.complexity.UserSettingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.UserSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "UserSettingConnection.edges":
 		if e.complexity.UserSettingConnection.Edges == nil {
 			break
@@ -36519,6 +37582,15 @@ extend type Mutation{
         """
         id: ID!
     ): ActionPlanDeletePayload!
+    """
+    Delete multiple actionPlans
+    """
+    deleteBulkActionPlan(
+        """
+        IDs of the actionPlans to delete
+        """
+        ids: [ID!]!
+    ): ActionPlanBulkDeletePayload!
 }
 
 """
@@ -36573,6 +37645,16 @@ type ActionPlanBulkUpdatePayload {
     IDs of the updated actionPlans
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkActionPlan mutation
+"""
+type ActionPlanBulkDeletePayload {
+    """
+    Deleted actionPlan IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/adminsearch.graphql", Input: `extend type Query{
     """
@@ -37789,6 +38871,15 @@ extend type Mutation{
         """
         id: ID!
     ): APITokenDeletePayload!
+    """
+    Delete multiple apiTokens
+    """
+    deleteBulkAPIToken(
+        """
+        IDs of the apiTokens to delete
+        """
+        ids: [ID!]!
+    ): APITokenBulkDeletePayload!
 }
 
 """
@@ -37829,6 +38920,16 @@ type APITokenBulkCreatePayload {
     Created apiTokens
     """
     apiTokens: [APIToken!]
+}
+
+"""
+Return response for deleteBulkAPIToken mutation
+"""
+type APITokenBulkDeletePayload {
+    """
+    Deleted apiToken IDs
+    """
+    deletedIDs: [ID!]!
 }
 
 `, BuiltIn: false},
@@ -37894,6 +38995,15 @@ extend type Mutation{
         """
         id: ID!
     ): AssetDeletePayload!
+    """
+    Delete multiple assets
+    """
+    deleteBulkAsset(
+        """
+        IDs of the assets to delete
+        """
+        ids: [ID!]!
+    ): AssetBulkDeletePayload!
 }
 
 """
@@ -37934,6 +39044,16 @@ type AssetBulkCreatePayload {
     Created assets
     """
     assets: [Asset!]
+}
+
+"""
+Return response for deleteBulkAsset mutation
+"""
+type AssetBulkDeletePayload {
+    """
+    Deleted asset IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/audit.graphql", Input: `extend type Query {
   auditLogs(
@@ -38133,6 +39253,15 @@ extend type Mutation{
         """
         id: ID!
     ): ContactDeletePayload!
+    """
+    Delete multiple contacts
+    """
+    deleteBulkContact(
+        """
+        IDs of the contacts to delete
+        """
+        ids: [ID!]!
+    ): ContactBulkDeletePayload!
 }
 
 """
@@ -38187,6 +39316,16 @@ type ContactBulkUpdatePayload {
     IDs of the updated contacts
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkContact mutation
+"""
+type ContactBulkDeletePayload {
+    """
+    Deleted contact IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/control.graphql", Input: `extend type Query {
     """
@@ -38265,6 +39404,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlDeletePayload!
+    """
+    Delete multiple controls
+    """
+    deleteBulkControl(
+        """
+        IDs of the controls to delete
+        """
+        ids: [ID!]!
+    ): ControlBulkDeletePayload!
 }
 
 """
@@ -38319,6 +39467,16 @@ type ControlBulkUpdatePayload {
     IDs of the updated controls
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkControl mutation
+"""
+type ControlBulkDeletePayload {
+    """
+    Deleted control IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/controlextended.graphql", Input: `"""
 CloneControlInput is used to clone controls and their subcontrols
@@ -38637,6 +39795,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlImplementationDeletePayload!
+    """
+    Delete multiple controlImplementations
+    """
+    deleteBulkControlImplementation(
+        """
+        IDs of the controlImplementations to delete
+        """
+        ids: [ID!]!
+    ): ControlImplementationBulkDeletePayload!
 }
 
 """
@@ -38677,6 +39844,16 @@ type ControlImplementationBulkCreatePayload {
     Created controlImplementations
     """
     controlImplementations: [ControlImplementation!]
+}
+
+"""
+Return response for deleteBulkControlImplementation mutation
+"""
+type ControlImplementationBulkDeletePayload {
+    """
+    Deleted controlImplementation IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/controlobjective.graphql", Input: `extend type Query {
     """
@@ -38740,6 +39917,15 @@ extend type Mutation{
         """
         id: ID!
     ): ControlObjectiveDeletePayload!
+    """
+    Delete multiple controlObjectives
+    """
+    deleteBulkControlObjective(
+        """
+        IDs of the controlObjectives to delete
+        """
+        ids: [ID!]!
+    ): ControlObjectiveBulkDeletePayload!
 }
 
 """
@@ -38780,6 +39966,16 @@ type ControlObjectiveBulkCreatePayload {
     Created controlObjectives
     """
     controlObjectives: [ControlObjective!]
+}
+
+"""
+Return response for deleteBulkControlObjective mutation
+"""
+type ControlObjectiveBulkDeletePayload {
+    """
+    Deleted controlObjective IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/customdomain.graphql", Input: `extend type Query {
     """
@@ -38843,6 +40039,15 @@ extend type Mutation{
         """
         id: ID!
     ): CustomDomainDeletePayload!
+    """
+    Delete multiple customDomains
+    """
+    deleteBulkCustomDomain(
+        """
+        IDs of the customDomains to delete
+        """
+        ids: [ID!]!
+    ): CustomDomainBulkDeletePayload!
 }
 
 """
@@ -38883,6 +40088,16 @@ type CustomDomainBulkCreatePayload {
     Created customDomains
     """
     customDomains: [CustomDomain!]
+}
+
+"""
+Return response for deleteBulkCustomDomain mutation
+"""
+type CustomDomainBulkDeletePayload {
+    """
+    Deleted customDomain IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/directives.graphql", Input: `"""
 Indicates if a field will be returned in a query, if true, only system-admins
@@ -38969,6 +40184,15 @@ extend type Mutation{
         """
         id: ID!
     ): DNSVerificationDeletePayload!
+    """
+    Delete multiple dnsVerifications
+    """
+    deleteBulkDNSVerification(
+        """
+        IDs of the dnsVerifications to delete
+        """
+        ids: [ID!]!
+    ): DNSVerificationBulkDeletePayload!
 }
 
 """
@@ -39009,6 +40233,16 @@ type DNSVerificationBulkCreatePayload {
     Created dnsVerifications
     """
     dnsVerifications: [DNSVerification!]
+}
+
+"""
+Return response for deleteBulkDNSVerification mutation
+"""
+type DNSVerificationBulkDeletePayload {
+    """
+    Deleted dnsVerification IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
@@ -39072,6 +40306,15 @@ extend type Mutation{
         """
         id: ID!
     ): DocumentDataDeletePayload!
+    """
+    Delete multiple documentData
+    """
+    deleteBulkDocumentData(
+        """
+        IDs of the documentData to delete
+        """
+        ids: [ID!]!
+    ): DocumentDataBulkDeletePayload!
 }
 
 """
@@ -39112,6 +40355,16 @@ type DocumentDataBulkCreatePayload {
     Created documentData
     """
     documentData: [DocumentData!]
+}
+
+"""
+Return response for deleteBulkDocumentData mutation
+"""
+type DocumentDataBulkDeletePayload {
+    """
+    Deleted documentData IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
@@ -47754,6 +49007,7 @@ input CreateInternalPolicyInput {
   riskIDs: [ID!]
   programIDs: [ID!]
   fileID: ID
+  commentIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -48054,6 +49308,9 @@ input CreateNoteInput {
   taskID: ID
   controlID: ID
   subcontrolID: ID
+  procedureID: ID
+  riskID: ID
+  internalPolicyID: ID
   fileIDs: [ID!]
 }
 """
@@ -48413,6 +49670,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
+  commentIDs: [ID!]
   fileID: ID
 }
 """
@@ -48568,6 +49826,7 @@ input CreateRiskInput {
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
+  commentIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -61048,6 +62307,37 @@ type InternalPolicy implements Node {
     where: ProgramWhereInput
   ): ProgramConnection!
   file: File
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -62105,6 +63395,11 @@ input InternalPolicyWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -66728,6 +68023,9 @@ type Note implements Node {
   task: Task
   control: Control
   subcontrol: Subcontrol
+  procedure: Procedure
+  risk: Risk
+  internalPolicy: InternalPolicy
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67214,6 +68512,21 @@ input NoteWhereInput {
   """
   hasSubcontrol: Boolean
   hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
+  risk edge predicates
+  """
+  hasRisk: Boolean
+  hasRiskWith: [RiskWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
   """
   files edge predicates
   """
@@ -73207,6 +74520,37 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
   file: File
 }
 """
@@ -74250,6 +75594,11 @@ input ProcedureWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   file edge predicates
   """
@@ -80039,6 +81388,37 @@ type Risk implements Node {
   temporary delegates for the risk, used for temporary ownership
   """
   delegate: Group
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -81004,6 +82384,11 @@ input RiskWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Scan implements Node {
   id: ID!
@@ -91885,21 +93270,19 @@ type TrustCenterWatermarkConfigEdge {
 TrustCenterWatermarkConfigFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -91981,21 +93364,19 @@ type TrustCenterWatermarkConfigHistoryEdge {
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
 enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
-  arial
-  helvetica
-  times
-  times_new_roman
-  georgia
-  verdana
-  courier
-  courier_new
-  trebuchet_ms
-  comic_sans_ms
-  impact
-  palatino
-  garamond
-  bookman
-  avant_garde
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
 }
 """
 TrustCenterWatermarkConfigHistoryOpType is enum for the field operation
@@ -94257,6 +95638,9 @@ input UpdateInternalPolicyInput {
   clearPrograms: Boolean
   fileID: ID
   clearFile: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -94612,6 +95996,12 @@ input UpdateNoteInput {
   clearControl: Boolean
   subcontrolID: ID
   clearSubcontrol: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
+  riskID: ID
+  clearRisk: Boolean
+  internalPolicyID: ID
+  clearInternalPolicy: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -95148,6 +96538,9 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   fileID: ID
   clearFile: Boolean
 }
@@ -95381,6 +96774,9 @@ input UpdateRiskInput {
   clearStakeholder: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -98578,6 +99974,15 @@ extend type Mutation{
         """
         id: ID!
     ): EntityDeletePayload!
+    """
+    Delete multiple entities
+    """
+    deleteBulkEntity(
+        """
+        IDs of the entities to delete
+        """
+        ids: [ID!]!
+    ): EntityBulkDeletePayload!
 }
 
 """
@@ -98618,6 +100023,16 @@ type EntityBulkCreatePayload {
     Created entities
     """
     entities: [Entity!]
+}
+
+"""
+Return response for deleteBulkEntity mutation
+"""
+type EntityBulkDeletePayload {
+    """
+    Deleted entity IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
@@ -98689,6 +100104,15 @@ extend type Mutation{
         """
         id: ID!
     ): EntityTypeDeletePayload!
+    """
+    Delete multiple entityTypes
+    """
+    deleteBulkEntityType(
+        """
+        IDs of the entityTypes to delete
+        """
+        ids: [ID!]!
+    ): EntityTypeBulkDeletePayload!
 }
 
 """
@@ -98729,6 +100153,16 @@ type EntityTypeBulkCreatePayload {
     Created entityTypes
     """
     entityTypes: [EntityType!]
+}
+
+"""
+Return response for deleteBulkEntityType mutation
+"""
+type EntityTypeBulkDeletePayload {
+    """
+    Deleted entityType IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/event.graphql", Input: `extend type Query {
     """
@@ -98792,6 +100226,15 @@ extend type Mutation{
         """
         id: ID!
     ): EventDeletePayload!
+    """
+    Delete multiple events
+    """
+    deleteBulkEvent(
+        """
+        IDs of the events to delete
+        """
+        ids: [ID!]!
+    ): EventBulkDeletePayload!
 }
 
 """
@@ -98832,6 +100275,16 @@ type EventBulkCreatePayload {
     Created events
     """
     events: [Event!]
+}
+
+"""
+Return response for deleteBulkEvent mutation
+"""
+type EventBulkDeletePayload {
+    """
+    Deleted event IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/evidence.graphql", Input: `extend type Query {
     """
@@ -99129,6 +100582,15 @@ extend type Mutation{
         """
         id: ID!
     ): GroupDeletePayload!
+    """
+    Delete multiple groups
+    """
+    deleteBulkGroup(
+        """
+        IDs of the groups to delete
+        """
+        ids: [ID!]!
+    ): GroupBulkDeletePayload!
 }
 
 """
@@ -99169,6 +100631,16 @@ type GroupBulkCreatePayload {
     Created groups
     """
     groups: [Group!]
+}
+
+"""
+Return response for deleteBulkGroup mutation
+"""
+type GroupBulkDeletePayload {
+    """
+    Deleted group IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
@@ -99483,6 +100955,15 @@ extend type Mutation{
         """
         id: ID!
     ): GroupMembershipDeletePayload!
+    """
+    Delete multiple groupMemberships
+    """
+    deleteBulkGroupMembership(
+        """
+        IDs of the groupMemberships to delete
+        """
+        ids: [ID!]!
+    ): GroupMembershipBulkDeletePayload!
 }
 
 """
@@ -99523,6 +101004,16 @@ type GroupMembershipBulkCreatePayload {
     Created groupMemberships
     """
     groupMemberships: [GroupMembership!]
+}
+
+"""
+Return response for deleteBulkGroupMembership mutation
+"""
+type GroupMembershipBulkDeletePayload {
+    """
+    Deleted groupMembership IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
@@ -99586,6 +101077,15 @@ extend type Mutation{
         """
         id: ID!
     ): GroupSettingDeletePayload!
+    """
+    Delete multiple groupSettings
+    """
+    deleteBulkGroupSetting(
+        """
+        IDs of the groupSettings to delete
+        """
+        ids: [ID!]!
+    ): GroupSettingBulkDeletePayload!
 }
 
 """
@@ -99626,6 +101126,16 @@ type GroupSettingBulkCreatePayload {
     Created groupSettings
     """
     groupSettings: [GroupSetting!]
+}
+
+"""
+Return response for deleteBulkGroupSetting mutation
+"""
+type GroupSettingBulkDeletePayload {
+    """
+    Deleted groupSetting IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/hush.graphql", Input: `extend type Query {
     """
@@ -99704,6 +101214,15 @@ extend type Mutation{
         """
         id: ID!
     ): HushDeletePayload!
+    """
+    Delete multiple hushs
+    """
+    deleteBulkHush(
+        """
+        IDs of the hushs to delete
+        """
+        ids: [ID!]!
+    ): HushBulkDeletePayload!
 }
 
 """
@@ -99758,6 +101277,16 @@ type HushBulkUpdatePayload {
     IDs of the updated hushs
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkHush mutation
+"""
+type HushBulkDeletePayload {
+    """
+    Deleted hush IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
@@ -99882,6 +101411,15 @@ extend type Mutation{
         """
         id: ID!
     ): InternalPolicyDeletePayload!
+    """
+    Delete multiple internalPolicys
+    """
+    deleteBulkInternalPolicy(
+        """
+        IDs of the internalPolicys to delete
+        """
+        ids: [ID!]!
+    ): InternalPolicyBulkDeletePayload!
 }
 
 """
@@ -99936,6 +101474,16 @@ type InternalPolicyBulkUpdatePayload {
     IDs of the updated internalPolicys
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkDeletePayload {
+    """
+    Deleted internalPolicy IDs
+    """
+    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
@@ -100000,6 +101548,15 @@ extend type Mutation{
         """
         id: ID!
     ): InviteDeletePayload!
+    """
+    Delete multiple invites
+    """
+    deleteBulkInvite(
+        """
+        IDs of the invites to delete
+        """
+        ids: [ID!]!
+    ): InviteBulkDeletePayload!
 }
 
 """
@@ -100040,6 +101597,16 @@ type InviteBulkCreatePayload {
     Created invites
     """
     invites: [Invite!]
+}
+
+"""
+Return response for deleteBulkInvite mutation
+"""
+type InviteBulkDeletePayload {
+    """
+    Deleted invite IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/jobresult.graphql", Input: `extend type Query {
     """
@@ -100391,6 +101958,15 @@ extend type Mutation{
         """
         id: ID!
     ): JobTemplateDeletePayload!
+    """
+    Delete multiple jobTemplates
+    """
+    deleteBulkJobTemplate(
+        """
+        IDs of the jobTemplates to delete
+        """
+        ids: [ID!]!
+    ): JobTemplateBulkDeletePayload!
 }
 
 """
@@ -100431,6 +102007,16 @@ type JobTemplateBulkCreatePayload {
     Created jobTemplates
     """
     jobTemplates: [JobTemplate!]
+}
+
+"""
+Return response for deleteBulkJobTemplate mutation
+"""
+type JobTemplateBulkDeletePayload {
+    """
+    Deleted jobTemplate IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
     """
@@ -100494,6 +102080,15 @@ extend type Mutation{
         """
         id: ID!
     ): MappableDomainDeletePayload!
+    """
+    Delete multiple mappableDomains
+    """
+    deleteBulkMappableDomain(
+        """
+        IDs of the mappableDomains to delete
+        """
+        ids: [ID!]!
+    ): MappableDomainBulkDeletePayload!
 }
 
 """
@@ -100534,6 +102129,16 @@ type MappableDomainBulkCreatePayload {
     Created mappableDomains
     """
     mappableDomains: [MappableDomain!]
+}
+
+"""
+Return response for deleteBulkMappableDomain mutation
+"""
+type MappableDomainBulkDeletePayload {
+    """
+    Deleted mappableDomain IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
     """
@@ -100597,6 +102202,15 @@ extend type Mutation{
         """
         id: ID!
     ): MappedControlDeletePayload!
+    """
+    Delete multiple mappedControls
+    """
+    deleteBulkMappedControl(
+        """
+        IDs of the mappedControls to delete
+        """
+        ids: [ID!]!
+    ): MappedControlBulkDeletePayload!
 }
 
 """
@@ -100637,6 +102251,34 @@ type MappedControlBulkCreatePayload {
     Created mappedControls
     """
     mappedControls: [MappedControl!]
+}
+
+"""
+Return response for deleteBulkMappedControl mutation
+"""
+type MappedControlBulkDeletePayload {
+    """
+    Deleted mappedControl IDs
+    """
+    deletedIDs: [ID!]!
+}`, BuiltIn: false},
+	{Name: "../schema/mappedcontrolextended.graphql", Input: `extend input CreateMappedControlInput {
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
+    """
+    fromControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    fromSubcontrolRefCodes: [String!]
+    """
+    the ref code(s) of the control(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1
+    """
+    toControlRefCodes: [String!]
+    """
+    the ref code(s) of the subcontrol(s) prefixed with the standard for the to side of the mapping, e.g. SOC2::CC1.1-POF1
+    """
+    toSubcontrolRefCodes: [String!]
 }`, BuiltIn: false},
 	{Name: "../schema/narrative.graphql", Input: `extend type Query {
     """
@@ -100700,6 +102342,15 @@ extend type Mutation{
         """
         id: ID!
     ): NarrativeDeletePayload!
+    """
+    Delete multiple narratives
+    """
+    deleteBulkNarrative(
+        """
+        IDs of the narratives to delete
+        """
+        ids: [ID!]!
+    ): NarrativeBulkDeletePayload!
 }
 
 """
@@ -100740,6 +102391,16 @@ type NarrativeBulkCreatePayload {
     Created narratives
     """
     narratives: [Narrative!]
+}
+
+"""
+Return response for deleteBulkNarrative mutation
+"""
+type NarrativeBulkDeletePayload {
+    """
+    Deleted narrative IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/note.graphql", Input: `extend type Query {
     """
@@ -100820,8 +102481,77 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): SubcontrolUpdatePayload!
+    """
+    Update an existing procedure comment
+    """
+    updateProcedureComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ProcedureUpdatePayload!
+    """
+    Update an existing risk comment
+    """
+    updateRiskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): RiskUpdatePayload!
+    """
+    Update an existing internal policy comment
+    """
+    updateInternalPolicyComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): InternalPolicyUpdatePayload!
+    """
+    Delete an existing note
+    """
+    deleteNote(
+        """
+        ID of the note/comment
+        """
+        id: ID!
+    ): NoteDeletePayload!
 }
 
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+    """
+    Deleted comment ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
@@ -100993,6 +102723,15 @@ extend type Mutation{
         """
         id: ID!
     ): OrganizationSettingDeletePayload!
+    """
+    Delete multiple organizationSettings
+    """
+    deleteBulkOrganizationSetting(
+        """
+        IDs of the organizationSettings to delete
+        """
+        ids: [ID!]!
+    ): OrganizationSettingBulkDeletePayload!
 }
 
 """
@@ -101033,6 +102772,16 @@ type OrganizationSettingBulkCreatePayload {
     Created organizationSettings
     """
     organizationSettings: [OrganizationSetting!]
+}
+
+"""
+Return response for deleteBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkDeletePayload {
+    """
+    Deleted organizationSetting IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
@@ -101139,6 +102888,15 @@ extend type Mutation{
         """
         id: ID!
     ): OrgMembershipDeletePayload!
+    """
+    Delete multiple orgMemberships
+    """
+    deleteBulkOrgMembership(
+        """
+        IDs of the orgMemberships to delete
+        """
+        ids: [ID!]!
+    ): OrgMembershipBulkDeletePayload!
 }
 
 """
@@ -101179,6 +102937,16 @@ type OrgMembershipBulkCreatePayload {
     Created orgMemberships
     """
     orgMemberships: [OrgMembership!]
+}
+
+"""
+Return response for deleteBulkOrgMembership mutation
+"""
+type OrgMembershipBulkDeletePayload {
+    """
+    Deleted orgMembership IDs
+    """
+    deletedIDs: [ID!]!
 }
 
 extend input OrgMembershipWhereInput {
@@ -101374,6 +103142,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProcedureDeletePayload!
+    """
+    Delete multiple procedures
+    """
+    deleteBulkProcedure(
+        """
+        IDs of the procedures to delete
+        """
+        ids: [ID!]!
+    ): ProcedureBulkDeletePayload!
 }
 
 """
@@ -101428,7 +103205,18 @@ type ProcedureBulkUpdatePayload {
     IDs of the updated procedures
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+
+"""
+Return response for deleteBulkProcedure mutation
+"""
+type ProcedureBulkDeletePayload {
+    """
+    Deleted export IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
 	{Name: "../schema/program.graphql", Input: `extend type Query {
     """
     Look up program by ID
@@ -101491,6 +103279,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramDeletePayload!
+    """
+    Delete multiple programs
+    """
+    deleteBulkProgram(
+        """
+        IDs of the programs to delete
+        """
+        ids: [ID!]!
+    ): ProgramBulkDeletePayload!
 }
 
 """
@@ -101531,6 +103328,16 @@ type ProgramBulkCreatePayload {
     Created programs
     """
     programs: [Program!]
+}
+
+"""
+Return response for deleteBulkProgram mutation
+"""
+type ProgramBulkDeletePayload {
+    """
+    Deleted program IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
   addProgramMembers: [AddProgramMembershipInput!]
@@ -101689,6 +103496,15 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramMembershipDeletePayload!
+    """
+    Delete multiple programMemberships
+    """
+    deleteBulkProgramMembership(
+        """
+        IDs of the programMemberships to delete
+        """
+        ids: [ID!]!
+    ): ProgramMembershipBulkDeletePayload!
 }
 
 """
@@ -101729,6 +103545,16 @@ type ProgramMembershipBulkCreatePayload {
     Created programMemberships
     """
     programMemberships: [ProgramMembership!]
+}
+
+"""
+Return response for deleteBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkDeletePayload {
+    """
+    Deleted programMembership IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/revision.graphql", Input: `extend input UpdateActionPlanInput {
     RevisionBump: VersionBump
@@ -101827,6 +103653,15 @@ extend type Mutation{
         """
         id: ID!
     ): RiskDeletePayload!
+    """
+    Delete multiple risks
+    """
+    deleteBulkRisk(
+        """
+        IDs of the risks to delete
+        """
+        ids: [ID!]!
+    ): RiskBulkDeletePayload!
 }
 
 """
@@ -101881,6 +103716,16 @@ type RiskBulkUpdatePayload {
     IDs of the updated risks
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkRisk mutation
+"""
+type RiskBulkDeletePayload {
+    """
+    Deleted risk IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/scalars.graphql", Input: `"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.
@@ -102029,6 +103874,15 @@ extend type Mutation{
         """
         id: ID!
     ): ScanDeletePayload!
+    """
+    Delete multiple scans
+    """
+    deleteBulkScan(
+        """
+        IDs of the scans to delete
+        """
+        ids: [ID!]!
+    ): ScanBulkDeletePayload!
 }
 
 """
@@ -102083,6 +103937,16 @@ type ScanBulkUpdatePayload {
     IDs of the updated scans
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkScan mutation
+"""
+type ScanBulkDeletePayload {
+    """
+    Deleted scan IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
     """
@@ -102146,6 +104010,15 @@ extend type Mutation{
         """
         id: ID!
     ): ScheduledJobDeletePayload!
+    """
+    Delete multiple scheduledJobs
+    """
+    deleteBulkScheduledJob(
+        """
+        IDs of the scheduledJobs to delete
+        """
+        ids: [ID!]!
+    ): ScheduledJobBulkDeletePayload!
 }
 
 """
@@ -102186,6 +104059,16 @@ type ScheduledJobBulkCreatePayload {
     Created scheduledJobs
     """
     scheduledJobs: [ScheduledJob!]
+}
+
+"""
+Return response for deleteBulkScheduledJob mutation
+"""
+type ScheduledJobBulkDeletePayload {
+    """
+    Deleted scheduledJob IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/scheduledjobrun.graphql", Input: `extend type Query {
     """
@@ -103712,6 +105595,15 @@ extend type Mutation{
         """
         id: ID!
     ): SubcontrolDeletePayload!
+    """
+    Delete multiple subcontrols
+    """
+    deleteBulkSubcontrol(
+        """
+        IDs of the subcontrols to delete
+        """
+        ids: [ID!]!
+    ): SubcontrolBulkDeletePayload!
 }
 
 """
@@ -103752,6 +105644,16 @@ type SubcontrolBulkCreatePayload {
     Created subcontrols
     """
     subcontrols: [Subcontrol!]
+}
+
+"""
+Return response for deleteBulkSubcontrol mutation
+"""
+type SubcontrolBulkDeletePayload {
+    """
+    Deleted subcontrol IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/subprocessor.graphql", Input: `extend type Query {
     """
@@ -103817,6 +105719,15 @@ extend type Mutation{
         """
         id: ID!
     ): SubprocessorDeletePayload!
+    """
+    Delete multiple subprocessors
+    """
+    deleteBulkSubprocessor(
+        """
+        IDs of the subprocessors to delete
+        """
+        ids: [ID!]!
+    ): SubprocessorBulkDeletePayload!
 }
 
 """
@@ -103857,6 +105768,16 @@ type SubprocessorBulkCreatePayload {
     Created subprocessors
     """
     subprocessors: [Subprocessor!]
+}
+
+"""
+Return response for deleteBulkSubprocessor mutation
+"""
+type SubprocessorBulkDeletePayload {
+    """
+    Deleted subprocessor IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/subscriber.graphql", Input: `extend type Query {
     """
@@ -104044,6 +105965,15 @@ extend type Mutation{
         """
         id: ID!
     ): TaskDeletePayload!
+    """
+    Delete multiple tasks
+    """
+    deleteBulkTask(
+        """
+        IDs of the tasks to delete
+        """
+        ids: [ID!]!
+    ): TaskBulkDeletePayload!
 }
 
 """
@@ -104098,6 +106028,16 @@ type TaskBulkUpdatePayload {
     IDs of the updated tasks
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkTask mutation
+"""
+type TaskBulkDeletePayload {
+    """
+    Deleted task IDs
+    """
+    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/template.graphql", Input: `extend type Query {
@@ -104164,6 +106104,15 @@ extend type Mutation{
         """
         id: ID!
     ): TemplateDeletePayload!
+    """
+    Delete multiple templates
+    """
+    deleteBulkTemplate(
+        """
+        IDs of the templates to delete
+        """
+        ids: [ID!]!
+    ): TemplateBulkDeletePayload!
 }
 
 """
@@ -104204,6 +106153,16 @@ type TemplateBulkCreatePayload {
     Created templates
     """
     templates: [Template!]
+}
+
+"""
+Return response for deleteBulkTemplate mutation
+"""
+type TemplateBulkDeletePayload {
+    """
+    Deleted template IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
     tfaSecret: String
@@ -104413,6 +106372,15 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterComplianceDeletePayload!
+    """
+    Delete multiple trustCenterCompliances
+    """
+    deleteBulkTrustCenterCompliance(
+        """
+        IDs of the trustCenterCompliances to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterComplianceBulkDeletePayload!
 }
 
 """
@@ -104453,6 +106421,16 @@ type TrustCenterComplianceBulkCreatePayload {
     Created trustCenterCompliances
     """
     trustCenterCompliances: [TrustCenterCompliance!]
+}
+
+"""
+Return response for deleteBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkDeletePayload {
+    """
+    Deleted trustCenterCompliance IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterdoc.graphql", Input: `extend type Query {
     """
@@ -104519,6 +106497,15 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterDocDeletePayload!
+    """
+    Delete multiple trustCenterDocs
+    """
+    deleteBulkTrustCenterDoc(
+        """
+        IDs of the trustCenterDocs to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterDocBulkDeletePayload!
 }
 
 """
@@ -104559,6 +106546,16 @@ type TrustCenterDocBulkCreatePayload {
     Created trustCenterDocs
     """
     trustCenterDocs: [TrustCenterDoc!]
+}
+
+"""
+Return response for deleteBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkDeletePayload {
+    """
+    Deleted trustCenterDoc IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
     """
@@ -104839,6 +106836,15 @@ extend type Mutation{
         """
         id: ID!
     ): TrustCenterSubprocessorDeletePayload!
+    """
+    Delete multiple trustCenterSubprocessors
+    """
+    deleteBulkTrustCenterSubprocessor(
+        """
+        IDs of the trustCenterSubprocessors to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterSubprocessorBulkDeletePayload!
 }
 
 """
@@ -104879,6 +106885,16 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+
+"""
+Return response for deleteBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkDeletePayload {
+    """
+    Deleted trustCenterSubprocessor IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterwatermarkconfig.graphql", Input: `extend type Query {
     """
@@ -105114,6 +107130,15 @@ extend type Mutation{
         """
         input: UpdateUserSettingInput!
     ): UserSettingUpdatePayload!
+    """
+    Delete multiple userSettings
+    """
+    deleteBulkUserSetting(
+        """
+        IDs of the userSettings to delete
+        """
+        ids: [ID!]!
+    ): UserSettingBulkDeletePayload!
 }
 
 """
@@ -105144,6 +107169,16 @@ type UserSettingBulkCreatePayload {
     Created userSettings
     """
     userSettings: [UserSetting!]
+}
+
+"""
+Return response for deleteBulkUserSetting mutation
+"""
+type UserSettingBulkDeletePayload {
+    """
+    Deleted userSetting IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/webauthn.graphql", Input: `extend type Mutation{
     """

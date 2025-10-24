@@ -8,6 +8,7 @@ import (
 var importSchemaMimeTypes = []string{
 	"text/plain; charset=utf-8", "text/plain",
 	"text/markdown",
+	"text/x-markdown",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 

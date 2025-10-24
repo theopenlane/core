@@ -1491,6 +1491,47 @@ var (
 			},
 		},
 	}
+	// FileDownloadTokensColumns holds the columns for the "file_download_tokens" table.
+	FileDownloadTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "token", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "ttl", Type: field.TypeTime, Nullable: true},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "secret", Type: field.TypeBytes, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+	}
+	// FileDownloadTokensTable holds the schema information for the "file_download_tokens" table.
+	FileDownloadTokensTable = &schema.Table{
+		Name:       "file_download_tokens",
+		Columns:    FileDownloadTokensColumns,
+		PrimaryKey: []*schema.Column{FileDownloadTokensColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "file_download_tokens_users_file_download_tokens",
+				Columns:    []*schema.Column{FileDownloadTokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "filedownloadtoken_token",
+				Unique:  true,
+				Columns: []*schema.Column{FileDownloadTokensColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2827,8 +2868,11 @@ var (
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "control_comments", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_comments", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_comments", Type: field.TypeString, Nullable: true},
 		{Name: "program_notes", Type: field.TypeString, Nullable: true},
+		{Name: "risk_comments", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
 	}
@@ -2851,26 +2895,44 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_organizations_notes",
+				Symbol:     "notes_internal_policies_comments",
 				Columns:    []*schema.Column{NotesColumns[11]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_organizations_notes",
+				Columns:    []*schema.Column{NotesColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "notes_procedures_comments",
+				Columns:    []*schema.Column{NotesColumns[13]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[12]},
+				Columns:    []*schema.Column{NotesColumns[14]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "notes_risks_comments",
+				Columns:    []*schema.Column{NotesColumns[15]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "notes_subcontrols_comments",
-				Columns:    []*schema.Column{NotesColumns[13]},
+				Columns:    []*schema.Column{NotesColumns[16]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[14]},
+				Columns:    []*schema.Column{NotesColumns[17]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2879,12 +2941,12 @@ var (
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[7], NotesColumns[11]},
+				Columns: []*schema.Column{NotesColumns[7], NotesColumns[12]},
 			},
 			{
 				Name:    "note_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[11]},
+				Columns: []*schema.Column{NotesColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5301,7 +5363,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN"}, Default: "HELVETICA"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
 	}
@@ -5363,7 +5425,7 @@ var (
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
 		{Name: "rotation", Type: field.TypeFloat64, Nullable: true, Default: 45},
 		{Name: "color", Type: field.TypeString, Nullable: true, Default: "#808080"},
-		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"arial", "helvetica", "times", "times_new_roman", "georgia", "verdana", "courier", "courier_new", "trebuchet_ms", "comic_sans_ms", "impact", "palatino", "garamond", "bookman", "avant_garde"}, Default: "arial"},
+		{Name: "font", Type: field.TypeEnum, Nullable: true, Enums: []string{"COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN"}, Default: "HELVETICA"},
 	}
 	// TrustCenterWatermarkConfigHistoryTable holds the schema information for the "trust_center_watermark_config_history" table.
 	TrustCenterWatermarkConfigHistoryTable = &schema.Table{
@@ -8410,6 +8472,7 @@ var (
 		EvidenceHistoryTable,
 		ExportsTable,
 		FilesTable,
+		FileDownloadTokensTable,
 		FileHistoryTable,
 		GroupsTable,
 		GroupHistoryTable,
@@ -8687,6 +8750,7 @@ func init() {
 	FilesTable.ForeignKeys[0].RefTable = ExportsTable
 	FilesTable.ForeignKeys[1].RefTable = IntegrationsTable
 	FilesTable.ForeignKeys[2].RefTable = NotesTable
+	FileDownloadTokensTable.ForeignKeys[0].RefTable = UsersTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -8768,10 +8832,13 @@ func init() {
 	}
 	NotesTable.ForeignKeys[0].RefTable = ControlsTable
 	NotesTable.ForeignKeys[1].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[3].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[4].RefTable = SubcontrolsTable
-	NotesTable.ForeignKeys[5].RefTable = TasksTable
+	NotesTable.ForeignKeys[2].RefTable = InternalPoliciesTable
+	NotesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[4].RefTable = ProceduresTable
+	NotesTable.ForeignKeys[5].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[6].RefTable = RisksTable
+	NotesTable.ForeignKeys[7].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[8].RefTable = TasksTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}

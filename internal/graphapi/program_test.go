@@ -558,7 +558,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 
 	archivedProgram := (&ProgramBuilder{client: suite.client, Status: enums.ProgramStatusArchived}).MustNew(testUser1.UserCtx, t)
 
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{})
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
+		ProgramID: &program.ID,
+	})
 	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""

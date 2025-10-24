@@ -1,0 +1,31 @@
+{
+  "id": "evidence-12345",
+  "type": "compliance_evidence",
+  "metadata": {
+    "created_at": "2025-10-04T00:00:00Z",
+    "created_by": "user@example.com",
+    "control_id": "AC-2",
+    "control_family": "Access Control"
+  },
+  "findings": [
+    {
+      "finding_id": "F-001",
+      "severity": "high",
+      "description": "Unauthorized access detected in production environment",
+      "remediation": "Implement multi-factor authentication for all privileged accounts"
+    },
+    {
+      "finding_id": "F-002",
+      "severity": "medium",
+      "description": "Weak password policies observed",
+      "remediation": "Enforce minimum 12 character passwords with complexity requirements"
+    }
+  ],
+  "attachments": [
+    "screenshot-login-page.png",
+    "audit-log-export.csv",
+    "remediation-plan.pdf"
+  ],
+  "status": "under_review",
+  "tags": ["security", "access-control", "audit"]
+}

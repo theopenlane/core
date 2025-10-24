@@ -357,6 +357,18 @@ func (f FileFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FileMutation", m)
 }
 
+// The FileDownloadTokenFunc type is an adapter to allow the use of ordinary
+// function as FileDownloadToken mutator.
+type FileDownloadTokenFunc func(context.Context, *generated.FileDownloadTokenMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FileDownloadTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.FileDownloadTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FileDownloadTokenMutation", m)
+}
+
 // The FileHistoryFunc type is an adapter to allow the use of ordinary
 // function as FileHistory mutator.
 type FileHistoryFunc func(context.Context, *generated.FileHistoryMutation) (generated.Value, error)
