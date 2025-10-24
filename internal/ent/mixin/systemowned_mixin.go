@@ -168,6 +168,8 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 
 		systemOwned, _ := mut.SystemOwned()
 		if systemOwned {
+			zerolog.Ctx(ctx).Warn().Msg("attempt to modify system owned object by non system admin")
+
 			return generated.ErrPermissionDenied
 		}
 
@@ -185,6 +187,8 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 		}
 
 		if systemOwned {
+			zerolog.Ctx(ctx).Warn().Msg("attempt to modify system owned object by non system admin")
+
 			return generated.ErrPermissionDenied
 		}
 

@@ -148,6 +148,8 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	// deny if it was a mutation is not allowed
+	zerolog.Ctx(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID).Msg("request denied by access for user in organization")
+
 	return generated.ErrPermissionDenied
 }
 
@@ -196,7 +198,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					zerolog.Ctx(ctx).Debug().Str("relation", relation).Str("organization_id", parentOrgID).
+					zerolog.Ctx(ctx).Error().Str("relation", relation).Str("organization_id", parentOrgID).
 						Msg("access denied to parent org")
 
 					return generated.ErrPermissionDenied
@@ -243,6 +245,8 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
+		zerolog.Ctx(ctx).Error().Str("relation", relation).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", user.OrganizationID).Msg("request denied by access for user in organization")
+
 		return generated.ErrPermissionDenied
 	})
 }
