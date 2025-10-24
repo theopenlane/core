@@ -46,7 +46,6 @@ authz:
         scopes: ""
     enabled: true
     hostUrl: https://authz.theopenlane.io
-    ignoreDuplicateKeyError: true
     modelFile: fga/model/model.fga
     modelId: ""
     storeId: ""

@@ -289,8 +289,6 @@ coreConfiguration:
       issuer: ""  # @schema type:string
       # -- scopes for the openFGA client
       scopes: ""  # @schema type:string
-    # -- ignore duplicate key error
-    ignoreDuplicateKeyError: true  # @schema type:boolean; default:true
   # -- DB contains the database configuration for the ent client
   db:
     # -- debug enables printing the debug database logs
