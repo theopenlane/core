@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -47,13 +48,15 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 
 		access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
 		if err != nil {
-			log.Err(err).Interface("req", ac).Msg("failed to check access")
+			zerolog.Ctx(ctx).Err(err).Interface("req", ac).Msg("failed to check access")
 
 			return generated.ErrPermissionDenied
 		}
 
 		if !access {
 			// deny if the user does not have access to create the object
+			zerolog.Ctx(ctx).Error().Str("relation", relation).Str("organization_id", au.OrganizationID).Str("user_id", au.SubjectID).Str("email", au.SubjectEmail).Msg("access denied to create object in organization")
+
 			return generated.ErrPermissionDenied
 		}
 
