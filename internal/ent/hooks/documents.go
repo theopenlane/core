@@ -16,9 +16,12 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -246,4 +249,92 @@ func importURLToSchema(m importSchemaMutation) error {
 	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
+}
+
+// statusMutation is an interface for mutations that have status and approver/delegate fields
+type statusMutation interface {
+	utils.GenericMutation
+
+	Status() (r enums.DocumentStatus, exists bool)
+	OldApproverID(ctx context.Context) (v string, err error)
+	OldDelegateID(ctx context.Context) (v string, err error)
+	ApproverID() (id string, exists bool)
+	DelegateID() (id string, exists bool)
+}
+
+// HookStatusApproval is an ent hook that ensures only users in the approver or delegate group can set status to APPROVED
+func HookStatusApproval() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			mut, ok := m.(statusMutation)
+			if !ok {
+				log.Info().Msg("status approval hook used on unsupported mutation type")
+				return next.Mutate(ctx, m)
+			}
+
+			// Check if status is being set to APPROVED
+			status, exists := mut.Status()
+			if !exists || status != enums.DocumentApproved {
+				// Not setting to APPROVED, allow the mutation
+				return next.Mutate(ctx, m)
+			}
+
+			// Get the authenticated user
+			actor, err := auth.GetAuthenticatedUserFromContext(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			// Determine the approver and delegate group IDs based on operation type
+			var approverID, delegateID string
+
+			switch mut.Op() {
+			case ent.OpCreate:
+				// For create operations, get the IDs from the mutation
+				approverID, _ = mut.ApproverID()
+				delegateID, _ = mut.DelegateID()
+
+			case ent.OpUpdate, ent.OpUpdateOne:
+				// For update operations, get the old values from the database
+				approverID, _ = mut.OldApproverID(ctx)
+				delegateID, _ = mut.OldDelegateID(ctx)
+			}
+
+			// If neither approver nor delegate group is set, reject the approval
+			if approverID == "" && delegateID == "" {
+				return nil, ErrStatusApprovedNotAllowed
+			}
+
+			// Check if the user is a member of either the approver or delegate group
+			query := mut.Client().GroupMembership.Query().
+				Where(groupmembership.UserID(actor.SubjectID))
+
+			// Build the query to check membership in either group
+			if approverID != "" && delegateID != "" {
+				query = query.Where(
+					groupmembership.Or(
+						groupmembership.GroupID(approverID),
+						groupmembership.GroupID(delegateID),
+					),
+				)
+			} else if approverID != "" {
+				query = query.Where(groupmembership.GroupID(approverID))
+			} else {
+				query = query.Where(groupmembership.GroupID(delegateID))
+			}
+
+			// Check if the user is a member of any of the groups
+			isMember, err := query.Exist(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if !isMember {
+				return nil, ErrStatusApprovedNotAllowed
+			}
+
+			// User is authorized, proceed with the mutation
+			return next.Mutate(ctx, m)
+		})
+	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
 }

@@ -62,6 +62,10 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 		),
 		hooks.HookImportDocument(),
 		hooks.HookSummarizeDetails(),
+		hook.On(
+			hooks.HookStatusApproval(),
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 
