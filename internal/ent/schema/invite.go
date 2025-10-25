@@ -106,6 +106,10 @@ func (Invite) Fields() []ent.Field {
 			Nillable().
 			Annotations(entgql.Skip()).
 			Sensitive(),
+		field.Bool("ownership_transfer").
+			Comment("indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner").
+			Default(false).
+			Optional(),
 	}
 }
 

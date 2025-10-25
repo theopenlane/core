@@ -216,6 +216,26 @@ func (_u *InviteUpdate) SetSecret(v []byte) *InviteUpdate {
 	return _u
 }
 
+// SetOwnershipTransfer sets the "ownership_transfer" field.
+func (_u *InviteUpdate) SetOwnershipTransfer(v bool) *InviteUpdate {
+	_u.mutation.SetOwnershipTransfer(v)
+	return _u
+}
+
+// SetNillableOwnershipTransfer sets the "ownership_transfer" field if the given value is not nil.
+func (_u *InviteUpdate) SetNillableOwnershipTransfer(v *bool) *InviteUpdate {
+	if v != nil {
+		_u.SetOwnershipTransfer(*v)
+	}
+	return _u
+}
+
+// ClearOwnershipTransfer clears the value of the "ownership_transfer" field.
+func (_u *InviteUpdate) ClearOwnershipTransfer() *InviteUpdate {
+	_u.mutation.ClearOwnershipTransfer()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InviteUpdate) SetOwner(v *Organization) *InviteUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -450,6 +470,12 @@ func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
+	}
+	if value, ok := _u.mutation.OwnershipTransfer(); ok {
+		_spec.SetField(invite.FieldOwnershipTransfer, field.TypeBool, value)
+	}
+	if _u.mutation.OwnershipTransferCleared() {
+		_spec.ClearField(invite.FieldOwnershipTransfer, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -783,6 +809,26 @@ func (_u *InviteUpdateOne) SetSecret(v []byte) *InviteUpdateOne {
 	return _u
 }
 
+// SetOwnershipTransfer sets the "ownership_transfer" field.
+func (_u *InviteUpdateOne) SetOwnershipTransfer(v bool) *InviteUpdateOne {
+	_u.mutation.SetOwnershipTransfer(v)
+	return _u
+}
+
+// SetNillableOwnershipTransfer sets the "ownership_transfer" field if the given value is not nil.
+func (_u *InviteUpdateOne) SetNillableOwnershipTransfer(v *bool) *InviteUpdateOne {
+	if v != nil {
+		_u.SetOwnershipTransfer(*v)
+	}
+	return _u
+}
+
+// ClearOwnershipTransfer clears the value of the "ownership_transfer" field.
+func (_u *InviteUpdateOne) ClearOwnershipTransfer() *InviteUpdateOne {
+	_u.mutation.ClearOwnershipTransfer()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InviteUpdateOne) SetOwner(v *Organization) *InviteUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1047,6 +1093,12 @@ func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err erro
 	}
 	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
+	}
+	if value, ok := _u.mutation.OwnershipTransfer(); ok {
+		_spec.SetField(invite.FieldOwnershipTransfer, field.TypeBool, value)
+	}
+	if _u.mutation.OwnershipTransferCleared() {
+		_spec.ClearField(invite.FieldOwnershipTransfer, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

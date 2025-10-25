@@ -443,3 +443,27 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
     }
   }
 }
+
+mutation TransferOrganizationOwnership($organizationID: ID!, $newOwnerID: ID!) {
+  transferOrganizationOwnership(
+    organizationID: $organizationID
+    newOwnerID: $newOwnerID
+  ) {
+    organization {
+      id
+      name
+      displayName
+      members {
+        totalCount
+        edges {
+          node {
+            id
+            role
+            userID
+          }
+        }
+      }
+    }
+    invitationSent
+  }
+}

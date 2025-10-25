@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -166,6 +168,8 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -256,6 +260,8 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":

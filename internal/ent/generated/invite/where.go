@@ -133,6 +133,11 @@ func Secret(v []byte) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldSecret, v))
 }
 
+// OwnershipTransfer applies equality check predicate on the "ownership_transfer" field. It's identical to OwnershipTransferEQ.
+func OwnershipTransfer(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldOwnershipTransfer, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldCreatedAt, v))
@@ -976,6 +981,26 @@ func SecretLT(v []byte) predicate.Invite {
 // SecretLTE applies the LTE predicate on the "secret" field.
 func SecretLTE(v []byte) predicate.Invite {
 	return predicate.Invite(sql.FieldLTE(FieldSecret, v))
+}
+
+// OwnershipTransferEQ applies the EQ predicate on the "ownership_transfer" field.
+func OwnershipTransferEQ(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldOwnershipTransfer, v))
+}
+
+// OwnershipTransferNEQ applies the NEQ predicate on the "ownership_transfer" field.
+func OwnershipTransferNEQ(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldNEQ(FieldOwnershipTransfer, v))
+}
+
+// OwnershipTransferIsNil applies the IsNil predicate on the "ownership_transfer" field.
+func OwnershipTransferIsNil() predicate.Invite {
+	return predicate.Invite(sql.FieldIsNull(FieldOwnershipTransfer))
+}
+
+// OwnershipTransferNotNil applies the NotNil predicate on the "ownership_transfer" field.
+func OwnershipTransferNotNil() predicate.Invite {
+	return predicate.Invite(sql.FieldNotNull(FieldOwnershipTransfer))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

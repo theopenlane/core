@@ -49,6 +49,8 @@ type Invite struct {
 	RequestorID string `json:"requestor_id,omitempty"`
 	// the comparison secret to verify the token's signature
 	Secret *[]byte `json:"-"`
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	OwnershipTransfer bool `json:"ownership_transfer,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InviteQuery when eager-loading is set.
 	Edges        InviteEdges `json:"edges"`
@@ -109,6 +111,8 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case invite.FieldSecret:
 			values[i] = new([]byte)
+		case invite.FieldOwnershipTransfer:
+			values[i] = new(sql.NullBool)
 		case invite.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
 		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldDeletedBy, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole, invite.FieldRequestorID:
@@ -226,6 +230,12 @@ func (_m *Invite) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				_m.Secret = value
 			}
+		case invite.FieldOwnershipTransfer:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ownership_transfer", values[i])
+			} else if value.Valid {
+				_m.OwnershipTransfer = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -319,6 +329,9 @@ func (_m *Invite) String() string {
 	builder.WriteString(_m.RequestorID)
 	builder.WriteString(", ")
 	builder.WriteString("secret=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("ownership_transfer=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OwnershipTransfer))
 	builder.WriteByte(')')
 	return builder.String()
 }
