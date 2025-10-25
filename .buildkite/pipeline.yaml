@@ -503,6 +503,7 @@ steps:
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     if: build.branch !~ /^renovate\//
+    if_changed: "{**.go,go.{mod,sum}}"
     key: "image-build"
     steps:
       - label: ":docker: docker pr build"
@@ -512,7 +513,6 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
-        if_changed: "{**.go,go.{mod,sum}}"
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
