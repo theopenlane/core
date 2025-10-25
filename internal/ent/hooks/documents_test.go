@@ -1,10 +1,15 @@
 package hooks
 
 import (
+	"context"
 	"testing"
 
+	"entgo.io/ent"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 func TestFilenameToTitle(t *testing.T) {
@@ -95,6 +100,87 @@ func TestUpdatePlaceholderText(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result := updatePlaceholderText(tt.details, tt.orgName)
 			assert.Check(t, is.Equal(result, tt.expected))
+		})
+	}
+}
+
+// mockStatusMutation is a mock implementation of statusMutation for testing
+type mockStatusMutation struct {
+	op          ent.Op
+	status      enums.DocumentStatus
+	approverID  string
+	delegateID  string
+	client      *generated.Client
+}
+
+func (m *mockStatusMutation) Op() ent.Op                                        { return m.op }
+func (m *mockStatusMutation) Type() string                                      { return "MockDocument" }
+func (m *mockStatusMutation) ID() (string, bool)                                { return "test-id", true }
+func (m *mockStatusMutation) IDs(ctx context.Context) ([]string, error)         { return []string{"test-id"}, nil }
+func (m *mockStatusMutation) Status() (enums.DocumentStatus, bool)              { return m.status, true }
+func (m *mockStatusMutation) ApproverID() (string, bool)                        { return m.approverID, m.approverID != "" }
+func (m *mockStatusMutation) DelegateID() (string, bool)                        { return m.delegateID, m.delegateID != "" }
+func (m *mockStatusMutation) OldApproverID(ctx context.Context) (string, error) { return m.approverID, nil }
+func (m *mockStatusMutation) OldDelegateID(ctx context.Context) (string, error) { return m.delegateID, nil }
+func (m *mockStatusMutation) Client() *generated.Client                         { return m.client }
+
+func TestGetApproverDelegateIDs(t *testing.T) {
+	ctx := context.Background()
+
+	tests := []struct {
+		name               string
+		op                 ent.Op
+		approverID         string
+		delegateID         string
+		expectedApproverID string
+		expectedDelegateID string
+	}{
+		{
+			name:               "create operation with both IDs",
+			op:                 ent.OpCreate,
+			approverID:         "approver-123",
+			delegateID:         "delegate-456",
+			expectedApproverID: "approver-123",
+			expectedDelegateID: "delegate-456",
+		},
+		{
+			name:               "create operation with only approver",
+			op:                 ent.OpCreate,
+			approverID:         "approver-123",
+			delegateID:         "",
+			expectedApproverID: "approver-123",
+			expectedDelegateID: "",
+		},
+		{
+			name:               "update operation with both IDs",
+			op:                 ent.OpUpdate,
+			approverID:         "approver-789",
+			delegateID:         "delegate-012",
+			expectedApproverID: "approver-789",
+			expectedDelegateID: "delegate-012",
+		},
+		{
+			name:               "updateone operation with only delegate",
+			op:                 ent.OpUpdateOne,
+			approverID:         "",
+			delegateID:         "delegate-345",
+			expectedApproverID: "",
+			expectedDelegateID: "delegate-345",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mut := &mockStatusMutation{
+				op:         tt.op,
+				approverID: tt.approverID,
+				delegateID: tt.delegateID,
+			}
+
+			approverID, delegateID := getApproverDelegateIDs(ctx, mut)
+
+			assert.Check(t, is.Equal(approverID, tt.expectedApproverID))
+			assert.Check(t, is.Equal(delegateID, tt.expectedDelegateID))
 		})
 	}
 }
