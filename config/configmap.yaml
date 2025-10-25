@@ -180,7 +180,6 @@ data:
   CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.openlane.coreConfiguration.authz.credentials.audience | quote }}
   CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.openlane.coreConfiguration.authz.credentials.issuer | quote }}
   CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
-  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.openlane.coreConfiguration.authz.ignoreDuplicateKeyError | quote | default "true" }}
   CORE_DB_DEBUG: {{ .Values.openlane.coreConfiguration.db.debug | quote | default "false" }}
   CORE_DB_DATABASENAME: {{ .Values.openlane.coreConfiguration.db.databaseName | quote | default "openlane" }}
   CORE_DB_DRIVERNAME: {{ .Values.openlane.coreConfiguration.db.driverName | quote | default "pgx" }}

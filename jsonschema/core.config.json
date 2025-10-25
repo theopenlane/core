@@ -668,10 +668,6 @@
         "credentials": {
           "$ref": "#/$defs/fgax.Credentials",
           "description": "credentials for the openFGA client"
-        },
-        "ignoreDuplicateKeyError": {
-          "type": "boolean",
-          "description": "ignore duplicate key error"
         }
       },
       "additionalProperties": false,

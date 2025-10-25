@@ -53,10 +53,12 @@ func trustCenterComplianceCreateHook(ctx context.Context, m *generated.TrustCent
 			writeTuples = append(writeTuples, fgax.GetTupleKey(standardReq))
 		}
 
-		if _, err := m.Authz.WriteTupleKeys(ctx, writeTuples, nil); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+		if len(writeTuples) > 0 {
+			if _, err := m.Authz.WriteTupleKeys(ctx, writeTuples, nil); err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-			return ErrInternalServerError
+				return ErrInternalServerError
+			}
 		}
 	}
 
@@ -78,6 +80,7 @@ func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCent
 		ObjectType:  "standard",
 		Relation:    "associated_with",
 	})
+
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tupleKey}); err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuple")
 
