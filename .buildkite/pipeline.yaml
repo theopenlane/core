@@ -512,6 +512,7 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
+        if_changed: "{**.go,go.{mod,sum}}"
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
