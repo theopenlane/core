@@ -174,6 +174,11 @@ func updateTaskTuples(ctx context.Context, m *generated.TaskMutation, newUser, r
 		deleteTuples = append(deleteTuples, deleteTuple)
 	}
 
+	// ensure there is something to add or delete
+	if len(addTuples) == 0 && len(deleteTuples) == 0 {
+		return nil
+	}
+
 	// add the new assignee and remove the old assignee
 	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, deleteTuples); err != nil {
 		return err

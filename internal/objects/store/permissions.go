@@ -70,11 +70,13 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 
 			log.Debug().Interface("req", req).Msg("adding file permissions")
 
-			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
-				return ctx, err
-			}
+			if len(tuples) > 0 {
+				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
+					return ctx, err
+				}
 
-			log.Debug().Interface("req", req).Msg("added file permissions")
+				log.Debug().Interface("req", req).Msg("added file permissions")
+			}
 
 			ctx = pkgobjects.RemoveFileFromContext(ctx, f)
 

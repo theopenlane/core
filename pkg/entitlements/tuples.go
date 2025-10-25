@@ -31,6 +31,10 @@ func DeleteModuleTuple(ctx context.Context, authz *fgax.Client, orgID, moduleNam
 // CreateFeatureTuples writes default feature tuples to FGA and inserts them into
 // the feature cache if available.
 func CreateFeatureTuples(ctx context.Context, authz *fgax.Client, orgID string, feats []models.OrgModule) error {
+	if len(feats) == 0 {
+		return nil
+	}
+
 	tuples := make([]fgax.TupleKey, 0, len(feats))
 
 	for _, f := range feats {
