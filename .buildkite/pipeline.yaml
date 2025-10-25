@@ -248,6 +248,7 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - all except graphapi"
+        if_changed:  "**.go"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
