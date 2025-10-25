@@ -147,12 +147,13 @@ func HookInviteAccepted() ent.Hook {
 			ownerID, ownerOK := m.OwnerID()
 			role, roleOK := m.Role()
 			recipient, recipientOK := m.Recipient()
+			ownershipTransfer, ownershipTransferOK := m.OwnershipTransfer()
 			groupIDs := m.GroupsIDs()
 
 			// if we are missing any, get them from the db
 			// this should happen on an update mutation
 			id, _ := m.ID()
-			if !ownerOK || !roleOK || !recipientOK {
+			if !ownerOK || !roleOK || !recipientOK || !ownershipTransferOK {
 				// bypass interceptors that filters results
 				invite, err := m.Client().Invite.Query().Where(invite.ID(id)).Only(ctx)
 				if err != nil {
@@ -164,6 +165,7 @@ func HookInviteAccepted() ent.Hook {
 				ownerID = invite.OwnerID
 				role = invite.Role
 				recipient = invite.Recipient
+				ownershipTransfer = invite.OwnershipTransfer
 			}
 
 			// add the org to the authenticated context for querying
@@ -206,6 +208,41 @@ func HookInviteAccepted() ent.Hook {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
+			}
+
+			// if this is an ownership transfer, demote the current owner to admin
+			if ownershipTransfer {
+				// find the current owner(s) of the organization
+				currentOwners, err := m.Client().OrgMembership.Query().
+					Where(
+						orgmembership.OrganizationID(ownerID),
+						orgmembership.RoleEQ(enums.RoleOwner),
+						orgmembership.UserIDNEQ(userID), // exclude the new owner who was just added
+					).
+					All(allowCtx)
+				if err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to query current organization owners")
+					return nil, err
+				}
+
+				// demote all current owners to admin
+				for _, currentOwner := range currentOwners {
+					adminRole := enums.RoleAdmin
+					if err := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
+						SetRole(adminRole).
+						Exec(allowCtx); err != nil {
+						zerolog.Ctx(ctx).Error().Err(err).
+							Str("user_id", currentOwner.UserID).
+							Msg("unable to demote current owner to admin")
+						return nil, err
+					}
+				}
+
+				zerolog.Ctx(ctx).Info().
+					Str("organization_id", ownerID).
+					Str("new_owner_id", userID).
+					Int("demoted_owners", len(currentOwners)).
+					Msg("organization ownership transfer completed")
 			}
 
 			// add the user to the group as member if any were specified

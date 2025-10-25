@@ -8666,6 +8666,10 @@ input CreateInviteInput {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   ownerID: ID
   eventIDs: [ID!]
   groupIDs: [ID!]
@@ -18758,6 +18762,7 @@ enum GroupMembershipHistoryOrderField {
 GroupMembershipHistoryRole is enum for the field role
 """
 enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
 }
@@ -18945,6 +18950,7 @@ enum GroupMembershipOrderField {
 GroupMembershipRole is enum for the field role
 """
 enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
 }
@@ -23022,6 +23028,10 @@ type Invite implements Node {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   owner: Organization
   events(
     """
@@ -23152,6 +23162,7 @@ enum InviteOrderField {
 InviteRole is enum for the field role
 """
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
 }
@@ -23328,6 +23339,13 @@ input InviteWhereInput {
   requestorIDNotNil: Boolean
   requestorIDEqualFold: String
   requestorIDContainsFold: String
+  """
+  ownership_transfer field predicates
+  """
+  ownershipTransfer: Boolean
+  ownershipTransferNEQ: Boolean
+  ownershipTransferIsNil: Boolean
+  ownershipTransferNotNil: Boolean
   """
   owner edge predicates
   """
@@ -28354,9 +28372,9 @@ enum OrgMembershipHistoryOrderField {
 OrgMembershipHistoryRole is enum for the field role
 """
 enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
-  OWNER
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -28542,9 +28560,9 @@ enum OrgMembershipOrderField {
 OrgMembershipRole is enum for the field role
 """
 enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
-  OWNER
 }
 """
 OrgMembershipWhereInput is used for filtering OrgMembership objects.
@@ -36390,6 +36408,7 @@ enum ProgramMembershipHistoryOrderField {
 ProgramMembershipHistoryRole is enum for the field role
 """
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
 }
@@ -36577,6 +36596,7 @@ enum ProgramMembershipOrderField {
 ProgramMembershipRole is enum for the field role
 """
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
 }
@@ -55158,6 +55178,11 @@ input UpdateInviteInput {
   the number of attempts made to perform email send of the invitation, maximum of 5
   """
   sendAttempts: Int
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
+  clearOwnershipTransfer: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]
@@ -57923,6 +57948,7 @@ enum UserHistoryOrderField {
 UserHistoryRole is enum for the field role
 """
 enum UserHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
   USER
@@ -58263,6 +58289,7 @@ enum UserOrderField {
 UserRole is enum for the field role
 """
 enum UserRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+  OWNER
   ADMIN
   MEMBER
   USER

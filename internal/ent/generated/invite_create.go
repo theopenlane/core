@@ -210,6 +210,20 @@ func (_c *InviteCreate) SetSecret(v []byte) *InviteCreate {
 	return _c
 }
 
+// SetOwnershipTransfer sets the "ownership_transfer" field.
+func (_c *InviteCreate) SetOwnershipTransfer(v bool) *InviteCreate {
+	_c.mutation.SetOwnershipTransfer(v)
+	return _c
+}
+
+// SetNillableOwnershipTransfer sets the "ownership_transfer" field if the given value is not nil.
+func (_c *InviteCreate) SetNillableOwnershipTransfer(v *bool) *InviteCreate {
+	if v != nil {
+		_c.SetOwnershipTransfer(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InviteCreate) SetID(v string) *InviteCreate {
 	_c.mutation.SetID(v)
@@ -328,6 +342,10 @@ func (_c *InviteCreate) defaults() error {
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := invite.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
+	}
+	if _, ok := _c.mutation.OwnershipTransfer(); !ok {
+		v := invite.DefaultOwnershipTransfer
+		_c.mutation.SetOwnershipTransfer(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if invite.DefaultID == nil {
@@ -485,6 +503,10 @@ func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
+	}
+	if value, ok := _c.mutation.OwnershipTransfer(); ok {
+		_spec.SetField(invite.FieldOwnershipTransfer, field.TypeBool, value)
+		_node.OwnershipTransfer = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

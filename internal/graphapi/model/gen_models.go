@@ -1075,6 +1075,14 @@ type OrganizationSettingUpdatePayload struct {
 	OrganizationSetting *generated.OrganizationSetting `json:"organizationSetting"`
 }
 
+// Return response for transferOrganizationOwnership mutation
+type OrganizationTransferOwnershipPayload struct {
+	// Updated organization
+	Organization *generated.Organization `json:"organization"`
+	// Whether an invitation was sent (true if new owner wasn't a member)
+	InvitationSent bool `json:"invitationSent"`
+}
+
 // Return response for updateOrganization mutation
 type OrganizationUpdatePayload struct {
 	// Updated organization

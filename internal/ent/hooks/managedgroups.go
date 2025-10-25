@@ -253,6 +253,24 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 		return err
 	}
 
+	// Check if user is already a member of this group
+	existingMembership, err := m.Client().GroupMembership.Query().
+		Where(
+			groupmembership.UserID(om.UserID),
+			groupmembership.GroupID(group.ID),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error checking existing group membership")
+		return err
+	}
+
+	// If user is already in the group, skip creation
+	if existingMembership {
+		zerolog.Ctx(ctx).Debug().Str("user_id", om.UserID).Str("group", groupName).Msg("user already in managed group, skipping")
+		return nil
+	}
+
 	input := generated.CreateGroupMembershipInput{
 		Role:    &enums.RoleMember,
 		UserID:  om.UserID,

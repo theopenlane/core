@@ -40537,6 +40537,12 @@ type InviteWhereInput struct {
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
 
+	// "ownership_transfer" field predicates.
+	OwnershipTransfer       *bool `json:"ownershipTransfer,omitempty"`
+	OwnershipTransferNEQ    *bool `json:"ownershipTransferNEQ,omitempty"`
+	OwnershipTransferIsNil  bool  `json:"ownershipTransferIsNil,omitempty"`
+	OwnershipTransferNotNil bool  `json:"ownershipTransferNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -41007,6 +41013,18 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	}
 	if i.RequestorIDContainsFold != nil {
 		predicates = append(predicates, invite.RequestorIDContainsFold(*i.RequestorIDContainsFold))
+	}
+	if i.OwnershipTransfer != nil {
+		predicates = append(predicates, invite.OwnershipTransferEQ(*i.OwnershipTransfer))
+	}
+	if i.OwnershipTransferNEQ != nil {
+		predicates = append(predicates, invite.OwnershipTransferNEQ(*i.OwnershipTransferNEQ))
+	}
+	if i.OwnershipTransferIsNil {
+		predicates = append(predicates, invite.OwnershipTransferIsNil())
+	}
+	if i.OwnershipTransferNotNil {
+		predicates = append(predicates, invite.OwnershipTransferNotNil())
 	}
 
 	if i.HasOwner != nil {

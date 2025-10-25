@@ -5663,15 +5663,16 @@ func (c *InternalPolicyUpdateOne) SetInput(i UpdateInternalPolicyInput) *Interna
 
 // CreateInviteInput represents a mutation input for creating invites.
 type CreateInviteInput struct {
-	Expires      *time.Time
-	Recipient    string
-	Status       *enums.InviteStatus
-	Role         *enums.Role
-	SendAttempts *int
-	RequestorID  *string
-	OwnerID      *string
-	EventIDs     []string
-	GroupIDs     []string
+	Expires           *time.Time
+	Recipient         string
+	Status            *enums.InviteStatus
+	Role              *enums.Role
+	SendAttempts      *int
+	RequestorID       *string
+	OwnershipTransfer *bool
+	OwnerID           *string
+	EventIDs          []string
+	GroupIDs          []string
 }
 
 // Mutate applies the CreateInviteInput on the InviteMutation builder.
@@ -5692,6 +5693,9 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	if v := i.RequestorID; v != nil {
 		m.SetRequestorID(*v)
 	}
+	if v := i.OwnershipTransfer; v != nil {
+		m.SetOwnershipTransfer(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -5711,19 +5715,21 @@ func (c *InviteCreate) SetInput(i CreateInviteInput) *InviteCreate {
 
 // UpdateInviteInput represents a mutation input for updating invites.
 type UpdateInviteInput struct {
-	ClearExpires   bool
-	Expires        *time.Time
-	Status         *enums.InviteStatus
-	Role           *enums.Role
-	SendAttempts   *int
-	ClearOwner     bool
-	OwnerID        *string
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
-	ClearGroups    bool
-	AddGroupIDs    []string
-	RemoveGroupIDs []string
+	ClearExpires           bool
+	Expires                *time.Time
+	Status                 *enums.InviteStatus
+	Role                   *enums.Role
+	SendAttempts           *int
+	ClearOwnershipTransfer bool
+	OwnershipTransfer      *bool
+	ClearOwner             bool
+	OwnerID                *string
+	ClearEvents            bool
+	AddEventIDs            []string
+	RemoveEventIDs         []string
+	ClearGroups            bool
+	AddGroupIDs            []string
+	RemoveGroupIDs         []string
 }
 
 // Mutate applies the UpdateInviteInput on the InviteMutation builder.
@@ -5742,6 +5748,12 @@ func (i *UpdateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.SendAttempts; v != nil {
 		m.SetSendAttempts(*v)
+	}
+	if i.ClearOwnershipTransfer {
+		m.ClearOwnershipTransfer()
+	}
+	if v := i.OwnershipTransfer; v != nil {
+		m.SetOwnershipTransfer(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

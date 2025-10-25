@@ -5576,10 +5576,12 @@ type CreateInviteInput struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
 	// the user who initiated the invitation
-	RequestorID *string  `json:"requestorID,omitempty"`
-	OwnerID     *string  `json:"ownerID,omitempty"`
-	EventIDs    []string `json:"eventIDs,omitempty"`
-	GroupIDs    []string `json:"groupIDs,omitempty"`
+	RequestorID *string `json:"requestorID,omitempty"`
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	OwnershipTransfer *bool    `json:"ownershipTransfer,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	EventIDs          []string `json:"eventIDs,omitempty"`
+	GroupIDs          []string `json:"groupIDs,omitempty"`
 }
 
 // CreateJobResultInput is used for create JobResult object.
@@ -14533,10 +14535,12 @@ type Invite struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
 	// the user who initiated the invitation
-	RequestorID *string          `json:"requestorID,omitempty"`
-	Owner       *Organization    `json:"owner,omitempty"`
-	Events      *EventConnection `json:"events"`
-	Groups      *GroupConnection `json:"groups"`
+	RequestorID *string `json:"requestorID,omitempty"`
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	OwnershipTransfer *bool            `json:"ownershipTransfer,omitempty"`
+	Owner             *Organization    `json:"owner,omitempty"`
+	Events            *EventConnection `json:"events"`
+	Groups            *GroupConnection `json:"groups"`
 }
 
 func (Invite) IsNode() {}
@@ -14738,6 +14742,11 @@ type InviteWhereInput struct {
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+	// ownership_transfer field predicates
+	OwnershipTransfer       *bool `json:"ownershipTransfer,omitempty"`
+	OwnershipTransferNeq    *bool `json:"ownershipTransferNEQ,omitempty"`
+	OwnershipTransferIsNil  *bool `json:"ownershipTransferIsNil,omitempty"`
+	OwnershipTransferNotNil *bool `json:"ownershipTransferNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -20228,6 +20237,14 @@ type OrganizationSettingWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
+// Return response for transferOrganizationOwnership mutation
+type OrganizationTransferOwnershipPayload struct {
+	// Updated organization
+	Organization *Organization `json:"organization"`
+	// Whether an invitation was sent (true if new owner wasn't a member)
+	InvitationSent bool `json:"invitationSent"`
 }
 
 // Return response for updateOrganization mutation
@@ -33075,15 +33092,18 @@ type UpdateInviteInput struct {
 	Status *enums.InviteStatus `json:"status,omitempty"`
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
-	SendAttempts   *int64   `json:"sendAttempts,omitempty"`
-	OwnerID        *string  `json:"ownerID,omitempty"`
-	ClearOwner     *bool    `json:"clearOwner,omitempty"`
-	AddEventIDs    []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool    `json:"clearEvents,omitempty"`
-	AddGroupIDs    []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups    *bool    `json:"clearGroups,omitempty"`
+	SendAttempts *int64 `json:"sendAttempts,omitempty"`
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	OwnershipTransfer      *bool    `json:"ownershipTransfer,omitempty"`
+	ClearOwnershipTransfer *bool    `json:"clearOwnershipTransfer,omitempty"`
+	OwnerID                *string  `json:"ownerID,omitempty"`
+	ClearOwner             *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs            []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs         []string `json:"removeEventIDs,omitempty"`
+	ClearEvents            *bool    `json:"clearEvents,omitempty"`
+	AddGroupIDs            []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs         []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups            *bool    `json:"clearGroups,omitempty"`
 }
 
 // UpdateJobResultInput is used for update JobResult object.
