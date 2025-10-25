@@ -53,6 +53,8 @@ func HookDeleteCustomDomain() ent.Hook {
 				if !isDeleteOp(ctx, m) {
 					// only allow system admin to update
 					if !auth.IsSystemAdminFromContext(ctx) {
+						zerolog.Ctx(ctx).Warn().Msg("only system admins can update custom domains")
+
 						return nil, generated.ErrPermissionDenied
 					}
 

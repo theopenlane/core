@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
-	sliceutil "github.com/theopenlane/utils/slice"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -341,7 +340,7 @@ func setOrgFromInputInContext(ctx context.Context, inputOrgID *string) error {
 		return err
 	}
 
-	if !sliceutil.Contains(orgIDs, *inputOrgID) {
+	if !lo.Contains(orgIDs, *inputOrgID) {
 		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, *inputOrgID)
 	}
 

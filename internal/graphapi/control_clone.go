@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
@@ -130,6 +131,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !hasModules {
+			zerolog.Ctx(ctx).Error().Str("organization_id", ac.OrganizationID).Msg("organization does not have required modules enabled for control operations")
+
 			return nil, generated.ErrPermissionDenied
 		}
 	}
@@ -211,6 +214,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !allow {
+			zerolog.Ctx(ctx).Error().Str("organization_id", ac.OrganizationID).Str("user_id", ac.SubjectID).Msg("no access to edit specified program")
+
 			return nil, generated.ErrPermissionDenied
 		}
 	}

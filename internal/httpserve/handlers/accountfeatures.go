@@ -5,6 +5,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -13,8 +14,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	models "github.com/theopenlane/core/pkg/openapi"
-
-	sliceutil "github.com/theopenlane/utils/slice"
 )
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization
@@ -66,7 +65,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 func (h *Handler) getOrganizationID(id string, au *auth.AuthenticatedUser) (string, error) {
 	// if an ID is provided, check if the authenticated user has access to it
 	if id != "" {
-		if !sliceutil.Contains(au.OrganizationIDs, id) {
+		if !lo.Contains(au.OrganizationIDs, id) {
 			return "", ErrInvalidInput
 		}
 
