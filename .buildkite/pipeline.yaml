@@ -191,6 +191,7 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
+    if_changed: "{**.go,**.golangci.yaml}"
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
         if: build.branch !~ /^renovate\//
