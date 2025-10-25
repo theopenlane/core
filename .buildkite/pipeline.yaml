@@ -294,6 +294,16 @@ steps:
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
     if: build.branch !~ /^renovate\//
+    if_changed:
+      - "**.go"
+      - go.{mod,sum}
+      - .golangci.yaml
+      - cmd/**
+      - internal/**
+      - pkg/**
+      - config/**
+      - fga/**
+      - db/**
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
