@@ -16,7 +16,6 @@ env:
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
-  BUILDKITE_PULL_REQUEST_BASE_BRANCH: main
 
 steps:
   - group: ":knife: Pre-check"
@@ -29,7 +28,10 @@ steps:
           size: $RUNNER_LARGE
           location: "NYC"
         cancel_on_build_failing: true
-        if_changed: "{go.{mod,sum},internal/**,pkg/**}"
+        if_changed:
+          - go.{mod,sum}
+          - internal/**
+          - pkg/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -46,7 +48,10 @@ steps:
         key: "generate_config"
         cancel_on_build_failing: true
         if_changed:
-          "{go.{mod,sum},internal/**,pkg/**,config/**}"
+          - go.{mod,sum}
+          - internal/**
+          - pkg/**
+          - config/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -191,11 +196,14 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
-    if_changed: "{**.go,**.golangci.yaml}"
+    if_changed:
+      - "**.go"
+      - .golangci.yaml
+      - fga/**
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
         if: build.branch !~ /^renovate\//
-        if_changed: "{**.go,**.golangci.yaml}"
+        if_changed: "{**.go,.golangci.yaml}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -409,7 +417,10 @@ steps:
         key: "gobuild-server"
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
-        if_changed: "{**.go,go.{mod,sum},cmd/**}"
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
+          - cmd/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -433,7 +444,10 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
-        if_changed: "{**.go,go.{mod,sum},cmd/cli/**}"
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
+          - cmd/cli/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -453,7 +467,9 @@ steps:
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
-        if_changed: "{db/**,internal/ent/schema/**}"
+        if_changed:
+          - db/**
+          - internal/ent/schema/**
         soft_fail:
           - exit_status: 1
         plugins:
@@ -515,7 +531,9 @@ steps:
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     if: build.branch !~ /^renovate\//
-    if_changed: "{**.go,go.{mod,sum}}"
+    if_changed:
+      - "**.go"
+      - go.{mod,sum}
     key: "image-build"
     steps:
       - label: ":docker: docker pr build"
