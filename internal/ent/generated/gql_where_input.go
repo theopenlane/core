@@ -37913,6 +37913,10 @@ type InternalPolicyWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39054,6 +39058,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasFileWith(with...))
+	}
+	if i.HasComments != nil {
+		p := internalpolicy.HasComments()
+		if !*i.HasComments {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasCommentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -50343,6 +50365,18 @@ type NoteWhereInput struct {
 	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
 	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
 
+	// "procedure" edge predicates.
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
+
+	// "risk" edge predicates.
+	HasRisk     *bool             `json:"hasRisk,omitempty"`
+	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
+
+	// "internal_policy" edge predicates.
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -50794,6 +50828,60 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasSubcontrolWith(with...))
+	}
+	if i.HasProcedure != nil {
+		p := note.HasProcedure()
+		if !*i.HasProcedure {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProcedureWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		for _, w := range i.HasProcedureWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProcedureWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasProcedureWith(with...))
+	}
+	if i.HasRisk != nil {
+		p := note.HasRisk()
+		if !*i.HasRisk {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRiskWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRiskWith))
+		for _, w := range i.HasRiskWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRiskWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasRiskWith(with...))
+	}
+	if i.HasInternalPolicy != nil {
+		p := note.HasInternalPolicy()
+		if !*i.HasInternalPolicy {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalPolicyWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		for _, w := range i.HasInternalPolicyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasInternalPolicyWith(with...))
 	}
 	if i.HasFiles != nil {
 		p := note.HasFiles()
@@ -61078,6 +61166,10 @@ type ProcedureWhereInput struct {
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
@@ -62168,6 +62260,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasTasksWith(with...))
+	}
+	if i.HasComments != nil {
+		p := procedure.HasComments()
+		if !*i.HasComments {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasCommentsWith(with...))
 	}
 	if i.HasFile != nil {
 		p := procedure.HasFile()
@@ -67537,6 +67647,10 @@ type RiskWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -68600,6 +68714,24 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasDelegateWith(with...))
+	}
+	if i.HasComments != nil {
+		p := risk.HasComments()
+		if !*i.HasComments {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasCommentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

@@ -82,6 +82,17 @@ var (
 		Buckets: prometheus.DefBuckets,
 	}, []string{"operation"})
 
+	GraphQLQueryRejected = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_graphql_query_rejected_total",
+		Help: "The total number of GraphQL queries rejected",
+	}, []string{"reason"})
+
+	GraphQLQueryComplexity = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "openlane_graphql_query_complexity",
+		Help:    "The complexity of GraphQL queries by operation",
+		Buckets: []float64{5, 10, 25, 50, 100, 200, 500, 1000},
+	}, []string{"operation"})
+
 	FileUploadsInFlight = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "openlane_file_uploads_in_flight",
 		Help: "Current number of file uploads in progress",
@@ -133,6 +144,11 @@ var (
 		Help: "Total number of files deleted per storage provider",
 	}, []string{"provider"})
 
+	AuthenticationAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_authentication_attempts_total",
+		Help: "The total number of authentication attempts by type (jwt, jwt_anonymous, pat, api_token)",
+	}, []string{"type"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -143,6 +159,8 @@ var (
 		QueueTasksPushFailures,
 		GraphQLOperationTotal,
 		GraphQLOperationDuration,
+		GraphQLQueryRejected,
+		GraphQLQueryComplexity,
 		RequestValidations,
 		HandlerErrors,
 		HandlerResults,
@@ -156,6 +174,7 @@ var (
 		StorageProviderDownloads,
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
+		AuthenticationAttempts,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{

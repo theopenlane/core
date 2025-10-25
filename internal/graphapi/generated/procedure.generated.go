@@ -136,10 +136,41 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Procedure_comments(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProcedureBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProcedureBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProcedureBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -253,6 +284,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Procedure_comments(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -399,6 +432,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Procedure_comments(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -545,6 +580,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Procedure_comments(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -579,6 +616,45 @@ func (ec *executionContext) _ProcedureBulkCreatePayload(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("ProcedureBulkCreatePayload")
 		case "procedures":
 			out.Values[i] = ec._ProcedureBulkCreatePayload_procedures(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var procedureBulkDeletePayloadImplementors = []string{"ProcedureBulkDeletePayload"}
+
+func (ec *executionContext) _ProcedureBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ProcedureBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, procedureBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProcedureBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ProcedureBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -773,6 +849,20 @@ func (ec *executionContext) marshalNProcedureBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ProcedureBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProcedureBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureBulkDeletePayload) graphql.Marshaler {
+	return ec._ProcedureBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProcedureBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProcedureBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProcedureBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureBulkUpdatePayload) graphql.Marshaler {

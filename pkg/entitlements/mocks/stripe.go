@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 )
 
 type FakeStripeClient struct {

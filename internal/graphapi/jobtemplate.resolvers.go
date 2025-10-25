@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteJobTemplate(ctx context.Context, id string) (*m
 	}, nil
 }
 
+// DeleteBulkJobTemplate is the resolver for the deleteBulkJobTemplate field.
+func (r *mutationResolver) DeleteBulkJobTemplate(ctx context.Context, ids []string) (*model.JobTemplateBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteJobTemplate(ctx, ids)
+}
+
 // JobTemplate is the resolver for the jobTemplate field.
 func (r *queryResolver) JobTemplate(ctx context.Context, id string) (*generated.JobTemplate, error) {
 	query, err := withTransactionalMutation(ctx).JobTemplate.Query().Where(jobtemplate.ID(id)).CollectFields(ctx)

@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): ScheduledJobDeletePayload!
+    """
+    Delete multiple scheduledJobs
+    """
+    deleteBulkScheduledJob(
+        """
+        IDs of the scheduledJobs to delete
+        """
+        ids: [ID!]!
+    ): ScheduledJobBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type ScheduledJobBulkCreatePayload {
     Created scheduledJobs
     """
     scheduledJobs: [ScheduledJob!]
+}
+
+"""
+Return response for deleteBulkScheduledJob mutation
+"""
+type ScheduledJobBulkDeletePayload {
+    """
+    Deleted scheduledJob IDs
+    """
+    deletedIDs: [ID!]!
 }

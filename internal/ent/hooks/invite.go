@@ -122,7 +122,7 @@ func HookInviteGroups() ent.Hook {
 					return nil, err
 				} else if !ok {
 					// user does not have access to the group, return an error
-					zerolog.Ctx(ctx).Info().Msgf("user %s does not have access to group %s", userID, groupID)
+					zerolog.Ctx(ctx).Error().Msgf("user %s does not have access to group %s", userID, groupID)
 
 					return nil, generated.ErrPermissionDenied
 				}

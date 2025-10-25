@@ -94,6 +94,15 @@ func (r *mutationResolver) DeleteGroupSetting(ctx context.Context, id string) (*
 	}, nil
 }
 
+// DeleteBulkGroupSetting is the resolver for the deleteBulkGroupSetting field.
+func (r *mutationResolver) DeleteBulkGroupSetting(ctx context.Context, ids []string) (*model.GroupSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteGroupSetting(ctx, ids)
+}
+
 // GroupSetting is the resolver for the groupSetting field.
 func (r *queryResolver) GroupSetting(ctx context.Context, id string) (*generated.GroupSetting, error) {
 	query, err := withTransactionalMutation(ctx).GroupSetting.Query().Where(groupsetting.ID(id)).CollectFields(ctx)

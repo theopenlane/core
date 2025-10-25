@@ -385,3 +385,9 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
     }
   }
 }
+
+mutation DeleteBulkProcedure($ids: [ID!]!) {
+  deleteBulkProcedure(ids: $ids) {
+    deletedIDs
+  }
+}

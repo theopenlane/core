@@ -84,6 +84,9 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    billing:
+        bypassEmailDomains: null
+        requirePaymentMethod: false
     emailValidation:
         allowedEmailTypes:
             disposable: false
