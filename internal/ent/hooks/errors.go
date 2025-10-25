@@ -88,7 +88,7 @@ var (
 	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group
-	ErrStatusApprovedNotAllowed = errors.New("You must be in the approver group to mark as approved.")
+	ErrStatusApprovedNotAllowed = errors.New("you must be in the approver group to mark as approved")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

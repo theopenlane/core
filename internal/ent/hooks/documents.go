@@ -16,7 +16,6 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/iam/auth"
 )
 
 type detailsMutation interface {
@@ -324,17 +324,18 @@ func HookStatusApproval() ent.Hook {
 			query := mut.Client().GroupMembership.Query().
 				Where(groupmembership.UserID(actor.SubjectID))
 
-			// Build the query to check membership in either group
-			if approverID != "" && delegateID != "" {
+				// Build the query to check membership in either group
+			switch {
+			case approverID != "" && delegateID != "":
 				query = query.Where(
 					groupmembership.Or(
 						groupmembership.GroupID(approverID),
 						groupmembership.GroupID(delegateID),
 					),
 				)
-			} else if approverID != "" {
+			case approverID != "":
 				query = query.Where(groupmembership.GroupID(approverID))
-			} else {
+			default:
 				query = query.Where(groupmembership.GroupID(delegateID))
 			}
 

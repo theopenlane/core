@@ -57,7 +57,7 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 			approverID:    &emptyGroup.ID, // testUser1 is NOT in emptyGroup
 			status:        enums.DocumentApproved,
 			expectError:   true,
-			errorContains: "You must be in the approver group to mark as approved",
+			errorContains: "you must be in the approver group to mark as approved",
 		},
 		{
 			name:          "fail: create with APPROVED status but no approver group set",
@@ -65,7 +65,7 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 			userContext:   testUser1.UserCtx,
 			status:        enums.DocumentApproved,
 			expectError:   true,
-			errorContains: "You must be in the approver group to mark as approved",
+			errorContains: "you must be in the approver group to mark as approved",
 		},
 		{
 			name:        "happy path: create with DRAFT status and no approver group",
@@ -173,7 +173,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			userContext:   testUser1.UserCtx,
 			newStatus:     lo.ToPtr(enums.DocumentApproved),
 			expectError:   true,
-			errorContains: "You must be in the approver group to mark as approved",
+			errorContains: "you must be in the approver group to mark as approved",
 		},
 		{
 			name:          "fail: update to APPROVED status but no approver group set",
@@ -182,7 +182,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			userContext:   testUser1.UserCtx,
 			newStatus:     lo.ToPtr(enums.DocumentApproved),
 			expectError:   true,
-			errorContains: "You must be in the approver group to mark as approved",
+			errorContains: "you must be in the approver group to mark as approved",
 		},
 		{
 			name:        "happy path: update other status without check",
