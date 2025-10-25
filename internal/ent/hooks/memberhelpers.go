@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -94,6 +95,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 	}
 
 	if slices.Contains(userIDs, actorID) {
+		log.Warn().Str("user_id", actorID).Msg("user attempting to create membership for themselves")
+
 		return generated.ErrPermissionDenied
 	}
 
