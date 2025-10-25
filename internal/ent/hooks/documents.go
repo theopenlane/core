@@ -277,6 +277,43 @@ type statusMutation interface {
 	DelegateID() (id string, exists bool)
 }
 
+// getApproverDelegateIDs retrieves the approver and delegate group IDs based on the operation type
+func getApproverDelegateIDs(ctx context.Context, mut statusMutation) (approverID, delegateID string) {
+	switch mut.Op() {
+	case ent.OpCreate:
+		// For create operations, get the IDs from the mutation
+		approverID, _ = mut.ApproverID()
+		delegateID, _ = mut.DelegateID()
+	case ent.OpUpdate, ent.OpUpdateOne:
+		// For update operations, get the old values from the database
+		approverID, _ = mut.OldApproverID(ctx)
+		delegateID, _ = mut.OldDelegateID(ctx)
+	}
+	return approverID, delegateID
+}
+
+// checkUserInApproverGroups verifies if a user is a member of the approver or delegate group
+func checkUserInApproverGroups(ctx context.Context, client *generated.Client, userID, approverID, delegateID string) (bool, error) {
+	query := client.GroupMembership.Query().Where(groupmembership.UserID(userID))
+
+	// Build the query to check membership in either group
+	switch {
+	case approverID != "" && delegateID != "":
+		query = query.Where(
+			groupmembership.Or(
+				groupmembership.GroupID(approverID),
+				groupmembership.GroupID(delegateID),
+			),
+		)
+	case approverID != "":
+		query = query.Where(groupmembership.GroupID(approverID))
+	default:
+		query = query.Where(groupmembership.GroupID(delegateID))
+	}
+
+	return query.Exist(ctx)
+}
+
 // HookStatusApproval is an ent hook that ensures only users in the approver or delegate group can set status to APPROVED
 func HookStatusApproval() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
@@ -301,19 +338,7 @@ func HookStatusApproval() ent.Hook {
 			}
 
 			// Determine the approver and delegate group IDs based on operation type
-			var approverID, delegateID string
-
-			switch mut.Op() {
-			case ent.OpCreate:
-				// For create operations, get the IDs from the mutation
-				approverID, _ = mut.ApproverID()
-				delegateID, _ = mut.DelegateID()
-
-			case ent.OpUpdate, ent.OpUpdateOne:
-				// For update operations, get the old values from the database
-				approverID, _ = mut.OldApproverID(ctx)
-				delegateID, _ = mut.OldDelegateID(ctx)
-			}
+			approverID, delegateID := getApproverDelegateIDs(ctx, mut)
 
 			// If neither approver nor delegate group is set, reject the approval
 			if approverID == "" && delegateID == "" {
@@ -321,26 +346,7 @@ func HookStatusApproval() ent.Hook {
 			}
 
 			// Check if the user is a member of either the approver or delegate group
-			query := mut.Client().GroupMembership.Query().
-				Where(groupmembership.UserID(actor.SubjectID))
-
-				// Build the query to check membership in either group
-			switch {
-			case approverID != "" && delegateID != "":
-				query = query.Where(
-					groupmembership.Or(
-						groupmembership.GroupID(approverID),
-						groupmembership.GroupID(delegateID),
-					),
-				)
-			case approverID != "":
-				query = query.Where(groupmembership.GroupID(approverID))
-			default:
-				query = query.Where(groupmembership.GroupID(delegateID))
-			}
-
-			// Check if the user is a member of any of the groups
-			isMember, err := query.Exist(ctx)
+			isMember, err := checkUserInApproverGroups(ctx, mut.Client(), actor.SubjectID, approverID, delegateID)
 			if err != nil {
 				return nil, err
 			}
