@@ -275,6 +275,8 @@ type statusMutation interface {
 	OldDelegateID(ctx context.Context) (v string, err error)
 	ApproverID() (id string, exists bool)
 	DelegateID() (id string, exists bool)
+	ApprovalRequired() (v bool, exists bool)
+	OldApprovalRequired(ctx context.Context) (v bool, err error)
 }
 
 // getApproverDelegateIDs retrieves the approver and delegate group IDs based on the operation type
@@ -290,6 +292,22 @@ func getApproverDelegateIDs(ctx context.Context, mut statusMutation) (approverID
 		delegateID, _ = mut.OldDelegateID(ctx)
 	}
 	return approverID, delegateID
+}
+
+func getRequireApproval(ctx context.Context, mut statusMutation) (bool, error) {
+	switch mut.Op() {
+	case ent.OpCreate:
+		if requireApproval, exists := mut.ApprovalRequired(); exists {
+			return requireApproval, nil
+		}
+
+		// this field will default to true if not set on create
+		return true, nil
+	case ent.OpUpdate, ent.OpUpdateOne:
+		return mut.OldApprovalRequired(ctx)
+	default:
+		return true, nil
+	}
 }
 
 // checkUserInApproverGroups verifies if a user is a member of the approver or delegate group
@@ -328,6 +346,13 @@ func HookStatusApproval() ent.Hook {
 			status, exists := mut.Status()
 			if !exists || status != enums.DocumentApproved {
 				// Not setting to APPROVED, allow the mutation
+				return next.Mutate(ctx, m)
+			}
+
+			// check if the document requires approval
+			requireApproval, err := getRequireApproval(ctx, mut)
+			if err == nil && !requireApproval {
+				// no approval required, allow the mutation
 				return next.Mutate(ctx, m)
 			}
 

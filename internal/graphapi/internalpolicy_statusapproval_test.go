@@ -25,69 +25,86 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 	(&GroupMemberBuilder{client: suite.client, UserID: testUser1.ID, GroupID: delegateGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		client        *testclient.TestClient
-		userContext   context.Context
-		approverID    *string
-		delegateID    *string
-		status        enums.DocumentStatus
-		expectError   bool
-		errorContains string
+		name            string
+		client          *testclient.TestClient
+		userContext     context.Context
+		approverID      *string
+		delegateID      *string
+		status          enums.DocumentStatus
+		requireApproval bool
+		expectError     bool
+		errorContains   string
 	}{
 		{
-			name:        "happy path: create with APPROVED status and user in approver group",
-			client:      suite.client.api,
-			userContext: testUser1.UserCtx,
-			approverID:  &approverGroup.ID,
-			status:      enums.DocumentApproved,
-			expectError: false,
+			name:            "happy path: create with APPROVED status and user in approver group",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			approverID:      &approverGroup.ID,
+			status:          enums.DocumentApproved,
+			requireApproval: true,
+			expectError:     false,
 		},
 		{
-			name:        "happy path: create with APPROVED status and user in delegate group",
-			client:      suite.client.api,
-			userContext: testUser1.UserCtx,
-			delegateID:  &delegateGroup.ID,
-			status:      enums.DocumentApproved,
-			expectError: false,
+			name:            "happy path: create with APPROVED status and user in delegate group",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			delegateID:      &delegateGroup.ID,
+			status:          enums.DocumentApproved,
+			requireApproval: true,
+			expectError:     false,
 		},
 		{
-			name:          "fail: create with APPROVED status but user not in approver group",
-			client:        suite.client.api,
-			userContext:   testUser1.UserCtx,
-			approverID:    &emptyGroup.ID, // testUser1 is NOT in emptyGroup
-			status:        enums.DocumentApproved,
-			expectError:   true,
-			errorContains: "you must be in the approver group to mark as approved",
+			name:            "fail: create with APPROVED status but user not in approver group",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			approverID:      &emptyGroup.ID, // testUser1 is NOT in emptyGroup
+			status:          enums.DocumentApproved,
+			requireApproval: true,
+			expectError:     true,
+			errorContains:   "you must be in the approver group to mark as approved",
 		},
 		{
-			name:          "fail: create with APPROVED status but no approver group set",
-			client:        suite.client.api,
-			userContext:   testUser1.UserCtx,
-			status:        enums.DocumentApproved,
-			expectError:   true,
-			errorContains: "you must be in the approver group to mark as approved",
+			name:            "happy path: create with APPROVED status but user not in approver group but approval not required",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			approverID:      &emptyGroup.ID, // testUser1 is NOT in emptyGroup
+			status:          enums.DocumentApproved,
+			requireApproval: false,
+			expectError:     false,
 		},
 		{
-			name:        "happy path: create with DRAFT status and no approver group",
-			client:      suite.client.api,
-			userContext: testUser1.UserCtx,
-			status:      enums.DocumentDraft,
-			expectError: false,
+			name:            "fail: create with APPROVED status but no approver group set",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			status:          enums.DocumentApproved,
+			requireApproval: true,
+			expectError:     true,
+			errorContains:   "you must be in the approver group to mark as approved",
 		},
 		{
-			name:        "happy path: create with PUBLISHED status and no approver group",
-			client:      suite.client.api,
-			userContext: testUser1.UserCtx,
-			status:      enums.DocumentPublished,
-			expectError: false,
+			name:            "happy path: create with DRAFT status and no approver group",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			status:          enums.DocumentDraft,
+			requireApproval: true,
+			expectError:     false,
+		},
+		{
+			name:            "happy path: create with PUBLISHED status and no approver group",
+			client:          suite.client.api,
+			userContext:     testUser1.UserCtx,
+			status:          enums.DocumentPublished,
+			requireApproval: true,
+			expectError:     false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			input := testclient.CreateInternalPolicyInput{
-				Name:   gofakeit.AppName(),
-				Status: &tc.status,
+				Name:             gofakeit.AppName(),
+				Status:           &tc.status,
+				ApprovalRequired: &tc.requireApproval,
 			}
 
 			if tc.approverID != nil {
@@ -133,12 +150,13 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy3 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy4 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	policy5 := (&InternalPolicyBuilder{client: suite.client, SkipApprovalRequirement: true}).MustNew(testUser1.UserCtx, t)
 
 	// Set approver/delegate groups using direct database access (bypasses authorization but keeps user context)
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	suite.client.db.InternalPolicy.UpdateOneID(policy1.ID).SetApproverID(approverGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)
 	suite.client.db.InternalPolicy.UpdateOneID(policy2.ID).SetDelegateID(delegateGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)
-	suite.client.db.InternalPolicy.UpdateOneID(policy3.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // no approver group
+	suite.client.db.InternalPolicy.UpdateOneID(policy3.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)                              // no approver group
 	suite.client.db.InternalPolicy.UpdateOneID(policy4.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // user not in group
 
 	testCases := []struct {
@@ -190,6 +208,14 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			policyID:    policy3.ID,
 			userContext: testUser1.UserCtx,
 			newStatus:   lo.ToPtr(enums.DocumentPublished),
+			expectError: false,
+		},
+		{
+			name:        "happy path: update to APPROVED status but approval not required",
+			client:      suite.client.api,
+			policyID:    policy5.ID,
+			userContext: testUser1.UserCtx,
+			newStatus:   lo.ToPtr(enums.DocumentApproved),
 			expectError: false,
 		},
 	}
