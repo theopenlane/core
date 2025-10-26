@@ -230,7 +230,7 @@ steps:
           location: "NYC"
         key: "go_test_graph"
         cancel_on_build_failing: true
-        if_changed:  "**.go"
+        if_changed: "**.go"
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
@@ -256,7 +256,7 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - all except graphapi"
-        if_changed:  "**.go"
+        if_changed: "**.go"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -317,6 +317,7 @@ steps:
         key: "test-analytics"
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
+        if_changed: "**.go"
         depends_on: ["go_test_graph", "go_test_no_graph"]
         commands: |
           #!/bin/bash
@@ -350,6 +351,7 @@ steps:
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         if: build.pull_request.id != null
+        if_changed: "**.go"
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
           - cluster-secrets#v1.0.0:
