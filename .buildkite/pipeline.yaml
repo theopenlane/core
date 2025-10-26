@@ -92,6 +92,7 @@ steps:
         key: "link_pr_automation"
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
+        if_changed: "{config/**}"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -113,6 +114,7 @@ steps:
         key: "helm_automation"
         depends_on: "generate_config"
         if: build.branch == "main"
+        if_changed: "{config/**}"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -136,6 +138,7 @@ steps:
         key: "post_merge_automation"
         depends_on: "helm_automation"
         if: build.branch == "main"
+        if_changed: "{config/**}"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -159,6 +162,7 @@ steps:
         key: "cleanup_draft_prs"
         depends_on: "post_merge_automation"
         if: build.branch == "main"
+        if_changed: "{config/**}"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -196,14 +200,11 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
-    if_changed:
-      - "**.go"
-      - .golangci.yaml
-      - fga/**
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
-        if: build.branch !~ /^renovate\//
-        if_changed: "{**.go,.golangci.yaml}"
+        if_changed:
+          - "**.go"
+          - .golangci.yaml
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -230,7 +231,9 @@ steps:
           location: "NYC"
         key: "go_test_graph"
         cancel_on_build_failing: true
-        if_changed:  "**.go"
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
@@ -256,7 +259,9 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - all except graphapi"
-        if_changed:  "**.go"
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -288,7 +293,6 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-no-graph.out", "junit-no-graph.xml"]
       - label: ":auth0: fga model test"
-        if: build.branch !~ /^renovate\//
         if_changed: "{fga/**}"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -301,22 +305,14 @@ steps:
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
-    if: build.branch !~ /^renovate\//
-    if_changed:
-      - "**.go"
-      - go.{mod,sum}
-      - .golangci.yaml
-      - cmd/**
-      - internal/**
-      - pkg/**
-      - config/**
-      - fga/**
-      - db/**
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         depends_on: ["go_test_graph", "go_test_no_graph"]
         commands: |
           #!/bin/bash
@@ -349,6 +345,9 @@ steps:
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
@@ -380,6 +379,9 @@ steps:
                 - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
       - label: ":github: upload reports"
         key: "scan-upload"
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_graph"]
@@ -411,7 +413,6 @@ steps:
                 - "SONAR_HOST_URL=$SONAR_HOST"
   - group: ":golang: Builds"
     key: "go-builds"
-    if: build.branch !~ /^renovate\//
     steps:
       - label: ":golang: build"
         key: "gobuild-server"
@@ -463,7 +464,6 @@ steps:
               command: ["task", "go:build-cli:ci"]
   - group: ":database: schema lint"
     key: "database"
-    if: build.branch !~ /^renovate\//
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
@@ -530,7 +530,6 @@ steps:
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
   - group: ":docker: Image Build"
     depends_on: "go-builds"
-    if: build.branch !~ /^renovate\//
     if_changed:
       - "**.go"
       - go.{mod,sum}
