@@ -153,6 +153,31 @@ func Sub(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldSub, v))
 }
 
+// ScimExternalID applies equality check predicate on the "scim_external_id" field. It's identical to ScimExternalIDEQ.
+func ScimExternalID(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimUsername applies equality check predicate on the "scim_username" field. It's identical to ScimUsernameEQ.
+func ScimUsername(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimUsername, v))
+}
+
+// ScimActive applies equality check predicate on the "scim_active" field. It's identical to ScimActiveEQ.
+func ScimActive(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimPreferredLanguage applies equality check predicate on the "scim_preferred_language" field. It's identical to ScimPreferredLanguageEQ.
+func ScimPreferredLanguage(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimPreferredLanguage, v))
+}
+
+// ScimLocale applies equality check predicate on the "scim_locale" field. It's identical to ScimLocaleEQ.
+func ScimLocale(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimLocale, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCreatedAt, v))
@@ -1391,6 +1416,326 @@ func RoleIsNil() predicate.User {
 // RoleNotNil applies the NotNil predicate on the "role" field.
 func RoleNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldRole))
+}
+
+// ScimExternalIDEQ applies the EQ predicate on the "scim_external_id" field.
+func ScimExternalIDEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDNEQ applies the NEQ predicate on the "scim_external_id" field.
+func ScimExternalIDNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIn applies the In predicate on the "scim_external_id" field.
+func ScimExternalIDIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDNotIn applies the NotIn predicate on the "scim_external_id" field.
+func ScimExternalIDNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDGT applies the GT predicate on the "scim_external_id" field.
+func ScimExternalIDGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDGTE applies the GTE predicate on the "scim_external_id" field.
+func ScimExternalIDGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLT applies the LT predicate on the "scim_external_id" field.
+func ScimExternalIDLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLTE applies the LTE predicate on the "scim_external_id" field.
+func ScimExternalIDLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContains applies the Contains predicate on the "scim_external_id" field.
+func ScimExternalIDContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasPrefix applies the HasPrefix predicate on the "scim_external_id" field.
+func ScimExternalIDHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasSuffix applies the HasSuffix predicate on the "scim_external_id" field.
+func ScimExternalIDHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIsNil applies the IsNil predicate on the "scim_external_id" field.
+func ScimExternalIDIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldScimExternalID))
+}
+
+// ScimExternalIDNotNil applies the NotNil predicate on the "scim_external_id" field.
+func ScimExternalIDNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldScimExternalID))
+}
+
+// ScimExternalIDEqualFold applies the EqualFold predicate on the "scim_external_id" field.
+func ScimExternalIDEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContainsFold applies the ContainsFold predicate on the "scim_external_id" field.
+func ScimExternalIDContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldScimExternalID, v))
+}
+
+// ScimUsernameEQ applies the EQ predicate on the "scim_username" field.
+func ScimUsernameEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimUsername, v))
+}
+
+// ScimUsernameNEQ applies the NEQ predicate on the "scim_username" field.
+func ScimUsernameNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldScimUsername, v))
+}
+
+// ScimUsernameIn applies the In predicate on the "scim_username" field.
+func ScimUsernameIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldScimUsername, vs...))
+}
+
+// ScimUsernameNotIn applies the NotIn predicate on the "scim_username" field.
+func ScimUsernameNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldScimUsername, vs...))
+}
+
+// ScimUsernameGT applies the GT predicate on the "scim_username" field.
+func ScimUsernameGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldScimUsername, v))
+}
+
+// ScimUsernameGTE applies the GTE predicate on the "scim_username" field.
+func ScimUsernameGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldScimUsername, v))
+}
+
+// ScimUsernameLT applies the LT predicate on the "scim_username" field.
+func ScimUsernameLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldScimUsername, v))
+}
+
+// ScimUsernameLTE applies the LTE predicate on the "scim_username" field.
+func ScimUsernameLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldScimUsername, v))
+}
+
+// ScimUsernameContains applies the Contains predicate on the "scim_username" field.
+func ScimUsernameContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldScimUsername, v))
+}
+
+// ScimUsernameHasPrefix applies the HasPrefix predicate on the "scim_username" field.
+func ScimUsernameHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldScimUsername, v))
+}
+
+// ScimUsernameHasSuffix applies the HasSuffix predicate on the "scim_username" field.
+func ScimUsernameHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldScimUsername, v))
+}
+
+// ScimUsernameIsNil applies the IsNil predicate on the "scim_username" field.
+func ScimUsernameIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldScimUsername))
+}
+
+// ScimUsernameNotNil applies the NotNil predicate on the "scim_username" field.
+func ScimUsernameNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldScimUsername))
+}
+
+// ScimUsernameEqualFold applies the EqualFold predicate on the "scim_username" field.
+func ScimUsernameEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldScimUsername, v))
+}
+
+// ScimUsernameContainsFold applies the ContainsFold predicate on the "scim_username" field.
+func ScimUsernameContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldScimUsername, v))
+}
+
+// ScimActiveEQ applies the EQ predicate on the "scim_active" field.
+func ScimActiveEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimActiveNEQ applies the NEQ predicate on the "scim_active" field.
+func ScimActiveNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldScimActive, v))
+}
+
+// ScimActiveIsNil applies the IsNil predicate on the "scim_active" field.
+func ScimActiveIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldScimActive))
+}
+
+// ScimActiveNotNil applies the NotNil predicate on the "scim_active" field.
+func ScimActiveNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldScimActive))
+}
+
+// ScimPreferredLanguageEQ applies the EQ predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageNEQ applies the NEQ predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageIn applies the In predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldScimPreferredLanguage, vs...))
+}
+
+// ScimPreferredLanguageNotIn applies the NotIn predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldScimPreferredLanguage, vs...))
+}
+
+// ScimPreferredLanguageGT applies the GT predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageGTE applies the GTE predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageLT applies the LT predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageLTE applies the LTE predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageContains applies the Contains predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageHasPrefix applies the HasPrefix predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageHasSuffix applies the HasSuffix predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageIsNil applies the IsNil predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldScimPreferredLanguage))
+}
+
+// ScimPreferredLanguageNotNil applies the NotNil predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldScimPreferredLanguage))
+}
+
+// ScimPreferredLanguageEqualFold applies the EqualFold predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldScimPreferredLanguage, v))
+}
+
+// ScimPreferredLanguageContainsFold applies the ContainsFold predicate on the "scim_preferred_language" field.
+func ScimPreferredLanguageContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldScimPreferredLanguage, v))
+}
+
+// ScimLocaleEQ applies the EQ predicate on the "scim_locale" field.
+func ScimLocaleEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldScimLocale, v))
+}
+
+// ScimLocaleNEQ applies the NEQ predicate on the "scim_locale" field.
+func ScimLocaleNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldScimLocale, v))
+}
+
+// ScimLocaleIn applies the In predicate on the "scim_locale" field.
+func ScimLocaleIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldScimLocale, vs...))
+}
+
+// ScimLocaleNotIn applies the NotIn predicate on the "scim_locale" field.
+func ScimLocaleNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldScimLocale, vs...))
+}
+
+// ScimLocaleGT applies the GT predicate on the "scim_locale" field.
+func ScimLocaleGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldScimLocale, v))
+}
+
+// ScimLocaleGTE applies the GTE predicate on the "scim_locale" field.
+func ScimLocaleGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldScimLocale, v))
+}
+
+// ScimLocaleLT applies the LT predicate on the "scim_locale" field.
+func ScimLocaleLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldScimLocale, v))
+}
+
+// ScimLocaleLTE applies the LTE predicate on the "scim_locale" field.
+func ScimLocaleLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldScimLocale, v))
+}
+
+// ScimLocaleContains applies the Contains predicate on the "scim_locale" field.
+func ScimLocaleContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldScimLocale, v))
+}
+
+// ScimLocaleHasPrefix applies the HasPrefix predicate on the "scim_locale" field.
+func ScimLocaleHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldScimLocale, v))
+}
+
+// ScimLocaleHasSuffix applies the HasSuffix predicate on the "scim_locale" field.
+func ScimLocaleHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldScimLocale, v))
+}
+
+// ScimLocaleIsNil applies the IsNil predicate on the "scim_locale" field.
+func ScimLocaleIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldScimLocale))
+}
+
+// ScimLocaleNotNil applies the NotNil predicate on the "scim_locale" field.
+func ScimLocaleNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldScimLocale))
+}
+
+// ScimLocaleEqualFold applies the EqualFold predicate on the "scim_locale" field.
+func ScimLocaleEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldScimLocale, v))
+}
+
+// ScimLocaleContainsFold applies the ContainsFold predicate on the "scim_locale" field.
+func ScimLocaleContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldScimLocale, v))
 }
 
 // HasPersonalAccessTokens applies the HasEdge predicate on the "personal_access_tokens" edge.

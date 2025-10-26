@@ -80,6 +80,14 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_Group_scimExternalID(ctx, field)
+			case "scimDisplayName":
+				return ec.fieldContext_Group_scimDisplayName(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_Group_scimActive(ctx, field)
+			case "scimGroupMailing":
+				return ec.fieldContext_Group_scimGroupMailing(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "programEditors":
@@ -244,6 +252,14 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_Group_scimExternalID(ctx, field)
+			case "scimDisplayName":
+				return ec.fieldContext_Group_scimDisplayName(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_Group_scimActive(ctx, field)
+			case "scimGroupMailing":
+				return ec.fieldContext_Group_scimGroupMailing(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "programEditors":
@@ -408,6 +424,14 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_Group_scimExternalID(ctx, field)
+			case "scimDisplayName":
+				return ec.fieldContext_Group_scimDisplayName(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_Group_scimActive(ctx, field)
+			case "scimGroupMailing":
+				return ec.fieldContext_Group_scimGroupMailing(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "programEditors":

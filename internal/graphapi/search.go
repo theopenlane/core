@@ -805,9 +805,12 @@ func adminSearchGroups(ctx context.Context, query string, after *entgql.Cursor[s
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				group.OwnerIDContainsFold(query),     // search by OwnerID
-				group.NameContainsFold(query),        // search by Name
-				group.DisplayNameContainsFold(query), // search by DisplayName
+				group.OwnerIDContainsFold(query),          // search by OwnerID
+				group.NameContainsFold(query),             // search by Name
+				group.DisplayNameContainsFold(query),      // search by DisplayName
+				group.ScimExternalIDContainsFold(query),   // search by ScimExternalID
+				group.ScimDisplayNameContainsFold(query),  // search by ScimDisplayName
+				group.ScimGroupMailingContainsFold(query), // search by ScimGroupMailing
 			),
 		)
 
@@ -2049,13 +2052,17 @@ func adminSearchUsers(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				user.EmailContainsFold(query),             // search by Email
-				user.FirstNameContainsFold(query),         // search by FirstName
-				user.LastNameContainsFold(query),          // search by LastName
-				user.DisplayNameContainsFold(query),       // search by DisplayName
-				user.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
-				user.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
-				user.SubContainsFold(query),               // search by Sub
+				user.EmailContainsFold(query),                 // search by Email
+				user.FirstNameContainsFold(query),             // search by FirstName
+				user.LastNameContainsFold(query),              // search by LastName
+				user.DisplayNameContainsFold(query),           // search by DisplayName
+				user.AvatarRemoteURLContainsFold(query),       // search by AvatarRemoteURL
+				user.AvatarLocalFileIDContainsFold(query),     // search by AvatarLocalFileID
+				user.SubContainsFold(query),                   // search by Sub
+				user.ScimExternalIDContainsFold(query),        // search by ScimExternalID
+				user.ScimUsernameContainsFold(query),          // search by ScimUsername
+				user.ScimPreferredLanguageContainsFold(query), // search by ScimPreferredLanguage
+				user.ScimLocaleContainsFold(query),            // search by ScimLocale
 			),
 		)
 

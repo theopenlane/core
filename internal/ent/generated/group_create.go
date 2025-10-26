@@ -226,6 +226,62 @@ func (_c *GroupCreate) SetNillableDisplayName(v *string) *GroupCreate {
 	return _c
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_c *GroupCreate) SetScimExternalID(v string) *GroupCreate {
+	_c.mutation.SetScimExternalID(v)
+	return _c
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableScimExternalID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetScimExternalID(*v)
+	}
+	return _c
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_c *GroupCreate) SetScimDisplayName(v string) *GroupCreate {
+	_c.mutation.SetScimDisplayName(v)
+	return _c
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableScimDisplayName(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetScimDisplayName(*v)
+	}
+	return _c
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_c *GroupCreate) SetScimActive(v bool) *GroupCreate {
+	_c.mutation.SetScimActive(v)
+	return _c
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableScimActive(v *bool) *GroupCreate {
+	if v != nil {
+		_c.SetScimActive(*v)
+	}
+	return _c
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_c *GroupCreate) SetScimGroupMailing(v string) *GroupCreate {
+	_c.mutation.SetScimGroupMailing(v)
+	return _c
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableScimGroupMailing(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetScimGroupMailing(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *GroupCreate) SetID(v string) *GroupCreate {
 	_c.mutation.SetID(v)
@@ -867,6 +923,10 @@ func (_c *GroupCreate) defaults() error {
 		v := group.DefaultDisplayName
 		_c.mutation.SetDisplayName(v)
 	}
+	if _, ok := _c.mutation.ScimActive(); !ok {
+		v := group.DefaultScimActive
+		_c.mutation.SetScimActive(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if group.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized group.DefaultID (forgotten import generated/runtime?)")
@@ -1009,6 +1069,22 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.ScimExternalID(); ok {
+		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
+		_node.ScimExternalID = &value
+	}
+	if value, ok := _c.mutation.ScimDisplayName(); ok {
+		_spec.SetField(group.FieldScimDisplayName, field.TypeString, value)
+		_node.ScimDisplayName = &value
+	}
+	if value, ok := _c.mutation.ScimActive(); ok {
+		_spec.SetField(group.FieldScimActive, field.TypeBool, value)
+		_node.ScimActive = value
+	}
+	if value, ok := _c.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(group.FieldScimGroupMailing, field.TypeString, value)
+		_node.ScimGroupMailing = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

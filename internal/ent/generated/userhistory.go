@@ -67,7 +67,17 @@ type UserHistory struct {
 	// auth provider used to register the account
 	AuthProvider enums.AuthProvider `json:"auth_provider,omitempty"`
 	// the user's role
-	Role         enums.Role `json:"role,omitempty"`
+	Role enums.Role `json:"role,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID *string `json:"scim_external_id,omitempty"`
+	// the SCIM username for the user
+	ScimUsername *string `json:"scim_username,omitempty"`
+	// whether the SCIM user is active
+	ScimActive bool `json:"scim_active,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage *string `json:"scim_preferred_language,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale   *string `json:"scim_locale,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -80,7 +90,9 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldDisplayID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldLastLoginProvider, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
+		case userhistory.FieldScimActive:
+			values[i] = new(sql.NullBool)
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldDisplayID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldLastLoginProvider, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole, userhistory.FieldScimExternalID, userhistory.FieldScimUsername, userhistory.FieldScimPreferredLanguage, userhistory.FieldScimLocale:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt, userhistory.FieldDeletedAt, userhistory.FieldAvatarUpdatedAt, userhistory.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -256,6 +268,40 @@ func (_m *UserHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Role = enums.Role(value.String)
 			}
+		case userhistory.FieldScimExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_external_id", values[i])
+			} else if value.Valid {
+				_m.ScimExternalID = new(string)
+				*_m.ScimExternalID = value.String
+			}
+		case userhistory.FieldScimUsername:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_username", values[i])
+			} else if value.Valid {
+				_m.ScimUsername = new(string)
+				*_m.ScimUsername = value.String
+			}
+		case userhistory.FieldScimActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_active", values[i])
+			} else if value.Valid {
+				_m.ScimActive = value.Bool
+			}
+		case userhistory.FieldScimPreferredLanguage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_preferred_language", values[i])
+			} else if value.Valid {
+				_m.ScimPreferredLanguage = new(string)
+				*_m.ScimPreferredLanguage = value.String
+			}
+		case userhistory.FieldScimLocale:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_locale", values[i])
+			} else if value.Valid {
+				_m.ScimLocale = new(string)
+				*_m.ScimLocale = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -370,6 +416,29 @@ func (_m *UserHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))
+	builder.WriteString(", ")
+	if v := _m.ScimExternalID; v != nil {
+		builder.WriteString("scim_external_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimUsername; v != nil {
+		builder.WriteString("scim_username=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("scim_active=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScimActive))
+	builder.WriteString(", ")
+	if v := _m.ScimPreferredLanguage; v != nil {
+		builder.WriteString("scim_preferred_language=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimLocale; v != nil {
+		builder.WriteString("scim_locale=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

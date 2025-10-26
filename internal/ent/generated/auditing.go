@@ -1391,6 +1391,18 @@ func (_m *GroupHistory) changes(new *GroupHistory) []Change {
 	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
 		changes = append(changes, NewChange(grouphistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
+	if !reflect.DeepEqual(_m.ScimExternalID, new.ScimExternalID) {
+		changes = append(changes, NewChange(grouphistory.FieldScimExternalID, _m.ScimExternalID, new.ScimExternalID))
+	}
+	if !reflect.DeepEqual(_m.ScimDisplayName, new.ScimDisplayName) {
+		changes = append(changes, NewChange(grouphistory.FieldScimDisplayName, _m.ScimDisplayName, new.ScimDisplayName))
+	}
+	if !reflect.DeepEqual(_m.ScimActive, new.ScimActive) {
+		changes = append(changes, NewChange(grouphistory.FieldScimActive, _m.ScimActive, new.ScimActive))
+	}
+	if !reflect.DeepEqual(_m.ScimGroupMailing, new.ScimGroupMailing) {
+		changes = append(changes, NewChange(grouphistory.FieldScimGroupMailing, _m.ScimGroupMailing, new.ScimGroupMailing))
+	}
 	return changes
 }
 
@@ -3877,6 +3889,21 @@ func (_m *UserHistory) changes(new *UserHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Role, new.Role) {
 		changes = append(changes, NewChange(userhistory.FieldRole, _m.Role, new.Role))
+	}
+	if !reflect.DeepEqual(_m.ScimExternalID, new.ScimExternalID) {
+		changes = append(changes, NewChange(userhistory.FieldScimExternalID, _m.ScimExternalID, new.ScimExternalID))
+	}
+	if !reflect.DeepEqual(_m.ScimUsername, new.ScimUsername) {
+		changes = append(changes, NewChange(userhistory.FieldScimUsername, _m.ScimUsername, new.ScimUsername))
+	}
+	if !reflect.DeepEqual(_m.ScimActive, new.ScimActive) {
+		changes = append(changes, NewChange(userhistory.FieldScimActive, _m.ScimActive, new.ScimActive))
+	}
+	if !reflect.DeepEqual(_m.ScimPreferredLanguage, new.ScimPreferredLanguage) {
+		changes = append(changes, NewChange(userhistory.FieldScimPreferredLanguage, _m.ScimPreferredLanguage, new.ScimPreferredLanguage))
+	}
+	if !reflect.DeepEqual(_m.ScimLocale, new.ScimLocale) {
+		changes = append(changes, NewChange(userhistory.FieldScimLocale, _m.ScimLocale, new.ScimLocale))
 	}
 	return changes
 }

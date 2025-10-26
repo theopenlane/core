@@ -60,6 +60,16 @@ const (
 	FieldAuthProvider = "auth_provider"
 	// FieldRole holds the string denoting the role field in the database.
 	FieldRole = "role"
+	// FieldScimExternalID holds the string denoting the scim_external_id field in the database.
+	FieldScimExternalID = "scim_external_id"
+	// FieldScimUsername holds the string denoting the scim_username field in the database.
+	FieldScimUsername = "scim_username"
+	// FieldScimActive holds the string denoting the scim_active field in the database.
+	FieldScimActive = "scim_active"
+	// FieldScimPreferredLanguage holds the string denoting the scim_preferred_language field in the database.
+	FieldScimPreferredLanguage = "scim_preferred_language"
+	// FieldScimLocale holds the string denoting the scim_locale field in the database.
+	FieldScimLocale = "scim_locale"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeTfaSettings holds the string denoting the tfa_settings edge name in mutations.
@@ -285,6 +295,11 @@ var Columns = []string{
 	FieldSub,
 	FieldAuthProvider,
 	FieldRole,
+	FieldScimExternalID,
+	FieldScimUsername,
+	FieldScimActive,
+	FieldScimPreferredLanguage,
+	FieldScimLocale,
 }
 
 var (
@@ -350,6 +365,8 @@ var (
 	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// UpdateDefaultLastSeen holds the default value on update for the "last_seen" field.
 	UpdateDefaultLastSeen func() time.Time
+	// DefaultScimActive holds the default value on creation for the "scim_active" field.
+	DefaultScimActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -494,6 +511,31 @@ func ByAuthProvider(opts ...sql.OrderTermOption) OrderOption {
 // ByRole orders the results by the role field.
 func ByRole(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRole, opts...).ToFunc()
+}
+
+// ByScimExternalID orders the results by the scim_external_id field.
+func ByScimExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimExternalID, opts...).ToFunc()
+}
+
+// ByScimUsername orders the results by the scim_username field.
+func ByScimUsername(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimUsername, opts...).ToFunc()
+}
+
+// ByScimActive orders the results by the scim_active field.
+func ByScimActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimActive, opts...).ToFunc()
+}
+
+// ByScimPreferredLanguage orders the results by the scim_preferred_language field.
+func ByScimPreferredLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimPreferredLanguage, opts...).ToFunc()
+}
+
+// ByScimLocale orders the results by the scim_locale field.
+func ByScimLocale(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimLocale, opts...).ToFunc()
 }
 
 // ByPersonalAccessTokensCount orders the results by personal_access_tokens count.
