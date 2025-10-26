@@ -244,6 +244,6 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 	}
 
 	// Cleanup
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{policy1.ID, policy2.ID, policy3.ID, policy4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{policy1.ID, policy2.ID, policy3.ID, policy4.ID, policy5.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, emptyGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
