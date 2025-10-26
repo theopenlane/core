@@ -158,6 +158,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 	suite.client.db.InternalPolicy.UpdateOneID(policy2.ID).SetDelegateID(delegateGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)
 	suite.client.db.InternalPolicy.UpdateOneID(policy3.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)                              // no approver group
 	suite.client.db.InternalPolicy.UpdateOneID(policy4.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // user not in group
+	suite.client.db.InternalPolicy.UpdateOneID(policy5.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // approval not required so should pass
 
 	testCases := []struct {
 		name          string
