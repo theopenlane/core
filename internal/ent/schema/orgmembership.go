@@ -48,6 +48,7 @@ func (OrgMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
+			Values(string(enums.RoleOwner)).
 			Annotations(
 				entgql.OrderField("ROLE"),
 			).

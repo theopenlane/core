@@ -17,9 +17,9 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the Role enum.
-// Possible default values are "OWNER", "ADMIN", "MEMBER"
+// Possible default values are "ADMIN", "MEMBER"
 func (Role) Values() (kinds []string) {
-	for _, s := range []Role{RoleOwner, RoleAdmin, RoleMember} {
+	for _, s := range []Role{RoleAdmin, RoleMember} {
 		kinds = append(kinds, string(s))
 	}
 
