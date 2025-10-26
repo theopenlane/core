@@ -56,13 +56,17 @@ func (APIToken) Fields() []ent.Field {
 		field.String("token").
 			Unique().
 			Immutable().
+			DefaultFunc(func() string {
+				plainToken := keygen.GenerateKey()
+				derivedKey, err := passwd.CreateDerivedKey(plainToken)
+				if err != nil {
+					return plainToken // fallback to plain token if hashing fails
+				}
+				return derivedKey
+			}).
 			Annotations(
 				entgql.Skip(^entgql.SkipType),
-			).
-			DefaultFunc(func() string {
-				token := keygen.PrefixedSecret("tola") // api token prefix
-				return token
-			}),
+			),
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(

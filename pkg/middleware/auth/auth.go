@@ -14,6 +14,7 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/passwd"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -581,14 +582,49 @@ var (
 	}
 
 	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
-		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
-			WithOwner().
-			WithOrganizations().
-			Only(ctx)
+		// we store a derived key in the DB, so we must compare the provided token
+		// against the stored derived keys. This requires iterating candidate tokens
+		// and verifying the derived key. We load owner and organizations for downstream
+		// checks.
+		pats, err := db.PersonalAccessToken.Query().WithOwner().WithOrganizations().All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, p := range pats {
+			valid, err := passwd.VerifyDerivedKey(p.Token, token)
+			if err != nil {
+				return nil, err
+			}
+
+			if valid {
+				return p, nil
+			}
+		}
+
+		return nil, rout.ErrInvalidCredentials
 	}
 
 	fetchAPITokenFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.APIToken, error) {
-		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
+		// we store a derived key in the DB, so iterate API tokens and verify
+		// the provided token against stored derived keys.
+		ats, err := db.APIToken.Query().All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, a := range ats {
+			valid, err := passwd.VerifyDerivedKey(a.Token, token)
+			if err != nil {
+				return nil, err
+			}
+
+			if valid {
+				return a, nil
+			}
+		}
+
+		return nil, rout.ErrInvalidCredentials
 	}
 
 	isPATSSOAuthorizedFunc = isPATSSOAuthorized
