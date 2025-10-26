@@ -1748,12 +1748,15 @@ func TestMutationDeleteControl(t *testing.T) {
 }
 
 func TestMutationDeleteBulkControl(t *testing.T) {
-	// create objects to be deleted
-	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	anotherUser := suite.userBuilder(context.Background(), t)
 
-	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
 
 	testCases := []struct {
 		name                 string
@@ -1767,14 +1770,14 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 			name:                 "happy path, delete multiple controls",
 			idsToDelete:          []string{control1.ID, control2.ID, control3.ID},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  testUser.UserCtx,
 			expectedDeletedCount: 3,
 		},
 		{
 			name:                 "not authorized, delete controls from another user",
 			idsToDelete:          []string{control1.ID, controlAnotherUser.ID},
 			client:               suite.client.api,
-			ctx:                  testUser2.UserCtx,
+			ctx:                  anotherUser.UserCtx,
 			expectedDeletedCount: 1,
 		},
 	}

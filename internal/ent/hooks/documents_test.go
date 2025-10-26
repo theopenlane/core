@@ -106,23 +106,31 @@ func TestUpdatePlaceholderText(t *testing.T) {
 
 // mockStatusMutation is a mock implementation of statusMutation for testing
 type mockStatusMutation struct {
-	op          ent.Op
-	status      enums.DocumentStatus
-	approverID  string
-	delegateID  string
-	client      *generated.Client
+	op         ent.Op
+	status     enums.DocumentStatus
+	approverID string
+	delegateID string
+	client     *generated.Client
 }
 
-func (m *mockStatusMutation) Op() ent.Op                                        { return m.op }
-func (m *mockStatusMutation) Type() string                                      { return "MockDocument" }
-func (m *mockStatusMutation) ID() (string, bool)                                { return "test-id", true }
-func (m *mockStatusMutation) IDs(ctx context.Context) ([]string, error)         { return []string{"test-id"}, nil }
-func (m *mockStatusMutation) Status() (enums.DocumentStatus, bool)              { return m.status, true }
-func (m *mockStatusMutation) ApproverID() (string, bool)                        { return m.approverID, m.approverID != "" }
-func (m *mockStatusMutation) DelegateID() (string, bool)                        { return m.delegateID, m.delegateID != "" }
-func (m *mockStatusMutation) OldApproverID(ctx context.Context) (string, error) { return m.approverID, nil }
-func (m *mockStatusMutation) OldDelegateID(ctx context.Context) (string, error) { return m.delegateID, nil }
-func (m *mockStatusMutation) Client() *generated.Client                         { return m.client }
+func (m *mockStatusMutation) Op() ent.Op         { return m.op }
+func (m *mockStatusMutation) Type() string       { return "MockDocument" }
+func (m *mockStatusMutation) ID() (string, bool) { return "test-id", true }
+func (m *mockStatusMutation) IDs(ctx context.Context) ([]string, error) {
+	return []string{"test-id"}, nil
+}
+func (m *mockStatusMutation) Status() (enums.DocumentStatus, bool) { return m.status, true }
+func (m *mockStatusMutation) ApproverID() (string, bool)           { return m.approverID, m.approverID != "" }
+func (m *mockStatusMutation) DelegateID() (string, bool)           { return m.delegateID, m.delegateID != "" }
+func (m *mockStatusMutation) OldApproverID(ctx context.Context) (string, error) {
+	return m.approverID, nil
+}
+func (m *mockStatusMutation) OldDelegateID(ctx context.Context) (string, error) {
+	return m.delegateID, nil
+}
+func (m *mockStatusMutation) ApprovalRequired() (bool, bool)                        { return true, true }
+func (m *mockStatusMutation) OldApprovalRequired(ctx context.Context) (bool, error) { return true, nil }
+func (m *mockStatusMutation) Client() *generated.Client                             { return m.client }
 
 func TestGetApproverDelegateIDs(t *testing.T) {
 	ctx := context.Background()

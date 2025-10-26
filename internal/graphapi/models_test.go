@@ -215,9 +215,10 @@ type InternalPolicyBuilder struct {
 	client *client
 
 	// Fields
-	Name            string
-	BlockedGroupIDs []string
-	EditorGroupIDs  []string
+	Name                    string
+	BlockedGroupIDs         []string
+	EditorGroupIDs          []string
+	SkipApprovalRequirement bool
 }
 
 type RiskBuilder struct {
@@ -1056,6 +1057,10 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	if len(p.EditorGroupIDs) > 0 {
 		mut.AddEditorIDs(p.EditorGroupIDs...)
+	}
+
+	if p.SkipApprovalRequirement {
+		mut.SetApprovalRequired(false)
 	}
 
 	policy, err := mut.Save(ctx)
