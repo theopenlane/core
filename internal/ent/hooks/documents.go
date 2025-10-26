@@ -294,6 +294,7 @@ func getApproverDelegateIDs(ctx context.Context, mut statusMutation) (approverID
 	return approverID, delegateID
 }
 
+// getRequireApproval determines if approval is required based on the operation type
 func getRequireApproval(ctx context.Context, mut statusMutation) (bool, error) {
 	switch mut.Op() {
 	case ent.OpCreate:
@@ -304,6 +305,13 @@ func getRequireApproval(ctx context.Context, mut statusMutation) (bool, error) {
 		// this field will default to true if not set on create
 		return true, nil
 	case ent.OpUpdate, ent.OpUpdateOne:
+		// check if the field is being updated to not require approval anymore first
+		requireApproval, exists := mut.ApprovalRequired()
+		if exists {
+			return requireApproval, nil
+		}
+
+		// otherwise fall back to the old value from the database
 		return mut.OldApprovalRequired(ctx)
 	default:
 		return true, nil
