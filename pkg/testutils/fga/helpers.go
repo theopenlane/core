@@ -2,8 +2,8 @@ package dbtest
 
 import (
 	"context"
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"database/sql"
 	"io"
 	"path/filepath"
@@ -122,6 +122,10 @@ func randomString(n int) []byte {
 }
 
 func createTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, error) {
+	if refreshOverlap >= 0 {
+		refreshOverlap = -15 * time.Minute
+	}
+
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
 		Issuer:          "http://localhost:17608",
@@ -130,7 +134,12 @@ func createTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, err
 		RefreshOverlap:  refreshOverlap,
 	}
 
-	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if -refreshOverlap > conf.AccessDuration {
+		refreshOverlap = -(conf.AccessDuration - time.Second)
+		conf.RefreshOverlap = refreshOverlap
+	}
+
+	_, key, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, err
 	}

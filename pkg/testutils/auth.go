@@ -1,8 +1,9 @@
 package testutils
 
 import (
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
+	"fmt"
 	"io"
 	"log"
 	"time"
@@ -54,6 +55,10 @@ func randomString(n int) []byte {
 
 // CreateTokenManager creates a new token manager for testing
 func CreateTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, error) {
+	if refreshOverlap == 0 {
+		refreshOverlap = -15 * time.Minute
+	}
+
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
 		Issuer:          "http://localhost:17608",
@@ -62,10 +67,15 @@ func CreateTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, err
 		RefreshOverlap:  refreshOverlap,
 	}
 
-	key, err := rsa.GenerateKey(rand.Reader, 2048) //nolint:mnd
+	_, key, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, err
 	}
 
-	return tokens.NewWithKey(key, conf)
+	tm, err := tokens.NewWithKey(key, conf)
+	if err != nil {
+		return nil, fmt.Errorf("new token manager: %w", err)
+	}
+
+	return tm, nil
 }

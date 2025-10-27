@@ -145,7 +145,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		}),
 	}
 
-	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	requireNoError(err)
 
 	sm := coreutils.CreateSessionManager()

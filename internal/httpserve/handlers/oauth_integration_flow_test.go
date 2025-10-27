@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -17,8 +16,8 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -532,74 +531,6 @@ func generateTestOAuthState(orgID, provider string) (string, error) {
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 
-// createTestIntegration creates a test integration for testing
-func (suite *HandlerTestSuite) createTestIntegration(ctx context.Context, ownerID, provider string) *ent.Integration {
-	return suite.db.Integration.Create().
-		SetOwnerID(ownerID).
-		SetName(fmt.Sprintf("%s Integration Test", provider)).
-		SetDescription(fmt.Sprintf("Test integration for %s", provider)).
-		SetKind(provider).
-		SaveX(ctx)
-}
-
-// createTestTokens creates test tokens for an integration
-func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration *ent.Integration) {
-	// Create access token
-	suite.db.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(fmt.Sprintf("%s access token", integration.Name)).
-		SetDescription(fmt.Sprintf("Access token for %s integration", integration.Kind)).
-		SetKind("oauth_token").
-		SetSecretName(fmt.Sprintf("%s_access_token", integration.Kind)).
-		SetSecretValue("test_access_token_123").
-		AddIntegrations(integration).
-		SaveX(ctx)
-
-	// Create refresh token
-	suite.db.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(fmt.Sprintf("%s refresh token", integration.Name)).
-		SetDescription(fmt.Sprintf("Refresh token for %s integration", integration.Kind)).
-		SetKind("oauth_token").
-		SetSecretName(fmt.Sprintf("%s_refresh_token", integration.Kind)).
-		SetSecretValue("test_refresh_token_456").
-		AddIntegrations(integration).
-		SaveX(ctx)
-
-	// Create expiry
-	expiryTime := time.Now().Add(1 * time.Hour)
-	suite.db.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(fmt.Sprintf("%s expires at", integration.Name)).
-		SetDescription(fmt.Sprintf("Token expiry for %s integration", integration.Kind)).
-		SetKind("oauth_token").
-		SetSecretName(fmt.Sprintf("%s_expires_at", integration.Kind)).
-		SetSecretValue(expiryTime.Format(time.RFC3339)).
-		AddIntegrations(integration).
-		SaveX(ctx)
-
-	// Create provider metadata
-	suite.db.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(fmt.Sprintf("%s provider user ID", integration.Name)).
-		SetDescription(fmt.Sprintf("Provider user ID for %s integration", integration.Kind)).
-		SetKind("oauth_token").
-		SetSecretName(fmt.Sprintf("%s_provider_user_id", integration.Kind)).
-		SetSecretValue("test_user_id_789").
-		AddIntegrations(integration).
-		SaveX(ctx)
-
-	suite.db.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(fmt.Sprintf("%s provider username", integration.Name)).
-		SetDescription(fmt.Sprintf("Provider username for %s integration", integration.Kind)).
-		SetKind("oauth_token").
-		SetSecretName(fmt.Sprintf("%s_provider_username", integration.Kind)).
-		SetSecretValue("testuser").
-		AddIntegrations(integration).
-		SaveX(ctx)
-}
-
 // TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteLax
 func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 	t := suite.T()
@@ -807,7 +738,7 @@ func (suite *HandlerTestSuite) TestOAuthCallbackWithCookies() {
 func (suite *HandlerTestSuite) TestOAuthStateValidation() {
 	t := suite.T()
 
-	orgID := "test-org-123"
+	orgID := ulids.New().String()
 	provider := "github"
 
 	t.Run("state generation and validation", func(t *testing.T) {
