@@ -88,29 +88,40 @@ func TestQueryTask(t *testing.T) {
 }
 
 func TestQueryTasks(t *testing.T) {
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+
+	viewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
+
+	adminUser1 := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser1, enums.RoleAdmin, testUser.OrganizationID)
+
+	anotherUser := suite.userBuilder(context.Background(), t)
+
 	// create a bunch to test the pagination with different users
 	// works with overfetching
 	numTasks := 10
 	org1TaskIDs := []string{}
 	org2TaskIDs := []string{}
 	for range numTasks {
-		t1 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser1.UserCtx, t)
-		t2 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(viewOnlyUser2.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(adminUser.UserCtx, t)
+		t1 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(viewUser.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(adminUser1.UserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
 
-		t4 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(anotherUser.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
-	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.PersonalOrgID)
+	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// add a task for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	taskPersonal := (&TaskBuilder{client: suite.client, AssigneeID: testUser1.ID}).MustNew(userCtxPersonalOrg, t)
+	taskPersonal := (&TaskBuilder{client: suite.client, AssigneeID: testUser.ID}).MustNew(userCtxPersonalOrg, t)
 
-	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	taskWithRisk := (&TaskBuilder{client: suite.client, RiskID: risk.ID}).MustNew(testUser1.UserCtx, t)
+	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser1.UserCtx, t)
+	taskWithRisk := (&TaskBuilder{client: suite.client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
 
 	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
 
@@ -133,7 +144,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			totalCount:      31,
 		},
@@ -141,7 +152,7 @@ func TestQueryTasks(t *testing.T) {
 			name:            "happy path, with order by due date, page 1",
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -151,7 +162,7 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -161,7 +172,7 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -171,7 +182,7 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: 1,
 			totalCount:      31,
 		},
@@ -179,7 +190,7 @@ func TestQueryTasks(t *testing.T) {
 			name:            "happy path, with order by created date, page 1",
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -189,7 +200,7 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -199,7 +210,7 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      31,
@@ -209,27 +220,27 @@ func TestQueryTasks(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: 1,
 			totalCount:      31,
 		},
 		{
 			name:            "happy path, view only user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser2.UserCtx,
+			ctx:             viewUser.UserCtx,
 			expectedResults: first,
 			totalCount:      10,
 		},
 		{
 			name:            "happy path, admin user",
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             adminUser1.UserCtx,
 			expectedResults: first,
 			totalCount:      11,
 		},
 		{
 			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
-			client:          suite.client.apiWithPAT,
+			client:          patClient,
 			ctx:             context.Background(),
 			expectedResults: first,
 			totalCount:      32,
@@ -237,7 +248,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "another user, no entities should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             anotherUser.UserCtx,
 			expectedResults: first,
 			totalCount:      10,
 		},
@@ -292,8 +303,8 @@ func TestQueryTasks(t *testing.T) {
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).
 		MustDelete(systemAdminUser.UserCtx, t)
 
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(anotherUser.UserCtx, t)
 }
 
 func getFutureDate() time.Time {
