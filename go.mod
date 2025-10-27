@@ -119,54 +119,13 @@ require (
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.10.3 // indirect
-	github.com/andybalholm/cascadia v1.3.3 // indirect
-	github.com/bmatcuk/doublestar/v4 v4.9.1 // indirect
-	github.com/checkpoint-restore/go-criu/v6 v6.3.0 // indirect
-	github.com/cilium/ebpf v0.17.3 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
-	github.com/coder/websocket v1.8.12 // indirect
-	github.com/containerd/console v1.0.4 // indirect
-	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
-	github.com/cyphar/filepath-securejoin v0.4.1 // indirect
-	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-faster/errors v0.7.1 // indirect
-	github.com/go-faster/jx v1.1.0 // indirect
-	github.com/go-faster/yaml v0.4.6 // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/addlicense v1.1.1 // indirect
-	github.com/iancoleman/strcase v0.3.0 // indirect
-	github.com/lyft/protoc-gen-star/v2 v2.0.4-0.20230330145011-496ad1ac90a4 // indirect
-	github.com/moby/sys/capability v0.4.0 // indirect
-	github.com/moby/sys/mountinfo v0.7.2 // indirect
-	github.com/mrunalp/fileutils v0.5.1 // indirect
-	github.com/ncruces/go-strftime v0.1.9 // indirect
-	github.com/ogen-go/ogen v1.3.0 // indirect
-	github.com/opencontainers/cgroups v0.0.4 // indirect
-	github.com/opencontainers/runtime-spec v1.2.1 // indirect
-	github.com/opencontainers/selinux v1.11.1 // indirect
-	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/seccomp/libseccomp-golang v0.10.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	github.com/theopenlane/go-turso v0.1.0 // indirect
-	github.com/tursodatabase/libsql-client-go v0.0.0-20240902231107-85af5b9d094d // indirect
-	github.com/urfave/cli v1.22.16 // indirect
-	github.com/vishvananda/netlink v1.3.0 // indirect
-	github.com/vishvananda/netns v0.0.4 // indirect
-	github.com/wundergraph/graphql-go-tools v1.67.4 // indirect
-	github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
 	google.golang.org/api v0.253.0 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	modernc.org/libc v1.66.3 // indirect
-	modernc.org/mathutil v1.7.1 // indirect
-	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.39.0 // indirect
 )
 
 require (
