@@ -13,6 +13,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/utils/passwd"
+	"github.com/theopenlane/utils/keygen"
 )
 
 func validateExpirationTime(m mutationWithExpirationTime) error {
@@ -40,9 +42,18 @@ func HookCreateAPIToken() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+			// generate raw token and derived key, store derived key in DB but return raw token to caller
+			rawToken := keygen.PrefixedSecret("tola") // api token prefix
+			hash, err := passwd.CreateDerivedKey(rawToken)
+			if err != nil {
+				return nil, err
+			}
 
 			// set organization on the token
 			m.SetOwnerID(orgID)
+
+			// set the derived token hash for storage
+			m.SetToken(hash)
 
 			if err := validateExpirationTime(m); err != nil {
 				return nil, err
@@ -57,6 +68,9 @@ func HookCreateAPIToken() ent.Hook {
 			if !ok {
 				return retVal, err
 			}
+
+			// set the token field on the returned object to the raw token so the caller can see it
+			token.Token = rawToken
 
 			// create the relationship tuples in fga for the token
 			tuples, err := createScopeTuples(token.Scopes, orgID, token.ID)
