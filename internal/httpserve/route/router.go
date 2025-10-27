@@ -628,6 +628,7 @@ func RegisterRoutes(router *Router) error {
 		registerEndImpersonationHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
+		registerSCIMRoutes,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into

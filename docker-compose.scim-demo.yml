@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # SCIM Client Test Container
+  scim-client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.scim-client
+    environment:
+      - SCIM_BASE_URL=${SCIM_BASE_URL:-http://host.docker.internal:17608/scim}
+      - SCIM_AUTH_TOKEN=${SCIM_AUTH_TOKEN}
+    volumes:
+      - ./scripts/scim:/app/scripts
+    networks:
+      - scim-demo
+    command: tail -f /dev/null
+    profiles:
+      - scim-demo
+
+networks:
+  scim-demo:
+    name: scim-demo
+    driver: bridge

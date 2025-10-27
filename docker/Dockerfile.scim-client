@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir requests
+
+# Copy SCIM client scripts
+COPY scripts/scim/ /app/scripts/
+
+# Set the scripts as executable
+RUN chmod +x /app/scripts/*.py
+
+CMD ["tail", "-f", "/dev/null"]

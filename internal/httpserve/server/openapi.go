@@ -1,9 +1,12 @@
 package server
 
 import (
+	"context"
+	"fmt"
 	"go/doc"
 	"go/parser"
 	"go/token"
+	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -12,6 +15,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
+	"github.com/rs/zerolog/log"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
@@ -68,7 +72,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		}).Scheme(),
 	}
 
-	return &openapi3.T{
+	spec := &openapi3.T{
 		OpenAPI: "3.0.0",
 		Info: &openapi3.Info{
 			Title:       "Openlane OpenAPI 3.0.0 Specifications",
@@ -104,7 +108,202 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			SecuritySchemes: securityschemes,
 			Examples:        examples,
 		},
-	}, nil
+	}
+
+	// Merge SCIM OpenAPI spec
+	if err := mergeSCIMSpec(spec); err != nil {
+		log.Warn().Err(err).Msg("failed to merge SCIM spec, continuing without it")
+	}
+
+	return spec, nil
+}
+
+var (
+	// ErrFailedToGetFilePath is returned when runtime.Caller fails to get the current file path
+	ErrFailedToGetFilePath = fmt.Errorf("failed to get current file path")
+	// ErrSCIMSpecNotFound is returned when the SCIM spec file is not found
+	ErrSCIMSpecNotFound = fmt.Errorf("SCIM spec file not found")
+)
+
+// mergeSCIMSpec loads the SCIM OpenAPI specification and merges it into the main spec
+func mergeSCIMSpec(mainSpec *openapi3.T) error {
+	// Find the specs directory relative to this file
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return ErrFailedToGetFilePath
+	}
+
+	// Navigate from server -> httpserve to get to specs directory
+	httpserveDir := filepath.Dir(filepath.Dir(filename))
+	scimSpecPath := filepath.Join(httpserveDir, "specs", "scim.yaml")
+
+	// Check if SCIM spec file exists
+	if _, err := os.Stat(scimSpecPath); os.IsNotExist(err) {
+		return fmt.Errorf("%w: %s", ErrSCIMSpecNotFound, scimSpecPath)
+	}
+
+	// Load SCIM spec
+	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
+
+	scimSpec, err := loader.LoadFromFile(scimSpecPath)
+	if err != nil {
+		return fmt.Errorf("failed to load SCIM spec: %w", err)
+	}
+
+	// Validate SCIM spec
+	if err := scimSpec.Validate(context.Background()); err != nil {
+		return fmt.Errorf("SCIM spec validation failed: %w", err)
+	}
+
+	log.Info().Str("path", scimSpecPath).Msg("loaded SCIM OpenAPI spec")
+
+	// Merge all spec components
+	mergePaths(mainSpec, scimSpec)
+	mergeComponents(mainSpec, scimSpec)
+	mergeTags(mainSpec, scimSpec)
+
+	log.Info().
+		Int("paths", len(scimSpec.Paths.Map())).
+		Int("schemas", len(scimSpec.Components.Schemas)).
+		Msg("successfully merged SCIM spec into main OpenAPI spec")
+
+	return nil
+}
+
+// mergePaths merges paths from source spec into main spec
+func mergePaths(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Paths == nil {
+		return
+	}
+
+	if mainSpec.Paths == nil {
+		mainSpec.Paths = openapi3.NewPaths()
+	}
+
+	for path, pathItem := range sourceSpec.Paths.Map() {
+		if pathItem != nil {
+			mainSpec.Paths.Set(path, pathItem)
+		}
+	}
+}
+
+// mergeComponents merges all component types from source spec into main spec
+func mergeComponents(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components == nil {
+		return
+	}
+
+	if mainSpec.Components == nil {
+		mainSpec.Components = &openapi3.Components{}
+	}
+
+	mergeSchemas(mainSpec, sourceSpec)
+	mergeResponses(mainSpec, sourceSpec)
+	mergeParameters(mainSpec, sourceSpec)
+	mergeRequestBodies(mainSpec, sourceSpec)
+	mergeSecuritySchemes(mainSpec, sourceSpec)
+}
+
+// mergeSchemas merges schema definitions
+func mergeSchemas(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.Schemas == nil {
+		return
+	}
+
+	if mainSpec.Components.Schemas == nil {
+		mainSpec.Components.Schemas = make(openapi3.Schemas)
+	}
+
+	for name, schema := range sourceSpec.Components.Schemas {
+		mainSpec.Components.Schemas[name] = schema
+	}
+}
+
+// mergeResponses merges response definitions
+func mergeResponses(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.Responses == nil {
+		return
+	}
+
+	if mainSpec.Components.Responses == nil {
+		mainSpec.Components.Responses = make(openapi3.ResponseBodies)
+	}
+
+	for name, response := range sourceSpec.Components.Responses {
+		mainSpec.Components.Responses[name] = response
+	}
+}
+
+// mergeParameters merges parameter definitions
+func mergeParameters(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.Parameters == nil {
+		return
+	}
+
+	if mainSpec.Components.Parameters == nil {
+		mainSpec.Components.Parameters = make(openapi3.ParametersMap)
+	}
+
+	for name, param := range sourceSpec.Components.Parameters {
+		mainSpec.Components.Parameters[name] = param
+	}
+}
+
+// mergeRequestBodies merges request body definitions
+func mergeRequestBodies(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.RequestBodies == nil {
+		return
+	}
+
+	if mainSpec.Components.RequestBodies == nil {
+		mainSpec.Components.RequestBodies = make(openapi3.RequestBodies)
+	}
+
+	for name, reqBody := range sourceSpec.Components.RequestBodies {
+		mainSpec.Components.RequestBodies[name] = reqBody
+	}
+}
+
+// mergeSecuritySchemes merges security scheme definitions without overriding existing ones
+func mergeSecuritySchemes(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.SecuritySchemes == nil {
+		return
+	}
+
+	if mainSpec.Components.SecuritySchemes == nil {
+		mainSpec.Components.SecuritySchemes = make(openapi3.SecuritySchemes)
+	}
+
+	for name, scheme := range sourceSpec.Components.SecuritySchemes {
+		// Only add if not already present
+		if _, exists := mainSpec.Components.SecuritySchemes[name]; !exists {
+			mainSpec.Components.SecuritySchemes[name] = scheme
+		}
+	}
+}
+
+// mergeTags merges tag definitions from source spec into main spec
+func mergeTags(mainSpec, sourceSpec *openapi3.T) {
+	if len(sourceSpec.Tags) == 0 {
+		return
+	}
+
+	// Check if any source tags already exist in main spec
+	for _, sourceTag := range sourceSpec.Tags {
+		tagExists := false
+
+		for _, mainTag := range mainSpec.Tags {
+			if mainTag.Name == sourceTag.Name {
+				tagExists = true
+				break
+			}
+		}
+
+		if !tagExists {
+			mainSpec.Tags = append(mainSpec.Tags, sourceTag)
+		}
+	}
 }
 
 // customizer is a customizer function that allows for the modification of the generated schemas

@@ -549,3 +549,66 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
+
+  # === SCIM Demo Tasks ===
+  scim:demo:up:
+    desc: brings up the SCIM demo compose stack
+    cmds:
+      - docker compose --profile scim-demo -f docker-compose.scim-demo.yml up -d
+
+  scim:demo:down:
+    desc: brings down the SCIM demo compose stack
+    cmds:
+      - docker compose -f docker-compose.scim-demo.yml down
+
+  scim:demo:run:
+    desc: runs the SCIM demo script using a dynamically generated token
+    deps: ['go:build-cli']
+    preconditions:
+      - sh: 'docker ps | grep -q scim-client'
+        msg: "SCIM demo container not running. Run 'task scim:demo:up' first"
+      - sh: 'curl -sf http://localhost:17608/livez > /dev/null'
+        msg: "Openlane server not running on localhost:17608. Start the server first"
+    vars:
+      API_TOKEN:
+        sh: ./openlane-cli token create -n "scim-demo-token" -z json 2>/dev/null | jq -r '.createAPIToken.apiToken.token'
+    cmds:
+      - docker compose -f docker-compose.scim-demo.yml exec -e SCIM_AUTH_TOKEN={{.API_TOKEN}} -e SCIM_BASE_URL=http://host.docker.internal:17608/scim scim-client python /app/scripts/scim_client.py
+
+  scim:demo:team:
+    desc: runs the SCIM team provisioning demo
+    deps: ['go:build-cli']
+    preconditions:
+      - sh: 'docker ps | grep -q scim-client'
+        msg: "SCIM demo container not running. Run 'task scim:demo:up' first"
+      - sh: 'curl -sf http://localhost:17608/livez > /dev/null'
+        msg: "Openlane server not running on localhost:17608. Start the server first"
+    vars:
+      API_TOKEN:
+        sh: ./openlane-cli token create -n "scim-team-token" -z json 2>/dev/null | jq -r '.createAPIToken.apiToken.token'
+    cmds:
+      - docker compose -f docker-compose.scim-demo.yml exec -e SCIM_AUTH_TOKEN={{.API_TOKEN}} -e SCIM_BASE_URL=http://host.docker.internal:17608/scim scim-client python /app/scripts/provision_team.py
+
+  scim:demo:full:
+    desc: complete SCIM demo - brings up compose stack, creates token, and runs demo
+    cmds:
+      - task: scim:demo:up
+      - sleep 3
+      - task: scim:demo:run
+
+  scim:demo:shell:
+    desc: open a shell in the SCIM demo container for manual testing
+    preconditions:
+      - sh: 'docker ps | grep -q scim-client'
+        msg: "SCIM demo container not running. Run 'task scim:demo:up' first"
+    deps: ['go:build-cli']
+    vars:
+      API_TOKEN:
+        sh: ./openlane-cli token create -n "scim-shell-token" -z json 2>/dev/null | jq -r '.createAPIToken.apiToken.token'
+    cmds:
+      - docker compose -f docker-compose.scim-demo.yml exec -e SCIM_AUTH_TOKEN={{.API_TOKEN}} -e SCIM_BASE_URL=http://host.docker.internal:17608/scim scim-client bash
+
+  scim:demo:logs:
+    desc: show logs from the SCIM demo container
+    cmds:
+      - docker compose -f docker-compose.scim-demo.yml logs -f scim-client
