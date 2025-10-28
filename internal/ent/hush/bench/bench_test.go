@@ -85,7 +85,7 @@ func setupBenchmarkClient(b *testing.B) *benchmarkContext {
 	fgaClient, err := ofgaTF.NewFgaClient(ctx)
 	require.NoError(b, err)
 
-	tm, err := coreutils.CreateTokenManager(15 * time.Minute)
+	tm, err := coreutils.CreateTokenManager(-15 * time.Minute)
 	require.NoError(b, err)
 
 	sm := coreutils.CreateSessionManager()

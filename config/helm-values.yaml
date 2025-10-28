@@ -235,6 +235,24 @@ coreConfiguration:
       jwksEndpoint: ""  # @schema type:string
       keys: {}
       generateKeys: true  # @schema type:boolean; default:true
+      jwksCacheTTL: 5m0s  # @schema type:integer; default:5m
+      redis:
+        enabled: false  # @schema type:boolean; default:false
+        config:
+          enabled: true  # @schema type:boolean; default:true
+          address: "localhost:6379"  # @schema type:string; default:localhost:6379
+          name: ""  # @schema type:string
+          username: ""  # @schema type:string
+          password: ""  # @schema type:string
+          db: 0  # @schema type:integer; default:0
+          dialTimeout: 5s  # @schema type:integer; default:5s
+          readTimeout: 0s  # @schema type:integer; default:0
+          writeTimeout: 0s  # @schema type:integer; default:0
+          maxRetries: 3  # @schema type:integer; default:3
+          minIdleConns: 0  # @schema type:integer; default:0
+          maxIdleConns: 0  # @schema type:integer; default:0
+          maxActiveConns: 0  # @schema type:integer; default:0
+        blacklistPrefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedProviders: []
     # -- Providers contains supported oauth2 providers configuration
@@ -289,8 +307,6 @@ coreConfiguration:
       issuer: ""  # @schema type:string
       # -- scopes for the openFGA client
       scopes: ""  # @schema type:string
-    # -- ignore duplicate key error
-    ignoreDuplicateKeyError: true  # @schema type:boolean; default:true
   # -- DB contains the database configuration for the ent client
   db:
     # -- debug enables printing the debug database logs
