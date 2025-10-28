@@ -42,9 +42,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 	// Set full overlap of the refresh and access token so the refresh token is immediately valid
 	tm, err := testutils.CreateTokenManager(-60 * time.Minute) //nolint:mnd
-	if err != nil {
-		t.Error("error creating token manager")
-	}
+	require.NoError(t, err)
 
 	suite.h.TokenManager = tm
 
@@ -85,9 +83,10 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 	}
 
 	_, refresh, err := tm.CreateTokenPair(claims)
-	if err != nil {
-		t.Error("error creating token pair")
-	}
+	require.NoError(t, err)
+
+	// ensure refresh token is valid by waiting
+	time.Sleep(1 * time.Second)
 
 	testCases := []struct {
 		name               string
@@ -115,9 +114,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			}
 
 			body, err := json.Marshal(refreshJSON)
-			if err != nil {
-				require.NoError(t, err)
-			}
+			require.NoError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/refresh", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -134,9 +131,8 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			var out *apimodels.RefreshReply
 
 			// parse request body
-			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
-				t.Error("error parsing response", err)
-			}
+			err = json.NewDecoder(res.Body).Decode(&out)
+			require.NoError(t, err)
 
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
@@ -144,7 +140,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 				assert.True(t, out.Success)
 
 				jwt, err := tokens.ParseUnverifiedTokenClaims(out.AccessToken)
-				assert.NoError(t, err)
+				require.NoError(t, err)
 
 				// ensure the claims contain the modules
 				assert.NotEmpty(t, jwt.Modules)
