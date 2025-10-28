@@ -2,8 +2,8 @@ package serveropts
 
 import (
 	"context"
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
@@ -102,16 +102,32 @@ func WithGeneratedKeys() ServerOption {
 
 		// generate a new private key if one doesn't exist
 		if _, err := os.Stat(privFileName); err != nil {
-			// Generate a new RSA private key with 2048 bits
-			privateKey, err := rsa.GenerateKey(rand.Reader, 2048) //nolint:mnd
+			// Generate a new Ed25519 key pair
+			publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
 			if err != nil {
-				log.Panic().Err(err).Msg("Error generating RSA private key")
+				log.Panic().Err(err).Msg("Error generating Ed25519 key pair")
 			}
 
-			// Encode the private key to the PEM format
+			// Marshal private key to PKCS#8 format expected by token loader
+			privateKeyDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
+			if err != nil {
+				log.Panic().Err(err).Msg("Error marshaling Ed25519 private key")
+			}
+
+			// Marshal public key to PKIX format so both key blocks are available
+			publicKeyDER, err := x509.MarshalPKIXPublicKey(publicKey)
+			if err != nil {
+				log.Panic().Err(err).Msg("Error marshaling Ed25519 public key")
+			}
+
 			privateKeyPEM := &pem.Block{
-				Type:  "RSA PRIVATE KEY",
-				Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
+				Type:  "PRIVATE KEY",
+				Bytes: privateKeyDER,
+			}
+
+			publicKeyPEM := &pem.Block{
+				Type:  "PUBLIC KEY",
+				Bytes: publicKeyDER,
 			}
 
 			privateKeyFile, err := os.Create(privFileName)
@@ -120,7 +136,11 @@ func WithGeneratedKeys() ServerOption {
 			}
 
 			if err := pem.Encode(privateKeyFile, privateKeyPEM); err != nil {
-				log.Panic().Err(err).Msg("unable to encode pem on startup")
+				log.Panic().Err(err).Msg("unable to encode private key pem on startup")
+			}
+
+			if err := pem.Encode(privateKeyFile, publicKeyPEM); err != nil {
+				log.Panic().Err(err).Msg("unable to encode public key pem on startup")
 			}
 
 			privateKeyFile.Close()

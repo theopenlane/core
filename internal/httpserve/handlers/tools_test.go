@@ -134,7 +134,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	var err error
 
 	// shared token manager to avoid RSA key generation
-	suite.sharedTokenManager, err = coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	require.NoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup

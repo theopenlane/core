@@ -2,8 +2,8 @@ package impersonation
 
 import (
 	"context"
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,11 +16,11 @@ import (
 	"github.com/theopenlane/iam/tokens"
 )
 
-var testKey *rsa.PrivateKey
+var testKey ed25519.PrivateKey
 
 func init() {
 	var err error
-	testKey, err = rsa.GenerateKey(rand.Reader, 2048)
+	_, testKey, err = ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		panic(err)
 	}
