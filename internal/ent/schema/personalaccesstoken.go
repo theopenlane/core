@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
