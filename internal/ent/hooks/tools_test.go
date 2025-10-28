@@ -79,7 +79,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
 	require.NoError(t, err)
 
-	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
 
@@ -155,7 +155,19 @@ func (suite *HookTestSuite) seedSystemAdmin() *generated.User {
 
 	// add system admin relation for user
 	_, err := suite.client.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
-	require.NoError(suite.T(), err)
+	if err != nil {
+		// TokenManager refresh tightening surfaces duplicate tuple writes during reseeds; if the write failed
+		// because the tuple already exists, ensure the relation is present and continue.
+		ok, checkErr := suite.client.Authz.CheckAccess(context.Background(), fgax.AccessCheck{
+			ObjectType:  fgax.Kind(authmw.SystemObject),
+			ObjectID:    authmw.SystemObjectID,
+			SubjectID:   newUser.ID,
+			SubjectType: auth.UserSubjectType,
+			Relation:    fgax.SystemAdminRelation,
+		})
+		require.NoError(suite.T(), checkErr)
+		require.True(suite.T(), ok, "system admin tuple should exist after WriteTupleKeys error: %v", err)
+	}
 
 	return newUser
 }

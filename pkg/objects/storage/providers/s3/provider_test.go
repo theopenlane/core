@@ -3,8 +3,8 @@ package s3_test
 import (
 	"bytes"
 	"context"
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"errors"
 	"io"
 	"net/http"
@@ -449,9 +449,16 @@ func createBucket(t *testing.T, ctx context.Context, endpoint, bucket string) {
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
-	key, err := rsa.GenerateKey(rand.Reader, 1024)
+	_, key, err := ed25519.GenerateKey(rand.Reader)
 	require.NoError(t, err)
-	tm, err := tokens.NewWithKey(key, tokens.Config{})
+	conf := tokens.Config{
+		Audience:        "http://localhost:17608",
+		Issuer:          "http://localhost:17608",
+		AccessDuration:  time.Hour,
+		RefreshDuration: 2 * time.Hour,
+		RefreshOverlap:  -15 * time.Minute,
+	}
+	tm, err := tokens.NewWithKey(key, conf)
 	require.NoError(t, err)
 	return tm
 }

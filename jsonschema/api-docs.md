@@ -66,7 +66,10 @@ Config contains the configuration for the core server
     },
     "auth": {
         "token": {
-            "keys": {}
+            "keys": {},
+            "redis": {
+                "config": {}
+            }
         },
         "providers": {
             "github": {},
@@ -661,7 +664,10 @@ Auth settings including oauth2 providers and token configuration
 ```json
 {
     "token": {
-        "keys": {}
+        "keys": {},
+        "redis": {
+            "config": {}
+        }
     },
     "providers": {
         "github": {},
@@ -688,13 +694,18 @@ Auth settings including oauth2 providers and token configuration
 |**jwksEndpoint**|`string`||no|
 |[**keys**](#authtokenkeys)|`object`||yes|
 |**generateKeys**|`boolean`||no|
+|**jwksCacheTTL**|`integer`||no|
+|[**redis**](#authtokenredis)|`object`||no|
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "keys": {}
+    "keys": {},
+    "redis": {
+        "config": {}
+    }
 }
 ```
 
@@ -707,6 +718,48 @@ Auth settings including oauth2 providers and token configuration
 |----|----|-----------|--------|
 |**Additional Properties**|`string`|||
 
+<a name="authtokenredis"></a>
+#### auth\.token\.redis: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|[**config**](#authtokenredisconfig)|`object`|||
+|**blacklistPrefix**|`string`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "config": {}
+}
+```
+
+<a name="authtokenredisconfig"></a>
+##### auth\.token\.redis\.config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**address**|`string`|||
+|**name**|`string`|||
+|**username**|`string`|||
+|**password**|`string`|||
+|**db**|`integer`|||
+|**dialTimeout**|`integer`|||
+|**readTimeout**|`integer`|||
+|**writeTimeout**|`integer`|||
+|**maxRetries**|`integer`|||
+|**minIdleConns**|`integer`|||
+|**maxIdleConns**|`integer`|||
+|**maxActiveConns**|`integer`|||
+
+**Additional Properties:** not allowed  
 <a name="authsupportedproviders"></a>
 ### auth\.supportedProviders: array
 
@@ -817,7 +870,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**createNewModel**|`boolean`|force create a new model<br/>|no|
 |**modelFile**|`string`|path to the fga model file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
-|**ignoreDuplicateKeyError**|`boolean`|ignore duplicate key error<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**

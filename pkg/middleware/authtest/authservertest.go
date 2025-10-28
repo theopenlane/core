@@ -1,8 +1,8 @@
 package authtest
 
 import (
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -58,9 +58,9 @@ func NewServer() (s *Server, err error) {
 
 	// if the file isn't there, generate with a new key
 	if _, err := os.Stat(privFileName); err != nil {
-		var key *rsa.PrivateKey
+		var key ed25519.PrivateKey
 
-		if key, err = rsa.GenerateKey(rand.Reader, 2048); err != nil { //nolint:mnd
+		if _, key, err = ed25519.GenerateKey(rand.Reader); err != nil {
 			return nil, err
 		}
 
@@ -107,7 +107,8 @@ func (s *Server) KeysURL() string {
 // CreateToken creates a token without overwriting the claims, which is useful for
 // creating tokens with specific not before and expiration times for testing.
 func (s *Server) CreateToken(claims *tokens.Claims) (tks string, err error) {
-	return s.tokens.Sign(s.tokens.CreateToken(claims))
+	token := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claims)
+	return s.tokens.Sign(token)
 }
 
 func (s *Server) CreateAccessToken(claims *tokens.Claims) (tks string, err error) {
