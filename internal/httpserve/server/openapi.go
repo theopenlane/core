@@ -66,16 +66,10 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		}).Scheme(),
 	}
 
-	securityschemes["openIdConnect"] = &openapi3.SecuritySchemeRef{
-		Value: (*OpenID)(&OpenID{
-			ConnectURL: "https://api.theopenlane.io/.well-known/openid-configuration",
-		}).Scheme(),
-	}
-
 	spec := &openapi3.T{
-		OpenAPI: "3.0.0",
+		OpenAPI: "3.1.1",
 		Info: &openapi3.Info{
-			Title:       "Openlane OpenAPI 3.0.0 Specifications",
+			Title:       "Openlane OpenAPI 3.1.1 Specifications",
 			Description: "Openlane's API services are designed to provide a simple and easy to use interface for interacting with the Openlane platform. This API is designed to be used by both internal and external clients to interact with the Openlane platform.",
 			Version:     "v1.0.0",
 			Contact: &openapi3.Contact{
@@ -99,7 +93,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			Description: "Documentation for Openlane's API services",
 			URL:         "https://docs.theopenlane.io",
 		},
-
+		Tags: openapi3.Tags{},
 		Components: &openapi3.Components{
 			Schemas:         schemas,
 			Responses:       responses,
@@ -114,6 +108,9 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	if err := mergeSCIMSpec(spec); err != nil {
 		log.Warn().Err(err).Msg("failed to merge SCIM spec, continuing without it")
 	}
+
+	// Add descriptions from Go doc comments to schemas
+	addSchemaDescriptions(spec)
 
 	return spec, nil
 }
@@ -203,6 +200,7 @@ func mergeComponents(mainSpec, sourceSpec *openapi3.T) {
 	mergeParameters(mainSpec, sourceSpec)
 	mergeRequestBodies(mainSpec, sourceSpec)
 	mergeSecuritySchemes(mainSpec, sourceSpec)
+	mergeExamples(mainSpec, sourceSpec)
 }
 
 // mergeSchemas merges schema definitions
@@ -283,6 +281,21 @@ func mergeSecuritySchemes(mainSpec, sourceSpec *openapi3.T) {
 	}
 }
 
+// mergeExamples merges example definitions
+func mergeExamples(mainSpec, sourceSpec *openapi3.T) {
+	if sourceSpec.Components.Examples == nil {
+		return
+	}
+
+	if mainSpec.Components.Examples == nil {
+		mainSpec.Components.Examples = make(openapi3.Examples)
+	}
+
+	for name, example := range sourceSpec.Components.Examples {
+		mainSpec.Components.Examples[name] = example
+	}
+}
+
 // mergeTags merges tag definitions from source spec into main spec
 func mergeTags(mainSpec, sourceSpec *openapi3.T) {
 	if len(sourceSpec.Tags) == 0 {
@@ -309,7 +322,7 @@ func mergeTags(mainSpec, sourceSpec *openapi3.T) {
 // customizer is a customizer function that allows for the modification of the generated schemas
 // this is used to ignore fields that are not required in the OAS specification
 // and to add additional metadata to the schema such as descriptions and examples
-var customizer = openapi3gen.SchemaCustomizer(func(name string, t reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
+var customizer = openapi3gen.SchemaCustomizer(func(_ string, t reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
 	if tag.Get("exclude") != "" && tag.Get("exclude") == "true" {
 		return &openapi3gen.ExcludeSchemaSentinel{}
 	}
@@ -322,8 +335,8 @@ var customizer = openapi3gen.SchemaCustomizer(func(name string, t reflect.Type, 
 		schema.Example = tag.Get("example")
 	}
 
-	// For top-level structs, try to extract description from Go doc comments
-	if (name == "_root" || tag == "") && schema.Description == "" && t.Kind() == reflect.Struct {
+	// For all structs, try to extract description from Go doc comments if not already set
+	if schema.Description == "" && t.Kind() == reflect.Struct {
 		if desc := getTypeDescription(t); desc != "" {
 			schema.Description = desc
 		}
@@ -479,4 +492,108 @@ func getPackageDir(pkgPath string) string {
 	}
 
 	return ""
+}
+
+// addSchemaDescriptions extracts Go doc comments and adds them as descriptions to schemas
+func addSchemaDescriptions(spec *openapi3.T) {
+	if spec == nil || spec.Components == nil || spec.Components.Schemas == nil {
+		return
+	}
+
+	// Extract all type descriptions from the openapi package
+	typeDescriptions := extractOpenAPITypeDescriptions()
+
+	// Apply descriptions to schemas
+	for name, schemaRef := range spec.Components.Schemas {
+		if schemaRef == nil || schemaRef.Value == nil {
+			continue
+		}
+
+		schema := schemaRef.Value
+
+		// Only add description if one doesn't exist
+		if schema.Description == "" {
+			if desc, exists := typeDescriptions[name]; exists {
+				schema.Description = desc
+			}
+		}
+	}
+}
+
+// extractOpenAPITypeDescriptions parses the openapi package and extracts type descriptions
+func extractOpenAPITypeDescriptions() map[string]string {
+	descriptions := make(map[string]string)
+
+	// Get the path to the openapi package
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return descriptions
+	}
+
+	// Navigate from server -> httpserve -> internal -> core -> pkg/openapi
+	projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filename)))
+	openapiPkgPath := filepath.Join(projectRoot, "pkg", "openapi")
+
+	// Parse the package
+	fset := token.NewFileSet()
+
+	pkgs, err := parser.ParseDir(fset, openapiPkgPath, nil, parser.ParseComments)
+	if err != nil {
+		log.Warn().Err(err).Msg("failed to parse openapi package for type descriptions")
+		return descriptions
+	}
+
+	// Extract type descriptions from all packages in the directory
+	for _, pkg := range pkgs {
+		docPkg := doc.New(pkg, "./", 0)
+
+		for _, typ := range docPkg.Types {
+			if typ.Doc != "" {
+				descriptions[typ.Name] = strings.TrimSpace(typ.Doc)
+			}
+		}
+	}
+
+	return descriptions
+}
+
+// GenerateTagsFromOperations collects all unique tags from operations and generates tag definitions using operation descriptions
+func GenerateTagsFromOperations(spec *openapi3.T) {
+	if spec == nil || spec.Paths == nil {
+		return
+	}
+
+	tagDescriptions := make(map[string]string)
+
+	for _, pathItem := range spec.Paths.Map() {
+		if pathItem == nil {
+			continue
+		}
+
+		for _, op := range pathItem.Operations() {
+			if op == nil {
+				continue
+			}
+
+			for _, tag := range op.Tags {
+				if _, exists := tagDescriptions[tag]; !exists {
+					if op.Summary != "" {
+						tagDescriptions[tag] = op.Summary
+					} else if op.Description != "" {
+						tagDescriptions[tag] = op.Description
+					}
+				}
+			}
+		}
+	}
+
+	tags := make(openapi3.Tags, 0, len(tagDescriptions))
+	for tagName, desc := range tagDescriptions {
+		tags = append(tags, &openapi3.Tag{
+			Name:        tagName,
+			Description: desc,
+		})
+	}
+
+	spec.Tags = tags
 }

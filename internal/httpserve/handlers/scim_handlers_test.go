@@ -32,9 +32,18 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 		email: ulids.New().String() + "@example.com",
 	})
 
+	// Enable SSO enforcement for SCIM (required for SCIM operations)
+	ctx = privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+	org, err := suite.db.Organization.Get(ctx, scimTestUser.OrganizationID)
+	suite.Require().NoError(err)
+	setting, err := org.Setting(ctx)
+	suite.Require().NoError(err)
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
+	suite.Require().NoError(err)
+
 	// Register SCIM routes
 	suite.router.Handler = suite.h
-	err := route.RegisterRoutes(suite.router)
+	err = route.RegisterRoutes(suite.router)
 	suite.Require().NoError(err)
 
 	testCases := []struct {
@@ -170,9 +179,18 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 		email: ulids.New().String() + "@example.com",
 	})
 
+	// Enable SSO enforcement for SCIM (required for SCIM operations)
+	ctx = privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+	org, err := suite.db.Organization.Get(ctx, scimTestUser.OrganizationID)
+	suite.Require().NoError(err)
+	setting, err := org.Setting(ctx)
+	suite.Require().NoError(err)
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
+	suite.Require().NoError(err)
+
 	// Register SCIM routes
 	suite.router.Handler = suite.h
-	err := route.RegisterRoutes(suite.router)
+	err = route.RegisterRoutes(suite.router)
 	suite.Require().NoError(err)
 
 	email := fmt.Sprintf("scim-user-%s@example.com", strings.ToLower(ulids.New().String()))
@@ -256,9 +274,18 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 		email: ulids.New().String() + "@example.com",
 	})
 
+	// Enable SSO enforcement for SCIM (required for SCIM operations)
+	ctx = privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+	org, err := suite.db.Organization.Get(ctx, scimTestUser.OrganizationID)
+	suite.Require().NoError(err)
+	setting, err := org.Setting(ctx)
+	suite.Require().NoError(err)
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
+	suite.Require().NoError(err)
+
 	// Register SCIM routes
 	suite.router.Handler = suite.h
-	err := route.RegisterRoutes(suite.router)
+	err = route.RegisterRoutes(suite.router)
 	suite.Require().NoError(err)
 
 	ctx = privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)

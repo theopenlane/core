@@ -142,6 +142,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		handler.Routes(s.Router.Echo.Group("", s.config.GraphMiddleware...))
 	}
 
+	// Generate tag definitions from registered operations
+	GenerateTagsFromOperations(s.Router.OAS)
+
 	// Print routes on startup
 	routes := s.Router.Echo.Router().Routes()
 	for _, r := range routes {

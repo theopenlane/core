@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.1
 info:
   title: Openlane SCIM v2 API
   description: |
@@ -511,7 +511,7 @@ components:
         Filter expression for querying resources. Follows SCIM filter syntax as defined in
         [RFC 7644 Section 3.4.2.2](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2).
 
-        Example: `userName eq "john@example.com"`
+        Example: `userName eq "mitb@meowmeow.com"`
       schema:
         type: string
 

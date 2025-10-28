@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/mail"
 	"strings"
 	"time"
 
@@ -33,6 +34,55 @@ func NewUserHandler() *UserHandler {
 	return &UserHandler{}
 }
 
+// extractEmail extracts email address from SCIM attributes according to RFC 7643.
+// Priority order:
+// 1. Primary email from emails array
+// 2. First email from emails array
+// 3. userName if it's in valid email format
+// Returns error if no valid email is found.
+func extractEmail(attributes scim.ResourceAttributes) (string, error) {
+	if emailsArray, ok := attributes["emails"].([]any); ok && len(emailsArray) > 0 {
+		var firstEmail string
+
+		for _, emailItem := range emailsArray {
+			emailMap, ok := emailItem.(map[string]any)
+			if !ok {
+				continue
+			}
+
+			value, ok := emailMap["value"].(string)
+			if !ok || value == "" {
+				continue
+			}
+
+			if _, err := mail.ParseAddress(value); err != nil {
+				continue
+			}
+
+			if firstEmail == "" {
+				firstEmail = value
+			}
+
+			if primary, ok := emailMap["primary"].(bool); ok && primary {
+				return value, nil
+			}
+		}
+
+		if firstEmail != "" {
+			return firstEmail, nil
+		}
+	}
+
+	userName, _ := attributes["userName"].(string)
+	if userName != "" {
+		if _, err := mail.ParseAddress(userName); err == nil {
+			return userName, nil
+		}
+	}
+
+	return "", fmt.Errorf("%w: no valid email found in emails array or userName field", ErrInvalidAttributes)
+}
+
 // Create stores given attributes and returns a resource with the attributes that are stored and a unique identifier.
 func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
 	ctx := r.Context()
@@ -43,96 +93,69 @@ func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes
 		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	userName, _ := attributes["userName"].(string)
-	if userName == "" {
-		return scim.Resource{}, fmt.Errorf("%w: userName is required", ErrInvalidAttributes)
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return scim.Resource{}, err
 	}
 
-	email := userName
-
-	var firstName, lastName, displayName string
-	if nameMap, ok := attributes["name"].(map[string]interface{}); ok {
-		firstName, _ = nameMap["givenName"].(string)
-		lastName, _ = nameMap["familyName"].(string)
+	ua, err := ExtractUserAttributes(attributes)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	if dn, ok := attributes["displayName"].(string); ok {
-		displayName = dn
-	}
-
-	if displayName == "" {
-		displayName = strings.TrimSpace(firstName + " " + lastName)
-	}
-
-	if displayName == "" {
-		displayName = email
-	}
-
-	active := true
-	if activeVal, ok := attributes["active"].(bool); ok {
-		active = activeVal
-	}
-
-	userSetting, err := client.UserSetting.Create().
-		SetEmailConfirmed(true).
-		Save(ctx)
+	userSetting, err := client.UserSetting.Create().SetEmailConfirmed(true).Save(ctx)
 	if err != nil {
 		return scim.Resource{}, fmt.Errorf("failed to create user settings: %w", err)
 	}
 
-	lastLoginProvider := enums.AuthProviderOIDC
+	// SCIM users are provisioned by an IdP and will authenticate via SSO
 	authProvider := enums.AuthProviderOIDC
 	userRole := enums.RoleUser
 	input := generated.CreateUserInput{
-		Email:             email,
-		FirstName:         &firstName,
-		LastName:          &lastName,
-		DisplayName:       displayName,
-		LastSeen:          lo.ToPtr(time.Now().UTC()),
-		LastLoginProvider: &lastLoginProvider,
+		Email:             ua.Email,
+		DisplayName:       ua.DisplayName,
 		AuthProvider:      &authProvider,
+		LastLoginProvider: &authProvider,
 		Role:              &userRole,
-		ScimUsername:      &email,
-		ScimActive:        &active,
+		ScimUsername:      &ua.UserName,
+		ScimActive:        &ua.Active,
 		SettingID:         userSetting.ID,
 	}
 
-	entUser, err := client.User.Create().
-		SetInput(input).
-		Save(ctx)
-	if err != nil {
-		if generated.IsConstraintError(err) {
-			return scim.Resource{}, scimerrors.ScimError{
-				ScimType: scimerrors.ScimTypeUniqueness,
-				Detail:   fmt.Sprintf("User with email %s already exists", email),
-				Status:   http.StatusConflict,
-			}
-		}
-
-		if generated.IsValidationError(err) {
-			return scim.Resource{}, scimerrors.ScimError{
-				ScimType: scimerrors.ScimTypeInvalidValue,
-				Detail:   fmt.Sprintf("Invalid user attributes: %v", err),
-				Status:   http.StatusBadRequest,
-			}
-		}
-
-		return scim.Resource{}, fmt.Errorf("failed to create user: %w", err)
+	if ua.FirstName != "" {
+		input.FirstName = &ua.FirstName
 	}
 
-	if _, err := client.OrgMembership.Create().
-		SetUserID(entUser.ID).
-		SetOrganizationID(orgID).
-		SetRole(enums.RoleMember).
-		Save(ctx); err != nil {
+	if ua.LastName != "" {
+		input.LastName = &ua.LastName
+	}
+
+	if ua.ExternalID != "" {
+		input.ScimExternalID = &ua.ExternalID
+	}
+
+	if ua.PreferredLanguage != "" {
+		input.ScimPreferredLanguage = &ua.PreferredLanguage
+	}
+
+	if ua.Locale != "" {
+		input.ScimLocale = &ua.Locale
+	}
+
+	if ua.ProfileURL != "" {
+		input.AvatarRemoteURL = &ua.ProfileURL
+	}
+
+	entUser, err := client.User.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return scim.Resource{}, HandleEntError(err, "failed to create user", fmt.Sprintf("User with email %s already exists", ua.Email))
+	}
+
+	if _, err := client.OrgMembership.Create().SetUserID(entUser.ID).SetOrganizationID(orgID).SetRole(enums.RoleMember).Save(ctx); err != nil {
 		return scim.Resource{}, fmt.Errorf("failed to create org membership: %w", err)
 	}
 
-	if !active {
-		updatedUser, err := client.User.UpdateOne(entUser).
-			SetDeletedAt(time.Now()).
-			SetScimActive(false).
-			Save(ctx)
+	if !ua.Active {
+		updatedUser, err := client.User.UpdateOne(entUser).SetDeletedAt(time.Now()).SetScimActive(false).Save(ctx)
 		if err != nil {
 			return scim.Resource{}, fmt.Errorf("failed to set user inactive: %w", err)
 		}
@@ -153,15 +176,11 @@ func (h *UserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	entUser, err := client.User.Query().
-		Where(
-			user.ID(id),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
-		).
-		WithGroups(func(gq *generated.GroupQuery) {
-			gq.Where(group.HasOwnerWith(organization.ID(orgID)))
-		}).
-		Only(ctx)
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return scim.Resource{}, err
+	}
+
+	entUser, err := client.User.Query().Where(user.ID(id), user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID))).WithGroups(func(gq *generated.GroupQuery) { gq.Where(group.HasOwnerWith(organization.ID(orgID))) }).Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
@@ -183,8 +202,11 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 		return scim.Page{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	query := client.User.Query().
-		Where(user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)))
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return scim.Page{}, err
+	}
+
+	query := client.User.Query().Where(user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)))
 
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
@@ -201,13 +223,7 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 		count = 100
 	}
 
-	users, err := query.
-		Offset(offset).
-		Limit(count).
-		WithGroups(func(gq *generated.GroupQuery) {
-			gq.Where(group.HasOwnerWith(organization.ID(orgID)))
-		}).
-		All(ctx)
+	users, err := query.Offset(offset).Limit(count).WithGroups(func(gq *generated.GroupQuery) { gq.Where(group.HasOwnerWith(organization.ID(orgID))) }).All(ctx)
 	if err != nil {
 		return scim.Page{}, fmt.Errorf("failed to list users: %w", err)
 	}
@@ -239,12 +255,11 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	entUser, err := client.User.Query().
-		Where(
-			user.ID(id),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
-		).
-		Only(ctx)
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return scim.Resource{}, err
+	}
+
+	entUser, err := client.User.Query().Where(user.ID(id), user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID))).Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
@@ -253,84 +268,60 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 		return scim.Resource{}, fmt.Errorf("failed to get user: %w", err)
 	}
 
-	userName, _ := attributes["userName"].(string)
-	if userName == "" {
-		return scim.Resource{}, fmt.Errorf("%w: userName is required", ErrInvalidAttributes)
+	ua, err := ExtractUserAttributes(attributes)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	email := userName
-
-	var firstName, lastName, displayName string
-	if nameMap, ok := attributes["name"].(map[string]interface{}); ok {
-		firstName, _ = nameMap["givenName"].(string)
-		lastName, _ = nameMap["familyName"].(string)
-	}
-
-	if dn, ok := attributes["displayName"].(string); ok {
-		displayName = dn
-	}
-
-	if displayName == "" {
-		displayName = strings.TrimSpace(firstName + " " + lastName)
-	}
-
-	if displayName == "" {
-		displayName = email
-	}
-
-	active := true
-	if activeVal, ok := attributes["active"].(bool); ok {
-		active = activeVal
-	}
-
+	// SCIM users authenticate via SSO (typically OIDC or SAML), defaulting to OIDC
 	authProvider := enums.AuthProviderOIDC
-	update := client.User.UpdateOne(entUser).
-		SetEmail(email).
-		SetDisplayName(displayName).
-		SetLastLoginProvider(enums.AuthProviderOIDC).
-		SetAuthProvider(authProvider).
-		SetScimUsername(email).
-		SetScimActive(active)
+	update := client.User.UpdateOne(entUser).SetEmail(ua.Email).SetDisplayName(ua.DisplayName).SetAuthProvider(authProvider).SetScimUsername(ua.UserName).SetScimActive(ua.Active)
 
-	if firstName != "" {
-		update.SetFirstName(firstName)
+	if ua.ExternalID != "" {
+		update.SetScimExternalID(ua.ExternalID)
+	} else {
+		update.ClearScimExternalID()
+	}
+
+	if ua.PreferredLanguage != "" {
+		update.SetScimPreferredLanguage(ua.PreferredLanguage)
+	} else {
+		update.ClearScimPreferredLanguage()
+	}
+
+	if ua.Locale != "" {
+		update.SetScimLocale(ua.Locale)
+	} else {
+		update.ClearScimLocale()
+	}
+
+	if ua.ProfileURL != "" {
+		update.SetAvatarRemoteURL(ua.ProfileURL)
+	} else {
+		update.ClearAvatarRemoteURL()
+	}
+
+	if ua.FirstName != "" {
+		update.SetFirstName(ua.FirstName)
 	} else {
 		update.ClearFirstName()
 	}
 
-	if lastName != "" {
-		update.SetLastName(lastName)
+	if ua.LastName != "" {
+		update.SetLastName(ua.LastName)
 	} else {
 		update.ClearLastName()
 	}
 
-	if !active {
-		update.SetDeletedAt(time.Now()).
-			SetScimActive(false)
+	if !ua.Active {
+		update.SetDeletedAt(time.Now()).SetScimActive(false)
 	} else {
-		update.ClearDeletedAt().
-			SetScimActive(true)
+		update.ClearDeletedAt().SetScimActive(true)
 	}
 
 	updatedUser, err := update.Save(ctx)
 	if err != nil {
-		if generated.IsConstraintError(err) {
-			return scim.Resource{}, scimerrors.ScimError{
-				ScimType: scimerrors.ScimTypeUniqueness,
-				Detail:   fmt.Sprintf("User with email %s already exists", email),
-				Status:   http.StatusConflict,
-			}
-		}
-
-		if generated.IsValidationError(err) {
-			return scim.Resource{}, scimerrors.ScimError{
-				ScimType: scimerrors.ScimTypeInvalidValue,
-				Detail:   fmt.Sprintf("Invalid user attributes: %v", err),
-				Status:   http.StatusBadRequest,
-			}
-		}
-
-		return scim.Resource{}, fmt.Errorf("failed to update user: %w", err)
+		return scim.Resource{}, HandleEntError(err, "failed to update user", fmt.Sprintf("User with email %s already exists", ua.Email))
 	}
 
 	return h.toSCIMResource(ctx, updatedUser, orgID)
@@ -346,12 +337,11 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 		return fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	entUser, err := client.User.Query().
-		Where(
-			user.ID(id),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
-		).
-		Only(ctx)
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return err
+	}
+
+	entUser, err := client.User.Query().Where(user.ID(id), user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID))).Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return scimerrors.ScimErrorResourceNotFound(id)
@@ -378,12 +368,11 @@ func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchO
 		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
 	}
 
-	entUser, err := client.User.Query().
-		Where(
-			user.ID(id),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
-		).
-		Only(ctx)
+	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+		return scim.Resource{}, err
+	}
+
+	entUser, err := client.User.Query().Where(user.ID(id), user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID))).Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
@@ -411,23 +400,7 @@ func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchO
 	if modified {
 		entUser, err = update.Save(ctx)
 		if err != nil {
-			if generated.IsConstraintError(err) {
-				return scim.Resource{}, scimerrors.ScimError{
-					ScimType: scimerrors.ScimTypeUniqueness,
-					Detail:   "Constraint violation during patch operation",
-					Status:   http.StatusConflict,
-				}
-			}
-
-			if generated.IsValidationError(err) {
-				return scim.Resource{}, scimerrors.ScimError{
-					ScimType: scimerrors.ScimTypeInvalidValue,
-					Detail:   fmt.Sprintf("Invalid user attributes: %v", err),
-					Status:   http.StatusBadRequest,
-				}
-			}
-
-			return scim.Resource{}, fmt.Errorf("failed to patch user: %w", err)
+			return scim.Resource{}, HandleEntError(err, "failed to patch user", "Constraint violation during patch operation")
 		}
 	}
 
@@ -440,83 +413,102 @@ func (h *UserHandler) applyPatchOperation(update *generated.UserUpdateOne, op sc
 		pathStr = strings.ToLower(op.Path.String())
 	}
 
-	valueMap, isMap := op.Value.(map[string]interface{})
+	_, isMap := op.Value.(map[string]any)
 	if !isMap && pathStr == "" {
 		return fmt.Errorf("%w: patch operation requires path or value map", ErrInvalidAttributes)
 	}
 
 	if isMap {
-		if userName, ok := valueMap["userName"].(string); ok && userName != "" {
-			update.SetEmail(userName)
+		return h.applyMapPatchOperation(update, op, modified)
+	}
+
+	return h.applyPathPatchOperation(update, op, pathStr, modified)
+}
+
+// applyMapPatchOperation applies patch operations when the value is a map of attributes
+func (h *UserHandler) applyMapPatchOperation(update *generated.UserUpdateOne, op scim.PatchOperation, modified *bool) error {
+	patch, err := ExtractPatchUserAttribute(op)
+	if err != nil {
+		return err
+	}
+
+	applyStringField := func(value *string, setter func(string) *generated.UserUpdateOne) {
+		if value != nil && *value != "" {
+			setter(*value)
 			*modified = true
 		}
+	}
 
-		if displayName, ok := valueMap["displayName"].(string); ok {
-			update.SetDisplayName(displayName)
+	applyStringField(patch.ExternalID, update.SetScimExternalID)
+	applyStringField(patch.PreferredLanguage, update.SetScimPreferredLanguage)
+	applyStringField(patch.Locale, update.SetScimLocale)
+	applyStringField(patch.ProfileURL, update.SetAvatarRemoteURL)
+	applyStringField(patch.DisplayName, update.SetDisplayName)
+	applyStringField(patch.FirstName, update.SetFirstName)
+	applyStringField(patch.LastName, update.SetLastName)
+
+	if patch.UserName != nil && patch.Email != nil {
+		update.SetEmail(*patch.Email).SetScimUsername(*patch.UserName)
+		*modified = true
+	}
+
+	if patch.Active != nil {
+		h.setActiveStatus(update, *patch.Active)
+		*modified = true
+	}
+
+	return nil
+}
+
+// applyPathPatchOperation applies patch operations when using a specific path attribute
+func (h *UserHandler) applyPathPatchOperation(update *generated.UserUpdateOne, op scim.PatchOperation, pathStr string, modified *bool) error {
+	applyStringPath := func(path string, setter func(string) *generated.UserUpdateOne) bool {
+		if pathStr == path {
+			if strVal, ok := op.Value.(string); ok && strVal != "" {
+				setter(strVal)
+				*modified = true
+				return true
+			}
+		}
+		return false
+	}
+
+	if applyStringPath("externalid", update.SetScimExternalID) ||
+		applyStringPath("preferredlanguage", update.SetScimPreferredLanguage) ||
+		applyStringPath("locale", update.SetScimLocale) ||
+		applyStringPath("profileurl", update.SetAvatarRemoteURL) ||
+		applyStringPath("displayname", update.SetDisplayName) ||
+		applyStringPath("name.givenname", update.SetFirstName) ||
+		applyStringPath("name.familyname", update.SetLastName) {
+		return nil
+	}
+
+	switch pathStr {
+	case "username":
+		if strVal, ok := op.Value.(string); ok && strVal != "" {
+			if _, err := mail.ParseAddress(strVal); err != nil {
+				return fmt.Errorf("%w: userName must be a valid email address", ErrInvalidAttributes)
+			}
+			update.SetEmail(strVal).SetScimUsername(strVal)
 			*modified = true
 		}
-
-		if name, ok := valueMap["name"].(map[string]interface{}); ok {
-			if givenName, ok := name["givenName"].(string); ok {
-				update.SetFirstName(givenName)
-				*modified = true
-			}
-
-			if familyName, ok := name["familyName"].(string); ok {
-				update.SetLastName(familyName)
-				*modified = true
-			}
-		}
-
-		if active, ok := valueMap["active"].(bool); ok {
-			if !active {
-				update.SetDeletedAt(time.Now()).
-					SetScimActive(false)
-			} else {
-				update.ClearDeletedAt().
-					SetScimActive(true)
-			}
-
+	case "active":
+		if boolVal, ok := op.Value.(bool); ok {
+			h.setActiveStatus(update, boolVal)
 			*modified = true
-		}
-	} else {
-		switch pathStr {
-		case "username":
-			if strVal, ok := op.Value.(string); ok {
-				update.SetEmail(strVal)
-				*modified = true
-			}
-		case "displayname":
-			if strVal, ok := op.Value.(string); ok {
-				update.SetDisplayName(strVal)
-				*modified = true
-			}
-		case "name.givenname":
-			if strVal, ok := op.Value.(string); ok {
-				update.SetFirstName(strVal)
-				*modified = true
-			}
-		case "name.familyname":
-			if strVal, ok := op.Value.(string); ok {
-				update.SetLastName(strVal)
-				*modified = true
-			}
-		case "active":
-			if boolVal, ok := op.Value.(bool); ok {
-				if !boolVal {
-					update.SetDeletedAt(time.Now()).
-						SetScimActive(false)
-				} else {
-					update.ClearDeletedAt().
-						SetScimActive(true)
-				}
-
-				*modified = true
-			}
 		}
 	}
 
 	return nil
+}
+
+// setActiveStatus sets the user active/inactive status using DeletedAt and ScimActive fields
+func (h *UserHandler) setActiveStatus(update *generated.UserUpdateOne, active bool) {
+	if !active {
+		update.SetDeletedAt(time.Now()).SetScimActive(false)
+	} else {
+		update.ClearDeletedAt().SetScimActive(true)
+	}
 }
 
 func (h *UserHandler) applyRemoveOperation(update *generated.UserUpdateOne, op scim.PatchOperation, modified *bool) error {
@@ -538,6 +530,7 @@ func (h *UserHandler) applyRemoveOperation(update *generated.UserUpdateOne, op s
 	return nil
 }
 
+// toSCIMResource converts an ent User entity to a SCIM Resource representation
 func (h *UserHandler) toSCIMResource(_ any, entUser *generated.User, _ string) (scim.Resource, error) {
 	firstName := entUser.FirstName
 
@@ -545,10 +538,10 @@ func (h *UserHandler) toSCIMResource(_ any, entUser *generated.User, _ string) (
 
 	active := entUser.DeletedAt.IsZero()
 
-	groups := make([]map[string]interface{}, 0)
+	groups := make([]map[string]any, 0)
 	if entUser.Edges.Groups != nil {
-		groups = lo.Map(entUser.Edges.Groups, func(g *generated.Group, _ int) map[string]interface{} {
-			return map[string]interface{}{
+		groups = lo.Map(entUser.Edges.Groups, func(g *generated.Group, _ int) map[string]any {
+			return map[string]any{
 				"value":   g.ID,
 				"display": g.DisplayName,
 				"$ref":    fmt.Sprintf("/v1/scim/Groups/%s", g.ID),
@@ -556,15 +549,20 @@ func (h *UserHandler) toSCIMResource(_ any, entUser *generated.User, _ string) (
 		})
 	}
 
+	userName := entUser.Email
+	if entUser.ScimUsername != nil && *entUser.ScimUsername != "" {
+		userName = *entUser.ScimUsername
+	}
+
 	attrs := scim.ResourceAttributes{
 		scimschema.CommonAttributeID: entUser.ID,
-		"userName":                   entUser.Email,
-		"name": map[string]interface{}{
+		"userName":                   userName,
+		"name": map[string]any{
 			"givenName":  firstName,
 			"familyName": lastName,
 		},
 		"displayName": entUser.DisplayName,
-		"emails": []map[string]interface{}{
+		"emails": []map[string]any{
 			{
 				"value":   entUser.Email,
 				"primary": true,
@@ -574,15 +572,32 @@ func (h *UserHandler) toSCIMResource(_ any, entUser *generated.User, _ string) (
 		"groups": groups,
 	}
 
+	if entUser.ScimPreferredLanguage != nil && *entUser.ScimPreferredLanguage != "" {
+		attrs["preferredLanguage"] = *entUser.ScimPreferredLanguage
+	}
+
+	if entUser.ScimLocale != nil && *entUser.ScimLocale != "" {
+		attrs["locale"] = *entUser.ScimLocale
+	}
+
+	if entUser.AvatarRemoteURL != nil && *entUser.AvatarRemoteURL != "" {
+		attrs["profileUrl"] = *entUser.AvatarRemoteURL
+	}
+
 	meta := scim.Meta{
 		Created:      &entUser.CreatedAt,
 		LastModified: &entUser.UpdatedAt,
 		Version:      fmt.Sprintf("W/\"%d\"", entUser.UpdatedAt.Unix()),
 	}
 
+	externalID := scimoptional.NewString("")
+	if entUser.ScimExternalID != nil && *entUser.ScimExternalID != "" {
+		externalID = scimoptional.NewString(*entUser.ScimExternalID)
+	}
+
 	return scim.Resource{
 		ID:         entUser.ID,
-		ExternalID: scimoptional.NewString(""),
+		ExternalID: externalID,
 		Attributes: attrs,
 		Meta:       meta,
 	}, nil

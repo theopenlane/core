@@ -637,7 +637,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, &models.IntegrationTokenResponse{}, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, models.IntegrationTokenResponse{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

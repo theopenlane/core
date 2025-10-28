@@ -72,6 +72,7 @@ func unauthorized() *openapi3.Response {
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
 func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Operation) {
 	request := openapi3.NewRequestBody().
+		WithDescription("Request body").
 		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/schemas/" + name}))
 	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
