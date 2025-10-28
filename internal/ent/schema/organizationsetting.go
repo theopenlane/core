@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
+	"github.com/theopenlane/magiclinks/pkg/keygen"
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity

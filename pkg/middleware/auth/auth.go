@@ -13,18 +13,16 @@ import (
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/passwd"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"

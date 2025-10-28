@@ -9,8 +9,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+
+	"github.com/theopenlane/magiclinks/pkg/keygen"
 	"github.com/theopenlane/utils/passwd"
-	"github.com/theopenlane/utils/keygen"
 )
 
 const (
@@ -30,18 +31,20 @@ func HookCreatePersonalAccessToken() ent.Hook {
 				return nil, err
 			}
 
-			// generate raw token and derived key, store derived key in DB but return raw token to caller
+			// generate raw token
 			rawToken := keygen.PrefixedSecret("tolp") // token prefix
+
+			// hash the token for storage
 			hash, err := passwd.CreateDerivedKey(rawToken)
 			if err != nil {
 				return nil, err
 			}
 
+			// set the hashed token for storage
+			m.SetToken(hash)
+
 			// set user on the token
 			m.SetOwnerID(userID)
-
-			// set the derived token hash for storage
-			m.SetToken(hash)
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {

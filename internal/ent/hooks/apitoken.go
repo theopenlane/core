@@ -7,14 +7,14 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/fgax"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+
 	"github.com/theopenlane/utils/passwd"
-	"github.com/theopenlane/utils/keygen"
 )
 
 func validateExpirationTime(m mutationWithExpirationTime) error {
@@ -42,18 +42,20 @@ func HookCreateAPIToken() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
-			// generate raw token and derived key, store derived key in DB but return raw token to caller
+			// generate raw token
 			rawToken := keygen.PrefixedSecret("tola") // api token prefix
+
+			// hash the token for storage
 			hash, err := passwd.CreateDerivedKey(rawToken)
 			if err != nil {
 				return nil, err
 			}
 
+			// set the hashed token for storage
+			m.SetToken(hash)
+
 			// set organization on the token
 			m.SetOwnerID(orgID)
-
-			// set the derived token hash for storage
-			m.SetToken(hash)
 
 			if err := validateExpirationTime(m); err != nil {
 				return nil, err

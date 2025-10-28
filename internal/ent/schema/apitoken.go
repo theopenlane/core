@@ -10,8 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/utils/keygen"
-
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -56,14 +54,6 @@ func (APIToken) Fields() []ent.Field {
 		field.String("token").
 			Unique().
 			Immutable().
-			DefaultFunc(func() string {
-				plainToken := keygen.GenerateKey()
-				derivedKey, err := passwd.CreateDerivedKey(plainToken)
-				if err != nil {
-					return plainToken // fallback to plain token if hashing fails
-				}
-				return derivedKey
-			}).
 			Annotations(
 				entgql.Skip(^entgql.SkipType),
 			),
