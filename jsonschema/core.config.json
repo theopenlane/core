@@ -668,10 +668,6 @@
         "credentials": {
           "$ref": "#/$defs/fgax.Credentials",
           "description": "credentials for the openFGA client"
-        },
-        "ignoreDuplicateKeyError": {
-          "type": "boolean",
-          "description": "ignore duplicate key error"
         }
       },
       "additionalProperties": false,
@@ -1464,6 +1460,12 @@
         },
         "generateKeys": {
           "type": "boolean"
+        },
+        "jwksCacheTTL": {
+          "type": "integer"
+        },
+        "redis": {
+          "$ref": "#/$defs/tokens.RedisConfig"
         }
       },
       "additionalProperties": false,
@@ -1474,6 +1476,21 @@
         "issuer",
         "keys"
       ]
+    },
+    "tokens.RedisConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "config": {
+          "$ref": "#/$defs/cache.Config"
+        },
+        "blacklistPrefix": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "totp.Config": {
       "properties": {

@@ -127,6 +127,22 @@ data:
   CORE_AUTH_TOKEN_JWKSENDPOINT: ""
 {{- end }}
   CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys | quote | default "true" }}
+  CORE_AUTH_TOKEN_JWKSCACHETTL: {{ .Values.openlane.coreConfiguration.auth.token.jwksCacheTTL | quote | default "5m" }}
+  CORE_AUTH_TOKEN_REDIS_ENABLED: {{ .Values.openlane.coreConfiguration.auth.token.redis.enabled | quote | default "false" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_ENABLED: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.enabled | quote | default "true" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_ADDRESS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.address | quote | default "localhost:6379" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_NAME: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.name | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_USERNAME: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.username | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_PASSWORD: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.password | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_DB: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.db | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_DIALTIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.dialTimeout | quote | default "5s" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_READTIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.readTimeout | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_WRITETIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.writeTimeout | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXRETRIES: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxRetries | quote | default "3" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MINIDLECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.minIdleConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXIDLECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxIdleConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXACTIVECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxActiveConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_BLACKLISTPREFIX: {{ .Values.openlane.coreConfiguration.auth.token.redis.blacklistPrefix | quote | default "token:blacklist:" }}
   CORE_AUTH_SUPPORTEDPROVIDERS: {{ join "," .Values.openlane.coreConfiguration.auth.supportedProviders | quote }}
   CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.redirectUrl | quote | default "http://localhost:3001/api/auth/callback/theopenlane" }}
   CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientId | quote }}
@@ -180,7 +196,6 @@ data:
   CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.openlane.coreConfiguration.authz.credentials.audience | quote }}
   CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.openlane.coreConfiguration.authz.credentials.issuer | quote }}
   CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
-  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.openlane.coreConfiguration.authz.ignoreDuplicateKeyError | quote | default "true" }}
   CORE_DB_DEBUG: {{ .Values.openlane.coreConfiguration.db.debug | quote | default "false" }}
   CORE_DB_DATABASENAME: {{ .Values.openlane.coreConfiguration.db.databaseName | quote | default "openlane" }}
   CORE_DB_DRIVERNAME: {{ .Values.openlane.coreConfiguration.db.driverName | quote | default "pgx" }}
