@@ -122,7 +122,7 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	golang.org/x/image v0.27.0 // indirect
+	golang.org/x/image v0.32.0 // indirect
 	google.golang.org/api v0.252.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

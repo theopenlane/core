@@ -444,10 +444,9 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
   }
 }
 
-mutation TransferOrganizationOwnership($organizationID: ID!, $newOwnerID: ID!) {
+mutation TransferOrganizationOwnership($newOwnerEmail: String!) {
   transferOrganizationOwnership(
-    organizationID: $organizationID
-    newOwnerID: $newOwnerID
+    newOwnerEmail: $newOwnerEmail
   ) {
     organization {
       id

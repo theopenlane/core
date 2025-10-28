@@ -2803,7 +2803,7 @@ type ComplexityRoot struct {
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
-		TransferOrganizationOwnership        func(childComplexity int, organizationID string, newOwnerID string) int
+		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -20457,7 +20457,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.TransferOrganizationOwnership(childComplexity, args["organizationID"].(string), args["newOwnerID"].(string)), true
+		return e.complexity.Mutation.TransferOrganizationOwnership(childComplexity, args["newOwnerEmail"].(string)), true
 
 	case "Mutation.updateAPIToken":
 		if e.complexity.Mutation.UpdateAPIToken == nil {
@@ -102891,13 +102891,9 @@ extend type Mutation{
     """
     transferOrganizationOwnership(
         """
-        ID of the organization
+        Email of the new owner
         """
-        organizationID: ID!
-        """
-        ID of the new owner
-        """
-        newOwnerID: ID!
+        newOwnerEmail: String!
     ): OrganizationTransferOwnershipPayload!
 }
 

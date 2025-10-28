@@ -203,7 +203,7 @@ type MutationResolver interface {
 	DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error)
 	DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error)
 	CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
-	TransferOrganizationOwnership(ctx context.Context, organizationID string, newOwnerID string) (*model.OrganizationTransferOwnershipPayload, error)
+	TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error)
 	CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error)
 	CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error)
 	CreateBulkCSVOrgMembership(ctx context.Context, input graphql.Upload) (*model.OrgMembershipBulkCreatePayload, error)
@@ -3161,16 +3161,11 @@ func (ec *executionContext) field_Mutation_submitTrustCenterNDAResponse_args(ctx
 func (ec *executionContext) field_Mutation_transferOrganizationOwnership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "organizationID", ec.unmarshalNID2string)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "newOwnerEmail", ec.unmarshalNString2string)
 	if err != nil {
 		return nil, err
 	}
-	args["organizationID"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "newOwnerID", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["newOwnerID"] = arg1
+	args["newOwnerEmail"] = arg0
 	return args, nil
 }
 
@@ -13237,7 +13232,7 @@ func (ec *executionContext) _Mutation_transferOrganizationOwnership(ctx context.
 		ec.fieldContext_Mutation_transferOrganizationOwnership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().TransferOrganizationOwnership(ctx, fc.Args["organizationID"].(string), fc.Args["newOwnerID"].(string))
+			return ec.resolvers.Mutation().TransferOrganizationOwnership(ctx, fc.Args["newOwnerEmail"].(string))
 		},
 		nil,
 		ec.marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload,

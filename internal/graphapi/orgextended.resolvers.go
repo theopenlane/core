@@ -13,6 +13,7 @@ import (
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -60,12 +61,19 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 }
 
 // TransferOrganizationOwnership is the resolver for the transferOrganizationOwnership field.
-func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, organizationID string, newOwnerID string) (*model.OrganizationTransferOwnershipPayload, error) {
+func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error) {
 	// Step 1: Get current user from context
-	currentUserID, err := auth.GetSubjectIDFromContext(ctx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get current user from context")
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+	}
+
+	currentUserID := au.SubjectID
+	organizationID := au.OrganizationID
+
+	if organizationID == "" {
+		log.Error().Msg("unable to determine organization for ownership transfer")
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -97,28 +105,31 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, or
 		return nil, newPermissionDeniedError()
 	}
 
-	// Step 4: Verify new owner user exists
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	newOwnerUser, err := c.User.Get(allowCtx, newOwnerID)
-	if err != nil {
-		log.Error().Err(err).Str("new_owner_id", newOwnerID).Msg("new owner user not found")
-		return nil, newNotFoundError("user")
-	}
+
+	// Step 4: Look up user by email to get their ID (if they exist)
+	newOwnerUser, err := c.User.Query().
+		Where(user.Email(newOwnerEmail)).
+		Only(allowCtx)
 
 	// Step 5: Check if new owner is already a member
-	newOwnerMembership, err := c.OrgMembership.Query().
-		Where(
-			orgmembership.OrganizationID(organizationID),
-			orgmembership.UserID(newOwnerID),
-		).
-		First(ctx)
+	var newOwnerMembership *generated.OrgMembership
+	if err == nil {
+		// User exists, check if they're already a member
+		newOwnerMembership, err = c.OrgMembership.Query().
+			Where(
+				orgmembership.OrganizationID(organizationID),
+				orgmembership.UserID(newOwnerUser.ID),
+			).
+			Only(ctx)
+	}
 
 	invitationSent := false
 
 	if err != nil {
-		// User is not a member - create an invite with ownership_transfer=true
+		// User is not a member or doesn't exist - create an invite with ownership_transfer=true
 		log.Info().
-			Str("new_owner_id", newOwnerID).
+			Str("new_owner_email", newOwnerEmail).
 			Str("organization_id", organizationID).
 			Msg("new owner not a member, creating ownership transfer invitation")
 
@@ -126,7 +137,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, or
 		ownershipTransfer := true
 
 		inviteInput := generated.CreateInviteInput{
-			Recipient:         newOwnerUser.Email,
+			Recipient:         newOwnerEmail,
 			Role:              &ownerRole,
 			OwnerID:           &organizationID,
 			OwnershipTransfer: &ownershipTransfer,
@@ -141,7 +152,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, or
 	} else {
 		// User is already a member - directly update roles
 		log.Info().
-			Str("new_owner_id", newOwnerID).
+			Str("new_owner_id", newOwnerUser.ID).
 			Str("organization_id", organizationID).
 			Msg("new owner already a member, directly transferring ownership")
 
@@ -167,7 +178,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, or
 		log.Info().
 			Str("organization_id", organizationID).
 			Str("old_owner_id", currentUserID).
-			Str("new_owner_id", newOwnerID).
+			Str("new_owner_id", newOwnerUser.ID).
 			Msg("organization ownership transferred successfully")
 	}
 

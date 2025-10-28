@@ -45,13 +45,9 @@ extend type Mutation{
     """
     transferOrganizationOwnership(
         """
-        ID of the organization
+        Email of the new owner
         """
-        organizationID: ID!
-        """
-        ID of the new owner
-        """
-        newOwnerID: ID!
+        newOwnerEmail: String!
     ): OrganizationTransferOwnershipPayload!
 }
 
