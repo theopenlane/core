@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/utils/keygen"
 
-	"github.com/theopenlane/magiclinks/pkg/keygen"
 	"github.com/theopenlane/utils/passwd"
 )
 

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/magiclinks/pkg/keygen"
+	"github.com/theopenlane/utils/keygen"
 )
 
 const (
