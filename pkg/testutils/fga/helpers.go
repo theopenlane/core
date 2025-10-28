@@ -134,7 +134,7 @@ func createTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, err
 		RefreshOverlap:  refreshOverlap,
 	}
 
-	if -refreshOverlap > conf.AccessDuration {
+	if -refreshOverlap >= conf.AccessDuration {
 		refreshOverlap = -(conf.AccessDuration - time.Second)
 		conf.RefreshOverlap = refreshOverlap
 	}

@@ -55,7 +55,7 @@ func randomString(n int) []byte {
 
 // CreateTokenManager creates a new token manager for testing
 func CreateTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, error) {
-	if refreshOverlap == 0 {
+	if refreshOverlap >= 0 {
 		refreshOverlap = -15 * time.Minute
 	}
 
@@ -65,6 +65,11 @@ func CreateTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, err
 		AccessDuration:  1 * time.Hour, //nolint:mnd
 		RefreshDuration: 2 * time.Hour, //nolint:mnd
 		RefreshOverlap:  refreshOverlap,
+	}
+
+	if -refreshOverlap >= conf.AccessDuration {
+		refreshOverlap = -(conf.AccessDuration - time.Second)
+		conf.RefreshOverlap = refreshOverlap
 	}
 
 	_, key, err := ed25519.GenerateKey(rand.Reader)
