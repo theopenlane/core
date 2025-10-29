@@ -34766,9 +34766,6 @@ type UpdateTemplateInput struct {
 	// the description of the template
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the kind of template, e.g. questionnaire
-	Kind      *enums.TemplateKind `json:"kind,omitempty"`
-	ClearKind *bool               `json:"clearKind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI

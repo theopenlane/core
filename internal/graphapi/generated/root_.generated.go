@@ -97696,11 +97696,6 @@ input UpdateTemplateInput {
   description: String
   clearDescription: Boolean
   """
-  the kind of template, e.g. questionnaire
-  """
-  kind: TemplateTemplateKind
-  clearKind: Boolean
-  """
   the jsonschema object of the template
   """
   jsonconfig: Map

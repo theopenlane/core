@@ -12112,8 +12112,6 @@ type UpdateTemplateInput struct {
 	TemplateType          *enums.DocumentType
 	ClearDescription      bool
 	Description           *string
-	ClearKind             bool
-	Kind                  *enums.TemplateKind
 	Jsonconfig            map[string]interface{}
 	ClearUischema         bool
 	Uischema              map[string]interface{}
@@ -12161,12 +12159,6 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if i.ClearKind {
-		m.ClearKind()
-	}
-	if v := i.Kind; v != nil {
-		m.SetKind(*v)
 	}
 	if v := i.Jsonconfig; v != nil {
 		m.SetJsonconfig(v)
