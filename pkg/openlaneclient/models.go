@@ -33309,6 +33309,8 @@ type UpdateInternalPolicyInput struct {
 	AddCommentIDs                  []string            `json:"addCommentIDs,omitempty"`
 	RemoveCommentIDs               []string            `json:"removeCommentIDs,omitempty"`
 	ClearComments                  *bool               `json:"clearComments,omitempty"`
+	AddComment                     *CreateNoteInput    `json:"addComment,omitempty"`
+	DeleteComment                  *string             `json:"deleteComment,omitempty"`
 	RevisionBump                   *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -34012,6 +34014,8 @@ type UpdateProcedureInput struct {
 	ClearComments           *bool               `json:"clearComments,omitempty"`
 	FileID                  *string             `json:"fileID,omitempty"`
 	ClearFile               *bool               `json:"clearFile,omitempty"`
+	AddComment              *CreateNoteInput    `json:"addComment,omitempty"`
+	DeleteComment           *string             `json:"deleteComment,omitempty"`
 	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -34148,54 +34152,56 @@ type UpdateRiskInput struct {
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
 	// business costs associated with the risk
-	BusinessCosts           *string  `json:"businessCosts,omitempty"`
-	ClearBusinessCosts      *bool    `json:"clearBusinessCosts,omitempty"`
-	AddBlockedGroupIDs      []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool    `json:"clearViewers,omitempty"`
-	AddControlIDs           []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool    `json:"clearSubcontrols,omitempty"`
-	AddProcedureIDs         []string `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs      []string `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures         *bool    `json:"clearProcedures,omitempty"`
-	AddInternalPolicyIDs    []string `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool    `json:"clearInternalPolicies,omitempty"`
-	AddProgramIDs           []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool    `json:"clearPrograms,omitempty"`
-	AddActionPlanIDs        []string `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs     []string `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans        *bool    `json:"clearActionPlans,omitempty"`
-	AddTaskIDs              []string `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool    `json:"clearTasks,omitempty"`
-	AddAssetIDs             []string `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool    `json:"clearAssets,omitempty"`
-	AddEntityIDs            []string `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool    `json:"clearEntities,omitempty"`
-	AddScanIDs              []string `json:"addScanIDs,omitempty"`
-	RemoveScanIDs           []string `json:"removeScanIDs,omitempty"`
-	ClearScans              *bool    `json:"clearScans,omitempty"`
-	StakeholderID           *string  `json:"stakeholderID,omitempty"`
-	ClearStakeholder        *bool    `json:"clearStakeholder,omitempty"`
-	DelegateID              *string  `json:"delegateID,omitempty"`
-	ClearDelegate           *bool    `json:"clearDelegate,omitempty"`
-	AddCommentIDs           []string `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool    `json:"clearComments,omitempty"`
+	BusinessCosts           *string          `json:"businessCosts,omitempty"`
+	ClearBusinessCosts      *bool            `json:"clearBusinessCosts,omitempty"`
+	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	AddViewerIDs            []string         `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs         []string         `json:"removeViewerIDs,omitempty"`
+	ClearViewers            *bool            `json:"clearViewers,omitempty"`
+	AddControlIDs           []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string         `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool            `json:"clearSubcontrols,omitempty"`
+	AddProcedureIDs         []string         `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs      []string         `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures         *bool            `json:"clearProcedures,omitempty"`
+	AddInternalPolicyIDs    []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool            `json:"clearInternalPolicies,omitempty"`
+	AddProgramIDs           []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool            `json:"clearPrograms,omitempty"`
+	AddActionPlanIDs        []string         `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs     []string         `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans        *bool            `json:"clearActionPlans,omitempty"`
+	AddTaskIDs              []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool            `json:"clearTasks,omitempty"`
+	AddAssetIDs             []string         `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs          []string         `json:"removeAssetIDs,omitempty"`
+	ClearAssets             *bool            `json:"clearAssets,omitempty"`
+	AddEntityIDs            []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool            `json:"clearEntities,omitempty"`
+	AddScanIDs              []string         `json:"addScanIDs,omitempty"`
+	RemoveScanIDs           []string         `json:"removeScanIDs,omitempty"`
+	ClearScans              *bool            `json:"clearScans,omitempty"`
+	StakeholderID           *string          `json:"stakeholderID,omitempty"`
+	ClearStakeholder        *bool            `json:"clearStakeholder,omitempty"`
+	DelegateID              *string          `json:"delegateID,omitempty"`
+	ClearDelegate           *bool            `json:"clearDelegate,omitempty"`
+	AddCommentIDs           []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs        []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments           *bool            `json:"clearComments,omitempty"`
+	AddComment              *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment           *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateScanInput is used for update Scan object.
