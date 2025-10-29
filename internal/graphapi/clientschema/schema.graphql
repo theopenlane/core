@@ -65003,6 +65003,8 @@ input UpdateInternalPolicyInput {
 	addCommentIDs: [ID!]
 	removeCommentIDs: [ID!]
 	clearComments: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 	RevisionBump: VersionBump
 }
 """
@@ -65909,6 +65911,8 @@ input UpdateProcedureInput {
 	clearComments: Boolean
 	fileID: ID
 	clearFile: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 	RevisionBump: VersionBump
 }
 """
@@ -66146,6 +66150,8 @@ input UpdateRiskInput {
 	addCommentIDs: [ID!]
 	removeCommentIDs: [ID!]
 	clearComments: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateScanInput is used for update Scan object.

@@ -243,6 +243,120 @@ func (r *updateControlInputResolver) DeleteComment(ctx context.Context, obj *gen
 }
 
 // AddComment is the resolver for the addComment field.
+func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.InternalPolicyID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.InternalPolicyID == nil {
+		return newNotFoundError("internalpolicy")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateInternalPolicyInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *generated.UpdateProcedureInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ProcedureID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ProcedureID == nil {
+		return newNotFoundError("procedure")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateProcedureInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateProcedureInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated.UpdateRiskInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.RiskID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.RiskID == nil {
+		return newNotFoundError("risk")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateRiskInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateRiskInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
 func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *generated.CreateNoteInput) error {
 	if data == nil {
 		return nil
