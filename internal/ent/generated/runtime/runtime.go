@@ -2304,6 +2304,10 @@ func init() {
 	group.DefaultDisplayName = groupDescDisplayName.Default.(string)
 	// group.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	group.DisplayNameValidator = groupDescDisplayName.Validators[0].(func(string) error)
+	// groupDescScimActive is the schema descriptor for scim_active field.
+	groupDescScimActive := groupFields[8].Descriptor()
+	// group.DefaultScimActive holds the default value on creation for the scim_active field.
+	group.DefaultScimActive = groupDescScimActive.Default.(bool)
 	// groupDescID is the schema descriptor for id field.
 	groupDescID := groupMixinFields3[0].Descriptor()
 	// group.DefaultID holds the default value on creation for the id field.
@@ -2347,6 +2351,10 @@ func init() {
 	grouphistoryDescDisplayName := grouphistoryFields[18].Descriptor()
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
+	// grouphistoryDescScimActive is the schema descriptor for scim_active field.
+	grouphistoryDescScimActive := grouphistoryFields[21].Descriptor()
+	// grouphistory.DefaultScimActive holds the default value on creation for the scim_active field.
+	grouphistory.DefaultScimActive = grouphistoryDescScimActive.Default.(bool)
 	// grouphistoryDescID is the schema descriptor for id field.
 	grouphistoryDescID := grouphistoryFields[9].Descriptor()
 	// grouphistory.DefaultID holds the default value on creation for the id field.
@@ -7327,6 +7335,10 @@ func init() {
 	userDescLastSeen := userFields[7].Descriptor()
 	// user.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	user.UpdateDefaultLastSeen = userDescLastSeen.UpdateDefault.(func() time.Time)
+	// userDescScimActive is the schema descriptor for scim_active field.
+	userDescScimActive := userFields[15].Descriptor()
+	// user.DefaultScimActive holds the default value on creation for the scim_active field.
+	user.DefaultScimActive = userDescScimActive.Default.(bool)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userMixinFields2[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
@@ -7372,6 +7384,10 @@ func init() {
 	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
 	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	userhistory.UpdateDefaultLastSeen = userhistoryDescLastSeen.UpdateDefault.(func() time.Time)
+	// userhistoryDescScimActive is the schema descriptor for scim_active field.
+	userhistoryDescScimActive := userhistoryFields[27].Descriptor()
+	// userhistory.DefaultScimActive holds the default value on creation for the scim_active field.
+	userhistory.DefaultScimActive = userhistoryDescScimActive.Default.(bool)
 	// userhistoryDescID is the schema descriptor for id field.
 	userhistoryDescID := userhistoryFields[9].Descriptor()
 	// userhistory.DefaultID holds the default value on creation for the id field.

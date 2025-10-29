@@ -9084,6 +9084,22 @@ input CreateGroupInput {
 	The group's displayed 'friendly' name
 	"""
 	displayName: String
+	"""
+	the SCIM external ID for the group
+	"""
+	scimExternalID: String
+	"""
+	the SCIM displayname for the group
+	"""
+	scimDisplayName: String
+	"""
+	whether the SCIM group is marked as active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM group mailing list email
+	"""
+	scimGroupMailing: String
 	ownerID: ID
 	programEditorIDs: [ID!]
 	programBlockedGroupIDs: [ID!]
@@ -10838,6 +10854,26 @@ input CreateUserInput {
 	the user's role
 	"""
 	role: UserRole
+	"""
+	the SCIM external ID for the user
+	"""
+	scimExternalID: String
+	"""
+	the SCIM username for the user
+	"""
+	scimUsername: String
+	"""
+	whether the SCIM user is active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM preferred language for the user
+	"""
+	scimPreferredLanguage: String
+	"""
+	the SCIM locale for the user
+	"""
+	scimLocale: String
 	personalAccessTokenIDs: [ID!]
 	tfaSettingIDs: [ID!]
 	settingID: ID!
@@ -18294,6 +18330,22 @@ type Group implements Node {
 	The group's displayed 'friendly' name
 	"""
 	displayName: String!
+	"""
+	the SCIM external ID for the group
+	"""
+	scimExternalID: String
+	"""
+	the SCIM displayname for the group
+	"""
+	scimDisplayName: String
+	"""
+	whether the SCIM group is marked as active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM group mailing list email
+	"""
+	scimGroupMailing: String
 	owner: Organization
 	programEditors(
 		"""
@@ -19517,6 +19569,22 @@ type GroupHistory implements Node {
 	The group's displayed 'friendly' name
 	"""
 	displayName: String!
+	"""
+	the SCIM external ID for the group
+	"""
+	scimExternalID: String
+	"""
+	the SCIM displayname for the group
+	"""
+	scimDisplayName: String
+	"""
+	whether the SCIM group is marked as active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM group mailing list email
+	"""
+	scimGroupMailing: String
 }
 """
 A connection to a list of items.
@@ -19771,6 +19839,67 @@ input GroupHistoryWhereInput {
 	displayNameHasSuffix: String
 	displayNameEqualFold: String
 	displayNameContainsFold: String
+	"""
+	scim_external_id field predicates
+	"""
+	scimExternalID: String
+	scimExternalIDNEQ: String
+	scimExternalIDIn: [String!]
+	scimExternalIDNotIn: [String!]
+	scimExternalIDGT: String
+	scimExternalIDGTE: String
+	scimExternalIDLT: String
+	scimExternalIDLTE: String
+	scimExternalIDContains: String
+	scimExternalIDHasPrefix: String
+	scimExternalIDHasSuffix: String
+	scimExternalIDIsNil: Boolean
+	scimExternalIDNotNil: Boolean
+	scimExternalIDEqualFold: String
+	scimExternalIDContainsFold: String
+	"""
+	scim_display_name field predicates
+	"""
+	scimDisplayName: String
+	scimDisplayNameNEQ: String
+	scimDisplayNameIn: [String!]
+	scimDisplayNameNotIn: [String!]
+	scimDisplayNameGT: String
+	scimDisplayNameGTE: String
+	scimDisplayNameLT: String
+	scimDisplayNameLTE: String
+	scimDisplayNameContains: String
+	scimDisplayNameHasPrefix: String
+	scimDisplayNameHasSuffix: String
+	scimDisplayNameIsNil: Boolean
+	scimDisplayNameNotNil: Boolean
+	scimDisplayNameEqualFold: String
+	scimDisplayNameContainsFold: String
+	"""
+	scim_active field predicates
+	"""
+	scimActive: Boolean
+	scimActiveNEQ: Boolean
+	scimActiveIsNil: Boolean
+	scimActiveNotNil: Boolean
+	"""
+	scim_group_mailing field predicates
+	"""
+	scimGroupMailing: String
+	scimGroupMailingNEQ: String
+	scimGroupMailingIn: [String!]
+	scimGroupMailingNotIn: [String!]
+	scimGroupMailingGT: String
+	scimGroupMailingGTE: String
+	scimGroupMailingLT: String
+	scimGroupMailingLTE: String
+	scimGroupMailingContains: String
+	scimGroupMailingHasPrefix: String
+	scimGroupMailingHasSuffix: String
+	scimGroupMailingIsNil: Boolean
+	scimGroupMailingNotNil: Boolean
+	scimGroupMailingEqualFold: String
+	scimGroupMailingContainsFold: String
 }
 """
 GroupMembersInput is used to create members for a group
@@ -21128,6 +21257,67 @@ input GroupWhereInput {
 	displayNameHasSuffix: String
 	displayNameEqualFold: String
 	displayNameContainsFold: String
+	"""
+	scim_external_id field predicates
+	"""
+	scimExternalID: String
+	scimExternalIDNEQ: String
+	scimExternalIDIn: [String!]
+	scimExternalIDNotIn: [String!]
+	scimExternalIDGT: String
+	scimExternalIDGTE: String
+	scimExternalIDLT: String
+	scimExternalIDLTE: String
+	scimExternalIDContains: String
+	scimExternalIDHasPrefix: String
+	scimExternalIDHasSuffix: String
+	scimExternalIDIsNil: Boolean
+	scimExternalIDNotNil: Boolean
+	scimExternalIDEqualFold: String
+	scimExternalIDContainsFold: String
+	"""
+	scim_display_name field predicates
+	"""
+	scimDisplayName: String
+	scimDisplayNameNEQ: String
+	scimDisplayNameIn: [String!]
+	scimDisplayNameNotIn: [String!]
+	scimDisplayNameGT: String
+	scimDisplayNameGTE: String
+	scimDisplayNameLT: String
+	scimDisplayNameLTE: String
+	scimDisplayNameContains: String
+	scimDisplayNameHasPrefix: String
+	scimDisplayNameHasSuffix: String
+	scimDisplayNameIsNil: Boolean
+	scimDisplayNameNotNil: Boolean
+	scimDisplayNameEqualFold: String
+	scimDisplayNameContainsFold: String
+	"""
+	scim_active field predicates
+	"""
+	scimActive: Boolean
+	scimActiveNEQ: Boolean
+	scimActiveIsNil: Boolean
+	scimActiveNotNil: Boolean
+	"""
+	scim_group_mailing field predicates
+	"""
+	scimGroupMailing: String
+	scimGroupMailingNEQ: String
+	scimGroupMailingIn: [String!]
+	scimGroupMailingNotIn: [String!]
+	scimGroupMailingGT: String
+	scimGroupMailingGTE: String
+	scimGroupMailingLT: String
+	scimGroupMailingLTE: String
+	scimGroupMailingContains: String
+	scimGroupMailingHasPrefix: String
+	scimGroupMailingHasSuffix: String
+	scimGroupMailingIsNil: Boolean
+	scimGroupMailingNotNil: Boolean
+	scimGroupMailingEqualFold: String
+	scimGroupMailingContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -64652,6 +64842,26 @@ input UpdateGroupInput {
 	The group's displayed 'friendly' name
 	"""
 	displayName: String
+	"""
+	the SCIM external ID for the group
+	"""
+	scimExternalID: String
+	clearScimExternalID: Boolean
+	"""
+	the SCIM displayname for the group
+	"""
+	scimDisplayName: String
+	clearScimDisplayName: Boolean
+	"""
+	whether the SCIM group is marked as active
+	"""
+	scimActive: Boolean
+	clearScimActive: Boolean
+	"""
+	the SCIM group mailing list email
+	"""
+	scimGroupMailing: String
+	clearScimGroupMailing: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addProgramEditorIDs: [ID!]
@@ -67034,6 +67244,31 @@ input UpdateUserInput {
 	"""
 	role: UserRole
 	clearRole: Boolean
+	"""
+	the SCIM external ID for the user
+	"""
+	scimExternalID: String
+	clearScimExternalID: Boolean
+	"""
+	the SCIM username for the user
+	"""
+	scimUsername: String
+	clearScimUsername: Boolean
+	"""
+	whether the SCIM user is active
+	"""
+	scimActive: Boolean
+	clearScimActive: Boolean
+	"""
+	the SCIM preferred language for the user
+	"""
+	scimPreferredLanguage: String
+	clearScimPreferredLanguage: Boolean
+	"""
+	the SCIM locale for the user
+	"""
+	scimLocale: String
+	clearScimLocale: Boolean
 	addPersonalAccessTokenIDs: [ID!]
 	removePersonalAccessTokenIDs: [ID!]
 	clearPersonalAccessTokens: Boolean
@@ -67186,6 +67421,26 @@ type User implements Node {
 	the user's role
 	"""
 	role: UserRole
+	"""
+	the SCIM external ID for the user
+	"""
+	scimExternalID: String
+	"""
+	the SCIM username for the user
+	"""
+	scimUsername: String
+	"""
+	whether the SCIM user is active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM preferred language for the user
+	"""
+	scimPreferredLanguage: String
+	"""
+	the SCIM locale for the user
+	"""
+	scimLocale: String
 	personalAccessTokens(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -67778,6 +68033,26 @@ type UserHistory implements Node {
 	the user's role
 	"""
 	role: UserHistoryRole
+	"""
+	the SCIM external ID for the user
+	"""
+	scimExternalID: String
+	"""
+	the SCIM username for the user
+	"""
+	scimUsername: String
+	"""
+	whether the SCIM user is active
+	"""
+	scimActive: Boolean
+	"""
+	the SCIM preferred language for the user
+	"""
+	scimPreferredLanguage: String
+	"""
+	the SCIM locale for the user
+	"""
+	scimLocale: String
 }
 """
 UserHistoryAuthProvider is enum for the field last_login_provider
@@ -68167,6 +68442,85 @@ input UserHistoryWhereInput {
 	roleNotIn: [UserHistoryRole!]
 	roleIsNil: Boolean
 	roleNotNil: Boolean
+	"""
+	scim_external_id field predicates
+	"""
+	scimExternalID: String
+	scimExternalIDNEQ: String
+	scimExternalIDIn: [String!]
+	scimExternalIDNotIn: [String!]
+	scimExternalIDGT: String
+	scimExternalIDGTE: String
+	scimExternalIDLT: String
+	scimExternalIDLTE: String
+	scimExternalIDContains: String
+	scimExternalIDHasPrefix: String
+	scimExternalIDHasSuffix: String
+	scimExternalIDIsNil: Boolean
+	scimExternalIDNotNil: Boolean
+	scimExternalIDEqualFold: String
+	scimExternalIDContainsFold: String
+	"""
+	scim_username field predicates
+	"""
+	scimUsername: String
+	scimUsernameNEQ: String
+	scimUsernameIn: [String!]
+	scimUsernameNotIn: [String!]
+	scimUsernameGT: String
+	scimUsernameGTE: String
+	scimUsernameLT: String
+	scimUsernameLTE: String
+	scimUsernameContains: String
+	scimUsernameHasPrefix: String
+	scimUsernameHasSuffix: String
+	scimUsernameIsNil: Boolean
+	scimUsernameNotNil: Boolean
+	scimUsernameEqualFold: String
+	scimUsernameContainsFold: String
+	"""
+	scim_active field predicates
+	"""
+	scimActive: Boolean
+	scimActiveNEQ: Boolean
+	scimActiveIsNil: Boolean
+	scimActiveNotNil: Boolean
+	"""
+	scim_preferred_language field predicates
+	"""
+	scimPreferredLanguage: String
+	scimPreferredLanguageNEQ: String
+	scimPreferredLanguageIn: [String!]
+	scimPreferredLanguageNotIn: [String!]
+	scimPreferredLanguageGT: String
+	scimPreferredLanguageGTE: String
+	scimPreferredLanguageLT: String
+	scimPreferredLanguageLTE: String
+	scimPreferredLanguageContains: String
+	scimPreferredLanguageHasPrefix: String
+	scimPreferredLanguageHasSuffix: String
+	scimPreferredLanguageIsNil: Boolean
+	scimPreferredLanguageNotNil: Boolean
+	scimPreferredLanguageEqualFold: String
+	scimPreferredLanguageContainsFold: String
+	"""
+	scim_locale field predicates
+	"""
+	scimLocale: String
+	scimLocaleNEQ: String
+	scimLocaleIn: [String!]
+	scimLocaleNotIn: [String!]
+	scimLocaleGT: String
+	scimLocaleGTE: String
+	scimLocaleLT: String
+	scimLocaleLTE: String
+	scimLocaleContains: String
+	scimLocaleHasPrefix: String
+	scimLocaleHasSuffix: String
+	scimLocaleIsNil: Boolean
+	scimLocaleNotNil: Boolean
+	scimLocaleEqualFold: String
+	scimLocaleContainsFold: String
 }
 """
 Ordering options for User connections
@@ -69119,6 +69473,85 @@ input UserWhereInput {
 	roleNotIn: [UserRole!]
 	roleIsNil: Boolean
 	roleNotNil: Boolean
+	"""
+	scim_external_id field predicates
+	"""
+	scimExternalID: String
+	scimExternalIDNEQ: String
+	scimExternalIDIn: [String!]
+	scimExternalIDNotIn: [String!]
+	scimExternalIDGT: String
+	scimExternalIDGTE: String
+	scimExternalIDLT: String
+	scimExternalIDLTE: String
+	scimExternalIDContains: String
+	scimExternalIDHasPrefix: String
+	scimExternalIDHasSuffix: String
+	scimExternalIDIsNil: Boolean
+	scimExternalIDNotNil: Boolean
+	scimExternalIDEqualFold: String
+	scimExternalIDContainsFold: String
+	"""
+	scim_username field predicates
+	"""
+	scimUsername: String
+	scimUsernameNEQ: String
+	scimUsernameIn: [String!]
+	scimUsernameNotIn: [String!]
+	scimUsernameGT: String
+	scimUsernameGTE: String
+	scimUsernameLT: String
+	scimUsernameLTE: String
+	scimUsernameContains: String
+	scimUsernameHasPrefix: String
+	scimUsernameHasSuffix: String
+	scimUsernameIsNil: Boolean
+	scimUsernameNotNil: Boolean
+	scimUsernameEqualFold: String
+	scimUsernameContainsFold: String
+	"""
+	scim_active field predicates
+	"""
+	scimActive: Boolean
+	scimActiveNEQ: Boolean
+	scimActiveIsNil: Boolean
+	scimActiveNotNil: Boolean
+	"""
+	scim_preferred_language field predicates
+	"""
+	scimPreferredLanguage: String
+	scimPreferredLanguageNEQ: String
+	scimPreferredLanguageIn: [String!]
+	scimPreferredLanguageNotIn: [String!]
+	scimPreferredLanguageGT: String
+	scimPreferredLanguageGTE: String
+	scimPreferredLanguageLT: String
+	scimPreferredLanguageLTE: String
+	scimPreferredLanguageContains: String
+	scimPreferredLanguageHasPrefix: String
+	scimPreferredLanguageHasSuffix: String
+	scimPreferredLanguageIsNil: Boolean
+	scimPreferredLanguageNotNil: Boolean
+	scimPreferredLanguageEqualFold: String
+	scimPreferredLanguageContainsFold: String
+	"""
+	scim_locale field predicates
+	"""
+	scimLocale: String
+	scimLocaleNEQ: String
+	scimLocaleIn: [String!]
+	scimLocaleNotIn: [String!]
+	scimLocaleGT: String
+	scimLocaleGTE: String
+	scimLocaleLT: String
+	scimLocaleLTE: String
+	scimLocaleContains: String
+	scimLocaleHasPrefix: String
+	scimLocaleHasSuffix: String
+	scimLocaleIsNil: Boolean
+	scimLocaleNotNil: Boolean
+	scimLocaleEqualFold: String
+	scimLocaleContainsFold: String
 	"""
 	personal_access_tokens edge predicates
 	"""

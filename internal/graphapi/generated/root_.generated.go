@@ -1571,6 +1571,10 @@ type ComplexityRoot struct {
 		ScanBlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScanEditors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScanViewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScimActive                         func(childComplexity int) int
+		ScimDisplayName                    func(childComplexity int) int
+		ScimExternalID                     func(childComplexity int) int
+		ScimGroupMailing                   func(childComplexity int) int
 		Setting                            func(childComplexity int) int
 		Tags                               func(childComplexity int) int
 		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -1607,23 +1611,27 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DisplayID       func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		GravatarLogoURL func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IsManaged       func(childComplexity int) int
-		LogoURL         func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		GravatarLogoURL  func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IsManaged        func(childComplexity int) int
+		LogoURL          func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		ScimActive       func(childComplexity int) int
+		ScimDisplayName  func(childComplexity int) int
+		ScimExternalID   func(childComplexity int) int
+		ScimGroupMailing func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	GroupHistoryConnection struct {
@@ -5518,43 +5526,48 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AssigneeTasks        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		AssignerTasks        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		AuthProvider         func(childComplexity int) int
-		AvatarFile           func(childComplexity int) int
-		AvatarLocalFileID    func(childComplexity int) int
-		AvatarRemoteURL      func(childComplexity int) int
-		AvatarUpdatedAt      func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		DisplayName          func(childComplexity int) int
-		Email                func(childComplexity int) int
-		Events               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		FirstName            func(childComplexity int) int
-		GroupMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
-		Groups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                   func(childComplexity int) int
-		LastLoginProvider    func(childComplexity int) int
-		LastName             func(childComplexity int) int
-		LastSeen             func(childComplexity int) int
-		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		ProgramMemberships   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
-		ProgramOwner         func(childComplexity int) int
-		Programs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Role                 func(childComplexity int) int
-		Setting              func(childComplexity int) int
-		Sub                  func(childComplexity int) int
-		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags                 func(childComplexity int) int
-		TfaSettings          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Webauthns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssigneeTasks         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AssignerTasks         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AuthProvider          func(childComplexity int) int
+		AvatarFile            func(childComplexity int) int
+		AvatarLocalFileID     func(childComplexity int) int
+		AvatarRemoteURL       func(childComplexity int) int
+		AvatarUpdatedAt       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		FirstName             func(childComplexity int) int
+		GroupMemberships      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                    func(childComplexity int) int
+		LastLoginProvider     func(childComplexity int) int
+		LastName              func(childComplexity int) int
+		LastSeen              func(childComplexity int) int
+		OrgMemberships        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Organizations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		PersonalAccessTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		ProgramMemberships    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		ProgramOwner          func(childComplexity int) int
+		Programs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Role                  func(childComplexity int) int
+		ScimActive            func(childComplexity int) int
+		ScimExternalID        func(childComplexity int) int
+		ScimLocale            func(childComplexity int) int
+		ScimPreferredLanguage func(childComplexity int) int
+		ScimUsername          func(childComplexity int) int
+		Setting               func(childComplexity int) int
+		Sub                   func(childComplexity int) int
+		Subcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags                  func(childComplexity int) int
+		TfaSettings           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Webauthns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
 	}
 
 	UserBulkCreatePayload struct {
@@ -5581,28 +5594,33 @@ type ComplexityRoot struct {
 	}
 
 	UserHistory struct {
-		AuthProvider      func(childComplexity int) int
-		AvatarLocalFileID func(childComplexity int) int
-		AvatarRemoteURL   func(childComplexity int) int
-		AvatarUpdatedAt   func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		DisplayName       func(childComplexity int) int
-		Email             func(childComplexity int) int
-		FirstName         func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		LastLoginProvider func(childComplexity int) int
-		LastName          func(childComplexity int) int
-		LastSeen          func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Role              func(childComplexity int) int
-		Sub               func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		AuthProvider          func(childComplexity int) int
+		AvatarLocalFileID     func(childComplexity int) int
+		AvatarRemoteURL       func(childComplexity int) int
+		AvatarUpdatedAt       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		FirstName             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		LastLoginProvider     func(childComplexity int) int
+		LastName              func(childComplexity int) int
+		LastSeen              func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		ScimActive            func(childComplexity int) int
+		ScimExternalID        func(childComplexity int) int
+		ScimLocale            func(childComplexity int) int
+		ScimPreferredLanguage func(childComplexity int) int
+		ScimUsername          func(childComplexity int) int
+		Sub                   func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	UserHistoryConnection struct {
@@ -13182,6 +13200,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Group.ScanViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
 
+	case "Group.scimActive":
+		if e.complexity.Group.ScimActive == nil {
+			break
+		}
+
+		return e.complexity.Group.ScimActive(childComplexity), true
+
+	case "Group.scimDisplayName":
+		if e.complexity.Group.ScimDisplayName == nil {
+			break
+		}
+
+		return e.complexity.Group.ScimDisplayName(childComplexity), true
+
+	case "Group.scimExternalID":
+		if e.complexity.Group.ScimExternalID == nil {
+			break
+		}
+
+		return e.complexity.Group.ScimExternalID(childComplexity), true
+
+	case "Group.scimGroupMailing":
+		if e.complexity.Group.ScimGroupMailing == nil {
+			break
+		}
+
+		return e.complexity.Group.ScimGroupMailing(childComplexity), true
+
 	case "Group.setting":
 		if e.complexity.Group.Setting == nil {
 			break
@@ -13394,6 +13440,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupHistory.Ref(childComplexity), true
+
+	case "GroupHistory.scimActive":
+		if e.complexity.GroupHistory.ScimActive == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.ScimActive(childComplexity), true
+
+	case "GroupHistory.scimDisplayName":
+		if e.complexity.GroupHistory.ScimDisplayName == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.ScimDisplayName(childComplexity), true
+
+	case "GroupHistory.scimExternalID":
+		if e.complexity.GroupHistory.ScimExternalID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.ScimExternalID(childComplexity), true
+
+	case "GroupHistory.scimGroupMailing":
+		if e.complexity.GroupHistory.ScimGroupMailing == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.ScimGroupMailing(childComplexity), true
 
 	case "GroupHistory.tags":
 		if e.complexity.GroupHistory.Tags == nil {
@@ -36277,6 +36351,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.Role(childComplexity), true
 
+	case "User.scimActive":
+		if e.complexity.User.ScimActive == nil {
+			break
+		}
+
+		return e.complexity.User.ScimActive(childComplexity), true
+
+	case "User.scimExternalID":
+		if e.complexity.User.ScimExternalID == nil {
+			break
+		}
+
+		return e.complexity.User.ScimExternalID(childComplexity), true
+
+	case "User.scimLocale":
+		if e.complexity.User.ScimLocale == nil {
+			break
+		}
+
+		return e.complexity.User.ScimLocale(childComplexity), true
+
+	case "User.scimPreferredLanguage":
+		if e.complexity.User.ScimPreferredLanguage == nil {
+			break
+		}
+
+		return e.complexity.User.ScimPreferredLanguage(childComplexity), true
+
+	case "User.scimUsername":
+		if e.complexity.User.ScimUsername == nil {
+			break
+		}
+
+		return e.complexity.User.ScimUsername(childComplexity), true
+
 	case "User.setting":
 		if e.complexity.User.Setting == nil {
 			break
@@ -36529,6 +36638,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserHistory.Role(childComplexity), true
+
+	case "UserHistory.scimActive":
+		if e.complexity.UserHistory.ScimActive == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.ScimActive(childComplexity), true
+
+	case "UserHistory.scimExternalID":
+		if e.complexity.UserHistory.ScimExternalID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.ScimExternalID(childComplexity), true
+
+	case "UserHistory.scimLocale":
+		if e.complexity.UserHistory.ScimLocale == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.ScimLocale(childComplexity), true
+
+	case "UserHistory.scimPreferredLanguage":
+		if e.complexity.UserHistory.ScimPreferredLanguage == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.ScimPreferredLanguage(childComplexity), true
+
+	case "UserHistory.scimUsername":
+		if e.complexity.UserHistory.ScimUsername == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.ScimUsername(childComplexity), true
 
 	case "UserHistory.sub":
 		if e.complexity.UserHistory.Sub == nil {
@@ -48796,6 +48940,22 @@ input CreateGroupInput {
   The group's displayed 'friendly' name
   """
   displayName: String
+  """
+  the SCIM external ID for the group
+  """
+  scimExternalID: String
+  """
+  the SCIM displayname for the group
+  """
+  scimDisplayName: String
+  """
+  whether the SCIM group is marked as active
+  """
+  scimActive: Boolean
+  """
+  the SCIM group mailing list email
+  """
+  scimGroupMailing: String
   ownerID: ID
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
@@ -50482,6 +50642,26 @@ input CreateUserInput {
   the user's role
   """
   role: UserRole
+  """
+  the SCIM external ID for the user
+  """
+  scimExternalID: String
+  """
+  the SCIM username for the user
+  """
+  scimUsername: String
+  """
+  whether the SCIM user is active
+  """
+  scimActive: Boolean
+  """
+  the SCIM preferred language for the user
+  """
+  scimPreferredLanguage: String
+  """
+  the SCIM locale for the user
+  """
+  scimLocale: String
   personalAccessTokenIDs: [ID!]
   tfaSettingIDs: [ID!]
   settingID: ID!
@@ -57565,6 +57745,22 @@ type Group implements Node {
   The group's displayed 'friendly' name
   """
   displayName: String!
+  """
+  the SCIM external ID for the group
+  """
+  scimExternalID: String
+  """
+  the SCIM displayname for the group
+  """
+  scimDisplayName: String
+  """
+  whether the SCIM group is marked as active
+  """
+  scimActive: Boolean
+  """
+  the SCIM group mailing list email
+  """
+  scimGroupMailing: String
   owner: Organization
   programEditors(
     """
@@ -58728,6 +58924,22 @@ type GroupHistory implements Node {
   The group's displayed 'friendly' name
   """
   displayName: String!
+  """
+  the SCIM external ID for the group
+  """
+  scimExternalID: String
+  """
+  the SCIM displayname for the group
+  """
+  scimDisplayName: String
+  """
+  whether the SCIM group is marked as active
+  """
+  scimActive: Boolean
+  """
+  the SCIM group mailing list email
+  """
+  scimGroupMailing: String
 }
 """
 A connection to a list of items.
@@ -58982,6 +59194,67 @@ input GroupHistoryWhereInput {
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  scim_external_id field predicates
+  """
+  scimExternalID: String
+  scimExternalIDNEQ: String
+  scimExternalIDIn: [String!]
+  scimExternalIDNotIn: [String!]
+  scimExternalIDGT: String
+  scimExternalIDGTE: String
+  scimExternalIDLT: String
+  scimExternalIDLTE: String
+  scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
+  scimExternalIDHasSuffix: String
+  scimExternalIDIsNil: Boolean
+  scimExternalIDNotNil: Boolean
+  scimExternalIDEqualFold: String
+  scimExternalIDContainsFold: String
+  """
+  scim_display_name field predicates
+  """
+  scimDisplayName: String
+  scimDisplayNameNEQ: String
+  scimDisplayNameIn: [String!]
+  scimDisplayNameNotIn: [String!]
+  scimDisplayNameGT: String
+  scimDisplayNameGTE: String
+  scimDisplayNameLT: String
+  scimDisplayNameLTE: String
+  scimDisplayNameContains: String
+  scimDisplayNameHasPrefix: String
+  scimDisplayNameHasSuffix: String
+  scimDisplayNameIsNil: Boolean
+  scimDisplayNameNotNil: Boolean
+  scimDisplayNameEqualFold: String
+  scimDisplayNameContainsFold: String
+  """
+  scim_active field predicates
+  """
+  scimActive: Boolean
+  scimActiveNEQ: Boolean
+  scimActiveIsNil: Boolean
+  scimActiveNotNil: Boolean
+  """
+  scim_group_mailing field predicates
+  """
+  scimGroupMailing: String
+  scimGroupMailingNEQ: String
+  scimGroupMailingIn: [String!]
+  scimGroupMailingNotIn: [String!]
+  scimGroupMailingGT: String
+  scimGroupMailingGTE: String
+  scimGroupMailingLT: String
+  scimGroupMailingLTE: String
+  scimGroupMailingContains: String
+  scimGroupMailingHasPrefix: String
+  scimGroupMailingHasSuffix: String
+  scimGroupMailingIsNil: Boolean
+  scimGroupMailingNotNil: Boolean
+  scimGroupMailingEqualFold: String
+  scimGroupMailingContainsFold: String
 }
 type GroupMembership implements Node {
   id: ID!
@@ -60092,6 +60365,67 @@ input GroupWhereInput {
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  scim_external_id field predicates
+  """
+  scimExternalID: String
+  scimExternalIDNEQ: String
+  scimExternalIDIn: [String!]
+  scimExternalIDNotIn: [String!]
+  scimExternalIDGT: String
+  scimExternalIDGTE: String
+  scimExternalIDLT: String
+  scimExternalIDLTE: String
+  scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
+  scimExternalIDHasSuffix: String
+  scimExternalIDIsNil: Boolean
+  scimExternalIDNotNil: Boolean
+  scimExternalIDEqualFold: String
+  scimExternalIDContainsFold: String
+  """
+  scim_display_name field predicates
+  """
+  scimDisplayName: String
+  scimDisplayNameNEQ: String
+  scimDisplayNameIn: [String!]
+  scimDisplayNameNotIn: [String!]
+  scimDisplayNameGT: String
+  scimDisplayNameGTE: String
+  scimDisplayNameLT: String
+  scimDisplayNameLTE: String
+  scimDisplayNameContains: String
+  scimDisplayNameHasPrefix: String
+  scimDisplayNameHasSuffix: String
+  scimDisplayNameIsNil: Boolean
+  scimDisplayNameNotNil: Boolean
+  scimDisplayNameEqualFold: String
+  scimDisplayNameContainsFold: String
+  """
+  scim_active field predicates
+  """
+  scimActive: Boolean
+  scimActiveNEQ: Boolean
+  scimActiveIsNil: Boolean
+  scimActiveNotNil: Boolean
+  """
+  scim_group_mailing field predicates
+  """
+  scimGroupMailing: String
+  scimGroupMailingNEQ: String
+  scimGroupMailingIn: [String!]
+  scimGroupMailingNotIn: [String!]
+  scimGroupMailingGT: String
+  scimGroupMailingGTE: String
+  scimGroupMailingLT: String
+  scimGroupMailingLTE: String
+  scimGroupMailingContains: String
+  scimGroupMailingHasPrefix: String
+  scimGroupMailingHasSuffix: String
+  scimGroupMailingIsNil: Boolean
+  scimGroupMailingNotNil: Boolean
+  scimGroupMailingEqualFold: String
+  scimGroupMailingContainsFold: String
   """
   owner edge predicates
   """
@@ -95299,6 +95633,26 @@ input UpdateGroupInput {
   The group's displayed 'friendly' name
   """
   displayName: String
+  """
+  the SCIM external ID for the group
+  """
+  scimExternalID: String
+  clearScimExternalID: Boolean
+  """
+  the SCIM displayname for the group
+  """
+  scimDisplayName: String
+  clearScimDisplayName: Boolean
+  """
+  whether the SCIM group is marked as active
+  """
+  scimActive: Boolean
+  clearScimActive: Boolean
+  """
+  the SCIM group mailing list email
+  """
+  scimGroupMailing: String
+  clearScimGroupMailing: Boolean
   ownerID: ID
   clearOwner: Boolean
   addProgramEditorIDs: [ID!]
@@ -97650,6 +98004,31 @@ input UpdateUserInput {
   """
   role: UserRole
   clearRole: Boolean
+  """
+  the SCIM external ID for the user
+  """
+  scimExternalID: String
+  clearScimExternalID: Boolean
+  """
+  the SCIM username for the user
+  """
+  scimUsername: String
+  clearScimUsername: Boolean
+  """
+  whether the SCIM user is active
+  """
+  scimActive: Boolean
+  clearScimActive: Boolean
+  """
+  the SCIM preferred language for the user
+  """
+  scimPreferredLanguage: String
+  clearScimPreferredLanguage: Boolean
+  """
+  the SCIM locale for the user
+  """
+  scimLocale: String
+  clearScimLocale: Boolean
   addPersonalAccessTokenIDs: [ID!]
   removePersonalAccessTokenIDs: [ID!]
   clearPersonalAccessTokens: Boolean
@@ -97797,6 +98176,26 @@ type User implements Node {
   the user's role
   """
   role: UserRole
+  """
+  the SCIM external ID for the user
+  """
+  scimExternalID: String
+  """
+  the SCIM username for the user
+  """
+  scimUsername: String
+  """
+  whether the SCIM user is active
+  """
+  scimActive: Boolean
+  """
+  the SCIM preferred language for the user
+  """
+  scimPreferredLanguage: String
+  """
+  the SCIM locale for the user
+  """
+  scimLocale: String
   personalAccessTokens(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98362,6 +98761,26 @@ type UserHistory implements Node {
   the user's role
   """
   role: UserHistoryRole
+  """
+  the SCIM external ID for the user
+  """
+  scimExternalID: String
+  """
+  the SCIM username for the user
+  """
+  scimUsername: String
+  """
+  whether the SCIM user is active
+  """
+  scimActive: Boolean
+  """
+  the SCIM preferred language for the user
+  """
+  scimPreferredLanguage: String
+  """
+  the SCIM locale for the user
+  """
+  scimLocale: String
 }
 """
 UserHistoryAuthProvider is enum for the field last_login_provider
@@ -98751,6 +99170,85 @@ input UserHistoryWhereInput {
   roleNotIn: [UserHistoryRole!]
   roleIsNil: Boolean
   roleNotNil: Boolean
+  """
+  scim_external_id field predicates
+  """
+  scimExternalID: String
+  scimExternalIDNEQ: String
+  scimExternalIDIn: [String!]
+  scimExternalIDNotIn: [String!]
+  scimExternalIDGT: String
+  scimExternalIDGTE: String
+  scimExternalIDLT: String
+  scimExternalIDLTE: String
+  scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
+  scimExternalIDHasSuffix: String
+  scimExternalIDIsNil: Boolean
+  scimExternalIDNotNil: Boolean
+  scimExternalIDEqualFold: String
+  scimExternalIDContainsFold: String
+  """
+  scim_username field predicates
+  """
+  scimUsername: String
+  scimUsernameNEQ: String
+  scimUsernameIn: [String!]
+  scimUsernameNotIn: [String!]
+  scimUsernameGT: String
+  scimUsernameGTE: String
+  scimUsernameLT: String
+  scimUsernameLTE: String
+  scimUsernameContains: String
+  scimUsernameHasPrefix: String
+  scimUsernameHasSuffix: String
+  scimUsernameIsNil: Boolean
+  scimUsernameNotNil: Boolean
+  scimUsernameEqualFold: String
+  scimUsernameContainsFold: String
+  """
+  scim_active field predicates
+  """
+  scimActive: Boolean
+  scimActiveNEQ: Boolean
+  scimActiveIsNil: Boolean
+  scimActiveNotNil: Boolean
+  """
+  scim_preferred_language field predicates
+  """
+  scimPreferredLanguage: String
+  scimPreferredLanguageNEQ: String
+  scimPreferredLanguageIn: [String!]
+  scimPreferredLanguageNotIn: [String!]
+  scimPreferredLanguageGT: String
+  scimPreferredLanguageGTE: String
+  scimPreferredLanguageLT: String
+  scimPreferredLanguageLTE: String
+  scimPreferredLanguageContains: String
+  scimPreferredLanguageHasPrefix: String
+  scimPreferredLanguageHasSuffix: String
+  scimPreferredLanguageIsNil: Boolean
+  scimPreferredLanguageNotNil: Boolean
+  scimPreferredLanguageEqualFold: String
+  scimPreferredLanguageContainsFold: String
+  """
+  scim_locale field predicates
+  """
+  scimLocale: String
+  scimLocaleNEQ: String
+  scimLocaleIn: [String!]
+  scimLocaleNotIn: [String!]
+  scimLocaleGT: String
+  scimLocaleGTE: String
+  scimLocaleLT: String
+  scimLocaleLTE: String
+  scimLocaleContains: String
+  scimLocaleHasPrefix: String
+  scimLocaleHasSuffix: String
+  scimLocaleIsNil: Boolean
+  scimLocaleNotNil: Boolean
+  scimLocaleEqualFold: String
+  scimLocaleContainsFold: String
 }
 """
 Ordering options for User connections
@@ -99658,6 +100156,85 @@ input UserWhereInput {
   roleNotIn: [UserRole!]
   roleIsNil: Boolean
   roleNotNil: Boolean
+  """
+  scim_external_id field predicates
+  """
+  scimExternalID: String
+  scimExternalIDNEQ: String
+  scimExternalIDIn: [String!]
+  scimExternalIDNotIn: [String!]
+  scimExternalIDGT: String
+  scimExternalIDGTE: String
+  scimExternalIDLT: String
+  scimExternalIDLTE: String
+  scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
+  scimExternalIDHasSuffix: String
+  scimExternalIDIsNil: Boolean
+  scimExternalIDNotNil: Boolean
+  scimExternalIDEqualFold: String
+  scimExternalIDContainsFold: String
+  """
+  scim_username field predicates
+  """
+  scimUsername: String
+  scimUsernameNEQ: String
+  scimUsernameIn: [String!]
+  scimUsernameNotIn: [String!]
+  scimUsernameGT: String
+  scimUsernameGTE: String
+  scimUsernameLT: String
+  scimUsernameLTE: String
+  scimUsernameContains: String
+  scimUsernameHasPrefix: String
+  scimUsernameHasSuffix: String
+  scimUsernameIsNil: Boolean
+  scimUsernameNotNil: Boolean
+  scimUsernameEqualFold: String
+  scimUsernameContainsFold: String
+  """
+  scim_active field predicates
+  """
+  scimActive: Boolean
+  scimActiveNEQ: Boolean
+  scimActiveIsNil: Boolean
+  scimActiveNotNil: Boolean
+  """
+  scim_preferred_language field predicates
+  """
+  scimPreferredLanguage: String
+  scimPreferredLanguageNEQ: String
+  scimPreferredLanguageIn: [String!]
+  scimPreferredLanguageNotIn: [String!]
+  scimPreferredLanguageGT: String
+  scimPreferredLanguageGTE: String
+  scimPreferredLanguageLT: String
+  scimPreferredLanguageLTE: String
+  scimPreferredLanguageContains: String
+  scimPreferredLanguageHasPrefix: String
+  scimPreferredLanguageHasSuffix: String
+  scimPreferredLanguageIsNil: Boolean
+  scimPreferredLanguageNotNil: Boolean
+  scimPreferredLanguageEqualFold: String
+  scimPreferredLanguageContainsFold: String
+  """
+  scim_locale field predicates
+  """
+  scimLocale: String
+  scimLocaleNEQ: String
+  scimLocaleIn: [String!]
+  scimLocaleNotIn: [String!]
+  scimLocaleGT: String
+  scimLocaleGTE: String
+  scimLocaleLT: String
+  scimLocaleLTE: String
+  scimLocaleContains: String
+  scimLocaleHasPrefix: String
+  scimLocaleHasSuffix: String
+  scimLocaleIsNil: Boolean
+  scimLocaleNotNil: Boolean
+  scimLocaleEqualFold: String
+  scimLocaleContainsFold: String
   """
   personal_access_tokens edge predicates
   """

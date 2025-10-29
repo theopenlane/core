@@ -90,6 +90,16 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_authProvider(ctx, field)
 			case "role":
 				return ec.fieldContext_User_role(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_User_scimExternalID(ctx, field)
+			case "scimUsername":
+				return ec.fieldContext_User_scimUsername(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_User_scimActive(ctx, field)
+			case "scimPreferredLanguage":
+				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
+			case "scimLocale":
+				return ec.fieldContext_User_scimLocale(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_User_personalAccessTokens(ctx, field)
 			case "tfaSettings":
@@ -195,6 +205,16 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_authProvider(ctx, field)
 			case "role":
 				return ec.fieldContext_User_role(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_User_scimExternalID(ctx, field)
+			case "scimUsername":
+				return ec.fieldContext_User_scimUsername(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_User_scimActive(ctx, field)
+			case "scimPreferredLanguage":
+				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
+			case "scimLocale":
+				return ec.fieldContext_User_scimLocale(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_User_personalAccessTokens(ctx, field)
 			case "tfaSettings":
@@ -329,6 +349,16 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_authProvider(ctx, field)
 			case "role":
 				return ec.fieldContext_User_role(ctx, field)
+			case "scimExternalID":
+				return ec.fieldContext_User_scimExternalID(ctx, field)
+			case "scimUsername":
+				return ec.fieldContext_User_scimUsername(ctx, field)
+			case "scimActive":
+				return ec.fieldContext_User_scimActive(ctx, field)
+			case "scimPreferredLanguage":
+				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
+			case "scimLocale":
+				return ec.fieldContext_User_scimLocale(ctx, field)
 			case "personalAccessTokens":
 				return ec.fieldContext_User_personalAccessTokens(ctx, field)
 			case "tfaSettings":

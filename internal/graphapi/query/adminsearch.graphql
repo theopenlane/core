@@ -378,6 +378,9 @@ query AdminSearch($query: String!) {
           ownerID
           name
           displayName
+          scimExternalID
+          scimDisplayName
+          scimGroupMailing
         }
       }
     }
@@ -1010,6 +1013,10 @@ query AdminSearch($query: String!) {
           avatarRemoteURL
           avatarLocalFileID
           sub
+          scimExternalID
+          scimUsername
+          scimPreferredLanguage
+          scimLocale
         }
       }
     }
