@@ -5,6 +5,7 @@ import (
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/pkg/metrics"
 )
 
