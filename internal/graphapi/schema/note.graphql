@@ -25,6 +25,21 @@ extend input UpdateSubcontrolInput {
     deleteComment: ID
 }
 
+extend input UpdateRiskInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateInternalPolicyInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateProcedureInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
