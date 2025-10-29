@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -366,12 +365,8 @@ func (h *GroupHandler) applyReplaceOperation(ctx context.Context, update *genera
 		case "displayname":
 			if strVal, ok := op.Value.(string); ok && strVal != "" {
 				name := strings.ReplaceAll(strings.ToLower(strVal), " ", "-")
-
-				if err := validator.SpecialCharValidator(name); err != nil {
-					return fmt.Errorf("%w: displayName contains invalid characters", ErrInvalidAttributes)
-				}
-
-				update.SetDisplayName(strVal).SetName(name).SetScimDisplayName(strVal)
+				strippedName := hooks.StripInvalidChars(name)
+				update.SetDisplayName(strVal).SetName(strippedName).SetScimDisplayName(strVal)
 				*modified = true
 			}
 		case "active":
