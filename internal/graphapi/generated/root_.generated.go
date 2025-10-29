@@ -54,6 +54,7 @@ type ResolverRoot interface {
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
 	UpdateProcedureInput() UpdateProcedureInputResolver
 	UpdateProgramInput() UpdateProgramInputResolver
+	UpdateRiskInput() UpdateRiskInputResolver
 	UpdateStandardInput() UpdateStandardInputResolver
 	UpdateSubcontrolInput() UpdateSubcontrolInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
@@ -103002,6 +103003,21 @@ extend input UpdateControlInput {
 }
 
 extend input UpdateSubcontrolInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateRiskInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateInternalPolicyInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateProcedureInput {
     addComment: CreateNoteInput
     deleteComment: ID
 }
