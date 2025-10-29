@@ -324,6 +324,7 @@ var ExampleRegisterSuccessRequest = RegisterRequest{
 	LastName:  "Funk",
 	Email:     "sfunky@theopenlane.io",
 	Password:  "mitb!",
+	Token:     stringPtr("invite_token_example"),
 }
 
 // ExampleRegisterSuccessResponse is an example of a successful register response for OpenAPI documentation

@@ -16951,6 +16951,26 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, group.FieldDisplayName)
 				fieldSeen[group.FieldDisplayName] = struct{}{}
 			}
+		case "scimExternalID":
+			if _, ok := fieldSeen[group.FieldScimExternalID]; !ok {
+				selectedFields = append(selectedFields, group.FieldScimExternalID)
+				fieldSeen[group.FieldScimExternalID] = struct{}{}
+			}
+		case "scimDisplayName":
+			if _, ok := fieldSeen[group.FieldScimDisplayName]; !ok {
+				selectedFields = append(selectedFields, group.FieldScimDisplayName)
+				fieldSeen[group.FieldScimDisplayName] = struct{}{}
+			}
+		case "scimActive":
+			if _, ok := fieldSeen[group.FieldScimActive]; !ok {
+				selectedFields = append(selectedFields, group.FieldScimActive)
+				fieldSeen[group.FieldScimActive] = struct{}{}
+			}
+		case "scimGroupMailing":
+			if _, ok := fieldSeen[group.FieldScimGroupMailing]; !ok {
+				selectedFields = append(selectedFields, group.FieldScimGroupMailing)
+				fieldSeen[group.FieldScimGroupMailing] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -17120,6 +17140,26 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[grouphistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDisplayName)
 				fieldSeen[grouphistory.FieldDisplayName] = struct{}{}
+			}
+		case "scimExternalID":
+			if _, ok := fieldSeen[grouphistory.FieldScimExternalID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldScimExternalID)
+				fieldSeen[grouphistory.FieldScimExternalID] = struct{}{}
+			}
+		case "scimDisplayName":
+			if _, ok := fieldSeen[grouphistory.FieldScimDisplayName]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldScimDisplayName)
+				fieldSeen[grouphistory.FieldScimDisplayName] = struct{}{}
+			}
+		case "scimActive":
+			if _, ok := fieldSeen[grouphistory.FieldScimActive]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldScimActive)
+				fieldSeen[grouphistory.FieldScimActive] = struct{}{}
+			}
+		case "scimGroupMailing":
+			if _, ok := fieldSeen[grouphistory.FieldScimGroupMailing]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldScimGroupMailing)
+				fieldSeen[grouphistory.FieldScimGroupMailing] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -48907,6 +48947,31 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, user.FieldRole)
 				fieldSeen[user.FieldRole] = struct{}{}
 			}
+		case "scimExternalID":
+			if _, ok := fieldSeen[user.FieldScimExternalID]; !ok {
+				selectedFields = append(selectedFields, user.FieldScimExternalID)
+				fieldSeen[user.FieldScimExternalID] = struct{}{}
+			}
+		case "scimUsername":
+			if _, ok := fieldSeen[user.FieldScimUsername]; !ok {
+				selectedFields = append(selectedFields, user.FieldScimUsername)
+				fieldSeen[user.FieldScimUsername] = struct{}{}
+			}
+		case "scimActive":
+			if _, ok := fieldSeen[user.FieldScimActive]; !ok {
+				selectedFields = append(selectedFields, user.FieldScimActive)
+				fieldSeen[user.FieldScimActive] = struct{}{}
+			}
+		case "scimPreferredLanguage":
+			if _, ok := fieldSeen[user.FieldScimPreferredLanguage]; !ok {
+				selectedFields = append(selectedFields, user.FieldScimPreferredLanguage)
+				fieldSeen[user.FieldScimPreferredLanguage] = struct{}{}
+			}
+		case "scimLocale":
+			if _, ok := fieldSeen[user.FieldScimLocale]; !ok {
+				selectedFields = append(selectedFields, user.FieldScimLocale)
+				fieldSeen[user.FieldScimLocale] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -49101,6 +49166,31 @@ func (_q *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[userhistory.FieldRole]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldRole)
 				fieldSeen[userhistory.FieldRole] = struct{}{}
+			}
+		case "scimExternalID":
+			if _, ok := fieldSeen[userhistory.FieldScimExternalID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldScimExternalID)
+				fieldSeen[userhistory.FieldScimExternalID] = struct{}{}
+			}
+		case "scimUsername":
+			if _, ok := fieldSeen[userhistory.FieldScimUsername]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldScimUsername)
+				fieldSeen[userhistory.FieldScimUsername] = struct{}{}
+			}
+		case "scimActive":
+			if _, ok := fieldSeen[userhistory.FieldScimActive]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldScimActive)
+				fieldSeen[userhistory.FieldScimActive] = struct{}{}
+			}
+		case "scimPreferredLanguage":
+			if _, ok := fieldSeen[userhistory.FieldScimPreferredLanguage]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldScimPreferredLanguage)
+				fieldSeen[userhistory.FieldScimPreferredLanguage] = struct{}{}
+			}
+		case "scimLocale":
+			if _, ok := fieldSeen[userhistory.FieldScimLocale]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldScimLocale)
+				fieldSeen[userhistory.FieldScimLocale] = struct{}{}
 			}
 		case "id":
 		case "__typename":

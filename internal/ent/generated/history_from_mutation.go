@@ -4092,6 +4092,22 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDisplayName(displayName)
 	}
 
+	if scimExternalID, exists := m.ScimExternalID(); exists {
+		create = create.SetNillableScimExternalID(&scimExternalID)
+	}
+
+	if scimDisplayName, exists := m.ScimDisplayName(); exists {
+		create = create.SetNillableScimDisplayName(&scimDisplayName)
+	}
+
+	if scimActive, exists := m.ScimActive(); exists {
+		create = create.SetScimActive(scimActive)
+	}
+
+	if scimGroupMailing, exists := m.ScimGroupMailing(); exists {
+		create = create.SetNillableScimGroupMailing(&scimGroupMailing)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4213,6 +4229,30 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDisplayName(group.DisplayName)
 		}
 
+		if scimExternalID, exists := m.ScimExternalID(); exists {
+			create = create.SetNillableScimExternalID(&scimExternalID)
+		} else {
+			create = create.SetNillableScimExternalID(group.ScimExternalID)
+		}
+
+		if scimDisplayName, exists := m.ScimDisplayName(); exists {
+			create = create.SetNillableScimDisplayName(&scimDisplayName)
+		} else {
+			create = create.SetNillableScimDisplayName(group.ScimDisplayName)
+		}
+
+		if scimActive, exists := m.ScimActive(); exists {
+			create = create.SetScimActive(scimActive)
+		} else {
+			create = create.SetScimActive(group.ScimActive)
+		}
+
+		if scimGroupMailing, exists := m.ScimGroupMailing(); exists {
+			create = create.SetNillableScimGroupMailing(&scimGroupMailing)
+		} else {
+			create = create.SetNillableScimGroupMailing(group.ScimGroupMailing)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4263,6 +4303,10 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetGravatarLogoURL(group.GravatarLogoURL).
 			SetLogoURL(group.LogoURL).
 			SetDisplayName(group.DisplayName).
+			SetNillableScimExternalID(group.ScimExternalID).
+			SetNillableScimDisplayName(group.ScimDisplayName).
+			SetScimActive(group.ScimActive).
+			SetNillableScimGroupMailing(group.ScimGroupMailing).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -12913,6 +12957,26 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRole(role)
 	}
 
+	if scimExternalID, exists := m.ScimExternalID(); exists {
+		create = create.SetNillableScimExternalID(&scimExternalID)
+	}
+
+	if scimUsername, exists := m.ScimUsername(); exists {
+		create = create.SetNillableScimUsername(&scimUsername)
+	}
+
+	if scimActive, exists := m.ScimActive(); exists {
+		create = create.SetScimActive(scimActive)
+	}
+
+	if scimPreferredLanguage, exists := m.ScimPreferredLanguage(); exists {
+		create = create.SetNillableScimPreferredLanguage(&scimPreferredLanguage)
+	}
+
+	if scimLocale, exists := m.ScimLocale(); exists {
+		create = create.SetNillableScimLocale(&scimLocale)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -13070,6 +13134,36 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRole(user.Role)
 		}
 
+		if scimExternalID, exists := m.ScimExternalID(); exists {
+			create = create.SetNillableScimExternalID(&scimExternalID)
+		} else {
+			create = create.SetNillableScimExternalID(user.ScimExternalID)
+		}
+
+		if scimUsername, exists := m.ScimUsername(); exists {
+			create = create.SetNillableScimUsername(&scimUsername)
+		} else {
+			create = create.SetNillableScimUsername(user.ScimUsername)
+		}
+
+		if scimActive, exists := m.ScimActive(); exists {
+			create = create.SetScimActive(scimActive)
+		} else {
+			create = create.SetScimActive(user.ScimActive)
+		}
+
+		if scimPreferredLanguage, exists := m.ScimPreferredLanguage(); exists {
+			create = create.SetNillableScimPreferredLanguage(&scimPreferredLanguage)
+		} else {
+			create = create.SetNillableScimPreferredLanguage(user.ScimPreferredLanguage)
+		}
+
+		if scimLocale, exists := m.ScimLocale(); exists {
+			create = create.SetNillableScimLocale(&scimLocale)
+		} else {
+			create = create.SetNillableScimLocale(user.ScimLocale)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -13126,6 +13220,11 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSub(user.Sub).
 			SetAuthProvider(user.AuthProvider).
 			SetRole(user.Role).
+			SetNillableScimExternalID(user.ScimExternalID).
+			SetNillableScimUsername(user.ScimUsername).
+			SetScimActive(user.ScimActive).
+			SetNillableScimPreferredLanguage(user.ScimPreferredLanguage).
+			SetNillableScimLocale(user.ScimLocale).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -176,7 +176,9 @@ func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler,
 				return nil, err
 			}
 
-			request := openapi3.NewRequestBody().WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			request := openapi3.NewRequestBody().
+				WithDescription("Request body").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
 			op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
 			request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)

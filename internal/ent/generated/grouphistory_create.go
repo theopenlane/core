@@ -241,6 +241,62 @@ func (_c *GroupHistoryCreate) SetNillableDisplayName(v *string) *GroupHistoryCre
 	return _c
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_c *GroupHistoryCreate) SetScimExternalID(v string) *GroupHistoryCreate {
+	_c.mutation.SetScimExternalID(v)
+	return _c
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableScimExternalID(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetScimExternalID(*v)
+	}
+	return _c
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_c *GroupHistoryCreate) SetScimDisplayName(v string) *GroupHistoryCreate {
+	_c.mutation.SetScimDisplayName(v)
+	return _c
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableScimDisplayName(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetScimDisplayName(*v)
+	}
+	return _c
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_c *GroupHistoryCreate) SetScimActive(v bool) *GroupHistoryCreate {
+	_c.mutation.SetScimActive(v)
+	return _c
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableScimActive(v *bool) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetScimActive(*v)
+	}
+	return _c
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_c *GroupHistoryCreate) SetScimGroupMailing(v string) *GroupHistoryCreate {
+	_c.mutation.SetScimGroupMailing(v)
+	return _c
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableScimGroupMailing(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetScimGroupMailing(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *GroupHistoryCreate) SetID(v string) *GroupHistoryCreate {
 	_c.mutation.SetID(v)
@@ -324,6 +380,10 @@ func (_c *GroupHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.DisplayName(); !ok {
 		v := grouphistory.DefaultDisplayName
 		_c.mutation.SetDisplayName(v)
+	}
+	if _, ok := _c.mutation.ScimActive(); !ok {
+		v := grouphistory.DefaultScimActive
+		_c.mutation.SetScimActive(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if grouphistory.DefaultID == nil {
@@ -464,6 +524,22 @@ func (_c *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.ScimExternalID(); ok {
+		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
+		_node.ScimExternalID = &value
+	}
+	if value, ok := _c.mutation.ScimDisplayName(); ok {
+		_spec.SetField(grouphistory.FieldScimDisplayName, field.TypeString, value)
+		_node.ScimDisplayName = &value
+	}
+	if value, ok := _c.mutation.ScimActive(); ok {
+		_spec.SetField(grouphistory.FieldScimActive, field.TypeBool, value)
+		_node.ScimActive = value
+	}
+	if value, ok := _c.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(grouphistory.FieldScimGroupMailing, field.TypeString, value)
+		_node.ScimGroupMailing = &value
 	}
 	return _node, _spec
 }

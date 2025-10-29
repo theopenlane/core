@@ -349,6 +349,106 @@ func (_u *UserHistoryUpdate) ClearRole() *UserHistoryUpdate {
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *UserHistoryUpdate) SetScimExternalID(v string) *UserHistoryUpdate {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableScimExternalID(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *UserHistoryUpdate) ClearScimExternalID() *UserHistoryUpdate {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimUsername sets the "scim_username" field.
+func (_u *UserHistoryUpdate) SetScimUsername(v string) *UserHistoryUpdate {
+	_u.mutation.SetScimUsername(v)
+	return _u
+}
+
+// SetNillableScimUsername sets the "scim_username" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableScimUsername(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetScimUsername(*v)
+	}
+	return _u
+}
+
+// ClearScimUsername clears the value of the "scim_username" field.
+func (_u *UserHistoryUpdate) ClearScimUsername() *UserHistoryUpdate {
+	_u.mutation.ClearScimUsername()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *UserHistoryUpdate) SetScimActive(v bool) *UserHistoryUpdate {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableScimActive(v *bool) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *UserHistoryUpdate) ClearScimActive() *UserHistoryUpdate {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimPreferredLanguage sets the "scim_preferred_language" field.
+func (_u *UserHistoryUpdate) SetScimPreferredLanguage(v string) *UserHistoryUpdate {
+	_u.mutation.SetScimPreferredLanguage(v)
+	return _u
+}
+
+// SetNillableScimPreferredLanguage sets the "scim_preferred_language" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableScimPreferredLanguage(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetScimPreferredLanguage(*v)
+	}
+	return _u
+}
+
+// ClearScimPreferredLanguage clears the value of the "scim_preferred_language" field.
+func (_u *UserHistoryUpdate) ClearScimPreferredLanguage() *UserHistoryUpdate {
+	_u.mutation.ClearScimPreferredLanguage()
+	return _u
+}
+
+// SetScimLocale sets the "scim_locale" field.
+func (_u *UserHistoryUpdate) SetScimLocale(v string) *UserHistoryUpdate {
+	_u.mutation.SetScimLocale(v)
+	return _u
+}
+
+// SetNillableScimLocale sets the "scim_locale" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableScimLocale(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetScimLocale(*v)
+	}
+	return _u
+}
+
+// ClearScimLocale clears the value of the "scim_locale" field.
+func (_u *UserHistoryUpdate) ClearScimLocale() *UserHistoryUpdate {
+	_u.mutation.ClearScimLocale()
+	return _u
+}
+
 // Mutation returns the UserHistoryMutation object of the builder.
 func (_u *UserHistoryUpdate) Mutation() *UserHistoryMutation {
 	return _u.mutation
@@ -560,6 +660,36 @@ func (_u *UserHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.RoleCleared() {
 		_spec.ClearField(userhistory.FieldRole, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(userhistory.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(userhistory.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimUsername(); ok {
+		_spec.SetField(userhistory.FieldScimUsername, field.TypeString, value)
+	}
+	if _u.mutation.ScimUsernameCleared() {
+		_spec.ClearField(userhistory.FieldScimUsername, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(userhistory.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(userhistory.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimPreferredLanguage(); ok {
+		_spec.SetField(userhistory.FieldScimPreferredLanguage, field.TypeString, value)
+	}
+	if _u.mutation.ScimPreferredLanguageCleared() {
+		_spec.ClearField(userhistory.FieldScimPreferredLanguage, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimLocale(); ok {
+		_spec.SetField(userhistory.FieldScimLocale, field.TypeString, value)
+	}
+	if _u.mutation.ScimLocaleCleared() {
+		_spec.ClearField(userhistory.FieldScimLocale, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -901,6 +1031,106 @@ func (_u *UserHistoryUpdateOne) ClearRole() *UserHistoryUpdateOne {
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *UserHistoryUpdateOne) SetScimExternalID(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableScimExternalID(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *UserHistoryUpdateOne) ClearScimExternalID() *UserHistoryUpdateOne {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimUsername sets the "scim_username" field.
+func (_u *UserHistoryUpdateOne) SetScimUsername(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetScimUsername(v)
+	return _u
+}
+
+// SetNillableScimUsername sets the "scim_username" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableScimUsername(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimUsername(*v)
+	}
+	return _u
+}
+
+// ClearScimUsername clears the value of the "scim_username" field.
+func (_u *UserHistoryUpdateOne) ClearScimUsername() *UserHistoryUpdateOne {
+	_u.mutation.ClearScimUsername()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *UserHistoryUpdateOne) SetScimActive(v bool) *UserHistoryUpdateOne {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableScimActive(v *bool) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *UserHistoryUpdateOne) ClearScimActive() *UserHistoryUpdateOne {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimPreferredLanguage sets the "scim_preferred_language" field.
+func (_u *UserHistoryUpdateOne) SetScimPreferredLanguage(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetScimPreferredLanguage(v)
+	return _u
+}
+
+// SetNillableScimPreferredLanguage sets the "scim_preferred_language" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableScimPreferredLanguage(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimPreferredLanguage(*v)
+	}
+	return _u
+}
+
+// ClearScimPreferredLanguage clears the value of the "scim_preferred_language" field.
+func (_u *UserHistoryUpdateOne) ClearScimPreferredLanguage() *UserHistoryUpdateOne {
+	_u.mutation.ClearScimPreferredLanguage()
+	return _u
+}
+
+// SetScimLocale sets the "scim_locale" field.
+func (_u *UserHistoryUpdateOne) SetScimLocale(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetScimLocale(v)
+	return _u
+}
+
+// SetNillableScimLocale sets the "scim_locale" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableScimLocale(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimLocale(*v)
+	}
+	return _u
+}
+
+// ClearScimLocale clears the value of the "scim_locale" field.
+func (_u *UserHistoryUpdateOne) ClearScimLocale() *UserHistoryUpdateOne {
+	_u.mutation.ClearScimLocale()
+	return _u
+}
+
 // Mutation returns the UserHistoryMutation object of the builder.
 func (_u *UserHistoryUpdateOne) Mutation() *UserHistoryMutation {
 	return _u.mutation
@@ -1142,6 +1372,36 @@ func (_u *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHistory
 	}
 	if _u.mutation.RoleCleared() {
 		_spec.ClearField(userhistory.FieldRole, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(userhistory.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(userhistory.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimUsername(); ok {
+		_spec.SetField(userhistory.FieldScimUsername, field.TypeString, value)
+	}
+	if _u.mutation.ScimUsernameCleared() {
+		_spec.ClearField(userhistory.FieldScimUsername, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(userhistory.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(userhistory.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimPreferredLanguage(); ok {
+		_spec.SetField(userhistory.FieldScimPreferredLanguage, field.TypeString, value)
+	}
+	if _u.mutation.ScimPreferredLanguageCleared() {
+		_spec.ClearField(userhistory.FieldScimPreferredLanguage, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimLocale(); ok {
+		_spec.SetField(userhistory.FieldScimLocale, field.TypeString, value)
+	}
+	if _u.mutation.ScimLocaleCleared() {
+		_spec.ClearField(userhistory.FieldScimLocale, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

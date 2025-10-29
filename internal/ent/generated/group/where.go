@@ -137,6 +137,26 @@ func DisplayName(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldDisplayName, v))
 }
 
+// ScimExternalID applies equality check predicate on the "scim_external_id" field. It's identical to ScimExternalIDEQ.
+func ScimExternalID(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimDisplayName applies equality check predicate on the "scim_display_name" field. It's identical to ScimDisplayNameEQ.
+func ScimDisplayName(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimDisplayName, v))
+}
+
+// ScimActive applies equality check predicate on the "scim_active" field. It's identical to ScimActiveEQ.
+func ScimActive(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimGroupMailing applies equality check predicate on the "scim_group_mailing" field. It's identical to ScimGroupMailingEQ.
+func ScimGroupMailing(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimGroupMailing, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldCreatedAt, v))
@@ -1035,6 +1055,251 @@ func DisplayNameEqualFold(v string) predicate.Group {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.Group {
 	return predicate.Group(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// ScimExternalIDEQ applies the EQ predicate on the "scim_external_id" field.
+func ScimExternalIDEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDNEQ applies the NEQ predicate on the "scim_external_id" field.
+func ScimExternalIDNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIn applies the In predicate on the "scim_external_id" field.
+func ScimExternalIDIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDNotIn applies the NotIn predicate on the "scim_external_id" field.
+func ScimExternalIDNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDGT applies the GT predicate on the "scim_external_id" field.
+func ScimExternalIDGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDGTE applies the GTE predicate on the "scim_external_id" field.
+func ScimExternalIDGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLT applies the LT predicate on the "scim_external_id" field.
+func ScimExternalIDLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLTE applies the LTE predicate on the "scim_external_id" field.
+func ScimExternalIDLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContains applies the Contains predicate on the "scim_external_id" field.
+func ScimExternalIDContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasPrefix applies the HasPrefix predicate on the "scim_external_id" field.
+func ScimExternalIDHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasSuffix applies the HasSuffix predicate on the "scim_external_id" field.
+func ScimExternalIDHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIsNil applies the IsNil predicate on the "scim_external_id" field.
+func ScimExternalIDIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldScimExternalID))
+}
+
+// ScimExternalIDNotNil applies the NotNil predicate on the "scim_external_id" field.
+func ScimExternalIDNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldScimExternalID))
+}
+
+// ScimExternalIDEqualFold applies the EqualFold predicate on the "scim_external_id" field.
+func ScimExternalIDEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContainsFold applies the ContainsFold predicate on the "scim_external_id" field.
+func ScimExternalIDContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldScimExternalID, v))
+}
+
+// ScimDisplayNameEQ applies the EQ predicate on the "scim_display_name" field.
+func ScimDisplayNameEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameNEQ applies the NEQ predicate on the "scim_display_name" field.
+func ScimDisplayNameNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameIn applies the In predicate on the "scim_display_name" field.
+func ScimDisplayNameIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldScimDisplayName, vs...))
+}
+
+// ScimDisplayNameNotIn applies the NotIn predicate on the "scim_display_name" field.
+func ScimDisplayNameNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldScimDisplayName, vs...))
+}
+
+// ScimDisplayNameGT applies the GT predicate on the "scim_display_name" field.
+func ScimDisplayNameGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameGTE applies the GTE predicate on the "scim_display_name" field.
+func ScimDisplayNameGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameLT applies the LT predicate on the "scim_display_name" field.
+func ScimDisplayNameLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameLTE applies the LTE predicate on the "scim_display_name" field.
+func ScimDisplayNameLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameContains applies the Contains predicate on the "scim_display_name" field.
+func ScimDisplayNameContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameHasPrefix applies the HasPrefix predicate on the "scim_display_name" field.
+func ScimDisplayNameHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameHasSuffix applies the HasSuffix predicate on the "scim_display_name" field.
+func ScimDisplayNameHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameIsNil applies the IsNil predicate on the "scim_display_name" field.
+func ScimDisplayNameIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldScimDisplayName))
+}
+
+// ScimDisplayNameNotNil applies the NotNil predicate on the "scim_display_name" field.
+func ScimDisplayNameNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldScimDisplayName))
+}
+
+// ScimDisplayNameEqualFold applies the EqualFold predicate on the "scim_display_name" field.
+func ScimDisplayNameEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameContainsFold applies the ContainsFold predicate on the "scim_display_name" field.
+func ScimDisplayNameContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldScimDisplayName, v))
+}
+
+// ScimActiveEQ applies the EQ predicate on the "scim_active" field.
+func ScimActiveEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimActiveNEQ applies the NEQ predicate on the "scim_active" field.
+func ScimActiveNEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldScimActive, v))
+}
+
+// ScimActiveIsNil applies the IsNil predicate on the "scim_active" field.
+func ScimActiveIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldScimActive))
+}
+
+// ScimActiveNotNil applies the NotNil predicate on the "scim_active" field.
+func ScimActiveNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldScimActive))
+}
+
+// ScimGroupMailingEQ applies the EQ predicate on the "scim_group_mailing" field.
+func ScimGroupMailingEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingNEQ applies the NEQ predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingIn applies the In predicate on the "scim_group_mailing" field.
+func ScimGroupMailingIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldScimGroupMailing, vs...))
+}
+
+// ScimGroupMailingNotIn applies the NotIn predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldScimGroupMailing, vs...))
+}
+
+// ScimGroupMailingGT applies the GT predicate on the "scim_group_mailing" field.
+func ScimGroupMailingGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingGTE applies the GTE predicate on the "scim_group_mailing" field.
+func ScimGroupMailingGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingLT applies the LT predicate on the "scim_group_mailing" field.
+func ScimGroupMailingLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingLTE applies the LTE predicate on the "scim_group_mailing" field.
+func ScimGroupMailingLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingContains applies the Contains predicate on the "scim_group_mailing" field.
+func ScimGroupMailingContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingHasPrefix applies the HasPrefix predicate on the "scim_group_mailing" field.
+func ScimGroupMailingHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingHasSuffix applies the HasSuffix predicate on the "scim_group_mailing" field.
+func ScimGroupMailingHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingIsNil applies the IsNil predicate on the "scim_group_mailing" field.
+func ScimGroupMailingIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldScimGroupMailing))
+}
+
+// ScimGroupMailingNotNil applies the NotNil predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldScimGroupMailing))
+}
+
+// ScimGroupMailingEqualFold applies the EqualFold predicate on the "scim_group_mailing" field.
+func ScimGroupMailingEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingContainsFold applies the ContainsFold predicate on the "scim_group_mailing" field.
+func ScimGroupMailingContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldScimGroupMailing, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

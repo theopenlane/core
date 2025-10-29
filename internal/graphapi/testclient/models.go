@@ -5457,7 +5457,15 @@ type CreateGroupInput struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                          *string                  `json:"displayName,omitempty"`
+	DisplayName *string `json:"displayName,omitempty"`
+	// the SCIM external ID for the group
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName *string `json:"scimDisplayName,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing                     *string                  `json:"scimGroupMailing,omitempty"`
 	OwnerID                              *string                  `json:"ownerID,omitempty"`
 	ProgramEditorIDs                     []string                 `json:"programEditorIDs,omitempty"`
 	ProgramBlockedGroupIDs               []string                 `json:"programBlockedGroupIDs,omitempty"`
@@ -6579,24 +6587,34 @@ type CreateUserInput struct {
 	// auth provider used to register the account
 	AuthProvider *enums.AuthProvider `json:"authProvider,omitempty"`
 	// the user's role
-	Role                     *enums.Role `json:"role,omitempty"`
-	PersonalAccessTokenIDs   []string    `json:"personalAccessTokenIDs,omitempty"`
-	TfaSettingIDs            []string    `json:"tfaSettingIDs,omitempty"`
-	SettingID                string      `json:"settingID"`
-	GroupIDs                 []string    `json:"groupIDs,omitempty"`
-	OrganizationIDs          []string    `json:"organizationIDs,omitempty"`
-	WebauthnIDs              []string    `json:"webauthnIDs,omitempty"`
-	FileIDs                  []string    `json:"fileIDs,omitempty"`
-	AvatarFileID             *string     `json:"avatarFileID,omitempty"`
-	EventIDs                 []string    `json:"eventIDs,omitempty"`
-	ActionPlanIDs            []string    `json:"actionPlanIDs,omitempty"`
-	SubcontrolIDs            []string    `json:"subcontrolIDs,omitempty"`
-	AssignerTaskIDs          []string    `json:"assignerTaskIDs,omitempty"`
-	AssigneeTaskIDs          []string    `json:"assigneeTaskIDs,omitempty"`
-	ProgramIDs               []string    `json:"programIDs,omitempty"`
-	ProgramOwnerID           *string     `json:"programOwnerID,omitempty"`
-	ImpersonationEventIDs    []string    `json:"impersonationEventIDs,omitempty"`
-	TargetedImpersonationIDs []string    `json:"targetedImpersonationIDs,omitempty"`
+	Role *enums.Role `json:"role,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM username for the user
+	ScimUsername *string `json:"scimUsername,omitempty"`
+	// whether the SCIM user is active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage *string `json:"scimPreferredLanguage,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale               *string  `json:"scimLocale,omitempty"`
+	PersonalAccessTokenIDs   []string `json:"personalAccessTokenIDs,omitempty"`
+	TfaSettingIDs            []string `json:"tfaSettingIDs,omitempty"`
+	SettingID                string   `json:"settingID"`
+	GroupIDs                 []string `json:"groupIDs,omitempty"`
+	OrganizationIDs          []string `json:"organizationIDs,omitempty"`
+	WebauthnIDs              []string `json:"webauthnIDs,omitempty"`
+	FileIDs                  []string `json:"fileIDs,omitempty"`
+	AvatarFileID             *string  `json:"avatarFileID,omitempty"`
+	EventIDs                 []string `json:"eventIDs,omitempty"`
+	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	AssignerTaskIDs          []string `json:"assignerTaskIDs,omitempty"`
+	AssigneeTaskIDs          []string `json:"assigneeTaskIDs,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	ProgramOwnerID           *string  `json:"programOwnerID,omitempty"`
+	ImpersonationEventIDs    []string `json:"impersonationEventIDs,omitempty"`
+	TargetedImpersonationIDs []string `json:"targetedImpersonationIDs,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -11249,7 +11267,15 @@ type Group struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                        string                           `json:"displayName"`
+	DisplayName string `json:"displayName"`
+	// the SCIM external ID for the group
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName *string `json:"scimDisplayName,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing                   *string                          `json:"scimGroupMailing,omitempty"`
 	Owner                              *Organization                    `json:"owner,omitempty"`
 	ProgramEditors                     *ProgramConnection               `json:"programEditors"`
 	ProgramBlockedGroups               *ProgramConnection               `json:"programBlockedGroups"`
@@ -11362,6 +11388,14 @@ type GroupHistory struct {
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
+	// the SCIM external ID for the group
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName *string `json:"scimDisplayName,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing *string `json:"scimGroupMailing,omitempty"`
 }
 
 func (GroupHistory) IsNode() {}
@@ -11556,6 +11590,59 @@ type GroupHistoryWhereInput struct {
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// scim_external_id field predicates
+	ScimExternalID             *string  `json:"scimExternalID,omitempty"`
+	ScimExternalIdneq          *string  `json:"scimExternalIDNEQ,omitempty"`
+	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
+	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
+	ScimExternalIdgt           *string  `json:"scimExternalIDGT,omitempty"`
+	ScimExternalIdgte          *string  `json:"scimExternalIDGTE,omitempty"`
+	ScimExternalIdlt           *string  `json:"scimExternalIDLT,omitempty"`
+	ScimExternalIdlte          *string  `json:"scimExternalIDLTE,omitempty"`
+	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
+	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
+	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
+	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
+	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
+	ScimExternalIDEqualFold    *string  `json:"scimExternalIDEqualFold,omitempty"`
+	ScimExternalIDContainsFold *string  `json:"scimExternalIDContainsFold,omitempty"`
+	// scim_display_name field predicates
+	ScimDisplayName             *string  `json:"scimDisplayName,omitempty"`
+	ScimDisplayNameNeq          *string  `json:"scimDisplayNameNEQ,omitempty"`
+	ScimDisplayNameIn           []string `json:"scimDisplayNameIn,omitempty"`
+	ScimDisplayNameNotIn        []string `json:"scimDisplayNameNotIn,omitempty"`
+	ScimDisplayNameGt           *string  `json:"scimDisplayNameGT,omitempty"`
+	ScimDisplayNameGte          *string  `json:"scimDisplayNameGTE,omitempty"`
+	ScimDisplayNameLt           *string  `json:"scimDisplayNameLT,omitempty"`
+	ScimDisplayNameLte          *string  `json:"scimDisplayNameLTE,omitempty"`
+	ScimDisplayNameContains     *string  `json:"scimDisplayNameContains,omitempty"`
+	ScimDisplayNameHasPrefix    *string  `json:"scimDisplayNameHasPrefix,omitempty"`
+	ScimDisplayNameHasSuffix    *string  `json:"scimDisplayNameHasSuffix,omitempty"`
+	ScimDisplayNameIsNil        *bool    `json:"scimDisplayNameIsNil,omitempty"`
+	ScimDisplayNameNotNil       *bool    `json:"scimDisplayNameNotNil,omitempty"`
+	ScimDisplayNameEqualFold    *string  `json:"scimDisplayNameEqualFold,omitempty"`
+	ScimDisplayNameContainsFold *string  `json:"scimDisplayNameContainsFold,omitempty"`
+	// scim_active field predicates
+	ScimActive       *bool `json:"scimActive,omitempty"`
+	ScimActiveNeq    *bool `json:"scimActiveNEQ,omitempty"`
+	ScimActiveIsNil  *bool `json:"scimActiveIsNil,omitempty"`
+	ScimActiveNotNil *bool `json:"scimActiveNotNil,omitempty"`
+	// scim_group_mailing field predicates
+	ScimGroupMailing             *string  `json:"scimGroupMailing,omitempty"`
+	ScimGroupMailingNeq          *string  `json:"scimGroupMailingNEQ,omitempty"`
+	ScimGroupMailingIn           []string `json:"scimGroupMailingIn,omitempty"`
+	ScimGroupMailingNotIn        []string `json:"scimGroupMailingNotIn,omitempty"`
+	ScimGroupMailingGt           *string  `json:"scimGroupMailingGT,omitempty"`
+	ScimGroupMailingGte          *string  `json:"scimGroupMailingGTE,omitempty"`
+	ScimGroupMailingLt           *string  `json:"scimGroupMailingLT,omitempty"`
+	ScimGroupMailingLte          *string  `json:"scimGroupMailingLTE,omitempty"`
+	ScimGroupMailingContains     *string  `json:"scimGroupMailingContains,omitempty"`
+	ScimGroupMailingHasPrefix    *string  `json:"scimGroupMailingHasPrefix,omitempty"`
+	ScimGroupMailingHasSuffix    *string  `json:"scimGroupMailingHasSuffix,omitempty"`
+	ScimGroupMailingIsNil        *bool    `json:"scimGroupMailingIsNil,omitempty"`
+	ScimGroupMailingNotNil       *bool    `json:"scimGroupMailingNotNil,omitempty"`
+	ScimGroupMailingEqualFold    *string  `json:"scimGroupMailingEqualFold,omitempty"`
+	ScimGroupMailingContainsFold *string  `json:"scimGroupMailingContainsFold,omitempty"`
 }
 
 // GroupMembersInput is used to create members for a group
@@ -12517,6 +12604,59 @@ type GroupWhereInput struct {
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// scim_external_id field predicates
+	ScimExternalID             *string  `json:"scimExternalID,omitempty"`
+	ScimExternalIdneq          *string  `json:"scimExternalIDNEQ,omitempty"`
+	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
+	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
+	ScimExternalIdgt           *string  `json:"scimExternalIDGT,omitempty"`
+	ScimExternalIdgte          *string  `json:"scimExternalIDGTE,omitempty"`
+	ScimExternalIdlt           *string  `json:"scimExternalIDLT,omitempty"`
+	ScimExternalIdlte          *string  `json:"scimExternalIDLTE,omitempty"`
+	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
+	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
+	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
+	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
+	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
+	ScimExternalIDEqualFold    *string  `json:"scimExternalIDEqualFold,omitempty"`
+	ScimExternalIDContainsFold *string  `json:"scimExternalIDContainsFold,omitempty"`
+	// scim_display_name field predicates
+	ScimDisplayName             *string  `json:"scimDisplayName,omitempty"`
+	ScimDisplayNameNeq          *string  `json:"scimDisplayNameNEQ,omitempty"`
+	ScimDisplayNameIn           []string `json:"scimDisplayNameIn,omitempty"`
+	ScimDisplayNameNotIn        []string `json:"scimDisplayNameNotIn,omitempty"`
+	ScimDisplayNameGt           *string  `json:"scimDisplayNameGT,omitempty"`
+	ScimDisplayNameGte          *string  `json:"scimDisplayNameGTE,omitempty"`
+	ScimDisplayNameLt           *string  `json:"scimDisplayNameLT,omitempty"`
+	ScimDisplayNameLte          *string  `json:"scimDisplayNameLTE,omitempty"`
+	ScimDisplayNameContains     *string  `json:"scimDisplayNameContains,omitempty"`
+	ScimDisplayNameHasPrefix    *string  `json:"scimDisplayNameHasPrefix,omitempty"`
+	ScimDisplayNameHasSuffix    *string  `json:"scimDisplayNameHasSuffix,omitempty"`
+	ScimDisplayNameIsNil        *bool    `json:"scimDisplayNameIsNil,omitempty"`
+	ScimDisplayNameNotNil       *bool    `json:"scimDisplayNameNotNil,omitempty"`
+	ScimDisplayNameEqualFold    *string  `json:"scimDisplayNameEqualFold,omitempty"`
+	ScimDisplayNameContainsFold *string  `json:"scimDisplayNameContainsFold,omitempty"`
+	// scim_active field predicates
+	ScimActive       *bool `json:"scimActive,omitempty"`
+	ScimActiveNeq    *bool `json:"scimActiveNEQ,omitempty"`
+	ScimActiveIsNil  *bool `json:"scimActiveIsNil,omitempty"`
+	ScimActiveNotNil *bool `json:"scimActiveNotNil,omitempty"`
+	// scim_group_mailing field predicates
+	ScimGroupMailing             *string  `json:"scimGroupMailing,omitempty"`
+	ScimGroupMailingNeq          *string  `json:"scimGroupMailingNEQ,omitempty"`
+	ScimGroupMailingIn           []string `json:"scimGroupMailingIn,omitempty"`
+	ScimGroupMailingNotIn        []string `json:"scimGroupMailingNotIn,omitempty"`
+	ScimGroupMailingGt           *string  `json:"scimGroupMailingGT,omitempty"`
+	ScimGroupMailingGte          *string  `json:"scimGroupMailingGTE,omitempty"`
+	ScimGroupMailingLt           *string  `json:"scimGroupMailingLT,omitempty"`
+	ScimGroupMailingLte          *string  `json:"scimGroupMailingLTE,omitempty"`
+	ScimGroupMailingContains     *string  `json:"scimGroupMailingContains,omitempty"`
+	ScimGroupMailingHasPrefix    *string  `json:"scimGroupMailingHasPrefix,omitempty"`
+	ScimGroupMailingHasSuffix    *string  `json:"scimGroupMailingHasSuffix,omitempty"`
+	ScimGroupMailingIsNil        *bool    `json:"scimGroupMailingIsNil,omitempty"`
+	ScimGroupMailingNotNil       *bool    `json:"scimGroupMailingNotNil,omitempty"`
+	ScimGroupMailingEqualFold    *string  `json:"scimGroupMailingEqualFold,omitempty"`
+	ScimGroupMailingContainsFold *string  `json:"scimGroupMailingContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -33043,7 +33183,19 @@ type UpdateGroupInput struct {
 	LogoURL      *string `json:"logoURL,omitempty"`
 	ClearLogoURL *bool   `json:"clearLogoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                                *string                       `json:"displayName,omitempty"`
+	DisplayName *string `json:"displayName,omitempty"`
+	// the SCIM external ID for the group
+	ScimExternalID      *string `json:"scimExternalID,omitempty"`
+	ClearScimExternalID *bool   `json:"clearScimExternalID,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName      *string `json:"scimDisplayName,omitempty"`
+	ClearScimDisplayName *bool   `json:"clearScimDisplayName,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive      *bool `json:"scimActive,omitempty"`
+	ClearScimActive *bool `json:"clearScimActive,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing                           *string                       `json:"scimGroupMailing,omitempty"`
+	ClearScimGroupMailing                      *bool                         `json:"clearScimGroupMailing,omitempty"`
 	OwnerID                                    *string                       `json:"ownerID,omitempty"`
 	ClearOwner                                 *bool                         `json:"clearOwner,omitempty"`
 	AddProgramEditorIDs                        []string                      `json:"addProgramEditorIDs,omitempty"`
@@ -34851,55 +35003,70 @@ type UpdateUserInput struct {
 	// auth provider used to register the account
 	AuthProvider *enums.AuthProvider `json:"authProvider,omitempty"`
 	// the user's role
-	Role                           *enums.Role `json:"role,omitempty"`
-	ClearRole                      *bool       `json:"clearRole,omitempty"`
-	AddPersonalAccessTokenIDs      []string    `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs   []string    `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessTokens      *bool       `json:"clearPersonalAccessTokens,omitempty"`
-	AddTfaSettingIDs               []string    `json:"addTfaSettingIDs,omitempty"`
-	RemoveTfaSettingIDs            []string    `json:"removeTfaSettingIDs,omitempty"`
-	ClearTfaSettings               *bool       `json:"clearTfaSettings,omitempty"`
-	SettingID                      *string     `json:"settingID,omitempty"`
-	AddGroupIDs                    []string    `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs                 []string    `json:"removeGroupIDs,omitempty"`
-	ClearGroups                    *bool       `json:"clearGroups,omitempty"`
-	AddOrganizationIDs             []string    `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs          []string    `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganizations             *bool       `json:"clearOrganizations,omitempty"`
-	AddWebauthnIDs                 []string    `json:"addWebauthnIDs,omitempty"`
-	RemoveWebauthnIDs              []string    `json:"removeWebauthnIDs,omitempty"`
-	ClearWebauthns                 *bool       `json:"clearWebauthns,omitempty"`
-	AddFileIDs                     []string    `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                  []string    `json:"removeFileIDs,omitempty"`
-	ClearFiles                     *bool       `json:"clearFiles,omitempty"`
-	AvatarFileID                   *string     `json:"avatarFileID,omitempty"`
-	ClearAvatarFile                *bool       `json:"clearAvatarFile,omitempty"`
-	AddEventIDs                    []string    `json:"addEventIDs,omitempty"`
-	RemoveEventIDs                 []string    `json:"removeEventIDs,omitempty"`
-	ClearEvents                    *bool       `json:"clearEvents,omitempty"`
-	AddActionPlanIDs               []string    `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs            []string    `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans               *bool       `json:"clearActionPlans,omitempty"`
-	AddSubcontrolIDs               []string    `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs            []string    `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols               *bool       `json:"clearSubcontrols,omitempty"`
-	AddAssignerTaskIDs             []string    `json:"addAssignerTaskIDs,omitempty"`
-	RemoveAssignerTaskIDs          []string    `json:"removeAssignerTaskIDs,omitempty"`
-	ClearAssignerTasks             *bool       `json:"clearAssignerTasks,omitempty"`
-	AddAssigneeTaskIDs             []string    `json:"addAssigneeTaskIDs,omitempty"`
-	RemoveAssigneeTaskIDs          []string    `json:"removeAssigneeTaskIDs,omitempty"`
-	ClearAssigneeTasks             *bool       `json:"clearAssigneeTasks,omitempty"`
-	AddProgramIDs                  []string    `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs               []string    `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                  *bool       `json:"clearPrograms,omitempty"`
-	ProgramOwnerID                 *string     `json:"programOwnerID,omitempty"`
-	ClearProgramOwner              *bool       `json:"clearProgramOwner,omitempty"`
-	AddImpersonationEventIDs       []string    `json:"addImpersonationEventIDs,omitempty"`
-	RemoveImpersonationEventIDs    []string    `json:"removeImpersonationEventIDs,omitempty"`
-	ClearImpersonationEvents       *bool       `json:"clearImpersonationEvents,omitempty"`
-	AddTargetedImpersonationIDs    []string    `json:"addTargetedImpersonationIDs,omitempty"`
-	RemoveTargetedImpersonationIDs []string    `json:"removeTargetedImpersonationIDs,omitempty"`
-	ClearTargetedImpersonations    *bool       `json:"clearTargetedImpersonations,omitempty"`
+	Role      *enums.Role `json:"role,omitempty"`
+	ClearRole *bool       `json:"clearRole,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID      *string `json:"scimExternalID,omitempty"`
+	ClearScimExternalID *bool   `json:"clearScimExternalID,omitempty"`
+	// the SCIM username for the user
+	ScimUsername      *string `json:"scimUsername,omitempty"`
+	ClearScimUsername *bool   `json:"clearScimUsername,omitempty"`
+	// whether the SCIM user is active
+	ScimActive      *bool `json:"scimActive,omitempty"`
+	ClearScimActive *bool `json:"clearScimActive,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage      *string `json:"scimPreferredLanguage,omitempty"`
+	ClearScimPreferredLanguage *bool   `json:"clearScimPreferredLanguage,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale                     *string  `json:"scimLocale,omitempty"`
+	ClearScimLocale                *bool    `json:"clearScimLocale,omitempty"`
+	AddPersonalAccessTokenIDs      []string `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs   []string `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessTokens      *bool    `json:"clearPersonalAccessTokens,omitempty"`
+	AddTfaSettingIDs               []string `json:"addTfaSettingIDs,omitempty"`
+	RemoveTfaSettingIDs            []string `json:"removeTfaSettingIDs,omitempty"`
+	ClearTfaSettings               *bool    `json:"clearTfaSettings,omitempty"`
+	SettingID                      *string  `json:"settingID,omitempty"`
+	AddGroupIDs                    []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                 []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups                    *bool    `json:"clearGroups,omitempty"`
+	AddOrganizationIDs             []string `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs          []string `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganizations             *bool    `json:"clearOrganizations,omitempty"`
+	AddWebauthnIDs                 []string `json:"addWebauthnIDs,omitempty"`
+	RemoveWebauthnIDs              []string `json:"removeWebauthnIDs,omitempty"`
+	ClearWebauthns                 *bool    `json:"clearWebauthns,omitempty"`
+	AddFileIDs                     []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                  []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                     *bool    `json:"clearFiles,omitempty"`
+	AvatarFileID                   *string  `json:"avatarFileID,omitempty"`
+	ClearAvatarFile                *bool    `json:"clearAvatarFile,omitempty"`
+	AddEventIDs                    []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs                 []string `json:"removeEventIDs,omitempty"`
+	ClearEvents                    *bool    `json:"clearEvents,omitempty"`
+	AddActionPlanIDs               []string `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs            []string `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans               *bool    `json:"clearActionPlans,omitempty"`
+	AddSubcontrolIDs               []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool    `json:"clearSubcontrols,omitempty"`
+	AddAssignerTaskIDs             []string `json:"addAssignerTaskIDs,omitempty"`
+	RemoveAssignerTaskIDs          []string `json:"removeAssignerTaskIDs,omitempty"`
+	ClearAssignerTasks             *bool    `json:"clearAssignerTasks,omitempty"`
+	AddAssigneeTaskIDs             []string `json:"addAssigneeTaskIDs,omitempty"`
+	RemoveAssigneeTaskIDs          []string `json:"removeAssigneeTaskIDs,omitempty"`
+	ClearAssigneeTasks             *bool    `json:"clearAssigneeTasks,omitempty"`
+	AddProgramIDs                  []string `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool    `json:"clearPrograms,omitempty"`
+	ProgramOwnerID                 *string  `json:"programOwnerID,omitempty"`
+	ClearProgramOwner              *bool    `json:"clearProgramOwner,omitempty"`
+	AddImpersonationEventIDs       []string `json:"addImpersonationEventIDs,omitempty"`
+	RemoveImpersonationEventIDs    []string `json:"removeImpersonationEventIDs,omitempty"`
+	ClearImpersonationEvents       *bool    `json:"clearImpersonationEvents,omitempty"`
+	AddTargetedImpersonationIDs    []string `json:"addTargetedImpersonationIDs,omitempty"`
+	RemoveTargetedImpersonationIDs []string `json:"removeTargetedImpersonationIDs,omitempty"`
+	ClearTargetedImpersonations    *bool    `json:"clearTargetedImpersonations,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.
@@ -34963,7 +35130,17 @@ type User struct {
 	// auth provider used to register the account
 	AuthProvider enums.AuthProvider `json:"authProvider"`
 	// the user's role
-	Role                 *enums.Role                    `json:"role,omitempty"`
+	Role *enums.Role `json:"role,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM username for the user
+	ScimUsername *string `json:"scimUsername,omitempty"`
+	// whether the SCIM user is active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage *string `json:"scimPreferredLanguage,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale           *string                        `json:"scimLocale,omitempty"`
 	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	TfaSettings          *TFASettingConnection          `json:"tfaSettings"`
 	Setting              *UserSetting                   `json:"setting"`
@@ -35056,6 +35233,16 @@ type UserHistory struct {
 	AuthProvider enums.AuthProvider `json:"authProvider"`
 	// the user's role
 	Role *enums.Role `json:"role,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID *string `json:"scimExternalID,omitempty"`
+	// the SCIM username for the user
+	ScimUsername *string `json:"scimUsername,omitempty"`
+	// whether the SCIM user is active
+	ScimActive *bool `json:"scimActive,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage *string `json:"scimPreferredLanguage,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale *string `json:"scimLocale,omitempty"`
 }
 
 func (UserHistory) IsNode() {}
@@ -35350,6 +35537,75 @@ type UserHistoryWhereInput struct {
 	RoleNotIn  []enums.Role `json:"roleNotIn,omitempty"`
 	RoleIsNil  *bool        `json:"roleIsNil,omitempty"`
 	RoleNotNil *bool        `json:"roleNotNil,omitempty"`
+	// scim_external_id field predicates
+	ScimExternalID             *string  `json:"scimExternalID,omitempty"`
+	ScimExternalIdneq          *string  `json:"scimExternalIDNEQ,omitempty"`
+	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
+	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
+	ScimExternalIdgt           *string  `json:"scimExternalIDGT,omitempty"`
+	ScimExternalIdgte          *string  `json:"scimExternalIDGTE,omitempty"`
+	ScimExternalIdlt           *string  `json:"scimExternalIDLT,omitempty"`
+	ScimExternalIdlte          *string  `json:"scimExternalIDLTE,omitempty"`
+	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
+	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
+	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
+	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
+	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
+	ScimExternalIDEqualFold    *string  `json:"scimExternalIDEqualFold,omitempty"`
+	ScimExternalIDContainsFold *string  `json:"scimExternalIDContainsFold,omitempty"`
+	// scim_username field predicates
+	ScimUsername             *string  `json:"scimUsername,omitempty"`
+	ScimUsernameNeq          *string  `json:"scimUsernameNEQ,omitempty"`
+	ScimUsernameIn           []string `json:"scimUsernameIn,omitempty"`
+	ScimUsernameNotIn        []string `json:"scimUsernameNotIn,omitempty"`
+	ScimUsernameGt           *string  `json:"scimUsernameGT,omitempty"`
+	ScimUsernameGte          *string  `json:"scimUsernameGTE,omitempty"`
+	ScimUsernameLt           *string  `json:"scimUsernameLT,omitempty"`
+	ScimUsernameLte          *string  `json:"scimUsernameLTE,omitempty"`
+	ScimUsernameContains     *string  `json:"scimUsernameContains,omitempty"`
+	ScimUsernameHasPrefix    *string  `json:"scimUsernameHasPrefix,omitempty"`
+	ScimUsernameHasSuffix    *string  `json:"scimUsernameHasSuffix,omitempty"`
+	ScimUsernameIsNil        *bool    `json:"scimUsernameIsNil,omitempty"`
+	ScimUsernameNotNil       *bool    `json:"scimUsernameNotNil,omitempty"`
+	ScimUsernameEqualFold    *string  `json:"scimUsernameEqualFold,omitempty"`
+	ScimUsernameContainsFold *string  `json:"scimUsernameContainsFold,omitempty"`
+	// scim_active field predicates
+	ScimActive       *bool `json:"scimActive,omitempty"`
+	ScimActiveNeq    *bool `json:"scimActiveNEQ,omitempty"`
+	ScimActiveIsNil  *bool `json:"scimActiveIsNil,omitempty"`
+	ScimActiveNotNil *bool `json:"scimActiveNotNil,omitempty"`
+	// scim_preferred_language field predicates
+	ScimPreferredLanguage             *string  `json:"scimPreferredLanguage,omitempty"`
+	ScimPreferredLanguageNeq          *string  `json:"scimPreferredLanguageNEQ,omitempty"`
+	ScimPreferredLanguageIn           []string `json:"scimPreferredLanguageIn,omitempty"`
+	ScimPreferredLanguageNotIn        []string `json:"scimPreferredLanguageNotIn,omitempty"`
+	ScimPreferredLanguageGt           *string  `json:"scimPreferredLanguageGT,omitempty"`
+	ScimPreferredLanguageGte          *string  `json:"scimPreferredLanguageGTE,omitempty"`
+	ScimPreferredLanguageLt           *string  `json:"scimPreferredLanguageLT,omitempty"`
+	ScimPreferredLanguageLte          *string  `json:"scimPreferredLanguageLTE,omitempty"`
+	ScimPreferredLanguageContains     *string  `json:"scimPreferredLanguageContains,omitempty"`
+	ScimPreferredLanguageHasPrefix    *string  `json:"scimPreferredLanguageHasPrefix,omitempty"`
+	ScimPreferredLanguageHasSuffix    *string  `json:"scimPreferredLanguageHasSuffix,omitempty"`
+	ScimPreferredLanguageIsNil        *bool    `json:"scimPreferredLanguageIsNil,omitempty"`
+	ScimPreferredLanguageNotNil       *bool    `json:"scimPreferredLanguageNotNil,omitempty"`
+	ScimPreferredLanguageEqualFold    *string  `json:"scimPreferredLanguageEqualFold,omitempty"`
+	ScimPreferredLanguageContainsFold *string  `json:"scimPreferredLanguageContainsFold,omitempty"`
+	// scim_locale field predicates
+	ScimLocale             *string  `json:"scimLocale,omitempty"`
+	ScimLocaleNeq          *string  `json:"scimLocaleNEQ,omitempty"`
+	ScimLocaleIn           []string `json:"scimLocaleIn,omitempty"`
+	ScimLocaleNotIn        []string `json:"scimLocaleNotIn,omitempty"`
+	ScimLocaleGt           *string  `json:"scimLocaleGT,omitempty"`
+	ScimLocaleGte          *string  `json:"scimLocaleGTE,omitempty"`
+	ScimLocaleLt           *string  `json:"scimLocaleLT,omitempty"`
+	ScimLocaleLte          *string  `json:"scimLocaleLTE,omitempty"`
+	ScimLocaleContains     *string  `json:"scimLocaleContains,omitempty"`
+	ScimLocaleHasPrefix    *string  `json:"scimLocaleHasPrefix,omitempty"`
+	ScimLocaleHasSuffix    *string  `json:"scimLocaleHasSuffix,omitempty"`
+	ScimLocaleIsNil        *bool    `json:"scimLocaleIsNil,omitempty"`
+	ScimLocaleNotNil       *bool    `json:"scimLocaleNotNil,omitempty"`
+	ScimLocaleEqualFold    *string  `json:"scimLocaleEqualFold,omitempty"`
+	ScimLocaleContainsFold *string  `json:"scimLocaleContainsFold,omitempty"`
 }
 
 // Ordering options for User connections
@@ -36030,6 +36286,75 @@ type UserWhereInput struct {
 	RoleNotIn  []enums.Role `json:"roleNotIn,omitempty"`
 	RoleIsNil  *bool        `json:"roleIsNil,omitempty"`
 	RoleNotNil *bool        `json:"roleNotNil,omitempty"`
+	// scim_external_id field predicates
+	ScimExternalID             *string  `json:"scimExternalID,omitempty"`
+	ScimExternalIdneq          *string  `json:"scimExternalIDNEQ,omitempty"`
+	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
+	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
+	ScimExternalIdgt           *string  `json:"scimExternalIDGT,omitempty"`
+	ScimExternalIdgte          *string  `json:"scimExternalIDGTE,omitempty"`
+	ScimExternalIdlt           *string  `json:"scimExternalIDLT,omitempty"`
+	ScimExternalIdlte          *string  `json:"scimExternalIDLTE,omitempty"`
+	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
+	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
+	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
+	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
+	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
+	ScimExternalIDEqualFold    *string  `json:"scimExternalIDEqualFold,omitempty"`
+	ScimExternalIDContainsFold *string  `json:"scimExternalIDContainsFold,omitempty"`
+	// scim_username field predicates
+	ScimUsername             *string  `json:"scimUsername,omitempty"`
+	ScimUsernameNeq          *string  `json:"scimUsernameNEQ,omitempty"`
+	ScimUsernameIn           []string `json:"scimUsernameIn,omitempty"`
+	ScimUsernameNotIn        []string `json:"scimUsernameNotIn,omitempty"`
+	ScimUsernameGt           *string  `json:"scimUsernameGT,omitempty"`
+	ScimUsernameGte          *string  `json:"scimUsernameGTE,omitempty"`
+	ScimUsernameLt           *string  `json:"scimUsernameLT,omitempty"`
+	ScimUsernameLte          *string  `json:"scimUsernameLTE,omitempty"`
+	ScimUsernameContains     *string  `json:"scimUsernameContains,omitempty"`
+	ScimUsernameHasPrefix    *string  `json:"scimUsernameHasPrefix,omitempty"`
+	ScimUsernameHasSuffix    *string  `json:"scimUsernameHasSuffix,omitempty"`
+	ScimUsernameIsNil        *bool    `json:"scimUsernameIsNil,omitempty"`
+	ScimUsernameNotNil       *bool    `json:"scimUsernameNotNil,omitempty"`
+	ScimUsernameEqualFold    *string  `json:"scimUsernameEqualFold,omitempty"`
+	ScimUsernameContainsFold *string  `json:"scimUsernameContainsFold,omitempty"`
+	// scim_active field predicates
+	ScimActive       *bool `json:"scimActive,omitempty"`
+	ScimActiveNeq    *bool `json:"scimActiveNEQ,omitempty"`
+	ScimActiveIsNil  *bool `json:"scimActiveIsNil,omitempty"`
+	ScimActiveNotNil *bool `json:"scimActiveNotNil,omitempty"`
+	// scim_preferred_language field predicates
+	ScimPreferredLanguage             *string  `json:"scimPreferredLanguage,omitempty"`
+	ScimPreferredLanguageNeq          *string  `json:"scimPreferredLanguageNEQ,omitempty"`
+	ScimPreferredLanguageIn           []string `json:"scimPreferredLanguageIn,omitempty"`
+	ScimPreferredLanguageNotIn        []string `json:"scimPreferredLanguageNotIn,omitempty"`
+	ScimPreferredLanguageGt           *string  `json:"scimPreferredLanguageGT,omitempty"`
+	ScimPreferredLanguageGte          *string  `json:"scimPreferredLanguageGTE,omitempty"`
+	ScimPreferredLanguageLt           *string  `json:"scimPreferredLanguageLT,omitempty"`
+	ScimPreferredLanguageLte          *string  `json:"scimPreferredLanguageLTE,omitempty"`
+	ScimPreferredLanguageContains     *string  `json:"scimPreferredLanguageContains,omitempty"`
+	ScimPreferredLanguageHasPrefix    *string  `json:"scimPreferredLanguageHasPrefix,omitempty"`
+	ScimPreferredLanguageHasSuffix    *string  `json:"scimPreferredLanguageHasSuffix,omitempty"`
+	ScimPreferredLanguageIsNil        *bool    `json:"scimPreferredLanguageIsNil,omitempty"`
+	ScimPreferredLanguageNotNil       *bool    `json:"scimPreferredLanguageNotNil,omitempty"`
+	ScimPreferredLanguageEqualFold    *string  `json:"scimPreferredLanguageEqualFold,omitempty"`
+	ScimPreferredLanguageContainsFold *string  `json:"scimPreferredLanguageContainsFold,omitempty"`
+	// scim_locale field predicates
+	ScimLocale             *string  `json:"scimLocale,omitempty"`
+	ScimLocaleNeq          *string  `json:"scimLocaleNEQ,omitempty"`
+	ScimLocaleIn           []string `json:"scimLocaleIn,omitempty"`
+	ScimLocaleNotIn        []string `json:"scimLocaleNotIn,omitempty"`
+	ScimLocaleGt           *string  `json:"scimLocaleGT,omitempty"`
+	ScimLocaleGte          *string  `json:"scimLocaleGTE,omitempty"`
+	ScimLocaleLt           *string  `json:"scimLocaleLT,omitempty"`
+	ScimLocaleLte          *string  `json:"scimLocaleLTE,omitempty"`
+	ScimLocaleContains     *string  `json:"scimLocaleContains,omitempty"`
+	ScimLocaleHasPrefix    *string  `json:"scimLocaleHasPrefix,omitempty"`
+	ScimLocaleHasSuffix    *string  `json:"scimLocaleHasSuffix,omitempty"`
+	ScimLocaleIsNil        *bool    `json:"scimLocaleIsNil,omitempty"`
+	ScimLocaleNotNil       *bool    `json:"scimLocaleNotNil,omitempty"`
+	ScimLocaleEqualFold    *string  `json:"scimLocaleEqualFold,omitempty"`
+	ScimLocaleContainsFold *string  `json:"scimLocaleContainsFold,omitempty"`
 	// personal_access_tokens edge predicates
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
 	HasPersonalAccessTokensWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokensWith,omitempty"`
