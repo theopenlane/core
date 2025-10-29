@@ -66,13 +66,13 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 			newOwnerEmail: "someone@theopenlane.io",
 			client:        suite.client.api,
 			ctx:           viewOnlyUser.UserCtx,
-			expectedErr:   "permission denied",
+			expectedErr:   notAuthorizedErrorMsg,
 		},
 		{
 			name:          "different org owner, no access",
 			newOwnerEmail: "someone@theopenlane.io",
 			client:        suite.client.api,
-			ctx:           otherOwner.UserCtx,
+			ctx:           auth.NewTestContextWithOrgID(otherOwner.ID, testUser1.OrganizationID),
 			expectedErr:   notFoundErrorMsg,
 		},
 		{
