@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/ent"
 
@@ -32,16 +33,27 @@ func HookCreatePersonalAccessToken() ent.Hook {
 			}
 
 			// generate raw token
-			rawToken := keygen.PrefixedSecret("tolp") // token prefix
+			secret := keygen.Secret()
+			publicID := keygen.AlphaNumeric(16)
+			prefix := "tolp"
 
-			// hash the token for storage
-			hash, err := passwd.CreateDerivedKey(rawToken)
+			rawToken := fmt.Sprintf("%s_%s_%s", prefix, publicID, secret)
+
+			// hash the secret for storage
+			hash, err := passwd.CreateDerivedKey(secret)
 			if err != nil {
 				return nil, err
 			}
 
-			// set the hashed token for storage
+			// set the hashed token for storage (backwards compatibility)
 			m.SetToken(hash)
+
+			// set the new token_hash (argon2 of secret)
+			m.SetTokenHash(hash)
+
+			// set the token fingerprint for lookup
+			tokenFP := keygen.GenerateSHA256Hmac("", []byte(publicID))
+			m.SetTokenFingerprint(tokenFP)
 
 			// set user on the token
 			m.SetOwnerID(userID)
