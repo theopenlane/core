@@ -174,7 +174,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 					assert.NotEmpty(t, claims["org"])
 
-					if tc.expectedStatus == http.StatusOK {
+					if tc.userConfirmed {
 						job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 							[]rivertest.ExpectedJob{
 								{
