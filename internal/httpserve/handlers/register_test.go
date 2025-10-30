@@ -346,14 +346,6 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 									),
 								},
 							},
-							{
-								Args: jobs.EmailArgs{
-									Message: *newman.NewEmailMessageWithOptions(
-										newman.WithSubject("Welcome to Meow Inc.!"),
-										newman.WithTo([]string{tc.email}),
-									),
-								},
-							},
 						})
 					require.NotNil(t, job)
 				}
