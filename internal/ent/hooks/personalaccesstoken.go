@@ -51,7 +51,7 @@ func HookCreatePersonalAccessToken() ent.Hook {
 
 			// set the token fingerprint for lookup
 			tokenFP := keygen.GenerateSHA256Hmac("", []byte(publicID))
-			m.SetTokenFingerprint(tokenFP)
+			m.SetTokenFp(tokenFP)
 
 			// set user on the token
 			m.SetOwnerID(userID)
