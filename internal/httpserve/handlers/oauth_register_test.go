@@ -1,15 +1,20 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/httpsling"
@@ -84,6 +89,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			suite.ClearTestData()
+
 			registerJSON := models.OauthTokenRequest{
 				Name:             tt.args.name,
 				Email:            tt.args.email,
@@ -126,6 +133,19 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				assert.True(t, out.Success)
 				assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
 				assert.Equal(t, "Bearer", out.TokenType)
+
+				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{
+								Message: *newman.NewEmailMessageWithOptions(
+									newman.WithSubject("Welcome to Meow Inc.!"),
+									newman.WithTo([]string{tt.args.email}),
+								),
+							},
+						},
+					})
+				require.NotNil(t, job)
 			}
 		})
 	}

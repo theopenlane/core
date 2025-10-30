@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,10 +11,14 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -79,6 +84,8 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			suite.ClearTestData()
+
 			// set privacy allow in order to allow the creation of the users without
 			// authentication in the tests
 			ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -166,6 +173,19 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 					require.True(t, ok)
 
 					assert.NotEmpty(t, claims["org"])
+
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{
+									Message: *newman.NewEmailMessageWithOptions(
+										newman.WithSubject("Welcome to Meow Inc.!"),
+										newman.WithTo([]string{tc.email}),
+									),
+								},
+							},
+						})
+					require.NotNil(t, job)
 				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)
