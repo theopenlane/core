@@ -12,8 +12,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
@@ -53,6 +57,134 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 
 	return &model.OrganizationCreatePayload{
 		Organization: finalResult,
+	}, nil
+}
+
+// TransferOrganizationOwnership is the resolver for the transferOrganizationOwnership field.
+func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error) {
+	// Step 1: Get current user from context
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+	}
+
+	currentUserID := au.SubjectID
+	organizationID := au.OrganizationID
+
+	if organizationID == "" {
+		log.Error().Msg("unable to determine organization for ownership transfer")
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+	}
+
+	c := withTransactionalMutation(ctx)
+
+	// Step 2: Verify organization exists
+	org, err := c.Organization.Get(ctx, organizationID)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+	}
+
+	// Step 3: Verify current user is the owner
+	currentUserMembership, err := c.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(organizationID),
+			orgmembership.UserID(currentUserID),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to find current user's membership")
+		return nil, newNotFoundError("org_membership")
+	}
+
+	if currentUserMembership.Role != enums.RoleOwner {
+		log.Info().
+			Str("user_id", currentUserID).
+			Str("organization_id", organizationID).
+			Str("role", currentUserMembership.Role.String()).
+			Msg("user attempted to transfer ownership without being owner")
+		return nil, newPermissionDeniedError()
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Step 4: Look up user by email to get their ID (if they exist)
+	newOwnerUser, err := c.User.Query().
+		Where(user.Email(newOwnerEmail)).
+		Only(allowCtx)
+
+	// Step 5: Check if new owner is already a member
+	var newOwnerMembership *generated.OrgMembership
+	if err == nil {
+		// User exists, check if they're already a member
+		newOwnerMembership, err = c.OrgMembership.Query().
+			Where(
+				orgmembership.OrganizationID(organizationID),
+				orgmembership.UserID(newOwnerUser.ID),
+			).
+			Only(ctx)
+	}
+
+	invitationSent := false
+
+	if err != nil {
+		// User is not a member or doesn't exist - create an invite with ownership_transfer=true
+		log.Info().
+			Str("new_owner_email", newOwnerEmail).
+			Str("organization_id", organizationID).
+			Msg("new owner not a member, creating ownership transfer invitation")
+
+		ownerRole := enums.RoleOwner
+		ownershipTransfer := true
+
+		inviteInput := generated.CreateInviteInput{
+			Recipient:         newOwnerEmail,
+			Role:              &ownerRole,
+			OwnerID:           &organizationID,
+			OwnershipTransfer: &ownershipTransfer,
+		}
+
+		if _, err := c.Invite.Create().SetInput(inviteInput).Save(ctx); err != nil {
+			log.Error().Err(err).Msg("unable to create ownership transfer invitation")
+			return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+		}
+
+		invitationSent = true
+	} else {
+		// User is already a member - directly update roles
+		log.Info().
+			Str("new_owner_id", newOwnerUser.ID).
+			Str("organization_id", organizationID).
+			Msg("new owner already a member, directly transferring ownership")
+
+		// Update new owner to OWNER role
+		// Use allowCtx to bypass privacy restrictions since this is an authorized ownership transfer
+		newRole := enums.RoleOwner
+		if err := c.OrgMembership.UpdateOneID(newOwnerMembership.ID).
+			SetRole(newRole).
+			Exec(allowCtx); err != nil {
+			log.Error().Err(err).Msg("unable to update new owner role")
+			return nil, parseRequestError(err, action{action: ActionUpdate, object: "org_membership"})
+		}
+
+		// Update current owner to ADMIN role
+		adminRole := enums.RoleAdmin
+		if err := c.OrgMembership.UpdateOneID(currentUserMembership.ID).
+			SetRole(adminRole).
+			Exec(allowCtx); err != nil {
+			log.Error().Err(err).Msg("unable to demote current owner to admin")
+			return nil, parseRequestError(err, action{action: ActionUpdate, object: "org_membership"})
+		}
+
+		log.Info().
+			Str("organization_id", organizationID).
+			Str("old_owner_id", currentUserID).
+			Str("new_owner_id", newOwnerUser.ID).
+			Msg("organization ownership transferred successfully")
+	}
+
+	return &model.OrganizationTransferOwnershipPayload{
+		Organization:   org,
+		InvitationSent: invitationSent,
 	}, nil
 }
 

@@ -443,3 +443,26 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
     }
   }
 }
+
+mutation TransferOrganizationOwnership($newOwnerEmail: String!) {
+  transferOrganizationOwnership(
+    newOwnerEmail: $newOwnerEmail
+  ) {
+    organization {
+      id
+      name
+      displayName
+      members {
+        totalCount
+        edges {
+          node {
+            id
+            role
+            userID
+          }
+        }
+      }
+    }
+    invitationSent
+  }
+}

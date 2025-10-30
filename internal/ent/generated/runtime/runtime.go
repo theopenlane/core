@@ -3070,6 +3070,10 @@ func init() {
 	inviteDescSecret := inviteFields[7].Descriptor()
 	// invite.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	invite.SecretValidator = inviteDescSecret.Validators[0].(func([]byte) error)
+	// inviteDescOwnershipTransfer is the schema descriptor for ownership_transfer field.
+	inviteDescOwnershipTransfer := inviteFields[8].Descriptor()
+	// invite.DefaultOwnershipTransfer holds the default value on creation for the ownership_transfer field.
+	invite.DefaultOwnershipTransfer = inviteDescOwnershipTransfer.Default.(bool)
 	// inviteDescID is the schema descriptor for id field.
 	inviteDescID := inviteMixinFields3[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
