@@ -531,7 +531,7 @@ func extractOpenAPITypeDescriptions() map[string]string {
 	}
 
 	// Navigate from server -> httpserve -> internal -> core -> pkg/openapi
-	projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filename)))
+	projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(filename))))
 	openapiPkgPath := filepath.Join(projectRoot, "pkg", "openapi")
 
 	// Parse the package
