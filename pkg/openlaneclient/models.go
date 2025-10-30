@@ -27,10 +27,6 @@ type APIToken struct {
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
-	// argon2 hash of the secret part of the token
-	TokenHash string `json:"tokenHash"`
-	// HMAC fingerprint of the public_id for lookup
-	TokenFp string `json:"tokenFp"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
@@ -20928,10 +20924,6 @@ type PersonalAccessToken struct {
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
-	// argon2 hash of the secret part of the token
-	TokenHash string `json:"tokenHash"`
-	// HMAC fingerprint of the public_id for lookup
-	TokenFp string `json:"tokenFp"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
