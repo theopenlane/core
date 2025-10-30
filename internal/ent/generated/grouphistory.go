@@ -54,8 +54,16 @@ type GroupHistory struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL string `json:"logo_url,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName  string `json:"display_name,omitempty"`
-	selectValues sql.SelectValues
+	DisplayName string `json:"display_name,omitempty"`
+	// the SCIM external ID for the group
+	ScimExternalID *string `json:"scim_external_id,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName *string `json:"scim_display_name,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive bool `json:"scim_active,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing *string `json:"scim_group_mailing,omitempty"`
+	selectValues     sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,9 +75,9 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case grouphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case grouphistory.FieldIsManaged:
+		case grouphistory.FieldIsManaged, grouphistory.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -204,6 +212,33 @@ func (_m *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DisplayName = value.String
 			}
+		case grouphistory.FieldScimExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_external_id", values[i])
+			} else if value.Valid {
+				_m.ScimExternalID = new(string)
+				*_m.ScimExternalID = value.String
+			}
+		case grouphistory.FieldScimDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_display_name", values[i])
+			} else if value.Valid {
+				_m.ScimDisplayName = new(string)
+				*_m.ScimDisplayName = value.String
+			}
+		case grouphistory.FieldScimActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_active", values[i])
+			} else if value.Valid {
+				_m.ScimActive = value.Bool
+			}
+		case grouphistory.FieldScimGroupMailing:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_group_mailing", values[i])
+			} else if value.Valid {
+				_m.ScimGroupMailing = new(string)
+				*_m.ScimGroupMailing = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -293,6 +328,24 @@ func (_m *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)
+	builder.WriteString(", ")
+	if v := _m.ScimExternalID; v != nil {
+		builder.WriteString("scim_external_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimDisplayName; v != nil {
+		builder.WriteString("scim_display_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("scim_active=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScimActive))
+	builder.WriteString(", ")
+	if v := _m.ScimGroupMailing; v != nil {
+		builder.WriteString("scim_group_mailing=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

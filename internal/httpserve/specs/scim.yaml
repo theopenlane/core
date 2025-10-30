@@ -1,0 +1,1344 @@
+openapi: 3.1.1
+info:
+  title: Openlane SCIM v2 API
+  description: |
+    The Openlane SCIM API implements the SCIM 2.0 open standard
+    ([RFC 7643](https://datatracker.ietf.org/doc/html/rfc7643) - Core Schema and
+    [RFC 7644](https://datatracker.ietf.org/doc/html/rfc7644) - Protocol).
+
+    This API enables automated user and group provisioning via external Identity Providers,
+    allowing organizations to manage user lifecycle and group memberships centrally.
+  version: 2.0.0
+  contact:
+    name: Openlane
+    url: https://github.com/theopenlane/core
+
+servers:
+  - url: /scim/v2
+    description: SCIM v2 API base path
+
+tags:
+  - name: Users
+    description: Operations for managing user accounts
+    externalDocs:
+      description: SCIM User Resource Schema
+      url: https://datatracker.ietf.org/doc/html/rfc7643#section-4.1
+  - name: Groups
+    description: Operations for managing groups
+    externalDocs:
+      description: SCIM Group Resource Schema
+      url: https://datatracker.ietf.org/doc/html/rfc7643#section-4.2
+  - name: Discovery
+    description: Discovery endpoints for service provider capabilities
+    externalDocs:
+      description: SCIM Service Provider Configuration
+      url: https://datatracker.ietf.org/doc/html/rfc7644#section-4
+
+paths:
+  /Users:
+    get:
+      tags:
+        - Users
+      summary: List users
+      description: Returns a list of users with optional filtering and pagination
+      operationId: listUsers
+      parameters:
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/startIndex'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/excludedAttributes'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Creates a new user with the provided attributes
+      operationId: createUser
+      requestBody:
+        $ref: '#/components/requestBodies/UserBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/UserCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /Users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: Retrieves details of a specific user by ID
+      operationId: getUserById
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/excludedAttributes'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserRetrieved'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    put:
+      tags:
+        - Users
+      summary: Replace user
+      description: Replaces all attributes of an existing user
+      operationId: replaceUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/UserBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserUpdated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    patch:
+      tags:
+        - Users
+      summary: Update user
+      description: Applies partial modifications to a user using SCIM PATCH operations
+      operationId: patchUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserUpdated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Removes a user from the system
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          description: User deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /Groups:
+    get:
+      tags:
+        - Groups
+      summary: List groups
+      description: Returns a list of groups with optional filtering and pagination
+      operationId: listGroups
+      parameters:
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/startIndex'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/excludedAttributes'
+      responses:
+        '200':
+          $ref: '#/components/responses/GroupList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    post:
+      tags:
+        - Groups
+      summary: Create a new group
+      description: Creates a new group with the provided attributes
+      operationId: createGroup
+      requestBody:
+        $ref: '#/components/requestBodies/GroupBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/GroupCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /Groups/{id}:
+    get:
+      tags:
+        - Groups
+      summary: Get group by ID
+      description: Retrieves details of a specific group by ID
+      operationId: getGroupById
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/excludedAttributes'
+      responses:
+        '200':
+          $ref: '#/components/responses/GroupRetrieved'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    put:
+      tags:
+        - Groups
+      summary: Replace group
+      description: Replaces all attributes of an existing group
+      operationId: replaceGroup
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      requestBody:
+        $ref: '#/components/requestBodies/GroupBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/GroupUpdated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    patch:
+      tags:
+        - Groups
+      summary: Update group
+      description: Applies partial modifications to a group using SCIM PATCH operations
+      operationId: patchGroup
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/GroupUpdated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+    delete:
+      tags:
+        - Groups
+      summary: Delete group
+      description: Removes a group from the system
+      operationId: deleteGroup
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        '204':
+          description: Group deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /ServiceProviderConfig:
+    get:
+      tags:
+        - Discovery
+      summary: Get service provider configuration
+      description: Returns the service provider's configuration, including supported features and authentication schemes
+      operationId: getServiceProviderConfig
+      responses:
+        '200':
+          description: Service provider configuration retrieved successfully
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /ResourceTypes:
+    get:
+      tags:
+        - Discovery
+      summary: Get resource types
+      description: Returns available SCIM resource types supported by this service provider
+      operationId: getResourceTypes
+      responses:
+        '200':
+          description: Resource types retrieved successfully
+          content:
+            application/scim+json:
+              schema:
+                type: object
+                properties:
+                  schemas:
+                    $ref: '#/components/schemas/listResponseSchemas'
+                  totalResults:
+                    $ref: '#/components/schemas/totalResults'
+                  startIndex:
+                    $ref: '#/components/schemas/startIndex'
+                  itemsPerPage:
+                    $ref: '#/components/schemas/itemsPerPage'
+                  Resources:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ResourceType'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /ResourceTypes/{name}:
+    get:
+      tags:
+        - Discovery
+      summary: Get resource type by name
+      description: Returns detailed information about a specific resource type
+      operationId: getResourceTypeByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the resource type (e.g., User, Group)
+          schema:
+            type: string
+            enum: [User, Group]
+      responses:
+        '200':
+          description: Resource type retrieved successfully
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/ResourceType'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /Schemas:
+    get:
+      tags:
+        - Discovery
+      summary: Get schemas
+      description: Returns SCIM schemas supported by this service provider
+      operationId: getSchemas
+      responses:
+        '200':
+          description: Schemas retrieved successfully
+          content:
+            application/scim+json:
+              schema:
+                type: object
+                properties:
+                  schemas:
+                    $ref: '#/components/schemas/listResponseSchemas'
+                  totalResults:
+                    $ref: '#/components/schemas/totalResults'
+                  startIndex:
+                    $ref: '#/components/schemas/startIndex'
+                  itemsPerPage:
+                    $ref: '#/components/schemas/itemsPerPage'
+                  Resources:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SchemaDefinition'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+  /Schemas/{uri}:
+    get:
+      tags:
+        - Discovery
+      summary: Get schema by URI
+      description: Returns detailed schema definition for a specific schema URI
+      operationId: getSchemaByUri
+      parameters:
+        - name: uri
+          in: path
+          required: true
+          description: Schema URI (e.g., urn:ietf:params:scim:schemas:core:2.0:User)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Schema retrieved successfully
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/SchemaDefinition'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - BearerAuth: []
+
+components:
+  parameters:
+    userId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the user
+      schema:
+        type: string
+
+    groupId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the group
+      schema:
+        type: string
+
+    filter:
+      name: filter
+      in: query
+      required: false
+      description: |
+        Filter expression for querying resources. Follows SCIM filter syntax as defined in
+        [RFC 7644 Section 3.4.2.2](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2).
+
+        Example: `userName eq "mitb@meowmeow.com"`
+      schema:
+        type: string
+
+    startIndex:
+      name: startIndex
+      in: query
+      required: false
+      description: The 1-based index of the first result in the current set of list results
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+
+    count:
+      name: count
+      in: query
+      required: false
+      description: The number of resources returned in a list response page
+      schema:
+        type: integer
+        default: 100
+        minimum: 1
+
+    attributes:
+      name: attributes
+      in: query
+      required: false
+      description: |
+        A comma-separated list of attribute names to return in the response,
+        overriding the default set of attributes. Attribute names must be in
+        standard attribute notation form.
+      schema:
+        type: string
+      example: userName,emails,name
+
+    excludedAttributes:
+      name: excludedAttributes
+      in: query
+      required: false
+      description: |
+        A comma-separated list of attribute names to exclude from the default
+        set of attributes to return. Attribute names must be in standard
+        attribute notation form.
+      schema:
+        type: string
+      example: groups
+
+  requestBodies:
+    UserBody:
+      description: User resource attributes
+      required: true
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+    GroupBody:
+      description: Group resource attributes
+      required: true
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/Group'
+
+    PatchBody:
+      description: SCIM PATCH operation as defined in RFC 7644 Section 3.5.2
+      required: true
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/PatchRequest'
+
+  responses:
+    UserCreated:
+      description: User created successfully
+      headers:
+        Location:
+          description: The URL of the newly created user
+          schema:
+            type: string
+          required: true
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+    UserUpdated:
+      description: User updated successfully
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+    UserRetrieved:
+      description: User retrieved successfully
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+    UserList:
+      description: List of users
+      content:
+        application/scim+json:
+          schema:
+            type: object
+            properties:
+              schemas:
+                $ref: '#/components/schemas/listResponseSchemas'
+              totalResults:
+                $ref: '#/components/schemas/totalResults'
+              startIndex:
+                $ref: '#/components/schemas/startIndex'
+              itemsPerPage:
+                $ref: '#/components/schemas/itemsPerPage'
+              Resources:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    GroupCreated:
+      description: Group created successfully
+      headers:
+        Location:
+          description: The URL of the newly created group
+          schema:
+            type: string
+          required: true
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/Group'
+
+    GroupUpdated:
+      description: Group updated successfully
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/Group'
+
+    GroupRetrieved:
+      description: Group retrieved successfully
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/Group'
+
+    GroupList:
+      description: List of groups
+      content:
+        application/scim+json:
+          schema:
+            type: object
+            properties:
+              schemas:
+                $ref: '#/components/schemas/listResponseSchemas'
+              totalResults:
+                $ref: '#/components/schemas/totalResults'
+              startIndex:
+                $ref: '#/components/schemas/startIndex'
+              itemsPerPage:
+                $ref: '#/components/schemas/itemsPerPage'
+              Resources:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+
+    BadRequest:
+      description: Request is unparsable, syntactically incorrect, or violates schema
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Unauthorized:
+      description: Authorization failure. The authorization header is invalid or missing
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Forbidden:
+      description: Operation is not permitted based on the supplied authorization
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Conflict:
+      description: |
+        The specified version number does not match the resource's latest version number,
+        or a service provider refused to create a new, duplicate resource
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    User:
+      type: object
+      description: |
+        SCIM User resource as defined in RFC 7643 Section 4.1.
+        Represents a user account in the system.
+      required:
+        - schemas
+        - userName
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:schemas:core:2.0:User'
+          description: The schema URIs that define this resource
+        id:
+          type: string
+          description: |
+            Unique identifier for the user. Assigned by the service provider.
+            MUST be unique across the entire set of resources. Immutable.
+          readOnly: true
+        externalId:
+          type: string
+          description: |
+            Identifier for the user as defined by the provisioning client.
+            Allows the client to maintain their own identifier.
+        userName:
+          type: string
+          description: |
+            Unique identifier for the user, typically used for authentication.
+            Often the user's email address. REQUIRED. Case insensitive.
+        name:
+          type: object
+          description: The components of the user's name
+          properties:
+            formatted:
+              type: string
+              description: The full name, including all middle names, titles, and suffixes
+            familyName:
+              type: string
+              description: The family name (last name) of the user
+            givenName:
+              type: string
+              description: The given name (first name) of the user
+            middleName:
+              type: string
+              description: The middle name(s) of the user
+            honorificPrefix:
+              type: string
+              description: The honorific prefix(es) of the user (e.g., Ms., Dr.)
+            honorificSuffix:
+              type: string
+              description: The honorific suffix(es) of the user (e.g., III, Jr.)
+        displayName:
+          type: string
+          description: The name of the user, suitable for display to end-users
+        nickName:
+          type: string
+          description: The casual way to address the user
+        profileUrl:
+          type: string
+          format: uri
+          description: A URI pointing to the user's online profile
+        title:
+          type: string
+          description: The user's title, such as Vice President
+        userType:
+          type: string
+          description: |
+            Identifies the relationship between the organization and the user.
+            Typical values: Contractor, Employee, Intern, Temp, External
+        preferredLanguage:
+          type: string
+          description: |
+            The user's preferred written or spoken languages.
+            Format as defined in RFC 7231 Section 5.3.5
+        locale:
+          type: string
+          description: |
+            The user's default location for purposes of localizing items such as
+            currency and date/time format. Valid value is a language tag as defined in RFC 5646
+        timezone:
+          type: string
+          description: The user's time zone in IANA Time Zone database format
+        active:
+          type: boolean
+          description: |
+            Indicates the user's administrative status.
+            Typically true means able to log in, false means account suspended
+        password:
+          type: string
+          format: password
+          writeOnly: true
+          description: |
+            The user's cleartext password. Used for setting or changing passwords.
+            MUST NOT be returned by service provider. Write-only.
+        emails:
+          type: array
+          description: Email addresses for the user
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                format: email
+                description: The email address value
+              display:
+                type: string
+                description: A human-readable name for the email address
+              type:
+                type: string
+                description: The type of email address (work, home, other)
+              primary:
+                type: boolean
+                description: Indicates if this is the primary email address
+        phoneNumbers:
+          type: array
+          description: Phone numbers for the user
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                description: The phone number in E.164 format (e.g., tel:+1-201-555-0123)
+              display:
+                type: string
+                description: A human-readable name for the phone number
+              type:
+                type: string
+                description: The type of phone number (work, home, mobile, fax, pager, other)
+              primary:
+                type: boolean
+                description: Indicates if this is the primary phone number
+        addresses:
+          type: array
+          description: Physical mailing addresses for the user
+          items:
+            type: object
+            properties:
+              formatted:
+                type: string
+                description: The full mailing address, formatted for display
+              streetAddress:
+                type: string
+                description: The full street address component
+              locality:
+                type: string
+                description: The city or locality component
+              region:
+                type: string
+                description: The state or region component
+              postalCode:
+                type: string
+                description: The zip code or postal code component
+              country:
+                type: string
+                description: The country name in ISO 3166-1 alpha-2 format
+              type:
+                type: string
+                description: The type of address (work, home, other)
+              primary:
+                type: boolean
+                description: Indicates if this is the primary address
+        groups:
+          type: array
+          description: Groups to which the user belongs
+          readOnly: true
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                description: The identifier of the group
+              $ref:
+                type: string
+                format: uri
+                description: The URI of the corresponding Group resource
+              display:
+                type: string
+                description: A human-readable name for the group
+              type:
+                type: string
+                description: The type of group membership
+        meta:
+          $ref: '#/components/schemas/ResourceMetadata'
+
+    Group:
+      type: object
+      description: |
+        SCIM Group resource as defined in RFC 7643 Section 4.2.
+        Represents a group of users.
+      required:
+        - schemas
+        - displayName
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+          description: The schema URIs that define this resource
+        id:
+          type: string
+          description: |
+            Unique identifier for the group. Assigned by the service provider.
+            MUST be unique across the entire set of resources. Immutable.
+          readOnly: true
+        externalId:
+          type: string
+          description: |
+            Identifier for the group as defined by the provisioning client.
+            Allows the client to maintain their own identifier.
+        displayName:
+          type: string
+          description: A human-readable name for the group. REQUIRED
+        members:
+          type: array
+          description: Members of the group (users or nested groups)
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                description: The identifier of the member (user or group ID)
+              $ref:
+                type: string
+                format: uri
+                description: The URI of the corresponding User or Group resource
+              type:
+                type: string
+                description: The type of member
+                enum: [User, Group]
+              display:
+                type: string
+                description: A human-readable name for the member
+        meta:
+          $ref: '#/components/schemas/ResourceMetadata'
+
+    PatchRequest:
+      type: object
+      description: SCIM PATCH operation as defined in RFC 7644 Section 3.5.2
+      required:
+        - schemas
+        - Operations
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:api:messages:2.0:PatchOp'
+          description: The schema URI for PATCH operations
+        Operations:
+          type: array
+          description: A list of patch operations to be performed
+          minItems: 1
+          items:
+            type: object
+            required:
+              - op
+            properties:
+              op:
+                type: string
+                enum: [add, remove, replace]
+                description: The operation to perform
+              path:
+                type: string
+                description: |
+                  The attribute path to operate on. Optional for add and replace
+                  when the value contains the full attribute. Required for remove.
+              value:
+                description: |
+                  The value to set or add. Required for add and replace operations.
+                  May be a string, number, boolean, object, or array depending on the attribute.
+                oneOf:
+                  - type: string
+                  - type: number
+                  - type: boolean
+                  - type: object
+                  - type: array
+                    items: {}
+
+    ResourceMetadata:
+      type: object
+      description: Resource metadata as defined in RFC 7643 Section 3.1
+      readOnly: true
+      properties:
+        resourceType:
+          type: string
+          description: The name of the resource type (e.g., User, Group)
+        created:
+          type: string
+          format: date-time
+          description: The timestamp when the resource was created
+        lastModified:
+          type: string
+          format: date-time
+          description: The timestamp when the resource was last modified
+        location:
+          type: string
+          format: uri
+          description: The URI of the resource
+        version:
+          type: string
+          description: |
+            The version of the resource. Used for ETag-based versioning.
+            Weak ETags are prefixed with W/
+
+    ServiceProviderConfig:
+      type: object
+      description: Service provider configuration as defined in RFC 7644 Section 5
+      required:
+        - schemas
+        - patch
+        - bulk
+        - filter
+        - changePassword
+        - sort
+        - etag
+        - authenticationSchemes
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig'
+        documentationUri:
+          type: string
+          format: uri
+          description: HTTP-addressable URL pointing to the service provider's documentation
+        patch:
+          type: object
+          required: [supported]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether PATCH operations are supported
+        bulk:
+          type: object
+          required: [supported, maxOperations, maxPayloadSize]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether bulk operations are supported
+            maxOperations:
+              type: integer
+              description: Maximum number of operations in a single bulk request
+            maxPayloadSize:
+              type: integer
+              description: Maximum payload size in bytes for bulk requests
+        filter:
+          type: object
+          required: [supported, maxResults]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether filtering is supported
+            maxResults:
+              type: integer
+              description: Maximum number of results returned by a filter operation
+        changePassword:
+          type: object
+          required: [supported]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether password change operations are supported
+        sort:
+          type: object
+          required: [supported]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether sorting is supported
+        etag:
+          type: object
+          required: [supported]
+          properties:
+            supported:
+              type: boolean
+              description: Indicates whether ETag-based versioning is supported
+        authenticationSchemes:
+          type: array
+          description: Authentication schemes supported by the service provider
+          items:
+            type: object
+            required: [type, name, description]
+            properties:
+              type:
+                type: string
+                description: The authentication scheme type
+              name:
+                type: string
+                description: The common authentication scheme name
+              description:
+                type: string
+                description: A description of the authentication scheme
+              specUri:
+                type: string
+                format: uri
+                description: HTTP-addressable URL pointing to the specification
+              documentationUri:
+                type: string
+                format: uri
+                description: HTTP-addressable URL pointing to the documentation
+              primary:
+                type: boolean
+                description: Indicates if this is the primary authentication scheme
+        meta:
+          $ref: '#/components/schemas/ResourceMetadata'
+
+    ResourceType:
+      type: object
+      description: Resource type definition as defined in RFC 7644 Section 6
+      required:
+        - schemas
+        - id
+        - name
+        - endpoint
+        - schema
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:schemas:core:2.0:ResourceType'
+        id:
+          type: string
+          description: The resource type's unique identifier
+        name:
+          type: string
+          description: The resource type's name (e.g., User, Group)
+        description:
+          type: string
+          description: The resource type's human-readable description
+        endpoint:
+          type: string
+          description: The resource type's HTTP-addressable endpoint relative to the base URL
+        schema:
+          type: string
+          description: The resource type's primary/base schema URI
+        schemaExtensions:
+          type: array
+          description: List of schema extensions for this resource type
+          items:
+            type: object
+            required: [schema, required]
+            properties:
+              schema:
+                type: string
+                description: The URI of the extended schema
+              required:
+                type: boolean
+                description: Indicates whether the schema extension is required
+        meta:
+          $ref: '#/components/schemas/ResourceMetadata'
+
+    SchemaDefinition:
+      type: object
+      description: Schema definition as defined in RFC 7643 Section 7
+      required:
+        - schemas
+        - id
+        - name
+        - attributes
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:schemas:core:2.0:Schema'
+        id:
+          type: string
+          description: The unique URI of the schema
+        name:
+          type: string
+          description: The schema's human-readable name
+        description:
+          type: string
+          description: The schema's human-readable description
+        attributes:
+          type: array
+          description: The schema's attribute definitions
+          items:
+            $ref: '#/components/schemas/SchemaAttribute'
+        meta:
+          $ref: '#/components/schemas/ResourceMetadata'
+
+    SchemaAttribute:
+      type: object
+      description: Schema attribute definition as defined in RFC 7643 Section 7
+      required:
+        - name
+        - type
+        - multiValued
+        - required
+        - caseExact
+        - mutability
+        - returned
+        - uniqueness
+      properties:
+        name:
+          type: string
+          description: The attribute's name
+        type:
+          type: string
+          enum: [string, boolean, decimal, integer, dateTime, reference, complex]
+          description: The attribute's data type
+        description:
+          type: string
+          description: The attribute's human-readable description
+        multiValued:
+          type: boolean
+          description: Indicates if the attribute is multi-valued
+        required:
+          type: boolean
+          description: Indicates if the attribute is required
+        canonicalValues:
+          type: array
+          items:
+            type: string
+          description: Suggested canonical values for the attribute
+        caseExact:
+          type: boolean
+          description: Indicates if the attribute is case-sensitive
+        mutability:
+          type: string
+          enum: [readOnly, readWrite, immutable, writeOnly]
+          description: Indicates when the attribute value can be modified
+        returned:
+          type: string
+          enum: [always, never, default, request]
+          description: Indicates when the attribute is returned
+        uniqueness:
+          type: string
+          enum: [none, server, global]
+          description: Indicates how uniqueness is enforced
+        referenceTypes:
+          type: array
+          items:
+            type: string
+          description: For reference attributes, the SCIM resource types that may be referenced
+        subAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaAttribute'
+          description: Sub-attributes for complex attributes
+
+    ErrorResponse:
+      type: object
+      description: Error response as defined in RFC 7644 Section 3.12
+      required:
+        - schemas
+        - status
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'urn:ietf:params:scim:api:messages:2.0:Error'
+        scimType:
+          type: string
+          description: A SCIM detail error type
+          enum:
+            - invalidFilter
+            - tooMany
+            - uniqueness
+            - mutability
+            - invalidSyntax
+            - invalidPath
+            - noTarget
+            - invalidValue
+            - invalidVers
+            - sensitive
+        detail:
+          type: string
+          description: A detailed human-readable message
+        status:
+          type: string
+          description: The HTTP status code expressed as a JSON string
+          enum: ['400', '401', '403', '404', '409', '500', '501']
+
+    listResponseSchemas:
+      type: array
+      items:
+        type: string
+        enum:
+          - 'urn:ietf:params:scim:api:messages:2.0:ListResponse'
+
+    totalResults:
+      type: integer
+      description: The total number of results matching the query
+      minimum: 0
+
+    startIndex:
+      type: integer
+      description: The 1-based index of the first result in the current set of results
+      minimum: 1
+
+    itemsPerPage:
+      type: integer
+      description: The number of resources returned in the current page
+      minimum: 0
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Bearer token authentication using API tokens.
+        The token identifies the organization and grants permissions to manage
+        users and groups within that organization's scope.

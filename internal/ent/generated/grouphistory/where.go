@@ -145,6 +145,26 @@ func DisplayName(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldDisplayName, v))
 }
 
+// ScimExternalID applies equality check predicate on the "scim_external_id" field. It's identical to ScimExternalIDEQ.
+func ScimExternalID(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimDisplayName applies equality check predicate on the "scim_display_name" field. It's identical to ScimDisplayNameEQ.
+func ScimDisplayName(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimDisplayName, v))
+}
+
+// ScimActive applies equality check predicate on the "scim_active" field. It's identical to ScimActiveEQ.
+func ScimActive(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimGroupMailing applies equality check predicate on the "scim_group_mailing" field. It's identical to ScimGroupMailingEQ.
+func ScimGroupMailing(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimGroupMailing, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1178,6 +1198,251 @@ func DisplayNameEqualFold(v string) predicate.GroupHistory {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// ScimExternalIDEQ applies the EQ predicate on the "scim_external_id" field.
+func ScimExternalIDEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDNEQ applies the NEQ predicate on the "scim_external_id" field.
+func ScimExternalIDNEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIn applies the In predicate on the "scim_external_id" field.
+func ScimExternalIDIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDNotIn applies the NotIn predicate on the "scim_external_id" field.
+func ScimExternalIDNotIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotIn(FieldScimExternalID, vs...))
+}
+
+// ScimExternalIDGT applies the GT predicate on the "scim_external_id" field.
+func ScimExternalIDGT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDGTE applies the GTE predicate on the "scim_external_id" field.
+func ScimExternalIDGTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLT applies the LT predicate on the "scim_external_id" field.
+func ScimExternalIDLT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLT(FieldScimExternalID, v))
+}
+
+// ScimExternalIDLTE applies the LTE predicate on the "scim_external_id" field.
+func ScimExternalIDLTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLTE(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContains applies the Contains predicate on the "scim_external_id" field.
+func ScimExternalIDContains(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContains(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasPrefix applies the HasPrefix predicate on the "scim_external_id" field.
+func ScimExternalIDHasPrefix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasPrefix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDHasSuffix applies the HasSuffix predicate on the "scim_external_id" field.
+func ScimExternalIDHasSuffix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasSuffix(FieldScimExternalID, v))
+}
+
+// ScimExternalIDIsNil applies the IsNil predicate on the "scim_external_id" field.
+func ScimExternalIDIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldScimExternalID))
+}
+
+// ScimExternalIDNotNil applies the NotNil predicate on the "scim_external_id" field.
+func ScimExternalIDNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldScimExternalID))
+}
+
+// ScimExternalIDEqualFold applies the EqualFold predicate on the "scim_external_id" field.
+func ScimExternalIDEqualFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEqualFold(FieldScimExternalID, v))
+}
+
+// ScimExternalIDContainsFold applies the ContainsFold predicate on the "scim_external_id" field.
+func ScimExternalIDContainsFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContainsFold(FieldScimExternalID, v))
+}
+
+// ScimDisplayNameEQ applies the EQ predicate on the "scim_display_name" field.
+func ScimDisplayNameEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameNEQ applies the NEQ predicate on the "scim_display_name" field.
+func ScimDisplayNameNEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameIn applies the In predicate on the "scim_display_name" field.
+func ScimDisplayNameIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIn(FieldScimDisplayName, vs...))
+}
+
+// ScimDisplayNameNotIn applies the NotIn predicate on the "scim_display_name" field.
+func ScimDisplayNameNotIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotIn(FieldScimDisplayName, vs...))
+}
+
+// ScimDisplayNameGT applies the GT predicate on the "scim_display_name" field.
+func ScimDisplayNameGT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGT(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameGTE applies the GTE predicate on the "scim_display_name" field.
+func ScimDisplayNameGTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGTE(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameLT applies the LT predicate on the "scim_display_name" field.
+func ScimDisplayNameLT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLT(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameLTE applies the LTE predicate on the "scim_display_name" field.
+func ScimDisplayNameLTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLTE(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameContains applies the Contains predicate on the "scim_display_name" field.
+func ScimDisplayNameContains(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContains(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameHasPrefix applies the HasPrefix predicate on the "scim_display_name" field.
+func ScimDisplayNameHasPrefix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasPrefix(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameHasSuffix applies the HasSuffix predicate on the "scim_display_name" field.
+func ScimDisplayNameHasSuffix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasSuffix(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameIsNil applies the IsNil predicate on the "scim_display_name" field.
+func ScimDisplayNameIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldScimDisplayName))
+}
+
+// ScimDisplayNameNotNil applies the NotNil predicate on the "scim_display_name" field.
+func ScimDisplayNameNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldScimDisplayName))
+}
+
+// ScimDisplayNameEqualFold applies the EqualFold predicate on the "scim_display_name" field.
+func ScimDisplayNameEqualFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEqualFold(FieldScimDisplayName, v))
+}
+
+// ScimDisplayNameContainsFold applies the ContainsFold predicate on the "scim_display_name" field.
+func ScimDisplayNameContainsFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContainsFold(FieldScimDisplayName, v))
+}
+
+// ScimActiveEQ applies the EQ predicate on the "scim_active" field.
+func ScimActiveEQ(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimActive, v))
+}
+
+// ScimActiveNEQ applies the NEQ predicate on the "scim_active" field.
+func ScimActiveNEQ(v bool) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldScimActive, v))
+}
+
+// ScimActiveIsNil applies the IsNil predicate on the "scim_active" field.
+func ScimActiveIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldScimActive))
+}
+
+// ScimActiveNotNil applies the NotNil predicate on the "scim_active" field.
+func ScimActiveNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldScimActive))
+}
+
+// ScimGroupMailingEQ applies the EQ predicate on the "scim_group_mailing" field.
+func ScimGroupMailingEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingNEQ applies the NEQ predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingIn applies the In predicate on the "scim_group_mailing" field.
+func ScimGroupMailingIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIn(FieldScimGroupMailing, vs...))
+}
+
+// ScimGroupMailingNotIn applies the NotIn predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNotIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotIn(FieldScimGroupMailing, vs...))
+}
+
+// ScimGroupMailingGT applies the GT predicate on the "scim_group_mailing" field.
+func ScimGroupMailingGT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGT(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingGTE applies the GTE predicate on the "scim_group_mailing" field.
+func ScimGroupMailingGTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGTE(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingLT applies the LT predicate on the "scim_group_mailing" field.
+func ScimGroupMailingLT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLT(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingLTE applies the LTE predicate on the "scim_group_mailing" field.
+func ScimGroupMailingLTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLTE(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingContains applies the Contains predicate on the "scim_group_mailing" field.
+func ScimGroupMailingContains(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContains(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingHasPrefix applies the HasPrefix predicate on the "scim_group_mailing" field.
+func ScimGroupMailingHasPrefix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasPrefix(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingHasSuffix applies the HasSuffix predicate on the "scim_group_mailing" field.
+func ScimGroupMailingHasSuffix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasSuffix(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingIsNil applies the IsNil predicate on the "scim_group_mailing" field.
+func ScimGroupMailingIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldScimGroupMailing))
+}
+
+// ScimGroupMailingNotNil applies the NotNil predicate on the "scim_group_mailing" field.
+func ScimGroupMailingNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldScimGroupMailing))
+}
+
+// ScimGroupMailingEqualFold applies the EqualFold predicate on the "scim_group_mailing" field.
+func ScimGroupMailingEqualFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEqualFold(FieldScimGroupMailing, v))
+}
+
+// ScimGroupMailingContainsFold applies the ContainsFold predicate on the "scim_group_mailing" field.
+func ScimGroupMailingContainsFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContainsFold(FieldScimGroupMailing, v))
 }
 
 // And groups predicates with the AND operator between them.

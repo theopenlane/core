@@ -1158,21 +1158,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Group",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			group.FieldCreatedAt:       {Type: field.TypeTime, Column: group.FieldCreatedAt},
-			group.FieldUpdatedAt:       {Type: field.TypeTime, Column: group.FieldUpdatedAt},
-			group.FieldCreatedBy:       {Type: field.TypeString, Column: group.FieldCreatedBy},
-			group.FieldUpdatedBy:       {Type: field.TypeString, Column: group.FieldUpdatedBy},
-			group.FieldDeletedAt:       {Type: field.TypeTime, Column: group.FieldDeletedAt},
-			group.FieldDeletedBy:       {Type: field.TypeString, Column: group.FieldDeletedBy},
-			group.FieldDisplayID:       {Type: field.TypeString, Column: group.FieldDisplayID},
-			group.FieldTags:            {Type: field.TypeJSON, Column: group.FieldTags},
-			group.FieldOwnerID:         {Type: field.TypeString, Column: group.FieldOwnerID},
-			group.FieldName:            {Type: field.TypeString, Column: group.FieldName},
-			group.FieldDescription:     {Type: field.TypeString, Column: group.FieldDescription},
-			group.FieldIsManaged:       {Type: field.TypeBool, Column: group.FieldIsManaged},
-			group.FieldGravatarLogoURL: {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
-			group.FieldLogoURL:         {Type: field.TypeString, Column: group.FieldLogoURL},
-			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
+			group.FieldCreatedAt:        {Type: field.TypeTime, Column: group.FieldCreatedAt},
+			group.FieldUpdatedAt:        {Type: field.TypeTime, Column: group.FieldUpdatedAt},
+			group.FieldCreatedBy:        {Type: field.TypeString, Column: group.FieldCreatedBy},
+			group.FieldUpdatedBy:        {Type: field.TypeString, Column: group.FieldUpdatedBy},
+			group.FieldDeletedAt:        {Type: field.TypeTime, Column: group.FieldDeletedAt},
+			group.FieldDeletedBy:        {Type: field.TypeString, Column: group.FieldDeletedBy},
+			group.FieldDisplayID:        {Type: field.TypeString, Column: group.FieldDisplayID},
+			group.FieldTags:             {Type: field.TypeJSON, Column: group.FieldTags},
+			group.FieldOwnerID:          {Type: field.TypeString, Column: group.FieldOwnerID},
+			group.FieldName:             {Type: field.TypeString, Column: group.FieldName},
+			group.FieldDescription:      {Type: field.TypeString, Column: group.FieldDescription},
+			group.FieldIsManaged:        {Type: field.TypeBool, Column: group.FieldIsManaged},
+			group.FieldGravatarLogoURL:  {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
+			group.FieldLogoURL:          {Type: field.TypeString, Column: group.FieldLogoURL},
+			group.FieldDisplayName:      {Type: field.TypeString, Column: group.FieldDisplayName},
+			group.FieldScimExternalID:   {Type: field.TypeString, Column: group.FieldScimExternalID},
+			group.FieldScimDisplayName:  {Type: field.TypeString, Column: group.FieldScimDisplayName},
+			group.FieldScimActive:       {Type: field.TypeBool, Column: group.FieldScimActive},
+			group.FieldScimGroupMailing: {Type: field.TypeString, Column: group.FieldScimGroupMailing},
 		},
 	}
 	graph.Nodes[32] = &sqlgraph.Node{
@@ -1186,24 +1190,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "GroupHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			grouphistory.FieldHistoryTime:     {Type: field.TypeTime, Column: grouphistory.FieldHistoryTime},
-			grouphistory.FieldRef:             {Type: field.TypeString, Column: grouphistory.FieldRef},
-			grouphistory.FieldOperation:       {Type: field.TypeEnum, Column: grouphistory.FieldOperation},
-			grouphistory.FieldCreatedAt:       {Type: field.TypeTime, Column: grouphistory.FieldCreatedAt},
-			grouphistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: grouphistory.FieldUpdatedAt},
-			grouphistory.FieldCreatedBy:       {Type: field.TypeString, Column: grouphistory.FieldCreatedBy},
-			grouphistory.FieldUpdatedBy:       {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
-			grouphistory.FieldDeletedAt:       {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
-			grouphistory.FieldDeletedBy:       {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
-			grouphistory.FieldDisplayID:       {Type: field.TypeString, Column: grouphistory.FieldDisplayID},
-			grouphistory.FieldTags:            {Type: field.TypeJSON, Column: grouphistory.FieldTags},
-			grouphistory.FieldOwnerID:         {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
-			grouphistory.FieldName:            {Type: field.TypeString, Column: grouphistory.FieldName},
-			grouphistory.FieldDescription:     {Type: field.TypeString, Column: grouphistory.FieldDescription},
-			grouphistory.FieldIsManaged:       {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
-			grouphistory.FieldGravatarLogoURL: {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
-			grouphistory.FieldLogoURL:         {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
-			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
+			grouphistory.FieldHistoryTime:      {Type: field.TypeTime, Column: grouphistory.FieldHistoryTime},
+			grouphistory.FieldRef:              {Type: field.TypeString, Column: grouphistory.FieldRef},
+			grouphistory.FieldOperation:        {Type: field.TypeEnum, Column: grouphistory.FieldOperation},
+			grouphistory.FieldCreatedAt:        {Type: field.TypeTime, Column: grouphistory.FieldCreatedAt},
+			grouphistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: grouphistory.FieldUpdatedAt},
+			grouphistory.FieldCreatedBy:        {Type: field.TypeString, Column: grouphistory.FieldCreatedBy},
+			grouphistory.FieldUpdatedBy:        {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
+			grouphistory.FieldDeletedAt:        {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
+			grouphistory.FieldDeletedBy:        {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
+			grouphistory.FieldDisplayID:        {Type: field.TypeString, Column: grouphistory.FieldDisplayID},
+			grouphistory.FieldTags:             {Type: field.TypeJSON, Column: grouphistory.FieldTags},
+			grouphistory.FieldOwnerID:          {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
+			grouphistory.FieldName:             {Type: field.TypeString, Column: grouphistory.FieldName},
+			grouphistory.FieldDescription:      {Type: field.TypeString, Column: grouphistory.FieldDescription},
+			grouphistory.FieldIsManaged:        {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
+			grouphistory.FieldGravatarLogoURL:  {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
+			grouphistory.FieldLogoURL:          {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
+			grouphistory.FieldDisplayName:      {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
+			grouphistory.FieldScimExternalID:   {Type: field.TypeString, Column: grouphistory.FieldScimExternalID},
+			grouphistory.FieldScimDisplayName:  {Type: field.TypeString, Column: grouphistory.FieldScimDisplayName},
+			grouphistory.FieldScimActive:       {Type: field.TypeBool, Column: grouphistory.FieldScimActive},
+			grouphistory.FieldScimGroupMailing: {Type: field.TypeString, Column: grouphistory.FieldScimGroupMailing},
 		},
 	}
 	graph.Nodes[33] = &sqlgraph.Node{
@@ -3568,27 +3576,32 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "User",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			user.FieldCreatedAt:         {Type: field.TypeTime, Column: user.FieldCreatedAt},
-			user.FieldUpdatedAt:         {Type: field.TypeTime, Column: user.FieldUpdatedAt},
-			user.FieldCreatedBy:         {Type: field.TypeString, Column: user.FieldCreatedBy},
-			user.FieldUpdatedBy:         {Type: field.TypeString, Column: user.FieldUpdatedBy},
-			user.FieldDeletedAt:         {Type: field.TypeTime, Column: user.FieldDeletedAt},
-			user.FieldDeletedBy:         {Type: field.TypeString, Column: user.FieldDeletedBy},
-			user.FieldDisplayID:         {Type: field.TypeString, Column: user.FieldDisplayID},
-			user.FieldTags:              {Type: field.TypeJSON, Column: user.FieldTags},
-			user.FieldEmail:             {Type: field.TypeString, Column: user.FieldEmail},
-			user.FieldFirstName:         {Type: field.TypeString, Column: user.FieldFirstName},
-			user.FieldLastName:          {Type: field.TypeString, Column: user.FieldLastName},
-			user.FieldDisplayName:       {Type: field.TypeString, Column: user.FieldDisplayName},
-			user.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
-			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
-			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
-			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
-			user.FieldLastLoginProvider: {Type: field.TypeEnum, Column: user.FieldLastLoginProvider},
-			user.FieldPassword:          {Type: field.TypeString, Column: user.FieldPassword},
-			user.FieldSub:               {Type: field.TypeString, Column: user.FieldSub},
-			user.FieldAuthProvider:      {Type: field.TypeEnum, Column: user.FieldAuthProvider},
-			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
+			user.FieldCreatedAt:             {Type: field.TypeTime, Column: user.FieldCreatedAt},
+			user.FieldUpdatedAt:             {Type: field.TypeTime, Column: user.FieldUpdatedAt},
+			user.FieldCreatedBy:             {Type: field.TypeString, Column: user.FieldCreatedBy},
+			user.FieldUpdatedBy:             {Type: field.TypeString, Column: user.FieldUpdatedBy},
+			user.FieldDeletedAt:             {Type: field.TypeTime, Column: user.FieldDeletedAt},
+			user.FieldDeletedBy:             {Type: field.TypeString, Column: user.FieldDeletedBy},
+			user.FieldDisplayID:             {Type: field.TypeString, Column: user.FieldDisplayID},
+			user.FieldTags:                  {Type: field.TypeJSON, Column: user.FieldTags},
+			user.FieldEmail:                 {Type: field.TypeString, Column: user.FieldEmail},
+			user.FieldFirstName:             {Type: field.TypeString, Column: user.FieldFirstName},
+			user.FieldLastName:              {Type: field.TypeString, Column: user.FieldLastName},
+			user.FieldDisplayName:           {Type: field.TypeString, Column: user.FieldDisplayName},
+			user.FieldAvatarRemoteURL:       {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
+			user.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
+			user.FieldAvatarUpdatedAt:       {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
+			user.FieldLastSeen:              {Type: field.TypeTime, Column: user.FieldLastSeen},
+			user.FieldLastLoginProvider:     {Type: field.TypeEnum, Column: user.FieldLastLoginProvider},
+			user.FieldPassword:              {Type: field.TypeString, Column: user.FieldPassword},
+			user.FieldSub:                   {Type: field.TypeString, Column: user.FieldSub},
+			user.FieldAuthProvider:          {Type: field.TypeEnum, Column: user.FieldAuthProvider},
+			user.FieldRole:                  {Type: field.TypeEnum, Column: user.FieldRole},
+			user.FieldScimExternalID:        {Type: field.TypeString, Column: user.FieldScimExternalID},
+			user.FieldScimUsername:          {Type: field.TypeString, Column: user.FieldScimUsername},
+			user.FieldScimActive:            {Type: field.TypeBool, Column: user.FieldScimActive},
+			user.FieldScimPreferredLanguage: {Type: field.TypeString, Column: user.FieldScimPreferredLanguage},
+			user.FieldScimLocale:            {Type: field.TypeString, Column: user.FieldScimLocale},
 		},
 	}
 	graph.Nodes[111] = &sqlgraph.Node{
@@ -3602,30 +3615,35 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "UserHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			userhistory.FieldHistoryTime:       {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
-			userhistory.FieldRef:               {Type: field.TypeString, Column: userhistory.FieldRef},
-			userhistory.FieldOperation:         {Type: field.TypeEnum, Column: userhistory.FieldOperation},
-			userhistory.FieldCreatedAt:         {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
-			userhistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
-			userhistory.FieldCreatedBy:         {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
-			userhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
-			userhistory.FieldDeletedAt:         {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
-			userhistory.FieldDeletedBy:         {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
-			userhistory.FieldDisplayID:         {Type: field.TypeString, Column: userhistory.FieldDisplayID},
-			userhistory.FieldTags:              {Type: field.TypeJSON, Column: userhistory.FieldTags},
-			userhistory.FieldEmail:             {Type: field.TypeString, Column: userhistory.FieldEmail},
-			userhistory.FieldFirstName:         {Type: field.TypeString, Column: userhistory.FieldFirstName},
-			userhistory.FieldLastName:          {Type: field.TypeString, Column: userhistory.FieldLastName},
-			userhistory.FieldDisplayName:       {Type: field.TypeString, Column: userhistory.FieldDisplayName},
-			userhistory.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
-			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
-			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
-			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
-			userhistory.FieldLastLoginProvider: {Type: field.TypeEnum, Column: userhistory.FieldLastLoginProvider},
-			userhistory.FieldPassword:          {Type: field.TypeString, Column: userhistory.FieldPassword},
-			userhistory.FieldSub:               {Type: field.TypeString, Column: userhistory.FieldSub},
-			userhistory.FieldAuthProvider:      {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
-			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
+			userhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
+			userhistory.FieldRef:                   {Type: field.TypeString, Column: userhistory.FieldRef},
+			userhistory.FieldOperation:             {Type: field.TypeEnum, Column: userhistory.FieldOperation},
+			userhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
+			userhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
+			userhistory.FieldCreatedBy:             {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
+			userhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
+			userhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
+			userhistory.FieldDeletedBy:             {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
+			userhistory.FieldDisplayID:             {Type: field.TypeString, Column: userhistory.FieldDisplayID},
+			userhistory.FieldTags:                  {Type: field.TypeJSON, Column: userhistory.FieldTags},
+			userhistory.FieldEmail:                 {Type: field.TypeString, Column: userhistory.FieldEmail},
+			userhistory.FieldFirstName:             {Type: field.TypeString, Column: userhistory.FieldFirstName},
+			userhistory.FieldLastName:              {Type: field.TypeString, Column: userhistory.FieldLastName},
+			userhistory.FieldDisplayName:           {Type: field.TypeString, Column: userhistory.FieldDisplayName},
+			userhistory.FieldAvatarRemoteURL:       {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
+			userhistory.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
+			userhistory.FieldAvatarUpdatedAt:       {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
+			userhistory.FieldLastSeen:              {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
+			userhistory.FieldLastLoginProvider:     {Type: field.TypeEnum, Column: userhistory.FieldLastLoginProvider},
+			userhistory.FieldPassword:              {Type: field.TypeString, Column: userhistory.FieldPassword},
+			userhistory.FieldSub:                   {Type: field.TypeString, Column: userhistory.FieldSub},
+			userhistory.FieldAuthProvider:          {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
+			userhistory.FieldRole:                  {Type: field.TypeEnum, Column: userhistory.FieldRole},
+			userhistory.FieldScimExternalID:        {Type: field.TypeString, Column: userhistory.FieldScimExternalID},
+			userhistory.FieldScimUsername:          {Type: field.TypeString, Column: userhistory.FieldScimUsername},
+			userhistory.FieldScimActive:            {Type: field.TypeBool, Column: userhistory.FieldScimActive},
+			userhistory.FieldScimPreferredLanguage: {Type: field.TypeString, Column: userhistory.FieldScimPreferredLanguage},
+			userhistory.FieldScimLocale:            {Type: field.TypeString, Column: userhistory.FieldScimLocale},
 		},
 	}
 	graph.Nodes[112] = &sqlgraph.Node{
@@ -15799,6 +15817,26 @@ func (f *GroupFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(group.FieldDisplayName))
 }
 
+// WhereScimExternalID applies the entql string predicate on the scim_external_id field.
+func (f *GroupFilter) WhereScimExternalID(p entql.StringP) {
+	f.Where(p.Field(group.FieldScimExternalID))
+}
+
+// WhereScimDisplayName applies the entql string predicate on the scim_display_name field.
+func (f *GroupFilter) WhereScimDisplayName(p entql.StringP) {
+	f.Where(p.Field(group.FieldScimDisplayName))
+}
+
+// WhereScimActive applies the entql bool predicate on the scim_active field.
+func (f *GroupFilter) WhereScimActive(p entql.BoolP) {
+	f.Where(p.Field(group.FieldScimActive))
+}
+
+// WhereScimGroupMailing applies the entql string predicate on the scim_group_mailing field.
+func (f *GroupFilter) WhereScimGroupMailing(p entql.StringP) {
+	f.Where(p.Field(group.FieldScimGroupMailing))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *GroupFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -16459,6 +16497,26 @@ func (f *GroupHistoryFilter) WhereLogoURL(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *GroupHistoryFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldDisplayName))
+}
+
+// WhereScimExternalID applies the entql string predicate on the scim_external_id field.
+func (f *GroupHistoryFilter) WhereScimExternalID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldScimExternalID))
+}
+
+// WhereScimDisplayName applies the entql string predicate on the scim_display_name field.
+func (f *GroupHistoryFilter) WhereScimDisplayName(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldScimDisplayName))
+}
+
+// WhereScimActive applies the entql bool predicate on the scim_active field.
+func (f *GroupHistoryFilter) WhereScimActive(p entql.BoolP) {
+	f.Where(p.Field(grouphistory.FieldScimActive))
+}
+
+// WhereScimGroupMailing applies the entql string predicate on the scim_group_mailing field.
+func (f *GroupHistoryFilter) WhereScimGroupMailing(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldScimGroupMailing))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -30650,6 +30708,31 @@ func (f *UserFilter) WhereRole(p entql.StringP) {
 	f.Where(p.Field(user.FieldRole))
 }
 
+// WhereScimExternalID applies the entql string predicate on the scim_external_id field.
+func (f *UserFilter) WhereScimExternalID(p entql.StringP) {
+	f.Where(p.Field(user.FieldScimExternalID))
+}
+
+// WhereScimUsername applies the entql string predicate on the scim_username field.
+func (f *UserFilter) WhereScimUsername(p entql.StringP) {
+	f.Where(p.Field(user.FieldScimUsername))
+}
+
+// WhereScimActive applies the entql bool predicate on the scim_active field.
+func (f *UserFilter) WhereScimActive(p entql.BoolP) {
+	f.Where(p.Field(user.FieldScimActive))
+}
+
+// WhereScimPreferredLanguage applies the entql string predicate on the scim_preferred_language field.
+func (f *UserFilter) WhereScimPreferredLanguage(p entql.StringP) {
+	f.Where(p.Field(user.FieldScimPreferredLanguage))
+}
+
+// WhereScimLocale applies the entql string predicate on the scim_locale field.
+func (f *UserFilter) WhereScimLocale(p entql.StringP) {
+	f.Where(p.Field(user.FieldScimLocale))
+}
+
 // WhereHasPersonalAccessTokens applies a predicate to check if query has an edge personal_access_tokens.
 func (f *UserFilter) WhereHasPersonalAccessTokens() {
 	f.Where(entql.HasEdge("personal_access_tokens"))
@@ -31130,6 +31213,31 @@ func (f *UserHistoryFilter) WhereAuthProvider(p entql.StringP) {
 // WhereRole applies the entql string predicate on the role field.
 func (f *UserHistoryFilter) WhereRole(p entql.StringP) {
 	f.Where(p.Field(userhistory.FieldRole))
+}
+
+// WhereScimExternalID applies the entql string predicate on the scim_external_id field.
+func (f *UserHistoryFilter) WhereScimExternalID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldScimExternalID))
+}
+
+// WhereScimUsername applies the entql string predicate on the scim_username field.
+func (f *UserHistoryFilter) WhereScimUsername(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldScimUsername))
+}
+
+// WhereScimActive applies the entql bool predicate on the scim_active field.
+func (f *UserHistoryFilter) WhereScimActive(p entql.BoolP) {
+	f.Where(p.Field(userhistory.FieldScimActive))
+}
+
+// WhereScimPreferredLanguage applies the entql string predicate on the scim_preferred_language field.
+func (f *UserHistoryFilter) WhereScimPreferredLanguage(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldScimPreferredLanguage))
+}
+
+// WhereScimLocale applies the entql string predicate on the scim_locale field.
+func (f *UserHistoryFilter) WhereScimLocale(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldScimLocale))
 }
 
 // addPredicate implements the predicateAdder interface.

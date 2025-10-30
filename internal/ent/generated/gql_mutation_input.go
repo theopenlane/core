@@ -4180,6 +4180,10 @@ type CreateGroupInput struct {
 	Description                          *string
 	LogoURL                              *string
 	DisplayName                          *string
+	ScimExternalID                       *string
+	ScimDisplayName                      *string
+	ScimActive                           *bool
+	ScimGroupMailing                     *string
 	OwnerID                              *string
 	ProgramEditorIDs                     []string
 	ProgramBlockedGroupIDs               []string
@@ -4231,6 +4235,18 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if v := i.ScimExternalID; v != nil {
+		m.SetScimExternalID(*v)
+	}
+	if v := i.ScimDisplayName; v != nil {
+		m.SetScimDisplayName(*v)
+	}
+	if v := i.ScimActive; v != nil {
+		m.SetScimActive(*v)
+	}
+	if v := i.ScimGroupMailing; v != nil {
+		m.SetScimGroupMailing(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4356,6 +4372,14 @@ type UpdateGroupInput struct {
 	ClearLogoURL                               bool
 	LogoURL                                    *string
 	DisplayName                                *string
+	ClearScimExternalID                        bool
+	ScimExternalID                             *string
+	ClearScimDisplayName                       bool
+	ScimDisplayName                            *string
+	ClearScimActive                            bool
+	ScimActive                                 *bool
+	ClearScimGroupMailing                      bool
+	ScimGroupMailing                           *string
 	ClearOwner                                 bool
 	OwnerID                                    *string
 	ClearProgramEditors                        bool
@@ -4489,6 +4513,30 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if i.ClearScimExternalID {
+		m.ClearScimExternalID()
+	}
+	if v := i.ScimExternalID; v != nil {
+		m.SetScimExternalID(*v)
+	}
+	if i.ClearScimDisplayName {
+		m.ClearScimDisplayName()
+	}
+	if v := i.ScimDisplayName; v != nil {
+		m.SetScimDisplayName(*v)
+	}
+	if i.ClearScimActive {
+		m.ClearScimActive()
+	}
+	if v := i.ScimActive; v != nil {
+		m.SetScimActive(*v)
+	}
+	if i.ClearScimGroupMailing {
+		m.ClearScimGroupMailing()
+	}
+	if v := i.ScimGroupMailing; v != nil {
+		m.SetScimGroupMailing(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -13008,6 +13056,11 @@ type CreateUserInput struct {
 	Sub                      *string
 	AuthProvider             *enums.AuthProvider
 	Role                     *enums.Role
+	ScimExternalID           *string
+	ScimUsername             *string
+	ScimActive               *bool
+	ScimPreferredLanguage    *string
+	ScimLocale               *string
 	PersonalAccessTokenIDs   []string
 	TfaSettingIDs            []string
 	SettingID                string
@@ -13063,6 +13116,21 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if v := i.ScimExternalID; v != nil {
+		m.SetScimExternalID(*v)
+	}
+	if v := i.ScimUsername; v != nil {
+		m.SetScimUsername(*v)
+	}
+	if v := i.ScimActive; v != nil {
+		m.SetScimActive(*v)
+	}
+	if v := i.ScimPreferredLanguage; v != nil {
+		m.SetScimPreferredLanguage(*v)
+	}
+	if v := i.ScimLocale; v != nil {
+		m.SetScimLocale(*v)
 	}
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
@@ -13147,6 +13215,16 @@ type UpdateUserInput struct {
 	AuthProvider                   *enums.AuthProvider
 	ClearRole                      bool
 	Role                           *enums.Role
+	ClearScimExternalID            bool
+	ScimExternalID                 *string
+	ClearScimUsername              bool
+	ScimUsername                   *string
+	ClearScimActive                bool
+	ScimActive                     *bool
+	ClearScimPreferredLanguage     bool
+	ScimPreferredLanguage          *string
+	ClearScimLocale                bool
+	ScimLocale                     *string
 	ClearPersonalAccessTokens      bool
 	AddPersonalAccessTokenIDs      []string
 	RemovePersonalAccessTokenIDs   []string
@@ -13269,6 +13347,36 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if i.ClearScimExternalID {
+		m.ClearScimExternalID()
+	}
+	if v := i.ScimExternalID; v != nil {
+		m.SetScimExternalID(*v)
+	}
+	if i.ClearScimUsername {
+		m.ClearScimUsername()
+	}
+	if v := i.ScimUsername; v != nil {
+		m.SetScimUsername(*v)
+	}
+	if i.ClearScimActive {
+		m.ClearScimActive()
+	}
+	if v := i.ScimActive; v != nil {
+		m.SetScimActive(*v)
+	}
+	if i.ClearScimPreferredLanguage {
+		m.ClearScimPreferredLanguage()
+	}
+	if v := i.ScimPreferredLanguage; v != nil {
+		m.SetScimPreferredLanguage(*v)
+	}
+	if i.ClearScimLocale {
+		m.ClearScimLocale()
+	}
+	if v := i.ScimLocale; v != nil {
+		m.SetScimLocale(*v)
 	}
 	if i.ClearPersonalAccessTokens {
 		m.ClearPersonalAccessTokens()

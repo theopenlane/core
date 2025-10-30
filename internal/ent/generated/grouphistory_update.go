@@ -230,6 +230,86 @@ func (_u *GroupHistoryUpdate) SetNillableDisplayName(v *string) *GroupHistoryUpd
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *GroupHistoryUpdate) SetScimExternalID(v string) *GroupHistoryUpdate {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableScimExternalID(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *GroupHistoryUpdate) ClearScimExternalID() *GroupHistoryUpdate {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_u *GroupHistoryUpdate) SetScimDisplayName(v string) *GroupHistoryUpdate {
+	_u.mutation.SetScimDisplayName(v)
+	return _u
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableScimDisplayName(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetScimDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearScimDisplayName clears the value of the "scim_display_name" field.
+func (_u *GroupHistoryUpdate) ClearScimDisplayName() *GroupHistoryUpdate {
+	_u.mutation.ClearScimDisplayName()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *GroupHistoryUpdate) SetScimActive(v bool) *GroupHistoryUpdate {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableScimActive(v *bool) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *GroupHistoryUpdate) ClearScimActive() *GroupHistoryUpdate {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_u *GroupHistoryUpdate) SetScimGroupMailing(v string) *GroupHistoryUpdate {
+	_u.mutation.SetScimGroupMailing(v)
+	return _u
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableScimGroupMailing(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetScimGroupMailing(*v)
+	}
+	return _u
+}
+
+// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
+func (_u *GroupHistoryUpdate) ClearScimGroupMailing() *GroupHistoryUpdate {
+	_u.mutation.ClearScimGroupMailing()
+	return _u
+}
+
 // Mutation returns the GroupHistoryMutation object of the builder.
 func (_u *GroupHistoryUpdate) Mutation() *GroupHistoryMutation {
 	return _u.mutation
@@ -368,6 +448,30 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(grouphistory.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimDisplayName(); ok {
+		_spec.SetField(grouphistory.FieldScimDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.ScimDisplayNameCleared() {
+		_spec.ClearField(grouphistory.FieldScimDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(grouphistory.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(grouphistory.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(grouphistory.FieldScimGroupMailing, field.TypeString, value)
+	}
+	if _u.mutation.ScimGroupMailingCleared() {
+		_spec.ClearField(grouphistory.FieldScimGroupMailing, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.GroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -591,6 +695,86 @@ func (_u *GroupHistoryUpdateOne) SetNillableDisplayName(v *string) *GroupHistory
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *GroupHistoryUpdateOne) SetScimExternalID(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableScimExternalID(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *GroupHistoryUpdateOne) ClearScimExternalID() *GroupHistoryUpdateOne {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_u *GroupHistoryUpdateOne) SetScimDisplayName(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetScimDisplayName(v)
+	return _u
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableScimDisplayName(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearScimDisplayName clears the value of the "scim_display_name" field.
+func (_u *GroupHistoryUpdateOne) ClearScimDisplayName() *GroupHistoryUpdateOne {
+	_u.mutation.ClearScimDisplayName()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *GroupHistoryUpdateOne) SetScimActive(v bool) *GroupHistoryUpdateOne {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableScimActive(v *bool) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *GroupHistoryUpdateOne) ClearScimActive() *GroupHistoryUpdateOne {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_u *GroupHistoryUpdateOne) SetScimGroupMailing(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetScimGroupMailing(v)
+	return _u
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableScimGroupMailing(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetScimGroupMailing(*v)
+	}
+	return _u
+}
+
+// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
+func (_u *GroupHistoryUpdateOne) ClearScimGroupMailing() *GroupHistoryUpdateOne {
+	_u.mutation.ClearScimGroupMailing()
+	return _u
+}
+
 // Mutation returns the GroupHistoryMutation object of the builder.
 func (_u *GroupHistoryUpdateOne) Mutation() *GroupHistoryMutation {
 	return _u.mutation
@@ -759,6 +943,30 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(grouphistory.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimDisplayName(); ok {
+		_spec.SetField(grouphistory.FieldScimDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.ScimDisplayNameCleared() {
+		_spec.ClearField(grouphistory.FieldScimDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(grouphistory.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(grouphistory.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(grouphistory.FieldScimGroupMailing, field.TypeString, value)
+	}
+	if _u.mutation.ScimGroupMailingCleared() {
+		_spec.ClearField(grouphistory.FieldScimGroupMailing, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.GroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

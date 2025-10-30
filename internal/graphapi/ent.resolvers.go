@@ -3643,6 +3643,11 @@ func (r *Resolver) UpdateProgramInput() gqlgenerated.UpdateProgramInputResolver 
 	return &updateProgramInputResolver{r}
 }
 
+// UpdateRiskInput returns gqlgenerated.UpdateRiskInputResolver implementation.
+func (r *Resolver) UpdateRiskInput() gqlgenerated.UpdateRiskInputResolver {
+	return &updateRiskInputResolver{r}
+}
+
 // UpdateStandardInput returns gqlgenerated.UpdateStandardInputResolver implementation.
 func (r *Resolver) UpdateStandardInput() gqlgenerated.UpdateStandardInputResolver {
 	return &updateStandardInputResolver{r}
@@ -3684,6 +3689,7 @@ type updateInternalPolicyInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
 type updateProcedureInputResolver struct{ *Resolver }
 type updateProgramInputResolver struct{ *Resolver }
+type updateRiskInputResolver struct{ *Resolver }
 type updateStandardInputResolver struct{ *Resolver }
 type updateSubcontrolInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }

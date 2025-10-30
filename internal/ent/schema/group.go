@@ -98,6 +98,22 @@ func (Group) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
+		field.String("scim_external_id").
+			Comment("the SCIM external ID for the group").
+			Optional().
+			Nillable(),
+		field.String("scim_display_name").
+			Comment("the SCIM displayname for the group").
+			Optional().
+			Nillable(),
+		field.Bool("scim_active").
+			Comment("whether the SCIM group is marked as active").
+			Optional().
+			Default(true),
+		field.String("scim_group_mailing").
+			Comment("the SCIM group mailing list email").
+			Optional().
+			Nillable(),
 	}
 }
 

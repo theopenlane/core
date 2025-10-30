@@ -59,7 +59,7 @@ func HookGroup() ent.Hook {
 				// up as they will fail otherwise
 				isManaged, _ := m.IsManaged()
 				if isManaged {
-					m.SetName(stripInvalidChars(name))
+					m.SetName(StripInvalidChars(name))
 				}
 			}
 
@@ -291,12 +291,14 @@ func defaultGroupSettings(ctx context.Context, m *generated.GroupMutation) (stri
 	return groupSetting.ID, nil
 }
 
-func stripInvalidChars(s string) string {
+// StripInvalidChars removes invalid characters from a string
+func StripInvalidChars(s string) string {
 	var b strings.Builder
 	for _, r := range s {
 		if !strings.ContainsRune(validator.InvalidChars, r) {
 			b.WriteRune(r)
 		}
 	}
+
 	return b.String()
 }

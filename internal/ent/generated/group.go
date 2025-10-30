@@ -50,6 +50,14 @@ type Group struct {
 	LogoURL string `json:"logo_url,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"display_name,omitempty"`
+	// the SCIM external ID for the group
+	ScimExternalID *string `json:"scim_external_id,omitempty"`
+	// the SCIM displayname for the group
+	ScimDisplayName *string `json:"scim_display_name,omitempty"`
+	// whether the SCIM group is marked as active
+	ScimActive bool `json:"scim_active,omitempty"`
+	// the SCIM group mailing list email
+	ScimGroupMailing *string `json:"scim_group_mailing,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the GroupQuery when eager-loading is set.
 	Edges                                        GroupEdges `json:"edges"`
@@ -548,9 +556,9 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case group.FieldTags:
 			values[i] = new([]byte)
-		case group.FieldIsManaged:
+		case group.FieldIsManaged, group.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldDisplayID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
+		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldDisplayID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName, group.FieldScimExternalID, group.FieldScimDisplayName, group.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -700,6 +708,33 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				_m.DisplayName = value.String
+			}
+		case group.FieldScimExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_external_id", values[i])
+			} else if value.Valid {
+				_m.ScimExternalID = new(string)
+				*_m.ScimExternalID = value.String
+			}
+		case group.FieldScimDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_display_name", values[i])
+			} else if value.Valid {
+				_m.ScimDisplayName = new(string)
+				*_m.ScimDisplayName = value.String
+			}
+		case group.FieldScimActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_active", values[i])
+			} else if value.Valid {
+				_m.ScimActive = value.Bool
+			}
+		case group.FieldScimGroupMailing:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_group_mailing", values[i])
+			} else if value.Valid {
+				_m.ScimGroupMailing = new(string)
+				*_m.ScimGroupMailing = value.String
 			}
 		case group.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1090,6 +1125,24 @@ func (_m *Group) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)
+	builder.WriteString(", ")
+	if v := _m.ScimExternalID; v != nil {
+		builder.WriteString("scim_external_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimDisplayName; v != nil {
+		builder.WriteString("scim_display_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("scim_active=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScimActive))
+	builder.WriteString(", ")
+	if v := _m.ScimGroupMailing; v != nil {
+		builder.WriteString("scim_group_mailing=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
