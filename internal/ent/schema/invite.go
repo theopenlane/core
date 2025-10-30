@@ -88,6 +88,7 @@ func (Invite) Fields() []ent.Field {
 			Default(string(enums.InvitationSent)),
 		field.Enum("role").
 			GoType(enums.Role("")).
+			Values(string(enums.RoleOwner)).
 			Default(string(enums.RoleMember)),
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send of the invitation, maximum of 5").
@@ -106,6 +107,10 @@ func (Invite) Fields() []ent.Field {
 			Nillable().
 			Annotations(entgql.Skip()).
 			Sensitive(),
+		field.Bool("ownership_transfer").
+			Comment("indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner").
+			Default(false).
+			Optional(),
 	}
 }
 
