@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.25.1
+go 1.25.3
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
@@ -94,7 +94,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.6
 	github.com/theopenlane/entx v0.15.1
-	github.com/theopenlane/gqlgen-plugins v0.10.2
+	github.com/theopenlane/gqlgen-plugins v0.10.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.21.0
 	github.com/theopenlane/newman v0.2.1
@@ -103,7 +103,7 @@ require (
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.5.0
-	github.com/vektah/gqlparser/v2 v2.5.30
+	github.com/vektah/gqlparser/v2 v2.5.31
 	github.com/windmill-labs/windmill-go-client v1.567.3
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0

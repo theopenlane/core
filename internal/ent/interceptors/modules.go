@@ -62,7 +62,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				err = ErrFeatureNotEnabled
 			}
 
-			zerolog.Ctx(ctx).Error().Err(err).Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
+			zerolog.Ctx(ctx).Info().Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found
@@ -129,7 +129,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 			} else {
 				// this shouldn't happen unless a REST request is requesting data that isn't in the base module
 				// adding warning here to indicate potential misconfiguration
-				zerolog.Ctx(ctx).Error().Err(err).Msg("graphql operation not found, unable to set graphql error for missing module")
+				zerolog.Ctx(ctx).Info().Str("field", fieldCheck).Msg("graphql operation not found, unable to set graphql error for missing module")
 
 				return generated.ErrPermissionDenied
 			}
