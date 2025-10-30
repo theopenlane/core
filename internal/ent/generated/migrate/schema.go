@@ -2309,10 +2309,11 @@ var (
 		{Name: "expires", Type: field.TypeTime, Nullable: true},
 		{Name: "recipient", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVITATION_SENT", "APPROVAL_REQUIRED", "INVITATION_ACCEPTED", "INVITATION_EXPIRED"}, Default: "INVITATION_SENT"},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
+		{Name: "ownership_transfer", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
@@ -2323,7 +2324,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "invites_organizations_invites",
-				Columns:    []*schema.Column{InvitesColumns[15]},
+				Columns:    []*schema.Column{InvitesColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2332,7 +2333,7 @@ var (
 			{
 				Name:    "invite_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{InvitesColumns[15]},
+				Columns: []*schema.Column{InvitesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2340,7 +2341,7 @@ var (
 			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[9], InvitesColumns[15]},
+				Columns: []*schema.Column{InvitesColumns[9], InvitesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

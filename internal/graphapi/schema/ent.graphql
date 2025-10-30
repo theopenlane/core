@@ -8691,6 +8691,10 @@ input CreateInviteInput {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   ownerID: ID
   eventIDs: [ID!]
   groupIDs: [ID!]
@@ -23262,6 +23266,10 @@ type Invite implements Node {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   owner: Organization
   events(
     """
@@ -23394,6 +23402,7 @@ InviteRole is enum for the field role
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
   ADMIN
   MEMBER
+  OWNER
 }
 """
 InviteWhereInput is used for filtering Invite objects.
@@ -23568,6 +23577,13 @@ input InviteWhereInput {
   requestorIDNotNil: Boolean
   requestorIDEqualFold: String
   requestorIDContainsFold: String
+  """
+  ownership_transfer field predicates
+  """
+  ownershipTransfer: Boolean
+  ownershipTransferNEQ: Boolean
+  ownershipTransferIsNil: Boolean
+  ownershipTransferNotNil: Boolean
   """
   owner edge predicates
   """
@@ -55519,6 +55535,11 @@ input UpdateInviteInput {
   the number of attempts made to perform email send of the invitation, maximum of 5
   """
   sendAttempts: Int
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
+  clearOwnershipTransfer: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

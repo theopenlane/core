@@ -2108,21 +2108,22 @@ type ComplexityRoot struct {
 	}
 
 	Invite struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Expires      func(childComplexity int) int
-		Groups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID           func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Recipient    func(childComplexity int) int
-		RequestorID  func(childComplexity int) int
-		Role         func(childComplexity int) int
-		SendAttempts func(childComplexity int) int
-		Status       func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Events            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Expires           func(childComplexity int) int
+		Groups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		OwnershipTransfer func(childComplexity int) int
+		Recipient         func(childComplexity int) int
+		RequestorID       func(childComplexity int) int
+		Role              func(childComplexity int) int
+		SendAttempts      func(childComplexity int) int
+		Status            func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	InviteBulkCreatePayload struct {
@@ -2813,6 +2814,7 @@ type ComplexityRoot struct {
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
+		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -3426,6 +3428,11 @@ type ComplexityRoot struct {
 
 	OrganizationSettingUpdatePayload struct {
 		OrganizationSetting func(childComplexity int) int
+	}
+
+	OrganizationTransferOwnershipPayload struct {
+		InvitationSent func(childComplexity int) int
+		Organization   func(childComplexity int) int
 	}
 
 	OrganizationUpdatePayload struct {
@@ -15727,6 +15734,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Invite.OwnerID(childComplexity), true
 
+	case "Invite.ownershipTransfer":
+		if e.complexity.Invite.OwnershipTransfer == nil {
+			break
+		}
+
+		return e.complexity.Invite.OwnershipTransfer(childComplexity), true
+
 	case "Invite.recipient":
 		if e.complexity.Invite.Recipient == nil {
 			break
@@ -20526,6 +20540,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.SubmitTrustCenterNDAResponse(childComplexity, args["input"].(model.SubmitTrustCenterNDAResponseInput)), true
 
+	case "Mutation.transferOrganizationOwnership":
+		if e.complexity.Mutation.TransferOrganizationOwnership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_transferOrganizationOwnership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.TransferOrganizationOwnership(childComplexity, args["newOwnerEmail"].(string)), true
+
 	case "Mutation.updateAPIToken":
 		if e.complexity.Mutation.UpdateAPIToken == nil {
 			break
@@ -24324,6 +24350,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingUpdatePayload.OrganizationSetting(childComplexity), true
+
+	case "OrganizationTransferOwnershipPayload.invitationSent":
+		if e.complexity.OrganizationTransferOwnershipPayload.InvitationSent == nil {
+			break
+		}
+
+		return e.complexity.OrganizationTransferOwnershipPayload.InvitationSent(childComplexity), true
+
+	case "OrganizationTransferOwnershipPayload.organization":
+		if e.complexity.OrganizationTransferOwnershipPayload.Organization == nil {
+			break
+		}
+
+		return e.complexity.OrganizationTransferOwnershipPayload.Organization(childComplexity), true
 
 	case "OrganizationUpdatePayload.organization":
 		if e.complexity.OrganizationUpdatePayload.Organization == nil {
@@ -49236,6 +49276,10 @@ input CreateInviteInput {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   ownerID: ID
   eventIDs: [ID!]
   groupIDs: [ID!]
@@ -63807,6 +63851,10 @@ type Invite implements Node {
   the user who initiated the invitation
   """
   requestorID: String
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
   owner: Organization
   events(
     """
@@ -63939,6 +63987,7 @@ InviteRole is enum for the field role
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
   ADMIN
   MEMBER
+  OWNER
 }
 """
 InviteWhereInput is used for filtering Invite objects.
@@ -64113,6 +64162,13 @@ input InviteWhereInput {
   requestorIDNotNil: Boolean
   requestorIDEqualFold: String
   requestorIDContainsFold: String
+  """
+  ownership_transfer field predicates
+  """
+  ownershipTransfer: Boolean
+  ownershipTransferNEQ: Boolean
+  ownershipTransferIsNil: Boolean
+  ownershipTransferNotNil: Boolean
   """
   owner edge predicates
   """
@@ -96064,6 +96120,11 @@ input UpdateInviteInput {
   the number of attempts made to perform email send of the invitation, maximum of 5
   """
   sendAttempts: Int
+  """
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  """
+  ownershipTransfer: Boolean
+  clearOwnershipTransfer: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]
@@ -103466,6 +103527,29 @@ extend type Mutation{
         """
         members: [OrgMembersInput!]
     ): OrganizationCreatePayload!
+    """
+    Transfer ownership of an organization to another user
+    """
+    transferOrganizationOwnership(
+        """
+        Email of the new owner
+        """
+        newOwnerEmail: String!
+    ): OrganizationTransferOwnershipPayload!
+}
+
+"""
+Return response for transferOrganizationOwnership mutation
+"""
+type OrganizationTransferOwnershipPayload {
+    """
+    Updated organization
+    """
+    organization: Organization!
+    """
+    Whether an invitation was sent (true if new owner wasn't a member)
+    """
+    invitationSent: Boolean!
 }`, BuiltIn: false},
 	{Name: "../schema/orgmembership.graphql", Input: `extend type Query {
     """

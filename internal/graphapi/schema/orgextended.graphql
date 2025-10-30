@@ -40,4 +40,27 @@ extend type Mutation{
         """
         members: [OrgMembersInput!]
     ): OrganizationCreatePayload!
+    """
+    Transfer ownership of an organization to another user
+    """
+    transferOrganizationOwnership(
+        """
+        Email of the new owner
+        """
+        newOwnerEmail: String!
+    ): OrganizationTransferOwnershipPayload!
+}
+
+"""
+Return response for transferOrganizationOwnership mutation
+"""
+type OrganizationTransferOwnershipPayload {
+    """
+    Updated organization
+    """
+    organization: Organization!
+    """
+    Whether an invitation was sent (true if new owner wasn't a member)
+    """
+    invitationSent: Boolean!
 }

@@ -21096,6 +21096,11 @@ func (_q *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, invite.FieldRequestorID)
 				fieldSeen[invite.FieldRequestorID] = struct{}{}
 			}
+		case "ownershipTransfer":
+			if _, ok := fieldSeen[invite.FieldOwnershipTransfer]; !ok {
+				selectedFields = append(selectedFields, invite.FieldOwnershipTransfer)
+				fieldSeen[invite.FieldOwnershipTransfer] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

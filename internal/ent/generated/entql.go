@@ -1569,21 +1569,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Invite",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			invite.FieldCreatedAt:    {Type: field.TypeTime, Column: invite.FieldCreatedAt},
-			invite.FieldUpdatedAt:    {Type: field.TypeTime, Column: invite.FieldUpdatedAt},
-			invite.FieldCreatedBy:    {Type: field.TypeString, Column: invite.FieldCreatedBy},
-			invite.FieldUpdatedBy:    {Type: field.TypeString, Column: invite.FieldUpdatedBy},
-			invite.FieldDeletedAt:    {Type: field.TypeTime, Column: invite.FieldDeletedAt},
-			invite.FieldDeletedBy:    {Type: field.TypeString, Column: invite.FieldDeletedBy},
-			invite.FieldOwnerID:      {Type: field.TypeString, Column: invite.FieldOwnerID},
-			invite.FieldToken:        {Type: field.TypeString, Column: invite.FieldToken},
-			invite.FieldExpires:      {Type: field.TypeTime, Column: invite.FieldExpires},
-			invite.FieldRecipient:    {Type: field.TypeString, Column: invite.FieldRecipient},
-			invite.FieldStatus:       {Type: field.TypeEnum, Column: invite.FieldStatus},
-			invite.FieldRole:         {Type: field.TypeEnum, Column: invite.FieldRole},
-			invite.FieldSendAttempts: {Type: field.TypeInt, Column: invite.FieldSendAttempts},
-			invite.FieldRequestorID:  {Type: field.TypeString, Column: invite.FieldRequestorID},
-			invite.FieldSecret:       {Type: field.TypeBytes, Column: invite.FieldSecret},
+			invite.FieldCreatedAt:         {Type: field.TypeTime, Column: invite.FieldCreatedAt},
+			invite.FieldUpdatedAt:         {Type: field.TypeTime, Column: invite.FieldUpdatedAt},
+			invite.FieldCreatedBy:         {Type: field.TypeString, Column: invite.FieldCreatedBy},
+			invite.FieldUpdatedBy:         {Type: field.TypeString, Column: invite.FieldUpdatedBy},
+			invite.FieldDeletedAt:         {Type: field.TypeTime, Column: invite.FieldDeletedAt},
+			invite.FieldDeletedBy:         {Type: field.TypeString, Column: invite.FieldDeletedBy},
+			invite.FieldOwnerID:           {Type: field.TypeString, Column: invite.FieldOwnerID},
+			invite.FieldToken:             {Type: field.TypeString, Column: invite.FieldToken},
+			invite.FieldExpires:           {Type: field.TypeTime, Column: invite.FieldExpires},
+			invite.FieldRecipient:         {Type: field.TypeString, Column: invite.FieldRecipient},
+			invite.FieldStatus:            {Type: field.TypeEnum, Column: invite.FieldStatus},
+			invite.FieldRole:              {Type: field.TypeEnum, Column: invite.FieldRole},
+			invite.FieldSendAttempts:      {Type: field.TypeInt, Column: invite.FieldSendAttempts},
+			invite.FieldRequestorID:       {Type: field.TypeString, Column: invite.FieldRequestorID},
+			invite.FieldSecret:            {Type: field.TypeBytes, Column: invite.FieldSecret},
+			invite.FieldOwnershipTransfer: {Type: field.TypeBool, Column: invite.FieldOwnershipTransfer},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -18528,6 +18529,11 @@ func (f *InviteFilter) WhereRequestorID(p entql.StringP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *InviteFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(invite.FieldSecret))
+}
+
+// WhereOwnershipTransfer applies the entql bool predicate on the ownership_transfer field.
+func (f *InviteFilter) WhereOwnershipTransfer(p entql.BoolP) {
+	f.Where(p.Field(invite.FieldOwnershipTransfer))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
