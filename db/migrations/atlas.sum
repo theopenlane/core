@@ -1,4 +1,4 @@
-h1:qLWLUIxqI1/bBnO1JX6ZQ3z4rPRb5rNcTXv1e8SZM1k=
+h1:CFWNks1ApUmnzNV+YLn9n95ZUtnScnubb5ad0yicnOo=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -70,3 +70,4 @@ h1:qLWLUIxqI1/bBnO1JX6ZQ3z4rPRb5rNcTXv1e8SZM1k=
 20251020115019_filedownloadtoken.sql h1:JgFHXewTfBYNohPPiOocH2qdR2vfCMJ1duVxsUQCm+E=
 20251021165301_notes_procedure_policy_risk.sql h1:lzPmKqZFhgcm2dLj+ErASCli5bd41mKk85w43Uazc+8=
 20251026212517_scim.sql h1:sy4Omy+wLRIlwlyY2LXL77ZHA5lx0TwSONEieXiBnVo=
+20251030194750_ownership.sql h1:IrP8mbXJKPJBzeJ/8OGmKR9xDG08OnPw+5emSbG6xPk=

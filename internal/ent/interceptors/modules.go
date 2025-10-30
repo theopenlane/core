@@ -126,7 +126,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 					Message: ErrFeatureNotEnabled.Error(),
 					Path:    path,
 				})
-			} else {
+			} else if fieldCheck != "search" {
 				// this shouldn't happen unless a REST request is requesting data that isn't in the base module
 				// adding warning here to indicate potential misconfiguration
 				zerolog.Ctx(ctx).Info().Str("field", fieldCheck).Msg("graphql operation not found, unable to set graphql error for missing module")
