@@ -173,21 +173,19 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 					require.True(t, ok)
 
 					assert.NotEmpty(t, claims["org"])
-
-					if tc.userConfirmed {
-						job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-							[]rivertest.ExpectedJob{
-								{
-									Args: jobs.EmailArgs{
-										Message: *newman.NewEmailMessageWithOptions(
-											newman.WithSubject("Welcome to Meow Inc.!"),
-											newman.WithTo([]string{tc.email}),
-										),
-									},
+				} else {
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{
+									Message: *newman.NewEmailMessageWithOptions(
+										newman.WithSubject("Welcome to Meow Inc.!"),
+										newman.WithTo([]string{tc.email}),
+									),
 								},
-							})
-						require.NotNil(t, job)
-					}
+							},
+						})
+					require.NotNil(t, job)
 				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)
