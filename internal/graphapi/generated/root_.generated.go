@@ -88,6 +88,8 @@ type ComplexityRoot struct {
 		Scopes            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Token             func(childComplexity int) int
+		TokenFp           func(childComplexity int) int
+		TokenHash         func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -3456,6 +3458,8 @@ type ComplexityRoot struct {
 		Scopes            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Token             func(childComplexity int) int
+		TokenFp           func(childComplexity int) int
+		TokenHash         func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -5882,6 +5886,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APIToken.Token(childComplexity), true
+
+	case "APIToken.tokenFp":
+		if e.complexity.APIToken.TokenFp == nil {
+			break
+		}
+
+		return e.complexity.APIToken.TokenFp(childComplexity), true
+
+	case "APIToken.tokenHash":
+		if e.complexity.APIToken.TokenHash == nil {
+			break
+		}
+
+		return e.complexity.APIToken.TokenHash(childComplexity), true
 
 	case "APIToken.updatedAt":
 		if e.complexity.APIToken.UpdatedAt == nil {
@@ -24478,6 +24496,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessToken.Token(childComplexity), true
 
+	case "PersonalAccessToken.tokenFp":
+		if e.complexity.PersonalAccessToken.TokenFp == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.TokenFp(childComplexity), true
+
+	case "PersonalAccessToken.tokenHash":
+		if e.complexity.PersonalAccessToken.TokenHash == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.TokenHash(childComplexity), true
+
 	case "PersonalAccessToken.updatedAt":
 		if e.complexity.PersonalAccessToken.UpdatedAt == nil {
 			break
@@ -40532,6 +40564,14 @@ type APIToken implements Node {
   """
   name: String!
   token: String!
+  """
+  argon2 hash of the secret part of the token
+  """
+  tokenHash: String!
+  """
+  HMAC fingerprint of the public_id for lookup
+  """
+  tokenFp: String!
   """
   when the token expires
   """
@@ -74119,6 +74159,14 @@ type PersonalAccessToken implements Node {
   """
   name: String!
   token: String!
+  """
+  argon2 hash of the secret part of the token
+  """
+  tokenHash: String!
+  """
+  HMAC fingerprint of the public_id for lookup
+  """
+  tokenFp: String!
   """
   when the token expires
   """

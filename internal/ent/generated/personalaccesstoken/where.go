@@ -112,6 +112,16 @@ func Token(v string) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldEQ(FieldToken, v))
 }
 
+// TokenHash applies equality check predicate on the "token_hash" field. It's identical to TokenHashEQ.
+func TokenHash(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldTokenHash, v))
+}
+
+// TokenFp applies equality check predicate on the "token_fp" field. It's identical to TokenFpEQ.
+func TokenFp(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldTokenFp, v))
+}
+
 // ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
 func ExpiresAt(v time.Time) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldEQ(FieldExpiresAt, v))
@@ -725,6 +735,136 @@ func TokenEqualFold(v string) predicate.PersonalAccessToken {
 // TokenContainsFold applies the ContainsFold predicate on the "token" field.
 func TokenContainsFold(v string) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldContainsFold(FieldToken, v))
+}
+
+// TokenHashEQ applies the EQ predicate on the "token_hash" field.
+func TokenHashEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldTokenHash, v))
+}
+
+// TokenHashNEQ applies the NEQ predicate on the "token_hash" field.
+func TokenHashNEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldTokenHash, v))
+}
+
+// TokenHashIn applies the In predicate on the "token_hash" field.
+func TokenHashIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIn(FieldTokenHash, vs...))
+}
+
+// TokenHashNotIn applies the NotIn predicate on the "token_hash" field.
+func TokenHashNotIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotIn(FieldTokenHash, vs...))
+}
+
+// TokenHashGT applies the GT predicate on the "token_hash" field.
+func TokenHashGT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGT(FieldTokenHash, v))
+}
+
+// TokenHashGTE applies the GTE predicate on the "token_hash" field.
+func TokenHashGTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGTE(FieldTokenHash, v))
+}
+
+// TokenHashLT applies the LT predicate on the "token_hash" field.
+func TokenHashLT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLT(FieldTokenHash, v))
+}
+
+// TokenHashLTE applies the LTE predicate on the "token_hash" field.
+func TokenHashLTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLTE(FieldTokenHash, v))
+}
+
+// TokenHashContains applies the Contains predicate on the "token_hash" field.
+func TokenHashContains(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContains(FieldTokenHash, v))
+}
+
+// TokenHashHasPrefix applies the HasPrefix predicate on the "token_hash" field.
+func TokenHashHasPrefix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasPrefix(FieldTokenHash, v))
+}
+
+// TokenHashHasSuffix applies the HasSuffix predicate on the "token_hash" field.
+func TokenHashHasSuffix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasSuffix(FieldTokenHash, v))
+}
+
+// TokenHashEqualFold applies the EqualFold predicate on the "token_hash" field.
+func TokenHashEqualFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEqualFold(FieldTokenHash, v))
+}
+
+// TokenHashContainsFold applies the ContainsFold predicate on the "token_hash" field.
+func TokenHashContainsFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContainsFold(FieldTokenHash, v))
+}
+
+// TokenFpEQ applies the EQ predicate on the "token_fp" field.
+func TokenFpEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEQ(FieldTokenFp, v))
+}
+
+// TokenFpNEQ applies the NEQ predicate on the "token_fp" field.
+func TokenFpNEQ(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNEQ(FieldTokenFp, v))
+}
+
+// TokenFpIn applies the In predicate on the "token_fp" field.
+func TokenFpIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIn(FieldTokenFp, vs...))
+}
+
+// TokenFpNotIn applies the NotIn predicate on the "token_fp" field.
+func TokenFpNotIn(vs ...string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotIn(FieldTokenFp, vs...))
+}
+
+// TokenFpGT applies the GT predicate on the "token_fp" field.
+func TokenFpGT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGT(FieldTokenFp, v))
+}
+
+// TokenFpGTE applies the GTE predicate on the "token_fp" field.
+func TokenFpGTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldGTE(FieldTokenFp, v))
+}
+
+// TokenFpLT applies the LT predicate on the "token_fp" field.
+func TokenFpLT(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLT(FieldTokenFp, v))
+}
+
+// TokenFpLTE applies the LTE predicate on the "token_fp" field.
+func TokenFpLTE(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldLTE(FieldTokenFp, v))
+}
+
+// TokenFpContains applies the Contains predicate on the "token_fp" field.
+func TokenFpContains(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContains(FieldTokenFp, v))
+}
+
+// TokenFpHasPrefix applies the HasPrefix predicate on the "token_fp" field.
+func TokenFpHasPrefix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasPrefix(FieldTokenFp, v))
+}
+
+// TokenFpHasSuffix applies the HasSuffix predicate on the "token_fp" field.
+func TokenFpHasSuffix(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldHasSuffix(FieldTokenFp, v))
+}
+
+// TokenFpEqualFold applies the EqualFold predicate on the "token_fp" field.
+func TokenFpEqualFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldEqualFold(FieldTokenFp, v))
+}
+
+// TokenFpContainsFold applies the ContainsFold predicate on the "token_fp" field.
+func TokenFpContainsFold(v string) predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldContainsFold(FieldTokenFp, v))
 }
 
 // ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
