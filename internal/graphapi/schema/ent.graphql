@@ -20,6 +20,14 @@ type APIToken implements Node {
   name: String!
   token: String!
   """
+  argon2 hash of the secret part of the token
+  """
+  tokenHash: String!
+  """
+  HMAC fingerprint of the public_id for lookup
+  """
+  tokenFp: String!
+  """
   when the token expires
   """
   expiresAt: Time
@@ -33606,6 +33614,14 @@ type PersonalAccessToken implements Node {
   """
   name: String!
   token: String!
+  """
+  argon2 hash of the secret part of the token
+  """
+  tokenHash: String!
+  """
+  HMAC fingerprint of the public_id for lookup
+  """
+  tokenFp: String!
   """
   when the token expires
   """

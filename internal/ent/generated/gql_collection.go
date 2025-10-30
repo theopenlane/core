@@ -196,6 +196,16 @@ func (_q *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, apitoken.FieldToken)
 				fieldSeen[apitoken.FieldToken] = struct{}{}
 			}
+		case "tokenHash":
+			if _, ok := fieldSeen[apitoken.FieldTokenHash]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldTokenHash)
+				fieldSeen[apitoken.FieldTokenHash] = struct{}{}
+			}
+		case "tokenFp":
+			if _, ok := fieldSeen[apitoken.FieldTokenFp]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldTokenFp)
+				fieldSeen[apitoken.FieldTokenFp] = struct{}{}
+			}
 		case "expiresAt":
 			if _, ok := fieldSeen[apitoken.FieldExpiresAt]; !ok {
 				selectedFields = append(selectedFields, apitoken.FieldExpiresAt)
@@ -32749,6 +32759,16 @@ func (_q *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[personalaccesstoken.FieldToken]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldToken)
 				fieldSeen[personalaccesstoken.FieldToken] = struct{}{}
+			}
+		case "tokenHash":
+			if _, ok := fieldSeen[personalaccesstoken.FieldTokenHash]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldTokenHash)
+				fieldSeen[personalaccesstoken.FieldTokenHash] = struct{}{}
+			}
+		case "tokenFp":
+			if _, ok := fieldSeen[personalaccesstoken.FieldTokenFp]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldTokenFp)
+				fieldSeen[personalaccesstoken.FieldTokenFp] = struct{}{}
 			}
 		case "expiresAt":
 			if _, ok := fieldSeen[personalaccesstoken.FieldExpiresAt]; !ok {

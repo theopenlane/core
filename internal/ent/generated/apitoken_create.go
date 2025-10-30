@@ -138,11 +138,15 @@ func (_c *APITokenCreate) SetToken(v string) *APITokenCreate {
 	return _c
 }
 
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (_c *APITokenCreate) SetNillableToken(v *string) *APITokenCreate {
-	if v != nil {
-		_c.SetToken(*v)
-	}
+// SetTokenHash sets the "token_hash" field.
+func (_c *APITokenCreate) SetTokenHash(v string) *APITokenCreate {
+	_c.mutation.SetTokenHash(v)
+	return _c
+}
+
+// SetTokenFp sets the "token_fp" field.
+func (_c *APITokenCreate) SetTokenFp(v string) *APITokenCreate {
+	_c.mutation.SetTokenFp(v)
 	return _c
 }
 
@@ -330,13 +334,6 @@ func (_c *APITokenCreate) defaults() error {
 		v := apitoken.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.Token(); !ok {
-		if apitoken.DefaultToken == nil {
-			return fmt.Errorf("generated: uninitialized apitoken.DefaultToken (forgotten import generated/runtime?)")
-		}
-		v := apitoken.DefaultToken()
-		_c.mutation.SetToken(v)
-	}
 	if _, ok := _c.mutation.IsActive(); !ok {
 		v := apitoken.DefaultIsActive
 		_c.mutation.SetIsActive(v)
@@ -368,6 +365,12 @@ func (_c *APITokenCreate) check() error {
 	}
 	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "APIToken.token"`)}
+	}
+	if _, ok := _c.mutation.TokenHash(); !ok {
+		return &ValidationError{Name: "token_hash", err: errors.New(`generated: missing required field "APIToken.token_hash"`)}
+	}
+	if _, ok := _c.mutation.TokenFp(); !ok {
+		return &ValidationError{Name: "token_fp", err: errors.New(`generated: missing required field "APIToken.token_fp"`)}
 	}
 	return nil
 }
@@ -440,6 +443,14 @@ func (_c *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(apitoken.FieldToken, field.TypeString, value)
 		_node.Token = value
+	}
+	if value, ok := _c.mutation.TokenHash(); ok {
+		_spec.SetField(apitoken.FieldTokenHash, field.TypeString, value)
+		_node.TokenHash = value
+	}
+	if value, ok := _c.mutation.TokenFp(); ok {
+		_spec.SetField(apitoken.FieldTokenFp, field.TypeString, value)
+		_node.TokenFp = value
 	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)

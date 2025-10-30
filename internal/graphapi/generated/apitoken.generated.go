@@ -70,6 +70,10 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_APIToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_APIToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_APIToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_APIToken_expiresAt(ctx, field)
 			case "description":
@@ -168,6 +172,10 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_APIToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_APIToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_APIToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_APIToken_expiresAt(ctx, field)
 			case "description":
@@ -266,6 +274,10 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_APIToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_APIToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_APIToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_APIToken_expiresAt(ctx, field)
 			case "description":

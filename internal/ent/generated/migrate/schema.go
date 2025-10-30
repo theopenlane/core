@@ -21,6 +21,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "token_hash", Type: field.TypeString},
+		{Name: "token_fp", Type: field.TypeString},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
@@ -40,7 +42,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[19]},
+				Columns:    []*schema.Column{APITokensColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -49,10 +51,15 @@ var (
 			{
 				Name:    "apitoken_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[19]},
+				Columns: []*schema.Column{APITokensColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+			{
+				Name:    "apitoken_token_fp",
+				Unique:  false,
+				Columns: []*schema.Column{APITokensColumns[11]},
 			},
 			{
 				Name:    "apitoken_token",
@@ -3559,6 +3566,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "token_hash", Type: field.TypeString},
+		{Name: "token_fp", Type: field.TypeString},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
@@ -3578,12 +3587,17 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[19]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[21]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "personalaccesstoken_token_fp",
+				Unique:  false,
+				Columns: []*schema.Column{PersonalAccessTokensColumns[11]},
+			},
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,

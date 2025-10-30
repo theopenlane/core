@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_PersonalAccessToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_PersonalAccessToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
 			case "description":
@@ -139,6 +143,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_PersonalAccessToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_PersonalAccessToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
 			case "description":
@@ -239,6 +247,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
 			case "token":
 				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
+			case "tokenHash":
+				return ec.fieldContext_PersonalAccessToken_tokenHash(ctx, field)
+			case "tokenFp":
+				return ec.fieldContext_PersonalAccessToken_tokenFp(ctx, field)
 			case "expiresAt":
 				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
 			case "description":
