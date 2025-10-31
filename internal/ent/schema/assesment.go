@@ -10,10 +10,12 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -91,11 +93,11 @@ func (a Assessment) Edges() []ent.Edge {
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-		// rule.AllowIfAssessmentQueryCreatedBy(),
+			rule.AllowIfAssessmentQueryCreatedBy(),
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			// rule.AllowIfAssessmentCreatedBy(),
+			rule.AllowIfAssessmentCreatedBy(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -104,7 +106,7 @@ func (Assessment) Policy() ent.Policy {
 // Annotations of the Assessment
 func (Assessment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 	}
 }
 

@@ -12,8 +12,11 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -117,11 +120,11 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			// rule.AllowIfAssessmentResponseQueryOwner(),
+			rule.AllowIfAssessmentResponseQueryOwner(),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			// rule.AllowIfAssessmentResponseOwner(),
+			rule.AllowIfAssessmentResponseOwner(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
@@ -131,7 +134,7 @@ func (AssessmentResponse) Policy() ent.Policy {
 // Annotations of the AssessmentResponse
 func (AssessmentResponse) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 	}
 }
 

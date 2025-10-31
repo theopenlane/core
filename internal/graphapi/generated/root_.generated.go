@@ -58999,7 +58999,6 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.Exp
   RISK
   SUBSCRIBER
   TASK
-  TEMPLATE_RESPONDER
 }
 """
 Ordering options for Export connections
