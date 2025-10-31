@@ -104,6 +104,12 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			oldEmailConfirmed, _ := m.OldEmailConfirmed(ctx)
+			if oldEmailConfirmed {
+				// email was already confirmed, continue with normal flow
+				return next.Mutate(ctx, m)
+			}
+
 			// execute the mutation first, so the user setting is updated
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
