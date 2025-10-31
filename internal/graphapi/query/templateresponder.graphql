@@ -1,0 +1,139 @@
+
+mutation CreateBulkCSVTemplateResponder($input: Upload!) {
+  createBulkCSVTemplateResponder(input: $input) {
+    templateResponders {
+      assessmentID
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTemplateResponder($input: [CreateTemplateResponderInput!]) {
+  createBulkTemplateResponder(input: $input) {
+    templateResponders {
+      assessmentID
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTemplateResponder($input: CreateTemplateResponderInput!) {
+  createTemplateResponder(input: $input) {
+    templateResponder {
+      assessmentID
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTemplateResponder($deleteTemplateResponderId: ID!) {
+  deleteTemplateResponder(id: $deleteTemplateResponderId) {
+    deletedID
+  }
+}
+
+query GetAllTemplateResponders {
+  templateResponders {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        createdAt
+        createdBy
+        email
+        id
+        ownerID
+        sendAttempts
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTemplateResponderByID($templateResponderId: ID!) {
+  templateResponder(id: $templateResponderId) {
+    assessmentID
+    createdAt
+    createdBy
+    email
+    id
+    ownerID
+    sendAttempts
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTemplateResponders($first: Int, $last: Int, $where: TemplateResponderWhereInput) {
+  templateResponders(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        createdAt
+        createdBy
+        email
+        id
+        ownerID
+        sendAttempts
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTemplateResponder($updateTemplateResponderId: ID!, $input: UpdateTemplateResponderInput!) {
+  updateTemplateResponder(id: $updateTemplateResponderId, input: $input) {
+    templateResponder {
+      assessmentID
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}

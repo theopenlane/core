@@ -88,6 +88,54 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Return response for createBulkAssessment mutation
+type AssessmentBulkCreatePayload struct {
+	// Created assessments
+	Assessments []*generated.Assessment `json:"assessments,omitempty"`
+}
+
+// Return response for createAssessment mutation
+type AssessmentCreatePayload struct {
+	// Created assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
+// Return response for deleteAssessment mutation
+type AssessmentDeletePayload struct {
+	// Deleted assessment ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkAssessmentResponse mutation
+type AssessmentResponseBulkCreatePayload struct {
+	// Created assessmentResponses
+	AssessmentResponses []*generated.AssessmentResponse `json:"assessmentResponses,omitempty"`
+}
+
+// Return response for createAssessmentResponse mutation
+type AssessmentResponseCreatePayload struct {
+	// Created assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for deleteAssessmentResponse mutation
+type AssessmentResponseDeletePayload struct {
+	// Deleted assessmentResponse ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAssessmentResponse mutation
+type AssessmentResponseUpdatePayload struct {
+	// Updated assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for updateAssessment mutation
+type AssessmentUpdatePayload struct {
+	// Updated assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
 // Return response for createBulkAsset mutation
 type AssetBulkCreatePayload struct {
 	// Created assets
@@ -1498,6 +1546,8 @@ type SearchResults struct {
 	TotalCount                  int                                             `json:"totalCount"`
 	APITokens                   *generated.APITokenConnection                   `json:"apiTokens,omitempty"`
 	ActionPlans                 *generated.ActionPlanConnection                 `json:"actionPlans,omitempty"`
+	Assessments                 *generated.AssessmentConnection                 `json:"assessments,omitempty"`
+	AssessmentResponses         *generated.AssessmentResponseConnection         `json:"assessmentResponses,omitempty"`
 	Assets                      *generated.AssetConnection                      `json:"assets,omitempty"`
 	Contacts                    *generated.ContactConnection                    `json:"contacts,omitempty"`
 	Controls                    *generated.ControlConnection                    `json:"controls,omitempty"`
@@ -1536,6 +1586,7 @@ type SearchResults struct {
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
+	TemplateResponders          *generated.TemplateResponderConnection          `json:"templateResponders,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
 	TrustCenterCompliances      *generated.TrustCenterComplianceConnection      `json:"trustCenterCompliances,omitempty"`
 	TrustCenterDocs             *generated.TrustCenterDocConnection             `json:"trustCenterDocs,omitempty"`
@@ -1752,6 +1803,30 @@ type TemplateCreatePayload struct {
 type TemplateDeletePayload struct {
 	// Deleted template ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkTemplateResponder mutation
+type TemplateResponderBulkCreatePayload struct {
+	// Created templateResponders
+	TemplateResponders []*generated.TemplateResponder `json:"templateResponders,omitempty"`
+}
+
+// Return response for createTemplateResponder mutation
+type TemplateResponderCreatePayload struct {
+	// Created templateResponder
+	TemplateResponder *generated.TemplateResponder `json:"templateResponder"`
+}
+
+// Return response for deleteTemplateResponder mutation
+type TemplateResponderDeletePayload struct {
+	// Deleted templateResponder ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTemplateResponder mutation
+type TemplateResponderUpdatePayload struct {
+	// Updated templateResponder
+	TemplateResponder *generated.TemplateResponder `json:"templateResponder"`
 }
 
 // Return response for updateTemplate mutation

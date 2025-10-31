@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -60,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -1338,6 +1340,36 @@ func (_c *OrganizationCreate) AddImpersonationEvents(v ...*ImpersonationEvent) *
 		ids[i] = v[i].ID
 	}
 	return _c.AddImpersonationEventIDs(ids...)
+}
+
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentIDs(ids...)
+	return _c
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_c *OrganizationCreate) AddAssessments(v ...*Assessment) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentIDs(ids...)
+}
+
+// AddTemplateResponderIDs adds the "template_responders" edge to the TemplateResponder entity by IDs.
+func (_c *OrganizationCreate) AddTemplateResponderIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTemplateResponderIDs(ids...)
+	return _c
+}
+
+// AddTemplateResponders adds the "template_responders" edges to the TemplateResponder entity.
+func (_c *OrganizationCreate) AddTemplateResponders(v ...*TemplateResponder) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTemplateResponderIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2721,6 +2753,40 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.ImpersonationEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentsTable,
+			Columns: []string{organization.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TemplateRespondersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRespondersTable,
+			Columns: []string{organization.TemplateRespondersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templateresponder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TemplateResponder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

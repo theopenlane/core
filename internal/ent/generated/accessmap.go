@@ -45,6 +45,52 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "assessment": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "template": {
+	ObjectType:      "template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "users": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessments": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessment_responses": {
+	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "template_responders": {
+	ObjectType:      "template_responder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "assessment_response": {"assessment": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "document": {
+	ObjectType:      "document",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "asset": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -1340,6 +1386,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "impersonation_event",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "assessments": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "template_responders": {
+	ObjectType:      "template_responder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1836,6 +1890,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "template_responder": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "assessment": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   true,
 	CheckViewAccess: false,
 },
 }, "trust_center": {"owner": {

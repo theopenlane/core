@@ -53,7 +53,7 @@ func (Template) Fields() []ent.Field {
 			Comment("the name of the template").
 			NotEmpty().
 			Annotations(
-				entgql.OrderField("name"),
+				entgql.OrderField("NAME"),
 				entx.FieldSearchable(),
 			),
 		field.Enum("template_type").
@@ -68,12 +68,13 @@ func (Template) Fields() []ent.Field {
 			Optional(),
 		field.Enum("kind").
 			Comment("the kind of template, e.g. questionnaire").
-			GoType(enums.TemplateKind("")).
 			Optional().
+			GoType(enums.TemplateKind("")).
+			Default(enums.TemplateKindQuestionnaire.String()).
 			Annotations(
+				entgql.Skip(entgql.SkipMutationUpdateInput),
 				entgql.OrderField("KIND"),
-			).
-			Default(enums.TemplateKindQuestionnaire.String()),
+			),
 		field.JSON("jsonconfig", map[string]any{}).
 			Comment("the jsonschema object of the template").
 			Annotations(

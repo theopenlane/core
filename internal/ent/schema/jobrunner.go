@@ -7,6 +7,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -15,8 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/history"
 )
 
 // JobRunner holds the schema definition for the JobRunner entity

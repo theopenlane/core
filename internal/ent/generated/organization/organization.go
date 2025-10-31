@@ -185,6 +185,10 @@ const (
 	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
 	EdgeImpersonationEvents = "impersonation_events"
+	// EdgeAssessments holds the string denoting the assessments edge name in mutations.
+	EdgeAssessments = "assessments"
+	// EdgeTemplateResponders holds the string denoting the template_responders edge name in mutations.
+	EdgeTemplateResponders = "template_responders"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -651,6 +655,20 @@ const (
 	ImpersonationEventsInverseTable = "impersonation_events"
 	// ImpersonationEventsColumn is the table column denoting the impersonation_events relation/edge.
 	ImpersonationEventsColumn = "organization_id"
+	// AssessmentsTable is the table that holds the assessments relation/edge.
+	AssessmentsTable = "assessments"
+	// AssessmentsInverseTable is the table name for the Assessment entity.
+	// It exists in this package in order to avoid circular dependency with the "assessment" package.
+	AssessmentsInverseTable = "assessments"
+	// AssessmentsColumn is the table column denoting the assessments relation/edge.
+	AssessmentsColumn = "owner_id"
+	// TemplateRespondersTable is the table that holds the template_responders relation/edge.
+	TemplateRespondersTable = "template_responders"
+	// TemplateRespondersInverseTable is the table name for the TemplateResponder entity.
+	// It exists in this package in order to avoid circular dependency with the "templateresponder" package.
+	TemplateRespondersInverseTable = "template_responders"
+	// TemplateRespondersColumn is the table column denoting the template_responders relation/edge.
+	TemplateRespondersColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1763,6 +1781,34 @@ func ByImpersonationEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByAssessmentsCount orders the results by assessments count.
+func ByAssessmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentsStep(), opts...)
+	}
+}
+
+// ByAssessments orders the results by assessments terms.
+func ByAssessments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplateRespondersCount orders the results by template_responders count.
+func ByTemplateRespondersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplateRespondersStep(), opts...)
+	}
+}
+
+// ByTemplateResponders orders the results by template_responders terms.
+func ByTemplateResponders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateRespondersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2250,6 +2296,20 @@ func newImpersonationEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ImpersonationEventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
+	)
+}
+func newAssessmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentsTable, AssessmentsColumn),
+	)
+}
+func newTemplateRespondersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateRespondersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplateRespondersTable, TemplateRespondersColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

@@ -170,6 +170,80 @@ func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_assessments(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_assessments,
+		func(ctx context.Context) (any, error) {
+			return obj.Assessments, nil
+		},
+		nil,
+		ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_assessments(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_AssessmentConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_AssessmentConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_AssessmentConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_assessmentResponses(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_assessmentResponses,
+		func(ctx context.Context) (any, error) {
+			return obj.AssessmentResponses, nil
+		},
+		nil,
+		ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_assessmentResponses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_AssessmentResponseConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_AssessmentResponseConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_AssessmentResponseConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_assets(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1576,6 +1650,43 @@ func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_templateResponders(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_templateResponders,
+		func(ctx context.Context) (any, error) {
+			return obj.TemplateResponders, nil
+		},
+		nil,
+		ec.marshalOTemplateResponderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateResponderConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_templateResponders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_TemplateResponderConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_TemplateResponderConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_TemplateResponderConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TemplateResponderConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_trustCenters(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1874,6 +1985,10 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_apiTokens(ctx, field, obj)
 		case "actionPlans":
 			out.Values[i] = ec._SearchResults_actionPlans(ctx, field, obj)
+		case "assessments":
+			out.Values[i] = ec._SearchResults_assessments(ctx, field, obj)
+		case "assessmentResponses":
+			out.Values[i] = ec._SearchResults_assessmentResponses(ctx, field, obj)
 		case "assets":
 			out.Values[i] = ec._SearchResults_assets(ctx, field, obj)
 		case "contacts":
@@ -1950,6 +2065,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_tasks(ctx, field, obj)
 		case "templates":
 			out.Values[i] = ec._SearchResults_templates(ctx, field, obj)
+		case "templateResponders":
+			out.Values[i] = ec._SearchResults_templateResponders(ctx, field, obj)
 		case "trustCenters":
 			out.Values[i] = ec._SearchResults_trustCenters(ctx, field, obj)
 		case "trustCenterCompliances":

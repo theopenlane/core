@@ -45,6 +45,54 @@ func (f ActionPlanHistoryFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ActionPlanHistoryMutation", m)
 }
 
+// The AssessmentFunc type is an adapter to allow the use of ordinary
+// function as Assessment mutator.
+type AssessmentFunc func(context.Context, *generated.AssessmentMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssessmentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentMutation", m)
+}
+
+// The AssessmentHistoryFunc type is an adapter to allow the use of ordinary
+// function as AssessmentHistory mutator.
+type AssessmentHistoryFunc func(context.Context, *generated.AssessmentHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssessmentHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentHistoryMutation", m)
+}
+
+// The AssessmentResponseFunc type is an adapter to allow the use of ordinary
+// function as AssessmentResponse mutator.
+type AssessmentResponseFunc func(context.Context, *generated.AssessmentResponseMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentResponseFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssessmentResponseMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentResponseMutation", m)
+}
+
+// The AssessmentResponseHistoryFunc type is an adapter to allow the use of ordinary
+// function as AssessmentResponseHistory mutator.
+type AssessmentResponseHistoryFunc func(context.Context, *generated.AssessmentResponseHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentResponseHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssessmentResponseHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentResponseHistoryMutation", m)
+}
+
 // The AssetFunc type is an adapter to allow the use of ordinary
 // function as Asset mutator.
 type AssetFunc func(context.Context, *generated.AssetMutation) (generated.Value, error)
@@ -1183,6 +1231,18 @@ func (f TemplateHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TemplateHistoryMutation", m)
+}
+
+// The TemplateResponderFunc type is an adapter to allow the use of ordinary
+// function as TemplateResponder mutator.
+type TemplateResponderFunc func(context.Context, *generated.TemplateResponderMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TemplateResponderFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TemplateResponderMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TemplateResponderMutation", m)
 }
 
 // The TrustCenterFunc type is an adapter to allow the use of ordinary

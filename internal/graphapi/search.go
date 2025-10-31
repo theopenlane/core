@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -50,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -176,6 +179,78 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 				actionplan.InternalNotesContainsFold(query),    // search by InternalNotes
 				actionplan.SystemInternalIDContainsFold(query), // search by SystemInternalID
 				actionplan.SourceContainsFold(query),           // search by Source
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessment searches for Assessment based on the query string looking for matches
+func searchAssessments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	request := withTransactionalMutation(ctx).Assessment.Query().
+		Where(
+			assessment.Or(
+				assessment.ID(query),               // search equal to ID
+				assessment.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessment searches for Assessment based on the query string looking for matches
+func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	request := withTransactionalMutation(ctx).Assessment.Query().
+		Where(
+			assessment.Or(
+				assessment.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				assessment.OwnerIDContainsFold(query),           // search by OwnerID
+				assessment.NameContainsFold(query),              // search by Name
+				assessment.TemplateIDContainsFold(query),        // search by TemplateID
+				assessment.AssessmentOwnerIDContainsFold(query), // search by AssessmentOwnerID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessmentResponse searches for AssessmentResponse based on the query string looking for matches
+func searchAssessmentResponses(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
+		Where(
+			assessmentresponse.Or(
+				assessmentresponse.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessmentResponse searches for AssessmentResponse based on the query string looking for matches
+func adminSearchAssessmentResponses(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
+		Where(
+			assessmentresponse.Or(
+				assessmentresponse.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				assessmentresponse.AssessmentIDContainsFold(query),   // search by AssessmentID
+				assessmentresponse.ResponderIDContainsFold(query),    // search by ResponderID
+				assessmentresponse.ResponseDataIDContainsFold(query), // search by ResponseDataID
 			),
 		)
 
@@ -1912,6 +1987,34 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
 				},
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTemplateResponder searches for TemplateResponder based on the query string looking for matches
+func searchTemplateResponders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	request := withTransactionalMutation(ctx).TemplateResponder.Query().
+		Where(
+			templateresponder.Or(
+				templateresponder.EmailContainsFold(query), // search by Email
+				templateresponder.ID(query),                // search equal to ID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTemplateResponder searches for TemplateResponder based on the query string looking for matches
+func adminSearchTemplateResponders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	request := withTransactionalMutation(ctx).TemplateResponder.Query().
+		Where(
+			templateresponder.Or(
+				templateresponder.ID(query),                       // search equal to ID
+				templateresponder.OwnerIDContainsFold(query),      // search by OwnerID
+				templateresponder.AssessmentIDContainsFold(query), // search by AssessmentID
+				templateresponder.EmailContainsFold(query),        // search by Email
 			),
 		)
 

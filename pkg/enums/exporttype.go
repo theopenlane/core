@@ -24,6 +24,8 @@ var (
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
+	// ExportTypeTemplateResponder indicates the templateresponder.
+	ExportTypeTemplateResponder ExportType = "TEMPLATE_RESPONDER"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
@@ -38,6 +40,7 @@ func (ExportType) Values() []string {
 		string(ExportTypeRisk),
 		string(ExportTypeSubscriber),
 		string(ExportTypeTask),
+		string(ExportTypeTemplateResponder),
 	}
 }
 
@@ -63,6 +66,8 @@ func ToExportType(r string) *ExportType {
 		return &ExportTypeSubscriber
 	case ExportTypeTask.String():
 		return &ExportTypeTask
+	case ExportTypeTemplateResponder.String():
+		return &ExportTypeTemplateResponder
 	default:
 		return &ExportTypeInvalid
 	}

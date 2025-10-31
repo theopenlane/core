@@ -1,0 +1,146 @@
+
+mutation CreateBulkCSVAssessment($input: Upload!) {
+  createBulkCSVAssessment(input: $input) {
+    assessments {
+      assessmentOwnerID
+      assessmentType
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkAssessment($input: [CreateAssessmentInput!]) {
+  createBulkAssessment(input: $input) {
+    assessments {
+      assessmentOwnerID
+      assessmentType
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateAssessment($input: CreateAssessmentInput!) {
+  createAssessment(input: $input) {
+    assessment {
+      assessmentOwnerID
+      assessmentType
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteAssessment($deleteAssessmentId: ID!) {
+  deleteAssessment(id: $deleteAssessmentId) {
+    deletedID
+  }
+}
+
+query GetAllAssessments {
+  assessments {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentOwnerID
+        assessmentType
+        createdAt
+        createdBy
+        id
+        name
+        ownerID
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetAssessmentByID($assessmentId: ID!) {
+  assessment(id: $assessmentId) {
+    assessmentOwnerID
+    assessmentType
+    createdAt
+    createdBy
+    id
+    name
+    ownerID
+    tags
+    templateID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetAssessments($first: Int, $last: Int, $where: AssessmentWhereInput) {
+  assessments(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentOwnerID
+        assessmentType
+        createdAt
+        createdBy
+        id
+        name
+        ownerID
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateAssessment($updateAssessmentId: ID!, $input: UpdateAssessmentInput!) {
+  updateAssessment(id: $updateAssessmentId, input: $input) {
+    assessment {
+      assessmentOwnerID
+      assessmentType
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}

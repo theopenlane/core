@@ -6,6 +6,7 @@ import "github.com/theopenlane/core/pkg/models"
 var FeatureOfType = map[string][]models.OrgModule{
 	"ActionPlan":                 {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon, models.CatalogRiskManagementAddon, models.CatalogEntityManagementModule},
 	"APIToken":                   {models.CatalogBaseModule},
+	"AssessmentResponse":         {models.CatalogComplianceModule},
 	"Asset":                      {models.CatalogEntityManagementModule},
 	"Contact":                    {models.CatalogEntityManagementModule},
 	"Control":                    {models.CatalogComplianceModule},
@@ -55,6 +56,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Subprocessor":               {models.CatalogTrustCenterModule},
 	"Subscriber":                 {models.CatalogBaseModule},
 	"Task":                       {models.CatalogBaseModule},
+	"TemplateResponder":          {models.CatalogComplianceModule},
 	"TFASetting":                 {models.CatalogBaseModule},
 	"TrustCenter":                {models.CatalogTrustCenterModule},
 	"TrustCenterSetting":         {models.CatalogTrustCenterModule},

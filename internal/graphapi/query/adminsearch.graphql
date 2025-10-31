@@ -55,6 +55,43 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    assessments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          name
+          templateID
+          assessmentOwnerID
+        }
+      }
+    }
+    assessmentResponses {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          assessmentID
+          responderID
+          responseDataID
+        }
+      }
+    }
     assets {
       totalCount
       pageInfo {
@@ -935,6 +972,23 @@ query AdminSearch($query: String!) {
           jsonconfig
           uischema
           trustCenterID
+        }
+      }
+    }
+    templateResponders {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          ownerID
+          assessmentID
+          email
         }
       }
     }

@@ -15,6 +15,18 @@ type ActionPlan func(*sql.Selector)
 // ActionPlanHistory is the predicate function for actionplanhistory builders.
 type ActionPlanHistory func(*sql.Selector)
 
+// Assessment is the predicate function for assessment builders.
+type Assessment func(*sql.Selector)
+
+// AssessmentHistory is the predicate function for assessmenthistory builders.
+type AssessmentHistory func(*sql.Selector)
+
+// AssessmentResponse is the predicate function for assessmentresponse builders.
+type AssessmentResponse func(*sql.Selector)
+
+// AssessmentResponseHistory is the predicate function for assessmentresponsehistory builders.
+type AssessmentResponseHistory func(*sql.Selector)
+
 // Asset is the predicate function for asset builders.
 type Asset func(*sql.Selector)
 
@@ -299,6 +311,9 @@ type Template func(*sql.Selector)
 
 // TemplateHistory is the predicate function for templatehistory builders.
 type TemplateHistory func(*sql.Selector)
+
+// TemplateResponder is the predicate function for templateresponder builders.
+type TemplateResponder func(*sql.Selector)
 
 // TrustCenter is the predicate function for trustcenter builders.
 type TrustCenter func(*sql.Selector)
