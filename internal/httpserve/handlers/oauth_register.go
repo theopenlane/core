@@ -52,10 +52,12 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	}
 
 	// set user to verified
-	if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
-		log.Error().Err(err).Msg("unable to set email as verified")
+	if !user.Edges.Setting.EmailConfirmed {
+		if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
+			log.Error().Err(err).Msg("unable to set email as verified")
 
-		return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, err, openapi)
+		}
 	}
 
 	// create claims for verified user

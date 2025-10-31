@@ -94,6 +94,7 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 }
 
 // HookUserSettingEmailConfirmation runs on user settings mutations and handles auto-join when email is confirmed
+// and sends welcome email after verification
 func HookUserSettingEmailConfirmation() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.UserSettingFunc(func(ctx context.Context, m *generated.UserSettingMutation) (generated.Value, error) {
@@ -101,6 +102,12 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			emailConfirmed, ok := m.EmailConfirmed()
 			if !ok || !emailConfirmed {
 				// not setting email confirmed to true, continue with normal flow
+				return next.Mutate(ctx, m)
+			}
+
+			oldEmailConfirmed, _ := m.OldEmailConfirmed(ctx)
+			if oldEmailConfirmed {
+				// email was already confirmed, continue with normal flow
 				return next.Mutate(ctx, m)
 			}
 
