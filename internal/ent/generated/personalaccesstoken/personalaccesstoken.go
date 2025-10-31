@@ -35,6 +35,10 @@ const (
 	FieldName = "name"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
+	// FieldTokenHash holds the string denoting the token_hash field in the database.
+	FieldTokenHash = "token_hash"
+	// FieldTokenFp holds the string denoting the token_fp field in the database.
+	FieldTokenFp = "token_fp"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -93,6 +97,8 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldToken,
+	FieldTokenHash,
+	FieldTokenFp,
 	FieldExpiresAt,
 	FieldDescription,
 	FieldScopes,
@@ -142,8 +148,6 @@ var (
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DefaultToken holds the default value on creation for the "token" field.
-	DefaultToken func() string
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
 	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -201,6 +205,16 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByToken orders the results by the token field.
 func ByToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldToken, opts...).ToFunc()
+}
+
+// ByTokenHash orders the results by the token_hash field.
+func ByTokenHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenHash, opts...).ToFunc()
+}
+
+// ByTokenFp orders the results by the token_fp field.
+func ByTokenFp(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenFp, opts...).ToFunc()
 }
 
 // ByExpiresAt orders the results by the expires_at field.

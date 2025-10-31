@@ -2,14 +2,16 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/fgax"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/keygen"
+	"github.com/theopenlane/utils/passwd"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -40,6 +42,28 @@ func HookCreateAPIToken() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+			// generate raw token
+			secret := keygen.Secret()
+			publicID := keygen.AlphaNumeric(16)
+			prefix := "tola"
+
+			rawToken := fmt.Sprintf("%s_%s_%s", prefix, publicID, secret)
+
+			// hash the secret for storage
+			hash, err := passwd.CreateDerivedKey(secret)
+			if err != nil {
+				return nil, err
+			}
+
+			// set the hashed token for storage (backwards compatibility)
+			m.SetToken(hash)
+
+			// set the new token_hash (argon2 of secret)
+			m.SetTokenHash(hash)
+
+			// set the token fingerprint for lookup
+			tokenFP := keygen.GenerateSHA256Hmac("", []byte(publicID))
+			m.SetTokenFp(tokenFP)
 
 			// set organization on the token
 			m.SetOwnerID(orgID)
@@ -57,6 +81,9 @@ func HookCreateAPIToken() ent.Hook {
 			if !ok {
 				return retVal, err
 			}
+
+			// set the token field on the returned object to the raw token so the caller can see it
+			token.Token = rawToken
 
 			// create the relationship tuples in fga for the token
 			tuples, err := createScopeTuples(token.Scopes, orgID, token.ID)

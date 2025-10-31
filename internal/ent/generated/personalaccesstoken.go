@@ -40,6 +40,10 @@ type PersonalAccessToken struct {
 	Name string `json:"name,omitempty"`
 	// Token holds the value of the "token" field.
 	Token string `json:"token,omitempty"`
+	// argon2 hash of the secret part of the token
+	TokenHash string `json:"token_hash,omitempty"`
+	// HMAC fingerprint of the public_id for lookup
+	TokenFp string `json:"token_fp,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// a description of the token's purpose
@@ -120,7 +124,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case personalaccesstoken.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription, personalaccesstoken.FieldRevokedReason, personalaccesstoken.FieldRevokedBy:
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldTokenHash, personalaccesstoken.FieldTokenFp, personalaccesstoken.FieldDescription, personalaccesstoken.FieldRevokedReason, personalaccesstoken.FieldRevokedBy:
 			values[i] = new(sql.NullString)
 		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt, personalaccesstoken.FieldRevokedAt:
 			values[i] = new(sql.NullTime)
@@ -206,6 +210,18 @@ func (_m *PersonalAccessToken) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
 				_m.Token = value.String
+			}
+		case personalaccesstoken.FieldTokenHash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token_hash", values[i])
+			} else if value.Valid {
+				_m.TokenHash = value.String
+			}
+		case personalaccesstoken.FieldTokenFp:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token_fp", values[i])
+			} else if value.Valid {
+				_m.TokenFp = value.String
 			}
 		case personalaccesstoken.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -351,6 +367,12 @@ func (_m *PersonalAccessToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("token=")
 	builder.WriteString(_m.Token)
+	builder.WriteString(", ")
+	builder.WriteString("token_hash=")
+	builder.WriteString(_m.TokenHash)
+	builder.WriteString(", ")
+	builder.WriteString("token_fp=")
+	builder.WriteString(_m.TokenFp)
 	builder.WriteString(", ")
 	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")

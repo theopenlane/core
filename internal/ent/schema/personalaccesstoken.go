@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -58,11 +57,19 @@ func (PersonalAccessToken) Fields() []ent.Field {
 			Immutable().
 			Annotations(
 				entgql.Skip(^entgql.SkipType),
+			),
+		field.String("token_hash").
+			Immutable().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
 			).
-			DefaultFunc(func() string {
-				token := keygen.PrefixedSecret("tolp") // token prefix
-				return token
-			}),
+			Comment("argon2 hash of the secret part of the token"),
+		field.String("token_fp").
+			Immutable().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
+			Comment("HMAC fingerprint of the public_id for lookup"),
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(
@@ -139,7 +146,9 @@ func (p PersonalAccessToken) Edges() []ent.Edge {
 // Indexes of the PersonalAccessToken
 func (PersonalAccessToken) Indexes() []ent.Index {
 	return []ent.Index{
-		// non-unique index.
+		// index for lookup by fingerprint
+		index.Fields("token_fp"),
+		// keep old index for backwards compatibility (can be removed later)
 		index.Fields("token"),
 	}
 }

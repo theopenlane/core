@@ -132,11 +132,15 @@ func (_c *PersonalAccessTokenCreate) SetToken(v string) *PersonalAccessTokenCrea
 	return _c
 }
 
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (_c *PersonalAccessTokenCreate) SetNillableToken(v *string) *PersonalAccessTokenCreate {
-	if v != nil {
-		_c.SetToken(*v)
-	}
+// SetTokenHash sets the "token_hash" field.
+func (_c *PersonalAccessTokenCreate) SetTokenHash(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetTokenHash(v)
+	return _c
+}
+
+// SetTokenFp sets the "token_fp" field.
+func (_c *PersonalAccessTokenCreate) SetTokenFp(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetTokenFp(v)
 	return _c
 }
 
@@ -354,13 +358,6 @@ func (_c *PersonalAccessTokenCreate) defaults() error {
 		v := personalaccesstoken.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.Token(); !ok {
-		if personalaccesstoken.DefaultToken == nil {
-			return fmt.Errorf("generated: uninitialized personalaccesstoken.DefaultToken (forgotten import generated/runtime?)")
-		}
-		v := personalaccesstoken.DefaultToken()
-		_c.mutation.SetToken(v)
-	}
 	if _, ok := _c.mutation.IsActive(); !ok {
 		v := personalaccesstoken.DefaultIsActive
 		_c.mutation.SetIsActive(v)
@@ -390,6 +387,12 @@ func (_c *PersonalAccessTokenCreate) check() error {
 	}
 	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "PersonalAccessToken.token"`)}
+	}
+	if _, ok := _c.mutation.TokenHash(); !ok {
+		return &ValidationError{Name: "token_hash", err: errors.New(`generated: missing required field "PersonalAccessToken.token_hash"`)}
+	}
+	if _, ok := _c.mutation.TokenFp(); !ok {
+		return &ValidationError{Name: "token_fp", err: errors.New(`generated: missing required field "PersonalAccessToken.token_fp"`)}
 	}
 	if len(_c.mutation.OwnerIDs()) == 0 {
 		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "PersonalAccessToken.owner"`)}
@@ -465,6 +468,14 @@ func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgra
 	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(personalaccesstoken.FieldToken, field.TypeString, value)
 		_node.Token = value
+	}
+	if value, ok := _c.mutation.TokenHash(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenHash, field.TypeString, value)
+		_node.TokenHash = value
+	}
+	if value, ok := _c.mutation.TokenFp(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenFp, field.TypeString, value)
+		_node.TokenFp = value
 	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
