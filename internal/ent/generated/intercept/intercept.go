@@ -110,6 +110,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -2940,6 +2941,33 @@ func (f TraverseTemplateHistory) Traverse(ctx context.Context, q generated.Query
 	return fmt.Errorf("unexpected query type %T. expect *generated.TemplateHistoryQuery", q)
 }
 
+// The TemplateResponderFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TemplateResponderFunc func(context.Context, *generated.TemplateResponderQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TemplateResponderFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TemplateResponderQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TemplateResponderQuery", q)
+}
+
+// The TraverseTemplateResponder type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTemplateResponder func(context.Context, *generated.TemplateResponderQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTemplateResponder) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTemplateResponder) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TemplateResponderQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TemplateResponderQuery", q)
+}
+
 // The TrustCenterFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TrustCenterFunc func(context.Context, *generated.TrustCenterQuery) (generated.Value, error)
 
@@ -3606,6 +3634,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TemplateQuery, predicate.Template, template.OrderOption]{typ: generated.TypeTemplate, tq: q}, nil
 	case *generated.TemplateHistoryQuery:
 		return &query[*generated.TemplateHistoryQuery, predicate.TemplateHistory, templatehistory.OrderOption]{typ: generated.TypeTemplateHistory, tq: q}, nil
+	case *generated.TemplateResponderQuery:
+		return &query[*generated.TemplateResponderQuery, predicate.TemplateResponder, templateresponder.OrderOption]{typ: generated.TypeTemplateResponder, tq: q}, nil
 	case *generated.TrustCenterQuery:
 		return &query[*generated.TrustCenterQuery, predicate.TrustCenter, trustcenter.OrderOption]{typ: generated.TypeTrustCenter, tq: q}, nil
 	case *generated.TrustCenterComplianceQuery:

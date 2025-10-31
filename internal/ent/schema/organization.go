@@ -436,6 +436,11 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         Assessment{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         TemplateResponder{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

@@ -86,8 +86,12 @@ func (ec *executionContext) fieldContext_AssessmentBulkCreatePayload_assessments
 				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Assessment_assessments(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "templateResponders":
+				return ec.fieldContext_Assessment_templateResponders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},
@@ -153,8 +157,12 @@ func (ec *executionContext) fieldContext_AssessmentCreatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Assessment_assessments(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "templateResponders":
+				return ec.fieldContext_Assessment_templateResponders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},
@@ -249,8 +257,12 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Assessment_assessments(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "templateResponders":
+				return ec.fieldContext_Assessment_templateResponders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},

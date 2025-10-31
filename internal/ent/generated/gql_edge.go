@@ -211,6 +211,27 @@ func (_m *Assessment) Users(
 	return _m.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Assessment) Assessments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssessmentOrder, where *AssessmentWhereInput,
+) (*AssessmentConnection, error) {
+	opts := []AssessmentPaginateOption{
+		WithAssessmentOrder(orderBy),
+		WithAssessmentFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedAssessments(alias); err == nil || hasTotalCount {
+		pager, err := newAssessmentPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssessmentConnection{Edges: []*AssessmentEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssessments().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Assessment) AssessmentResponses(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssessmentResponseOrder, where *AssessmentResponseWhereInput,
 ) (*AssessmentResponseConnection, error) {
@@ -219,7 +240,7 @@ func (_m *Assessment) AssessmentResponses(
 		WithAssessmentResponseFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
 	if nodes, err := _m.NamedAssessmentResponses(alias); err == nil || hasTotalCount {
 		pager, err := newAssessmentResponsePager(opts, last != nil)
 		if err != nil {
@@ -230,6 +251,27 @@ func (_m *Assessment) AssessmentResponses(
 		return conn, nil
 	}
 	return _m.QueryAssessmentResponses().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Assessment) TemplateResponders(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TemplateResponderOrder, where *TemplateResponderWhereInput,
+) (*TemplateResponderConnection, error) {
+	opts := []TemplateResponderPaginateOption{
+		WithTemplateResponderOrder(orderBy),
+		WithTemplateResponderFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedTemplateResponders(alias); err == nil || hasTotalCount {
+		pager, err := newTemplateResponderPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TemplateResponderConnection{Edges: []*TemplateResponderEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTemplateResponders().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *AssessmentResponse) Assessment(ctx context.Context) (*Assessment, error) {
@@ -5430,6 +5472,27 @@ func (_m *Organization) Assessments(
 	return _m.QueryAssessments().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Organization) TemplateResponders(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TemplateResponderOrder, where *TemplateResponderWhereInput,
+) (*TemplateResponderConnection, error) {
+	opts := []TemplateResponderPaginateOption{
+		WithTemplateResponderOrder(orderBy),
+		WithTemplateResponderFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[65][alias]
+	if nodes, err := _m.NamedTemplateResponders(alias); err == nil || hasTotalCount {
+		pager, err := newTemplateResponderPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TemplateResponderConnection{Edges: []*TemplateResponderEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTemplateResponders().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -5438,7 +5501,7 @@ func (_m *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[65][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[66][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -7409,6 +7472,22 @@ func (_m *Template) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 		result, err = _m.QueryTrustCenter().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (_m *TemplateResponder) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *TemplateResponder) Assessment(ctx context.Context) (*Assessment, error) {
+	result, err := _m.Edges.AssessmentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryAssessment().Only(ctx)
+	}
+	return result, err
 }
 
 func (_m *TrustCenter) Owner(ctx context.Context) (*Organization, error) {

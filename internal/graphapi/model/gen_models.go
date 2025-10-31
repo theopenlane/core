@@ -1578,6 +1578,7 @@ type SearchResults struct {
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
+	TemplateResponders          *generated.TemplateResponderConnection          `json:"templateResponders,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
 	TrustCenterCompliances      *generated.TrustCenterComplianceConnection      `json:"trustCenterCompliances,omitempty"`
 	TrustCenterDocs             *generated.TrustCenterDocConnection             `json:"trustCenterDocs,omitempty"`
@@ -1794,6 +1795,30 @@ type TemplateCreatePayload struct {
 type TemplateDeletePayload struct {
 	// Deleted template ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkTemplateResponder mutation
+type TemplateResponderBulkCreatePayload struct {
+	// Created templateResponders
+	TemplateResponders []*generated.TemplateResponder `json:"templateResponders,omitempty"`
+}
+
+// Return response for createTemplateResponder mutation
+type TemplateResponderCreatePayload struct {
+	// Created templateResponder
+	TemplateResponder *generated.TemplateResponder `json:"templateResponder"`
+}
+
+// Return response for deleteTemplateResponder mutation
+type TemplateResponderDeletePayload struct {
+	// Deleted templateResponder ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTemplateResponder mutation
+type TemplateResponderUpdatePayload struct {
+	// Updated templateResponder
+	TemplateResponder *generated.TemplateResponder `json:"templateResponder"`
 }
 
 // Return response for updateTemplate mutation

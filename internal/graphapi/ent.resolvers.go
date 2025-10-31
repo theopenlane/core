@@ -3139,6 +3139,40 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// TemplateResponders is the resolver for the templateResponders field.
+func (r *queryResolver) TemplateResponders(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateResponderOrder, where *generated.TemplateResponderWhereInput) (*generated.TemplateResponderConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TemplateResponderOrder{
+			{
+				Field:     generated.TemplateResponderOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TemplateResponder.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templateresponder"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTemplateResponderOrder(orderBy),
+		generated.WithTemplateResponderFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templateresponder"})
+	}
+
+	return res, err
+}
+
 // TrustCenters is the resolver for the trustCenters field.
 func (r *queryResolver) TrustCenters(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) (*generated.TrustCenterConnection, error) {
 	// set page limit if nothing was set

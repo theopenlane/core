@@ -254,6 +254,7 @@ type ComplexityRoot struct {
 		AssessmentOwnerID   func(childComplexity int) int
 		AssessmentResponses func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		AssessmentType      func(childComplexity int) int
+		Assessments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		BlockedGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
@@ -265,6 +266,7 @@ type ComplexityRoot struct {
 		Tags                func(childComplexity int) int
 		Template            func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
+		TemplateResponders  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateResponderOrder, where *generated.TemplateResponderWhereInput) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
 		Users               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
@@ -2766,6 +2768,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTemplateResponder       func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
@@ -2803,6 +2806,7 @@ type ComplexityRoot struct {
 		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
 		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
 		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
+		CreateBulkTemplateResponder          func(childComplexity int, input []*generated.CreateTemplateResponderInput) int
 		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
 		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
 		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
@@ -2859,6 +2863,7 @@ type ComplexityRoot struct {
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
+		CreateTemplateResponder              func(childComplexity int, input generated.CreateTemplateResponderInput) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
@@ -2962,6 +2967,7 @@ type ComplexityRoot struct {
 		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
 		DeleteTask                           func(childComplexity int, id string) int
 		DeleteTemplate                       func(childComplexity int, id string) int
+		DeleteTemplateResponder              func(childComplexity int, id string) int
 		DeleteTrustCenter                    func(childComplexity int, id string) int
 		DeleteTrustCenterCompliance          func(childComplexity int, id string) int
 		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
@@ -3034,6 +3040,7 @@ type ComplexityRoot struct {
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
+		UpdateTemplateResponder              func(childComplexity int, id string, input generated.UpdateTemplateResponderInput) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
@@ -3412,6 +3419,7 @@ type ComplexityRoot struct {
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		TemplateResponders            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateResponderOrder, where *generated.TemplateResponderWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterWatermarkConfigs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
@@ -4014,6 +4022,7 @@ type ComplexityRoot struct {
 		AdminSubprocessorSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTemplateResponderSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterComplianceSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterDocSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4209,6 +4218,9 @@ type ComplexityRoot struct {
 		Tasks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Template                              func(childComplexity int, id string) int
 		TemplateHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
+		TemplateResponder                     func(childComplexity int, id string) int
+		TemplateResponderSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TemplateResponders                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateResponderOrder, where *generated.TemplateResponderWhereInput) int
 		TemplateSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Templates                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TfaSetting                            func(childComplexity int, id *string) int
@@ -4614,6 +4626,7 @@ type ComplexityRoot struct {
 		Subprocessors               func(childComplexity int) int
 		Subscribers                 func(childComplexity int) int
 		Tasks                       func(childComplexity int) int
+		TemplateResponders          func(childComplexity int) int
 		Templates                   func(childComplexity int) int
 		TotalCount                  func(childComplexity int) int
 		TrustCenterCompliances      func(childComplexity int) int
@@ -5223,6 +5236,48 @@ type ComplexityRoot struct {
 	TemplateHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	TemplateResponder struct {
+		Assessment   func(childComplexity int) int
+		AssessmentID func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Email        func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Owner        func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
+		SendAttempts func(childComplexity int) int
+		Status       func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
+	}
+
+	TemplateResponderBulkCreatePayload struct {
+		TemplateResponders func(childComplexity int) int
+	}
+
+	TemplateResponderConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TemplateResponderCreatePayload struct {
+		TemplateResponder func(childComplexity int) int
+	}
+
+	TemplateResponderDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TemplateResponderEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TemplateResponderUpdatePayload struct {
+		TemplateResponder func(childComplexity int) int
 	}
 
 	TemplateUpdatePayload struct {
@@ -6821,6 +6876,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.AssessmentType(childComplexity), true
 
+	case "Assessment.assessments":
+		if e.complexity.Assessment.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Assessment.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+
 	case "Assessment.blockedGroups":
 		if e.complexity.Assessment.BlockedGroups == nil {
 			break
@@ -6907,6 +6974,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.TemplateID(childComplexity), true
+
+	case "Assessment.templateResponders":
+		if e.complexity.Assessment.TemplateResponders == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_templateResponders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Assessment.TemplateResponders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateResponderOrder), args["where"].(*generated.TemplateResponderWhereInput)), true
 
 	case "Assessment.updatedAt":
 		if e.complexity.Assessment.UpdatedAt == nil {
@@ -18984,6 +19063,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVTemplate(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVTemplateResponder":
+		if e.complexity.Mutation.CreateBulkCSVTemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVTemplateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVTemplateResponder(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVTrustCenterCompliance":
 		if e.complexity.Mutation.CreateBulkCSVTrustCenterCompliance == nil {
 			break
@@ -19427,6 +19518,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkTemplate(childComplexity, args["input"].([]*generated.CreateTemplateInput)), true
+
+	case "Mutation.createBulkTemplateResponder":
+		if e.complexity.Mutation.CreateBulkTemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkTemplateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkTemplateResponder(childComplexity, args["input"].([]*generated.CreateTemplateResponderInput)), true
 
 	case "Mutation.createBulkTrustCenterCompliance":
 		if e.complexity.Mutation.CreateBulkTrustCenterCompliance == nil {
@@ -20099,6 +20202,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.createTemplateResponder":
+		if e.complexity.Mutation.CreateTemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTemplateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTemplateResponder(childComplexity, args["input"].(generated.CreateTemplateResponderInput)), true
 
 	case "Mutation.createTrustCenter":
 		if e.complexity.Mutation.CreateTrustCenter == nil {
@@ -21336,6 +21451,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteTemplate(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteTemplateResponder":
+		if e.complexity.Mutation.DeleteTemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTemplateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTemplateResponder(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteTrustCenter":
 		if e.complexity.Mutation.DeleteTrustCenter == nil {
 			break
@@ -22199,6 +22326,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateTemplateResponder":
+		if e.complexity.Mutation.UpdateTemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTemplateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTemplateResponder(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateResponderInput)), true
 
 	case "Mutation.updateTrustCenter":
 		if e.complexity.Mutation.UpdateTrustCenter == nil {
@@ -24432,6 +24571,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.TemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Organization.templateResponders":
+		if e.complexity.Organization.TemplateResponders == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_templateResponders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TemplateResponders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateResponderOrder), args["where"].(*generated.TemplateResponderWhereInput)), true
 
 	case "Organization.templates":
 		if e.complexity.Organization.Templates == nil {
@@ -27739,6 +27890,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminTaskSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminTemplateResponderSearch":
+		if e.complexity.Query.AdminTemplateResponderSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminTemplateResponderSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminTemplateResponderSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminTemplateSearch":
 		if e.complexity.Query.AdminTemplateSearch == nil {
 			break
@@ -30064,6 +30227,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TemplateHistoryOrder), args["where"].(*generated.TemplateHistoryWhereInput)), true
 
+	case "Query.templateResponder":
+		if e.complexity.Query.TemplateResponder == nil {
+			break
+		}
+
+		args, err := ec.field_Query_templateResponder_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TemplateResponder(childComplexity, args["id"].(string)), true
+
+	case "Query.templateResponderSearch":
+		if e.complexity.Query.TemplateResponderSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_templateResponderSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TemplateResponderSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.templateResponders":
+		if e.complexity.Query.TemplateResponders == nil {
+			break
+		}
+
+		args, err := ec.field_Query_templateResponders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TemplateResponders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateResponderOrder), args["where"].(*generated.TemplateResponderWhereInput)), true
+
 	case "Query.templateSearch":
 		if e.complexity.Query.TemplateSearch == nil {
 			break
@@ -32275,6 +32474,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Tasks(childComplexity), true
+
+	case "SearchResults.templateResponders":
+		if e.complexity.SearchResults.TemplateResponders == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.TemplateResponders(childComplexity), true
 
 	case "SearchResults.templates":
 		if e.complexity.SearchResults.Templates == nil {
@@ -35234,6 +35440,153 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistoryEdge.Node(childComplexity), true
+
+	case "TemplateResponder.assessment":
+		if e.complexity.TemplateResponder.Assessment == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.Assessment(childComplexity), true
+
+	case "TemplateResponder.assessmentID":
+		if e.complexity.TemplateResponder.AssessmentID == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.AssessmentID(childComplexity), true
+
+	case "TemplateResponder.createdAt":
+		if e.complexity.TemplateResponder.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.CreatedAt(childComplexity), true
+
+	case "TemplateResponder.createdBy":
+		if e.complexity.TemplateResponder.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.CreatedBy(childComplexity), true
+
+	case "TemplateResponder.email":
+		if e.complexity.TemplateResponder.Email == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.Email(childComplexity), true
+
+	case "TemplateResponder.id":
+		if e.complexity.TemplateResponder.ID == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.ID(childComplexity), true
+
+	case "TemplateResponder.owner":
+		if e.complexity.TemplateResponder.Owner == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.Owner(childComplexity), true
+
+	case "TemplateResponder.ownerID":
+		if e.complexity.TemplateResponder.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.OwnerID(childComplexity), true
+
+	case "TemplateResponder.sendAttempts":
+		if e.complexity.TemplateResponder.SendAttempts == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.SendAttempts(childComplexity), true
+
+	case "TemplateResponder.status":
+		if e.complexity.TemplateResponder.Status == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.Status(childComplexity), true
+
+	case "TemplateResponder.updatedAt":
+		if e.complexity.TemplateResponder.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.UpdatedAt(childComplexity), true
+
+	case "TemplateResponder.updatedBy":
+		if e.complexity.TemplateResponder.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponder.UpdatedBy(childComplexity), true
+
+	case "TemplateResponderBulkCreatePayload.templateResponders":
+		if e.complexity.TemplateResponderBulkCreatePayload.TemplateResponders == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderBulkCreatePayload.TemplateResponders(childComplexity), true
+
+	case "TemplateResponderConnection.edges":
+		if e.complexity.TemplateResponderConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderConnection.Edges(childComplexity), true
+
+	case "TemplateResponderConnection.pageInfo":
+		if e.complexity.TemplateResponderConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderConnection.PageInfo(childComplexity), true
+
+	case "TemplateResponderConnection.totalCount":
+		if e.complexity.TemplateResponderConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderConnection.TotalCount(childComplexity), true
+
+	case "TemplateResponderCreatePayload.templateResponder":
+		if e.complexity.TemplateResponderCreatePayload.TemplateResponder == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderCreatePayload.TemplateResponder(childComplexity), true
+
+	case "TemplateResponderDeletePayload.deletedID":
+		if e.complexity.TemplateResponderDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderDeletePayload.DeletedID(childComplexity), true
+
+	case "TemplateResponderEdge.cursor":
+		if e.complexity.TemplateResponderEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderEdge.Cursor(childComplexity), true
+
+	case "TemplateResponderEdge.node":
+		if e.complexity.TemplateResponderEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderEdge.Node(childComplexity), true
+
+	case "TemplateResponderUpdatePayload.templateResponder":
+		if e.complexity.TemplateResponderUpdatePayload.TemplateResponder == nil {
+			break
+		}
+
+		return e.complexity.TemplateResponderUpdatePayload.TemplateResponder(childComplexity), true
 
 	case "TemplateUpdatePayload.template":
 		if e.complexity.TemplateUpdatePayload.Template == nil {
@@ -38419,6 +38772,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTFASettingInput,
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
+		ec.unmarshalInputCreateTemplateResponderInput,
 		ec.unmarshalInputCreateTrustCenterComplianceInput,
 		ec.unmarshalInputCreateTrustCenterDocInput,
 		ec.unmarshalInputCreateTrustCenterDomainInput,
@@ -38589,6 +38943,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTemplateHistoryOrder,
 		ec.unmarshalInputTemplateHistoryWhereInput,
 		ec.unmarshalInputTemplateOrder,
+		ec.unmarshalInputTemplateResponderOrder,
+		ec.unmarshalInputTemplateResponderWhereInput,
 		ec.unmarshalInputTemplateWhereInput,
 		ec.unmarshalInputTrustCenterComplianceHistoryOrder,
 		ec.unmarshalInputTrustCenterComplianceHistoryWhereInput,
@@ -38665,6 +39021,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTFASettingInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateTemplateInput,
+		ec.unmarshalInputUpdateTemplateResponderInput,
 		ec.unmarshalInputUpdateTrustCenterComplianceInput,
 		ec.unmarshalInputUpdateTrustCenterDocInput,
 		ec.unmarshalInputUpdateTrustCenterInput,
@@ -39982,6 +40339,31 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): TemplateConnection
+    """
+    Search across TemplateResponder objects
+    """
+    adminTemplateResponderSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TemplateResponderConnection
     """
     Search across TrustCenter objects
     """
@@ -43674,6 +44056,37 @@ type Assessment implements Node {
     """
     where: UserWhereInput
   ): UserConnection!
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43705,6 +44118,37 @@ type Assessment implements Node {
     """
     where: AssessmentResponseWhereInput
   ): AssessmentResponseConnection!
+  templateResponders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TemplateResponders returned from the connection.
+    """
+    orderBy: [TemplateResponderOrder!]
+
+    """
+    Filtering options for TemplateResponders returned from the connection.
+    """
+    where: TemplateResponderWhereInput
+  ): TemplateResponderConnection!
 }
 """
 AssessmentAssesmentType is enum for the field assessment_type
@@ -44903,10 +45347,20 @@ input AssessmentWhereInput {
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
   """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
+  """
   assessment_responses edge predicates
   """
   hasAssessmentResponses: Boolean
   hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+  """
+  template_responders edge predicates
+  """
+  hasTemplateResponders: Boolean
+  hasTemplateRespondersWith: [TemplateResponderWhereInput!]
 }
 type Asset implements Node {
   id: ID!
@@ -51030,7 +51484,9 @@ input CreateAssessmentInput {
   viewerIDs: [ID!]
   templateID: ID!
   userIDs: [ID!]
+  assessmentIDs: [ID!]
   assessmentResponseIDs: [ID!]
+  templateResponderIDs: [ID!]
 }
 """
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
@@ -52447,6 +52903,7 @@ input CreateOrganizationInput {
   trustCenterWatermarkConfigIDs: [ID!]
   impersonationEventIDs: [ID!]
   assessmentIDs: [ID!]
+  templateResponderIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -53255,6 +53712,22 @@ input CreateTemplateInput {
   documentIDs: [ID!]
   fileIDs: [ID!]
   trustCenterID: ID
+}
+"""
+CreateTemplateResponderInput is used for create TemplateResponder object.
+Input was generated by ent.
+"""
+input CreateTemplateResponderInput {
+  """
+  the email address of the recipient
+  """
+  email: String!
+  """
+  the status of the template responder
+  """
+  status: TemplateResponderTemplateResponderStatus
+  ownerID: ID
+  assessmentID: ID!
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -58999,6 +59472,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.Exp
   RISK
   SUBSCRIBER
   TASK
+  TEMPLATE_RESPONDER
 }
 """
 Ordering options for Export connections
@@ -74829,6 +75303,37 @@ type Organization implements Node {
     """
     where: AssessmentWhereInput
   ): AssessmentConnection!
+  templateResponders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TemplateResponders returned from the connection.
+    """
+    orderBy: [TemplateResponderOrder!]
+
+    """
+    Filtering options for TemplateResponders returned from the connection.
+    """
+    where: TemplateResponderWhereInput
+  ): TemplateResponderConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -76948,6 +77453,11 @@ input OrganizationWhereInput {
   """
   hasAssessments: Boolean
   hasAssessmentsWith: [AssessmentWhereInput!]
+  """
+  template_responders edge predicates
+  """
+  hasTemplateResponders: Boolean
+  hasTemplateRespondersWith: [TemplateResponderWhereInput!]
   """
   members edge predicates
   """
@@ -83713,6 +84223,37 @@ type Query {
     """
     where: TemplateHistoryWhereInput
   ): TemplateHistoryConnection!
+  templateResponders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TemplateResponders returned from the connection.
+    """
+    orderBy: [TemplateResponderOrder!]
+
+    """
+    Filtering options for TemplateResponders returned from the connection.
+    """
+    where: TemplateResponderWhereInput
+  ): TemplateResponderConnection!
   trustCenters(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -93186,6 +93727,259 @@ enum TemplateOrderField {
   TEMPLATE_TYPE
   KIND
 }
+type TemplateResponder implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the assement associated with this responder
+  """
+  assessmentID: ID!
+  """
+  the email address of the recipient
+  """
+  email: String!
+  """
+  the number of attempts made to perform email send, maximum of 5
+  """
+  sendAttempts: Int!
+  """
+  the status of the template responder
+  """
+  status: TemplateResponderTemplateResponderStatus!
+  owner: Organization
+  assessment: Assessment!
+}
+"""
+A connection to a list of items.
+"""
+type TemplateResponderConnection {
+  """
+  A list of edges.
+  """
+  edges: [TemplateResponderEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TemplateResponderEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TemplateResponder
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for TemplateResponder connections
+"""
+input TemplateResponderOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TemplateResponders.
+  """
+  field: TemplateResponderOrderField!
+}
+"""
+Properties by which TemplateResponder connections can be ordered.
+"""
+enum TemplateResponderOrderField {
+  created_at
+  updated_at
+  send_attempts
+  STATUS
+}
+"""
+TemplateResponderTemplateResponderStatus is enum for the field status
+"""
+enum TemplateResponderTemplateResponderStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateResponderStatus") {
+  PENDING
+  SENT
+  VIEWED
+  IN_PROGRESS
+  COMPLETED
+}
+"""
+TemplateResponderWhereInput is used for filtering TemplateResponder objects.
+Input was generated by ent.
+"""
+input TemplateResponderWhereInput {
+  not: TemplateResponderWhereInput
+  and: [TemplateResponderWhereInput!]
+  or: [TemplateResponderWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  assessment_id field predicates
+  """
+  assessmentID: ID
+  assessmentIDNEQ: ID
+  assessmentIDIn: [ID!]
+  assessmentIDNotIn: [ID!]
+  assessmentIDGT: ID
+  assessmentIDGTE: ID
+  assessmentIDLT: ID
+  assessmentIDLTE: ID
+  assessmentIDContains: ID
+  assessmentIDHasPrefix: ID
+  assessmentIDHasSuffix: ID
+  assessmentIDEqualFold: ID
+  assessmentIDContainsFold: ID
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  send_attempts field predicates
+  """
+  sendAttempts: Int
+  sendAttemptsNEQ: Int
+  sendAttemptsIn: [Int!]
+  sendAttemptsNotIn: [Int!]
+  sendAttemptsGT: Int
+  sendAttemptsGTE: Int
+  sendAttemptsLT: Int
+  sendAttemptsLTE: Int
+  """
+  status field predicates
+  """
+  status: TemplateResponderTemplateResponderStatus
+  statusNEQ: TemplateResponderTemplateResponderStatus
+  statusIn: [TemplateResponderTemplateResponderStatus!]
+  statusNotIn: [TemplateResponderTemplateResponderStatus!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  assessment edge predicates
+  """
+  hasAssessment: Boolean
+  hasAssessmentWith: [AssessmentWhereInput!]
+}
 """
 TemplateTemplateKind is enum for the field kind
 """
@@ -97653,9 +98447,15 @@ input UpdateAssessmentInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUsers: Boolean
+  addAssessmentIDs: [ID!]
+  removeAssessmentIDs: [ID!]
+  clearAssessments: Boolean
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean
+  addTemplateResponderIDs: [ID!]
+  removeTemplateResponderIDs: [ID!]
+  clearTemplateResponders: Boolean
 }
 """
 UpdateAssessmentResponseInput is used for update AssessmentResponse object.
@@ -99660,6 +100460,9 @@ input UpdateOrganizationInput {
   addAssessmentIDs: [ID!]
   removeAssessmentIDs: [ID!]
   clearAssessments: Boolean
+  addTemplateResponderIDs: [ID!]
+  removeTemplateResponderIDs: [ID!]
+  clearTemplateResponders: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -100783,6 +101586,19 @@ input UpdateTemplateInput {
   clearFiles: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+}
+"""
+UpdateTemplateResponderInput is used for update TemplateResponder object.
+Input was generated by ent.
+"""
+input UpdateTemplateResponderInput {
+  """
+  the status of the template responder
+  """
+  status: TemplateResponderTemplateResponderStatus
+  ownerID: ID
+  clearOwner: Boolean
+  assessmentID: ID
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -108857,6 +109673,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): TemplateConnection
     """
+    Search across TemplateResponder objects
+    """
+    templateResponderSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TemplateResponderConnection
+    """
     Search across TrustCenter objects
     """
     trustCenterSearch(
@@ -109058,6 +109899,7 @@ type SearchResults{
   subscribers: SubscriberConnection
   tasks: TaskConnection
   templates: TemplateConnection
+  templateResponders: TemplateResponderConnection
   trustCenters: TrustCenterConnection
   trustCenterCompliances: TrustCenterComplianceConnection
   trustCenterDocs: TrustCenterDocConnection
@@ -109874,6 +110716,109 @@ type TemplateBulkDeletePayload {
     Deleted template IDs
     """
     deletedIDs: [ID!]!
+}`, BuiltIn: false},
+	{Name: "../schema/templateresponder.graphql", Input: `extend type Query {
+    """
+    Look up templateResponder by ID
+    """
+     templateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+    ):  TemplateResponder!
+}
+
+extend type Mutation{
+    """
+    Create a new templateResponder
+    """
+    createTemplateResponder(
+        """
+        values of the templateResponder
+        """
+        input: CreateTemplateResponderInput!
+    ): TemplateResponderCreatePayload!
+    """
+    Create multiple new templateResponders
+    """
+    createBulkTemplateResponder(
+        """
+        values of the templateResponder
+        """
+        input: [CreateTemplateResponderInput!]
+    ): TemplateResponderBulkCreatePayload!
+    """
+    Create multiple new templateResponders via file upload
+    """
+    createBulkCSVTemplateResponder(
+        """
+        csv file containing values of the templateResponder
+        """
+        input: Upload!
+    ): TemplateResponderBulkCreatePayload!
+    """
+    Update an existing templateResponder
+    """
+    updateTemplateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+        """
+        New values for the templateResponder
+        """
+        input: UpdateTemplateResponderInput!
+    ): TemplateResponderUpdatePayload!
+    """
+    Delete an existing templateResponder
+    """
+    deleteTemplateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+    ): TemplateResponderDeletePayload!
+}
+
+"""
+Return response for createTemplateResponder mutation
+"""
+type TemplateResponderCreatePayload {
+    """
+    Created templateResponder
+    """
+    templateResponder: TemplateResponder!
+}
+
+"""
+Return response for updateTemplateResponder mutation
+"""
+type TemplateResponderUpdatePayload {
+    """
+    Updated templateResponder
+    """
+    templateResponder: TemplateResponder!
+}
+
+"""
+Return response for deleteTemplateResponder mutation
+"""
+type TemplateResponderDeletePayload {
+    """
+    Deleted templateResponder ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTemplateResponder mutation
+"""
+type TemplateResponderBulkCreatePayload {
+    """
+    Created templateResponders
+    """
+    templateResponders: [TemplateResponder!]
 }`, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
     tfaSecret: String

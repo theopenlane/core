@@ -4024,6 +4024,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) RunAndReturn(run f
 	return _c
 }
 
+// CreateBulkCSVTemplateResponder provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkCSVTemplateResponder(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTemplateResponder, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkCSVTemplateResponder")
+	}
+
+	var r0 *openlaneclient.CreateBulkCSVTemplateResponder
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTemplateResponder, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkCSVTemplateResponder); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkCSVTemplateResponder)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkCSVTemplateResponder'
+type MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call struct {
+	*mock.Call
+}
+
+// CreateBulkCSVTemplateResponder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTemplateResponder(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call {
+	return &MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call{Call: _e.mock.On("CreateBulkCSVTemplateResponder",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call) Return(createBulkCSVTemplateResponder *openlaneclient.CreateBulkCSVTemplateResponder, err error) *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call {
+	_c.Call.Return(createBulkCSVTemplateResponder, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTemplateResponder, error)) *MockOpenlaneGraphClient_CreateBulkCSVTemplateResponder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateBulkCSVTrustCenterCompliance provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterCompliance, error) {
 	var tmpRet mock.Arguments
@@ -6842,6 +6925,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) Return(createBulkTemp
 }
 
 func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplate, error)) *MockOpenlaneGraphClient_CreateBulkTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkTemplateResponder provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkTemplateResponder(ctx context.Context, input []*openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplateResponder, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkTemplateResponder")
+	}
+
+	var r0 *openlaneclient.CreateBulkTemplateResponder
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplateResponder, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkTemplateResponder); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkTemplateResponder)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkTemplateResponder'
+type MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call struct {
+	*mock.Call
+}
+
+// CreateBulkTemplateResponder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTemplateResponderInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTemplateResponder(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call {
+	return &MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call{Call: _e.mock.On("CreateBulkTemplateResponder",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTemplateResponderInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTemplateResponderInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call) Return(createBulkTemplateResponder *openlaneclient.CreateBulkTemplateResponder, err error) *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call {
+	_c.Call.Return(createBulkTemplateResponder, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplateResponder, error)) *MockOpenlaneGraphClient_CreateBulkTemplateResponder_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -10939,6 +11105,89 @@ func (_c *MockOpenlaneGraphClient_CreateTemplate_Call) Return(createTemplate *op
 }
 
 func (_c *MockOpenlaneGraphClient_CreateTemplate_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTemplate, error)) *MockOpenlaneGraphClient_CreateTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTemplateResponder provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTemplateResponder(ctx context.Context, input openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTemplateResponder, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTemplateResponder")
+	}
+
+	var r0 *openlaneclient.CreateTemplateResponder
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTemplateResponder, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTemplateResponder); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTemplateResponder)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTemplateResponderInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTemplateResponder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTemplateResponder'
+type MockOpenlaneGraphClient_CreateTemplateResponder_Call struct {
+	*mock.Call
+}
+
+// CreateTemplateResponder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTemplateResponderInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTemplateResponder(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTemplateResponder_Call {
+	return &MockOpenlaneGraphClient_CreateTemplateResponder_Call{Call: _e.mock.On("CreateTemplateResponder",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTemplateResponder_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTemplateResponder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTemplateResponderInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTemplateResponderInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTemplateResponder_Call) Return(createTemplateResponder *openlaneclient.CreateTemplateResponder, err error) *MockOpenlaneGraphClient_CreateTemplateResponder_Call {
+	_c.Call.Return(createTemplateResponder, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTemplateResponder_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTemplateResponder, error)) *MockOpenlaneGraphClient_CreateTemplateResponder_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -16287,6 +16536,89 @@ func (_c *MockOpenlaneGraphClient_DeleteTemplate_Call) Return(deleteTemplate *op
 }
 
 func (_c *MockOpenlaneGraphClient_DeleteTemplate_Call) RunAndReturn(run func(ctx context.Context, deleteTemplateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplate, error)) *MockOpenlaneGraphClient_DeleteTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTemplateResponder provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTemplateResponder(ctx context.Context, deleteTemplateResponderID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplateResponder, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTemplateResponderID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTemplateResponderID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTemplateResponder")
+	}
+
+	var r0 *openlaneclient.DeleteTemplateResponder
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplateResponder, error)); ok {
+		return returnFunc(ctx, deleteTemplateResponderID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTemplateResponder); ok {
+		r0 = returnFunc(ctx, deleteTemplateResponderID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTemplateResponder)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTemplateResponderID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTemplateResponder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTemplateResponder'
+type MockOpenlaneGraphClient_DeleteTemplateResponder_Call struct {
+	*mock.Call
+}
+
+// DeleteTemplateResponder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTemplateResponderID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTemplateResponder(ctx interface{}, deleteTemplateResponderID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTemplateResponder_Call {
+	return &MockOpenlaneGraphClient_DeleteTemplateResponder_Call{Call: _e.mock.On("DeleteTemplateResponder",
+		append([]interface{}{ctx, deleteTemplateResponderID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplateResponder_Call) Run(run func(ctx context.Context, deleteTemplateResponderID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTemplateResponder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplateResponder_Call) Return(deleteTemplateResponder *openlaneclient.DeleteTemplateResponder, err error) *MockOpenlaneGraphClient_DeleteTemplateResponder_Call {
+	_c.Call.Return(deleteTemplateResponder, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplateResponder_Call) RunAndReturn(run func(ctx context.Context, deleteTemplateResponderID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplateResponder, error)) *MockOpenlaneGraphClient_DeleteTemplateResponder_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -24439,6 +24771,83 @@ func (_c *MockOpenlaneGraphClient_GetAllTemplateHistories_Call) Return(getAllTem
 }
 
 func (_c *MockOpenlaneGraphClient_GetAllTemplateHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTemplateHistories, error)) *MockOpenlaneGraphClient_GetAllTemplateHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTemplateResponders provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTemplateResponders(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTemplateResponders, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTemplateResponders")
+	}
+
+	var r0 *openlaneclient.GetAllTemplateResponders
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTemplateResponders, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTemplateResponders); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTemplateResponders)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTemplateResponders_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTemplateResponders'
+type MockOpenlaneGraphClient_GetAllTemplateResponders_Call struct {
+	*mock.Call
+}
+
+// GetAllTemplateResponders is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTemplateResponders(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTemplateResponders_Call {
+	return &MockOpenlaneGraphClient_GetAllTemplateResponders_Call{Call: _e.mock.On("GetAllTemplateResponders",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTemplateResponders_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTemplateResponders_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTemplateResponders_Call) Return(getAllTemplateResponders *openlaneclient.GetAllTemplateResponders, err error) *MockOpenlaneGraphClient_GetAllTemplateResponders_Call {
+	_c.Call.Return(getAllTemplateResponders, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTemplateResponders_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTemplateResponders, error)) *MockOpenlaneGraphClient_GetAllTemplateResponders_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -38891,6 +39300,184 @@ func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) RunAndReturn(run fu
 	return _c
 }
 
+// GetTemplateResponderByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTemplateResponderByID(ctx context.Context, templateResponderID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponderByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, templateResponderID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, templateResponderID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTemplateResponderByID")
+	}
+
+	var r0 *openlaneclient.GetTemplateResponderByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponderByID, error)); ok {
+		return returnFunc(ctx, templateResponderID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTemplateResponderByID); ok {
+		r0 = returnFunc(ctx, templateResponderID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTemplateResponderByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, templateResponderID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTemplateResponderByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTemplateResponderByID'
+type MockOpenlaneGraphClient_GetTemplateResponderByID_Call struct {
+	*mock.Call
+}
+
+// GetTemplateResponderByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - templateResponderID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateResponderByID(ctx interface{}, templateResponderID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateResponderByID_Call {
+	return &MockOpenlaneGraphClient_GetTemplateResponderByID_Call{Call: _e.mock.On("GetTemplateResponderByID",
+		append([]interface{}{ctx, templateResponderID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponderByID_Call) Run(run func(ctx context.Context, templateResponderID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateResponderByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponderByID_Call) Return(getTemplateResponderByID *openlaneclient.GetTemplateResponderByID, err error) *MockOpenlaneGraphClient_GetTemplateResponderByID_Call {
+	_c.Call.Return(getTemplateResponderByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponderByID_Call) RunAndReturn(run func(ctx context.Context, templateResponderID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponderByID, error)) *MockOpenlaneGraphClient_GetTemplateResponderByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTemplateResponders provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTemplateResponders(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateResponderWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponders, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTemplateResponders")
+	}
+
+	var r0 *openlaneclient.GetTemplateResponders
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TemplateResponderWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponders, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TemplateResponderWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTemplateResponders); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTemplateResponders)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TemplateResponderWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTemplateResponders_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTemplateResponders'
+type MockOpenlaneGraphClient_GetTemplateResponders_Call struct {
+	*mock.Call
+}
+
+// GetTemplateResponders is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TemplateResponderWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateResponders(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateResponders_Call {
+	return &MockOpenlaneGraphClient_GetTemplateResponders_Call{Call: _e.mock.On("GetTemplateResponders",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponders_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateResponderWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateResponders_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TemplateResponderWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TemplateResponderWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponders_Call) Return(getTemplateResponders *openlaneclient.GetTemplateResponders, err error) *MockOpenlaneGraphClient_GetTemplateResponders_Call {
+	_c.Call.Return(getTemplateResponders, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplateResponders_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateResponderWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateResponders, error)) *MockOpenlaneGraphClient_GetTemplateResponders_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetTemplates provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetTemplates(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplates, error) {
 	var tmpRet mock.Arguments
@@ -45628,6 +46215,95 @@ func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) Return(updateTemplate *op
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) RunAndReturn(run func(ctx context.Context, updateTemplateID string, input openlaneclient.UpdateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTemplate, error)) *MockOpenlaneGraphClient_UpdateTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTemplateResponder provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTemplateResponder(ctx context.Context, updateTemplateResponderID string, input openlaneclient.UpdateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTemplateResponder, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateTemplateResponderID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateTemplateResponderID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTemplateResponder")
+	}
+
+	var r0 *openlaneclient.UpdateTemplateResponder
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTemplateResponderInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTemplateResponder, error)); ok {
+		return returnFunc(ctx, updateTemplateResponderID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTemplateResponderInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTemplateResponder); ok {
+		r0 = returnFunc(ctx, updateTemplateResponderID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTemplateResponder)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTemplateResponderInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTemplateResponderID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTemplateResponder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTemplateResponder'
+type MockOpenlaneGraphClient_UpdateTemplateResponder_Call struct {
+	*mock.Call
+}
+
+// UpdateTemplateResponder is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateTemplateResponderID string
+//   - input openlaneclient.UpdateTemplateResponderInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTemplateResponder(ctx interface{}, updateTemplateResponderID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTemplateResponder_Call {
+	return &MockOpenlaneGraphClient_UpdateTemplateResponder_Call{Call: _e.mock.On("UpdateTemplateResponder",
+		append([]interface{}{ctx, updateTemplateResponderID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTemplateResponder_Call) Run(run func(ctx context.Context, updateTemplateResponderID string, input openlaneclient.UpdateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTemplateResponder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTemplateResponderInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTemplateResponderInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTemplateResponder_Call) Return(updateTemplateResponder *openlaneclient.UpdateTemplateResponder, err error) *MockOpenlaneGraphClient_UpdateTemplateResponder_Call {
+	_c.Call.Return(updateTemplateResponder, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTemplateResponder_Call) RunAndReturn(run func(ctx context.Context, updateTemplateResponderID string, input openlaneclient.UpdateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTemplateResponder, error)) *MockOpenlaneGraphClient_UpdateTemplateResponder_Call {
 	_c.Call.Return(run)
 	return _c
 }

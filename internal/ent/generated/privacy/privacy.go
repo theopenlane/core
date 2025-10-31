@@ -2559,6 +2559,30 @@ func (f TemplateHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gen
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TemplateHistoryMutation", m)
 }
 
+// The TemplateResponderQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TemplateResponderQueryRuleFunc func(context.Context, *generated.TemplateResponderQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TemplateResponderQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TemplateResponderQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TemplateResponderQuery", q)
+}
+
+// The TemplateResponderMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TemplateResponderMutationRuleFunc func(context.Context, *generated.TemplateResponderMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TemplateResponderMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TemplateResponderMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TemplateResponderMutation", m)
+}
+
 // The TrustCenterQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TrustCenterQueryRuleFunc func(context.Context, *generated.TrustCenterQuery) error
@@ -3206,6 +3230,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TemplateHistoryQuery:
 		return q.Filter(), nil
+	case *generated.TemplateResponderQuery:
+		return q.Filter(), nil
 	case *generated.TrustCenterQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterComplianceQuery:
@@ -3450,6 +3476,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TemplateMutation:
 		return m.Filter(), nil
 	case *generated.TemplateHistoryMutation:
+		return m.Filter(), nil
+	case *generated.TemplateResponderMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterMutation:
 		return m.Filter(), nil

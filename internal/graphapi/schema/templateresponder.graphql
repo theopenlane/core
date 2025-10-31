@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up templateResponder by ID
+    """
+     templateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+    ):  TemplateResponder!
+}
+
+extend type Mutation{
+    """
+    Create a new templateResponder
+    """
+    createTemplateResponder(
+        """
+        values of the templateResponder
+        """
+        input: CreateTemplateResponderInput!
+    ): TemplateResponderCreatePayload!
+    """
+    Create multiple new templateResponders
+    """
+    createBulkTemplateResponder(
+        """
+        values of the templateResponder
+        """
+        input: [CreateTemplateResponderInput!]
+    ): TemplateResponderBulkCreatePayload!
+    """
+    Create multiple new templateResponders via file upload
+    """
+    createBulkCSVTemplateResponder(
+        """
+        csv file containing values of the templateResponder
+        """
+        input: Upload!
+    ): TemplateResponderBulkCreatePayload!
+    """
+    Update an existing templateResponder
+    """
+    updateTemplateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+        """
+        New values for the templateResponder
+        """
+        input: UpdateTemplateResponderInput!
+    ): TemplateResponderUpdatePayload!
+    """
+    Delete an existing templateResponder
+    """
+    deleteTemplateResponder(
+        """
+        ID of the templateResponder
+        """
+        id: ID!
+    ): TemplateResponderDeletePayload!
+}
+
+"""
+Return response for createTemplateResponder mutation
+"""
+type TemplateResponderCreatePayload {
+    """
+    Created templateResponder
+    """
+    templateResponder: TemplateResponder!
+}
+
+"""
+Return response for updateTemplateResponder mutation
+"""
+type TemplateResponderUpdatePayload {
+    """
+    Updated templateResponder
+    """
+    templateResponder: TemplateResponder!
+}
+
+"""
+Return response for deleteTemplateResponder mutation
+"""
+type TemplateResponderDeletePayload {
+    """
+    Deleted templateResponder ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTemplateResponder mutation
+"""
+type TemplateResponderBulkCreatePayload {
+    """
+    Created templateResponders
+    """
+    templateResponders: [TemplateResponder!]
+}

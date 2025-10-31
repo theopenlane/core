@@ -216,6 +216,8 @@ type Tx struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// TemplateResponder is the client for interacting with the TemplateResponder builders.
+	TemplateResponder *TemplateResponderClient
 	// TrustCenter is the client for interacting with the TrustCenter builders.
 	TrustCenter *TrustCenterClient
 	// TrustCenterCompliance is the client for interacting with the TrustCenterCompliance builders.
@@ -483,6 +485,7 @@ func (tx *Tx) init() {
 	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
+	tx.TemplateResponder = NewTemplateResponderClient(tx.config)
 	tx.TrustCenter = NewTrustCenterClient(tx.config)
 	tx.TrustCenterCompliance = NewTrustCenterComplianceClient(tx.config)
 	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)

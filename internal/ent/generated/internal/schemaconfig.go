@@ -11,6 +11,7 @@ type SchemaConfig struct {
 	ActionPlan                         string // ActionPlan table.
 	ActionPlanHistory                  string // ActionPlanHistory table.
 	Assessment                         string // Assessment table.
+	AssessmentAssessments              string // Assessment-assessments->Assessment table.
 	AssessmentHistory                  string // AssessmentHistory table.
 	AssessmentResponse                 string // AssessmentResponse table.
 	AssessmentResponseHistory          string // AssessmentResponseHistory table.
@@ -217,6 +218,7 @@ type SchemaConfig struct {
 	Template                           string // Template table.
 	TemplateFiles                      string // Template-files->File table.
 	TemplateHistory                    string // TemplateHistory table.
+	TemplateResponder                  string // TemplateResponder table.
 	TrustCenter                        string // TrustCenter table.
 	TrustCenterCompliance              string // TrustCenterCompliance table.
 	TrustCenterComplianceHistory       string // TrustCenterComplianceHistory table.

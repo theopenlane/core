@@ -698,6 +698,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    templateResponders {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          id
+        }
+      }
+    }
     trustCenters {
       totalCount
       pageInfo {

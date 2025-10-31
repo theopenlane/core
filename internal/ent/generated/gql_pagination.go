@@ -108,6 +108,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -38276,6 +38277,395 @@ func (_m *TemplateHistory) ToEdge(order *TemplateHistoryOrder) *TemplateHistoryE
 		order = DefaultTemplateHistoryOrder
 	}
 	return &TemplateHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// TemplateResponderEdge is the edge representation of TemplateResponder.
+type TemplateResponderEdge struct {
+	Node   *TemplateResponder `json:"node"`
+	Cursor Cursor             `json:"cursor"`
+}
+
+// TemplateResponderConnection is the connection containing edges to TemplateResponder.
+type TemplateResponderConnection struct {
+	Edges      []*TemplateResponderEdge `json:"edges"`
+	PageInfo   PageInfo                 `json:"pageInfo"`
+	TotalCount int                      `json:"totalCount"`
+}
+
+func (c *TemplateResponderConnection) build(nodes []*TemplateResponder, pager *templateresponderPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TemplateResponder
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TemplateResponder {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TemplateResponder {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TemplateResponderEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TemplateResponderEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TemplateResponderPaginateOption enables pagination customization.
+type TemplateResponderPaginateOption func(*templateresponderPager) error
+
+// WithTemplateResponderOrder configures pagination ordering.
+func WithTemplateResponderOrder(order []*TemplateResponderOrder) TemplateResponderPaginateOption {
+	return func(pager *templateresponderPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTemplateResponderFilter configures pagination filter.
+func WithTemplateResponderFilter(filter func(*TemplateResponderQuery) (*TemplateResponderQuery, error)) TemplateResponderPaginateOption {
+	return func(pager *templateresponderPager) error {
+		if filter == nil {
+			return errors.New("TemplateResponderQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type templateresponderPager struct {
+	reverse bool
+	order   []*TemplateResponderOrder
+	filter  func(*TemplateResponderQuery) (*TemplateResponderQuery, error)
+}
+
+func newTemplateResponderPager(opts []TemplateResponderPaginateOption, reverse bool) (*templateresponderPager, error) {
+	pager := &templateresponderPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *templateresponderPager) applyFilter(query *TemplateResponderQuery) (*TemplateResponderQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *templateresponderPager) toCursor(_m *TemplateResponder) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *templateresponderPager) applyCursors(query *TemplateResponderQuery, after, before *Cursor) (*TemplateResponderQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTemplateResponderOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *templateresponderPager) applyOrder(query *TemplateResponderQuery) *TemplateResponderQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTemplateResponderOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTemplateResponderOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *templateresponderPager) orderExpr(query *TemplateResponderQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTemplateResponderOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TemplateResponder.
+func (_m *TemplateResponderQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TemplateResponderPaginateOption,
+) (*TemplateResponderConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTemplateResponderPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TemplateResponderConnection{Edges: []*TemplateResponderEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TemplateResponderOrderFieldCreatedAt orders TemplateResponder by created_at.
+	TemplateResponderOrderFieldCreatedAt = &TemplateResponderOrderField{
+		Value: func(_m *TemplateResponder) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: templateresponder.FieldCreatedAt,
+		toTerm: templateresponder.ByCreatedAt,
+		toCursor: func(_m *TemplateResponder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TemplateResponderOrderFieldUpdatedAt orders TemplateResponder by updated_at.
+	TemplateResponderOrderFieldUpdatedAt = &TemplateResponderOrderField{
+		Value: func(_m *TemplateResponder) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: templateresponder.FieldUpdatedAt,
+		toTerm: templateresponder.ByUpdatedAt,
+		toCursor: func(_m *TemplateResponder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// TemplateResponderOrderFieldSendAttempts orders TemplateResponder by send_attempts.
+	TemplateResponderOrderFieldSendAttempts = &TemplateResponderOrderField{
+		Value: func(_m *TemplateResponder) (ent.Value, error) {
+			return _m.SendAttempts, nil
+		},
+		column: templateresponder.FieldSendAttempts,
+		toTerm: templateresponder.BySendAttempts,
+		toCursor: func(_m *TemplateResponder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SendAttempts,
+			}
+		},
+	}
+	// TemplateResponderOrderFieldStatus orders TemplateResponder by status.
+	TemplateResponderOrderFieldStatus = &TemplateResponderOrderField{
+		Value: func(_m *TemplateResponder) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: templateresponder.FieldStatus,
+		toTerm: templateresponder.ByStatus,
+		toCursor: func(_m *TemplateResponder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TemplateResponderOrderField) String() string {
+	var str string
+	switch f.column {
+	case TemplateResponderOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TemplateResponderOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case TemplateResponderOrderFieldSendAttempts.column:
+		str = "send_attempts"
+	case TemplateResponderOrderFieldStatus.column:
+		str = "STATUS"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TemplateResponderOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TemplateResponderOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TemplateResponderOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TemplateResponderOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TemplateResponderOrderFieldUpdatedAt
+	case "send_attempts":
+		*f = *TemplateResponderOrderFieldSendAttempts
+	case "STATUS":
+		*f = *TemplateResponderOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid TemplateResponderOrderField", str)
+	}
+	return nil
+}
+
+// TemplateResponderOrderField defines the ordering field of TemplateResponder.
+type TemplateResponderOrderField struct {
+	// Value extracts the ordering value from the given TemplateResponder.
+	Value    func(*TemplateResponder) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) templateresponder.OrderOption
+	toCursor func(*TemplateResponder) Cursor
+}
+
+// TemplateResponderOrder defines the ordering of TemplateResponder.
+type TemplateResponderOrder struct {
+	Direction OrderDirection               `json:"direction"`
+	Field     *TemplateResponderOrderField `json:"field"`
+}
+
+// DefaultTemplateResponderOrder is the default ordering of TemplateResponder.
+var DefaultTemplateResponderOrder = &TemplateResponderOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TemplateResponderOrderField{
+		Value: func(_m *TemplateResponder) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: templateresponder.FieldID,
+		toTerm: templateresponder.ByID,
+		toCursor: func(_m *TemplateResponder) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TemplateResponder into TemplateResponderEdge.
+func (_m *TemplateResponder) ToEdge(order *TemplateResponderOrder) *TemplateResponderEdge {
+	if order == nil {
+		order = DefaultTemplateResponderOrder
+	}
+	return &TemplateResponderEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

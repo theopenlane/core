@@ -70,6 +70,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		subscriberResults                 *generated.SubscriberConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
+		templateresponderResults          *generated.TemplateResponderConnection
 		trustcenterResults                *generated.TrustCenterConnection
 		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
 		trustcenterdocResults             *generated.TrustCenterDocConnection
@@ -461,6 +462,15 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			templateresponderResults, err = searchTemplateResponders(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+
+			highlightSearchContext(ctx, query, templateresponderResults, highlightTracker)
+		},
+		func() {
+			var err error
 			trustcenterResults, err = searchTrustCenters(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -734,6 +744,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Templates = templateResults
 
 		res.TotalCount += templateResults.TotalCount
+	}
+	if templateresponderResults != nil && len(templateresponderResults.Edges) > 0 {
+		res.TemplateResponders = templateresponderResults
+
+		res.TotalCount += templateresponderResults.TotalCount
 	}
 	if trustcenterResults != nil && len(trustcenterResults.Edges) > 0 {
 		res.TrustCenters = trustcenterResults
@@ -1523,6 +1538,24 @@ func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string, a
 
 	// return the results
 	return templateResults, nil
+}
+func (r *queryResolver) AdminTemplateResponderSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	templateresponderResults, err := adminSearchTemplateResponders(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return templateresponderResults, nil
 }
 func (r *queryResolver) AdminTrustCenterSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
 	// ensure the user is a system admin

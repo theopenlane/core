@@ -62,6 +62,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -890,6 +891,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TemplateResponder.Query().Where((templateresponder.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if templateresponderCount, err := FromContext(ctx).TemplateResponder.Delete().Where(templateresponder.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", templateresponderCount).Msg("deleting templateresponder")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -1090,6 +1098,12 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 
 func TemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templatehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TemplateResponderEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templateresponder edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

@@ -75,18 +75,9 @@ func (a Assessment) Edges() []ent.Edge {
 			required:   true,
 		}),
 		defaultEdgeToWithPagination(a, User{}),
+		defaultEdgeToWithPagination(a, Assessment{}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
-		// // owner is the group who is responsible for the assessment
-		// uniqueEdgeTo(&edgeDefinition{
-		// 	fromSchema: a,
-		// 	name:       "assessment_owner",
-		// 	t:          Group.Type,
-		// 	field:      "assessment_owner_id",
-		// 	comment:    "the group of users who are responsible for the assessment, will be assigned tasks, approval, etc.",
-		// 	annotations: []schema.Annotation{
-		// 		entgql.OrderField("ASSESSMENT_OWNER_name"),
-		// 	},
-		// }),
+		defaultEdgeToWithPagination(a, TemplateResponder{}),
 	}
 }
 

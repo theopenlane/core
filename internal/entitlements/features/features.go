@@ -56,6 +56,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Subprocessor":               {models.CatalogTrustCenterModule},
 	"Subscriber":                 {models.CatalogBaseModule},
 	"Task":                       {models.CatalogBaseModule},
+	"TemplateResponder":          {models.CatalogComplianceModule},
 	"TFASetting":                 {models.CatalogBaseModule},
 	"TrustCenter":                {models.CatalogTrustCenterModule},
 	"TrustCenterSetting":         {models.CatalogTrustCenterModule},

@@ -1233,6 +1233,18 @@ func (f TemplateHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TemplateHistoryMutation", m)
 }
 
+// The TemplateResponderFunc type is an adapter to allow the use of ordinary
+// function as TemplateResponder mutator.
+type TemplateResponderFunc func(context.Context, *generated.TemplateResponderMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TemplateResponderFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TemplateResponderMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TemplateResponderMutation", m)
+}
+
 // The TrustCenterFunc type is an adapter to allow the use of ordinary
 // function as TrustCenter mutator.
 type TrustCenterFunc func(context.Context, *generated.TrustCenterMutation) (generated.Value, error)

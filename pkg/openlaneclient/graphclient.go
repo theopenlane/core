@@ -479,6 +479,14 @@ type OpenlaneGraphClient interface {
 	UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error)
 	GetAllTemplateHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateHistories, error)
 	GetTemplateHistories(ctx context.Context, first *int64, last *int64, where *TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateHistories, error)
+	CreateBulkCSVTemplateResponder(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTemplateResponder, error)
+	CreateBulkTemplateResponder(ctx context.Context, input []*CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTemplateResponder, error)
+	CreateTemplateResponder(ctx context.Context, input CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplateResponder, error)
+	DeleteTemplateResponder(ctx context.Context, deleteTemplateResponderID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTemplateResponder, error)
+	GetAllTemplateResponders(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateResponders, error)
+	GetTemplateResponderByID(ctx context.Context, templateResponderID string, interceptors ...clientv2.RequestInterceptor) (*GetTemplateResponderByID, error)
+	GetTemplateResponders(ctx context.Context, first *int64, last *int64, where *TemplateResponderWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateResponders, error)
+	UpdateTemplateResponder(ctx context.Context, updateTemplateResponderID string, input UpdateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplateResponder, error)
 	CreateTFASetting(ctx context.Context, input CreateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTFASetting, error)
 	GetAllTFASettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTFASettings, error)
 	GetTFASettingByID(ctx context.Context, tFASettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTFASettingByID, error)
@@ -70417,6 +70425,715 @@ func (t *GetTemplateHistories_TemplateHistories) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.Email
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder struct {
+	TemplateResponders []*CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders "json:\"templateResponders,omitempty\" graphql:\"templateResponders\""
+}
+
+func (t *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder) GetTemplateResponders() []*CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder_TemplateResponders {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder{}
+	}
+	return t.TemplateResponders
+}
+
+type CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.Email
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetID() string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTemplateResponder_CreateBulkTemplateResponder struct {
+	TemplateResponders []*CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders "json:\"templateResponders,omitempty\" graphql:\"templateResponders\""
+}
+
+func (t *CreateBulkTemplateResponder_CreateBulkTemplateResponder) GetTemplateResponders() []*CreateBulkTemplateResponder_CreateBulkTemplateResponder_TemplateResponders {
+	if t == nil {
+		t = &CreateBulkTemplateResponder_CreateBulkTemplateResponder{}
+	}
+	return t.TemplateResponders
+}
+
+type CreateTemplateResponder_CreateTemplateResponder_TemplateResponder struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetEmail() string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.Email
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetID() string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.ID
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return &t.Status
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder_TemplateResponder{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTemplateResponder_CreateTemplateResponder struct {
+	TemplateResponder CreateTemplateResponder_CreateTemplateResponder_TemplateResponder "json:\"templateResponder\" graphql:\"templateResponder\""
+}
+
+func (t *CreateTemplateResponder_CreateTemplateResponder) GetTemplateResponder() *CreateTemplateResponder_CreateTemplateResponder_TemplateResponder {
+	if t == nil {
+		t = &CreateTemplateResponder_CreateTemplateResponder{}
+	}
+	return &t.TemplateResponder
+}
+
+type DeleteTemplateResponder_DeleteTemplateResponder struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTemplateResponder_DeleteTemplateResponder) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTemplateResponder_DeleteTemplateResponder{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTemplateResponders_TemplateResponders_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTemplateResponders_TemplateResponders_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTemplateResponders_TemplateResponders_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTemplateResponders_TemplateResponders_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTemplateResponders_TemplateResponders_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTemplateResponders_TemplateResponders_Edges_Node struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTemplateResponders_TemplateResponders_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTemplateResponders_TemplateResponders_Edges struct {
+	Node *GetAllTemplateResponders_TemplateResponders_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTemplateResponders_TemplateResponders_Edges) GetNode() *GetAllTemplateResponders_TemplateResponders_Edges_Node {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTemplateResponders_TemplateResponders struct {
+	Edges      []*GetAllTemplateResponders_TemplateResponders_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTemplateResponders_TemplateResponders_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTemplateResponders_TemplateResponders) GetEdges() []*GetAllTemplateResponders_TemplateResponders_Edges {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders{}
+	}
+	return t.Edges
+}
+func (t *GetAllTemplateResponders_TemplateResponders) GetPageInfo() *GetAllTemplateResponders_TemplateResponders_PageInfo {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTemplateResponders_TemplateResponders) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTemplateResponders_TemplateResponders{}
+	}
+	return t.TotalCount
+}
+
+type GetTemplateResponderByID_TemplateResponder struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTemplateResponderByID_TemplateResponder) GetAssessmentID() string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.AssessmentID
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetEmail() string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.Email
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetID() string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.ID
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.OwnerID
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.SendAttempts
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return &t.Status
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTemplateResponderByID_TemplateResponder) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTemplateResponderByID_TemplateResponder{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTemplateResponders_TemplateResponders_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTemplateResponders_TemplateResponders_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTemplateResponders_TemplateResponders_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTemplateResponders_TemplateResponders_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTemplateResponders_TemplateResponders_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTemplateResponders_TemplateResponders_Edges_Node struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTemplateResponders_TemplateResponders_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTemplateResponders_TemplateResponders_Edges struct {
+	Node *GetTemplateResponders_TemplateResponders_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTemplateResponders_TemplateResponders_Edges) GetNode() *GetTemplateResponders_TemplateResponders_Edges_Node {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders_Edges{}
+	}
+	return t.Node
+}
+
+type GetTemplateResponders_TemplateResponders struct {
+	Edges      []*GetTemplateResponders_TemplateResponders_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTemplateResponders_TemplateResponders_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTemplateResponders_TemplateResponders) GetEdges() []*GetTemplateResponders_TemplateResponders_Edges {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders{}
+	}
+	return t.Edges
+}
+func (t *GetTemplateResponders_TemplateResponders) GetPageInfo() *GetTemplateResponders_TemplateResponders_PageInfo {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTemplateResponders_TemplateResponders) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTemplateResponders_TemplateResponders{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder struct {
+	AssessmentID string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email        string                        "json:\"email\" graphql:\"email\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status       enums.TemplateResponderStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetEmail() string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.Email
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetID() string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.ID
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetSendAttempts() int64 {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.SendAttempts
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetStatus() *enums.TemplateResponderStatus {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return &t.Status
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTemplateResponder_UpdateTemplateResponder struct {
+	TemplateResponder UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder "json:\"templateResponder\" graphql:\"templateResponder\""
+}
+
+func (t *UpdateTemplateResponder_UpdateTemplateResponder) GetTemplateResponder() *UpdateTemplateResponder_UpdateTemplateResponder_TemplateResponder {
+	if t == nil {
+		t = &UpdateTemplateResponder_UpdateTemplateResponder{}
+	}
+	return &t.TemplateResponder
+}
+
 type CreateTFASetting_CreateTFASetting_TfaSetting struct {
 	TotpAllowed *bool "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
 	Verified    bool  "json:\"verified\" graphql:\"verified\""
@@ -86562,6 +87279,94 @@ func (t *GetTemplateHistories) GetTemplateHistories() *GetTemplateHistories_Temp
 		t = &GetTemplateHistories{}
 	}
 	return &t.TemplateHistories
+}
+
+type CreateBulkCSVTemplateResponder struct {
+	CreateBulkCSVTemplateResponder CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder "json:\"createBulkCSVTemplateResponder\" graphql:\"createBulkCSVTemplateResponder\""
+}
+
+func (t *CreateBulkCSVTemplateResponder) GetCreateBulkCSVTemplateResponder() *CreateBulkCSVTemplateResponder_CreateBulkCSVTemplateResponder {
+	if t == nil {
+		t = &CreateBulkCSVTemplateResponder{}
+	}
+	return &t.CreateBulkCSVTemplateResponder
+}
+
+type CreateBulkTemplateResponder struct {
+	CreateBulkTemplateResponder CreateBulkTemplateResponder_CreateBulkTemplateResponder "json:\"createBulkTemplateResponder\" graphql:\"createBulkTemplateResponder\""
+}
+
+func (t *CreateBulkTemplateResponder) GetCreateBulkTemplateResponder() *CreateBulkTemplateResponder_CreateBulkTemplateResponder {
+	if t == nil {
+		t = &CreateBulkTemplateResponder{}
+	}
+	return &t.CreateBulkTemplateResponder
+}
+
+type CreateTemplateResponder struct {
+	CreateTemplateResponder CreateTemplateResponder_CreateTemplateResponder "json:\"createTemplateResponder\" graphql:\"createTemplateResponder\""
+}
+
+func (t *CreateTemplateResponder) GetCreateTemplateResponder() *CreateTemplateResponder_CreateTemplateResponder {
+	if t == nil {
+		t = &CreateTemplateResponder{}
+	}
+	return &t.CreateTemplateResponder
+}
+
+type DeleteTemplateResponder struct {
+	DeleteTemplateResponder DeleteTemplateResponder_DeleteTemplateResponder "json:\"deleteTemplateResponder\" graphql:\"deleteTemplateResponder\""
+}
+
+func (t *DeleteTemplateResponder) GetDeleteTemplateResponder() *DeleteTemplateResponder_DeleteTemplateResponder {
+	if t == nil {
+		t = &DeleteTemplateResponder{}
+	}
+	return &t.DeleteTemplateResponder
+}
+
+type GetAllTemplateResponders struct {
+	TemplateResponders GetAllTemplateResponders_TemplateResponders "json:\"templateResponders\" graphql:\"templateResponders\""
+}
+
+func (t *GetAllTemplateResponders) GetTemplateResponders() *GetAllTemplateResponders_TemplateResponders {
+	if t == nil {
+		t = &GetAllTemplateResponders{}
+	}
+	return &t.TemplateResponders
+}
+
+type GetTemplateResponderByID struct {
+	TemplateResponder GetTemplateResponderByID_TemplateResponder "json:\"templateResponder\" graphql:\"templateResponder\""
+}
+
+func (t *GetTemplateResponderByID) GetTemplateResponder() *GetTemplateResponderByID_TemplateResponder {
+	if t == nil {
+		t = &GetTemplateResponderByID{}
+	}
+	return &t.TemplateResponder
+}
+
+type GetTemplateResponders struct {
+	TemplateResponders GetTemplateResponders_TemplateResponders "json:\"templateResponders\" graphql:\"templateResponders\""
+}
+
+func (t *GetTemplateResponders) GetTemplateResponders() *GetTemplateResponders_TemplateResponders {
+	if t == nil {
+		t = &GetTemplateResponders{}
+	}
+	return &t.TemplateResponders
+}
+
+type UpdateTemplateResponder struct {
+	UpdateTemplateResponder UpdateTemplateResponder_UpdateTemplateResponder "json:\"updateTemplateResponder\" graphql:\"updateTemplateResponder\""
+}
+
+func (t *UpdateTemplateResponder) GetUpdateTemplateResponder() *UpdateTemplateResponder_UpdateTemplateResponder {
+	if t == nil {
+		t = &UpdateTemplateResponder{}
+	}
+	return &t.UpdateTemplateResponder
 }
 
 type CreateTFASetting struct {
@@ -108427,6 +109232,292 @@ func (c *Client) GetTemplateHistories(ctx context.Context, first *int64, last *i
 	return &res, nil
 }
 
+const CreateBulkCSVTemplateResponderDocument = `mutation CreateBulkCSVTemplateResponder ($input: Upload!) {
+	createBulkCSVTemplateResponder(input: $input) {
+		templateResponders {
+			assessmentID
+			createdAt
+			createdBy
+			email
+			id
+			ownerID
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTemplateResponder(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTemplateResponder, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTemplateResponder
+	if err := c.Client.Post(ctx, "CreateBulkCSVTemplateResponder", CreateBulkCSVTemplateResponderDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTemplateResponderDocument = `mutation CreateBulkTemplateResponder ($input: [CreateTemplateResponderInput!]) {
+	createBulkTemplateResponder(input: $input) {
+		templateResponders {
+			assessmentID
+			createdAt
+			createdBy
+			email
+			id
+			ownerID
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTemplateResponder(ctx context.Context, input []*CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTemplateResponder, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTemplateResponder
+	if err := c.Client.Post(ctx, "CreateBulkTemplateResponder", CreateBulkTemplateResponderDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTemplateResponderDocument = `mutation CreateTemplateResponder ($input: CreateTemplateResponderInput!) {
+	createTemplateResponder(input: $input) {
+		templateResponder {
+			assessmentID
+			createdAt
+			createdBy
+			email
+			id
+			ownerID
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTemplateResponder(ctx context.Context, input CreateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplateResponder, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTemplateResponder
+	if err := c.Client.Post(ctx, "CreateTemplateResponder", CreateTemplateResponderDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTemplateResponderDocument = `mutation DeleteTemplateResponder ($deleteTemplateResponderId: ID!) {
+	deleteTemplateResponder(id: $deleteTemplateResponderId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTemplateResponder(ctx context.Context, deleteTemplateResponderID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTemplateResponder, error) {
+	vars := map[string]any{
+		"deleteTemplateResponderId": deleteTemplateResponderID,
+	}
+
+	var res DeleteTemplateResponder
+	if err := c.Client.Post(ctx, "DeleteTemplateResponder", DeleteTemplateResponderDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTemplateRespondersDocument = `query GetAllTemplateResponders {
+	templateResponders {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				email
+				id
+				ownerID
+				sendAttempts
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTemplateResponders(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateResponders, error) {
+	vars := map[string]any{}
+
+	var res GetAllTemplateResponders
+	if err := c.Client.Post(ctx, "GetAllTemplateResponders", GetAllTemplateRespondersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTemplateResponderByIDDocument = `query GetTemplateResponderByID ($templateResponderId: ID!) {
+	templateResponder(id: $templateResponderId) {
+		assessmentID
+		createdAt
+		createdBy
+		email
+		id
+		ownerID
+		sendAttempts
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTemplateResponderByID(ctx context.Context, templateResponderID string, interceptors ...clientv2.RequestInterceptor) (*GetTemplateResponderByID, error) {
+	vars := map[string]any{
+		"templateResponderId": templateResponderID,
+	}
+
+	var res GetTemplateResponderByID
+	if err := c.Client.Post(ctx, "GetTemplateResponderByID", GetTemplateResponderByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTemplateRespondersDocument = `query GetTemplateResponders ($first: Int, $last: Int, $where: TemplateResponderWhereInput) {
+	templateResponders(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				email
+				id
+				ownerID
+				sendAttempts
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTemplateResponders(ctx context.Context, first *int64, last *int64, where *TemplateResponderWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateResponders, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTemplateResponders
+	if err := c.Client.Post(ctx, "GetTemplateResponders", GetTemplateRespondersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTemplateResponderDocument = `mutation UpdateTemplateResponder ($updateTemplateResponderId: ID!, $input: UpdateTemplateResponderInput!) {
+	updateTemplateResponder(id: $updateTemplateResponderId, input: $input) {
+		templateResponder {
+			assessmentID
+			createdAt
+			createdBy
+			email
+			id
+			ownerID
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTemplateResponder(ctx context.Context, updateTemplateResponderID string, input UpdateTemplateResponderInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplateResponder, error) {
+	vars := map[string]any{
+		"updateTemplateResponderId": updateTemplateResponderID,
+		"input":                     input,
+	}
+
+	var res UpdateTemplateResponder
+	if err := c.Client.Post(ctx, "UpdateTemplateResponder", UpdateTemplateResponderDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTFASettingDocument = `mutation CreateTFASetting ($input: CreateTFASettingInput!) {
 	createTFASetting(input: $input) {
 		tfaSetting {
@@ -112360,6 +113451,14 @@ var DocumentOperationNames = map[string]string{
 	UpdateTemplateDocument:                            "UpdateTemplate",
 	GetAllTemplateHistoriesDocument:                   "GetAllTemplateHistories",
 	GetTemplateHistoriesDocument:                      "GetTemplateHistories",
+	CreateBulkCSVTemplateResponderDocument:            "CreateBulkCSVTemplateResponder",
+	CreateBulkTemplateResponderDocument:               "CreateBulkTemplateResponder",
+	CreateTemplateResponderDocument:                   "CreateTemplateResponder",
+	DeleteTemplateResponderDocument:                   "DeleteTemplateResponder",
+	GetAllTemplateRespondersDocument:                  "GetAllTemplateResponders",
+	GetTemplateResponderByIDDocument:                  "GetTemplateResponderByID",
+	GetTemplateRespondersDocument:                     "GetTemplateResponders",
+	UpdateTemplateResponderDocument:                   "UpdateTemplateResponder",
 	CreateTFASettingDocument:                          "CreateTFASetting",
 	GetAllTFASettingsDocument:                         "GetAllTFASettings",
 	GetTFASettingByIDDocument:                         "GetTFASettingByID",

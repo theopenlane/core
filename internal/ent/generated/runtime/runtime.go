@@ -107,6 +107,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -6710,6 +6711,76 @@ func init() {
 	templatehistoryDescID := templatehistoryFields[9].Descriptor()
 	// templatehistory.DefaultID holds the default value on creation for the id field.
 	templatehistory.DefaultID = templatehistoryDescID.Default.(func() string)
+	templateresponderMixin := schema.TemplateResponder{}.Mixin()
+	templateresponder.Policy = privacy.NewPolicies(schema.TemplateResponder{})
+	templateresponder.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := templateresponder.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	templateresponderMixinHooks0 := templateresponderMixin[0].Hooks()
+	templateresponderMixinHooks1 := templateresponderMixin[1].Hooks()
+	templateresponderMixinHooks2 := templateresponderMixin[2].Hooks()
+	templateresponderMixinHooks5 := templateresponderMixin[5].Hooks()
+
+	templateresponder.Hooks[1] = templateresponderMixinHooks0[0]
+
+	templateresponder.Hooks[2] = templateresponderMixinHooks1[0]
+
+	templateresponder.Hooks[3] = templateresponderMixinHooks2[0]
+
+	templateresponder.Hooks[4] = templateresponderMixinHooks5[0]
+	templateresponderMixinInters1 := templateresponderMixin[1].Interceptors()
+	templateresponderMixinInters2 := templateresponderMixin[2].Interceptors()
+	templateresponderMixinInters5 := templateresponderMixin[5].Interceptors()
+	templateresponder.Interceptors[0] = templateresponderMixinInters1[0]
+	templateresponder.Interceptors[1] = templateresponderMixinInters2[0]
+	templateresponder.Interceptors[2] = templateresponderMixinInters5[0]
+	templateresponderMixinFields0 := templateresponderMixin[0].Fields()
+	_ = templateresponderMixinFields0
+	templateresponderMixinFields3 := templateresponderMixin[3].Fields()
+	_ = templateresponderMixinFields3
+	templateresponderMixinFields5 := templateresponderMixin[5].Fields()
+	_ = templateresponderMixinFields5
+	templateresponderFields := schema.TemplateResponder{}.Fields()
+	_ = templateresponderFields
+	// templateresponderDescCreatedAt is the schema descriptor for created_at field.
+	templateresponderDescCreatedAt := templateresponderMixinFields0[0].Descriptor()
+	// templateresponder.DefaultCreatedAt holds the default value on creation for the created_at field.
+	templateresponder.DefaultCreatedAt = templateresponderDescCreatedAt.Default.(func() time.Time)
+	// templateresponderDescUpdatedAt is the schema descriptor for updated_at field.
+	templateresponderDescUpdatedAt := templateresponderMixinFields0[1].Descriptor()
+	// templateresponder.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	templateresponder.DefaultUpdatedAt = templateresponderDescUpdatedAt.Default.(func() time.Time)
+	// templateresponder.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	templateresponder.UpdateDefaultUpdatedAt = templateresponderDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// templateresponderDescOwnerID is the schema descriptor for owner_id field.
+	templateresponderDescOwnerID := templateresponderMixinFields5[0].Descriptor()
+	// templateresponder.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	templateresponder.OwnerIDValidator = templateresponderDescOwnerID.Validators[0].(func(string) error)
+	// templateresponderDescEmail is the schema descriptor for email field.
+	templateresponderDescEmail := templateresponderFields[1].Descriptor()
+	// templateresponder.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	templateresponder.EmailValidator = templateresponderDescEmail.Validators[0].(func(string) error)
+	// templateresponderDescToken is the schema descriptor for token field.
+	templateresponderDescToken := templateresponderFields[2].Descriptor()
+	// templateresponder.DefaultToken holds the default value on creation for the token field.
+	templateresponder.DefaultToken = templateresponderDescToken.Default.(func() string)
+	// templateresponderDescSecret is the schema descriptor for secret field.
+	templateresponderDescSecret := templateresponderFields[3].Descriptor()
+	// templateresponder.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
+	templateresponder.SecretValidator = templateresponderDescSecret.Validators[0].(func([]byte) error)
+	// templateresponderDescSendAttempts is the schema descriptor for send_attempts field.
+	templateresponderDescSendAttempts := templateresponderFields[4].Descriptor()
+	// templateresponder.DefaultSendAttempts holds the default value on creation for the send_attempts field.
+	templateresponder.DefaultSendAttempts = templateresponderDescSendAttempts.Default.(int)
+	// templateresponderDescID is the schema descriptor for id field.
+	templateresponderDescID := templateresponderMixinFields3[0].Descriptor()
+	// templateresponder.DefaultID holds the default value on creation for the id field.
+	templateresponder.DefaultID = templateresponderDescID.Default.(func() string)
 	trustcenterMixin := schema.TrustCenter{}.Mixin()
 	trustcenter.Policy = privacy.NewPolicies(schema.TrustCenter{})
 	trustcenter.Hooks[0] = func(next ent.Mutator) ent.Mutator {

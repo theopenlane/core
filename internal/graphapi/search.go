@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -1986,6 +1987,34 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
 				},
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTemplateResponder searches for TemplateResponder based on the query string looking for matches
+func searchTemplateResponders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	request := withTransactionalMutation(ctx).TemplateResponder.Query().
+		Where(
+			templateresponder.Or(
+				templateresponder.EmailContainsFold(query), // search by Email
+				templateresponder.ID(query),                // search equal to ID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTemplateResponder searches for TemplateResponder based on the query string looking for matches
+func adminSearchTemplateResponders(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	request := withTransactionalMutation(ctx).TemplateResponder.Query().
+		Where(
+			templateresponder.Or(
+				templateresponder.ID(query),                       // search equal to ID
+				templateresponder.OwnerIDContainsFold(query),      // search by OwnerID
+				templateresponder.AssessmentIDContainsFold(query), // search by AssessmentID
+				templateresponder.EmailContainsFold(query),        // search by Email
 			),
 		)
 

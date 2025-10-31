@@ -593,7 +593,9 @@ type CreateAssessmentInput struct {
 	ViewerIDs             []string
 	TemplateID            string
 	UserIDs               []string
+	AssessmentIDs         []string
 	AssessmentResponseIDs []string
+	TemplateResponderIDs  []string
 }
 
 // Mutate applies the CreateAssessmentInput on the AssessmentMutation builder.
@@ -624,8 +626,14 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
 	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
 		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.TemplateResponderIDs; len(v) > 0 {
+		m.AddTemplateResponderIDs(v...)
 	}
 }
 
@@ -658,9 +666,15 @@ type UpdateAssessmentInput struct {
 	ClearUsers                  bool
 	AddUserIDs                  []string
 	RemoveUserIDs               []string
+	ClearAssessments            bool
+	AddAssessmentIDs            []string
+	RemoveAssessmentIDs         []string
 	ClearAssessmentResponses    bool
 	AddAssessmentResponseIDs    []string
 	RemoveAssessmentResponseIDs []string
+	ClearTemplateResponders     bool
+	AddTemplateResponderIDs     []string
+	RemoveTemplateResponderIDs  []string
 }
 
 // Mutate applies the UpdateAssessmentInput on the AssessmentMutation builder.
@@ -728,6 +742,15 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
 	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
+	}
 	if i.ClearAssessmentResponses {
 		m.ClearAssessmentResponses()
 	}
@@ -736,6 +759,15 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
 		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearTemplateResponders {
+		m.ClearTemplateResponders()
+	}
+	if v := i.AddTemplateResponderIDs; len(v) > 0 {
+		m.AddTemplateResponderIDs(v...)
+	}
+	if v := i.RemoveTemplateResponderIDs; len(v) > 0 {
+		m.RemoveTemplateResponderIDs(v...)
 	}
 }
 
@@ -7569,6 +7601,7 @@ type CreateOrganizationInput struct {
 	TrustCenterWatermarkConfigIDs   []string
 	ImpersonationEventIDs           []string
 	AssessmentIDs                   []string
+	TemplateResponderIDs            []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -7787,6 +7820,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.AssessmentIDs; len(v) > 0 {
 		m.AddAssessmentIDs(v...)
 	}
+	if v := i.TemplateResponderIDs; len(v) > 0 {
+		m.AddTemplateResponderIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7995,6 +8031,9 @@ type UpdateOrganizationInput struct {
 	ClearAssessments                      bool
 	AddAssessmentIDs                      []string
 	RemoveAssessmentIDs                   []string
+	ClearTemplateResponders               bool
+	AddTemplateResponderIDs               []string
+	RemoveTemplateResponderIDs            []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8592,6 +8631,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAssessmentIDs; len(v) > 0 {
 		m.RemoveAssessmentIDs(v...)
+	}
+	if i.ClearTemplateResponders {
+		m.ClearTemplateResponders()
+	}
+	if v := i.AddTemplateResponderIDs; len(v) > 0 {
+		m.AddTemplateResponderIDs(v...)
+	}
+	if v := i.RemoveTemplateResponderIDs; len(v) > 0 {
+		m.RemoveTemplateResponderIDs(v...)
 	}
 }
 
@@ -12501,6 +12549,68 @@ func (c *TemplateUpdate) SetInput(i UpdateTemplateInput) *TemplateUpdate {
 
 // SetInput applies the change-set in the UpdateTemplateInput on the TemplateUpdateOne builder.
 func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTemplateResponderInput represents a mutation input for creating templateresponders.
+type CreateTemplateResponderInput struct {
+	Email        string
+	Status       *enums.TemplateResponderStatus
+	OwnerID      *string
+	AssessmentID string
+}
+
+// Mutate applies the CreateTemplateResponderInput on the TemplateResponderMutation builder.
+func (i *CreateTemplateResponderInput) Mutate(m *TemplateResponderMutation) {
+	m.SetEmail(i.Email)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetAssessmentID(i.AssessmentID)
+}
+
+// SetInput applies the change-set in the CreateTemplateResponderInput on the TemplateResponderCreate builder.
+func (c *TemplateResponderCreate) SetInput(i CreateTemplateResponderInput) *TemplateResponderCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTemplateResponderInput represents a mutation input for updating templateresponders.
+type UpdateTemplateResponderInput struct {
+	Status       *enums.TemplateResponderStatus
+	ClearOwner   bool
+	OwnerID      *string
+	AssessmentID *string
+}
+
+// Mutate applies the UpdateTemplateResponderInput on the TemplateResponderMutation builder.
+func (i *UpdateTemplateResponderInput) Mutate(m *TemplateResponderMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTemplateResponderInput on the TemplateResponderUpdate builder.
+func (c *TemplateResponderUpdate) SetInput(i UpdateTemplateResponderInput) *TemplateResponderUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTemplateResponderInput on the TemplateResponderUpdateOne builder.
+func (c *TemplateResponderUpdateOne) SetInput(i UpdateTemplateResponderInput) *TemplateResponderUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

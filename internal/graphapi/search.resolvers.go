@@ -64,6 +64,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		subscriberResults                 *generated.SubscriberConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
+		templateresponderResults          *generated.TemplateResponderConnection
 		trustcenterResults                *generated.TrustCenterConnection
 		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
 		trustcenterdocResults             *generated.TrustCenterDocConnection
@@ -455,6 +456,15 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			templateresponderResults, err = searchTemplateResponders(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+
+			highlightSearchContext(ctx, query, templateresponderResults, highlightTracker)
+		},
+		func() {
+			var err error
 			trustcenterResults, err = searchTrustCenters(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -728,6 +738,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Templates = templateResults
 
 		res.TotalCount += templateResults.TotalCount
+	}
+	if templateresponderResults != nil && len(templateresponderResults.Edges) > 0 {
+		res.TemplateResponders = templateresponderResults
+
+		res.TotalCount += templateresponderResults.TotalCount
 	}
 	if trustcenterResults != nil && len(trustcenterResults.Edges) > 0 {
 		res.TrustCenters = trustcenterResults
@@ -1181,6 +1196,16 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 
 	// return the results
 	return templateResults, nil
+}
+func (r *queryResolver) TemplateResponderSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateResponderConnection, error) {
+	templateresponderResults, err := searchTemplateResponders(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return templateresponderResults, nil
 }
 func (r *queryResolver) TrustCenterSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
 	trustcenterResults, err := searchTrustCenters(ctx, query, after, first, before, last)

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -37,14 +38,18 @@ type AssessmentQuery struct {
 	withViewers                  *GroupQuery
 	withTemplate                 *TemplateQuery
 	withUsers                    *UserQuery
+	withAssessments              *AssessmentQuery
 	withAssessmentResponses      *AssessmentResponseQuery
+	withTemplateResponders       *TemplateResponderQuery
 	loadTotal                    []func(context.Context, []*Assessment) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
 	withNamedEditors             map[string]*GroupQuery
 	withNamedViewers             map[string]*GroupQuery
 	withNamedUsers               map[string]*UserQuery
+	withNamedAssessments         map[string]*AssessmentQuery
 	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
+	withNamedTemplateResponders  map[string]*TemplateResponderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -231,6 +236,31 @@ func (_q *AssessmentQuery) QueryUsers() *UserQuery {
 	return query
 }
 
+// QueryAssessments chains the current query on the "assessments" edge.
+func (_q *AssessmentQuery) QueryAssessments() *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.AssessmentsTable, assessment.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentAssessments
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssessmentResponses chains the current query on the "assessment_responses" edge.
 func (_q *AssessmentQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 	query := (&AssessmentResponseClient{config: _q.config}).Query()
@@ -250,6 +280,31 @@ func (_q *AssessmentQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTemplateResponders chains the current query on the "template_responders" edge.
+func (_q *AssessmentQuery) QueryTemplateResponders() *TemplateResponderQuery {
+	query := (&TemplateResponderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(templateresponder.Table, templateresponder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessment.TemplateRespondersTable, assessment.TemplateRespondersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -454,7 +509,9 @@ func (_q *AssessmentQuery) Clone() *AssessmentQuery {
 		withViewers:             _q.withViewers.Clone(),
 		withTemplate:            _q.withTemplate.Clone(),
 		withUsers:               _q.withUsers.Clone(),
+		withAssessments:         _q.withAssessments.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
+		withTemplateResponders:  _q.withTemplateResponders.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -528,6 +585,17 @@ func (_q *AssessmentQuery) WithUsers(opts ...func(*UserQuery)) *AssessmentQuery 
 	return _q
 }
 
+// WithAssessments tells the query-builder to eager-load the nodes that are connected to
+// the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithAssessments(opts ...func(*AssessmentQuery)) *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessments = query
+	return _q
+}
+
 // WithAssessmentResponses tells the query-builder to eager-load the nodes that are connected to
 // the "assessment_responses" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQuery)) *AssessmentQuery {
@@ -536,6 +604,17 @@ func (_q *AssessmentQuery) WithAssessmentResponses(opts ...func(*AssessmentRespo
 		opt(query)
 	}
 	_q.withAssessmentResponses = query
+	return _q
+}
+
+// WithTemplateResponders tells the query-builder to eager-load the nodes that are connected to
+// the "template_responders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithTemplateResponders(opts ...func(*TemplateResponderQuery)) *AssessmentQuery {
+	query := (&TemplateResponderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTemplateResponders = query
 	return _q
 }
 
@@ -623,14 +702,16 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	var (
 		nodes       = []*Assessment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withTemplate != nil,
 			_q.withUsers != nil,
+			_q.withAssessments != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withTemplateResponders != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -696,11 +777,27 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withAssessments; query != nil {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.Assessments = []*Assessment{} },
+			func(n *Assessment, e *Assessment) { n.Edges.Assessments = append(n.Edges.Assessments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssessmentResponses; query != nil {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
 			func(n *Assessment, e *AssessmentResponse) {
 				n.Edges.AssessmentResponses = append(n.Edges.AssessmentResponses, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTemplateResponders; query != nil {
+		if err := _q.loadTemplateResponders(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.TemplateResponders = []*TemplateResponder{} },
+			func(n *Assessment, e *TemplateResponder) {
+				n.Edges.TemplateResponders = append(n.Edges.TemplateResponders, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -733,10 +830,24 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAssessments {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedAssessments(name) },
+			func(n *Assessment, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedAssessmentResponses {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedAssessmentResponses(name) },
 			func(n *Assessment, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTemplateResponders {
+		if err := _q.loadTemplateResponders(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedTemplateResponders(name) },
+			func(n *Assessment, e *TemplateResponder) { n.appendNamedTemplateResponders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -930,6 +1041,68 @@ func (_q *AssessmentQuery) loadUsers(ctx context.Context, query *UserQuery, node
 	}
 	return nil
 }
+func (_q *AssessmentQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *Assessment)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Assessment)
+	nids := make(map[string]map[*Assessment]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(assessment.AssessmentsTable)
+		joinT.Schema(_q.schemaConfig.AssessmentAssessments)
+		s.Join(joinT).On(s.C(assessment.FieldID), joinT.C(assessment.AssessmentsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(assessment.AssessmentsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(assessment.AssessmentsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Assessment]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Assessment](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assessments" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssessmentQuery) loadAssessmentResponses(ctx context.Context, query *AssessmentResponseQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *AssessmentResponse)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Assessment)
@@ -945,6 +1118,36 @@ func (_q *AssessmentQuery) loadAssessmentResponses(ctx context.Context, query *A
 	}
 	query.Where(predicate.AssessmentResponse(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(assessment.AssessmentResponsesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AssessmentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *AssessmentQuery) loadTemplateResponders(ctx context.Context, query *TemplateResponderQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *TemplateResponder)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Assessment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(templateresponder.FieldAssessmentID)
+	}
+	query.Where(predicate.TemplateResponder(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessment.TemplateRespondersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -1121,6 +1324,20 @@ func (_q *AssessmentQuery) WithNamedUsers(name string, opts ...func(*UserQuery))
 	return _q
 }
 
+// WithNamedAssessments tells the query-builder to eager-load the nodes that are connected to the "assessments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedAssessments(name string, opts ...func(*AssessmentQuery)) *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessments == nil {
+		_q.withNamedAssessments = make(map[string]*AssessmentQuery)
+	}
+	_q.withNamedAssessments[name] = query
+	return _q
+}
+
 // WithNamedAssessmentResponses tells the query-builder to eager-load the nodes that are connected to the "assessment_responses"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithNamedAssessmentResponses(name string, opts ...func(*AssessmentResponseQuery)) *AssessmentQuery {
@@ -1132,6 +1349,20 @@ func (_q *AssessmentQuery) WithNamedAssessmentResponses(name string, opts ...fun
 		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
 	}
 	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedTemplateResponders tells the query-builder to eager-load the nodes that are connected to the "template_responders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedTemplateResponders(name string, opts ...func(*TemplateResponderQuery)) *AssessmentQuery {
+	query := (&TemplateResponderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTemplateResponders == nil {
+		_q.withNamedTemplateResponders = make(map[string]*TemplateResponderQuery)
+	}
+	_q.withNamedTemplateResponders[name] = query
 	return _q
 }
 

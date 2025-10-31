@@ -120,6 +120,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -367,6 +368,8 @@ type Client struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// TemplateResponder is the client for interacting with the TemplateResponder builders.
+	TemplateResponder *TemplateResponderClient
 	// TrustCenter is the client for interacting with the TrustCenter builders.
 	TrustCenter *TrustCenterClient
 	// TrustCenterCompliance is the client for interacting with the TrustCenterCompliance builders.
@@ -523,6 +526,7 @@ func (c *Client) init() {
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
+	c.TemplateResponder = NewTemplateResponderClient(c.config)
 	c.TrustCenter = NewTrustCenterClient(c.config)
 	c.TrustCenterCompliance = NewTrustCenterComplianceClient(c.config)
 	c.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(c.config)
@@ -843,6 +847,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		Template:                          NewTemplateClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		TemplateResponder:                 NewTemplateResponderClient(cfg),
 		TrustCenter:                       NewTrustCenterClient(cfg),
 		TrustCenterCompliance:             NewTrustCenterComplianceClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
@@ -981,6 +986,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		Template:                          NewTemplateClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		TemplateResponder:                 NewTemplateResponderClient(cfg),
 		TrustCenter:                       NewTrustCenterClient(cfg),
 		TrustCenterCompliance:             NewTrustCenterComplianceClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
@@ -1053,12 +1059,12 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
 		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.TemplateResponder, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -1094,12 +1100,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
 		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.TemplateResponder, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1384,6 +1390,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Template.mutate(ctx, m)
 	case *TemplateHistoryMutation:
 		return c.TemplateHistory.mutate(ctx, m)
+	case *TemplateResponderMutation:
+		return c.TemplateResponder.mutate(ctx, m)
 	case *TrustCenterMutation:
 		return c.TrustCenter.mutate(ctx, m)
 	case *TrustCenterComplianceMutation:
@@ -2202,6 +2210,25 @@ func (c *AssessmentClient) QueryUsers(_m *Assessment) *UserQuery {
 	return query
 }
 
+// QueryAssessments queries the assessments edge of a Assessment.
+func (c *AssessmentClient) QueryAssessments(_m *Assessment) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.AssessmentsTable, assessment.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentAssessments
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssessmentResponses queries the assessment_responses edge of a Assessment.
 func (c *AssessmentClient) QueryAssessmentResponses(_m *Assessment) *AssessmentResponseQuery {
 	query := (&AssessmentResponseClient{config: c.config}).Query()
@@ -2215,6 +2242,25 @@ func (c *AssessmentClient) QueryAssessmentResponses(_m *Assessment) *AssessmentR
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplateResponders queries the template_responders edge of a Assessment.
+func (c *AssessmentClient) QueryTemplateResponders(_m *Assessment) *TemplateResponderQuery {
+	query := (&TemplateResponderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(templateresponder.Table, templateresponder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessment.TemplateRespondersTable, assessment.TemplateRespondersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17421,6 +17467,25 @@ func (c *OrganizationClient) QueryAssessments(_m *Organization) *AssessmentQuery
 	return query
 }
 
+// QueryTemplateResponders queries the template_responders edge of a Organization.
+func (c *OrganizationClient) QueryTemplateResponders(_m *Organization) *TemplateResponderQuery {
+	query := (&TemplateResponderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(templateresponder.Table, templateresponder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateRespondersTable, organization.TemplateRespondersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -23778,6 +23843,179 @@ func (c *TemplateHistoryClient) mutate(ctx context.Context, m *TemplateHistoryMu
 	}
 }
 
+// TemplateResponderClient is a client for the TemplateResponder schema.
+type TemplateResponderClient struct {
+	config
+}
+
+// NewTemplateResponderClient returns a client for the TemplateResponder from the given config.
+func NewTemplateResponderClient(c config) *TemplateResponderClient {
+	return &TemplateResponderClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `templateresponder.Hooks(f(g(h())))`.
+func (c *TemplateResponderClient) Use(hooks ...Hook) {
+	c.hooks.TemplateResponder = append(c.hooks.TemplateResponder, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `templateresponder.Intercept(f(g(h())))`.
+func (c *TemplateResponderClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TemplateResponder = append(c.inters.TemplateResponder, interceptors...)
+}
+
+// Create returns a builder for creating a TemplateResponder entity.
+func (c *TemplateResponderClient) Create() *TemplateResponderCreate {
+	mutation := newTemplateResponderMutation(c.config, OpCreate)
+	return &TemplateResponderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TemplateResponder entities.
+func (c *TemplateResponderClient) CreateBulk(builders ...*TemplateResponderCreate) *TemplateResponderCreateBulk {
+	return &TemplateResponderCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TemplateResponderClient) MapCreateBulk(slice any, setFunc func(*TemplateResponderCreate, int)) *TemplateResponderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TemplateResponderCreateBulk{err: fmt.Errorf("calling to TemplateResponderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TemplateResponderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TemplateResponderCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TemplateResponder.
+func (c *TemplateResponderClient) Update() *TemplateResponderUpdate {
+	mutation := newTemplateResponderMutation(c.config, OpUpdate)
+	return &TemplateResponderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TemplateResponderClient) UpdateOne(_m *TemplateResponder) *TemplateResponderUpdateOne {
+	mutation := newTemplateResponderMutation(c.config, OpUpdateOne, withTemplateResponder(_m))
+	return &TemplateResponderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TemplateResponderClient) UpdateOneID(id string) *TemplateResponderUpdateOne {
+	mutation := newTemplateResponderMutation(c.config, OpUpdateOne, withTemplateResponderID(id))
+	return &TemplateResponderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TemplateResponder.
+func (c *TemplateResponderClient) Delete() *TemplateResponderDelete {
+	mutation := newTemplateResponderMutation(c.config, OpDelete)
+	return &TemplateResponderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TemplateResponderClient) DeleteOne(_m *TemplateResponder) *TemplateResponderDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TemplateResponderClient) DeleteOneID(id string) *TemplateResponderDeleteOne {
+	builder := c.Delete().Where(templateresponder.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TemplateResponderDeleteOne{builder}
+}
+
+// Query returns a query builder for TemplateResponder.
+func (c *TemplateResponderClient) Query() *TemplateResponderQuery {
+	return &TemplateResponderQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTemplateResponder},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TemplateResponder entity by its id.
+func (c *TemplateResponderClient) Get(ctx context.Context, id string) (*TemplateResponder, error) {
+	return c.Query().Where(templateresponder.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TemplateResponderClient) GetX(ctx context.Context, id string) *TemplateResponder {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a TemplateResponder.
+func (c *TemplateResponderClient) QueryOwner(_m *TemplateResponder) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templateresponder.Table, templateresponder.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, templateresponder.OwnerTable, templateresponder.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessment queries the assessment edge of a TemplateResponder.
+func (c *TemplateResponderClient) QueryAssessment(_m *TemplateResponder) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templateresponder.Table, templateresponder.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, templateresponder.AssessmentTable, templateresponder.AssessmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TemplateResponderClient) Hooks() []Hook {
+	hooks := c.hooks.TemplateResponder
+	return append(hooks[:len(hooks):len(hooks)], templateresponder.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TemplateResponderClient) Interceptors() []Interceptor {
+	inters := c.inters.TemplateResponder
+	return append(inters[:len(inters):len(inters)], templateresponder.Interceptors[:]...)
+}
+
+func (c *TemplateResponderClient) mutate(ctx context.Context, m *TemplateResponderMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TemplateResponderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TemplateResponderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TemplateResponderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TemplateResponderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TemplateResponder mutation op: %q", m.Op())
+	}
+}
+
 // TrustCenterClient is a client for the TrustCenter schema.
 type TrustCenterClient struct {
 	config
@@ -27028,7 +27266,7 @@ type (
 		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
 		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
 		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
-		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		Task, TaskHistory, Template, TemplateHistory, TemplateResponder, TrustCenter,
 		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
 		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
 		TrustCenterSettingHistory, TrustCenterSubprocessor,
@@ -27058,7 +27296,7 @@ type (
 		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
 		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
 		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
-		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		Task, TaskHistory, Template, TemplateHistory, TemplateResponder, TrustCenter,
 		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
 		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
 		TrustCenterSettingHistory, TrustCenterSubprocessor,

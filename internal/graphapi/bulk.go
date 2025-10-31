@@ -2831,6 +2831,25 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 	}, nil
 }
 
+// bulkCreateTemplateResponder uses the CreateBulk function to create multiple TemplateResponder entities
+func (r *mutationResolver) bulkCreateTemplateResponder(ctx context.Context, input []*generated.CreateTemplateResponderInput) (*model.TemplateResponderBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TemplateResponderCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TemplateResponder.Create().SetInput(*data)
+	}
+
+	res, err := c.TemplateResponder.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "templateresponder"})
+	}
+
+	// return response
+	return &model.TemplateResponderBulkCreatePayload{
+		TemplateResponders: res,
+	}, nil
+}
+
 // bulkCreateTrustCenterCompliance uses the CreateBulk function to create multiple TrustCenterCompliance entities
 func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, input []*generated.CreateTrustCenterComplianceInput) (*model.TrustCenterComplianceBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

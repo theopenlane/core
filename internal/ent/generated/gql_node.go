@@ -103,6 +103,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -602,6 +603,11 @@ var templatehistoryImplementors = []string{"TemplateHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TemplateHistory) IsNode() {}
+
+var templateresponderImplementors = []string{"TemplateResponder", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TemplateResponder) IsNode() {}
 
 var trustcenterImplementors = []string{"TrustCenter", "Node"}
 
@@ -1597,6 +1603,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(templatehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, templatehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case templateresponder.Table:
+		query := c.TemplateResponder.Query().
+			Where(templateresponder.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, templateresponderImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -3335,6 +3350,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TemplateHistory.Query().
 			Where(templatehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, templatehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case templateresponder.Table:
+		query := c.TemplateResponder.Query().
+			Where(templateresponder.IDIn(ids...))
+		query, err := query.CollectFields(ctx, templateresponderImplementors...)
 		if err != nil {
 			return nil, err
 		}

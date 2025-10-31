@@ -3118,6 +3118,35 @@ func HasAssessmentsWith(preds ...predicate.Assessment) predicate.Organization {
 	})
 }
 
+// HasTemplateResponders applies the HasEdge predicate on the "template_responders" edge.
+func HasTemplateResponders() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TemplateRespondersTable, TemplateRespondersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplateRespondersWith applies the HasEdge predicate on the "template_responders" edge with a given conditions (other predicates).
+func HasTemplateRespondersWith(preds ...predicate.TemplateResponder) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTemplateRespondersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

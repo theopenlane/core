@@ -987,6 +987,35 @@ func HasUsersWith(preds ...predicate.User) predicate.Assessment {
 	})
 }
 
+// HasAssessments applies the HasEdge predicate on the "assessments" edge.
+func HasAssessments() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AssessmentsTable, AssessmentsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentAssessments
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentsWith applies the HasEdge predicate on the "assessments" edge with a given conditions (other predicates).
+func HasAssessmentsWith(preds ...predicate.Assessment) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newAssessmentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentAssessments
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAssessmentResponses applies the HasEdge predicate on the "assessment_responses" edge.
 func HasAssessmentResponses() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
@@ -1008,6 +1037,35 @@ func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTemplateResponders applies the HasEdge predicate on the "template_responders" edge.
+func HasTemplateResponders() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TemplateRespondersTable, TemplateRespondersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplateRespondersWith applies the HasEdge predicate on the "template_responders" edge with a given conditions (other predicates).
+func HasTemplateRespondersWith(preds ...predicate.TemplateResponder) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newTemplateRespondersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TemplateResponder
+		step.Edge.Schema = schemaConfig.TemplateResponder
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

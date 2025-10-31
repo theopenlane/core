@@ -1650,6 +1650,43 @@ func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_templateResponders(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_templateResponders,
+		func(ctx context.Context) (any, error) {
+			return obj.TemplateResponders, nil
+		},
+		nil,
+		ec.marshalOTemplateResponderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateResponderConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_templateResponders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_TemplateResponderConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_TemplateResponderConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_TemplateResponderConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TemplateResponderConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_trustCenters(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2028,6 +2065,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_tasks(ctx, field, obj)
 		case "templates":
 			out.Values[i] = ec._SearchResults_templates(ctx, field, obj)
+		case "templateResponders":
+			out.Values[i] = ec._SearchResults_templateResponders(ctx, field, obj)
 		case "trustCenters":
 			out.Values[i] = ec._SearchResults_trustCenters(ctx, field, obj)
 		case "trustCenterCompliances":

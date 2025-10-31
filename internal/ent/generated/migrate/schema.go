@@ -1582,7 +1582,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "EVIDENCE", "INTERNAL_POLICY", "PROCEDURE", "RISK", "SUBSCRIBER", "TASK"}},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "EVIDENCE", "INTERNAL_POLICY", "PROCEDURE", "RISK", "SUBSCRIBER", "TASK", "TEMPLATE_RESPONDER"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
@@ -5145,6 +5145,73 @@ var (
 			},
 		},
 	}
+	// TemplateRespondersColumns holds the columns for the "template_responders" table.
+	TemplateRespondersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "secret", Type: field.TypeBytes},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "SENT", "VIEWED", "IN_PROGRESS", "COMPLETED"}, Default: "PENDING"},
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// TemplateRespondersTable holds the schema information for the "template_responders" table.
+	TemplateRespondersTable = &schema.Table{
+		Name:       "template_responders",
+		Columns:    TemplateRespondersColumns,
+		PrimaryKey: []*schema.Column{TemplateRespondersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "template_responders_assessments_template_responders",
+				Columns:    []*schema.Column{TemplateRespondersColumns[12]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "template_responders_organizations_template_responders",
+				Columns:    []*schema.Column{TemplateRespondersColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "templateresponder_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TemplateRespondersColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "templateresponder_token",
+				Unique:  true,
+				Columns: []*schema.Column{TemplateRespondersColumns[8]},
+			},
+			{
+				Name:    "templateresponder_assessment_id_status",
+				Unique:  false,
+				Columns: []*schema.Column{TemplateRespondersColumns[12], TemplateRespondersColumns[11]},
+			},
+			{
+				Name:    "templateresponder_email_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TemplateRespondersColumns[7], TemplateRespondersColumns[13]},
+			},
+			{
+				Name:    "templateresponder_email_assessment_id",
+				Unique:  true,
+				Columns: []*schema.Column{TemplateRespondersColumns[7], TemplateRespondersColumns[12]},
+			},
+		},
+	}
 	// TrustCentersColumns holds the columns for the "trust_centers" table.
 	TrustCentersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -5869,6 +5936,31 @@ var (
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// AssessmentAssessmentsColumns holds the columns for the "assessment_assessments" table.
+	AssessmentAssessmentsColumns = []*schema.Column{
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "assessment_id", Type: field.TypeString},
+	}
+	// AssessmentAssessmentsTable holds the schema information for the "assessment_assessments" table.
+	AssessmentAssessmentsTable = &schema.Table{
+		Name:       "assessment_assessments",
+		Columns:    AssessmentAssessmentsColumns,
+		PrimaryKey: []*schema.Column{AssessmentAssessmentsColumns[0], AssessmentAssessmentsColumns[1], AssessmentAssessmentsColumns[0], AssessmentAssessmentsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_assessments_assessment_id",
+				Columns:    []*schema.Column{AssessmentAssessmentsColumns[0], AssessmentAssessmentsColumns[1]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "assessment_assessments_assessment_id",
+				Columns:    []*schema.Column{AssessmentAssessmentsColumns[0], AssessmentAssessmentsColumns[1]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -8776,6 +8868,7 @@ var (
 		TaskHistoryTable,
 		TemplatesTable,
 		TemplateHistoryTable,
+		TemplateRespondersTable,
 		TrustCentersTable,
 		TrustCenterCompliancesTable,
 		TrustCenterComplianceHistoryTable,
@@ -8793,6 +8886,7 @@ var (
 		UserSettingsTable,
 		UserSettingHistoryTable,
 		WebauthnsTable,
+		AssessmentAssessmentsTable,
 		ContactFilesTable,
 		ControlControlObjectivesTable,
 		ControlTasksTable,
@@ -9196,6 +9290,8 @@ func init() {
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
+	TemplateRespondersTable.ForeignKeys[0].RefTable = AssessmentsTable
+	TemplateRespondersTable.ForeignKeys[1].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
 	TrustCentersTable.ForeignKeys[2].RefTable = TrustCenterWatermarkConfigsTable
@@ -9244,6 +9340,8 @@ func init() {
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
+	AssessmentAssessmentsTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentAssessmentsTable.ForeignKeys[1].RefTable = AssessmentsTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable

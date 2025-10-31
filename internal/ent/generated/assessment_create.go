@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templateresponder"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -254,6 +255,21 @@ func (_c *AssessmentCreate) AddUsers(v ...*User) *AssessmentCreate {
 	return _c.AddUserIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_c *AssessmentCreate) AddAssessmentIDs(ids ...string) *AssessmentCreate {
+	_c.mutation.AddAssessmentIDs(ids...)
+	return _c
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_c *AssessmentCreate) AddAssessments(v ...*Assessment) *AssessmentCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentIDs(ids...)
+}
+
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
 func (_c *AssessmentCreate) AddAssessmentResponseIDs(ids ...string) *AssessmentCreate {
 	_c.mutation.AddAssessmentResponseIDs(ids...)
@@ -267,6 +283,21 @@ func (_c *AssessmentCreate) AddAssessmentResponses(v ...*AssessmentResponse) *As
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentResponseIDs(ids...)
+}
+
+// AddTemplateResponderIDs adds the "template_responders" edge to the TemplateResponder entity by IDs.
+func (_c *AssessmentCreate) AddTemplateResponderIDs(ids ...string) *AssessmentCreate {
+	_c.mutation.AddTemplateResponderIDs(ids...)
+	return _c
+}
+
+// AddTemplateResponders adds the "template_responders" edges to the TemplateResponder entity.
+func (_c *AssessmentCreate) AddTemplateResponders(v ...*TemplateResponder) *AssessmentCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTemplateResponderIDs(ids...)
 }
 
 // Mutation returns the AssessmentMutation object of the builder.
@@ -547,6 +578,23 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.AssessmentsTable,
+			Columns: assessment.AssessmentsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentAssessments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.AssessmentResponsesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -559,6 +607,23 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TemplateRespondersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.TemplateRespondersTable,
+			Columns: []string{assessment.TemplateRespondersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templateresponder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TemplateResponder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

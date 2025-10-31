@@ -200,13 +200,15 @@ type OrganizationEdges struct {
 	ImpersonationEvents []*ImpersonationEvent `json:"impersonation_events,omitempty"`
 	// Assessments holds the value of the assessments edge.
 	Assessments []*Assessment `json:"assessments,omitempty"`
+	// TemplateResponders holds the value of the template_responders edge.
+	TemplateResponders []*TemplateResponder `json:"template_responders,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [70]bool
+	loadedTypes [71]bool
 	// totalCount holds the count of the edges above.
-	totalCount [66]map[string]int
+	totalCount [67]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -274,6 +276,7 @@ type OrganizationEdges struct {
 	namedTrustCenterWatermarkConfigs   map[string][]*TrustCenterWatermarkConfig
 	namedImpersonationEvents           map[string][]*ImpersonationEvent
 	namedAssessments                   map[string][]*Assessment
+	namedTemplateResponders            map[string][]*TemplateResponder
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -904,10 +907,19 @@ func (e OrganizationEdges) AssessmentsOrErr() ([]*Assessment, error) {
 	return nil, &NotLoadedError{edge: "assessments"}
 }
 
+// TemplateRespondersOrErr returns the TemplateResponders value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TemplateRespondersOrErr() ([]*TemplateResponder, error) {
+	if e.loadedTypes[69] {
+		return e.TemplateResponders, nil
+	}
+	return nil, &NotLoadedError{edge: "template_responders"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[69] {
+	if e.loadedTypes[70] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1411,6 +1423,11 @@ func (_m *Organization) QueryImpersonationEvents() *ImpersonationEventQuery {
 // QueryAssessments queries the "assessments" edge of the Organization entity.
 func (_m *Organization) QueryAssessments() *AssessmentQuery {
 	return NewOrganizationClient(_m.config).QueryAssessments(_m)
+}
+
+// QueryTemplateResponders queries the "template_responders" edge of the Organization entity.
+func (_m *Organization) QueryTemplateResponders() *TemplateResponderQuery {
+	return NewOrganizationClient(_m.config).QueryTemplateResponders(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3084,6 +3101,30 @@ func (_m *Organization) appendNamedAssessments(name string, edges ...*Assessment
 		_m.Edges.namedAssessments[name] = []*Assessment{}
 	} else {
 		_m.Edges.namedAssessments[name] = append(_m.Edges.namedAssessments[name], edges...)
+	}
+}
+
+// NamedTemplateResponders returns the TemplateResponders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedTemplateResponders(name string) ([]*TemplateResponder, error) {
+	if _m.Edges.namedTemplateResponders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTemplateResponders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedTemplateResponders(name string, edges ...*TemplateResponder) {
+	if _m.Edges.namedTemplateResponders == nil {
+		_m.Edges.namedTemplateResponders = make(map[string][]*TemplateResponder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTemplateResponders[name] = []*TemplateResponder{}
+	} else {
+		_m.Edges.namedTemplateResponders[name] = append(_m.Edges.namedTemplateResponders[name], edges...)
 	}
 }
 

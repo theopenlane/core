@@ -54,8 +54,12 @@ const (
 	EdgeTemplate = "template"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeAssessments holds the string denoting the assessments edge name in mutations.
+	EdgeAssessments = "assessments"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeTemplateResponders holds the string denoting the template_responders edge name in mutations.
+	EdgeTemplateResponders = "template_responders"
 	// Table holds the table name of the assessment in the database.
 	Table = "assessments"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -100,6 +104,8 @@ const (
 	UsersInverseTable = "users"
 	// UsersColumn is the table column denoting the users relation/edge.
 	UsersColumn = "assessment_users"
+	// AssessmentsTable is the table that holds the assessments relation/edge. The primary key declared below.
+	AssessmentsTable = "assessment_assessments"
 	// AssessmentResponsesTable is the table that holds the assessment_responses relation/edge.
 	AssessmentResponsesTable = "assessment_responses"
 	// AssessmentResponsesInverseTable is the table name for the AssessmentResponse entity.
@@ -107,6 +113,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "assessment_id"
+	// TemplateRespondersTable is the table that holds the template_responders relation/edge.
+	TemplateRespondersTable = "template_responders"
+	// TemplateRespondersInverseTable is the table name for the TemplateResponder entity.
+	// It exists in this package in order to avoid circular dependency with the "templateresponder" package.
+	TemplateRespondersInverseTable = "template_responders"
+	// TemplateRespondersColumn is the table column denoting the template_responders relation/edge.
+	TemplateRespondersColumn = "assessment_id"
 )
 
 // Columns holds all SQL columns for assessment fields.
@@ -125,6 +138,12 @@ var Columns = []string{
 	FieldTemplateID,
 	FieldAssessmentOwnerID,
 }
+
+var (
+	// AssessmentsPrimaryKey and AssessmentsColumn2 are the table columns denoting the
+	// primary key for the assessments relation (M2M).
+	AssessmentsPrimaryKey = []string{"assessment_id", "assessment_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -306,6 +325,20 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAssessmentsCount orders the results by assessments count.
+func ByAssessmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentsStep(), opts...)
+	}
+}
+
+// ByAssessments orders the results by assessments terms.
+func ByAssessments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByAssessmentResponsesCount orders the results by assessment_responses count.
 func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -317,6 +350,20 @@ func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplateRespondersCount orders the results by template_responders count.
+func ByTemplateRespondersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplateRespondersStep(), opts...)
+	}
+}
+
+// ByTemplateResponders orders the results by template_responders terms.
+func ByTemplateResponders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateRespondersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -361,11 +408,25 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, UsersTable, UsersColumn),
 	)
 }
+func newAssessmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AssessmentsTable, AssessmentsPrimaryKey...),
+	)
+}
 func newAssessmentResponsesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newTemplateRespondersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateRespondersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplateRespondersTable, TemplateRespondersColumn),
 	)
 }
 
