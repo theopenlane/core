@@ -16,10 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/gravatar"
 	"github.com/theopenlane/utils/passwd"
 	"github.com/theopenlane/utils/ulids"
@@ -152,11 +150,6 @@ func HookUser() ent.Hook {
 				// update the personal org setting with the user's email
 				if err := updatePersonalOrgSetting(ctx, m.Client(), userCreated, org); err != nil {
 					return nil, err
-				}
-
-				// send a welcome email to the user
-				if err := sendRegisterWelcomeEmail(ctx, userCreated, m); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
 				}
 			}
 
@@ -310,37 +303,6 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	}
 
 	return setting, org, nil
-}
-
-// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
-func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
-	// if there is not job client, we can't send the email
-	if m.Job == nil {
-		zerolog.Ctx(ctx).Info().Msg("no job client, skipping welcome email")
-
-		return nil
-	}
-
-	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-	})
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating welcome email")
-
-		return err
-	}
-
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
 }
 
 func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) error {
