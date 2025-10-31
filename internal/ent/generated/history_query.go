@@ -9,6 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
@@ -100,6 +102,98 @@ func (aphq *ActionPlanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*
 	return aphq.
 		Where(actionplanhistory.HistoryTimeLTE(time)).
 		Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *Assessment) History() *AssessmentHistoryQuery {
+	historyClient := NewAssessmentHistoryClient(_m.config)
+	return historyClient.Query().Where(assessmenthistory.Ref(_m.ID))
+}
+
+func (_m *AssessmentHistory) Next(ctx context.Context) (*AssessmentHistory, error) {
+	client := NewAssessmentHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			assessmenthistory.Ref(_m.Ref),
+			assessmenthistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(assessmenthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *AssessmentHistory) Prev(ctx context.Context) (*AssessmentHistory, error) {
+	client := NewAssessmentHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			assessmenthistory.Ref(_m.Ref),
+			assessmenthistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(assessmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ahq *AssessmentHistoryQuery) Earliest(ctx context.Context) (*AssessmentHistory, error) {
+	return ahq.
+		Order(assessmenthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ahq *AssessmentHistoryQuery) Latest(ctx context.Context) (*AssessmentHistory, error) {
+	return ahq.
+		Order(assessmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ahq *AssessmentHistoryQuery) AsOf(ctx context.Context, time time.Time) (*AssessmentHistory, error) {
+	return ahq.
+		Where(assessmenthistory.HistoryTimeLTE(time)).
+		Order(assessmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *AssessmentResponse) History() *AssessmentResponseHistoryQuery {
+	historyClient := NewAssessmentResponseHistoryClient(_m.config)
+	return historyClient.Query().Where(assessmentresponsehistory.Ref(_m.ID))
+}
+
+func (_m *AssessmentResponseHistory) Next(ctx context.Context) (*AssessmentResponseHistory, error) {
+	client := NewAssessmentResponseHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			assessmentresponsehistory.Ref(_m.Ref),
+			assessmentresponsehistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(assessmentresponsehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *AssessmentResponseHistory) Prev(ctx context.Context) (*AssessmentResponseHistory, error) {
+	client := NewAssessmentResponseHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			assessmentresponsehistory.Ref(_m.Ref),
+			assessmentresponsehistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(assessmentresponsehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (arhq *AssessmentResponseHistoryQuery) Earliest(ctx context.Context) (*AssessmentResponseHistory, error) {
+	return arhq.
+		Order(assessmentresponsehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (arhq *AssessmentResponseHistoryQuery) Latest(ctx context.Context) (*AssessmentResponseHistory, error) {
+	return arhq.
+		Order(assessmentresponsehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (arhq *AssessmentResponseHistoryQuery) AsOf(ctx context.Context, time time.Time) (*AssessmentResponseHistory, error) {
+	return arhq.
+		Where(assessmentresponsehistory.HistoryTimeLTE(time)).
+		Order(assessmentresponsehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

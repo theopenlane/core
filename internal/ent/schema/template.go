@@ -86,15 +86,6 @@ func (Template) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("the id of the trust center this template is associated with").
 			Optional(),
-
-		field.Enum("audience").
-			Comment("the type of this template. is it meant for internal audience of your org or external?").
-			GoType(enums.TemplateAudience("")).
-			Default(enums.TemplateAudienceExternal.String()).
-			Immutable().
-			Annotations(
-				entgql.OrderField("AUDIENCE"),
-			),
 	}
 }
 
@@ -126,11 +117,6 @@ func (t Template) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         t,
-			edgeSchema:         TemplateResponder{},
-			cascadeDeleteOwner: true,
 		}),
 	}
 }

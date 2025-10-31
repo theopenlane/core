@@ -134,6 +134,138 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// Assessments is the resolver for the assessments field.
+func (r *queryResolver) Assessments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) (*generated.AssessmentConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AssessmentOrder{
+			{
+				Field:     generated.AssessmentOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Assessment.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentOrder(orderBy),
+		generated.WithAssessmentFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+	}
+
+	return res, err
+}
+
+// AssessmentHistories is the resolver for the assessmentHistories field.
+func (r *queryResolver) AssessmentHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) (*generated.AssessmentHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.AssessmentHistoryOrder{
+			Field:     generated.AssessmentHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentHistoryOrder(orderBy),
+		generated.WithAssessmentHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+	}
+
+	return res, err
+}
+
+// AssessmentResponses is the resolver for the assessmentResponses field.
+func (r *queryResolver) AssessmentResponses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) (*generated.AssessmentResponseConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AssessmentResponseOrder{
+			{
+				Field:     generated.AssessmentResponseOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentResponseOrder(orderBy),
+		generated.WithAssessmentResponseFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+	}
+
+	return res, err
+}
+
+// AssessmentResponseHistories is the resolver for the assessmentResponseHistories field.
+func (r *queryResolver) AssessmentResponseHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentResponseHistoryOrder, where *generated.AssessmentResponseHistoryWhereInput) (*generated.AssessmentResponseHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.AssessmentResponseHistoryOrder{
+			Field:     generated.AssessmentResponseHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentResponseHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentResponseHistoryOrder(orderBy),
+		generated.WithAssessmentResponseHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+	}
+
+	return res, err
+}
+
 // Assets is the resolver for the assets field.
 func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) (*generated.AssetConnection, error) {
 	// set page limit if nothing was set
@@ -3695,3 +3827,297 @@ type updateSubcontrolInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *organizationResolver) TemplateResponders(ctx context.Context, obj *generated.Organization, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.TemplateResponderOrder, where *model.TemplateResponderWhereInput) (*model.TemplateResponderConnection, error) {
+	panic(fmt.Errorf("not implemented: TemplateResponders - templateResponders"))
+}
+func (r *queryResolver) TemplateResponders(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.TemplateResponderOrder, where *model.TemplateResponderWhereInput) (*model.TemplateResponderConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TemplateResponderOrder{
+			{
+				Field:     generated.TemplateResponderOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TemplateResponder.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templateresponder"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTemplateResponderOrder(orderBy),
+		generated.WithTemplateResponderFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templateresponder"})
+	}
+
+	return res, err
+}
+func (r *templateResolver) Audience(ctx context.Context, obj *generated.Template) (enums.TemplateAudience, error) {
+	panic(fmt.Errorf("not implemented: Audience - audience"))
+}
+func (r *templateResolver) TemplateResponders(ctx context.Context, obj *generated.Template, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.TemplateResponderOrder, where *model.TemplateResponderWhereInput) (*model.TemplateResponderConnection, error) {
+	panic(fmt.Errorf("not implemented: TemplateResponders - templateResponders"))
+}
+func (r *templateHistoryResolver) Audience(ctx context.Context, obj *generated.TemplateHistory) (enums.TemplateAudience, error) {
+	panic(fmt.Errorf("not implemented: Audience - audience"))
+}
+func (r *createOrganizationInputResolver) TemplateResponderIDs(ctx context.Context, obj *generated.CreateOrganizationInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *createTemplateInputResolver) Audience(ctx context.Context, obj *generated.CreateTemplateInput, data *enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: Audience - audience"))
+}
+func (r *createTemplateInputResolver) TemplateResponderIDs(ctx context.Context, obj *generated.CreateTemplateInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *organizationWhereInputResolver) HasTemplateResponders(ctx context.Context, obj *generated.OrganizationWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *organizationWhereInputResolver) HasTemplateRespondersWith(ctx context.Context, obj *generated.OrganizationWhereInput, data []*model.TemplateResponderWhereInput) error {
+	panic(fmt.Errorf("not implemented: HasTemplateRespondersWith - hasTemplateRespondersWith"))
+}
+func (r *templateHistoryWhereInputResolver) Audience(ctx context.Context, obj *generated.TemplateHistoryWhereInput, data *enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: Audience - audience"))
+}
+func (r *templateHistoryWhereInputResolver) AudienceNeq(ctx context.Context, obj *generated.TemplateHistoryWhereInput, data *enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceNeq - audienceNEQ"))
+}
+func (r *templateHistoryWhereInputResolver) AudienceIn(ctx context.Context, obj *generated.TemplateHistoryWhereInput, data []enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceIn - audienceIn"))
+}
+func (r *templateHistoryWhereInputResolver) AudienceNotIn(ctx context.Context, obj *generated.TemplateHistoryWhereInput, data []enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceNotIn - audienceNotIn"))
+}
+func (r *templateWhereInputResolver) Audience(ctx context.Context, obj *generated.TemplateWhereInput, data *enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: Audience - audience"))
+}
+func (r *templateWhereInputResolver) AudienceNeq(ctx context.Context, obj *generated.TemplateWhereInput, data *enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceNeq - audienceNEQ"))
+}
+func (r *templateWhereInputResolver) AudienceIn(ctx context.Context, obj *generated.TemplateWhereInput, data []enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceIn - audienceIn"))
+}
+func (r *templateWhereInputResolver) AudienceNotIn(ctx context.Context, obj *generated.TemplateWhereInput, data []enums.TemplateAudience) error {
+	panic(fmt.Errorf("not implemented: AudienceNotIn - audienceNotIn"))
+}
+func (r *templateWhereInputResolver) HasTemplateResponders(ctx context.Context, obj *generated.TemplateWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *templateWhereInputResolver) HasTemplateRespondersWith(ctx context.Context, obj *generated.TemplateWhereInput, data []*model.TemplateResponderWhereInput) error {
+	panic(fmt.Errorf("not implemented: HasTemplateRespondersWith - hasTemplateRespondersWith"))
+}
+func (r *updateOrganizationInputResolver) AddTemplateResponderIDs(ctx context.Context, obj *generated.UpdateOrganizationInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *updateOrganizationInputResolver) RemoveTemplateResponderIDs(ctx context.Context, obj *generated.UpdateOrganizationInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *updateOrganizationInputResolver) ClearTemplateResponders(ctx context.Context, obj *generated.UpdateOrganizationInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *updateTemplateInputResolver) AddTemplateResponderIDs(ctx context.Context, obj *generated.UpdateTemplateInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *updateTemplateInputResolver) RemoveTemplateResponderIDs(ctx context.Context, obj *generated.UpdateTemplateInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "id"})
+	}
+
+	return &model.IDUpdatePayload{
+		ID: res,
+	}, nil
+}
+func (r *updateTemplateInputResolver) ClearTemplateResponders(ctx context.Context, obj *generated.UpdateTemplateInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *Resolver) Organization() gqlgenerated.OrganizationResolver { return &organizationResolver{r} }
+func (r *Resolver) Template() gqlgenerated.TemplateResolver { return &templateResolver{r} }
+func (r *Resolver) TemplateHistory() gqlgenerated.TemplateHistoryResolver {
+	return &templateHistoryResolver{r}
+}
+func (r *Resolver) CreateTemplateInput() gqlgenerated.CreateTemplateInputResolver {
+	return &createTemplateInputResolver{r}
+}
+func (r *Resolver) OrganizationWhereInput() gqlgenerated.OrganizationWhereInputResolver {
+	return &organizationWhereInputResolver{r}
+}
+func (r *Resolver) TemplateHistoryWhereInput() gqlgenerated.TemplateHistoryWhereInputResolver {
+	return &templateHistoryWhereInputResolver{r}
+}
+func (r *Resolver) TemplateWhereInput() gqlgenerated.TemplateWhereInputResolver {
+	return &templateWhereInputResolver{r}
+}
+func (r *Resolver) UpdateTemplateInput() gqlgenerated.UpdateTemplateInputResolver {
+	return &updateTemplateInputResolver{r}
+}
+type organizationResolver struct{ *Resolver }
+type templateResolver struct{ *Resolver }
+type templateHistoryResolver struct{ *Resolver }
+type createTemplateInputResolver struct{ *Resolver }
+type organizationWhereInputResolver struct{ *Resolver }
+type templateHistoryWhereInputResolver struct{ *Resolver }
+type templateWhereInputResolver struct{ *Resolver }
+type updateTemplateInputResolver struct{ *Resolver }
+*/
