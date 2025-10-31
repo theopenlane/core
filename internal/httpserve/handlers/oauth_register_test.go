@@ -48,6 +48,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		expectedErr     string
 		expectedErrCode rout.ErrorCode
 		wantErr         bool
+		wantEmailJob    bool
 	}{
 		{
 			name: "happy path, github",
@@ -60,6 +61,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				token:    "gh_thistokenisvalid",
 			},
 			expectedStatus: http.StatusOK,
+			wantEmailJob:   true,
 		},
 		{
 			name: "happy path, github, same user",
@@ -72,6 +74,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				token:    "gh_thistokenisvalid",
 			},
 			expectedStatus: http.StatusOK,
+			wantEmailJob:   false, // should not send welcome email again
 		},
 		{
 			name: "mismatch email",
@@ -85,6 +88,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 			},
 			expectedStatus:  http.StatusBadRequest,
 			expectedErrCode: handlers.InvalidInputErrCode,
+			wantEmailJob:    false,
 		},
 	}
 	for _, tt := range tests {
@@ -134,18 +138,22 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
 				assert.Equal(t, "Bearer", out.TokenType)
 
-				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{
-								Message: *newman.NewEmailMessageWithOptions(
-									newman.WithSubject("Welcome to Meow Inc.!"),
-									newman.WithTo([]string{tt.args.email}),
-								),
+				if tt.wantEmailJob {
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{
+									Message: *newman.NewEmailMessageWithOptions(
+										newman.WithSubject("Welcome to Meow Inc.!"),
+										newman.WithTo([]string{tt.args.email}),
+									),
+								},
 							},
-						},
-					})
-				require.NotNil(t, job)
+						})
+					require.NotNil(t, job)
+				} else {
+					rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				}
 			}
 		})
 	}
