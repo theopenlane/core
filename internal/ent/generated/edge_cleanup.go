@@ -172,6 +172,12 @@ func CustomDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func CustomTypeEnumEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customtypeenum edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -1027,6 +1033,12 @@ func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 
 func TFASettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TagDefinitionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tagdefinition edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

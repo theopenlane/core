@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -453,6 +454,25 @@ func (_u *ProgramUpdate) AddViewers(v ...*Group) *ProgramUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ProgramUpdate) SetProgramKindID(id string) *ProgramUpdate {
+	_u.mutation.SetProgramKindID(id)
+	return _u
+}
+
+// SetNillableProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableProgramKindID(id *string) *ProgramUpdate {
+	if id != nil {
+		_u = _u.SetProgramKindID(*id)
+	}
+	return _u
+}
+
+// SetProgramKind sets the "program_kind" edge to the CustomTypeEnum entity.
+func (_u *ProgramUpdate) SetProgramKind(v *CustomTypeEnum) *ProgramUpdate {
+	return _u.SetProgramKindID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *ProgramUpdate) AddControlIDs(ids ...string) *ProgramUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -754,6 +774,12 @@ func (_u *ProgramUpdate) RemoveViewers(v ...*Group) *ProgramUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearProgramKind clears the "program_kind" edge to the CustomTypeEnum entity.
+func (_u *ProgramUpdate) ClearProgramKind() *ProgramUpdate {
+	_u.mutation.ClearProgramKind()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1417,6 +1443,37 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProgramKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.ProgramKindTable,
+			Columns: []string{program.ProgramKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.ProgramKindTable,
+			Columns: []string{program.ProgramKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2574,6 +2631,25 @@ func (_u *ProgramUpdateOne) AddViewers(v ...*Group) *ProgramUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ProgramUpdateOne) SetProgramKindID(id string) *ProgramUpdateOne {
+	_u.mutation.SetProgramKindID(id)
+	return _u
+}
+
+// SetNillableProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableProgramKindID(id *string) *ProgramUpdateOne {
+	if id != nil {
+		_u = _u.SetProgramKindID(*id)
+	}
+	return _u
+}
+
+// SetProgramKind sets the "program_kind" edge to the CustomTypeEnum entity.
+func (_u *ProgramUpdateOne) SetProgramKind(v *CustomTypeEnum) *ProgramUpdateOne {
+	return _u.SetProgramKindID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *ProgramUpdateOne) AddControlIDs(ids ...string) *ProgramUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -2875,6 +2951,12 @@ func (_u *ProgramUpdateOne) RemoveViewers(v ...*Group) *ProgramUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearProgramKind clears the "program_kind" edge to the CustomTypeEnum entity.
+func (_u *ProgramUpdateOne) ClearProgramKind() *ProgramUpdateOne {
+	_u.mutation.ClearProgramKind()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -3568,6 +3650,37 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProgramKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.ProgramKindTable,
+			Columns: []string{program.ProgramKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.ProgramKindTable,
+			Columns: []string{program.ProgramKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

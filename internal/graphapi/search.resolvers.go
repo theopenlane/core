@@ -30,6 +30,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		controlimplementationResults      *generated.ControlImplementationConnection
 		controlobjectiveResults           *generated.ControlObjectiveConnection
 		customdomainResults               *generated.CustomDomainConnection
+		customtypeenumResults             *generated.CustomTypeEnumConnection
 		dnsverificationResults            *generated.DNSVerificationConnection
 		documentdataResults               *generated.DocumentDataConnection
 		entityResults                     *generated.EntityConnection
@@ -60,6 +61,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		subcontrolResults                 *generated.SubcontrolConnection
 		subprocessorResults               *generated.SubprocessorConnection
 		subscriberResults                 *generated.SubscriberConnection
+		tagdefinitionResults              *generated.TagDefinitionConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
@@ -169,6 +171,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, customdomainResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			customtypeenumResults, err = searchCustomTypeEnums(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, customtypeenumResults, highlightTracker)
 			}
 		},
 		func() {
@@ -533,6 +547,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			tagdefinitionResults, err = searchTagDefinitions(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, tagdefinitionResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			taskResults, err = searchTasks(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -678,6 +704,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.CustomDomains = customdomainResults
 
 		res.TotalCount += customdomainResults.TotalCount
+	}
+	if customtypeenumResults != nil && len(customtypeenumResults.Edges) > 0 {
+		res.CustomTypeEnums = customtypeenumResults
+
+		res.TotalCount += customtypeenumResults.TotalCount
 	}
 	if dnsverificationResults != nil && len(dnsverificationResults.Edges) > 0 {
 		res.DNSVerifications = dnsverificationResults
@@ -829,6 +860,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += subscriberResults.TotalCount
 	}
+	if tagdefinitionResults != nil && len(tagdefinitionResults.Edges) > 0 {
+		res.TagDefinitions = tagdefinitionResults
+
+		res.TotalCount += tagdefinitionResults.TotalCount
+	}
 	if taskResults != nil && len(taskResults.Edges) > 0 {
 		res.Tasks = taskResults
 
@@ -951,6 +987,16 @@ func (r *queryResolver) CustomDomainSearch(ctx context.Context, query string, af
 
 	// return the results
 	return customdomainResults, nil
+}
+func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomTypeEnumConnection, error) {
+	customtypeenumResults, err := searchCustomTypeEnums(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return customtypeenumResults, nil
 }
 func (r *queryResolver) DNSVerificationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
 	dnsverificationResults, err := searchDNSVerifications(ctx, query, after, first, before, last)
@@ -1251,6 +1297,16 @@ func (r *queryResolver) SubscriberSearch(ctx context.Context, query string, afte
 
 	// return the results
 	return subscriberResults, nil
+}
+func (r *queryResolver) TagDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TagDefinitionConnection, error) {
+	tagdefinitionResults, err := searchTagDefinitions(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return tagdefinitionResults, nil
 }
 func (r *queryResolver) TaskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
 	taskResults, err := searchTasks(ctx, query, after, first, before, last)

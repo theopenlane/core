@@ -52,8 +52,14 @@ const (
 	FieldAssigneeID = "assignee_id"
 	// FieldAssignerID holds the string denoting the assigner_id field in the database.
 	FieldAssignerID = "assigner_id"
+	// FieldSystemGenerated holds the string denoting the system_generated field in the database.
+	FieldSystemGenerated = "system_generated"
+	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
+	FieldIdempotencyKey = "idempotency_key"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeTaskKind holds the string denoting the task_kind edge name in mutations.
+	EdgeTaskKind = "task_kind"
 	// EdgeAssigner holds the string denoting the assigner edge name in mutations.
 	EdgeAssigner = "assigner"
 	// EdgeAssignee holds the string denoting the assignee edge name in mutations.
@@ -89,6 +95,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// TaskKindTable is the table that holds the task_kind relation/edge.
+	TaskKindTable = "tasks"
+	// TaskKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	TaskKindInverseTable = "custom_type_enums"
+	// TaskKindColumn is the table column denoting the task_kind relation/edge.
+	TaskKindColumn = "task_task_kind"
 	// AssignerTable is the table that holds the assigner relation/edge.
 	AssignerTable = "tasks"
 	// AssignerInverseTable is the table name for the User entity.
@@ -182,6 +195,15 @@ var Columns = []string{
 	FieldCompleted,
 	FieldAssigneeID,
 	FieldAssignerID,
+	FieldSystemGenerated,
+	FieldIdempotencyKey,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"custom_type_enum_tasks",
+	"task_task_kind",
 }
 
 var (
@@ -224,6 +246,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -233,7 +260,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -250,6 +277,8 @@ var (
 	OwnerIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// DefaultSystemGenerated holds the default value on creation for the "system_generated" field.
+	DefaultSystemGenerated bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -354,10 +383,27 @@ func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignerID, opts...).ToFunc()
 }
 
+// BySystemGenerated orders the results by the system_generated field.
+func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemGenerated, opts...).ToFunc()
+}
+
+// ByIdempotencyKey orders the results by the idempotency_key field.
+func ByIdempotencyKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdempotencyKey, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTaskKindField orders the results by task_kind field.
+func ByTaskKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTaskKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -533,6 +579,13 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newTaskKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TaskKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TaskKindTable, TaskKindColumn),
 	)
 }
 func newAssignerStep() *sqlgraph.Step {

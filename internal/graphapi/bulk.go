@@ -671,6 +671,25 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 	}, nil
 }
 
+// bulkCreateCustomTypeEnum uses the CreateBulk function to create multiple CustomTypeEnum entities
+func (r *mutationResolver) bulkCreateCustomTypeEnum(ctx context.Context, input []*generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.CustomTypeEnumCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.CustomTypeEnum.Create().SetInput(*data)
+	}
+
+	res, err := c.CustomTypeEnum.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "customtypeenum"})
+	}
+
+	// return response
+	return &model.CustomTypeEnumBulkCreatePayload{
+		CustomTypeEnums: res,
+	}, nil
+}
+
 // bulkCreateDNSVerification uses the CreateBulk function to create multiple DNSVerification entities
 func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2615,6 +2634,25 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	// return response
 	return &model.SubscriberBulkCreatePayload{
 		Subscribers: res,
+	}, nil
+}
+
+// bulkCreateTagDefinition uses the CreateBulk function to create multiple TagDefinition entities
+func (r *mutationResolver) bulkCreateTagDefinition(ctx context.Context, input []*generated.CreateTagDefinitionInput) (*model.TagDefinitionBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TagDefinitionCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TagDefinition.Create().SetInput(*data)
+	}
+
+	res, err := c.TagDefinition.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "tagdefinition"})
+	}
+
+	// return response
+	return &model.TagDefinitionBulkCreatePayload{
+		TagDefinitions: res,
 	}, nil
 }
 

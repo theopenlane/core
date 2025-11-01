@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up customTypeEnum by ID
+    """
+     customTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+    ):  CustomTypeEnum!
+}
+
+extend type Mutation{
+    """
+    Create a new customTypeEnum
+    """
+    createCustomTypeEnum(
+        """
+        values of the customTypeEnum
+        """
+        input: CreateCustomTypeEnumInput!
+    ): CustomTypeEnumCreatePayload!
+    """
+    Create multiple new customTypeEnums
+    """
+    createBulkCustomTypeEnum(
+        """
+        values of the customTypeEnum
+        """
+        input: [CreateCustomTypeEnumInput!]
+    ): CustomTypeEnumBulkCreatePayload!
+    """
+    Create multiple new customTypeEnums via file upload
+    """
+    createBulkCSVCustomTypeEnum(
+        """
+        csv file containing values of the customTypeEnum
+        """
+        input: Upload!
+    ): CustomTypeEnumBulkCreatePayload!
+    """
+    Update an existing customTypeEnum
+    """
+    updateCustomTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+        """
+        New values for the customTypeEnum
+        """
+        input: UpdateCustomTypeEnumInput!
+    ): CustomTypeEnumUpdatePayload!
+    """
+    Delete an existing customTypeEnum
+    """
+    deleteCustomTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+    ): CustomTypeEnumDeletePayload!
+}
+
+"""
+Return response for createCustomTypeEnum mutation
+"""
+type CustomTypeEnumCreatePayload {
+    """
+    Created customTypeEnum
+    """
+    customTypeEnum: CustomTypeEnum!
+}
+
+"""
+Return response for updateCustomTypeEnum mutation
+"""
+type CustomTypeEnumUpdatePayload {
+    """
+    Updated customTypeEnum
+    """
+    customTypeEnum: CustomTypeEnum!
+}
+
+"""
+Return response for deleteCustomTypeEnum mutation
+"""
+type CustomTypeEnumDeletePayload {
+    """
+    Deleted customTypeEnum ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCustomTypeEnum mutation
+"""
+type CustomTypeEnumBulkCreatePayload {
+    """
+    Created customTypeEnums
+    """
+    customTypeEnums: [CustomTypeEnum!]
+}

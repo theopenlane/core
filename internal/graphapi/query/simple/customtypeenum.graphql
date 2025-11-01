@@ -1,0 +1,175 @@
+mutation CreateBulkCSVCustomTypeEnum($input: Upload!) {
+  createBulkCSVCustomTypeEnum(input: $input) {
+    customTypeEnums {
+      createdAt
+      createdBy
+      description
+      field
+      id
+      internalNotes
+      name
+      objectType
+      ownerID
+      systemGenerated
+      systemInternalID
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkCustomTypeEnum($input: [CreateCustomTypeEnumInput!]) {
+  createBulkCustomTypeEnum(input: $input) {
+    customTypeEnums {
+      createdAt
+      createdBy
+      description
+      field
+      id
+      internalNotes
+      name
+      objectType
+      ownerID
+      systemGenerated
+      systemInternalID
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateCustomTypeEnum($input: CreateCustomTypeEnumInput!) {
+  createCustomTypeEnum(input: $input) {
+    customTypeEnum {
+      createdAt
+      createdBy
+      description
+      field
+      id
+      internalNotes
+      name
+      objectType
+      ownerID
+      systemGenerated
+      systemInternalID
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteCustomTypeEnum($deleteCustomTypeEnumId: ID!) {
+  deleteCustomTypeEnum(id: $deleteCustomTypeEnumId) {
+    deletedID
+  }
+}
+
+query GetAllCustomTypeEnums {
+  customTypeEnums {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        field
+        id
+        internalNotes
+        name
+        objectType
+        ownerID
+        systemGenerated
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetCustomTypeEnumByID($customTypeEnumId: ID!) {
+  customTypeEnum(id: $customTypeEnumId) {
+    createdAt
+    createdBy
+    description
+    field
+    id
+    internalNotes
+    name
+    objectType
+    ownerID
+    systemGenerated
+    systemInternalID
+    systemOwned
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetCustomTypeEnums($first: Int, $last: Int, $where: CustomTypeEnumWhereInput) {
+  customTypeEnums(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        field
+        id
+        internalNotes
+        name
+        objectType
+        ownerID
+        systemGenerated
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateCustomTypeEnum($updateCustomTypeEnumId: ID!, $input: UpdateCustomTypeEnumInput!) {
+  updateCustomTypeEnum(id: $updateCustomTypeEnumId, input: $input) {
+    customTypeEnum {
+      createdAt
+      createdBy
+      description
+      field
+      id
+      internalNotes
+      name
+      objectType
+      ownerID
+      systemGenerated
+      systemInternalID
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

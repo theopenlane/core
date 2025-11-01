@@ -2495,6 +2495,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Subcontrol {
 	})
 }
 
+// HasSubcontrolKind applies the HasEdge predicate on the "subcontrol_kind" edge.
+func HasSubcontrolKind() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolKindTable, SubcontrolKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolKindWith applies the HasEdge predicate on the "subcontrol_kind" edge with a given conditions (other predicates).
+func HasSubcontrolKindWith(preds ...predicate.CustomTypeEnum) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newSubcontrolKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControl applies the HasEdge predicate on the "control" edge.
 func HasControl() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {

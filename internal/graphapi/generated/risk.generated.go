@@ -100,6 +100,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -234,6 +238,10 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -368,6 +376,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -502,6 +514,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":

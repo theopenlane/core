@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -629,6 +630,25 @@ func (_c *SubcontrolCreate) SetOwner(v *Organization) *SubcontrolCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
+// SetSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID.
+func (_c *SubcontrolCreate) SetSubcontrolKindID(id string) *SubcontrolCreate {
+	_c.mutation.SetSubcontrolKindID(id)
+	return _c
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSubcontrolKindID(id *string) *SubcontrolCreate {
+	if id != nil {
+		_c = _c.SetSubcontrolKindID(*id)
+	}
+	return _c
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_c *SubcontrolCreate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolCreate {
+	return _c.SetSubcontrolKindID(v.ID)
+}
+
 // SetControl sets the "control" edge to the Control entity.
 func (_c *SubcontrolCreate) SetControl(v *Control) *SubcontrolCreate {
 	return _c.SetControlID(v.ID)
@@ -1211,6 +1231,24 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.subcontrol_subcontrol_kind = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {

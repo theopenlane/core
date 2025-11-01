@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -603,6 +604,25 @@ func (_u *InternalPolicyUpdate) SetDelegate(v *Group) *InternalPolicyUpdate {
 	return _u.SetDelegateID(v.ID)
 }
 
+// SetInternalPolicyKindID sets the "internal_policy_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *InternalPolicyUpdate) SetInternalPolicyKindID(id string) *InternalPolicyUpdate {
+	_u.mutation.SetInternalPolicyKindID(id)
+	return _u
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableInternalPolicyKindID(id *string) *InternalPolicyUpdate {
+	if id != nil {
+		_u = _u.SetInternalPolicyKindID(*id)
+	}
+	return _u
+}
+
+// SetInternalPolicyKind sets the "internal_policy_kind" edge to the CustomTypeEnum entity.
+func (_u *InternalPolicyUpdate) SetInternalPolicyKind(v *CustomTypeEnum) *InternalPolicyUpdate {
+	return _u.SetInternalPolicyKindID(v.ID)
+}
+
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (_u *InternalPolicyUpdate) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdate {
 	_u.mutation.AddControlObjectiveIDs(ids...)
@@ -820,6 +840,12 @@ func (_u *InternalPolicyUpdate) ClearApprover() *InternalPolicyUpdate {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *InternalPolicyUpdate) ClearDelegate() *InternalPolicyUpdate {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearInternalPolicyKind clears the "internal_policy_kind" edge to the CustomTypeEnum entity.
+func (_u *InternalPolicyUpdate) ClearInternalPolicyKind() *InternalPolicyUpdate {
+	_u.mutation.ClearInternalPolicyKind()
 	return _u
 }
 
@@ -1484,6 +1510,37 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPolicyKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.InternalPolicyKindTable,
+			Columns: []string{internalpolicy.InternalPolicyKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.InternalPolicyKindTable,
+			Columns: []string{internalpolicy.InternalPolicyKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicy
@@ -2584,6 +2641,25 @@ func (_u *InternalPolicyUpdateOne) SetDelegate(v *Group) *InternalPolicyUpdateOn
 	return _u.SetDelegateID(v.ID)
 }
 
+// SetInternalPolicyKindID sets the "internal_policy_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *InternalPolicyUpdateOne) SetInternalPolicyKindID(id string) *InternalPolicyUpdateOne {
+	_u.mutation.SetInternalPolicyKindID(id)
+	return _u
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableInternalPolicyKindID(id *string) *InternalPolicyUpdateOne {
+	if id != nil {
+		_u = _u.SetInternalPolicyKindID(*id)
+	}
+	return _u
+}
+
+// SetInternalPolicyKind sets the "internal_policy_kind" edge to the CustomTypeEnum entity.
+func (_u *InternalPolicyUpdateOne) SetInternalPolicyKind(v *CustomTypeEnum) *InternalPolicyUpdateOne {
+	return _u.SetInternalPolicyKindID(v.ID)
+}
+
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (_u *InternalPolicyUpdateOne) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
 	_u.mutation.AddControlObjectiveIDs(ids...)
@@ -2801,6 +2877,12 @@ func (_u *InternalPolicyUpdateOne) ClearApprover() *InternalPolicyUpdateOne {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *InternalPolicyUpdateOne) ClearDelegate() *InternalPolicyUpdateOne {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearInternalPolicyKind clears the "internal_policy_kind" edge to the CustomTypeEnum entity.
+func (_u *InternalPolicyUpdateOne) ClearInternalPolicyKind() *InternalPolicyUpdateOne {
+	_u.mutation.ClearInternalPolicyKind()
 	return _u
 }
 
@@ -3495,6 +3577,37 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPolicyKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.InternalPolicyKindTable,
+			Columns: []string{internalpolicy.InternalPolicyKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.InternalPolicyKindTable,
+			Columns: []string{internalpolicy.InternalPolicyKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicy

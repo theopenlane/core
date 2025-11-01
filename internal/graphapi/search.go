@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -48,6 +49,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -477,6 +479,47 @@ func adminSearchCustomDomains(ctx context.Context, query string, after *entgql.C
 				customdomain.CnameRecordContainsFold(query),       // search by CnameRecord
 				customdomain.MappableDomainIDContainsFold(query),  // search by MappableDomainID
 				customdomain.DNSVerificationIDContainsFold(query), // search by DNSVerificationID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCustomTypeEnum searches for CustomTypeEnum based on the query string looking for matches
+func searchCustomTypeEnums(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomTypeEnumConnection, error) {
+	request := withTransactionalMutation(ctx).CustomTypeEnum.Query().
+		Where(
+			customtypeenum.Or(
+				customtypeenum.ID(query),                     // search equal to ID
+				customtypeenum.NameContainsFold(query),       // search by Name
+				customtypeenum.ObjectTypeContainsFold(query), // search by ObjectType
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCustomTypeEnum searches for CustomTypeEnum based on the query string looking for matches
+func adminSearchCustomTypeEnums(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomTypeEnumConnection, error) {
+	request := withTransactionalMutation(ctx).CustomTypeEnum.Query().
+		Where(
+			customtypeenum.Or(
+				customtypeenum.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				customtypeenum.OwnerIDContainsFold(query),          // search by OwnerID
+				customtypeenum.InternalNotesContainsFold(query),    // search by InternalNotes
+				customtypeenum.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				customtypeenum.ObjectTypeContainsFold(query),       // search by ObjectType
+				customtypeenum.FieldContainsFold(query),            // search by Field
+				customtypeenum.NameContainsFold(query),             // search by Name
+				customtypeenum.DescriptionContainsFold(query),      // search by Description
 			),
 		)
 
@@ -1824,6 +1867,50 @@ func adminSearchSubscribers(ctx context.Context, query string, after *entgql.Cur
 	return request.Paginate(ctx, after, first, before, last)
 }
 
+// searchTagDefinition searches for TagDefinition based on the query string looking for matches
+func searchTagDefinitions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TagDefinitionConnection, error) {
+	request := withTransactionalMutation(ctx).TagDefinition.Query().
+		Where(
+			tagdefinition.Or(
+				tagdefinition.ID(query),               // search equal to ID
+				tagdefinition.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTagDefinition searches for TagDefinition based on the query string looking for matches
+func adminSearchTagDefinitions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TagDefinitionConnection, error) {
+	request := withTransactionalMutation(ctx).TagDefinition.Query().
+		Where(
+			tagdefinition.Or(
+				tagdefinition.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				tagdefinition.OwnerIDContainsFold(query),          // search by OwnerID
+				tagdefinition.InternalNotesContainsFold(query),    // search by InternalNotes
+				tagdefinition.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				tagdefinition.NameContainsFold(query),             // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(aliases)::text LIKE $7", likeQuery)) // search by Aliases
+				},
+				tagdefinition.SlugContainsFold(query),        // search by Slug
+				tagdefinition.DescriptionContainsFold(query), // search by Description
+				tagdefinition.ColorContainsFold(query),       // search by Color
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
 // searchTask searches for Task based on the query string looking for matches
 func searchTasks(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
 	request := withTransactionalMutation(ctx).Task.Query().
@@ -1853,12 +1940,13 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				task.OwnerIDContainsFold(query),    // search by OwnerID
-				task.TitleContainsFold(query),      // search by Title
-				task.DetailsContainsFold(query),    // search by Details
-				task.CategoryContainsFold(query),   // search by Category
-				task.AssigneeIDContainsFold(query), // search by AssigneeID
-				task.AssignerIDContainsFold(query), // search by AssignerID
+				task.OwnerIDContainsFold(query),        // search by OwnerID
+				task.TitleContainsFold(query),          // search by Title
+				task.DetailsContainsFold(query),        // search by Details
+				task.CategoryContainsFold(query),       // search by Category
+				task.AssigneeIDContainsFold(query),     // search by AssigneeID
+				task.AssignerIDContainsFold(query),     // search by AssignerID
+				task.IdempotencyKeyContainsFold(query), // search by IdempotencyKey
 			),
 		)
 

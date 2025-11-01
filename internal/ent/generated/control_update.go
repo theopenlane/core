@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -841,6 +842,25 @@ func (_u *ControlUpdate) AddEditors(v ...*Group) *ControlUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ControlUpdate) SetControlKindID(id string) *ControlUpdate {
+	_u.mutation.SetControlKindID(id)
+	return _u
+}
+
+// SetNillableControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ControlUpdate) SetNillableControlKindID(id *string) *ControlUpdate {
+	if id != nil {
+		_u = _u.SetControlKindID(*id)
+	}
+	return _u
+}
+
+// SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdate) SetControlKind(v *CustomTypeEnum) *ControlUpdate {
+	return _u.SetControlKindID(v.ID)
+}
+
 // SetStandard sets the "standard" edge to the Standard entity.
 func (_u *ControlUpdate) SetStandard(v *Standard) *ControlUpdate {
 	return _u.SetStandardID(v.ID)
@@ -1218,6 +1238,12 @@ func (_u *ControlUpdate) RemoveEditors(v ...*Group) *ControlUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearControlKind clears the "control_kind" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdate) ClearControlKind() *ControlUpdate {
+	_u.mutation.ClearControlKind()
+	return _u
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -2314,6 +2340,37 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3546,6 +3603,25 @@ func (_u *ControlUpdateOne) AddEditors(v ...*Group) *ControlUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ControlUpdateOne) SetControlKindID(id string) *ControlUpdateOne {
+	_u.mutation.SetControlKindID(id)
+	return _u
+}
+
+// SetNillableControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableControlKindID(id *string) *ControlUpdateOne {
+	if id != nil {
+		_u = _u.SetControlKindID(*id)
+	}
+	return _u
+}
+
+// SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdateOne) SetControlKind(v *CustomTypeEnum) *ControlUpdateOne {
+	return _u.SetControlKindID(v.ID)
+}
+
 // SetStandard sets the "standard" edge to the Standard entity.
 func (_u *ControlUpdateOne) SetStandard(v *Standard) *ControlUpdateOne {
 	return _u.SetStandardID(v.ID)
@@ -3923,6 +3999,12 @@ func (_u *ControlUpdateOne) RemoveEditors(v ...*Group) *ControlUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearControlKind clears the "control_kind" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdateOne) ClearControlKind() *ControlUpdateOne {
+	_u.mutation.ClearControlKind()
+	return _u
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -5049,6 +5131,37 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

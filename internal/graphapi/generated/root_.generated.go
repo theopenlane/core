@@ -124,6 +124,7 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlan struct {
+		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanType                  func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
@@ -461,6 +462,7 @@ type ComplexityRoot struct {
 		CategoryID                 func(childComplexity int) int
 		Comments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlKind                func(childComplexity int) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
@@ -896,6 +898,60 @@ type ComplexityRoot struct {
 
 	CustomDomainUpdatePayload struct {
 		CustomDomain func(childComplexity int) int
+	}
+
+	CustomTypeEnum struct {
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Field            func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Name             func(childComplexity int) int
+		ObjectType       func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemGenerated  func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	CustomTypeEnumBulkCreatePayload struct {
+		CustomTypeEnums func(childComplexity int) int
+	}
+
+	CustomTypeEnumConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CustomTypeEnumCreatePayload struct {
+		CustomTypeEnum func(childComplexity int) int
+	}
+
+	CustomTypeEnumDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	CustomTypeEnumEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CustomTypeEnumUpdatePayload struct {
+		CustomTypeEnum func(childComplexity int) int
 	}
 
 	DNSVerification struct {
@@ -1998,6 +2054,7 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		InternalPolicyKind              func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                           func(childComplexity int) int
@@ -2580,6 +2637,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomTypeEnum          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
@@ -2606,6 +2664,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTagDefinition           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
@@ -2617,6 +2676,7 @@ type ComplexityRoot struct {
 		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
 		CreateBulkControlObjective           func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
 		CreateBulkCustomDomain               func(childComplexity int, input []*generated.CreateCustomDomainInput) int
+		CreateBulkCustomTypeEnum             func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
 		CreateBulkDNSVerification            func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
@@ -2643,6 +2703,7 @@ type ComplexityRoot struct {
 		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
 		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkTagDefinition              func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
 		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
 		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
 		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
@@ -2656,6 +2717,7 @@ type ComplexityRoot struct {
 		CreateControlWithSubcontrols         func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
 		CreateControlsByClone                func(childComplexity int, input *model.CloneControlInput) int
 		CreateCustomDomain                   func(childComplexity int, input generated.CreateCustomDomainInput) int
+		CreateCustomTypeEnum                 func(childComplexity int, input generated.CreateCustomTypeEnumInput) int
 		CreateDNSVerification                func(childComplexity int, input generated.CreateDNSVerificationInput) int
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput) int
@@ -2699,6 +2761,7 @@ type ComplexityRoot struct {
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
+		CreateTagDefinition                  func(childComplexity int, input generated.CreateTagDefinitionInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
@@ -2761,6 +2824,7 @@ type ComplexityRoot struct {
 		DeleteControlImplementation          func(childComplexity int, id string) int
 		DeleteControlObjective               func(childComplexity int, id string) int
 		DeleteCustomDomain                   func(childComplexity int, id string) int
+		DeleteCustomTypeEnum                 func(childComplexity int, id string) int
 		DeleteDNSVerification                func(childComplexity int, id string) int
 		DeleteDocumentData                   func(childComplexity int, id string) int
 		DeleteEntity                         func(childComplexity int, id string) int
@@ -2800,6 +2864,7 @@ type ComplexityRoot struct {
 		DeleteSubcontrol                     func(childComplexity int, id string) int
 		DeleteSubprocessor                   func(childComplexity int, id string) int
 		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
+		DeleteTagDefinition                  func(childComplexity int, id string) int
 		DeleteTask                           func(childComplexity int, id string) int
 		DeleteTemplate                       func(childComplexity int, id string) int
 		DeleteTrustCenter                    func(childComplexity int, id string) int
@@ -2831,6 +2896,7 @@ type ComplexityRoot struct {
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
 		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
+		UpdateCustomTypeEnum                 func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
 		UpdateDNSVerification                func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
 		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
@@ -2870,6 +2936,7 @@ type ComplexityRoot struct {
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
+		UpdateTagDefinition                  func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
@@ -3194,6 +3261,7 @@ type ComplexityRoot struct {
 		CreatedAt                     func(childComplexity int) int
 		CreatedBy                     func(childComplexity int) int
 		CustomDomains                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		CustomTypeEnums               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
 		DNSVerifications              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
 		DedicatedDb                   func(childComplexity int) int
 		Description                   func(childComplexity int) int
@@ -3247,6 +3315,7 @@ type ComplexityRoot struct {
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		TagDefinitions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3522,6 +3591,7 @@ type ComplexityRoot struct {
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                           func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
+		ProcedureKind                   func(childComplexity int) int
 		ProcedureType                   func(childComplexity int) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue                       func(childComplexity int) int
@@ -3653,6 +3723,7 @@ type ComplexityRoot struct {
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Procedures           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramKind          func(childComplexity int) int
 		ProgramOwnerID       func(childComplexity int) int
 		ProgramType          func(childComplexity int) int
 		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -3823,6 +3894,7 @@ type ComplexityRoot struct {
 		AdminControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminCustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminCustomTypeEnumSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDNSVerificationSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3854,6 +3926,7 @@ type ComplexityRoot struct {
 		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubprocessorSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTagDefinitionSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterComplianceSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3892,6 +3965,9 @@ type ComplexityRoot struct {
 		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
 		CustomDomainSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		CustomDomains                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		CustomTypeEnum                        func(childComplexity int, id string) int
+		CustomTypeEnumSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CustomTypeEnums                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
 		DNSVerification                       func(childComplexity int, id string) int
 		DNSVerificationHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) int
 		DNSVerificationSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4036,6 +4112,9 @@ type ComplexityRoot struct {
 		Subscriber                            func(childComplexity int, email string) int
 		SubscriberSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subscribers                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		TagDefinition                         func(childComplexity int, id string) int
+		TagDefinitionSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TagDefinitions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
 		Task                                  func(childComplexity int, id string) int
 		TaskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
 		TaskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4105,6 +4184,8 @@ type ComplexityRoot struct {
 		OwnerID          func(childComplexity int) int
 		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskCategory     func(childComplexity int) int
+		RiskKind         func(childComplexity int) int
 		RiskType         func(childComplexity int) int
 		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Score            func(childComplexity int) int
@@ -4412,6 +4493,7 @@ type ComplexityRoot struct {
 		ControlObjectives           func(childComplexity int) int
 		Controls                    func(childComplexity int) int
 		CustomDomains               func(childComplexity int) int
+		CustomTypeEnums             func(childComplexity int) int
 		DNSVerifications            func(childComplexity int) int
 		DocumentData                func(childComplexity int) int
 		Entities                    func(childComplexity int) int
@@ -4444,6 +4526,7 @@ type ComplexityRoot struct {
 		Subcontrols                 func(childComplexity int) int
 		Subprocessors               func(childComplexity int) int
 		Subscribers                 func(childComplexity int) int
+		TagDefinitions              func(childComplexity int) int
 		Tasks                       func(childComplexity int) int
 		Templates                   func(childComplexity int) int
 		TotalCount                  func(childComplexity int) int
@@ -4608,6 +4691,7 @@ type ComplexityRoot struct {
 		Source                     func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
+		SubcontrolKind             func(childComplexity int) int
 		SystemInternalID           func(childComplexity int) int
 		SystemOwned                func(childComplexity int) int
 		Tags                       func(childComplexity int) int
@@ -4869,6 +4953,53 @@ type ComplexityRoot struct {
 		TfaSetting    func(childComplexity int) int
 	}
 
+	TagDefinition struct {
+		Aliases          func(childComplexity int) int
+		Color            func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Slug             func(childComplexity int) int
+		SystemGenerated  func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	TagDefinitionBulkCreatePayload struct {
+		TagDefinitions func(childComplexity int) int
+	}
+
+	TagDefinitionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TagDefinitionCreatePayload struct {
+		TagDefinition func(childComplexity int) int
+	}
+
+	TagDefinitionDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TagDefinitionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TagDefinitionUpdatePayload struct {
+		TagDefinition func(childComplexity int) int
+	}
+
 	Task struct {
 		Assignee               func(childComplexity int) int
 		AssigneeID             func(childComplexity int) int
@@ -4888,6 +5019,7 @@ type ComplexityRoot struct {
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
+		IdempotencyKey         func(childComplexity int) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -4896,7 +5028,9 @@ type ComplexityRoot struct {
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status                 func(childComplexity int) int
 		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemGenerated        func(childComplexity int) int
 		Tags                   func(childComplexity int) int
+		TaskKind               func(childComplexity int) int
 		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
@@ -4935,25 +5069,27 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
-		AssigneeID  func(childComplexity int) int
-		AssignerID  func(childComplexity int) int
-		Category    func(childComplexity int) int
-		Completed   func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Details     func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		Due         func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		AssigneeID      func(childComplexity int) int
+		AssignerID      func(childComplexity int) int
+		Category        func(childComplexity int) int
+		Completed       func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Details         func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
+		Due             func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IdempotencyKey  func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		Status          func(childComplexity int) int
+		SystemGenerated func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		Title           func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	TaskHistoryConnection struct {
@@ -5973,6 +6109,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APITokenUpdatePayload.APIToken(childComplexity), true
+
+	case "ActionPlan.actionPlanKind":
+		if e.complexity.ActionPlan.ActionPlanKind == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ActionPlanKind(childComplexity), true
 
 	case "ActionPlan.actionPlanType":
 		if e.complexity.ActionPlan.ActionPlanType == nil {
@@ -7614,6 +7757,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
+	case "Control.controlKind":
+		if e.complexity.Control.ControlKind == nil {
+			break
+		}
+
+		return e.complexity.Control.ControlKind(childComplexity), true
 
 	case "Control.controlObjectives":
 		if e.complexity.Control.ControlObjectives == nil {
@@ -9759,6 +9909,277 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainUpdatePayload.CustomDomain(childComplexity), true
+
+	case "CustomTypeEnum.actionPlans":
+		if e.complexity.CustomTypeEnum.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "CustomTypeEnum.controls":
+		if e.complexity.CustomTypeEnum.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "CustomTypeEnum.createdAt":
+		if e.complexity.CustomTypeEnum.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.CreatedAt(childComplexity), true
+
+	case "CustomTypeEnum.createdBy":
+		if e.complexity.CustomTypeEnum.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.CreatedBy(childComplexity), true
+
+	case "CustomTypeEnum.description":
+		if e.complexity.CustomTypeEnum.Description == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Description(childComplexity), true
+
+	case "CustomTypeEnum.field":
+		if e.complexity.CustomTypeEnum.Field == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Field(childComplexity), true
+
+	case "CustomTypeEnum.id":
+		if e.complexity.CustomTypeEnum.ID == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.ID(childComplexity), true
+
+	case "CustomTypeEnum.internalNotes":
+		if e.complexity.CustomTypeEnum.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.InternalNotes(childComplexity), true
+
+	case "CustomTypeEnum.internalPolicies":
+		if e.complexity.CustomTypeEnum.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
+	case "CustomTypeEnum.name":
+		if e.complexity.CustomTypeEnum.Name == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Name(childComplexity), true
+
+	case "CustomTypeEnum.objectType":
+		if e.complexity.CustomTypeEnum.ObjectType == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.ObjectType(childComplexity), true
+
+	case "CustomTypeEnum.owner":
+		if e.complexity.CustomTypeEnum.Owner == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Owner(childComplexity), true
+
+	case "CustomTypeEnum.ownerID":
+		if e.complexity.CustomTypeEnum.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.OwnerID(childComplexity), true
+
+	case "CustomTypeEnum.procedures":
+		if e.complexity.CustomTypeEnum.Procedures == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_procedures_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
+
+	case "CustomTypeEnum.programs":
+		if e.complexity.CustomTypeEnum.Programs == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "CustomTypeEnum.risks":
+		if e.complexity.CustomTypeEnum.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "CustomTypeEnum.subcontrols":
+		if e.complexity.CustomTypeEnum.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "CustomTypeEnum.systemGenerated":
+		if e.complexity.CustomTypeEnum.SystemGenerated == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.SystemGenerated(childComplexity), true
+
+	case "CustomTypeEnum.systemInternalID":
+		if e.complexity.CustomTypeEnum.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.SystemInternalID(childComplexity), true
+
+	case "CustomTypeEnum.systemOwned":
+		if e.complexity.CustomTypeEnum.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.SystemOwned(childComplexity), true
+
+	case "CustomTypeEnum.tags":
+		if e.complexity.CustomTypeEnum.Tags == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Tags(childComplexity), true
+
+	case "CustomTypeEnum.tasks":
+		if e.complexity.CustomTypeEnum.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_CustomTypeEnum_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CustomTypeEnum.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "CustomTypeEnum.updatedAt":
+		if e.complexity.CustomTypeEnum.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.UpdatedAt(childComplexity), true
+
+	case "CustomTypeEnum.updatedBy":
+		if e.complexity.CustomTypeEnum.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.UpdatedBy(childComplexity), true
+
+	case "CustomTypeEnumBulkCreatePayload.customTypeEnums":
+		if e.complexity.CustomTypeEnumBulkCreatePayload.CustomTypeEnums == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumBulkCreatePayload.CustomTypeEnums(childComplexity), true
+
+	case "CustomTypeEnumConnection.edges":
+		if e.complexity.CustomTypeEnumConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumConnection.Edges(childComplexity), true
+
+	case "CustomTypeEnumConnection.pageInfo":
+		if e.complexity.CustomTypeEnumConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumConnection.PageInfo(childComplexity), true
+
+	case "CustomTypeEnumConnection.totalCount":
+		if e.complexity.CustomTypeEnumConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumConnection.TotalCount(childComplexity), true
+
+	case "CustomTypeEnumCreatePayload.customTypeEnum":
+		if e.complexity.CustomTypeEnumCreatePayload.CustomTypeEnum == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumCreatePayload.CustomTypeEnum(childComplexity), true
+
+	case "CustomTypeEnumDeletePayload.deletedID":
+		if e.complexity.CustomTypeEnumDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumDeletePayload.DeletedID(childComplexity), true
+
+	case "CustomTypeEnumEdge.cursor":
+		if e.complexity.CustomTypeEnumEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumEdge.Cursor(childComplexity), true
+
+	case "CustomTypeEnumEdge.node":
+		if e.complexity.CustomTypeEnumEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumEdge.Node(childComplexity), true
+
+	case "CustomTypeEnumUpdatePayload.customTypeEnum":
+		if e.complexity.CustomTypeEnumUpdatePayload.CustomTypeEnum == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnumUpdatePayload.CustomTypeEnum(childComplexity), true
 
 	case "DNSVerification.acmeChallengePath":
 		if e.complexity.DNSVerification.AcmeChallengePath == nil {
@@ -15116,6 +15537,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.InternalNotes(childComplexity), true
 
+	case "InternalPolicy.internalPolicyKind":
+		if e.complexity.InternalPolicy.InternalPolicyKind == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.InternalPolicyKind(childComplexity), true
+
 	case "InternalPolicy.name":
 		if e.complexity.InternalPolicy.Name == nil {
 			break
@@ -17738,6 +18166,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVCustomDomain(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVCustomTypeEnum":
+		if e.complexity.Mutation.CreateBulkCSVCustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVCustomTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVCustomTypeEnum(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVDNSVerification":
 		if e.complexity.Mutation.CreateBulkCSVDNSVerification == nil {
 			break
@@ -18050,6 +18490,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVSubscriber(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVTagDefinition":
+		if e.complexity.Mutation.CreateBulkCSVTagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVTagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVTagDefinition(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVTask":
 		if e.complexity.Mutation.CreateBulkCSVTask == nil {
 			break
@@ -18181,6 +18633,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCustomDomain(childComplexity, args["input"].([]*generated.CreateCustomDomainInput)), true
+
+	case "Mutation.createBulkCustomTypeEnum":
+		if e.complexity.Mutation.CreateBulkCustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCustomTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCustomTypeEnum(childComplexity, args["input"].([]*generated.CreateCustomTypeEnumInput)), true
 
 	case "Mutation.createBulkDNSVerification":
 		if e.complexity.Mutation.CreateBulkDNSVerification == nil {
@@ -18494,6 +18958,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkSubscriber(childComplexity, args["input"].([]*generated.CreateSubscriberInput)), true
 
+	case "Mutation.createBulkTagDefinition":
+		if e.complexity.Mutation.CreateBulkTagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkTagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkTagDefinition(childComplexity, args["input"].([]*generated.CreateTagDefinitionInput)), true
+
 	case "Mutation.createBulkTask":
 		if e.complexity.Mutation.CreateBulkTask == nil {
 			break
@@ -18649,6 +19125,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateCustomDomain(childComplexity, args["input"].(generated.CreateCustomDomainInput)), true
+
+	case "Mutation.createCustomTypeEnum":
+		if e.complexity.Mutation.CreateCustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCustomTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCustomTypeEnum(childComplexity, args["input"].(generated.CreateCustomTypeEnumInput)), true
 
 	case "Mutation.createDNSVerification":
 		if e.complexity.Mutation.CreateDNSVerification == nil {
@@ -19165,6 +19653,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTFASetting(childComplexity, args["input"].(generated.CreateTFASettingInput)), true
+
+	case "Mutation.createTagDefinition":
+		if e.complexity.Mutation.CreateTagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTagDefinition(childComplexity, args["input"].(generated.CreateTagDefinitionInput)), true
 
 	case "Mutation.createTask":
 		if e.complexity.Mutation.CreateTask == nil {
@@ -19910,6 +20410,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteCustomDomain(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteCustomTypeEnum":
+		if e.complexity.Mutation.DeleteCustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCustomTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCustomTypeEnum(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteDNSVerification":
 		if e.complexity.Mutation.DeleteDNSVerification == nil {
 			break
@@ -20378,6 +20890,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteSubscriber(childComplexity, args["email"].(string), args["ownerID"].(*string)), true
 
+	case "Mutation.deleteTagDefinition":
+		if e.complexity.Mutation.DeleteTagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTagDefinition(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteTask":
 		if e.complexity.Mutation.DeleteTask == nil {
 			break
@@ -20749,6 +21273,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateCustomDomain(childComplexity, args["id"].(string), args["input"].(generated.UpdateCustomDomainInput)), true
+
+	case "Mutation.updateCustomTypeEnum":
+		if e.complexity.Mutation.UpdateCustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCustomTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCustomTypeEnum(childComplexity, args["id"].(string), args["input"].(generated.UpdateCustomTypeEnumInput)), true
 
 	case "Mutation.updateDNSVerification":
 		if e.complexity.Mutation.UpdateDNSVerification == nil {
@@ -21217,6 +21753,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTFASetting(childComplexity, args["input"].(generated.UpdateTFASettingInput)), true
+
+	case "Mutation.updateTagDefinition":
+		if e.complexity.Mutation.UpdateTagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTagDefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateTagDefinitionInput)), true
 
 	case "Mutation.updateTask":
 		if e.complexity.Mutation.UpdateTask == nil {
@@ -22858,6 +23406,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
 
+	case "Organization.customTypeEnums":
+		if e.complexity.Organization.CustomTypeEnums == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_customTypeEnums_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.CustomTypeEnums(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomTypeEnumOrder), args["where"].(*generated.CustomTypeEnumWhereInput)), true
+
 	case "Organization.dnsVerifications":
 		if e.complexity.Organization.DNSVerifications == nil {
 			break
@@ -23443,6 +24003,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
+
+	case "Organization.tagDefinitions":
+		if e.complexity.Organization.TagDefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_tagDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TagDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TagDefinitionOrder), args["where"].(*generated.TagDefinitionWhereInput)), true
 
 	case "Organization.tags":
 		if e.complexity.Organization.Tags == nil {
@@ -24814,6 +25386,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.OwnerID(childComplexity), true
 
+	case "Procedure.procedureKind":
+		if e.complexity.Procedure.ProcedureKind == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ProcedureKind(childComplexity), true
+
 	case "Procedure.procedureType":
 		if e.complexity.Procedure.ProcedureType == nil {
 			break
@@ -25558,6 +26137,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
+
+	case "Program.programKind":
+		if e.complexity.Program.ProgramKind == nil {
+			break
+		}
+
+		return e.complexity.Program.ProgramKind(childComplexity), true
 
 	case "Program.programOwnerID":
 		if e.complexity.Program.ProgramOwnerID == nil {
@@ -26387,6 +26973,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminCustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminCustomTypeEnumSearch":
+		if e.complexity.Query.AdminCustomTypeEnumSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminCustomTypeEnumSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminCustomTypeEnumSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminDNSVerificationSearch":
 		if e.complexity.Query.AdminDNSVerificationSearch == nil {
 			break
@@ -26758,6 +27356,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminSubscriberSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminTagDefinitionSearch":
+		if e.complexity.Query.AdminTagDefinitionSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminTagDefinitionSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminTagDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.adminTaskSearch":
 		if e.complexity.Query.AdminTaskSearch == nil {
@@ -27204,6 +27814,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
+
+	case "Query.customTypeEnum":
+		if e.complexity.Query.CustomTypeEnum == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customTypeEnum_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomTypeEnum(childComplexity, args["id"].(string)), true
+
+	case "Query.customTypeEnumSearch":
+		if e.complexity.Query.CustomTypeEnumSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customTypeEnumSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomTypeEnumSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.customTypeEnums":
+		if e.complexity.Query.CustomTypeEnums == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customTypeEnums_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomTypeEnums(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomTypeEnumOrder), args["where"].(*generated.CustomTypeEnumWhereInput)), true
 
 	case "Query.dnsVerification":
 		if e.complexity.Query.DNSVerification == nil {
@@ -28928,6 +29574,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
+	case "Query.tagDefinition":
+		if e.complexity.Query.TagDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Query_tagDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TagDefinition(childComplexity, args["id"].(string)), true
+
+	case "Query.tagDefinitionSearch":
+		if e.complexity.Query.TagDefinitionSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_tagDefinitionSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TagDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.tagDefinitions":
+		if e.complexity.Query.TagDefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_tagDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TagDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TagDefinitionOrder), args["where"].(*generated.TagDefinitionWhereInput)), true
+
 	case "Query.task":
 		if e.complexity.Query.Task == nil {
 			break
@@ -29644,6 +30326,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Risk.riskCategory":
+		if e.complexity.Risk.RiskCategory == nil {
+			break
+		}
+
+		return e.complexity.Risk.RiskCategory(childComplexity), true
+
+	case "Risk.riskKind":
+		if e.complexity.Risk.RiskKind == nil {
+			break
+		}
+
+		return e.complexity.Risk.RiskKind(childComplexity), true
 
 	case "Risk.riskType":
 		if e.complexity.Risk.RiskType == nil {
@@ -30967,6 +31663,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.CustomDomains(childComplexity), true
 
+	case "SearchResults.customTypeEnums":
+		if e.complexity.SearchResults.CustomTypeEnums == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.CustomTypeEnums(childComplexity), true
+
 	case "SearchResults.dnsVerifications":
 		if e.complexity.SearchResults.DNSVerifications == nil {
 			break
@@ -31190,6 +31893,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Subscribers(childComplexity), true
+
+	case "SearchResults.tagDefinitions":
+		if e.complexity.SearchResults.TagDefinitions == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.TagDefinitions(childComplexity), true
 
 	case "SearchResults.tasks":
 		if e.complexity.SearchResults.Tasks == nil {
@@ -32125,6 +32835,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.Subcategory(childComplexity), true
+
+	case "Subcontrol.subcontrolKind":
+		if e.complexity.Subcontrol.SubcontrolKind == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.SubcontrolKind(childComplexity), true
 
 	case "Subcontrol.systemInternalID":
 		if e.complexity.Subcontrol.SystemInternalID == nil {
@@ -33245,6 +33962,188 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TFASettingUpdatePayload.TfaSetting(childComplexity), true
 
+	case "TagDefinition.aliases":
+		if e.complexity.TagDefinition.Aliases == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Aliases(childComplexity), true
+
+	case "TagDefinition.color":
+		if e.complexity.TagDefinition.Color == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Color(childComplexity), true
+
+	case "TagDefinition.createdAt":
+		if e.complexity.TagDefinition.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.CreatedAt(childComplexity), true
+
+	case "TagDefinition.createdBy":
+		if e.complexity.TagDefinition.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.CreatedBy(childComplexity), true
+
+	case "TagDefinition.description":
+		if e.complexity.TagDefinition.Description == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Description(childComplexity), true
+
+	case "TagDefinition.id":
+		if e.complexity.TagDefinition.ID == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.ID(childComplexity), true
+
+	case "TagDefinition.internalNotes":
+		if e.complexity.TagDefinition.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.InternalNotes(childComplexity), true
+
+	case "TagDefinition.name":
+		if e.complexity.TagDefinition.Name == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Name(childComplexity), true
+
+	case "TagDefinition.owner":
+		if e.complexity.TagDefinition.Owner == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Owner(childComplexity), true
+
+	case "TagDefinition.ownerID":
+		if e.complexity.TagDefinition.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.OwnerID(childComplexity), true
+
+	case "TagDefinition.slug":
+		if e.complexity.TagDefinition.Slug == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Slug(childComplexity), true
+
+	case "TagDefinition.systemGenerated":
+		if e.complexity.TagDefinition.SystemGenerated == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.SystemGenerated(childComplexity), true
+
+	case "TagDefinition.systemInternalID":
+		if e.complexity.TagDefinition.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.SystemInternalID(childComplexity), true
+
+	case "TagDefinition.systemOwned":
+		if e.complexity.TagDefinition.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.SystemOwned(childComplexity), true
+
+	case "TagDefinition.tags":
+		if e.complexity.TagDefinition.Tags == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.Tags(childComplexity), true
+
+	case "TagDefinition.updatedAt":
+		if e.complexity.TagDefinition.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.UpdatedAt(childComplexity), true
+
+	case "TagDefinition.updatedBy":
+		if e.complexity.TagDefinition.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TagDefinition.UpdatedBy(childComplexity), true
+
+	case "TagDefinitionBulkCreatePayload.tagDefinitions":
+		if e.complexity.TagDefinitionBulkCreatePayload.TagDefinitions == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionBulkCreatePayload.TagDefinitions(childComplexity), true
+
+	case "TagDefinitionConnection.edges":
+		if e.complexity.TagDefinitionConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionConnection.Edges(childComplexity), true
+
+	case "TagDefinitionConnection.pageInfo":
+		if e.complexity.TagDefinitionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionConnection.PageInfo(childComplexity), true
+
+	case "TagDefinitionConnection.totalCount":
+		if e.complexity.TagDefinitionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionConnection.TotalCount(childComplexity), true
+
+	case "TagDefinitionCreatePayload.tagDefinition":
+		if e.complexity.TagDefinitionCreatePayload.TagDefinition == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionCreatePayload.TagDefinition(childComplexity), true
+
+	case "TagDefinitionDeletePayload.deletedID":
+		if e.complexity.TagDefinitionDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionDeletePayload.DeletedID(childComplexity), true
+
+	case "TagDefinitionEdge.cursor":
+		if e.complexity.TagDefinitionEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionEdge.Cursor(childComplexity), true
+
+	case "TagDefinitionEdge.node":
+		if e.complexity.TagDefinitionEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionEdge.Node(childComplexity), true
+
+	case "TagDefinitionUpdatePayload.tagDefinition":
+		if e.complexity.TagDefinitionUpdatePayload.TagDefinition == nil {
+			break
+		}
+
+		return e.complexity.TagDefinitionUpdatePayload.TagDefinition(childComplexity), true
+
 	case "Task.assignee":
 		if e.complexity.Task.Assignee == nil {
 			break
@@ -33401,6 +34300,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.ID(childComplexity), true
 
+	case "Task.idempotencyKey":
+		if e.complexity.Task.IdempotencyKey == nil {
+			break
+		}
+
+		return e.complexity.Task.IdempotencyKey(childComplexity), true
+
 	case "Task.internalPolicies":
 		if e.complexity.Task.InternalPolicies == nil {
 			break
@@ -33482,12 +34388,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "Task.systemGenerated":
+		if e.complexity.Task.SystemGenerated == nil {
+			break
+		}
+
+		return e.complexity.Task.SystemGenerated(childComplexity), true
+
 	case "Task.tags":
 		if e.complexity.Task.Tags == nil {
 			break
 		}
 
 		return e.complexity.Task.Tags(childComplexity), true
+
+	case "Task.taskKind":
+		if e.complexity.Task.TaskKind == nil {
+			break
+		}
+
+		return e.complexity.Task.TaskKind(childComplexity), true
 
 	case "Task.title":
 		if e.complexity.Task.Title == nil {
@@ -33664,6 +34584,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskHistory.ID(childComplexity), true
 
+	case "TaskHistory.idempotencyKey":
+		if e.complexity.TaskHistory.IdempotencyKey == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.IdempotencyKey(childComplexity), true
+
 	case "TaskHistory.operation":
 		if e.complexity.TaskHistory.Operation == nil {
 			break
@@ -33691,6 +34618,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.Status(childComplexity), true
+
+	case "TaskHistory.systemGenerated":
+		if e.complexity.TaskHistory.SystemGenerated == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.SystemGenerated(childComplexity), true
 
 	case "TaskHistory.tags":
 		if e.complexity.TaskHistory.Tags == nil {
@@ -37286,6 +38220,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateControlObjectiveInput,
 		ec.unmarshalInputCreateControlWithSubcontrolsInput,
 		ec.unmarshalInputCreateCustomDomainInput,
+		ec.unmarshalInputCreateCustomTypeEnumInput,
 		ec.unmarshalInputCreateDNSVerificationInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEntityInput,
@@ -37329,6 +38264,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateSubprocessorInput,
 		ec.unmarshalInputCreateSubscriberInput,
 		ec.unmarshalInputCreateTFASettingInput,
+		ec.unmarshalInputCreateTagDefinitionInput,
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
 		ec.unmarshalInputCreateTrustCenterComplianceInput,
@@ -37345,6 +38281,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCustomDomainHistoryWhereInput,
 		ec.unmarshalInputCustomDomainOrder,
 		ec.unmarshalInputCustomDomainWhereInput,
+		ec.unmarshalInputCustomTypeEnumOrder,
+		ec.unmarshalInputCustomTypeEnumWhereInput,
 		ec.unmarshalInputDNSVerificationHistoryOrder,
 		ec.unmarshalInputDNSVerificationHistoryWhereInput,
 		ec.unmarshalInputDNSVerificationOrder,
@@ -37494,6 +38432,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubscriberWhereInput,
 		ec.unmarshalInputTFASettingOrder,
 		ec.unmarshalInputTFASettingWhereInput,
+		ec.unmarshalInputTagDefinitionOrder,
+		ec.unmarshalInputTagDefinitionWhereInput,
 		ec.unmarshalInputTaskHistoryOrder,
 		ec.unmarshalInputTaskHistoryWhereInput,
 		ec.unmarshalInputTaskOrder,
@@ -37534,6 +38474,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateControlInput,
 		ec.unmarshalInputUpdateControlObjectiveInput,
 		ec.unmarshalInputUpdateCustomDomainInput,
+		ec.unmarshalInputUpdateCustomTypeEnumInput,
 		ec.unmarshalInputUpdateDNSVerificationInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
@@ -37573,6 +38514,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateSubprocessorInput,
 		ec.unmarshalInputUpdateSubscriberInput,
 		ec.unmarshalInputUpdateTFASettingInput,
+		ec.unmarshalInputUpdateTagDefinitionInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateTemplateInput,
 		ec.unmarshalInputUpdateTrustCenterComplianceInput,
@@ -38042,6 +38984,31 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): CustomDomainConnection
+    """
+    Search across CustomTypeEnum objects
+    """
+    adminCustomTypeEnumSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CustomTypeEnumConnection
     """
     Search across DNSVerification objects
     """
@@ -38792,6 +39759,31 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): SubscriberConnection
+    """
+    Search across TagDefinition objects
+    """
+    adminTagDefinitionSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TagDefinitionConnection
     """
     Search across Task objects
     """
@@ -40284,6 +41276,109 @@ type CustomDomainBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
+	{Name: "../schema/customtypeenum.graphql", Input: `extend type Query {
+    """
+    Look up customTypeEnum by ID
+    """
+     customTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+    ):  CustomTypeEnum!
+}
+
+extend type Mutation{
+    """
+    Create a new customTypeEnum
+    """
+    createCustomTypeEnum(
+        """
+        values of the customTypeEnum
+        """
+        input: CreateCustomTypeEnumInput!
+    ): CustomTypeEnumCreatePayload!
+    """
+    Create multiple new customTypeEnums
+    """
+    createBulkCustomTypeEnum(
+        """
+        values of the customTypeEnum
+        """
+        input: [CreateCustomTypeEnumInput!]
+    ): CustomTypeEnumBulkCreatePayload!
+    """
+    Create multiple new customTypeEnums via file upload
+    """
+    createBulkCSVCustomTypeEnum(
+        """
+        csv file containing values of the customTypeEnum
+        """
+        input: Upload!
+    ): CustomTypeEnumBulkCreatePayload!
+    """
+    Update an existing customTypeEnum
+    """
+    updateCustomTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+        """
+        New values for the customTypeEnum
+        """
+        input: UpdateCustomTypeEnumInput!
+    ): CustomTypeEnumUpdatePayload!
+    """
+    Delete an existing customTypeEnum
+    """
+    deleteCustomTypeEnum(
+        """
+        ID of the customTypeEnum
+        """
+        id: ID!
+    ): CustomTypeEnumDeletePayload!
+}
+
+"""
+Return response for createCustomTypeEnum mutation
+"""
+type CustomTypeEnumCreatePayload {
+    """
+    Created customTypeEnum
+    """
+    customTypeEnum: CustomTypeEnum!
+}
+
+"""
+Return response for updateCustomTypeEnum mutation
+"""
+type CustomTypeEnumUpdatePayload {
+    """
+    Updated customTypeEnum
+    """
+    customTypeEnum: CustomTypeEnum!
+}
+
+"""
+Return response for deleteCustomTypeEnum mutation
+"""
+type CustomTypeEnumDeletePayload {
+    """
+    Deleted customTypeEnum ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCustomTypeEnum mutation
+"""
+type CustomTypeEnumBulkCreatePayload {
+    """
+    Created customTypeEnums
+    """
+    customTypeEnums: [CustomTypeEnum!]
+}`, BuiltIn: false},
 	{Name: "../schema/directives.graphql", Input: `"""
 Indicates if a field will be returned in a query, if true, only system-admins
 can retrieve the value
@@ -40888,7 +41983,7 @@ type ActionPlan implements Node {
   """
   type of the action_plan, e.g. compliance, operational, health and safety, etc.
   """
-  actionPlanType: String
+  actionPlanType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the action_plan
   """
@@ -40983,6 +42078,7 @@ type ActionPlan implements Node {
   """
   delegate: Group
   owner: Organization
+  actionPlanKind: CustomTypeEnum
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41155,7 +42251,7 @@ type ActionPlanHistory implements Node {
   """
   type of the action_plan, e.g. compliance, operational, health and safety, etc.
   """
-  actionPlanType: String
+  actionPlanType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the action_plan
   """
@@ -42154,6 +43250,11 @@ input ActionPlanWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  action_plan_kind edge predicates
+  """
+  hasActionPlanKind: Boolean
+  hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
   """
   risks edge predicates
   """
@@ -43944,7 +45045,7 @@ type Control implements Node {
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  controlType: ControlControlType
+  controlType: ControlControlType @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the control
   """
@@ -44371,6 +45472,7 @@ type Control implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  controlKind: CustomTypeEnum
   standard: Standard
   programs(
     """
@@ -44679,7 +45781,7 @@ type ControlHistory implements Node {
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  controlType: ControlHistoryControlType
+  controlType: ControlHistoryControlType @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the control
   """
@@ -48100,6 +49202,11 @@ input ControlWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
+  control_kind edge predicates
+  """
+  hasControlKind: Boolean
+  hasControlKindWith: [CustomTypeEnumWhereInput!]
+  """
   standard edge predicates
   """
   hasStandard: Boolean
@@ -48268,6 +49375,7 @@ input CreateActionPlanInput {
   approverID: ID
   delegateID: ID
   ownerID: ID
+  actionPlanKindID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
   programIDs: [ID!]
@@ -48525,6 +49633,7 @@ input CreateControlInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
+  controlKindID: ID
   standardID: ID
   programIDs: [ID!]
   assetIDs: [ID!]
@@ -48620,6 +49729,53 @@ input CreateCustomDomainInput {
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
+}
+"""
+CreateCustomTypeEnumInput is used for create CustomTypeEnum object.
+Input was generated by ent.
+"""
+input CreateCustomTypeEnumInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  the kind of object the type applies to, for example task
+  """
+  objectType: String!
+  """
+  the field on the object the type applies to, for example type or category
+  """
+  field: String
+  """
+  The name of the enum value, for example evidence request
+  """
+  name: String!
+  """
+  The description of the custom type
+  """
+  description: String
+  """
+  indicates if the type was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+  ownerID: ID
+  taskIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  riskIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
+  actionPlanIDs: [ID!]
+  programIDs: [ID!]
 }
 """
 CreateDNSVerificationInput is used for create DNSVerification object.
@@ -49198,6 +50354,7 @@ input CreateInternalPolicyInput {
   editorIDs: [ID!]
   approverID: ID
   delegateID: ID
+  internalPolicyKindID: ID
   controlObjectiveIDs: [ID!]
   controlImplementationIDs: [ID!]
   controlIDs: [ID!]
@@ -49655,6 +50812,8 @@ input CreateOrganizationInput {
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
   impersonationEventIDs: [ID!]
+  customTypeEnumIDs: [ID!]
+  tagDefinitionIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -49868,6 +51027,7 @@ input CreateProcedureInput {
   editorIDs: [ID!]
   approverID: ID
   delegateID: ID
+  procedureKindID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
@@ -49943,6 +51103,7 @@ input CreateProgramInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  programKindID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
@@ -50019,6 +51180,8 @@ input CreateRiskInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  riskKindID: ID
+  riskCategoryID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   procedureIDs: [ID!]
@@ -50302,6 +51465,7 @@ input CreateSubcontrolInput {
   delegateID: ID
   responsiblePartyID: ID
   ownerID: ID
+  subcontrolKindID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
   scheduledJobIDs: [ID!]
@@ -50371,6 +51535,45 @@ input CreateTFASettingInput {
   totpAllowed: Boolean
 }
 """
+CreateTagDefinitionInput is used for create TagDefinition object.
+Input was generated by ent.
+"""
+input CreateTagDefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  The name of the tag definition
+  """
+  name: String!
+  """
+  common aliases or misspellings for the tag definition
+  """
+  aliases: [String!]
+  """
+  The description of the tag definition
+  """
+  description: String
+  """
+  The color of the tag definition in hex format
+  """
+  color: String
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+  ownerID: ID
+}
+"""
 CreateTaskInput is used for create Task object.
 Input was generated by ent.
 """
@@ -50403,7 +51606,12 @@ input CreateTaskInput {
   the completion date of the task
   """
   completed: DateTime
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
   ownerID: ID
+  taskKindID: ID
   assignerID: ID
   assigneeID: ID
   commentIDs: [ID!]
@@ -51401,6 +52609,613 @@ input CustomDomainWhereInput {
   """
   hasDNSVerification: Boolean
   hasDNSVerificationWith: [DNSVerificationWhereInput!]
+}
+type CustomTypeEnum implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  the kind of object the type applies to, for example task
+  """
+  objectType: String!
+  """
+  the field on the object the type applies to, for example type or category
+  """
+  field: String!
+  """
+  The name of the enum value, for example evidence request
+  """
+  name: String!
+  """
+  The description of the custom type
+  """
+  description: String
+  """
+  indicates if the type was generated by the system
+  """
+  systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+  owner: Organization
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+}
+"""
+A connection to a list of items.
+"""
+type CustomTypeEnumConnection {
+  """
+  A list of edges.
+  """
+  edges: [CustomTypeEnumEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CustomTypeEnumEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CustomTypeEnum
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for CustomTypeEnum connections
+"""
+input CustomTypeEnumOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CustomTypeEnums.
+  """
+  field: CustomTypeEnumOrderField!
+}
+"""
+Properties by which CustomTypeEnum connections can be ordered.
+"""
+enum CustomTypeEnumOrderField {
+  created_at
+  updated_at
+}
+"""
+CustomTypeEnumWhereInput is used for filtering CustomTypeEnum objects.
+Input was generated by ent.
+"""
+input CustomTypeEnumWhereInput {
+  not: CustomTypeEnumWhereInput
+  and: [CustomTypeEnumWhereInput!]
+  or: [CustomTypeEnumWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  object_type field predicates
+  """
+  objectType: String
+  objectTypeNEQ: String
+  objectTypeIn: [String!]
+  objectTypeNotIn: [String!]
+  objectTypeGT: String
+  objectTypeGTE: String
+  objectTypeLT: String
+  objectTypeLTE: String
+  objectTypeContains: String
+  objectTypeHasPrefix: String
+  objectTypeHasSuffix: String
+  objectTypeEqualFold: String
+  objectTypeContainsFold: String
+  """
+  field field predicates
+  """
+  field: String
+  fieldNEQ: String
+  fieldIn: [String!]
+  fieldNotIn: [String!]
+  fieldGT: String
+  fieldGTE: String
+  fieldLT: String
+  fieldLTE: String
+  fieldContains: String
+  fieldHasPrefix: String
+  fieldHasSuffix: String
+  fieldEqualFold: String
+  fieldContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  system_generated field predicates
+  """
+  systemGenerated: Boolean
+  systemGeneratedNEQ: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
 }
 type DNSVerification implements Node {
   id: ID!
@@ -62277,7 +64092,7 @@ type InternalPolicy implements Node {
   """
   type of the policy, e.g. compliance, operational, health and safety, etc.
   """
-  policyType: String
+  policyType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the policy
   """
@@ -62406,6 +64221,7 @@ type InternalPolicy implements Node {
   temporary delegates for the policy, used for temporary approval
   """
   delegate: Group
+  internalPolicyKind: CustomTypeEnum
   controlObjectives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62815,7 +64631,7 @@ type InternalPolicyHistory implements Node {
   """
   type of the policy, e.g. compliance, operational, health and safety, etc.
   """
-  policyType: String
+  policyType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the policy
   """
@@ -63724,6 +65540,11 @@ input InternalPolicyWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  internal_policy_kind edge predicates
+  """
+  hasInternalPolicyKind: Boolean
+  hasInternalPolicyKindWith: [CustomTypeEnumWhereInput!]
   """
   control_objectives edge predicates
   """
@@ -72018,6 +73839,68 @@ type Organization implements Node {
     """
     where: TrustCenterWatermarkConfigWhereInput
   ): TrustCenterWatermarkConfigConnection!
+  customTypeEnums(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomTypeEnums returned from the connection.
+    """
+    orderBy: [CustomTypeEnumOrder!]
+
+    """
+    Filtering options for CustomTypeEnums returned from the connection.
+    """
+    where: CustomTypeEnumWhereInput
+  ): CustomTypeEnumConnection!
+  tagDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TagDefinitions returned from the connection.
+    """
+    orderBy: [TagDefinitionOrder!]
+
+    """
+    Filtering options for TagDefinitions returned from the connection.
+    """
+    where: TagDefinitionWhereInput
+  ): TagDefinitionConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -74133,6 +76016,16 @@ input OrganizationWhereInput {
   hasTrustCenterWatermarkConfigs: Boolean
   hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
   """
+  custom_type_enums edge predicates
+  """
+  hasCustomTypeEnums: Boolean
+  hasCustomTypeEnumsWith: [CustomTypeEnumWhereInput!]
+  """
+  tag_definitions edge predicates
+  """
+  hasTagDefinitions: Boolean
+  hasTagDefinitionsWith: [TagDefinitionWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -74553,7 +76446,7 @@ type Procedure implements Node {
   """
   type of the procedure, e.g. compliance, operational, health and safety, etc.
   """
-  procedureType: String
+  procedureType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the procedure
   """
@@ -74694,6 +76587,7 @@ type Procedure implements Node {
   temporary delegates for the procedure, used for temporary approval
   """
   delegate: Group
+  procedureKind: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -75029,7 +76923,7 @@ type ProcedureHistory implements Node {
   """
   type of the procedure, e.g. compliance, operational, health and safety, etc.
   """
-  procedureType: String
+  procedureType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   details of the procedure
   """
@@ -75951,6 +77845,11 @@ input ProcedureWhereInput {
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
   """
+  procedure_kind edge predicates
+  """
+  hasProcedureKind: Boolean
+  hasProcedureKindWith: [CustomTypeEnumWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -76029,7 +77928,7 @@ type Program implements Node {
   """
   the type of the program
   """
-  programType: ProgramProgramType!
+  programType: ProgramProgramType! @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
@@ -76164,6 +78063,7 @@ type Program implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  programKind: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -76666,7 +78566,7 @@ type ProgramHistory implements Node {
   """
   the type of the program
   """
-  programType: ProgramHistoryProgramType!
+  programType: ProgramHistoryProgramType! @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
@@ -77889,6 +79789,11 @@ input ProgramWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  program_kind edge predicates
+  """
+  hasProgramKind: Boolean
+  hasProgramKindWith: [CustomTypeEnumWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -78448,6 +80353,37 @@ type Query {
     """
     where: CustomDomainHistoryWhereInput
   ): CustomDomainHistoryConnection!
+  customTypeEnums(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomTypeEnums returned from the connection.
+    """
+    orderBy: [CustomTypeEnumOrder!]
+
+    """
+    Filtering options for CustomTypeEnums returned from the connection.
+    """
+    where: CustomTypeEnumWhereInput
+  ): CustomTypeEnumConnection!
   dnsVerifications(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -80649,6 +82585,37 @@ type Query {
     """
     where: TFASettingWhereInput
   ): TFASettingConnection!
+  tagDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TagDefinitions returned from the connection.
+    """
+    orderBy: [TagDefinitionOrder!]
+
+    """
+    Filtering options for TagDefinitions returned from the connection.
+    """
+    where: TagDefinitionWhereInput
+  ): TagDefinitionConnection!
   tasks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81330,11 +83297,11 @@ type Risk implements Node {
   """
   type of the risk, e.g. strategic, operational, financial, external, etc.
   """
-  riskType: String
+  riskType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the risk, e.g. human resources, operations, IT, etc.
   """
-  category: String
+  category: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   impact of the risk -critical, high, medium, low
   """
@@ -81461,6 +83428,8 @@ type Risk implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  riskKind: CustomTypeEnum
+  riskCategory: CustomTypeEnum
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81873,11 +83842,11 @@ type RiskHistory implements Node {
   """
   type of the risk, e.g. strategic, operational, financial, external, etc.
   """
-  riskType: String
+  riskType: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the risk, e.g. human resources, operations, IT, etc.
   """
-  category: String
+  category: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   impact of the risk -critical, high, medium, low
   """
@@ -82715,6 +84684,16 @@ input RiskWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
+  """
+  risk_kind edge predicates
+  """
+  hasRiskKind: Boolean
+  hasRiskKindWith: [CustomTypeEnumWhereInput!]
+  """
+  risk_category edge predicates
+  """
+  hasRiskCategory: Boolean
+  hasRiskCategoryWith: [CustomTypeEnumWhereInput!]
   """
   controls edge predicates
   """
@@ -85550,7 +87529,7 @@ type Subcontrol implements Node {
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  controlType: SubcontrolControlType
+  controlType: SubcontrolControlType @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the control
   """
@@ -85915,6 +87894,7 @@ type Subcontrol implements Node {
   """
   responsibleParty: Entity
   owner: Organization
+  subcontrolKind: CustomTypeEnum
   control: Control!
   controlImplementations(
     """
@@ -86099,7 +88079,7 @@ type SubcontrolHistory implements Node {
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
-  controlType: SubcontrolHistoryControlType
+  controlType: SubcontrolHistoryControlType @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   category of the control
   """
@@ -87273,6 +89253,11 @@ input SubcontrolWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  subcontrol_kind edge predicates
+  """
+  hasSubcontrolKind: Boolean
+  hasSubcontrolKindWith: [CustomTypeEnumWhereInput!]
   """
   control edge predicates
   """
@@ -88512,6 +90497,333 @@ input TFASettingWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
 }
+type TagDefinition implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  The name of the tag definition
+  """
+  name: String!
+  """
+  common aliases or misspellings for the tag definition
+  """
+  aliases: [String!]
+  """
+  The slug of the tag definition, derived from the name, unique per organization
+  """
+  slug: String
+  """
+  The description of the tag definition
+  """
+  description: String
+  """
+  The color of the tag definition in hex format
+  """
+  color: String
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+  owner: Organization
+}
+"""
+A connection to a list of items.
+"""
+type TagDefinitionConnection {
+  """
+  A list of edges.
+  """
+  edges: [TagDefinitionEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TagDefinitionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TagDefinition
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for TagDefinition connections
+"""
+input TagDefinitionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TagDefinitions.
+  """
+  field: TagDefinitionOrderField!
+}
+"""
+Properties by which TagDefinition connections can be ordered.
+"""
+enum TagDefinitionOrderField {
+  created_at
+  updated_at
+}
+"""
+TagDefinitionWhereInput is used for filtering TagDefinition objects.
+Input was generated by ent.
+"""
+input TagDefinitionWhereInput {
+  not: TagDefinitionWhereInput
+  and: [TagDefinitionWhereInput!]
+  or: [TagDefinitionWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  slug field predicates
+  """
+  slug: String
+  slugNEQ: String
+  slugIn: [String!]
+  slugNotIn: [String!]
+  slugGT: String
+  slugGTE: String
+  slugLT: String
+  slugLTE: String
+  slugContains: String
+  slugHasPrefix: String
+  slugHasSuffix: String
+  slugIsNil: Boolean
+  slugNotNil: Boolean
+  slugEqualFold: String
+  slugContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  color field predicates
+  """
+  color: String
+  colorNEQ: String
+  colorIn: [String!]
+  colorNotIn: [String!]
+  colorGT: String
+  colorGTE: String
+  colorLT: String
+  colorLTE: String
+  colorContains: String
+  colorHasPrefix: String
+  colorHasSuffix: String
+  colorIsNil: Boolean
+  colorNotNil: Boolean
+  colorEqualFold: String
+  colorContainsFold: String
+  """
+  system_generated field predicates
+  """
+  systemGenerated: Boolean
+  systemGeneratedNEQ: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+}
 type Task implements Node {
   id: ID!
   createdAt: Time
@@ -88545,7 +90857,7 @@ type Task implements Node {
   """
   the category of the task, e.g. evidence upload, risk review, policy review, etc.
   """
-  category: String
+  category: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   the due date of the task
   """
@@ -88562,7 +90874,16 @@ type Task implements Node {
   the id of the user who assigned the task, can be left empty if created by the system or a service token
   """
   assignerID: ID
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+  """
+  key to prevent duplicates for auto-generated task based on rules
+  """
+  idempotencyKey: String
   owner: Organization
+  taskKind: CustomTypeEnum
   assigner: User
   assignee: User
   comments(
@@ -88973,7 +91294,7 @@ type TaskHistory implements Node {
   """
   the category of the task, e.g. evidence upload, risk review, policy review, etc.
   """
-  category: String
+  category: String @deprecated(reason: "Use ` + "`" + `custom_enum_type` + "`" + ` instead.")
   """
   the due date of the task
   """
@@ -88990,6 +91311,14 @@ type TaskHistory implements Node {
   the id of the user who assigned the task, can be left empty if created by the system or a service token
   """
   assignerID: String
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+  """
+  key to prevent duplicates for auto-generated task based on rules
+  """
+  idempotencyKey: String
 }
 """
 A connection to a list of items.
@@ -89339,6 +91668,29 @@ input TaskHistoryWhereInput {
   assignerIDNotNil: Boolean
   assignerIDEqualFold: String
   assignerIDContainsFold: String
+  """
+  system_generated field predicates
+  """
+  systemGenerated: Boolean
+  systemGeneratedNEQ: Boolean
+  """
+  idempotency_key field predicates
+  """
+  idempotencyKey: String
+  idempotencyKeyNEQ: String
+  idempotencyKeyIn: [String!]
+  idempotencyKeyNotIn: [String!]
+  idempotencyKeyGT: String
+  idempotencyKeyGTE: String
+  idempotencyKeyLT: String
+  idempotencyKeyLTE: String
+  idempotencyKeyContains: String
+  idempotencyKeyHasPrefix: String
+  idempotencyKeyHasSuffix: String
+  idempotencyKeyIsNil: Boolean
+  idempotencyKeyNotNil: Boolean
+  idempotencyKeyEqualFold: String
+  idempotencyKeyContainsFold: String
 }
 """
 Ordering options for Task connections
@@ -89614,10 +91966,38 @@ input TaskWhereInput {
   assignerIDEqualFold: ID
   assignerIDContainsFold: ID
   """
+  system_generated field predicates
+  """
+  systemGenerated: Boolean
+  systemGeneratedNEQ: Boolean
+  """
+  idempotency_key field predicates
+  """
+  idempotencyKey: String
+  idempotencyKeyNEQ: String
+  idempotencyKeyIn: [String!]
+  idempotencyKeyNotIn: [String!]
+  idempotencyKeyGT: String
+  idempotencyKeyGTE: String
+  idempotencyKeyLT: String
+  idempotencyKeyLTE: String
+  idempotencyKeyContains: String
+  idempotencyKeyHasPrefix: String
+  idempotencyKeyHasSuffix: String
+  idempotencyKeyIsNil: Boolean
+  idempotencyKeyNotNil: Boolean
+  idempotencyKeyEqualFold: String
+  idempotencyKeyContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  task_kind edge predicates
+  """
+  hasTaskKind: Boolean
+  hasTaskKindWith: [CustomTypeEnumWhereInput!]
   """
   assigner edge predicates
   """
@@ -94666,6 +97046,8 @@ input UpdateActionPlanInput {
   clearDelegate: Boolean
   ownerID: ID
   clearOwner: Boolean
+  actionPlanKindID: ID
+  clearActionPlanKind: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
@@ -95036,6 +97418,8 @@ input UpdateControlInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
+  controlKindID: ID
+  clearControlKind: Boolean
   standardID: ID
   clearStandard: Boolean
   addProgramIDs: [ID!]
@@ -95179,6 +97563,67 @@ input UpdateCustomDomainInput {
   clearOwner: Boolean
   dnsVerificationID: ID
   clearDNSVerification: Boolean
+}
+"""
+UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.
+Input was generated by ent.
+"""
+input UpdateCustomTypeEnumInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  The name of the enum value, for example evidence request
+  """
+  name: String
+  """
+  The description of the custom type
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  indicates if the type was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+  ownerID: ID
+  clearOwner: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
 }
 """
 UpdateDNSVerificationInput is used for update DNSVerification object.
@@ -96020,6 +98465,8 @@ input UpdateInternalPolicyInput {
   clearApprover: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  internalPolicyKindID: ID
+  clearInternalPolicyKind: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
@@ -96650,6 +99097,12 @@ input UpdateOrganizationInput {
   addImpersonationEventIDs: [ID!]
   removeImpersonationEventIDs: [ID!]
   clearImpersonationEvents: Boolean
+  addCustomTypeEnumIDs: [ID!]
+  removeCustomTypeEnumIDs: [ID!]
+  clearCustomTypeEnums: Boolean
+  addTagDefinitionIDs: [ID!]
+  removeTagDefinitionIDs: [ID!]
+  clearTagDefinitions: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -96933,6 +99386,8 @@ input UpdateProcedureInput {
   clearApprover: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  procedureKindID: ID
+  clearProcedureKind: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -97041,6 +99496,8 @@ input UpdateProgramInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  programKindID: ID
+  clearProgramKind: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -97156,6 +99613,10 @@ input UpdateRiskInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  riskKindID: ID
+  clearRiskKind: Boolean
+  riskCategoryID: ID
+  clearRiskCategory: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -97546,6 +100007,8 @@ input UpdateSubcontrolInput {
   clearDelegate: Boolean
   responsiblePartyID: ID
   clearResponsibleParty: Boolean
+  subcontrolKindID: ID
+  clearSubcontrolKind: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
@@ -97646,6 +100109,54 @@ input UpdateTFASettingInput {
   clearTotpAllowed: Boolean
 }
 """
+UpdateTagDefinitionInput is used for update TagDefinition object.
+Input was generated by ent.
+"""
+input UpdateTagDefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  The name of the tag definition
+  """
+  name: String
+  """
+  common aliases or misspellings for the tag definition
+  """
+  aliases: [String!]
+  appendAliases: [String!]
+  clearAliases: Boolean
+  """
+  The description of the tag definition
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  The color of the tag definition in hex format
+  """
+  color: String
+  clearColor: Boolean
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateTaskInput is used for update Task object.
 Input was generated by ent.
 """
@@ -97684,6 +100195,12 @@ input UpdateTaskInput {
   """
   completed: DateTime
   clearCompleted: Boolean
+  """
+  indicates if the task was generated by the system
+  """
+  systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+  taskKindID: ID
+  clearTaskKind: Boolean
   assignerID: ID
   clearAssigner: Boolean
   assigneeID: ID
@@ -105025,6 +107542,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): CustomDomainConnection
     """
+    Search across CustomTypeEnum objects
+    """
+    customTypeEnumSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CustomTypeEnumConnection
+    """
     Search across DNSVerification objects
     """
     dnsVerificationSearch(
@@ -105775,6 +108317,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): SubscriberConnection
     """
+    Search across TagDefinition objects
+    """
+    tagDefinitionSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TagDefinitionConnection
+    """
     Search across Task objects
     """
     taskSearch(
@@ -105992,6 +108559,7 @@ type SearchResults{
   controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
   customDomains: CustomDomainConnection
+  customTypeEnums: CustomTypeEnumConnection
   dnsVerifications: DNSVerificationConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
@@ -106022,6 +108590,7 @@ type SearchResults{
   subcontrols: SubcontrolConnection
   subprocessors: SubprocessorConnection
   subscribers: SubscriberConnection
+  tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection
   trustCenters: TrustCenterConnection
@@ -106565,6 +109134,109 @@ type SubscriberBulkCreatePayload {
 }
 
 `, BuiltIn: false},
+	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {
+    """
+    Look up tagDefinition by ID
+    """
+     tagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+    ):  TagDefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new tagDefinition
+    """
+    createTagDefinition(
+        """
+        values of the tagDefinition
+        """
+        input: CreateTagDefinitionInput!
+    ): TagDefinitionCreatePayload!
+    """
+    Create multiple new tagDefinitions
+    """
+    createBulkTagDefinition(
+        """
+        values of the tagDefinition
+        """
+        input: [CreateTagDefinitionInput!]
+    ): TagDefinitionBulkCreatePayload!
+    """
+    Create multiple new tagDefinitions via file upload
+    """
+    createBulkCSVTagDefinition(
+        """
+        csv file containing values of the tagDefinition
+        """
+        input: Upload!
+    ): TagDefinitionBulkCreatePayload!
+    """
+    Update an existing tagDefinition
+    """
+    updateTagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+        """
+        New values for the tagDefinition
+        """
+        input: UpdateTagDefinitionInput!
+    ): TagDefinitionUpdatePayload!
+    """
+    Delete an existing tagDefinition
+    """
+    deleteTagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+    ): TagDefinitionDeletePayload!
+}
+
+"""
+Return response for createTagDefinition mutation
+"""
+type TagDefinitionCreatePayload {
+    """
+    Created tagDefinition
+    """
+    tagDefinition: TagDefinition!
+}
+
+"""
+Return response for updateTagDefinition mutation
+"""
+type TagDefinitionUpdatePayload {
+    """
+    Updated tagDefinition
+    """
+    tagDefinition: TagDefinition!
+}
+
+"""
+Return response for deleteTagDefinition mutation
+"""
+type TagDefinitionDeletePayload {
+    """
+    Deleted tagDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTagDefinition mutation
+"""
+type TagDefinitionBulkCreatePayload {
+    """
+    Created tagDefinitions
+    """
+    tagDefinitions: [TagDefinition!]
+}`, BuiltIn: false},
 	{Name: "../schema/task.graphql", Input: `extend type Query {
     """
     Look up task by ID

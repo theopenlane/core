@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -397,6 +398,25 @@ func (_c *ProgramCreate) AddViewers(v ...*Group) *ProgramCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddViewerIDs(ids...)
+}
+
+// SetProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID.
+func (_c *ProgramCreate) SetProgramKindID(id string) *ProgramCreate {
+	_c.mutation.SetProgramKindID(id)
+	return _c
+}
+
+// SetNillableProgramKindID sets the "program_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_c *ProgramCreate) SetNillableProgramKindID(id *string) *ProgramCreate {
+	if id != nil {
+		_c = _c.SetProgramKindID(*id)
+	}
+	return _c
+}
+
+// SetProgramKind sets the "program_kind" edge to the CustomTypeEnum entity.
+func (_c *ProgramCreate) SetProgramKind(v *CustomTypeEnum) *ProgramCreate {
+	return _c.SetProgramKindID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -953,6 +973,24 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProgramKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.ProgramKindTable,
+			Columns: []string{program.ProgramKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.program_program_kind = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {

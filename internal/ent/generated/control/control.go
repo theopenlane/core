@@ -122,6 +122,8 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeControlKind holds the string denoting the control_kind edge name in mutations.
+	EdgeControlKind = "control_kind"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
 	EdgeStandard = "standard"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
@@ -227,6 +229,13 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// ControlKindTable is the table that holds the control_kind relation/edge.
+	ControlKindTable = "controls"
+	// ControlKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ControlKindInverseTable = "custom_type_enums"
+	// ControlKindColumn is the table column denoting the control_kind relation/edge.
+	ControlKindColumn = "control_control_kind"
 	// StandardTable is the table that holds the standard relation/edge.
 	StandardTable = "controls"
 	// StandardInverseTable is the table name for the Standard entity.
@@ -322,6 +331,13 @@ var Columns = []string{
 	FieldStandardID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"control_control_kind",
+	"custom_type_enum_controls",
+}
+
 var (
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
@@ -380,6 +396,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -389,7 +410,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [6]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -778,6 +799,13 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlKindField orders the results by control_kind field.
+func ByControlKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByStandardField orders the results by standard field.
 func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -999,6 +1027,13 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newControlKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ControlKindTable, ControlKindColumn),
 	)
 }
 func newStandardStep() *sqlgraph.Step {

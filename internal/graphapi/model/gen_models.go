@@ -426,6 +426,30 @@ type CustomDomainUpdatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for createBulkCustomTypeEnum mutation
+type CustomTypeEnumBulkCreatePayload struct {
+	// Created customTypeEnums
+	CustomTypeEnums []*generated.CustomTypeEnum `json:"customTypeEnums,omitempty"`
+}
+
+// Return response for createCustomTypeEnum mutation
+type CustomTypeEnumCreatePayload struct {
+	// Created customTypeEnum
+	CustomTypeEnum *generated.CustomTypeEnum `json:"customTypeEnum"`
+}
+
+// Return response for deleteCustomTypeEnum mutation
+type CustomTypeEnumDeletePayload struct {
+	// Deleted customTypeEnum ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateCustomTypeEnum mutation
+type CustomTypeEnumUpdatePayload struct {
+	// Updated customTypeEnum
+	CustomTypeEnum *generated.CustomTypeEnum `json:"customTypeEnum"`
+}
+
 // Return response for createBulkDNSVerification mutation
 type DNSVerificationBulkCreatePayload struct {
 	// Created dnsVerifications
@@ -1504,6 +1528,7 @@ type SearchResults struct {
 	ControlImplementations      *generated.ControlImplementationConnection      `json:"controlImplementations,omitempty"`
 	ControlObjectives           *generated.ControlObjectiveConnection           `json:"controlObjectives,omitempty"`
 	CustomDomains               *generated.CustomDomainConnection               `json:"customDomains,omitempty"`
+	CustomTypeEnums             *generated.CustomTypeEnumConnection             `json:"customTypeEnums,omitempty"`
 	DNSVerifications            *generated.DNSVerificationConnection            `json:"dnsVerifications,omitempty"`
 	DocumentData                *generated.DocumentDataConnection               `json:"documentData,omitempty"`
 	Entities                    *generated.EntityConnection                     `json:"entities,omitempty"`
@@ -1534,6 +1559,7 @@ type SearchResults struct {
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
+	TagDefinitions              *generated.TagDefinitionConnection              `json:"tagDefinitions,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
@@ -1690,6 +1716,30 @@ type TFASettingUpdatePayload struct {
 	TfaSecret     *string               `json:"tfaSecret,omitempty"`
 	QRCode        *string               `json:"qrCode,omitempty"`
 	RecoveryCodes []string              `json:"recoveryCodes,omitempty"`
+}
+
+// Return response for createBulkTagDefinition mutation
+type TagDefinitionBulkCreatePayload struct {
+	// Created tagDefinitions
+	TagDefinitions []*generated.TagDefinition `json:"tagDefinitions,omitempty"`
+}
+
+// Return response for createTagDefinition mutation
+type TagDefinitionCreatePayload struct {
+	// Created tagDefinition
+	TagDefinition *generated.TagDefinition `json:"tagDefinition"`
+}
+
+// Return response for deleteTagDefinition mutation
+type TagDefinitionDeletePayload struct {
+	// Deleted tagDefinition ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTagDefinition mutation
+type TagDefinitionUpdatePayload struct {
+	// Updated tagDefinition
+	TagDefinition *generated.TagDefinition `json:"tagDefinition"`
 }
 
 // Return response for createBulkTask mutation

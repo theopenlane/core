@@ -582,6 +582,36 @@ func (_u *TrustCenterSettingUpdate) check() error {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PrimaryColor(); ok {
+		if err := trustcentersetting.PrimaryColorValidator(v); err != nil {
+			return &ValidationError{Name: "primary_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.primary_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ForegroundColor(); ok {
+		if err := trustcentersetting.ForegroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.foreground_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.BackgroundColor(); ok {
+		if err := trustcentersetting.BackgroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "background_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.background_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AccentColor(); ok {
+		if err := trustcentersetting.AccentColorValidator(v); err != nil {
+			return &ValidationError{Name: "accent_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.accent_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		if err := trustcentersetting.SecondaryBackgroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "secondary_background_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_background_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		if err := trustcentersetting.SecondaryForegroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "secondary_foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_foreground_color": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1429,6 +1459,36 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 	if v, ok := _u.mutation.ThemeMode(); ok {
 		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PrimaryColor(); ok {
+		if err := trustcentersetting.PrimaryColorValidator(v); err != nil {
+			return &ValidationError{Name: "primary_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.primary_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ForegroundColor(); ok {
+		if err := trustcentersetting.ForegroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.foreground_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.BackgroundColor(); ok {
+		if err := trustcentersetting.BackgroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "background_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.background_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AccentColor(); ok {
+		if err := trustcentersetting.AccentColorValidator(v); err != nil {
+			return &ValidationError{Name: "accent_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.accent_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecondaryBackgroundColor(); ok {
+		if err := trustcentersetting.SecondaryBackgroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "secondary_background_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_background_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecondaryForegroundColor(); ok {
+		if err := trustcentersetting.SecondaryForegroundColorValidator(v); err != nil {
+			return &ValidationError{Name: "secondary_foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_foreground_color": %w`, err)}
 		}
 	}
 	return nil

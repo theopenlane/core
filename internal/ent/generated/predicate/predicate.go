@@ -51,6 +51,9 @@ type CustomDomain func(*sql.Selector)
 // CustomDomainHistory is the predicate function for customdomainhistory builders.
 type CustomDomainHistory func(*sql.Selector)
 
+// CustomTypeEnum is the predicate function for customtypeenum builders.
+type CustomTypeEnum func(*sql.Selector)
+
 // DNSVerification is the predicate function for dnsverification builders.
 type DNSVerification func(*sql.Selector)
 
@@ -287,6 +290,9 @@ type Subscriber func(*sql.Selector)
 
 // TFASetting is the predicate function for tfasetting builders.
 type TFASetting func(*sql.Selector)
+
+// TagDefinition is the predicate function for tagdefinition builders.
+type TagDefinition func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)

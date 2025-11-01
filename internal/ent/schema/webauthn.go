@@ -14,6 +14,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -118,7 +119,7 @@ func (w Webauthn) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
-		emixin.TagMixin{},
+		mixin.TagMixin{},
 		newUserOwnedMixin(w),
 	}
 }

@@ -72,6 +72,8 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeProgramKind holds the string denoting the program_kind edge name in mutations.
+	EdgeProgramKind = "program_kind"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -126,6 +128,13 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// ProgramKindTable is the table that holds the program_kind relation/edge.
+	ProgramKindTable = "programs"
+	// ProgramKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ProgramKindInverseTable = "custom_type_enums"
+	// ProgramKindColumn is the table column denoting the program_kind relation/edge.
+	ProgramKindColumn = "program_program_kind"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "program_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -239,6 +248,13 @@ var Columns = []string{
 	FieldProgramOwnerID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "programs"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"custom_type_enum_programs",
+	"program_program_kind",
+}
+
 var (
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
@@ -291,6 +307,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -300,7 +321,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -517,6 +538,13 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramKindField orders the results by program_kind field.
+func ByProgramKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -748,6 +776,13 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newProgramKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ProgramKindTable, ProgramKindColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -801,6 +802,25 @@ func (_u *SubcontrolUpdate) SetResponsibleParty(v *Entity) *SubcontrolUpdate {
 	return _u.SetResponsiblePartyID(v.ID)
 }
 
+// SetSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *SubcontrolUpdate) SetSubcontrolKindID(id string) *SubcontrolUpdate {
+	_u.mutation.SetSubcontrolKindID(id)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableSubcontrolKindID(id *string) *SubcontrolUpdate {
+	if id != nil {
+		_u = _u.SetSubcontrolKindID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdate {
+	return _u.SetSubcontrolKindID(v.ID)
+}
+
 // SetControl sets the "control" edge to the Control entity.
 func (_u *SubcontrolUpdate) SetControl(v *Control) *SubcontrolUpdate {
 	return _u.SetControlID(v.ID)
@@ -1075,6 +1095,12 @@ func (_u *SubcontrolUpdate) ClearDelegate() *SubcontrolUpdate {
 // ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdate) ClearResponsibleParty() *SubcontrolUpdate {
 	_u.mutation.ClearResponsibleParty()
+	return _u
+}
+
+// ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) ClearSubcontrolKind() *SubcontrolUpdate {
+	_u.mutation.ClearSubcontrolKind()
 	return _u
 }
 
@@ -1997,6 +2023,37 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subcontrol
@@ -3004,6 +3061,25 @@ func (_u *SubcontrolUpdateOne) SetResponsibleParty(v *Entity) *SubcontrolUpdateO
 	return _u.SetResponsiblePartyID(v.ID)
 }
 
+// SetSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *SubcontrolUpdateOne) SetSubcontrolKindID(id string) *SubcontrolUpdateOne {
+	_u.mutation.SetSubcontrolKindID(id)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableSubcontrolKindID(id *string) *SubcontrolUpdateOne {
+	if id != nil {
+		_u = _u.SetSubcontrolKindID(*id)
+	}
+	return _u
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdateOne {
+	return _u.SetSubcontrolKindID(v.ID)
+}
+
 // SetControl sets the "control" edge to the Control entity.
 func (_u *SubcontrolUpdateOne) SetControl(v *Control) *SubcontrolUpdateOne {
 	return _u.SetControlID(v.ID)
@@ -3278,6 +3354,12 @@ func (_u *SubcontrolUpdateOne) ClearDelegate() *SubcontrolUpdateOne {
 // ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdateOne) ClearResponsibleParty() *SubcontrolUpdateOne {
 	_u.mutation.ClearResponsibleParty()
+	return _u
+}
+
+// ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) ClearSubcontrolKind() *SubcontrolUpdateOne {
+	_u.mutation.ClearSubcontrolKind()
 	return _u
 }
 
@@ -4230,6 +4312,37 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subcontrol

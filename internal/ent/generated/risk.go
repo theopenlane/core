@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -67,6 +68,9 @@ type Risk struct {
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
+	custom_type_enum_risks  *string
+	risk_risk_kind          *string
+	risk_risk_category      *string
 	selectValues            sql.SelectValues
 }
 
@@ -80,6 +84,10 @@ type RiskEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// RiskKind holds the value of the risk_kind edge.
+	RiskKind *CustomTypeEnum `json:"risk_kind,omitempty"`
+	// RiskCategory holds the value of the risk_category edge.
+	RiskCategory *CustomTypeEnum `json:"risk_category,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -108,9 +116,9 @@ type RiskEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -166,10 +174,32 @@ func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// RiskKindOrErr returns the RiskKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) RiskKindOrErr() (*CustomTypeEnum, error) {
+	if e.RiskKind != nil {
+		return e.RiskKind, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "risk_kind"}
+}
+
+// RiskCategoryOrErr returns the RiskCategory value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) RiskCategoryOrErr() (*CustomTypeEnum, error) {
+	if e.RiskCategory != nil {
+		return e.RiskCategory, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "risk_category"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -178,7 +208,7 @@ func (e RiskEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -187,7 +217,7 @@ func (e RiskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -196,7 +226,7 @@ func (e RiskEdges) ProceduresOrErr() ([]*Procedure, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -205,7 +235,7 @@ func (e RiskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -214,7 +244,7 @@ func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -223,7 +253,7 @@ func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -232,7 +262,7 @@ func (e RiskEdges) TasksOrErr() ([]*Task, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -241,7 +271,7 @@ func (e RiskEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -250,7 +280,7 @@ func (e RiskEdges) EntitiesOrErr() ([]*Entity, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -261,7 +291,7 @@ func (e RiskEdges) ScansOrErr() ([]*Scan, error) {
 func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 	if e.Stakeholder != nil {
 		return e.Stakeholder, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "stakeholder"}
@@ -272,7 +302,7 @@ func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 func (e RiskEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -281,7 +311,7 @@ func (e RiskEdges) DelegateOrErr() (*Group, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -301,6 +331,12 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[1]: // custom_type_enum_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[2]: // risk_risk_kind
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[3]: // risk_risk_category
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -458,6 +494,27 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				_m.control_objective_risks = new(string)
 				*_m.control_objective_risks = value.String
 			}
+		case risk.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_risks", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_risks = new(string)
+				*_m.custom_type_enum_risks = value.String
+			}
+		case risk.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_risk_kind", values[i])
+			} else if value.Valid {
+				_m.risk_risk_kind = new(string)
+				*_m.risk_risk_kind = value.String
+			}
+		case risk.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_risk_category", values[i])
+			} else if value.Valid {
+				_m.risk_risk_category = new(string)
+				*_m.risk_risk_category = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -489,6 +546,16 @@ func (_m *Risk) QueryEditors() *GroupQuery {
 // QueryViewers queries the "viewers" edge of the Risk entity.
 func (_m *Risk) QueryViewers() *GroupQuery {
 	return NewRiskClient(_m.config).QueryViewers(_m)
+}
+
+// QueryRiskKind queries the "risk_kind" edge of the Risk entity.
+func (_m *Risk) QueryRiskKind() *CustomTypeEnumQuery {
+	return NewRiskClient(_m.config).QueryRiskKind(_m)
+}
+
+// QueryRiskCategory queries the "risk_category" edge of the Risk entity.
+func (_m *Risk) QueryRiskCategory() *CustomTypeEnumQuery {
+	return NewRiskClient(_m.config).QueryRiskCategory(_m)
 }
 
 // QueryControls queries the "controls" edge of the Risk entity.

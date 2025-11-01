@@ -3317,6 +3317,12 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(_m.AssignerID, new.AssignerID) {
 		changes = append(changes, NewChange(taskhistory.FieldAssignerID, _m.AssignerID, new.AssignerID))
 	}
+	if !reflect.DeepEqual(_m.SystemGenerated, new.SystemGenerated) {
+		changes = append(changes, NewChange(taskhistory.FieldSystemGenerated, _m.SystemGenerated, new.SystemGenerated))
+	}
+	if !reflect.DeepEqual(_m.IdempotencyKey, new.IdempotencyKey) {
+		changes = append(changes, NewChange(taskhistory.FieldIdempotencyKey, _m.IdempotencyKey, new.IdempotencyKey))
+	}
 	return changes
 }
 

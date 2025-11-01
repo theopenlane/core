@@ -2563,6 +2563,35 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Control {
 	})
 }
 
+// HasControlKind applies the HasEdge predicate on the "control_kind" edge.
+func HasControlKind() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ControlKindTable, ControlKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlKindWith applies the HasEdge predicate on the "control_kind" edge with a given conditions (other predicates).
+func HasControlKindWith(preds ...predicate.CustomTypeEnum) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newControlKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasStandard applies the HasEdge predicate on the "standard" edge.
 func HasStandard() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {

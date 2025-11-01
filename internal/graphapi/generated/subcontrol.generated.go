@@ -150,6 +150,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -314,6 +316,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -478,6 +482,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -601,6 +602,25 @@ func (_u *ProcedureUpdate) SetDelegate(v *Group) *ProcedureUpdate {
 	return _u.SetDelegateID(v.ID)
 }
 
+// SetProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ProcedureUpdate) SetProcedureKindID(id string) *ProcedureUpdate {
+	_u.mutation.SetProcedureKindID(id)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableProcedureKindID(id *string) *ProcedureUpdate {
+	if id != nil {
+		_u = _u.SetProcedureKindID(*id)
+	}
+	return _u
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdate {
+	return _u.SetProcedureKindID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *ProcedureUpdate) AddControlIDs(ids ...string) *ProcedureUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -788,6 +808,12 @@ func (_u *ProcedureUpdate) ClearApprover() *ProcedureUpdate {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdate) ClearDelegate() *ProcedureUpdate {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) ClearProcedureKind() *ProcedureUpdate {
+	_u.mutation.ClearProcedureKind()
 	return _u
 }
 
@@ -1410,6 +1436,37 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Procedure
@@ -2414,6 +2471,25 @@ func (_u *ProcedureUpdateOne) SetDelegate(v *Group) *ProcedureUpdateOne {
 	return _u.SetDelegateID(v.ID)
 }
 
+// SetProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *ProcedureUpdateOne) SetProcedureKindID(id string) *ProcedureUpdateOne {
+	_u.mutation.SetProcedureKindID(id)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableProcedureKindID(id *string) *ProcedureUpdateOne {
+	if id != nil {
+		_u = _u.SetProcedureKindID(*id)
+	}
+	return _u
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdateOne {
+	return _u.SetProcedureKindID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *ProcedureUpdateOne) AddControlIDs(ids ...string) *ProcedureUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -2601,6 +2677,12 @@ func (_u *ProcedureUpdateOne) ClearApprover() *ProcedureUpdateOne {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdateOne) ClearDelegate() *ProcedureUpdateOne {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) ClearProcedureKind() *ProcedureUpdateOne {
+	_u.mutation.ClearProcedureKind()
 	return _u
 }
 
@@ -3253,6 +3335,37 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Procedure

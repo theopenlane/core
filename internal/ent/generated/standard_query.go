@@ -578,6 +578,7 @@ func (_q *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, 
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(control.FieldStandardID)
 	}

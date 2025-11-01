@@ -1940,6 +1940,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.ActionPlan {
 	})
 }
 
+// HasActionPlanKind applies the HasEdge predicate on the "action_plan_kind" edge.
+func HasActionPlanKind() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ActionPlanKindTable, ActionPlanKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.ActionPlan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlanKindWith applies the HasEdge predicate on the "action_plan_kind" edge with a given conditions (other predicates).
+func HasActionPlanKindWith(preds ...predicate.CustomTypeEnum) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newActionPlanKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.ActionPlan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRisks applies the HasEdge predicate on the "risks" edge.
 func HasRisks() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {

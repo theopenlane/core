@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -451,6 +452,25 @@ func (_c *ProcedureCreate) SetApprover(v *Group) *ProcedureCreate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_c *ProcedureCreate) SetDelegate(v *Group) *ProcedureCreate {
 	return _c.SetDelegateID(v.ID)
+}
+
+// SetProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID.
+func (_c *ProcedureCreate) SetProcedureKindID(id string) *ProcedureCreate {
+	_c.mutation.SetProcedureKindID(id)
+	return _c
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableProcedureKindID(id *string) *ProcedureCreate {
+	if id != nil {
+		_c = _c.SetProcedureKindID(*id)
+	}
+	return _c
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_c *ProcedureCreate) SetProcedureKind(v *CustomTypeEnum) *ProcedureCreate {
+	return _c.SetProcedureKindID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -954,6 +974,24 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.procedure_procedure_kind = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {

@@ -68,6 +68,10 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeRiskKind holds the string denoting the risk_kind edge name in mutations.
+	EdgeRiskKind = "risk_kind"
+	// EdgeRiskCategory holds the string denoting the risk_category edge name in mutations.
+	EdgeRiskCategory = "risk_category"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -118,6 +122,20 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// RiskKindTable is the table that holds the risk_kind relation/edge.
+	RiskKindTable = "risks"
+	// RiskKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	RiskKindInverseTable = "custom_type_enums"
+	// RiskKindColumn is the table column denoting the risk_kind relation/edge.
+	RiskKindColumn = "risk_risk_kind"
+	// RiskCategoryTable is the table that holds the risk_category relation/edge.
+	RiskCategoryTable = "risks"
+	// RiskCategoryInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	RiskCategoryInverseTable = "custom_type_enums"
+	// RiskCategoryColumn is the table column denoting the risk_category relation/edge.
+	RiskCategoryColumn = "risk_risk_category"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_risks"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -227,6 +245,9 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
+	"custom_type_enum_risks",
+	"risk_risk_kind",
+	"risk_risk_category",
 }
 
 var (
@@ -283,7 +304,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -497,6 +518,20 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByRiskKindField orders the results by risk_kind field.
+func ByRiskKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRiskCategoryField orders the results by risk_category field.
+func ByRiskCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskCategoryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -690,6 +725,20 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newRiskKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RiskKindTable, RiskKindColumn),
+	)
+}
+func newRiskCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskCategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RiskCategoryTable, RiskCategoryColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

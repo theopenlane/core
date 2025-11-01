@@ -10948,6 +10948,14 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetAssignerID(assignerID)
 	}
 
+	if systemGenerated, exists := m.SystemGenerated(); exists {
+		create = create.SetSystemGenerated(systemGenerated)
+	}
+
+	if idempotencyKey, exists := m.IdempotencyKey(); exists {
+		create = create.SetIdempotencyKey(idempotencyKey)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11081,6 +11089,18 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAssignerID(task.AssignerID)
 		}
 
+		if systemGenerated, exists := m.SystemGenerated(); exists {
+			create = create.SetSystemGenerated(systemGenerated)
+		} else {
+			create = create.SetSystemGenerated(task.SystemGenerated)
+		}
+
+		if idempotencyKey, exists := m.IdempotencyKey(); exists {
+			create = create.SetIdempotencyKey(idempotencyKey)
+		} else {
+			create = create.SetIdempotencyKey(task.IdempotencyKey)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11133,6 +11153,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableCompleted(task.Completed).
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).
+			SetSystemGenerated(task.SystemGenerated).
+			SetIdempotencyKey(task.IdempotencyKey).
 			Save(ctx)
 		if err != nil {
 			return err

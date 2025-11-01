@@ -42,6 +42,8 @@ type Tx struct {
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
 	CustomDomainHistory *CustomDomainHistoryClient
+	// CustomTypeEnum is the client for interacting with the CustomTypeEnum builders.
+	CustomTypeEnum *CustomTypeEnumClient
 	// DNSVerification is the client for interacting with the DNSVerification builders.
 	DNSVerification *DNSVerificationClient
 	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
@@ -200,6 +202,8 @@ type Tx struct {
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
+	// TagDefinition is the client for interacting with the TagDefinition builders.
+	TagDefinition *TagDefinitionClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
@@ -388,6 +392,7 @@ func (tx *Tx) init() {
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
+	tx.CustomTypeEnum = NewCustomTypeEnumClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
 	tx.DNSVerificationHistory = NewDNSVerificationHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
@@ -467,6 +472,7 @@ func (tx *Tx) init() {
 	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
+	tx.TagDefinition = NewTagDefinitionClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)

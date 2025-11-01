@@ -272,6 +272,40 @@ func (_u *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskHistoryUpdate) SetSystemGenerated(v bool) *TaskHistoryUpdate {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskHistoryUpdate) SetIdempotencyKey(v string) *TaskHistoryUpdate {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskHistoryUpdate) ClearIdempotencyKey() *TaskHistoryUpdate {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (_u *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 	return _u.mutation
@@ -435,6 +469,15 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -698,6 +741,40 @@ func (_u *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
 	return _u
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskHistoryUpdateOne) SetSystemGenerated(v bool) *TaskHistoryUpdateOne {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskHistoryUpdateOne) SetIdempotencyKey(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskHistoryUpdateOne) ClearIdempotencyKey() *TaskHistoryUpdateOne {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (_u *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
 	return _u.mutation
@@ -891,6 +968,15 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -100,8 +101,10 @@ type Control struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
-	Edges        ControlEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                     ControlEdges `json:"edges"`
+	control_control_kind      *string
+	custom_type_enum_controls *string
+	selectValues              sql.SelectValues
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -136,6 +139,8 @@ type ControlEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
+	// ControlKind holds the value of the control_kind edge.
+	ControlKind *CustomTypeEnum `json:"control_kind,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard *Standard `json:"standard,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -156,9 +161,9 @@ type ControlEdges struct {
 	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [23]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -324,12 +329,23 @@ func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
+// ControlKindOrErr returns the ControlKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlEdges) ControlKindOrErr() (*CustomTypeEnum, error) {
+	if e.ControlKind != nil {
+		return e.ControlKind, nil
+	} else if e.loadedTypes[15] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "control_kind"}
+}
+
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -338,7 +354,7 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -347,7 +363,7 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -356,7 +372,7 @@ func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -365,7 +381,7 @@ func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -374,7 +390,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -383,7 +399,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -392,7 +408,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -401,7 +417,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -420,6 +436,10 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case control.ForeignKeys[0]: // control_control_kind
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[1]: // custom_type_enum_controls
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -686,6 +706,20 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StandardID = value.String
 			}
+		case control.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_control_kind", values[i])
+			} else if value.Valid {
+				_m.control_control_kind = new(string)
+				*_m.control_control_kind = value.String
+			}
+		case control.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_controls", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_controls = new(string)
+				*_m.custom_type_enum_controls = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -772,6 +806,11 @@ func (_m *Control) QueryBlockedGroups() *GroupQuery {
 // QueryEditors queries the "editors" edge of the Control entity.
 func (_m *Control) QueryEditors() *GroupQuery {
 	return NewControlClient(_m.config).QueryEditors(_m)
+}
+
+// QueryControlKind queries the "control_kind" edge of the Control entity.
+func (_m *Control) QueryControlKind() *CustomTypeEnumQuery {
+	return NewControlClient(_m.config).QueryControlKind(_m)
 }
 
 // QueryStandard queries the "standard" edge of the Control entity.

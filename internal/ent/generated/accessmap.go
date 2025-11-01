@@ -28,6 +28,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "action_plan_kind": {
+	ObjectType:      "custom_type_enum",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "risks": {
 	ObjectType:      "risk",
 	SkipEditCheck:   false,
@@ -145,6 +149,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "editors": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "control_kind": {
+	ObjectType:      "custom_type_enum",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "standard": {
@@ -276,6 +284,43 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "dns_verification": {
 	ObjectType:      "organization",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "custom_type_enum": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "subcontrols": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risks": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "internal_policies": {
+	ObjectType:      "internal_policy",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "procedures": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "action_plans": {
+	ObjectType:      "action_plan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "programs": {
+	ObjectType:      "program",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -769,6 +814,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "delegate": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_policy_kind": {
+	ObjectType:      "custom_type_enum",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "control_objectives": {
@@ -1340,6 +1389,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "impersonation_event",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "custom_type_enums": {
+	ObjectType:      "custom_type_enum",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tag_definitions": {
+	ObjectType:      "tag_definition",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1390,6 +1447,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "delegate": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "procedure_kind": {
+	ObjectType:      "custom_type_enum",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "controls": {
@@ -1443,6 +1504,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "viewers": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "program_kind": {
+	ObjectType:      "custom_type_enum",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "controls": {
@@ -1533,6 +1598,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "viewers": {
 	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "risk_kind": {
+	ObjectType:      "custom_type_enum",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "risk_category": {
+	ObjectType:      "custom_type_enum",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "controls": {
@@ -1712,6 +1785,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "subcontrol_kind": {
+	ObjectType:      "custom_type_enum",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control": {
 	ObjectType:      "control",
 	SkipEditCheck:   false,
@@ -1764,10 +1841,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 },
+}, "tag_definition": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+},
 }, "task": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "task_kind": {
+	ObjectType:      "custom_type_enum",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "assigner": {
 	ObjectType:      "assigner",
 	SkipEditCheck:   true,

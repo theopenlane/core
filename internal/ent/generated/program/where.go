@@ -1514,6 +1514,35 @@ func HasViewersWith(preds ...predicate.Group) predicate.Program {
 	})
 }
 
+// HasProgramKind applies the HasEdge predicate on the "program_kind" edge.
+func HasProgramKind() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ProgramKindTable, ProgramKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramKindWith applies the HasEdge predicate on the "program_kind" edge with a given conditions (other predicates).
+func HasProgramKindWith(preds ...predicate.CustomTypeEnum) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newProgramKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControls applies the HasEdge predicate on the "controls" edge.
 func HasControls() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {

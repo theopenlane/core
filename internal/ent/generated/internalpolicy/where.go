@@ -1893,6 +1893,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.InternalPolicy {
 	})
 }
 
+// HasInternalPolicyKind applies the HasEdge predicate on the "internal_policy_kind" edge.
+func HasInternalPolicyKind() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalPolicyKindTable, InternalPolicyKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPolicyKindWith applies the HasEdge predicate on the "internal_policy_kind" edge with a given conditions (other predicates).
+func HasInternalPolicyKindWith(preds ...predicate.CustomTypeEnum) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newInternalPolicyKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControlObjectives applies the HasEdge predicate on the "control_objectives" edge.
 func HasControlObjectives() predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {

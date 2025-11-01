@@ -430,6 +430,8 @@ func (o Organization) Edges() []ent.Edge {
 			cascadeDeleteOwner: true,
 		}),
 		defaultEdgeToWithPagination(o, ImpersonationEvent{}),
+		defaultEdgeToWithPagination(o, CustomTypeEnum{}),
+		defaultEdgeToWithPagination(o, TagDefinition{}),
 	}
 }
 

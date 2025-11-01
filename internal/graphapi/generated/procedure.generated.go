@@ -122,6 +122,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -270,6 +272,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -418,6 +422,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -566,6 +572,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":

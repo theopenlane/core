@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -284,6 +285,59 @@ func (_u *TaskUpdate) ClearAssignerID() *TaskUpdate {
 	return _u
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskUpdate) SetSystemGenerated(v bool) *TaskUpdate {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableSystemGenerated(v *bool) *TaskUpdate {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskUpdate) SetIdempotencyKey(v string) *TaskUpdate {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableIdempotencyKey(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskUpdate) ClearIdempotencyKey() *TaskUpdate {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
+// SetTaskKindID sets the "task_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *TaskUpdate) SetTaskKindID(id string) *TaskUpdate {
+	_u.mutation.SetTaskKindID(id)
+	return _u
+}
+
+// SetNillableTaskKindID sets the "task_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *TaskUpdate) SetNillableTaskKindID(id *string) *TaskUpdate {
+	if id != nil {
+		_u = _u.SetTaskKindID(*id)
+	}
+	return _u
+}
+
+// SetTaskKind sets the "task_kind" edge to the CustomTypeEnum entity.
+func (_u *TaskUpdate) SetTaskKind(v *CustomTypeEnum) *TaskUpdate {
+	return _u.SetTaskKindID(v.ID)
+}
+
 // SetAssigner sets the "assigner" edge to the User entity.
 func (_u *TaskUpdate) SetAssigner(v *User) *TaskUpdate {
 	return _u.SetAssignerID(v.ID)
@@ -462,6 +516,12 @@ func (_u *TaskUpdate) AddEvidence(v ...*Evidence) *TaskUpdate {
 // Mutation returns the TaskMutation object of the builder.
 func (_u *TaskUpdate) Mutation() *TaskMutation {
 	return _u.mutation
+}
+
+// ClearTaskKind clears the "task_kind" edge to the CustomTypeEnum entity.
+func (_u *TaskUpdate) ClearTaskKind() *TaskUpdate {
+	_u.mutation.ClearTaskKind()
+	return _u
 }
 
 // ClearAssigner clears the "assigner" edge to the User entity.
@@ -852,6 +912,46 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(task.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(task.FieldIdempotencyKey, field.TypeString)
+	}
+	if _u.mutation.TaskKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.TaskKindTable,
+			Columns: []string{task.TaskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TaskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.TaskKindTable,
+			Columns: []string{task.TaskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1705,6 +1805,59 @@ func (_u *TaskUpdateOne) ClearAssignerID() *TaskUpdateOne {
 	return _u
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskUpdateOne) SetSystemGenerated(v bool) *TaskUpdateOne {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableSystemGenerated(v *bool) *TaskUpdateOne {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskUpdateOne) SetIdempotencyKey(v string) *TaskUpdateOne {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableIdempotencyKey(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskUpdateOne) ClearIdempotencyKey() *TaskUpdateOne {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
+// SetTaskKindID sets the "task_kind" edge to the CustomTypeEnum entity by ID.
+func (_u *TaskUpdateOne) SetTaskKindID(id string) *TaskUpdateOne {
+	_u.mutation.SetTaskKindID(id)
+	return _u
+}
+
+// SetNillableTaskKindID sets the "task_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableTaskKindID(id *string) *TaskUpdateOne {
+	if id != nil {
+		_u = _u.SetTaskKindID(*id)
+	}
+	return _u
+}
+
+// SetTaskKind sets the "task_kind" edge to the CustomTypeEnum entity.
+func (_u *TaskUpdateOne) SetTaskKind(v *CustomTypeEnum) *TaskUpdateOne {
+	return _u.SetTaskKindID(v.ID)
+}
+
 // SetAssigner sets the "assigner" edge to the User entity.
 func (_u *TaskUpdateOne) SetAssigner(v *User) *TaskUpdateOne {
 	return _u.SetAssignerID(v.ID)
@@ -1883,6 +2036,12 @@ func (_u *TaskUpdateOne) AddEvidence(v ...*Evidence) *TaskUpdateOne {
 // Mutation returns the TaskMutation object of the builder.
 func (_u *TaskUpdateOne) Mutation() *TaskMutation {
 	return _u.mutation
+}
+
+// ClearTaskKind clears the "task_kind" edge to the CustomTypeEnum entity.
+func (_u *TaskUpdateOne) ClearTaskKind() *TaskUpdateOne {
+	_u.mutation.ClearTaskKind()
+	return _u
 }
 
 // ClearAssigner clears the "assigner" edge to the User entity.
@@ -2303,6 +2462,46 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(task.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(task.FieldIdempotencyKey, field.TypeString)
+	}
+	if _u.mutation.TaskKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.TaskKindTable,
+			Columns: []string{task.TaskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TaskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.TaskKindTable,
+			Columns: []string{task.TaskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{

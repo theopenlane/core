@@ -36,6 +36,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		controlimplementationResults      *generated.ControlImplementationConnection
 		controlobjectiveResults           *generated.ControlObjectiveConnection
 		customdomainResults               *generated.CustomDomainConnection
+		customtypeenumResults             *generated.CustomTypeEnumConnection
 		dnsverificationResults            *generated.DNSVerificationConnection
 		documentdataResults               *generated.DocumentDataConnection
 		entityResults                     *generated.EntityConnection
@@ -66,6 +67,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		subcontrolResults                 *generated.SubcontrolConnection
 		subprocessorResults               *generated.SubprocessorConnection
 		subscriberResults                 *generated.SubscriberConnection
+		tagdefinitionResults              *generated.TagDefinitionConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
@@ -175,6 +177,18 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, customdomainResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			customtypeenumResults, err = searchCustomTypeEnums(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, customtypeenumResults, highlightTracker)
 			}
 		},
 		func() {
@@ -539,6 +553,18 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			tagdefinitionResults, err = searchTagDefinitions(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, tagdefinitionResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			taskResults, err = searchTasks(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -684,6 +710,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.CustomDomains = customdomainResults
 
 		res.TotalCount += customdomainResults.TotalCount
+	}
+	if customtypeenumResults != nil && len(customtypeenumResults.Edges) > 0 {
+		res.CustomTypeEnums = customtypeenumResults
+
+		res.TotalCount += customtypeenumResults.TotalCount
 	}
 	if dnsverificationResults != nil && len(dnsverificationResults.Edges) > 0 {
 		res.DNSVerifications = dnsverificationResults
@@ -834,6 +865,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Subscribers = subscriberResults
 
 		res.TotalCount += subscriberResults.TotalCount
+	}
+	if tagdefinitionResults != nil && len(tagdefinitionResults.Edges) > 0 {
+		res.TagDefinitions = tagdefinitionResults
+
+		res.TotalCount += tagdefinitionResults.TotalCount
 	}
 	if taskResults != nil && len(taskResults.Edges) > 0 {
 		res.Tasks = taskResults
@@ -1021,6 +1057,24 @@ func (r *queryResolver) AdminCustomDomainSearch(ctx context.Context, query strin
 
 	// return the results
 	return customdomainResults, nil
+}
+func (r *queryResolver) AdminCustomTypeEnumSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomTypeEnumConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	customtypeenumResults, err := adminSearchCustomTypeEnums(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return customtypeenumResults, nil
 }
 func (r *queryResolver) AdminDNSVerificationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
 	// ensure the user is a system admin
@@ -1561,6 +1615,24 @@ func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string,
 
 	// return the results
 	return subscriberResults, nil
+}
+func (r *queryResolver) AdminTagDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TagDefinitionConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	tagdefinitionResults, err := adminSearchTagDefinitions(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return tagdefinitionResults, nil
 }
 func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
 	// ensure the user is a system admin

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -454,6 +455,25 @@ func (_c *ActionPlanCreate) SetOwner(v *Organization) *ActionPlanCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
+// SetActionPlanKindID sets the "action_plan_kind" edge to the CustomTypeEnum entity by ID.
+func (_c *ActionPlanCreate) SetActionPlanKindID(id string) *ActionPlanCreate {
+	_c.mutation.SetActionPlanKindID(id)
+	return _c
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableActionPlanKindID(id *string) *ActionPlanCreate {
+	if id != nil {
+		_c = _c.SetActionPlanKindID(*id)
+	}
+	return _c
+}
+
+// SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_c *ActionPlanCreate) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanCreate {
+	return _c.SetActionPlanKindID(v.ID)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_c *ActionPlanCreate) AddRiskIDs(ids ...string) *ActionPlanCreate {
 	_c.mutation.AddRiskIDs(ids...)
@@ -851,6 +871,24 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.action_plan_action_plan_kind = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {

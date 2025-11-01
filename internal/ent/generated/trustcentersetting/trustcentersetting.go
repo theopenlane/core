@@ -165,6 +165,18 @@ var (
 	LogoRemoteURLValidator func(string) error
 	// FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
 	FaviconRemoteURLValidator func(string) error
+	// PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
+	PrimaryColorValidator func(string) error
+	// ForegroundColorValidator is a validator for the "foreground_color" field. It is called by the builders before save.
+	ForegroundColorValidator func(string) error
+	// BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
+	BackgroundColorValidator func(string) error
+	// AccentColorValidator is a validator for the "accent_color" field. It is called by the builders before save.
+	AccentColorValidator func(string) error
+	// SecondaryBackgroundColorValidator is a validator for the "secondary_background_color" field. It is called by the builders before save.
+	SecondaryBackgroundColorValidator func(string) error
+	// SecondaryForegroundColorValidator is a validator for the "secondary_foreground_color" field. It is called by the builders before save.
+	SecondaryForegroundColorValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

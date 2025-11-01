@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -669,6 +670,25 @@ func (_c *ControlCreate) AddEditors(v ...*Group) *ControlCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEditorIDs(ids...)
+}
+
+// SetControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID.
+func (_c *ControlCreate) SetControlKindID(id string) *ControlCreate {
+	_c.mutation.SetControlKindID(id)
+	return _c
+}
+
+// SetNillableControlKindID sets the "control_kind" edge to the CustomTypeEnum entity by ID if the given value is not nil.
+func (_c *ControlCreate) SetNillableControlKindID(id *string) *ControlCreate {
+	if id != nil {
+		_c = _c.SetControlKindID(*id)
+	}
+	return _c
+}
+
+// SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
+func (_c *ControlCreate) SetControlKind(v *CustomTypeEnum) *ControlCreate {
+	return _c.SetControlKindID(v.ID)
 }
 
 // SetStandard sets the "standard" edge to the Standard entity.
@@ -1336,6 +1356,24 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.control_control_kind = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.StandardIDs(); len(nodes) > 0 {

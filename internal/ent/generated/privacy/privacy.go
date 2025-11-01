@@ -471,6 +471,30 @@ func (f CustomDomainHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CustomDomainHistoryMutation", m)
 }
 
+// The CustomTypeEnumQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CustomTypeEnumQueryRuleFunc func(context.Context, *generated.CustomTypeEnumQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CustomTypeEnumQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomTypeEnumQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CustomTypeEnumQuery", q)
+}
+
+// The CustomTypeEnumMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CustomTypeEnumMutationRuleFunc func(context.Context, *generated.CustomTypeEnumMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CustomTypeEnumMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CustomTypeEnumMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CustomTypeEnumMutation", m)
+}
+
 // The DNSVerificationQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DNSVerificationQueryRuleFunc func(context.Context, *generated.DNSVerificationQuery) error
@@ -2367,6 +2391,30 @@ func (f TFASettingMutationRuleFunc) EvalMutation(ctx context.Context, m generate
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TFASettingMutation", m)
 }
 
+// The TagDefinitionQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TagDefinitionQueryRuleFunc func(context.Context, *generated.TagDefinitionQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TagDefinitionQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TagDefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TagDefinitionQuery", q)
+}
+
+// The TagDefinitionMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TagDefinitionMutationRuleFunc func(context.Context, *generated.TagDefinitionMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TagDefinitionMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TagDefinitionMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TagDefinitionMutation", m)
+}
+
 // The TaskQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TaskQueryRuleFunc func(context.Context, *generated.TaskQuery) error
@@ -2936,6 +2984,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.CustomDomainHistoryQuery:
 		return q.Filter(), nil
+	case *generated.CustomTypeEnumQuery:
+		return q.Filter(), nil
 	case *generated.DNSVerificationQuery:
 		return q.Filter(), nil
 	case *generated.DNSVerificationHistoryQuery:
@@ -3094,6 +3144,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TFASettingQuery:
 		return q.Filter(), nil
+	case *generated.TagDefinitionQuery:
+		return q.Filter(), nil
 	case *generated.TaskQuery:
 		return q.Filter(), nil
 	case *generated.TaskHistoryQuery:
@@ -3172,6 +3224,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.CustomDomainMutation:
 		return m.Filter(), nil
 	case *generated.CustomDomainHistoryMutation:
+		return m.Filter(), nil
+	case *generated.CustomTypeEnumMutation:
 		return m.Filter(), nil
 	case *generated.DNSVerificationMutation:
 		return m.Filter(), nil
@@ -3330,6 +3384,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.SubscriberMutation:
 		return m.Filter(), nil
 	case *generated.TFASettingMutation:
+		return m.Filter(), nil
+	case *generated.TagDefinitionMutation:
 		return m.Filter(), nil
 	case *generated.TaskMutation:
 		return m.Filter(), nil

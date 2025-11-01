@@ -118,6 +118,8 @@ const (
 	EdgeResponsibleParty = "responsible_party"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeSubcontrolKind holds the string denoting the subcontrol_kind edge name in mutations.
+	EdgeSubcontrolKind = "subcontrol_kind"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
@@ -209,6 +211,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// SubcontrolKindTable is the table that holds the subcontrol_kind relation/edge.
+	SubcontrolKindTable = "subcontrols"
+	// SubcontrolKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	SubcontrolKindInverseTable = "custom_type_enums"
+	// SubcontrolKindColumn is the table column denoting the subcontrol_kind relation/edge.
+	SubcontrolKindColumn = "subcontrol_subcontrol_kind"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "subcontrols"
 	// ControlInverseTable is the table name for the Control entity.
@@ -283,7 +292,9 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"custom_type_enum_subcontrols",
 	"program_subcontrols",
+	"subcontrol_subcontrol_kind",
 	"user_subcontrols",
 }
 
@@ -341,7 +352,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -704,6 +715,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// BySubcontrolKindField orders the results by subcontrol_kind field.
+func BySubcontrolKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByControlField orders the results by control field.
 func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -855,6 +873,13 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newSubcontrolKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolKindTable, SubcontrolKindColumn),
 	)
 }
 func newControlStep() *sqlgraph.Step {

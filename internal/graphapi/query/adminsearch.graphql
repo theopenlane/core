@@ -206,6 +206,28 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    customTypeEnums {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          objectType
+          field
+          name
+          description
+        }
+      }
+    }
     dnsVerifications {
       totalCount
       pageInfo {
@@ -893,6 +915,29 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    tagDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          name
+          aliases
+          slug
+          description
+          color
+        }
+      }
+    }
     tasks {
       totalCount
       pageInfo {
@@ -912,6 +957,7 @@ query AdminSearch($query: String!) {
           category
           assigneeID
           assignerID
+          idempotencyKey
         }
       }
     }

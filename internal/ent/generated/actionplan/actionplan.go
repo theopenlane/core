@@ -90,6 +90,8 @@ const (
 	EdgeDelegate = "delegate"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeActionPlanKind holds the string denoting the action_plan_kind edge name in mutations.
+	EdgeActionPlanKind = "action_plan_kind"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -121,6 +123,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// ActionPlanKindTable is the table that holds the action_plan_kind relation/edge.
+	ActionPlanKindTable = "action_plans"
+	// ActionPlanKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ActionPlanKindInverseTable = "custom_type_enums"
+	// ActionPlanKindColumn is the table column denoting the action_plan_kind relation/edge.
+	ActionPlanKindColumn = "action_plan_action_plan_kind"
 	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
 	RisksTable = "risk_action_plans"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -186,6 +195,8 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "action_plans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"action_plan_action_plan_kind",
+	"custom_type_enum_action_plans",
 	"subcontrol_action_plans",
 	"user_action_plans",
 }
@@ -223,7 +234,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -455,6 +466,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByActionPlanKindField orders the results by action_plan_kind field.
+func ByActionPlanKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByRisksCount orders the results by risks count.
 func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -522,6 +540,13 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newActionPlanKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ActionPlanKindTable, ActionPlanKindColumn),
 	)
 }
 func newRisksStep() *sqlgraph.Step {

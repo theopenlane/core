@@ -89,7 +89,7 @@ func (Event) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
-		emixin.TagMixin{},
+		mixin.TagMixin{},
 		mixin.GraphQLAnnotationMixin{},
 	}
 }

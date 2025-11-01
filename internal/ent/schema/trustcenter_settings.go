@@ -90,6 +90,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 		// Easy options
 		field.String("primary_color").
 			Comment("primary color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 		// Advanced options
 		field.String("font").
@@ -97,18 +98,23 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Optional(),
 		field.String("foreground_color").
 			Comment("foreground color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 		field.String("background_color").
 			Comment("background color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 		field.String("accent_color").
 			Comment("accent/brand color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 		field.String("secondary_background_color").
 			Comment("secondary background color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 		field.String("secondary_foreground_color").
 			Comment("secondary foreground color for the trust center").
+			Validate(validator.HexColorValidator).
 			Optional(),
 	}
 }

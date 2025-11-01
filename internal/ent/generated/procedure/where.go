@@ -1893,6 +1893,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.Procedure {
 	})
 }
 
+// HasProcedureKind applies the HasEdge predicate on the "procedure_kind" edge.
+func HasProcedureKind() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ProcedureKindTable, ProcedureKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProcedureKindWith applies the HasEdge predicate on the "procedure_kind" edge with a given conditions (other predicates).
+func HasProcedureKindWith(preds ...predicate.CustomTypeEnum) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newProcedureKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControls applies the HasEdge predicate on the "controls" edge.
 func HasControls() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {

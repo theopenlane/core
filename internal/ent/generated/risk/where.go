@@ -1554,6 +1554,64 @@ func HasViewersWith(preds ...predicate.Group) predicate.Risk {
 	})
 }
 
+// HasRiskKind applies the HasEdge predicate on the "risk_kind" edge.
+func HasRiskKind() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, RiskKindTable, RiskKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskKindWith applies the HasEdge predicate on the "risk_kind" edge with a given conditions (other predicates).
+func HasRiskKindWith(preds ...predicate.CustomTypeEnum) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newRiskKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRiskCategory applies the HasEdge predicate on the "risk_category" edge.
+func HasRiskCategory() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, RiskCategoryTable, RiskCategoryColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskCategoryWith applies the HasEdge predicate on the "risk_category" edge with a given conditions (other predicates).
+func HasRiskCategoryWith(preds ...predicate.CustomTypeEnum) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newRiskCategoryStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControls applies the HasEdge predicate on the "controls" edge.
 func HasControls() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {

@@ -90,6 +90,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 			// all procedures are documents
 			NewDocumentMixin(p),
 			mixin.NewSystemOwnedMixin(),
+			newCustomEnumMixin(p),
 		},
 	}.getMixins(p)
 }

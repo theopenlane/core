@@ -58,6 +58,10 @@ const (
 	FieldAssigneeID = "assignee_id"
 	// FieldAssignerID holds the string denoting the assigner_id field in the database.
 	FieldAssignerID = "assigner_id"
+	// FieldSystemGenerated holds the string denoting the system_generated field in the database.
+	FieldSystemGenerated = "system_generated"
+	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
+	FieldIdempotencyKey = "idempotency_key"
 	// Table holds the table name of the taskhistory in the database.
 	Table = "task_history"
 )
@@ -85,6 +89,8 @@ var Columns = []string{
 	FieldCompleted,
 	FieldAssigneeID,
 	FieldAssignerID,
+	FieldSystemGenerated,
+	FieldIdempotencyKey,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -116,6 +122,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultSystemGenerated holds the default value on creation for the "system_generated" field.
+	DefaultSystemGenerated bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -243,6 +251,16 @@ func ByAssigneeID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssignerID orders the results by the assigner_id field.
 func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignerID, opts...).ToFunc()
+}
+
+// BySystemGenerated orders the results by the system_generated field.
+func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemGenerated, opts...).ToFunc()
+}
+
+// ByIdempotencyKey orders the results by the idempotency_key field.
+func ByIdempotencyKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdempotencyKey, opts...).ToFunc()
 }
 
 var (
