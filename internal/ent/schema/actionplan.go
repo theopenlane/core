@@ -4,10 +4,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -71,9 +69,6 @@ func (ActionPlan) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("priority of the action plan"),
-		field.String("owner_id").
-			Optional().
-			Comment("identifier for the primary user responsible for the action plan"),
 		field.Bool("requires_approval").
 			Default(false).
 			Comment("indicates if the action plan requires explicit approval before closure"),
@@ -114,13 +109,6 @@ func (a ActionPlan) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "integration that generated the action plan",
 		}),
-		edge.From("owner", User.Type).
-			Field("owner_id").
-			Unique().
-			Annotations(
-				accessmap.EdgeNoAuthCheck(),
-			).
-			Comment("primary user owner of the action plan"),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: File{},
