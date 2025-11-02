@@ -122,7 +122,7 @@ func (t Task) Mixin() []ent.Mixin {
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}, ActionPlan{}),
 				withOrganizationOwner(true),
 			),
 			newCustomEnumMixin(t),
