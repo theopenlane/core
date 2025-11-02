@@ -41,13 +41,14 @@ func (FindingControl) PluralName() string {
 func (FindingControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("finding_id").
+			Immutable().
 			NotEmpty().
 			Comment("the id of the finding associated with the control"),
 		field.String("control_id").
-			Optional().
+			Immutable().
 			Comment("the id of the control mapped to the finding when it exists in the catalog"),
 		field.String("standard_id").
-			Optional().
+			Immutable().
 			Comment("the id of the standard that the control belongs to when it exists in the catalog"),
 		field.String("external_standard").
 			Comment("external identifier for the standard provided by the source system such as iso or hipaa").
