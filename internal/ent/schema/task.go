@@ -225,6 +225,13 @@ func (t Task) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(ControlImplementation{}.Name()),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ActionPlan{}.Name()),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: Evidence{},
