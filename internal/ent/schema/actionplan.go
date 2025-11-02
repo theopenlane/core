@@ -103,7 +103,7 @@ func (a ActionPlan) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, Vulnerability{}),
 		defaultEdgeFromWithPagination(a, Review{}),
 		defaultEdgeFromWithPagination(a, Remediation{}),
-		defaultEdgeFromWithPagination(a, Task{}),
+		defaultEdgeToWithPagination(a, Task{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: Integration{},
