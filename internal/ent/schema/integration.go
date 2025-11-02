@@ -90,6 +90,7 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Review{}),
 		defaultEdgeToWithPagination(i, Remediation{}),
 		defaultEdgeToWithPagination(i, Task{}),
+		defaultEdgeToWithPagination(i, ActionPlan{}),
 	}
 }
 
