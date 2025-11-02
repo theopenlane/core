@@ -197,6 +197,7 @@ func (f Finding) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: f,
 			name:       "control_mappings",
+			required:   true,
 			t:          FindingControl.Type,
 			comment:    "control mappings associated with the finding",
 		}),
