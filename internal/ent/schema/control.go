@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -81,7 +82,22 @@ func (c Control) Edges() []ent.Edge {
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeToWithPagination(c, Asset{}),
+		defaultEdgeToWithPagination(c, ActionPlan{}),
 		defaultEdgeToWithPagination(c, Scan{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			name:       "finding_mappings",
+			t:          FindingControl.Type,
+			comment:    "control mappings between this control and imported findings",
+		}),
+		edge.From("findings", Finding.Type).
+			Ref("controls").
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+			).
+			Through("control_mappings", FindingControl.Type),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: ControlImplementation{},

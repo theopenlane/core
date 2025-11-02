@@ -85,6 +85,11 @@ func (i Integration) Edges() []ent.Edge {
 			comment:    "files associated with the integration",
 		}),
 		defaultEdgeToWithPagination(i, Event{}),
+		defaultEdgeToWithPagination(i, Finding{}),
+		defaultEdgeToWithPagination(i, Vulnerability{}),
+		defaultEdgeToWithPagination(i, Review{}),
+		defaultEdgeToWithPagination(i, Remediation{}),
+		defaultEdgeToWithPagination(i, Task{}),
 	}
 }
 
