@@ -51,6 +51,13 @@ func (Finding) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
 			),
+		field.String("owner_id").
+			Comment("the owner of the finding").
+			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("owner_id"),
+			),
 		field.String("source").
 			Comment("system that produced the finding, e.g. gcp_scc").
 			Optional(),
