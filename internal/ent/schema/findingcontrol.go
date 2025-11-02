@@ -42,10 +42,8 @@ func (FindingControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("finding_id").
 			Immutable().
-			NotEmpty().
 			Comment("the id of the finding associated with the control"),
 		field.String("control_id").
-			Optional().
 			Immutable().
 			Comment("the id of the control mapped to the finding when it exists in the catalog"),
 		field.String("standard_id").
@@ -113,9 +111,6 @@ func (fc FindingControl) Edges() []ent.Edge {
 func (FindingControl) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("finding_id", "control_id").
-			Unique().
-			Annotations(),
-		index.Fields("finding_id", "external_standard", "external_standard_version", "external_control_id").
 			Unique().
 			Annotations(),
 	}

@@ -194,13 +194,6 @@ func (f Finding) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(f, Vulnerability{}),
 		defaultEdgeToWithPagination(f, ActionPlan{}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema: f,
-			name:       "control_mappings",
-			required:   true,
-			t:          FindingControl.Type,
-			comment:    "control mappings associated with the finding",
-		}),
 		edge.To("controls", Control.Type).
 			Annotations(
 				entgql.RelayConnection(),
