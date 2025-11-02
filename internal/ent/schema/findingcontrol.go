@@ -41,7 +41,7 @@ func (FindingControl) PluralName() string {
 func (FindingControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("finding_id").
-			Optional().
+			NotEmpty().
 			Comment("the id of the finding associated with the control"),
 		field.String("control_id").
 			Optional().
