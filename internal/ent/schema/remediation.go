@@ -45,10 +45,17 @@ func (Remediation) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("external_id").
 			Comment("external identifier from the integration source for the remediation").
-			NotEmpty().
+			Optional().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
+			),
+		field.String("owner_id").
+			Comment("external identifier from the integration source for the remediation").
+			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("owner_id"),
 			),
 		field.String("title").
 			Comment("title or short description of the remediation effort").
