@@ -83,12 +83,6 @@ func (c Control) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeToWithPagination(c, Asset{}),
 		defaultEdgeToWithPagination(c, Scan{}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema: c,
-			name:       "finding_mappings",
-			t:          FindingControl.Type,
-			comment:    "control mappings between this control and imported findings",
-		}),
 		edge.From("findings", Finding.Type).
 			Ref("controls").
 			Annotations(
