@@ -45,9 +45,11 @@ func (FindingControl) Fields() []ent.Field {
 			NotEmpty().
 			Comment("the id of the finding associated with the control"),
 		field.String("control_id").
+			Optional().
 			Immutable().
 			Comment("the id of the control mapped to the finding when it exists in the catalog"),
 		field.String("standard_id").
+			Optional().
 			Immutable().
 			Comment("the id of the standard that the control belongs to when it exists in the catalog"),
 		field.String("external_standard").
