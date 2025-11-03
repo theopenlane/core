@@ -230,28 +230,13 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 			return nil
 		}
 
-		switch sub.Status {
-		case stripe.SubscriptionStatusTrialing:
+		params := &stripe.SubscriptionScheduleUpdateParams{
+			EndBehavior: stripe.String(string(stripe.SubscriptionScheduleEndBehaviorCancel)),
+		}
 
-			endSubsParams := &stripe.SubscriptionUpdateParams{
-				TrialEndNow: stripe.Bool(true),
-			}
-
-			_, err := sc.Client.V1Subscriptions.Update(ctx, sub.ID, endSubsParams)
-			if err != nil {
-				return err
-			}
-
-		default:
-
-			params := &stripe.SubscriptionScheduleUpdateParams{
-				EndBehavior: stripe.String(string(stripe.SubscriptionScheduleEndBehaviorCancel)),
-			}
-
-			_, err := sc.Client.V1SubscriptionSchedules.Update(ctx, sub.Schedule.ID, params)
-			if err != nil {
-				return err
-			}
+		_, err := sc.Client.V1SubscriptionSchedules.Update(ctx, sub.Schedule.ID, params)
+		if err != nil {
+			return err
 		}
 	}
 
