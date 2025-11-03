@@ -32,6 +32,26 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, first *int64, last *int64, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
+	CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessment, error)
+	CreateBulkAssessment(ctx context.Context, input []*CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessment, error)
+	CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error)
+	DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error)
+	GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error)
+	GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error)
+	GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error)
+	UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error)
+	GetAllAssessmentHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentHistories, error)
+	GetAssessmentHistories(ctx context.Context, first *int64, last *int64, where *AssessmentHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentHistories, error)
+	CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentResponse, error)
+	CreateBulkAssessmentResponse(ctx context.Context, input []*CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentResponse, error)
+	CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error)
+	DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error)
+	GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error)
+	GetAssessmentResponseByID(ctx context.Context, assessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseByID, error)
+	GetAssessmentResponses(ctx context.Context, first *int64, last *int64, where *AssessmentResponseWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponses, error)
+	UpdateAssessmentResponse(ctx context.Context, updateAssessmentResponseID string, input UpdateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentResponse, error)
+	GetAllAssessmentResponseHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponseHistories, error)
+	GetAssessmentResponseHistories(ctx context.Context, first *int64, last *int64, where *AssessmentResponseHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseHistories, error)
 	CreateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAsset, error)
 	CreateBulkAsset(ctx context.Context, input []*CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAsset, error)
 	CreateAsset(ctx context.Context, input CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateAsset, error)
@@ -3754,6 +3774,2454 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 		t = &UpdateAPIToken_UpdateAPIToken{}
 	}
 	return &t.APIToken
+}
+
+type CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return &t.AssessmentType
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetTemplateID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.TemplateID
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVAssessment_CreateBulkCSVAssessment struct {
+	Assessments []*CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments "json:\"assessments,omitempty\" graphql:\"assessments\""
+}
+
+func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment) GetAssessments() []*CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments {
+	if t == nil {
+		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment{}
+	}
+	return t.Assessments
+}
+
+type CreateBulkAssessment_CreateBulkAssessment_Assessments struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return &t.AssessmentType
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetID() string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetName() string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.Name
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetTemplateID() string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.TemplateID
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkAssessment_CreateBulkAssessment struct {
+	Assessments []*CreateBulkAssessment_CreateBulkAssessment_Assessments "json:\"assessments,omitempty\" graphql:\"assessments\""
+}
+
+func (t *CreateBulkAssessment_CreateBulkAssessment) GetAssessments() []*CreateBulkAssessment_CreateBulkAssessment_Assessments {
+	if t == nil {
+		t = &CreateBulkAssessment_CreateBulkAssessment{}
+	}
+	return t.Assessments
+}
+
+type CreateAssessment_CreateAssessment_Assessment struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetID() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.ID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetName() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.Name
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetTags() []string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.Tags
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateAssessment_CreateAssessment struct {
+	Assessment CreateAssessment_CreateAssessment_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *CreateAssessment_CreateAssessment) GetAssessment() *CreateAssessment_CreateAssessment_Assessment {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment{}
+	}
+	return &t.Assessment
+}
+
+type DeleteAssessment_DeleteAssessment struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAssessment_DeleteAssessment) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAssessment_DeleteAssessment{}
+	}
+	return t.DeletedID
+}
+
+type GetAllAssessments_Assessments_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessments_Assessments_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessments_Assessments_Edges_Node struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessments_Assessments_Edges struct {
+	Node *GetAllAssessments_Assessments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessments_Assessments_Edges) GetNode() *GetAllAssessments_Assessments_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessments_Assessments struct {
+	Edges      []*GetAllAssessments_Assessments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessments_Assessments_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessments_Assessments) GetEdges() []*GetAllAssessments_Assessments_Edges {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessments_Assessments) GetPageInfo() *GetAllAssessments_Assessments_PageInfo {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessments_Assessments) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentByID_Assessment struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentByID_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessmentByID_Assessment) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessmentByID_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentByID_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentByID_Assessment) GetID() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentByID_Assessment) GetName() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.Name
+}
+func (t *GetAssessmentByID_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentByID_Assessment) GetTags() []string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.Tags
+}
+func (t *GetAssessmentByID_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessmentByID_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentByID_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessments_Assessments_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessments_Assessments_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessments_Assessments_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessments_Assessments_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessments_Assessments_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessments_Assessments_Edges_Node struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessments_Assessments_Edges struct {
+	Node *GetAssessments_Assessments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessments_Assessments_Edges) GetNode() *GetAssessments_Assessments_Edges_Node {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessments_Assessments struct {
+	Edges      []*GetAssessments_Assessments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessments_Assessments_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessments_Assessments) GetEdges() []*GetAssessments_Assessments_Edges {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return t.Edges
+}
+func (t *GetAssessments_Assessments) GetPageInfo() *GetAssessments_Assessments_PageInfo {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessments_Assessments) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAssessment_UpdateAssessment_Assessment struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetID() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.ID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetName() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.Name
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTags() []string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.Tags
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateAssessment_UpdateAssessment struct {
+	Assessment UpdateAssessment_UpdateAssessment_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *UpdateAssessment_UpdateAssessment) GetAssessment() *UpdateAssessment_UpdateAssessment_Assessment {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment{}
+	}
+	return &t.Assessment
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_Edges_Node struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	Operation         history.OpType      "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_Edges struct {
+	Node *GetAllAssessmentHistories_AssessmentHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges) GetNode() *GetAllAssessmentHistories_AssessmentHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentHistories_AssessmentHistories struct {
+	Edges      []*GetAllAssessmentHistories_AssessmentHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentHistories_AssessmentHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetEdges() []*GetAllAssessmentHistories_AssessmentHistories_Edges {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetPageInfo() *GetAllAssessmentHistories_AssessmentHistories_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentHistories_AssessmentHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentHistories_AssessmentHistories_Edges_Node struct {
+	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssesmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string              "json:\"id\" graphql:\"id\""
+	Name              string              "json:\"name\" graphql:\"name\""
+	Operation         history.OpType      "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssesmentType {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentHistories_AssessmentHistories_Edges struct {
+	Node *GetAssessmentHistories_AssessmentHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_Edges) GetNode() *GetAssessmentHistories_AssessmentHistories_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentHistories_AssessmentHistories struct {
+	Edges      []*GetAssessmentHistories_AssessmentHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentHistories_AssessmentHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories) GetEdges() []*GetAssessmentHistories_AssessmentHistories_Edges {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentHistories_AssessmentHistories) GetPageInfo() *GetAssessmentHistories_AssessmentHistories_PageInfo {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.AssignedAt
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetDocumentDataID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.DocumentDataID
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetDueDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.DueDate
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.Email
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse struct {
+	AssessmentResponses []*CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses "json:\"assessmentResponses,omitempty\" graphql:\"assessmentResponses\""
+}
+
+func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse) GetAssessmentResponses() []*CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse{}
+	}
+	return t.AssessmentResponses
+}
+
+type CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.AssignedAt
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetDocumentDataID() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.DocumentDataID
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetDueDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.DueDate
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.Email
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetID() string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkAssessmentResponse_CreateBulkAssessmentResponse struct {
+	AssessmentResponses []*CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses "json:\"assessmentResponses,omitempty\" graphql:\"assessmentResponses\""
+}
+
+func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse) GetAssessmentResponses() []*CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse{}
+	}
+	return t.AssessmentResponses
+}
+
+type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateAssessmentResponse_CreateAssessmentResponse struct {
+	AssessmentResponse CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *CreateAssessmentResponse_CreateAssessmentResponse) GetAssessmentResponse() *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse{}
+	}
+	return &t.AssessmentResponse
+}
+
+type DeleteAssessmentResponse_DeleteAssessmentResponse struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAssessmentResponse_DeleteAssessmentResponse) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAssessmentResponse_DeleteAssessmentResponse{}
+	}
+	return t.DeletedID
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_Edges_Node struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_Edges struct {
+	Node *GetAllAssessmentResponses_AssessmentResponses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges) GetNode() *GetAllAssessmentResponses_AssessmentResponses_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentResponses_AssessmentResponses struct {
+	Edges      []*GetAllAssessmentResponses_AssessmentResponses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentResponses_AssessmentResponses_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetEdges() []*GetAllAssessmentResponses_AssessmentResponses_Edges {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetPageInfo() *GetAllAssessmentResponses_AssessmentResponses_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentResponseByID_AssessmentResponse struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponses_AssessmentResponses_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentResponses_AssessmentResponses_Edges_Node struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponses_AssessmentResponses_Edges struct {
+	Node *GetAssessmentResponses_AssessmentResponses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_Edges) GetNode() *GetAssessmentResponses_AssessmentResponses_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentResponses_AssessmentResponses struct {
+	Edges      []*GetAssessmentResponses_AssessmentResponses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentResponses_AssessmentResponses_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses) GetEdges() []*GetAssessmentResponses_AssessmentResponses_Edges {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentResponses_AssessmentResponses) GetPageInfo() *GetAssessmentResponses_AssessmentResponses_PageInfo {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateAssessmentResponse_UpdateAssessmentResponse struct {
+	AssessmentResponse UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse) GetAssessmentResponse() *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse{}
+	}
+	return &t.AssessmentResponse
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                     "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                       "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges struct {
+	Node *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges) GetNode() *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories struct {
+	Edges      []*GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetEdges() []*GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetPageInfo() *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
+	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                     "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                       "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssesmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssesmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges struct {
+	Node *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges) GetNode() *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories struct {
+	Edges      []*GetAssessmentResponseHistories_AssessmentResponseHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetEdges() []*GetAssessmentResponseHistories_AssessmentResponseHistories_Edges {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetPageInfo() *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVAsset_CreateBulkCSVAsset_Assets struct {
@@ -79242,6 +81710,226 @@ func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
 	return &t.UpdateAPIToken
 }
 
+type CreateBulkCSVAssessment struct {
+	CreateBulkCSVAssessment CreateBulkCSVAssessment_CreateBulkCSVAssessment "json:\"createBulkCSVAssessment\" graphql:\"createBulkCSVAssessment\""
+}
+
+func (t *CreateBulkCSVAssessment) GetCreateBulkCSVAssessment() *CreateBulkCSVAssessment_CreateBulkCSVAssessment {
+	if t == nil {
+		t = &CreateBulkCSVAssessment{}
+	}
+	return &t.CreateBulkCSVAssessment
+}
+
+type CreateBulkAssessment struct {
+	CreateBulkAssessment CreateBulkAssessment_CreateBulkAssessment "json:\"createBulkAssessment\" graphql:\"createBulkAssessment\""
+}
+
+func (t *CreateBulkAssessment) GetCreateBulkAssessment() *CreateBulkAssessment_CreateBulkAssessment {
+	if t == nil {
+		t = &CreateBulkAssessment{}
+	}
+	return &t.CreateBulkAssessment
+}
+
+type CreateAssessment struct {
+	CreateAssessment CreateAssessment_CreateAssessment "json:\"createAssessment\" graphql:\"createAssessment\""
+}
+
+func (t *CreateAssessment) GetCreateAssessment() *CreateAssessment_CreateAssessment {
+	if t == nil {
+		t = &CreateAssessment{}
+	}
+	return &t.CreateAssessment
+}
+
+type DeleteAssessment struct {
+	DeleteAssessment DeleteAssessment_DeleteAssessment "json:\"deleteAssessment\" graphql:\"deleteAssessment\""
+}
+
+func (t *DeleteAssessment) GetDeleteAssessment() *DeleteAssessment_DeleteAssessment {
+	if t == nil {
+		t = &DeleteAssessment{}
+	}
+	return &t.DeleteAssessment
+}
+
+type GetAllAssessments struct {
+	Assessments GetAllAssessments_Assessments "json:\"assessments\" graphql:\"assessments\""
+}
+
+func (t *GetAllAssessments) GetAssessments() *GetAllAssessments_Assessments {
+	if t == nil {
+		t = &GetAllAssessments{}
+	}
+	return &t.Assessments
+}
+
+type GetAssessmentByID struct {
+	Assessment GetAssessmentByID_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *GetAssessmentByID) GetAssessment() *GetAssessmentByID_Assessment {
+	if t == nil {
+		t = &GetAssessmentByID{}
+	}
+	return &t.Assessment
+}
+
+type GetAssessments struct {
+	Assessments GetAssessments_Assessments "json:\"assessments\" graphql:\"assessments\""
+}
+
+func (t *GetAssessments) GetAssessments() *GetAssessments_Assessments {
+	if t == nil {
+		t = &GetAssessments{}
+	}
+	return &t.Assessments
+}
+
+type UpdateAssessment struct {
+	UpdateAssessment UpdateAssessment_UpdateAssessment "json:\"updateAssessment\" graphql:\"updateAssessment\""
+}
+
+func (t *UpdateAssessment) GetUpdateAssessment() *UpdateAssessment_UpdateAssessment {
+	if t == nil {
+		t = &UpdateAssessment{}
+	}
+	return &t.UpdateAssessment
+}
+
+type GetAllAssessmentHistories struct {
+	AssessmentHistories GetAllAssessmentHistories_AssessmentHistories "json:\"assessmentHistories\" graphql:\"assessmentHistories\""
+}
+
+func (t *GetAllAssessmentHistories) GetAssessmentHistories() *GetAllAssessmentHistories_AssessmentHistories {
+	if t == nil {
+		t = &GetAllAssessmentHistories{}
+	}
+	return &t.AssessmentHistories
+}
+
+type GetAssessmentHistories struct {
+	AssessmentHistories GetAssessmentHistories_AssessmentHistories "json:\"assessmentHistories\" graphql:\"assessmentHistories\""
+}
+
+func (t *GetAssessmentHistories) GetAssessmentHistories() *GetAssessmentHistories_AssessmentHistories {
+	if t == nil {
+		t = &GetAssessmentHistories{}
+	}
+	return &t.AssessmentHistories
+}
+
+type CreateBulkCSVAssessmentResponse struct {
+	CreateBulkCSVAssessmentResponse CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse "json:\"createBulkCSVAssessmentResponse\" graphql:\"createBulkCSVAssessmentResponse\""
+}
+
+func (t *CreateBulkCSVAssessmentResponse) GetCreateBulkCSVAssessmentResponse() *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentResponse{}
+	}
+	return &t.CreateBulkCSVAssessmentResponse
+}
+
+type CreateBulkAssessmentResponse struct {
+	CreateBulkAssessmentResponse CreateBulkAssessmentResponse_CreateBulkAssessmentResponse "json:\"createBulkAssessmentResponse\" graphql:\"createBulkAssessmentResponse\""
+}
+
+func (t *CreateBulkAssessmentResponse) GetCreateBulkAssessmentResponse() *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse {
+	if t == nil {
+		t = &CreateBulkAssessmentResponse{}
+	}
+	return &t.CreateBulkAssessmentResponse
+}
+
+type CreateAssessmentResponse struct {
+	CreateAssessmentResponse CreateAssessmentResponse_CreateAssessmentResponse "json:\"createAssessmentResponse\" graphql:\"createAssessmentResponse\""
+}
+
+func (t *CreateAssessmentResponse) GetCreateAssessmentResponse() *CreateAssessmentResponse_CreateAssessmentResponse {
+	if t == nil {
+		t = &CreateAssessmentResponse{}
+	}
+	return &t.CreateAssessmentResponse
+}
+
+type DeleteAssessmentResponse struct {
+	DeleteAssessmentResponse DeleteAssessmentResponse_DeleteAssessmentResponse "json:\"deleteAssessmentResponse\" graphql:\"deleteAssessmentResponse\""
+}
+
+func (t *DeleteAssessmentResponse) GetDeleteAssessmentResponse() *DeleteAssessmentResponse_DeleteAssessmentResponse {
+	if t == nil {
+		t = &DeleteAssessmentResponse{}
+	}
+	return &t.DeleteAssessmentResponse
+}
+
+type GetAllAssessmentResponses struct {
+	AssessmentResponses GetAllAssessmentResponses_AssessmentResponses "json:\"assessmentResponses\" graphql:\"assessmentResponses\""
+}
+
+func (t *GetAllAssessmentResponses) GetAssessmentResponses() *GetAllAssessmentResponses_AssessmentResponses {
+	if t == nil {
+		t = &GetAllAssessmentResponses{}
+	}
+	return &t.AssessmentResponses
+}
+
+type GetAssessmentResponseByID struct {
+	AssessmentResponse GetAssessmentResponseByID_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *GetAssessmentResponseByID) GetAssessmentResponse() *GetAssessmentResponseByID_AssessmentResponse {
+	if t == nil {
+		t = &GetAssessmentResponseByID{}
+	}
+	return &t.AssessmentResponse
+}
+
+type GetAssessmentResponses struct {
+	AssessmentResponses GetAssessmentResponses_AssessmentResponses "json:\"assessmentResponses\" graphql:\"assessmentResponses\""
+}
+
+func (t *GetAssessmentResponses) GetAssessmentResponses() *GetAssessmentResponses_AssessmentResponses {
+	if t == nil {
+		t = &GetAssessmentResponses{}
+	}
+	return &t.AssessmentResponses
+}
+
+type UpdateAssessmentResponse struct {
+	UpdateAssessmentResponse UpdateAssessmentResponse_UpdateAssessmentResponse "json:\"updateAssessmentResponse\" graphql:\"updateAssessmentResponse\""
+}
+
+func (t *UpdateAssessmentResponse) GetUpdateAssessmentResponse() *UpdateAssessmentResponse_UpdateAssessmentResponse {
+	if t == nil {
+		t = &UpdateAssessmentResponse{}
+	}
+	return &t.UpdateAssessmentResponse
+}
+
+type GetAllAssessmentResponseHistories struct {
+	AssessmentResponseHistories GetAllAssessmentResponseHistories_AssessmentResponseHistories "json:\"assessmentResponseHistories\" graphql:\"assessmentResponseHistories\""
+}
+
+func (t *GetAllAssessmentResponseHistories) GetAssessmentResponseHistories() *GetAllAssessmentResponseHistories_AssessmentResponseHistories {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories{}
+	}
+	return &t.AssessmentResponseHistories
+}
+
+type GetAssessmentResponseHistories struct {
+	AssessmentResponseHistories GetAssessmentResponseHistories_AssessmentResponseHistories "json:\"assessmentResponseHistories\" graphql:\"assessmentResponseHistories\""
+}
+
+func (t *GetAssessmentResponseHistories) GetAssessmentResponseHistories() *GetAssessmentResponseHistories_AssessmentResponseHistories {
+	if t == nil {
+		t = &GetAssessmentResponseHistories{}
+	}
+	return &t.AssessmentResponseHistories
+}
+
 type CreateBulkCSVAsset struct {
 	CreateBulkCSVAsset CreateBulkCSVAsset_CreateBulkCSVAsset "json:\"createBulkCSVAsset\" graphql:\"createBulkCSVAsset\""
 }
@@ -85684,6 +88372,820 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 
 	var res UpdateAPIToken
 	if err := c.Client.Post(ctx, "UpdateAPIToken", UpdateAPITokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAssessmentDocument = `mutation CreateBulkCSVAssessment ($input: Upload!) {
+	createBulkCSVAssessment(input: $input) {
+		assessments {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessment, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAssessment
+	if err := c.Client.Post(ctx, "CreateBulkCSVAssessment", CreateBulkCSVAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAssessmentDocument = `mutation CreateBulkAssessment ($input: [CreateAssessmentInput!]) {
+	createBulkAssessment(input: $input) {
+		assessments {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAssessment(ctx context.Context, input []*CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessment, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAssessment
+	if err := c.Client.Post(ctx, "CreateBulkAssessment", CreateBulkAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentDocument = `mutation CreateAssessment ($input: CreateAssessmentInput!) {
+	createAssessment(input: $input) {
+		assessment {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessment
+	if err := c.Client.Post(ctx, "CreateAssessment", CreateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssessmentDocument = `mutation DeleteAssessment ($deleteAssessmentId: ID!) {
+	deleteAssessment(id: $deleteAssessmentId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error) {
+	vars := map[string]any{
+		"deleteAssessmentId": deleteAssessmentID,
+	}
+
+	var res DeleteAssessment
+	if err := c.Client.Post(ctx, "DeleteAssessment", DeleteAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentsDocument = `query GetAllAssessments {
+	assessments {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessments
+	if err := c.Client.Post(ctx, "GetAllAssessments", GetAllAssessmentsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentByIDDocument = `query GetAssessmentByID ($assessmentId: ID!) {
+	assessment(id: $assessmentId) {
+		assessmentOwnerID
+		assessmentType
+		createdAt
+		createdBy
+		id
+		name
+		ownerID
+		tags
+		templateID
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error) {
+	vars := map[string]any{
+		"assessmentId": assessmentID,
+	}
+
+	var res GetAssessmentByID
+	if err := c.Client.Post(ctx, "GetAssessmentByID", GetAssessmentByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentsDocument = `query GetAssessments ($first: Int, $last: Int, $where: AssessmentWhereInput) {
+	assessments(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessments
+	if err := c.Client.Post(ctx, "GetAssessments", GetAssessmentsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssessmentDocument = `mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInput!) {
+	updateAssessment(id: $updateAssessmentId, input: $input) {
+		assessment {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error) {
+	vars := map[string]any{
+		"updateAssessmentId": updateAssessmentID,
+		"input":              input,
+	}
+
+	var res UpdateAssessment
+	if err := c.Client.Post(ctx, "UpdateAssessment", UpdateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentHistoriesDocument = `query GetAllAssessmentHistories {
+	assessmentHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentHistories
+	if err := c.Client.Post(ctx, "GetAllAssessmentHistories", GetAllAssessmentHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentHistoriesDocument = `query GetAssessmentHistories ($first: Int, $last: Int, $where: AssessmentHistoryWhereInput) {
+	assessmentHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentHistories(ctx context.Context, first *int64, last *int64, where *AssessmentHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentHistories
+	if err := c.Client.Post(ctx, "GetAssessmentHistories", GetAssessmentHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAssessmentResponseDocument = `mutation CreateBulkCSVAssessmentResponse ($input: Upload!) {
+	createBulkCSVAssessmentResponse(input: $input) {
+		assessmentResponses {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentResponse, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAssessmentResponse
+	if err := c.Client.Post(ctx, "CreateBulkCSVAssessmentResponse", CreateBulkCSVAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAssessmentResponseDocument = `mutation CreateBulkAssessmentResponse ($input: [CreateAssessmentResponseInput!]) {
+	createBulkAssessmentResponse(input: $input) {
+		assessmentResponses {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAssessmentResponse(ctx context.Context, input []*CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentResponse, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAssessmentResponse
+	if err := c.Client.Post(ctx, "CreateBulkAssessmentResponse", CreateBulkAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentResponseDocument = `mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
+	createAssessmentResponse(input: $input) {
+		assessmentResponse {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessmentResponse
+	if err := c.Client.Post(ctx, "CreateAssessmentResponse", CreateAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssessmentResponseDocument = `mutation DeleteAssessmentResponse ($deleteAssessmentResponseId: ID!) {
+	deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error) {
+	vars := map[string]any{
+		"deleteAssessmentResponseId": deleteAssessmentResponseID,
+	}
+
+	var res DeleteAssessmentResponse
+	if err := c.Client.Post(ctx, "DeleteAssessmentResponse", DeleteAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentResponsesDocument = `query GetAllAssessmentResponses {
+	assessmentResponses {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentResponses
+	if err := c.Client.Post(ctx, "GetAllAssessmentResponses", GetAllAssessmentResponsesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponseByIDDocument = `query GetAssessmentResponseByID ($assessmentResponseId: ID!) {
+	assessmentResponse(id: $assessmentResponseId) {
+		assessmentID
+		assignedAt
+		completedAt
+		createdAt
+		createdBy
+		documentDataID
+		dueDate
+		email
+		id
+		ownerID
+		sendAttempts
+		startedAt
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponseByID(ctx context.Context, assessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseByID, error) {
+	vars := map[string]any{
+		"assessmentResponseId": assessmentResponseID,
+	}
+
+	var res GetAssessmentResponseByID
+	if err := c.Client.Post(ctx, "GetAssessmentResponseByID", GetAssessmentResponseByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponsesDocument = `query GetAssessmentResponses ($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {
+	assessmentResponses(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponses(ctx context.Context, first *int64, last *int64, where *AssessmentResponseWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponses, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentResponses
+	if err := c.Client.Post(ctx, "GetAssessmentResponses", GetAssessmentResponsesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssessmentResponseDocument = `mutation UpdateAssessmentResponse ($updateAssessmentResponseId: ID!, $input: UpdateAssessmentResponseInput!) {
+	updateAssessmentResponse(id: $updateAssessmentResponseId, input: $input) {
+		assessmentResponse {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAssessmentResponse(ctx context.Context, updateAssessmentResponseID string, input UpdateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentResponse, error) {
+	vars := map[string]any{
+		"updateAssessmentResponseId": updateAssessmentResponseID,
+		"input":                      input,
+	}
+
+	var res UpdateAssessmentResponse
+	if err := c.Client.Post(ctx, "UpdateAssessmentResponse", UpdateAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentResponseHistoriesDocument = `query GetAllAssessmentResponseHistories {
+	assessmentResponseHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentResponseHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponseHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentResponseHistories
+	if err := c.Client.Post(ctx, "GetAllAssessmentResponseHistories", GetAllAssessmentResponseHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponseHistoriesDocument = `query GetAssessmentResponseHistories ($first: Int, $last: Int, $where: AssessmentResponseHistoryWhereInput) {
+	assessmentResponseHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponseHistories(ctx context.Context, first *int64, last *int64, where *AssessmentResponseHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentResponseHistories
+	if err := c.Client.Post(ctx, "GetAssessmentResponseHistories", GetAssessmentResponseHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -108483,6 +111985,26 @@ var DocumentOperationNames = map[string]string{
 	GetAPITokenByIDDocument:                           "GetAPITokenByID",
 	GetAPITokensDocument:                              "GetAPITokens",
 	UpdateAPITokenDocument:                            "UpdateAPIToken",
+	CreateBulkCSVAssessmentDocument:                   "CreateBulkCSVAssessment",
+	CreateBulkAssessmentDocument:                      "CreateBulkAssessment",
+	CreateAssessmentDocument:                          "CreateAssessment",
+	DeleteAssessmentDocument:                          "DeleteAssessment",
+	GetAllAssessmentsDocument:                         "GetAllAssessments",
+	GetAssessmentByIDDocument:                         "GetAssessmentByID",
+	GetAssessmentsDocument:                            "GetAssessments",
+	UpdateAssessmentDocument:                          "UpdateAssessment",
+	GetAllAssessmentHistoriesDocument:                 "GetAllAssessmentHistories",
+	GetAssessmentHistoriesDocument:                    "GetAssessmentHistories",
+	CreateBulkCSVAssessmentResponseDocument:           "CreateBulkCSVAssessmentResponse",
+	CreateBulkAssessmentResponseDocument:              "CreateBulkAssessmentResponse",
+	CreateAssessmentResponseDocument:                  "CreateAssessmentResponse",
+	DeleteAssessmentResponseDocument:                  "DeleteAssessmentResponse",
+	GetAllAssessmentResponsesDocument:                 "GetAllAssessmentResponses",
+	GetAssessmentResponseByIDDocument:                 "GetAssessmentResponseByID",
+	GetAssessmentResponsesDocument:                    "GetAssessmentResponses",
+	UpdateAssessmentResponseDocument:                  "UpdateAssessmentResponse",
+	GetAllAssessmentResponseHistoriesDocument:         "GetAllAssessmentResponseHistories",
+	GetAssessmentResponseHistoriesDocument:            "GetAssessmentResponseHistories",
 	CreateBulkCSVAssetDocument:                        "CreateBulkCSVAsset",
 	CreateBulkAssetDocument:                           "CreateBulkAsset",
 	CreateAssetDocument:                               "CreateAsset",

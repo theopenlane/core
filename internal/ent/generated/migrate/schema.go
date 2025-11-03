@@ -207,6 +207,216 @@ var (
 			},
 		},
 	}
+	// AssessmentsColumns holds the columns for the "assessments" table.
+	AssessmentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
+		{Name: "assessment_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "template_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentsTable holds the schema information for the "assessments" table.
+	AssessmentsTable = &schema.Table{
+		Name:       "assessments",
+		Columns:    AssessmentsColumns,
+		PrimaryKey: []*schema.Column{AssessmentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessments_templates_template",
+				Columns:    []*schema.Column{AssessmentsColumns[11]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessments_organizations_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessment_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "assessment_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// AssessmentHistoryColumns holds the columns for the "assessment_history" table.
+	AssessmentHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
+		{Name: "template_id", Type: field.TypeString},
+		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
+	AssessmentHistoryTable = &schema.Table{
+		Name:       "assessment_history",
+		Columns:    AssessmentHistoryColumns,
+		PrimaryKey: []*schema.Column{AssessmentHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessmenthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentHistoryColumns[1]},
+			},
+		},
+	}
+	// AssessmentResponsesColumns holds the columns for the "assessment_responses" table.
+	AssessmentResponsesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "secret", Type: field.TypeBytes},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "assigned_at", Type: field.TypeTime},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentResponsesTable holds the schema information for the "assessment_responses" table.
+	AssessmentResponsesTable = &schema.Table{
+		Name:       "assessment_responses",
+		Columns:    AssessmentResponsesColumns,
+		PrimaryKey: []*schema.Column{AssessmentResponsesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_responses_assessments_assessment_responses",
+				Columns:    []*schema.Column{AssessmentResponsesColumns[16]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessment_responses_document_data_document",
+				Columns:    []*schema.Column{AssessmentResponsesColumns[17]},
+				RefColumns: []*schema.Column{DocumentDataColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assessment_responses_organizations_assessment_responses",
+				Columns:    []*schema.Column{AssessmentResponsesColumns[18]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessmentresponse_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "assessmentresponse_assessment_id_email",
+				Unique:  true,
+				Columns: []*schema.Column{AssessmentResponsesColumns[16], AssessmentResponsesColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "assessmentresponse_status",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[11]},
+			},
+			{
+				Name:    "assessmentresponse_due_date",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[15]},
+			},
+			{
+				Name:    "assessmentresponse_assigned_at",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[12]},
+			},
+			{
+				Name:    "assessmentresponse_completed_at",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[14]},
+			},
+		},
+	}
+	// AssessmentResponseHistoryColumns holds the columns for the "assessment_response_history" table.
+	AssessmentResponseHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString},
+		{Name: "token", Type: field.TypeString},
+		{Name: "secret", Type: field.TypeBytes},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "assigned_at", Type: field.TypeTime},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentResponseHistoryTable holds the schema information for the "assessment_response_history" table.
+	AssessmentResponseHistoryTable = &schema.Table{
+		Name:       "assessment_response_history",
+		Columns:    AssessmentResponseHistoryColumns,
+		PrimaryKey: []*schema.Column{AssessmentResponseHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessmentresponsehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponseHistoryColumns[1]},
+			},
+		},
+	}
 	// AssetsColumns holds the columns for the "assets" table.
 	AssetsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1601,6 +1811,9 @@ var (
 		{Name: "scim_display_name", Type: field.TypeString, Nullable: true},
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "scim_group_mailing", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_editors", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_viewers", Type: field.TypeString, Nullable: true},
 		{Name: "asset_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "asset_editors", Type: field.TypeString, Nullable: true},
 		{Name: "asset_viewers", Type: field.TypeString, Nullable: true},
@@ -1627,110 +1840,128 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_assets_blocked_groups",
+				Symbol:     "groups_assessments_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[19]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_assessments_editors",
+				Columns:    []*schema.Column{GroupsColumns[20]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_assessments_viewers",
+				Columns:    []*schema.Column{GroupsColumns[21]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_assets_blocked_groups",
+				Columns:    []*schema.Column{GroupsColumns[22]},
 				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_assets_editors",
-				Columns:    []*schema.Column{GroupsColumns[20]},
+				Columns:    []*schema.Column{GroupsColumns[23]},
 				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_assets_viewers",
-				Columns:    []*schema.Column{GroupsColumns[21]},
+				Columns:    []*schema.Column{GroupsColumns[24]},
 				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_control_creators",
-				Columns:    []*schema.Column{GroupsColumns[22]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_control_implementation_creators",
-				Columns:    []*schema.Column{GroupsColumns[23]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_control_objective_creators",
-				Columns:    []*schema.Column{GroupsColumns[24]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_evidence_creators",
 				Columns:    []*schema.Column{GroupsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_creators",
+				Symbol:     "groups_organizations_control_implementation_creators",
 				Columns:    []*schema.Column{GroupsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_internal_policy_creators",
+				Symbol:     "groups_organizations_control_objective_creators",
 				Columns:    []*schema.Column{GroupsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_mapped_control_creators",
+				Symbol:     "groups_organizations_evidence_creators",
 				Columns:    []*schema.Column{GroupsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_group_creators",
 				Columns:    []*schema.Column{GroupsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_internal_policy_creators",
 				Columns:    []*schema.Column{GroupsColumns[30]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_mapped_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[31]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scheduled_job_creators",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_standard_creators",
+				Symbol:     "groups_organizations_program_creators",
 				Columns:    []*schema.Column{GroupsColumns[34]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_risk_creators",
 				Columns:    []*schema.Column{GroupsColumns[35]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_scheduled_job_creators",
 				Columns:    []*schema.Column{GroupsColumns[36]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_standard_creators",
+				Columns:    []*schema.Column{GroupsColumns[37]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_template_creators",
+				Columns:    []*schema.Column{GroupsColumns[38]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_groups",
+				Columns:    []*schema.Column{GroupsColumns[39]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1739,12 +1970,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[36]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[39]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[36]},
+				Columns: []*schema.Column{GroupsColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1752,7 +1983,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[36]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5477,6 +5708,7 @@ var (
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "scim_preferred_language", Type: field.TypeString, Nullable: true},
 		{Name: "scim_locale", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_users", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -5486,8 +5718,14 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "users_files_avatar_file",
+				Symbol:     "users_assessments_users",
 				Columns:    []*schema.Column{UsersColumns[26]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "users_files_avatar_file",
+				Columns:    []*schema.Column{UsersColumns[27]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8465,6 +8703,10 @@ var (
 		APITokensTable,
 		ActionPlansTable,
 		ActionPlanHistoryTable,
+		AssessmentsTable,
+		AssessmentHistoryTable,
+		AssessmentResponsesTable,
+		AssessmentResponseHistoryTable,
 		AssetsTable,
 		AssetHistoryTable,
 		ContactsTable,
@@ -8703,6 +8945,17 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
+	AssessmentsTable.ForeignKeys[0].RefTable = TemplatesTable
+	AssessmentsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	AssessmentHistoryTable.Annotation = &entsql.Annotation{
+		Table: "assessment_history",
+	}
+	AssessmentResponsesTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentResponsesTable.ForeignKeys[1].RefTable = DocumentDataTable
+	AssessmentResponsesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	AssessmentResponseHistoryTable.Annotation = &entsql.Annotation{
+		Table: "assessment_response_history",
+	}
 	AssetsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	AssetsTable.ForeignKeys[1].RefTable = RisksTable
 	AssetHistoryTable.Annotation = &entsql.Annotation{
@@ -8773,12 +9026,12 @@ func init() {
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = AssetsTable
-	GroupsTable.ForeignKeys[1].RefTable = AssetsTable
-	GroupsTable.ForeignKeys[2].RefTable = AssetsTable
-	GroupsTable.ForeignKeys[3].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[5].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[0].RefTable = AssessmentsTable
+	GroupsTable.ForeignKeys[1].RefTable = AssessmentsTable
+	GroupsTable.ForeignKeys[2].RefTable = AssessmentsTable
+	GroupsTable.ForeignKeys[3].RefTable = AssetsTable
+	GroupsTable.ForeignKeys[4].RefTable = AssetsTable
+	GroupsTable.ForeignKeys[5].RefTable = AssetsTable
 	GroupsTable.ForeignKeys[6].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[7].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[8].RefTable = OrganizationsTable
@@ -8791,6 +9044,9 @@ func init() {
 	GroupsTable.ForeignKeys[15].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[16].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[17].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[18].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[19].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[20].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -9004,7 +9260,8 @@ func init() {
 	TrustCenterWatermarkConfigHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_watermark_config_history",
 	}
-	UsersTable.ForeignKeys[0].RefTable = FilesTable
+	UsersTable.ForeignKeys[0].RefTable = AssessmentsTable
+	UsersTable.ForeignKeys[1].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",
 	}

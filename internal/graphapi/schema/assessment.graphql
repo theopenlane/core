@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up assessment by ID
+    """
+     assessment(
+        """
+        ID of the assessment
+        """
+        id: ID!
+    ):  Assessment!
+}
+
+extend type Mutation{
+    """
+    Create a new assessment
+    """
+    createAssessment(
+        """
+        values of the assessment
+        """
+        input: CreateAssessmentInput!
+    ): AssessmentCreatePayload!
+    """
+    Create multiple new assessments
+    """
+    createBulkAssessment(
+        """
+        values of the assessment
+        """
+        input: [CreateAssessmentInput!]
+    ): AssessmentBulkCreatePayload!
+    """
+    Create multiple new assessments via file upload
+    """
+    createBulkCSVAssessment(
+        """
+        csv file containing values of the assessment
+        """
+        input: Upload!
+    ): AssessmentBulkCreatePayload!
+    """
+    Update an existing assessment
+    """
+    updateAssessment(
+        """
+        ID of the assessment
+        """
+        id: ID!
+        """
+        New values for the assessment
+        """
+        input: UpdateAssessmentInput!
+    ): AssessmentUpdatePayload!
+    """
+    Delete an existing assessment
+    """
+    deleteAssessment(
+        """
+        ID of the assessment
+        """
+        id: ID!
+    ): AssessmentDeletePayload!
+}
+
+"""
+Return response for createAssessment mutation
+"""
+type AssessmentCreatePayload {
+    """
+    Created assessment
+    """
+    assessment: Assessment!
+}
+
+"""
+Return response for updateAssessment mutation
+"""
+type AssessmentUpdatePayload {
+    """
+    Updated assessment
+    """
+    assessment: Assessment!
+}
+
+"""
+Return response for deleteAssessment mutation
+"""
+type AssessmentDeletePayload {
+    """
+    Deleted assessment ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAssessment mutation
+"""
+type AssessmentBulkCreatePayload {
+    """
+    Created assessments
+    """
+    assessments: [Assessment!]
+}

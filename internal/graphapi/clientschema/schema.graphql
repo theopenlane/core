@@ -1764,6 +1764,549 @@ This scalar can be used to store and validate address information in the GraphQL
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
 """
 scalar Address
+type Assessment implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the name of the assessment, e.g. cloud providers, marketing team
+	"""
+	name: String!
+	assessmentType: AssessmentAssesmentType!
+	"""
+	the template id associated with the assessment
+	"""
+	templateID: ID!
+	"""
+	the id of the group that owns the assessment
+	"""
+	assessmentOwnerID: String
+	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	template: Template!
+	users(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Users returned from the connection.
+		"""
+		orderBy: [UserOrder!]
+
+		"""
+		Filtering options for Users returned from the connection.
+		"""
+		where: UserWhereInput
+	): UserConnection!
+	assessmentResponses(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentResponses returned from the connection.
+		"""
+		orderBy: [AssessmentResponseOrder!]
+
+		"""
+		Filtering options for AssessmentResponses returned from the connection.
+		"""
+		where: AssessmentResponseWhereInput
+	): AssessmentResponseConnection!
+}
+"""
+AssessmentAssesmentType is enum for the field assessment_type
+"""
+enum AssessmentAssesmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+	INTERNAL
+	EXTERNAL
+}
+"""
+Return response for createBulkAssessment mutation
+"""
+type AssessmentBulkCreatePayload {
+	"""
+	Created assessments
+	"""
+	assessments: [Assessment!]
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssessmentEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createAssessment mutation
+"""
+type AssessmentCreatePayload {
+	"""
+	Created assessment
+	"""
+	assessment: Assessment!
+}
+"""
+Return response for deleteAssessment mutation
+"""
+type AssessmentDeletePayload {
+	"""
+	Deleted assessment ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Assessment
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type AssessmentHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: AssessmentHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the name of the assessment, e.g. cloud providers, marketing team
+	"""
+	name: String!
+	assessmentType: AssessmentHistoryAssesmentType!
+	"""
+	the template id associated with the assessment
+	"""
+	templateID: String!
+	"""
+	the id of the group that owns the assessment
+	"""
+	assessmentOwnerID: String
+}
+"""
+AssessmentHistoryAssesmentType is enum for the field assessment_type
+"""
+enum AssessmentHistoryAssesmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+	INTERNAL
+	EXTERNAL
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssessmentHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: AssessmentHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+AssessmentHistoryOpType is enum for the field operation
+"""
+enum AssessmentHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for AssessmentHistory connections
+"""
+input AssessmentHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AssessmentHistories.
+	"""
+	field: AssessmentHistoryOrderField!
+}
+"""
+Properties by which AssessmentHistory connections can be ordered.
+"""
+enum AssessmentHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	name
+	ASSESMENT_TYPE
+}
+"""
+AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
+Input was generated by ent.
+"""
+input AssessmentHistoryWhereInput {
+	not: AssessmentHistoryWhereInput
+	and: [AssessmentHistoryWhereInput!]
+	or: [AssessmentHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: AssessmentHistoryOpType
+	operationNEQ: AssessmentHistoryOpType
+	operationIn: [AssessmentHistoryOpType!]
+	operationNotIn: [AssessmentHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	assessment_type field predicates
+	"""
+	assessmentType: AssessmentHistoryAssesmentType
+	assessmentTypeNEQ: AssessmentHistoryAssesmentType
+	assessmentTypeIn: [AssessmentHistoryAssesmentType!]
+	assessmentTypeNotIn: [AssessmentHistoryAssesmentType!]
+	"""
+	template_id field predicates
+	"""
+	templateID: String
+	templateIDNEQ: String
+	templateIDIn: [String!]
+	templateIDNotIn: [String!]
+	templateIDGT: String
+	templateIDGTE: String
+	templateIDLT: String
+	templateIDLTE: String
+	templateIDContains: String
+	templateIDHasPrefix: String
+	templateIDHasSuffix: String
+	templateIDEqualFold: String
+	templateIDContainsFold: String
+	"""
+	assessment_owner_id field predicates
+	"""
+	assessmentOwnerID: String
+	assessmentOwnerIDNEQ: String
+	assessmentOwnerIDIn: [String!]
+	assessmentOwnerIDNotIn: [String!]
+	assessmentOwnerIDGT: String
+	assessmentOwnerIDGTE: String
+	assessmentOwnerIDLT: String
+	assessmentOwnerIDLTE: String
+	assessmentOwnerIDContains: String
+	assessmentOwnerIDHasPrefix: String
+	assessmentOwnerIDHasSuffix: String
+	assessmentOwnerIDIsNil: Boolean
+	assessmentOwnerIDNotNil: Boolean
+	assessmentOwnerIDEqualFold: String
+	assessmentOwnerIDContainsFold: String
+}
 """
 The `AssessmentMethod` scalar type represents methods that can be used during the audit to assess the control implementation
 """
@@ -1772,6 +2315,994 @@ scalar AssessmentMethod
 The `AssessmentObjective` scalar type represents objectives that are validated during the audit to ensure the control is implemented
 """
 scalar AssessmentObjective
+"""
+Ordering options for Assessment connections
+"""
+input AssessmentOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Assessments.
+	"""
+	field: AssessmentOrderField!
+}
+"""
+Properties by which Assessment connections can be ordered.
+"""
+enum AssessmentOrderField {
+	created_at
+	updated_at
+	name
+	ASSESMENT_TYPE
+}
+type AssessmentResponse implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the assessment this response is for
+	"""
+	assessmentID: ID!
+	"""
+	the email address of the recipient
+	"""
+	email: String!
+	"""
+	the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
+	"""
+	sendAttempts: Int!
+	"""
+	the current status of the assessment for this user
+	"""
+	status: AssessmentResponseAssesmentResponseStatus!
+	"""
+	when the assessment was assigned to the user
+	"""
+	assignedAt: Time!
+	"""
+	when the user started the assessment
+	"""
+	startedAt: Time!
+	"""
+	when the user completed the assessment
+	"""
+	completedAt: Time
+	"""
+	when the assessment is due
+	"""
+	dueDate: Time
+	"""
+	the document containing the user's response data
+	"""
+	documentDataID: ID
+	owner: Organization
+	"""
+	the document containing the user's response data
+	"""
+	document: DocumentData
+	assessment: Assessment!
+}
+"""
+AssessmentResponseAssesmentResponseStatus is enum for the field status
+"""
+enum AssessmentResponseAssesmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+	NOT_STARTED
+	COMPLETED
+	OVERDUE
+}
+"""
+Return response for createBulkAssessmentResponse mutation
+"""
+type AssessmentResponseBulkCreatePayload {
+	"""
+	Created assessmentResponses
+	"""
+	assessmentResponses: [AssessmentResponse!]
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentResponseConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssessmentResponseEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createAssessmentResponse mutation
+"""
+type AssessmentResponseCreatePayload {
+	"""
+	Created assessmentResponse
+	"""
+	assessmentResponse: AssessmentResponse!
+}
+"""
+Return response for deleteAssessmentResponse mutation
+"""
+type AssessmentResponseDeletePayload {
+	"""
+	Deleted assessmentResponse ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentResponseEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: AssessmentResponse
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type AssessmentResponseHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: AssessmentResponseHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the assessment this response is for
+	"""
+	assessmentID: String!
+	"""
+	the email address of the recipient
+	"""
+	email: String!
+	"""
+	the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
+	"""
+	sendAttempts: Int!
+	"""
+	the current status of the assessment for this user
+	"""
+	status: AssessmentResponseHistoryAssesmentResponseStatus!
+	"""
+	when the assessment was assigned to the user
+	"""
+	assignedAt: Time!
+	"""
+	when the user started the assessment
+	"""
+	startedAt: Time!
+	"""
+	when the user completed the assessment
+	"""
+	completedAt: Time
+	"""
+	when the assessment is due
+	"""
+	dueDate: Time
+	"""
+	the document containing the user's response data
+	"""
+	documentDataID: String
+}
+"""
+AssessmentResponseHistoryAssesmentResponseStatus is enum for the field status
+"""
+enum AssessmentResponseHistoryAssesmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+	NOT_STARTED
+	COMPLETED
+	OVERDUE
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentResponseHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssessmentResponseHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentResponseHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: AssessmentResponseHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+AssessmentResponseHistoryOpType is enum for the field operation
+"""
+enum AssessmentResponseHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for AssessmentResponseHistory connections
+"""
+input AssessmentResponseHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AssessmentResponseHistories.
+	"""
+	field: AssessmentResponseHistoryOrderField!
+}
+"""
+Properties by which AssessmentResponseHistory connections can be ordered.
+"""
+enum AssessmentResponseHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	send_attempts
+	STATUS
+	ASSIGNED_AT
+	STARTED_AT
+	COMPLETED_AT
+	DUE_DATE
+}
+"""
+AssessmentResponseHistoryWhereInput is used for filtering AssessmentResponseHistory objects.
+Input was generated by ent.
+"""
+input AssessmentResponseHistoryWhereInput {
+	not: AssessmentResponseHistoryWhereInput
+	and: [AssessmentResponseHistoryWhereInput!]
+	or: [AssessmentResponseHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: AssessmentResponseHistoryOpType
+	operationNEQ: AssessmentResponseHistoryOpType
+	operationIn: [AssessmentResponseHistoryOpType!]
+	operationNotIn: [AssessmentResponseHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	assessment_id field predicates
+	"""
+	assessmentID: String
+	assessmentIDNEQ: String
+	assessmentIDIn: [String!]
+	assessmentIDNotIn: [String!]
+	assessmentIDGT: String
+	assessmentIDGTE: String
+	assessmentIDLT: String
+	assessmentIDLTE: String
+	assessmentIDContains: String
+	assessmentIDHasPrefix: String
+	assessmentIDHasSuffix: String
+	assessmentIDEqualFold: String
+	assessmentIDContainsFold: String
+	"""
+	email field predicates
+	"""
+	email: String
+	emailNEQ: String
+	emailIn: [String!]
+	emailNotIn: [String!]
+	emailGT: String
+	emailGTE: String
+	emailLT: String
+	emailLTE: String
+	emailContains: String
+	emailHasPrefix: String
+	emailHasSuffix: String
+	emailEqualFold: String
+	emailContainsFold: String
+	"""
+	send_attempts field predicates
+	"""
+	sendAttempts: Int
+	sendAttemptsNEQ: Int
+	sendAttemptsIn: [Int!]
+	sendAttemptsNotIn: [Int!]
+	sendAttemptsGT: Int
+	sendAttemptsGTE: Int
+	sendAttemptsLT: Int
+	sendAttemptsLTE: Int
+	"""
+	status field predicates
+	"""
+	status: AssessmentResponseHistoryAssesmentResponseStatus
+	statusNEQ: AssessmentResponseHistoryAssesmentResponseStatus
+	statusIn: [AssessmentResponseHistoryAssesmentResponseStatus!]
+	statusNotIn: [AssessmentResponseHistoryAssesmentResponseStatus!]
+	"""
+	assigned_at field predicates
+	"""
+	assignedAt: Time
+	assignedAtNEQ: Time
+	assignedAtIn: [Time!]
+	assignedAtNotIn: [Time!]
+	assignedAtGT: Time
+	assignedAtGTE: Time
+	assignedAtLT: Time
+	assignedAtLTE: Time
+	"""
+	started_at field predicates
+	"""
+	startedAt: Time
+	startedAtNEQ: Time
+	startedAtIn: [Time!]
+	startedAtNotIn: [Time!]
+	startedAtGT: Time
+	startedAtGTE: Time
+	startedAtLT: Time
+	startedAtLTE: Time
+	"""
+	completed_at field predicates
+	"""
+	completedAt: Time
+	completedAtNEQ: Time
+	completedAtIn: [Time!]
+	completedAtNotIn: [Time!]
+	completedAtGT: Time
+	completedAtGTE: Time
+	completedAtLT: Time
+	completedAtLTE: Time
+	completedAtIsNil: Boolean
+	completedAtNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: Time
+	dueDateNEQ: Time
+	dueDateIn: [Time!]
+	dueDateNotIn: [Time!]
+	dueDateGT: Time
+	dueDateGTE: Time
+	dueDateLT: Time
+	dueDateLTE: Time
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
+	"""
+	document_data_id field predicates
+	"""
+	documentDataID: String
+	documentDataIDNEQ: String
+	documentDataIDIn: [String!]
+	documentDataIDNotIn: [String!]
+	documentDataIDGT: String
+	documentDataIDGTE: String
+	documentDataIDLT: String
+	documentDataIDLTE: String
+	documentDataIDContains: String
+	documentDataIDHasPrefix: String
+	documentDataIDHasSuffix: String
+	documentDataIDIsNil: Boolean
+	documentDataIDNotNil: Boolean
+	documentDataIDEqualFold: String
+	documentDataIDContainsFold: String
+}
+"""
+Ordering options for AssessmentResponse connections
+"""
+input AssessmentResponseOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AssessmentResponses.
+	"""
+	field: AssessmentResponseOrderField!
+}
+"""
+Properties by which AssessmentResponse connections can be ordered.
+"""
+enum AssessmentResponseOrderField {
+	created_at
+	updated_at
+	send_attempts
+	STATUS
+	ASSIGNED_AT
+	STARTED_AT
+	COMPLETED_AT
+	DUE_DATE
+}
+"""
+Return response for updateAssessmentResponse mutation
+"""
+type AssessmentResponseUpdatePayload {
+	"""
+	Updated assessmentResponse
+	"""
+	assessmentResponse: AssessmentResponse!
+}
+"""
+AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
+Input was generated by ent.
+"""
+input AssessmentResponseWhereInput {
+	not: AssessmentResponseWhereInput
+	and: [AssessmentResponseWhereInput!]
+	or: [AssessmentResponseWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	assessment_id field predicates
+	"""
+	assessmentID: ID
+	assessmentIDNEQ: ID
+	assessmentIDIn: [ID!]
+	assessmentIDNotIn: [ID!]
+	assessmentIDGT: ID
+	assessmentIDGTE: ID
+	assessmentIDLT: ID
+	assessmentIDLTE: ID
+	assessmentIDContains: ID
+	assessmentIDHasPrefix: ID
+	assessmentIDHasSuffix: ID
+	assessmentIDEqualFold: ID
+	assessmentIDContainsFold: ID
+	"""
+	email field predicates
+	"""
+	email: String
+	emailNEQ: String
+	emailIn: [String!]
+	emailNotIn: [String!]
+	emailGT: String
+	emailGTE: String
+	emailLT: String
+	emailLTE: String
+	emailContains: String
+	emailHasPrefix: String
+	emailHasSuffix: String
+	emailEqualFold: String
+	emailContainsFold: String
+	"""
+	send_attempts field predicates
+	"""
+	sendAttempts: Int
+	sendAttemptsNEQ: Int
+	sendAttemptsIn: [Int!]
+	sendAttemptsNotIn: [Int!]
+	sendAttemptsGT: Int
+	sendAttemptsGTE: Int
+	sendAttemptsLT: Int
+	sendAttemptsLTE: Int
+	"""
+	status field predicates
+	"""
+	status: AssessmentResponseAssesmentResponseStatus
+	statusNEQ: AssessmentResponseAssesmentResponseStatus
+	statusIn: [AssessmentResponseAssesmentResponseStatus!]
+	statusNotIn: [AssessmentResponseAssesmentResponseStatus!]
+	"""
+	assigned_at field predicates
+	"""
+	assignedAt: Time
+	assignedAtNEQ: Time
+	assignedAtIn: [Time!]
+	assignedAtNotIn: [Time!]
+	assignedAtGT: Time
+	assignedAtGTE: Time
+	assignedAtLT: Time
+	assignedAtLTE: Time
+	"""
+	started_at field predicates
+	"""
+	startedAt: Time
+	startedAtNEQ: Time
+	startedAtIn: [Time!]
+	startedAtNotIn: [Time!]
+	startedAtGT: Time
+	startedAtGTE: Time
+	startedAtLT: Time
+	startedAtLTE: Time
+	"""
+	completed_at field predicates
+	"""
+	completedAt: Time
+	completedAtNEQ: Time
+	completedAtIn: [Time!]
+	completedAtNotIn: [Time!]
+	completedAtGT: Time
+	completedAtGTE: Time
+	completedAtLT: Time
+	completedAtLTE: Time
+	completedAtIsNil: Boolean
+	completedAtNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: Time
+	dueDateNEQ: Time
+	dueDateIn: [Time!]
+	dueDateNotIn: [Time!]
+	dueDateGT: Time
+	dueDateGTE: Time
+	dueDateLT: Time
+	dueDateLTE: Time
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
+	"""
+	document_data_id field predicates
+	"""
+	documentDataID: ID
+	documentDataIDNEQ: ID
+	documentDataIDIn: [ID!]
+	documentDataIDNotIn: [ID!]
+	documentDataIDGT: ID
+	documentDataIDGTE: ID
+	documentDataIDLT: ID
+	documentDataIDLTE: ID
+	documentDataIDContains: ID
+	documentDataIDHasPrefix: ID
+	documentDataIDHasSuffix: ID
+	documentDataIDIsNil: Boolean
+	documentDataIDNotNil: Boolean
+	documentDataIDEqualFold: ID
+	documentDataIDContainsFold: ID
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	document edge predicates
+	"""
+	hasDocument: Boolean
+	hasDocumentWith: [DocumentDataWhereInput!]
+	"""
+	assessment edge predicates
+	"""
+	hasAssessment: Boolean
+	hasAssessmentWith: [AssessmentWhereInput!]
+}
+"""
+Return response for updateAssessment mutation
+"""
+type AssessmentUpdatePayload {
+	"""
+	Updated assessment
+	"""
+	assessment: Assessment!
+}
+"""
+AssessmentWhereInput is used for filtering Assessment objects.
+Input was generated by ent.
+"""
+input AssessmentWhereInput {
+	not: AssessmentWhereInput
+	and: [AssessmentWhereInput!]
+	or: [AssessmentWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	assessment_type field predicates
+	"""
+	assessmentType: AssessmentAssesmentType
+	assessmentTypeNEQ: AssessmentAssesmentType
+	assessmentTypeIn: [AssessmentAssesmentType!]
+	assessmentTypeNotIn: [AssessmentAssesmentType!]
+	"""
+	template_id field predicates
+	"""
+	templateID: ID
+	templateIDNEQ: ID
+	templateIDIn: [ID!]
+	templateIDNotIn: [ID!]
+	templateIDGT: ID
+	templateIDGTE: ID
+	templateIDLT: ID
+	templateIDLTE: ID
+	templateIDContains: ID
+	templateIDHasPrefix: ID
+	templateIDHasSuffix: ID
+	templateIDEqualFold: ID
+	templateIDContainsFold: ID
+	"""
+	assessment_owner_id field predicates
+	"""
+	assessmentOwnerID: String
+	assessmentOwnerIDNEQ: String
+	assessmentOwnerIDIn: [String!]
+	assessmentOwnerIDNotIn: [String!]
+	assessmentOwnerIDGT: String
+	assessmentOwnerIDGTE: String
+	assessmentOwnerIDLT: String
+	assessmentOwnerIDLTE: String
+	assessmentOwnerIDContains: String
+	assessmentOwnerIDHasPrefix: String
+	assessmentOwnerIDHasSuffix: String
+	assessmentOwnerIDIsNil: Boolean
+	assessmentOwnerIDNotNil: Boolean
+	assessmentOwnerIDEqualFold: String
+	assessmentOwnerIDContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
+	template edge predicates
+	"""
+	hasTemplate: Boolean
+	hasTemplateWith: [TemplateWhereInput!]
+	"""
+	users edge predicates
+	"""
+	hasUsers: Boolean
+	hasUsersWith: [UserWhereInput!]
+	"""
+	assessment_responses edge predicates
+	"""
+	hasAssessmentResponses: Boolean
+	hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
+}
 type Asset implements Node {
 	id: ID!
 	createdAt: Time
@@ -8364,6 +9895,65 @@ input CreateActionPlanInput {
 	fileID: ID
 }
 """
+CreateAssessmentInput is used for create Assessment object.
+Input was generated by ent.
+"""
+input CreateAssessmentInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the name of the assessment, e.g. cloud providers, marketing team
+	"""
+	name: String!
+	assessmentType: AssessmentAssesmentType
+	"""
+	the id of the group that owns the assessment
+	"""
+	assessmentOwnerID: String
+	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
+	templateID: ID!
+	userIDs: [ID!]
+	assessmentResponseIDs: [ID!]
+}
+"""
+CreateAssessmentResponseInput is used for create AssessmentResponse object.
+Input was generated by ent.
+"""
+input CreateAssessmentResponseInput {
+	"""
+	the email address of the recipient
+	"""
+	email: String!
+	"""
+	the current status of the assessment for this user
+	"""
+	status: AssessmentResponseAssesmentResponseStatus
+	"""
+	when the assessment was assigned to the user
+	"""
+	assignedAt: Time!
+	"""
+	when the user started the assessment
+	"""
+	startedAt: Time
+	"""
+	when the user completed the assessment
+	"""
+	completedAt: Time
+	"""
+	when the assessment is due
+	"""
+	dueDate: Time
+	ownerID: ID
+	documentID: ID
+	assessmentID: ID!
+}
+"""
 CreateAssetInput is used for create Asset object.
 Input was generated by ent.
 """
@@ -9780,6 +11370,8 @@ input CreateOrganizationInput {
 	exportIDs: [ID!]
 	trustCenterWatermarkConfigIDs: [ID!]
 	impersonationEventIDs: [ID!]
+	assessmentIDs: [ID!]
+	assessmentResponseIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -28873,6 +30465,106 @@ type Mutation {
 		ids: [ID!]!
 	): APITokenBulkDeletePayload!
 	"""
+	Create a new assessment
+	"""
+	createAssessment(
+		"""
+		values of the assessment
+		"""
+		input: CreateAssessmentInput!
+	): AssessmentCreatePayload!
+	"""
+	Create multiple new assessments
+	"""
+	createBulkAssessment(
+		"""
+		values of the assessment
+		"""
+		input: [CreateAssessmentInput!]
+	): AssessmentBulkCreatePayload!
+	"""
+	Create multiple new assessments via file upload
+	"""
+	createBulkCSVAssessment(
+		"""
+		csv file containing values of the assessment
+		"""
+		input: Upload!
+	): AssessmentBulkCreatePayload!
+	"""
+	Update an existing assessment
+	"""
+	updateAssessment(
+		"""
+		ID of the assessment
+		"""
+		id: ID!
+
+		"""
+		New values for the assessment
+		"""
+		input: UpdateAssessmentInput!
+	): AssessmentUpdatePayload!
+	"""
+	Delete an existing assessment
+	"""
+	deleteAssessment(
+		"""
+		ID of the assessment
+		"""
+		id: ID!
+	): AssessmentDeletePayload!
+	"""
+	Create a new assessmentResponse
+	"""
+	createAssessmentResponse(
+		"""
+		values of the assessmentResponse
+		"""
+		input: CreateAssessmentResponseInput!
+	): AssessmentResponseCreatePayload!
+	"""
+	Create multiple new assessmentResponses
+	"""
+	createBulkAssessmentResponse(
+		"""
+		values of the assessmentResponse
+		"""
+		input: [CreateAssessmentResponseInput!]
+	): AssessmentResponseBulkCreatePayload!
+	"""
+	Create multiple new assessmentResponses via file upload
+	"""
+	createBulkCSVAssessmentResponse(
+		"""
+		csv file containing values of the assessmentResponse
+		"""
+		input: Upload!
+	): AssessmentResponseBulkCreatePayload!
+	"""
+	Update an existing assessmentResponse
+	"""
+	updateAssessmentResponse(
+		"""
+		ID of the assessmentResponse
+		"""
+		id: ID!
+
+		"""
+		New values for the assessmentResponse
+		"""
+		input: UpdateAssessmentResponseInput!
+	): AssessmentResponseUpdatePayload!
+	"""
+	Delete an existing assessmentResponse
+	"""
+	deleteAssessmentResponse(
+		"""
+		ID of the assessmentResponse
+		"""
+		id: ID!
+	): AssessmentResponseDeletePayload!
+	"""
 	Create a new asset
 	"""
 	createAsset(
@@ -36696,6 +38388,68 @@ type Organization implements Node {
 		"""
 		where: TrustCenterWatermarkConfigWhereInput
 	): TrustCenterWatermarkConfigConnection!
+	assessments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assessments returned from the connection.
+		"""
+		orderBy: [AssessmentOrder!]
+
+		"""
+		Filtering options for Assessments returned from the connection.
+		"""
+		where: AssessmentWhereInput
+	): AssessmentConnection!
+	assessmentResponses(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentResponses returned from the connection.
+		"""
+		orderBy: [AssessmentResponseOrder!]
+
+		"""
+		Filtering options for AssessmentResponses returned from the connection.
+		"""
+		where: AssessmentResponseWhereInput
+	): AssessmentResponseConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -38904,6 +40658,16 @@ input OrganizationWhereInput {
 	"""
 	hasTrustCenterWatermarkConfigs: Boolean
 	hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
+	"""
+	assessments edge predicates
+	"""
+	hasAssessments: Boolean
+	hasAssessmentsWith: [AssessmentWhereInput!]
+	"""
+	assessment_responses edge predicates
+	"""
+	hasAssessmentResponses: Boolean
+	hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -43047,6 +44811,130 @@ type Query {
 		"""
 		where: ActionPlanHistoryWhereInput
 	): ActionPlanHistoryConnection!
+	assessments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assessments returned from the connection.
+		"""
+		orderBy: [AssessmentOrder!]
+
+		"""
+		Filtering options for Assessments returned from the connection.
+		"""
+		where: AssessmentWhereInput
+	): AssessmentConnection!
+	assessmentHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentHistories returned from the connection.
+		"""
+		orderBy: AssessmentHistoryOrder
+
+		"""
+		Filtering options for AssessmentHistories returned from the connection.
+		"""
+		where: AssessmentHistoryWhereInput
+	): AssessmentHistoryConnection!
+	assessmentResponses(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentResponses returned from the connection.
+		"""
+		orderBy: [AssessmentResponseOrder!]
+
+		"""
+		Filtering options for AssessmentResponses returned from the connection.
+		"""
+		where: AssessmentResponseWhereInput
+	): AssessmentResponseConnection!
+	assessmentResponseHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentResponseHistories returned from the connection.
+		"""
+		orderBy: AssessmentResponseHistoryOrder
+
+		"""
+		Filtering options for AssessmentResponseHistories returned from the connection.
+		"""
+		where: AssessmentResponseHistoryWhereInput
+	): AssessmentResponseHistoryConnection!
 	assets(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -46339,6 +48227,64 @@ type Query {
 		last: Int
 	): ActionPlanConnection
 	"""
+	Search across Assessment objects
+	"""
+	adminAssessmentSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssessmentConnection
+	"""
+	Search across AssessmentResponse objects
+	"""
+	adminAssessmentResponseSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssessmentResponseConnection
+	"""
 	Search across Asset objects
 	"""
 	adminAssetSearch(
@@ -47624,6 +49570,24 @@ type Query {
 		id: ID!
 	): APIToken!
 	"""
+	Look up assessment by ID
+	"""
+	assessment(
+		"""
+		ID of the assessment
+		"""
+		id: ID!
+	): Assessment!
+	"""
+	Look up assessmentResponse by ID
+	"""
+	assessmentResponse(
+		"""
+		ID of the assessmentResponse
+		"""
+		id: ID!
+	): AssessmentResponse!
+	"""
 	Look up asset by ID
 	"""
 	asset(
@@ -48165,6 +50129,64 @@ type Query {
 		"""
 		last: Int
 	): ActionPlanConnection
+	"""
+	Search across Assessment objects
+	"""
+	assessmentSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssessmentConnection
+	"""
+	Search across AssessmentResponse objects
+	"""
+	assessmentResponseSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssessmentResponseConnection
 	"""
 	Search across Asset objects
 	"""
@@ -52946,6 +54968,8 @@ type SearchResults {
 	totalCount: Int!
 	apiTokens: APITokenConnection
 	actionPlans: ActionPlanConnection
+	assessments: AssessmentConnection
+	assessmentResponses: AssessmentResponseConnection
 	assets: AssetConnection
 	contacts: ContactConnection
 	controls: ControlConnection
@@ -58894,7 +60918,7 @@ enum TemplateHistoryOrderField {
 	history_time
 	created_at
 	updated_at
-	name
+	NAME
 	TEMPLATE_TYPE
 	KIND
 }
@@ -59173,7 +61197,7 @@ Properties by which Template connections can be ordered.
 enum TemplateOrderField {
 	created_at
 	updated_at
-	name
+	NAME
 	TEMPLATE_TYPE
 	KIND
 }
@@ -63866,6 +65890,74 @@ input UpdateActionPlanInput {
 	RevisionBump: VersionBump
 }
 """
+UpdateAssessmentInput is used for update Assessment object.
+Input was generated by ent.
+"""
+input UpdateAssessmentInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	the name of the assessment, e.g. cloud providers, marketing team
+	"""
+	name: String
+	"""
+	the id of the group that owns the assessment
+	"""
+	assessmentOwnerID: String
+	clearAssessmentOwnerID: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
+	templateID: ID
+	addUserIDs: [ID!]
+	removeUserIDs: [ID!]
+	clearUsers: Boolean
+	addAssessmentResponseIDs: [ID!]
+	removeAssessmentResponseIDs: [ID!]
+	clearAssessmentResponses: Boolean
+}
+"""
+UpdateAssessmentResponseInput is used for update AssessmentResponse object.
+Input was generated by ent.
+"""
+input UpdateAssessmentResponseInput {
+	"""
+	the current status of the assessment for this user
+	"""
+	status: AssessmentResponseAssesmentResponseStatus
+	"""
+	when the user started the assessment
+	"""
+	startedAt: Time
+	"""
+	when the user completed the assessment
+	"""
+	completedAt: Time
+	clearCompletedAt: Boolean
+	"""
+	when the assessment is due
+	"""
+	dueDate: Time
+	clearDueDate: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	documentID: ID
+	clearDocument: Boolean
+	assessmentID: ID
+}
+"""
 UpdateAssetInput is used for update Asset object.
 Input was generated by ent.
 """
@@ -65852,6 +67944,12 @@ input UpdateOrganizationInput {
 	addImpersonationEventIDs: [ID!]
 	removeImpersonationEventIDs: [ID!]
 	clearImpersonationEvents: Boolean
+	addAssessmentIDs: [ID!]
+	removeAssessmentIDs: [ID!]
+	clearAssessments: Boolean
+	addAssessmentResponseIDs: [ID!]
+	removeAssessmentResponseIDs: [ID!]
+	clearAssessmentResponses: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput

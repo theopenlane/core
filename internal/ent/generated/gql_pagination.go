@@ -17,6 +17,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -1627,6 +1631,1664 @@ func (_m *ActionPlanHistory) ToEdge(order *ActionPlanHistoryOrder) *ActionPlanHi
 		order = DefaultActionPlanHistoryOrder
 	}
 	return &ActionPlanHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentEdge is the edge representation of Assessment.
+type AssessmentEdge struct {
+	Node   *Assessment `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// AssessmentConnection is the connection containing edges to Assessment.
+type AssessmentConnection struct {
+	Edges      []*AssessmentEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *AssessmentConnection) build(nodes []*Assessment, pager *assessmentPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Assessment
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Assessment {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Assessment {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentPaginateOption enables pagination customization.
+type AssessmentPaginateOption func(*assessmentPager) error
+
+// WithAssessmentOrder configures pagination ordering.
+func WithAssessmentOrder(order []*AssessmentOrder) AssessmentPaginateOption {
+	return func(pager *assessmentPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithAssessmentFilter configures pagination filter.
+func WithAssessmentFilter(filter func(*AssessmentQuery) (*AssessmentQuery, error)) AssessmentPaginateOption {
+	return func(pager *assessmentPager) error {
+		if filter == nil {
+			return errors.New("AssessmentQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmentPager struct {
+	reverse bool
+	order   []*AssessmentOrder
+	filter  func(*AssessmentQuery) (*AssessmentQuery, error)
+}
+
+func newAssessmentPager(opts []AssessmentPaginateOption, reverse bool) (*assessmentPager, error) {
+	pager := &assessmentPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *assessmentPager) applyFilter(query *AssessmentQuery) (*AssessmentQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmentPager) toCursor(_m *Assessment) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *assessmentPager) applyCursors(query *AssessmentQuery, after, before *Cursor) (*AssessmentQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultAssessmentOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *assessmentPager) applyOrder(query *AssessmentQuery) *AssessmentQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultAssessmentOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultAssessmentOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *assessmentPager) orderExpr(query *AssessmentQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultAssessmentOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Assessment.
+func (_m *AssessmentQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentPaginateOption,
+) (*AssessmentConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentConnection{Edges: []*AssessmentEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentOrderFieldCreatedAt orders Assessment by created_at.
+	AssessmentOrderFieldCreatedAt = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessment.FieldCreatedAt,
+		toTerm: assessment.ByCreatedAt,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentOrderFieldUpdatedAt orders Assessment by updated_at.
+	AssessmentOrderFieldUpdatedAt = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessment.FieldUpdatedAt,
+		toTerm: assessment.ByUpdatedAt,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AssessmentOrderFieldName orders Assessment by name.
+	AssessmentOrderFieldName = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: assessment.FieldName,
+		toTerm: assessment.ByName,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// AssessmentOrderFieldAssessmentType orders Assessment by assessment_type.
+	AssessmentOrderFieldAssessmentType = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.AssessmentType, nil
+		},
+		column: assessment.FieldAssessmentType,
+		toTerm: assessment.ByAssessmentType,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AssessmentType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AssessmentOrderFieldName.column:
+		str = "name"
+	case AssessmentOrderFieldAssessmentType.column:
+		str = "ASSESMENT_TYPE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *AssessmentOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentOrderFieldUpdatedAt
+	case "name":
+		*f = *AssessmentOrderFieldName
+	case "ASSESMENT_TYPE":
+		*f = *AssessmentOrderFieldAssessmentType
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentOrderField defines the ordering field of Assessment.
+type AssessmentOrderField struct {
+	// Value extracts the ordering value from the given Assessment.
+	Value    func(*Assessment) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessment.OrderOption
+	toCursor func(*Assessment) Cursor
+}
+
+// AssessmentOrder defines the ordering of Assessment.
+type AssessmentOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *AssessmentOrderField `json:"field"`
+}
+
+// DefaultAssessmentOrder is the default ordering of Assessment.
+var DefaultAssessmentOrder = &AssessmentOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessment.FieldID,
+		toTerm: assessment.ByID,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts Assessment into AssessmentEdge.
+func (_m *Assessment) ToEdge(order *AssessmentOrder) *AssessmentEdge {
+	if order == nil {
+		order = DefaultAssessmentOrder
+	}
+	return &AssessmentEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentHistoryEdge is the edge representation of AssessmentHistory.
+type AssessmentHistoryEdge struct {
+	Node   *AssessmentHistory `json:"node"`
+	Cursor Cursor             `json:"cursor"`
+}
+
+// AssessmentHistoryConnection is the connection containing edges to AssessmentHistory.
+type AssessmentHistoryConnection struct {
+	Edges      []*AssessmentHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                 `json:"pageInfo"`
+	TotalCount int                      `json:"totalCount"`
+}
+
+func (c *AssessmentHistoryConnection) build(nodes []*AssessmentHistory, pager *assessmenthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AssessmentHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AssessmentHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AssessmentHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentHistoryPaginateOption enables pagination customization.
+type AssessmentHistoryPaginateOption func(*assessmenthistoryPager) error
+
+// WithAssessmentHistoryOrder configures pagination ordering.
+func WithAssessmentHistoryOrder(order *AssessmentHistoryOrder) AssessmentHistoryPaginateOption {
+	if order == nil {
+		order = DefaultAssessmentHistoryOrder
+	}
+	o := *order
+	return func(pager *assessmenthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultAssessmentHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithAssessmentHistoryFilter configures pagination filter.
+func WithAssessmentHistoryFilter(filter func(*AssessmentHistoryQuery) (*AssessmentHistoryQuery, error)) AssessmentHistoryPaginateOption {
+	return func(pager *assessmenthistoryPager) error {
+		if filter == nil {
+			return errors.New("AssessmentHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmenthistoryPager struct {
+	reverse bool
+	order   *AssessmentHistoryOrder
+	filter  func(*AssessmentHistoryQuery) (*AssessmentHistoryQuery, error)
+}
+
+func newAssessmentHistoryPager(opts []AssessmentHistoryPaginateOption, reverse bool) (*assessmenthistoryPager, error) {
+	pager := &assessmenthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultAssessmentHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *assessmenthistoryPager) applyFilter(query *AssessmentHistoryQuery) (*AssessmentHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmenthistoryPager) toCursor(_m *AssessmentHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *assessmenthistoryPager) applyCursors(query *AssessmentHistoryQuery, after, before *Cursor) (*AssessmentHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultAssessmentHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *assessmenthistoryPager) applyOrder(query *AssessmentHistoryQuery) *AssessmentHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultAssessmentHistoryOrder.Field {
+		query = query.Order(DefaultAssessmentHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *assessmenthistoryPager) orderExpr(query *AssessmentHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultAssessmentHistoryOrder.Field {
+			b.Comma().Ident(DefaultAssessmentHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AssessmentHistory.
+func (_m *AssessmentHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentHistoryPaginateOption,
+) (*AssessmentHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentHistoryConnection{Edges: []*AssessmentHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentHistoryOrderFieldHistoryTime orders AssessmentHistory by history_time.
+	AssessmentHistoryOrderFieldHistoryTime = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: assessmenthistory.FieldHistoryTime,
+		toTerm: assessmenthistory.ByHistoryTime,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// AssessmentHistoryOrderFieldCreatedAt orders AssessmentHistory by created_at.
+	AssessmentHistoryOrderFieldCreatedAt = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessmenthistory.FieldCreatedAt,
+		toTerm: assessmenthistory.ByCreatedAt,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentHistoryOrderFieldUpdatedAt orders AssessmentHistory by updated_at.
+	AssessmentHistoryOrderFieldUpdatedAt = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessmenthistory.FieldUpdatedAt,
+		toTerm: assessmenthistory.ByUpdatedAt,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AssessmentHistoryOrderFieldName orders AssessmentHistory by name.
+	AssessmentHistoryOrderFieldName = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: assessmenthistory.FieldName,
+		toTerm: assessmenthistory.ByName,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// AssessmentHistoryOrderFieldAssessmentType orders AssessmentHistory by assessment_type.
+	AssessmentHistoryOrderFieldAssessmentType = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.AssessmentType, nil
+		},
+		column: assessmenthistory.FieldAssessmentType,
+		toTerm: assessmenthistory.ByAssessmentType,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AssessmentType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case AssessmentHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AssessmentHistoryOrderFieldName.column:
+		str = "name"
+	case AssessmentHistoryOrderFieldAssessmentType.column:
+		str = "ASSESMENT_TYPE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *AssessmentHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *AssessmentHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentHistoryOrderFieldUpdatedAt
+	case "name":
+		*f = *AssessmentHistoryOrderFieldName
+	case "ASSESMENT_TYPE":
+		*f = *AssessmentHistoryOrderFieldAssessmentType
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentHistoryOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentHistoryOrderField defines the ordering field of AssessmentHistory.
+type AssessmentHistoryOrderField struct {
+	// Value extracts the ordering value from the given AssessmentHistory.
+	Value    func(*AssessmentHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessmenthistory.OrderOption
+	toCursor func(*AssessmentHistory) Cursor
+}
+
+// AssessmentHistoryOrder defines the ordering of AssessmentHistory.
+type AssessmentHistoryOrder struct {
+	Direction OrderDirection               `json:"direction"`
+	Field     *AssessmentHistoryOrderField `json:"field"`
+}
+
+// DefaultAssessmentHistoryOrder is the default ordering of AssessmentHistory.
+var DefaultAssessmentHistoryOrder = &AssessmentHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessmenthistory.FieldID,
+		toTerm: assessmenthistory.ByID,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AssessmentHistory into AssessmentHistoryEdge.
+func (_m *AssessmentHistory) ToEdge(order *AssessmentHistoryOrder) *AssessmentHistoryEdge {
+	if order == nil {
+		order = DefaultAssessmentHistoryOrder
+	}
+	return &AssessmentHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentResponseEdge is the edge representation of AssessmentResponse.
+type AssessmentResponseEdge struct {
+	Node   *AssessmentResponse `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// AssessmentResponseConnection is the connection containing edges to AssessmentResponse.
+type AssessmentResponseConnection struct {
+	Edges      []*AssessmentResponseEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *AssessmentResponseConnection) build(nodes []*AssessmentResponse, pager *assessmentresponsePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AssessmentResponse
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AssessmentResponse {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AssessmentResponse {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentResponseEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentResponseEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentResponsePaginateOption enables pagination customization.
+type AssessmentResponsePaginateOption func(*assessmentresponsePager) error
+
+// WithAssessmentResponseOrder configures pagination ordering.
+func WithAssessmentResponseOrder(order []*AssessmentResponseOrder) AssessmentResponsePaginateOption {
+	return func(pager *assessmentresponsePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithAssessmentResponseFilter configures pagination filter.
+func WithAssessmentResponseFilter(filter func(*AssessmentResponseQuery) (*AssessmentResponseQuery, error)) AssessmentResponsePaginateOption {
+	return func(pager *assessmentresponsePager) error {
+		if filter == nil {
+			return errors.New("AssessmentResponseQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmentresponsePager struct {
+	reverse bool
+	order   []*AssessmentResponseOrder
+	filter  func(*AssessmentResponseQuery) (*AssessmentResponseQuery, error)
+}
+
+func newAssessmentResponsePager(opts []AssessmentResponsePaginateOption, reverse bool) (*assessmentresponsePager, error) {
+	pager := &assessmentresponsePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *assessmentresponsePager) applyFilter(query *AssessmentResponseQuery) (*AssessmentResponseQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmentresponsePager) toCursor(_m *AssessmentResponse) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *assessmentresponsePager) applyCursors(query *AssessmentResponseQuery, after, before *Cursor) (*AssessmentResponseQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultAssessmentResponseOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *assessmentresponsePager) applyOrder(query *AssessmentResponseQuery) *AssessmentResponseQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultAssessmentResponseOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultAssessmentResponseOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *assessmentresponsePager) orderExpr(query *AssessmentResponseQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultAssessmentResponseOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AssessmentResponse.
+func (_m *AssessmentResponseQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentResponsePaginateOption,
+) (*AssessmentResponseConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentResponsePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentResponseConnection{Edges: []*AssessmentResponseEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentResponseOrderFieldCreatedAt orders AssessmentResponse by created_at.
+	AssessmentResponseOrderFieldCreatedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessmentresponse.FieldCreatedAt,
+		toTerm: assessmentresponse.ByCreatedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldUpdatedAt orders AssessmentResponse by updated_at.
+	AssessmentResponseOrderFieldUpdatedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessmentresponse.FieldUpdatedAt,
+		toTerm: assessmentresponse.ByUpdatedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldSendAttempts orders AssessmentResponse by send_attempts.
+	AssessmentResponseOrderFieldSendAttempts = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.SendAttempts, nil
+		},
+		column: assessmentresponse.FieldSendAttempts,
+		toTerm: assessmentresponse.BySendAttempts,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SendAttempts,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldStatus orders AssessmentResponse by status.
+	AssessmentResponseOrderFieldStatus = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: assessmentresponse.FieldStatus,
+		toTerm: assessmentresponse.ByStatus,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldAssignedAt orders AssessmentResponse by assigned_at.
+	AssessmentResponseOrderFieldAssignedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.AssignedAt, nil
+		},
+		column: assessmentresponse.FieldAssignedAt,
+		toTerm: assessmentresponse.ByAssignedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AssignedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldStartedAt orders AssessmentResponse by started_at.
+	AssessmentResponseOrderFieldStartedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.StartedAt, nil
+		},
+		column: assessmentresponse.FieldStartedAt,
+		toTerm: assessmentresponse.ByStartedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StartedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldCompletedAt orders AssessmentResponse by completed_at.
+	AssessmentResponseOrderFieldCompletedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.CompletedAt, nil
+		},
+		column: assessmentresponse.FieldCompletedAt,
+		toTerm: assessmentresponse.ByCompletedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldDueDate orders AssessmentResponse by due_date.
+	AssessmentResponseOrderFieldDueDate = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.DueDate, nil
+		},
+		column: assessmentresponse.FieldDueDate,
+		toTerm: assessmentresponse.ByDueDate,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentResponseOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentResponseOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentResponseOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AssessmentResponseOrderFieldSendAttempts.column:
+		str = "send_attempts"
+	case AssessmentResponseOrderFieldStatus.column:
+		str = "STATUS"
+	case AssessmentResponseOrderFieldAssignedAt.column:
+		str = "ASSIGNED_AT"
+	case AssessmentResponseOrderFieldStartedAt.column:
+		str = "STARTED_AT"
+	case AssessmentResponseOrderFieldCompletedAt.column:
+		str = "COMPLETED_AT"
+	case AssessmentResponseOrderFieldDueDate.column:
+		str = "DUE_DATE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentResponseOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentResponseOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *AssessmentResponseOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentResponseOrderFieldUpdatedAt
+	case "send_attempts":
+		*f = *AssessmentResponseOrderFieldSendAttempts
+	case "STATUS":
+		*f = *AssessmentResponseOrderFieldStatus
+	case "ASSIGNED_AT":
+		*f = *AssessmentResponseOrderFieldAssignedAt
+	case "STARTED_AT":
+		*f = *AssessmentResponseOrderFieldStartedAt
+	case "COMPLETED_AT":
+		*f = *AssessmentResponseOrderFieldCompletedAt
+	case "DUE_DATE":
+		*f = *AssessmentResponseOrderFieldDueDate
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentResponseOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentResponseOrderField defines the ordering field of AssessmentResponse.
+type AssessmentResponseOrderField struct {
+	// Value extracts the ordering value from the given AssessmentResponse.
+	Value    func(*AssessmentResponse) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessmentresponse.OrderOption
+	toCursor func(*AssessmentResponse) Cursor
+}
+
+// AssessmentResponseOrder defines the ordering of AssessmentResponse.
+type AssessmentResponseOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *AssessmentResponseOrderField `json:"field"`
+}
+
+// DefaultAssessmentResponseOrder is the default ordering of AssessmentResponse.
+var DefaultAssessmentResponseOrder = &AssessmentResponseOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessmentresponse.FieldID,
+		toTerm: assessmentresponse.ByID,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AssessmentResponse into AssessmentResponseEdge.
+func (_m *AssessmentResponse) ToEdge(order *AssessmentResponseOrder) *AssessmentResponseEdge {
+	if order == nil {
+		order = DefaultAssessmentResponseOrder
+	}
+	return &AssessmentResponseEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentResponseHistoryEdge is the edge representation of AssessmentResponseHistory.
+type AssessmentResponseHistoryEdge struct {
+	Node   *AssessmentResponseHistory `json:"node"`
+	Cursor Cursor                     `json:"cursor"`
+}
+
+// AssessmentResponseHistoryConnection is the connection containing edges to AssessmentResponseHistory.
+type AssessmentResponseHistoryConnection struct {
+	Edges      []*AssessmentResponseHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                         `json:"pageInfo"`
+	TotalCount int                              `json:"totalCount"`
+}
+
+func (c *AssessmentResponseHistoryConnection) build(nodes []*AssessmentResponseHistory, pager *assessmentresponsehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AssessmentResponseHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AssessmentResponseHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AssessmentResponseHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentResponseHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentResponseHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentResponseHistoryPaginateOption enables pagination customization.
+type AssessmentResponseHistoryPaginateOption func(*assessmentresponsehistoryPager) error
+
+// WithAssessmentResponseHistoryOrder configures pagination ordering.
+func WithAssessmentResponseHistoryOrder(order *AssessmentResponseHistoryOrder) AssessmentResponseHistoryPaginateOption {
+	if order == nil {
+		order = DefaultAssessmentResponseHistoryOrder
+	}
+	o := *order
+	return func(pager *assessmentresponsehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultAssessmentResponseHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithAssessmentResponseHistoryFilter configures pagination filter.
+func WithAssessmentResponseHistoryFilter(filter func(*AssessmentResponseHistoryQuery) (*AssessmentResponseHistoryQuery, error)) AssessmentResponseHistoryPaginateOption {
+	return func(pager *assessmentresponsehistoryPager) error {
+		if filter == nil {
+			return errors.New("AssessmentResponseHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmentresponsehistoryPager struct {
+	reverse bool
+	order   *AssessmentResponseHistoryOrder
+	filter  func(*AssessmentResponseHistoryQuery) (*AssessmentResponseHistoryQuery, error)
+}
+
+func newAssessmentResponseHistoryPager(opts []AssessmentResponseHistoryPaginateOption, reverse bool) (*assessmentresponsehistoryPager, error) {
+	pager := &assessmentresponsehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultAssessmentResponseHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *assessmentresponsehistoryPager) applyFilter(query *AssessmentResponseHistoryQuery) (*AssessmentResponseHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmentresponsehistoryPager) toCursor(_m *AssessmentResponseHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *assessmentresponsehistoryPager) applyCursors(query *AssessmentResponseHistoryQuery, after, before *Cursor) (*AssessmentResponseHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultAssessmentResponseHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *assessmentresponsehistoryPager) applyOrder(query *AssessmentResponseHistoryQuery) *AssessmentResponseHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultAssessmentResponseHistoryOrder.Field {
+		query = query.Order(DefaultAssessmentResponseHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *assessmentresponsehistoryPager) orderExpr(query *AssessmentResponseHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultAssessmentResponseHistoryOrder.Field {
+			b.Comma().Ident(DefaultAssessmentResponseHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AssessmentResponseHistory.
+func (_m *AssessmentResponseHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentResponseHistoryPaginateOption,
+) (*AssessmentResponseHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentResponseHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentResponseHistoryConnection{Edges: []*AssessmentResponseHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentResponseHistoryOrderFieldHistoryTime orders AssessmentResponseHistory by history_time.
+	AssessmentResponseHistoryOrderFieldHistoryTime = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: assessmentresponsehistory.FieldHistoryTime,
+		toTerm: assessmentresponsehistory.ByHistoryTime,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldCreatedAt orders AssessmentResponseHistory by created_at.
+	AssessmentResponseHistoryOrderFieldCreatedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessmentresponsehistory.FieldCreatedAt,
+		toTerm: assessmentresponsehistory.ByCreatedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldUpdatedAt orders AssessmentResponseHistory by updated_at.
+	AssessmentResponseHistoryOrderFieldUpdatedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessmentresponsehistory.FieldUpdatedAt,
+		toTerm: assessmentresponsehistory.ByUpdatedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldSendAttempts orders AssessmentResponseHistory by send_attempts.
+	AssessmentResponseHistoryOrderFieldSendAttempts = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.SendAttempts, nil
+		},
+		column: assessmentresponsehistory.FieldSendAttempts,
+		toTerm: assessmentresponsehistory.BySendAttempts,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SendAttempts,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldStatus orders AssessmentResponseHistory by status.
+	AssessmentResponseHistoryOrderFieldStatus = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: assessmentresponsehistory.FieldStatus,
+		toTerm: assessmentresponsehistory.ByStatus,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldAssignedAt orders AssessmentResponseHistory by assigned_at.
+	AssessmentResponseHistoryOrderFieldAssignedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.AssignedAt, nil
+		},
+		column: assessmentresponsehistory.FieldAssignedAt,
+		toTerm: assessmentresponsehistory.ByAssignedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AssignedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldStartedAt orders AssessmentResponseHistory by started_at.
+	AssessmentResponseHistoryOrderFieldStartedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.StartedAt, nil
+		},
+		column: assessmentresponsehistory.FieldStartedAt,
+		toTerm: assessmentresponsehistory.ByStartedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StartedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldCompletedAt orders AssessmentResponseHistory by completed_at.
+	AssessmentResponseHistoryOrderFieldCompletedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.CompletedAt, nil
+		},
+		column: assessmentresponsehistory.FieldCompletedAt,
+		toTerm: assessmentresponsehistory.ByCompletedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldDueDate orders AssessmentResponseHistory by due_date.
+	AssessmentResponseHistoryOrderFieldDueDate = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.DueDate, nil
+		},
+		column: assessmentresponsehistory.FieldDueDate,
+		toTerm: assessmentresponsehistory.ByDueDate,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentResponseHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentResponseHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case AssessmentResponseHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentResponseHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AssessmentResponseHistoryOrderFieldSendAttempts.column:
+		str = "send_attempts"
+	case AssessmentResponseHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case AssessmentResponseHistoryOrderFieldAssignedAt.column:
+		str = "ASSIGNED_AT"
+	case AssessmentResponseHistoryOrderFieldStartedAt.column:
+		str = "STARTED_AT"
+	case AssessmentResponseHistoryOrderFieldCompletedAt.column:
+		str = "COMPLETED_AT"
+	case AssessmentResponseHistoryOrderFieldDueDate.column:
+		str = "DUE_DATE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentResponseHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentResponseHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentResponseHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *AssessmentResponseHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *AssessmentResponseHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentResponseHistoryOrderFieldUpdatedAt
+	case "send_attempts":
+		*f = *AssessmentResponseHistoryOrderFieldSendAttempts
+	case "STATUS":
+		*f = *AssessmentResponseHistoryOrderFieldStatus
+	case "ASSIGNED_AT":
+		*f = *AssessmentResponseHistoryOrderFieldAssignedAt
+	case "STARTED_AT":
+		*f = *AssessmentResponseHistoryOrderFieldStartedAt
+	case "COMPLETED_AT":
+		*f = *AssessmentResponseHistoryOrderFieldCompletedAt
+	case "DUE_DATE":
+		*f = *AssessmentResponseHistoryOrderFieldDueDate
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentResponseHistoryOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentResponseHistoryOrderField defines the ordering field of AssessmentResponseHistory.
+type AssessmentResponseHistoryOrderField struct {
+	// Value extracts the ordering value from the given AssessmentResponseHistory.
+	Value    func(*AssessmentResponseHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessmentresponsehistory.OrderOption
+	toCursor func(*AssessmentResponseHistory) Cursor
+}
+
+// AssessmentResponseHistoryOrder defines the ordering of AssessmentResponseHistory.
+type AssessmentResponseHistoryOrder struct {
+	Direction OrderDirection                       `json:"direction"`
+	Field     *AssessmentResponseHistoryOrderField `json:"field"`
+}
+
+// DefaultAssessmentResponseHistoryOrder is the default ordering of AssessmentResponseHistory.
+var DefaultAssessmentResponseHistoryOrder = &AssessmentResponseHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessmentresponsehistory.FieldID,
+		toTerm: assessmentresponsehistory.ByID,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AssessmentResponseHistory into AssessmentResponseHistoryEdge.
+func (_m *AssessmentResponseHistory) ToEdge(order *AssessmentResponseHistoryOrder) *AssessmentResponseHistoryEdge {
+	if order == nil {
+		order = DefaultAssessmentResponseHistoryOrder
+	}
+	return &AssessmentResponseHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -36191,7 +37853,7 @@ func (f TemplateOrderField) String() string {
 	case TemplateOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case TemplateOrderFieldName.column:
-		str = "name"
+		str = "NAME"
 	case TemplateOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
 	case TemplateOrderFieldKind.column:
@@ -36216,7 +37878,7 @@ func (f *TemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateOrderFieldUpdatedAt
-	case "name":
+	case "NAME":
 		*f = *TemplateOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateOrderFieldTemplateType
@@ -36575,7 +38237,7 @@ func (f TemplateHistoryOrderField) String() string {
 	case TemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case TemplateHistoryOrderFieldName.column:
-		str = "name"
+		str = "NAME"
 	case TemplateHistoryOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
 	case TemplateHistoryOrderFieldKind.column:
@@ -36602,7 +38264,7 @@ func (f *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateHistoryOrderFieldUpdatedAt
-	case "name":
+	case "NAME":
 		*f = *TemplateHistoryOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateHistoryOrderFieldTemplateType
