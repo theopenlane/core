@@ -213,8 +213,6 @@ tasks:
     desc: runs golangci-lint (optionally only on changed files with --changed=true)
     vars:
       CHANGED: '{{.CHANGED | default "false"}}'
-    env:
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     silent: true
     cmds:
       - |
@@ -250,8 +248,6 @@ tasks:
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
-    env:
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     ## do not use --fix in CI
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
