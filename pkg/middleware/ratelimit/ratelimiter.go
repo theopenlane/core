@@ -1,7 +1,6 @@
 package ratelimit
 
 import (
-	"fmt"
 	"math"
 	"net"
 	"net/http"
@@ -9,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -17,6 +18,7 @@ const (
 	defaultWindowSize        = time.Second
 	defaultFlushInterval     = 10 * time.Second
 	defaultRetryMessage      = "Too many requests"
+	rateLimitLogComponent    = "ratelimit"
 )
 
 // RateOption defines a distinct rate limiting window and request allowance.
@@ -56,6 +58,8 @@ type Config struct {
 	DenyMessage string `json:"denyMessage" koanf:"denyMessage" default:"Too many requests"`
 	// SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
 	SendRetryAfterHeader bool `json:"sendRetryAfterHeader" koanf:"sendRetryAfterHeader" default:"true"`
+	// DryRun enables logging rate limit decisions without blocking requests.
+	DryRun bool `json:"dryRun" koanf:"dryRun" default:"true"`
 }
 
 // RateLimiterWithConfig returns a middleware function for rate limiting requests with a supplied config.
@@ -87,16 +91,33 @@ func RateLimiterWithConfig(conf *Config) echo.MiddlewareFunc {
 				return next(c)
 			}
 
-			for _, limiter := range limiters {
+			logger := deriveRateLimitLogger(c, key)
+
+			for idx, limiter := range limiters {
 				status, err := limiter.Check(key)
 				if err != nil {
-					if c.Echo() != nil && c.Echo().Logger != nil {
-						c.Echo().Logger.Error(fmt.Errorf("ratelimit check failed: %w", err))
-					}
+					logger.
+						Error().
+						Err(err).
+						Int("limiter_index", idx).
+						Msg("ratelimit check failed")
 					continue
 				}
 
 				if status.IsLimited {
+					logRateLimitDecision(limitDecisionLogInput{
+						Logger:       logger,
+						Limiter:      limiter,
+						Status:       status,
+						LimiterIndex: idx,
+						DryRun:       conf.DryRun,
+						DenyStatus:   denyStatus,
+						DenyMessage:  denyMessage,
+					})
+					if conf.DryRun {
+						continue
+					}
+
 					if conf.SendRetryAfterHeader && status.LimitDuration != nil {
 						seconds := math.Ceil(status.LimitDuration.Seconds())
 						if seconds > 0 {
@@ -110,9 +131,10 @@ func RateLimiterWithConfig(conf *Config) echo.MiddlewareFunc {
 
 			for _, limiter := range limiters {
 				if err := limiter.Inc(key); err != nil {
-					if c.Echo() != nil && c.Echo().Logger != nil {
-						c.Echo().Logger.Error(fmt.Errorf("ratelimit increment failed: %w", err))
-					}
+					logger.
+						Error().
+						Err(err).
+						Msg("ratelimit increment failed")
 				}
 			}
 
@@ -145,7 +167,7 @@ func buildLimiters(conf *Config) []*RateLimiter {
 
 		expiration := opt.Expiration
 		if expiration <= 0 {
-			expiration = 2 * window
+			expiration = 2 * window // nolint:mnd
 		}
 
 		flush := opt.FlushInterval
@@ -188,6 +210,53 @@ func buildLimiterKey(c echo.Context, headers []string, conf *Config) string {
 	}
 
 	return strings.Join(parts, "|")
+}
+
+func deriveRateLimitLogger(c echo.Context, key string) zerolog.Logger {
+	base := zerolog.Ctx(c.Request().Context())
+	if base == nil {
+		fallback := log.Logger
+		base = &fallback
+	}
+
+	return base.With().
+		Str("component", rateLimitLogComponent).
+		Str("ratelimit_key", key).
+		Str("request_path", c.Path()).
+		Str("request_method", c.Request().Method).
+		Str("remote_ip", c.RealIP()).
+		Logger()
+}
+
+type limitDecisionLogInput struct {
+	Logger       zerolog.Logger
+	Limiter      *RateLimiter
+	Status       *LimitStatus
+	LimiterIndex int
+	DryRun       bool
+	DenyStatus   int
+	DenyMessage  string
+}
+
+func logRateLimitDecision(input limitDecisionLogInput) {
+	event := input.Logger.Warn().
+		Int("limiter_index", input.LimiterIndex).
+		Bool("dry_run", input.DryRun).
+		Float64("current_rate", input.Status.CurrentRate).
+		Int64("requests_limit", input.Limiter.RequestsLimit()).
+		Dur("window", input.Limiter.WindowSize())
+
+	if input.Status.LimitDuration != nil {
+		event.Dur("limit_duration", *input.Status.LimitDuration)
+	}
+
+	if !input.DryRun {
+		event.
+			Int("deny_status", input.DenyStatus).
+			Str("deny_message", input.DenyMessage)
+	}
+
+	event.Msg("rate limit exceeded")
 }
 
 func extractIP(c echo.Context, headers []string, forwardedIndex int) string {

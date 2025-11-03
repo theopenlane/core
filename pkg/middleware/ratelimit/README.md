@@ -109,3 +109,7 @@ func (f FakeDataStore) Get(key string, previousWindow, currentWindow time.Time) 
 rateLimiter := ratelimiter.New(FakeDataStore{}, maxLimit, windowSize)
 
 ```
+
+### Dry-run mode
+
+When the middleware is configured with `dryRun: true`, limit checks are still executed and logged using `zerolog`, but requests are not blocked. This is useful for validating rate limit settings in production before enforcing them.

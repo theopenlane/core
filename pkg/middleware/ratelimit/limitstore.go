@@ -33,6 +33,16 @@ func New(dataStore LimitStore, requestsLimit int64, windowSize time.Duration) *R
 	}
 }
 
+// RequestsLimit returns the maximum number of requests allowed within the window.
+func (r *RateLimiter) RequestsLimit() int64 {
+	return r.requestsLimit
+}
+
+// WindowSize returns the duration of the configured window.
+func (r *RateLimiter) WindowSize() time.Duration {
+	return r.windowSize
+}
+
 // Inc increments the limit counter for a given key
 func (r *RateLimiter) Inc(key string) error {
 	currentWindow := time.Now().UTC().Truncate(r.windowSize)

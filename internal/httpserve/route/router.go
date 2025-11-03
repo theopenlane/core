@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
@@ -16,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -148,16 +146,6 @@ var (
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
 
-	restrictedRateLimit = &ratelimit.Config{ //nolint:mnd
-		Enabled: true,
-		Options: []ratelimit.RateOption{
-			{
-				Requests:   10,
-				Window:     time.Second,
-				Expiration: 15 * time.Minute,
-			},
-		},
-	}
 	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
 	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
@@ -183,8 +171,6 @@ type Router struct {
 	LocalFilePath  string
 	Logger         *echo.Logger
 	SchemaRegistry SchemaRegistry
-	// RateLimiterConfig points to the global rate limiter configuration. When enabled it is applied server-wide.
-	RateLimiterConfig *ratelimit.Config
 }
 
 // SchemaRegistry interface for dynamic schema registration
@@ -695,13 +681,7 @@ func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
 	// add the restricted endpoints middleware (includes csrf)
 	mw = append(mw, router.Handler.AdditionalMiddleware...)
 
-	if router.RateLimiterConfig != nil && router.RateLimiterConfig.Enabled {
-		// Global rate limiter already enforces limits across all endpoints.
-		return mw
-	}
-
-	// Fallback limiter for restricted endpoints when the global limiter is disabled.
-	return append(mw, ratelimit.RateLimiterWithConfig(restrictedRateLimit))
+	return mw
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes

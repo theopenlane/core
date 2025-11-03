@@ -328,7 +328,7 @@ data:
   CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeLength | quote | default "8" }}
   CORE_RATELIMIT_ENABLED: {{ .Values.openlane.coreConfiguration.ratelimit.enabled | quote | default "false" }}
   CORE_RATELIMIT_OPTIONS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.options | quote }}
-  CORE_RATELIMIT_HEADERS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.headers | quote }}
+  CORE_RATELIMIT_HEADERS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.headers | quote | default "True-Client-IP" }}
   CORE_RATELIMIT_FORWARDEDINDEXFROMBEHIND: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind | quote | default "0" }}
   CORE_RATELIMIT_INCLUDEPATH: {{ .Values.openlane.coreConfiguration.ratelimit.includePath | quote | default "false" }}
   CORE_RATELIMIT_INCLUDEMETHOD: {{ .Values.openlane.coreConfiguration.ratelimit.includeMethod | quote | default "false" }}
@@ -336,6 +336,7 @@ data:
   CORE_RATELIMIT_DENYSTATUS: {{ .Values.openlane.coreConfiguration.ratelimit.denyStatus | quote | default "429" }}
   CORE_RATELIMIT_DENYMESSAGE: {{ .Values.openlane.coreConfiguration.ratelimit.denyMessage | quote | default "Too many requests" }}
   CORE_RATELIMIT_SENDRETRYAFTERHEADER: {{ .Values.openlane.coreConfiguration.ratelimit.sendRetryAfterHeader | quote | default "true" }}
+  CORE_RATELIMIT_DRYRUN: {{ .Values.openlane.coreConfiguration.ratelimit.dryRun | quote | default "true" }}
   CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.enabled | quote | default "true" }}
   CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}

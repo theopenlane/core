@@ -287,9 +287,11 @@ objectStorage:
 ratelimit:
     denyMessage: Too many requests
     denyStatus: 429
+    dryRun: true
     enabled: false
     forwardedIndexFromBehind: 0
-    headers: null
+    headers:
+        - True-Client-IP
     includeMethod: false
     includePath: false
     keyPrefix: ""

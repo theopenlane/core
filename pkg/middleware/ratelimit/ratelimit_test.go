@@ -100,3 +100,43 @@ func TestRateLimiterWithConfigIncludesPathWhenConfigured(t *testing.T) {
 		t.Fatalf("expected second request to /alpha to be rate limited, got status %d", status)
 	}
 }
+
+func TestRateLimiterWithDryRunAllowsRequests(t *testing.T) {
+	t.Parallel()
+
+	e := echo.New()
+
+	config := &ratelimit.Config{
+		Enabled:              true,
+		DryRun:               true,
+		Headers:              []string{"True-Client-IP"},
+		SendRetryAfterHeader: true,
+		Options: []ratelimit.RateOption{
+			{
+				Requests: 1,
+				Window:   time.Minute,
+			},
+		},
+	}
+
+	e.Use(ratelimit.RateLimiterWithConfig(config))
+	e.GET("/", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
+	})
+
+	for i := 0; i < 3; i++ {
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set("True-Client-IP", "192.0.2.1")
+		rec := httptest.NewRecorder()
+
+		e.ServeHTTP(rec, req)
+
+		if rec.Code != http.StatusOK {
+			t.Fatalf("expected dry-run request to succeed with 200, got status %d on request %d", rec.Code, i+1)
+		}
+
+		if rec.Header().Get(echo.HeaderRetryAfter) != "" {
+			t.Fatalf("expected Retry-After header to be omitted during dry-run")
+		}
+	}
+}

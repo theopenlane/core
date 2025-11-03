@@ -106,8 +106,6 @@ func NewServer(c config.Config) (*Server, error) {
 		return nil, err
 	}
 
-	srv.RateLimiterConfig = &c.Settings.Ratelimit
-
 	return &Server{
 		config: c,
 		Router: srv,

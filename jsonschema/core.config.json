@@ -969,6 +969,10 @@
         "sendRetryAfterHeader": {
           "type": "boolean",
           "description": "SendRetryAfterHeader toggles whether the Retry-After header should be added when available."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "DryRun enables logging rate limit decisions without blocking requests."
         }
       },
       "additionalProperties": false,

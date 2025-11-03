@@ -408,7 +408,8 @@ coreConfiguration:
     options: []
     # -- Headers determines which headers are inspected to determine the origin IP.
     # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
-    headers: []
+    headers:
+        - True-Client-IP
     # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
     # 0 means the closest client, 1 the proxy behind it, etc.
     forwardedIndexFromBehind: 0  # @schema type:integer; default:0
@@ -424,6 +425,8 @@ coreConfiguration:
     denyMessage: "Too many requests"  # @schema type:string; default:Too many requests
     # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
     sendRetryAfterHeader: true  # @schema type:boolean; default:true
+    # -- DryRun enables logging rate limit decisions without blocking requests.
+    dryRun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
   objectStorage:
     # -- Enabled indicates if object storage is enabled

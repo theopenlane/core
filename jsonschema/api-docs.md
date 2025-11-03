@@ -1263,6 +1263,7 @@ Config defines the configuration settings for the rate limiter middleware.
 |**denyStatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
 |**denyMessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
 |**sendRetryAfterHeader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
+|**dryRun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
