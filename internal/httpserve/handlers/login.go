@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -34,11 +35,15 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	user, err := h.getUserByEmail(reqCtx, req.Username)
 	if err != nil {
 		metrics.RecordLogin(false)
+		zerolog.Ctx(reqCtx).Info().Str("email", req.Username).Err(err).Msg("unable to find user by email")
+
 		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.RecordLogin(false)
+		zerolog.Ctx(reqCtx).Info().Str("email", req.Username).Msg("user not active")
+
 		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
@@ -46,12 +51,13 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	orgStatus := h.orgEnforcementsForUser(allowCtx, req.Username)
 	if orgStatus != nil && orgStatus.Enforced {
-		metrics.RecordLogin(false)
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
 	}
 
 	if user.Password == nil {
 		metrics.RecordLogin(false)
+		zerolog.Ctx(reqCtx).Info().Str("email", req.Username).Msg("no password set for user")
+
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
@@ -59,11 +65,15 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	valid, err := passwd.VerifyDerivedKey(*user.Password, req.Password)
 	if err != nil || !valid {
 		metrics.RecordLogin(false)
+		zerolog.Ctx(reqCtx).Info().Str("email", req.Username).Msg("invalid password provided during login")
+
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
 		metrics.RecordLogin(false)
+		zerolog.Ctx(reqCtx).Info().Str("email", req.Username).Msg("user email not verified, unable to login")
+
 		return h.BadRequest(ctx, auth.ErrUnverifiedUser, openapi)
 	}
 
