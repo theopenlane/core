@@ -404,9 +404,26 @@ coreConfiguration:
   # -- Ratelimit contains the configuration for the rate limiter
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
-    limit: 10  # @schema type:number; default:10
-    burst: 30  # @schema type:integer; default:30
-    expires: 10m0s  # @schema type:integer; default:10m
+    # -- Options enables configuring multiple concurrent rate windows that must all pass.
+    options: []
+    # -- Headers determines which headers are inspected to determine the origin IP.
+    # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
+    headers: []
+    # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
+    # 0 means the closest client, 1 the proxy behind it, etc.
+    forwardedIndexFromBehind: 0  # @schema type:integer; default:0
+    # -- IncludePath appends the request path to the limiter key when true.
+    includePath: false  # @schema type:boolean; default:false
+    # -- IncludeMethod appends the request method to the limiter key when true.
+    includeMethod: false  # @schema type:boolean; default:false
+    # -- KeyPrefix allows scoping the limiter key space with a static prefix.
+    keyPrefix: ""  # @schema type:string
+    # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
+    denyStatus: 429  # @schema type:integer; default:429
+    # -- DenyMessage customises the error payload when a rate limit is exceeded.
+    denyMessage: "Too many requests"  # @schema type:string; default:Too many requests
+    # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
+    sendRetryAfterHeader: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
   objectStorage:
     # -- Enabled indicates if object storage is enabled

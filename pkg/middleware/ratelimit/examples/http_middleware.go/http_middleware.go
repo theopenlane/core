@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/theopenlane/core/pkg/middleware/ratelimiter"
+	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
 // GetRemoteIP returns the remote IP address of the request
 func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Request) string {
-	realIP := r.Header.Get("X-Real-IP")
+	realIP := r.Header.Get("True-Client-IP")
 	forwardedFor := r.Header.Get("X-Forwarded-For")
 
 	for _, lookup := range ipLookups {
@@ -46,7 +46,7 @@ func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Re
 			return parts[partIndex]
 		}
 
-		if lookup == "X-Real-IP" && realIP != "" {
+		if lookup == "True-Client-IP" && realIP != "" {
 			return realIP
 		}
 	}
@@ -55,10 +55,10 @@ func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Re
 }
 
 // rateLimitMiddleware is a middleware that rate limits the requests
-func rateLimitMiddleware(rateLimiter *ratelimiter.RateLimiter) func(http.Handler) http.Handler {
+func rateLimitMiddleware(rateLimiter *ratelimit.RateLimiter) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			remoteIP := GetRemoteIP([]string{"X-Forwarded-For", "RemoteAddr", "X-Real-IP"}, 0, r)
+			remoteIP := GetRemoteIP([]string{"X-Forwarded-For", "RemoteAddr", "True-Client-IP"}, 0, r)
 			key := fmt.Sprintf("%s_%s_%s", remoteIP, r.URL.String(), r.Method)
 
 			limitStatus, err := rateLimiter.Check(key)
@@ -87,8 +87,8 @@ func hello(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	windowSize := 1 * time.Minute
-	dataStore := ratelimiter.NewMapLimitStore(2*windowSize, 10*time.Second)
-	rateLimiter := ratelimiter.New(dataStore, 5, windowSize)
+	dataStore := ratelimit.NewMapLimitStore(2*windowSize, 10*time.Second)
+	rateLimiter := ratelimit.New(dataStore, 5, windowSize)
 	rateLimiterHandler := rateLimitMiddleware(rateLimiter)
 	helloHandler := http.HandlerFunc(hello)
 	http.Handle("/", rateLimiterHandler(helloHandler))
