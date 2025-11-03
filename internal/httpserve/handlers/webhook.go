@@ -244,7 +244,6 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	}
 
 	exists, err := transaction.FromContext(ctx).Organization.Query().
-		Select(organization.FieldID).
 		Where(organization.StripeCustomerID(s.Customer.ID)).
 		Exist(ctx)
 	if err != nil {
