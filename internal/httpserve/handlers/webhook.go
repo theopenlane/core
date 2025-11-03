@@ -243,6 +243,19 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return ErrSubscriberNotFound
 	}
 
+	exists, err := transaction.FromContext(ctx).Organization.Query().
+		Select(organization.FieldID).
+		Where(organization.StripeCustomerID(s.Customer.ID)).
+		Exist(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error while fetching organization for pausing stripe subscription")
+		return err
+	}
+
+	if !exists {
+		return nil
+	}
+
 	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		return
