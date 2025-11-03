@@ -223,31 +223,31 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 		return err
 	}
 
-	for _, subs := range customer.Subscriptions.Data {
+	for _, sub := range customer.Subscriptions.Data {
 		// skip subscriptions that are already inactive
-		if subs.Status == stripe.SubscriptionStatusCanceled || subs.Status == stripe.SubscriptionStatusIncompleteExpired {
-			log.Debug().Str("subscription_id", subs.ID).Msg("subscription already inactive, skipping")
+		if sub.Status == stripe.SubscriptionStatusCanceled || sub.Status == stripe.SubscriptionStatusIncompleteExpired {
+			log.Debug().Str("subscription_id", sub.ID).Msg("subscription already inactive, skipping")
 			return nil
 		}
 
-		var endSubsParams *stripe.SubscriptionUpdateParams
-
-		switch subs.Status {
-		case stripe.SubscriptionStatusActive:
-			endSubsParams = &stripe.SubscriptionUpdateParams{
-				CancelAtPeriodEnd: stripe.Bool(true),
-			}
-		case stripe.SubscriptionStatusTrialing:
-			endSubsParams = &stripe.SubscriptionUpdateParams{
+		if sub.Status == stripe.SubscriptionStatusTrialing {
+			endSubsParams := &stripe.SubscriptionUpdateParams{
 				TrialEndNow: stripe.Bool(true),
+			}
+
+			_, err := sc.Client.V1Subscriptions.Update(ctx, sub.ID, endSubsParams)
+			if err != nil {
+				return err
 			}
 		}
 
-		// only make the request if we have params to update
-		if endSubsParams != nil {
-			if _, err := sc.Client.V1Subscriptions.Update(ctx, subs.ID, endSubsParams); err != nil {
-				return err
-			}
+		params := &stripe.SubscriptionScheduleUpdateParams{
+			EndBehavior: stripe.String(string(stripe.SubscriptionScheduleEndBehaviorCancel)),
+		}
+
+		_, err := sc.Client.V1SubscriptionSchedules.Update(ctx, sub.Schedule.ID, params)
+		if err != nil {
+			return err
 		}
 	}
 
