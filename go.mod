@@ -96,7 +96,7 @@ require (
 	github.com/theopenlane/entx v0.15.1
 	github.com/theopenlane/gqlgen-plugins v0.10.3
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.21.0
+	github.com/theopenlane/iam v0.22.0
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.3
 	github.com/theopenlane/utils v0.5.2
@@ -127,7 +127,7 @@ require (
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
-	google.golang.org/api v0.253.0 // indirect
+	google.golang.org/api v0.254.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
