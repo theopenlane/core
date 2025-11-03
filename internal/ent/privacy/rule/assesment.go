@@ -56,14 +56,14 @@ func AllowIfAssessmentQueryCreatedBy() privacy.AssessmentQueryRuleFunc {
 
 // AllowIfAssessmentResponseOwner allows users to edit assessment responses they own (where user_id matches)
 func AllowIfAssessmentResponseOwner() privacy.AssessmentResponseMutationRuleFunc {
-	return privacy.AssessmentResponseMutationRuleFunc(func(ctx context.Context, m *generated.AssessmentResponseMutation) error {
+	return privacy.AssessmentResponseMutationRuleFunc(func(_ context.Context, _ *generated.AssessmentResponseMutation) error {
 		return privacy.Deny
 	})
 }
 
 // AllowIfAssessmentResponseQueryOwner allows users to query only assessment responses they own
 func AllowIfAssessmentResponseQueryOwner() privacy.AssessmentResponseQueryRuleFunc {
-	return privacy.AssessmentResponseQueryRuleFunc(func(ctx context.Context, q *generated.AssessmentResponseQuery) error {
+	return privacy.AssessmentResponseQueryRuleFunc(func(_ context.Context, _ *generated.AssessmentResponseQuery) error {
 		return privacy.Deny
 	})
 }
