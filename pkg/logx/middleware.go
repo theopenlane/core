@@ -194,8 +194,8 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("bytes_out", strconv.FormatInt(res.Size, 10))
 
 	if config.NestKey != "" {
-		mainEvt.Dict(config.NestKey, evt).Msg("request details")
+		mainEvt.Dict(config.NestKey, evt).Msgf("request details for request to %s %s", req.Method, req.RequestURI)
 	} else {
-		mainEvt.Msg("request details")
+		mainEvt.Msgf("request details for request to %s %s", req.Method, req.RequestURI)
 	}
 }

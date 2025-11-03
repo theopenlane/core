@@ -35,7 +35,7 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 		Err(err).
 		Str("query", fmt.Sprintf("%v", c.QueryParams())).
 		Str("url", c.Request().URL.String()).
-		Msg("Error")
+		Msgf("Error handling %s to %s", c.Request().Method, c.Request().URL.String())
 
 	// Send response
 	if !c.Response().Committed {
