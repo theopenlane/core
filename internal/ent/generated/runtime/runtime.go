@@ -543,12 +543,15 @@ func init() {
 	assessmentresponse.Hooks[3] = assessmentresponseMixinHooks2[0]
 
 	assessmentresponse.Hooks[4] = assessmentresponseMixinHooks5[0]
+
+	assessmentresponse.Hooks[5] = assessmentresponseMixinHooks5[1]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters2[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters5[0]
+	assessmentresponse.Interceptors[3] = assessmentresponseMixinInters5[1]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields3 := assessmentresponseMixin[3].Fields()

@@ -104,26 +104,6 @@ func (_u *AssessmentResponseHistoryUpdate) ClearDeletedBy() *AssessmentResponseH
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetOwnerID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableOwnerID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearOwnerID() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetAssessmentID sets the "assessment_id" field.
 func (_u *AssessmentResponseHistoryUpdate) SetAssessmentID(v string) *AssessmentResponseHistoryUpdate {
 	_u.mutation.SetAssessmentID(v)
@@ -361,9 +341,6 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)
 	}
@@ -496,26 +473,6 @@ func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDeletedBy(v *string) *A
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *AssessmentResponseHistoryUpdateOne) ClearDeletedBy() *AssessmentResponseHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetOwnerID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableOwnerID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearOwnerID() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -785,9 +742,6 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)

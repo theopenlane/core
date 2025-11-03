@@ -33,7 +33,7 @@ type AssessmentResponse struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Assessment stores information about an questionnaire filled out
@@ -122,5 +123,11 @@ func (Assessment) Hooks() []ent.Hook {
 			}, "owner"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+	}
+}
+
+func (Assessment) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
 	}
 }

@@ -803,8 +803,6 @@ type UpdateAssessmentResponseInput struct {
 	CompletedAt      *time.Time
 	ClearDueDate     bool
 	DueDate          *time.Time
-	ClearOwner       bool
-	OwnerID          *string
 	ClearDocument    bool
 	DocumentID       *string
 	AssessmentID     *string
@@ -829,12 +827,6 @@ func (i *UpdateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearDocument {
 		m.ClearDocument()

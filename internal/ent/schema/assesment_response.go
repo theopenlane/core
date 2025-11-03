@@ -17,10 +17,10 @@ import (
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/keygen"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -130,8 +130,9 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(ar,
-				withSkipTokenTypesObjects(&token.AssesmentResponseToken{}),
+			newObjectOwnedMixin[generated.AssessmentResponse](ar,
+				withParents(Assessment{}),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins(ar)

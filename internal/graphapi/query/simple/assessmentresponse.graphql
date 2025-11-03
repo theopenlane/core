@@ -1,48 +1,4 @@
 
-mutation CreateBulkCSVAssessmentResponse($input: Upload!) {
-  createBulkCSVAssessmentResponse(input: $input) {
-    assessmentResponses {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkAssessmentResponse($input: [CreateAssessmentResponseInput!]) {
-  createBulkAssessmentResponse(input: $input) {
-    assessmentResponses {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreateAssessmentResponse($input: CreateAssessmentResponseInput!) {
   createAssessmentResponse(input: $input) {
     assessmentResponse {

@@ -21,24 +21,6 @@ extend type Mutation{
         input: CreateAssessmentInput!
     ): AssessmentCreatePayload!
     """
-    Create multiple new assessments
-    """
-    createBulkAssessment(
-        """
-        values of the assessment
-        """
-        input: [CreateAssessmentInput!]
-    ): AssessmentBulkCreatePayload!
-    """
-    Create multiple new assessments via file upload
-    """
-    createBulkCSVAssessment(
-        """
-        csv file containing values of the assessment
-        """
-        input: Upload!
-    ): AssessmentBulkCreatePayload!
-    """
     Update an existing assessment
     """
     updateAssessment(
@@ -92,12 +74,3 @@ type AssessmentDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessment mutation
-"""
-type AssessmentBulkCreatePayload {
-    """
-    Created assessments
-    """
-    assessments: [Assessment!]
-}

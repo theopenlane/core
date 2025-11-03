@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -104,26 +103,6 @@ func (_u *AssessmentResponseUpdate) SetNillableDeletedBy(v *string) *AssessmentR
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *AssessmentResponseUpdate) ClearDeletedBy() *AssessmentResponseUpdate {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentResponseUpdate) SetOwnerID(v string) *AssessmentResponseUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentResponseUpdate) SetNillableOwnerID(v *string) *AssessmentResponseUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentResponseUpdate) ClearOwnerID() *AssessmentResponseUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -256,11 +235,6 @@ func (_u *AssessmentResponseUpdate) ClearDocumentDataID() *AssessmentResponseUpd
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssessmentResponseUpdate) SetOwner(v *Organization) *AssessmentResponseUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdate) SetDocumentID(id string) *AssessmentResponseUpdate {
 	_u.mutation.SetDocumentID(id)
@@ -288,12 +262,6 @@ func (_u *AssessmentResponseUpdate) SetAssessment(v *Assessment) *AssessmentResp
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdate) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssessmentResponseUpdate) ClearOwner() *AssessmentResponseUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearDocument clears the "document" edge to the DocumentData entity.
@@ -352,11 +320,6 @@ func (_u *AssessmentResponseUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssessmentResponseUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := assessmentresponse.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AssessmentID(); ok {
 		if err := assessmentresponse.AssessmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
@@ -452,37 +415,6 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessmentresponse.OwnerTable,
-			Columns: []string{assessmentresponse.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessmentresponse.OwnerTable,
-			Columns: []string{assessmentresponse.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -642,26 +574,6 @@ func (_u *AssessmentResponseUpdateOne) ClearDeletedBy() *AssessmentResponseUpdat
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentResponseUpdateOne) SetOwnerID(v string) *AssessmentResponseUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentResponseUpdateOne) SetNillableOwnerID(v *string) *AssessmentResponseUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentResponseUpdateOne) ClearOwnerID() *AssessmentResponseUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetAssessmentID sets the "assessment_id" field.
 func (_u *AssessmentResponseUpdateOne) SetAssessmentID(v string) *AssessmentResponseUpdateOne {
 	_u.mutation.SetAssessmentID(v)
@@ -791,11 +703,6 @@ func (_u *AssessmentResponseUpdateOne) ClearDocumentDataID() *AssessmentResponse
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssessmentResponseUpdateOne) SetOwner(v *Organization) *AssessmentResponseUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdateOne) SetDocumentID(id string) *AssessmentResponseUpdateOne {
 	_u.mutation.SetDocumentID(id)
@@ -823,12 +730,6 @@ func (_u *AssessmentResponseUpdateOne) SetAssessment(v *Assessment) *AssessmentR
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdateOne) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssessmentResponseUpdateOne) ClearOwner() *AssessmentResponseUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearDocument clears the "document" edge to the DocumentData entity.
@@ -900,11 +801,6 @@ func (_u *AssessmentResponseUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssessmentResponseUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := assessmentresponse.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AssessmentID(); ok {
 		if err := assessmentresponse.AssessmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
@@ -1017,37 +913,6 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessmentresponse.OwnerTable,
-			Columns: []string{assessmentresponse.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessmentresponse.OwnerTable,
-			Columns: []string{assessmentresponse.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
