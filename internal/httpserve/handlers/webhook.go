@@ -239,7 +239,7 @@ func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID stri
 // handleSubscriptionPaused handles subscription updated events for paused subscriptions
 func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (err error) {
 	if err := h.isOrgValid(ctx, s); err != nil {
-		if err == ErrSubscriberNotFound {
+		if errors.Is(err, ErrSubscriberNotFound) {
 			log.Warn().Str("subscription_id", s.ID).Msg("organization not found for subscription, skipping processing")
 			return nil
 		}
@@ -298,7 +298,7 @@ func (h *Handler) isOrgValid(ctx context.Context, s *stripe.Subscription) error 
 // handleSubscriptionUpdated handles subscription updated events
 func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
 	if err := h.isOrgValid(ctx, s); err != nil {
-		if err == ErrSubscriberNotFound {
+		if errors.Is(err, ErrSubscriberNotFound) {
 			log.Warn().Str("subscription_id", s.ID).Msg("organization not found for subscription, skipping processing")
 			return nil
 		}
