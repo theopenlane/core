@@ -15,6 +15,10 @@ type Config struct {
 	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
 	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
+	// StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
+	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:""`
+	// StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
+	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:""`
 }
 
 type ConfigOpts func(*Config)
@@ -65,6 +69,20 @@ func WithStripeCancellationReturnURL(stripeCancellationReturnURL string) ConfigO
 func WithStripeWebhookEvents(events []string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeWebhookEvents = events
+	}
+}
+
+// WithStripeWebhookAPIVersion sets the current accepted Stripe API version for webhooks
+func WithStripeWebhookAPIVersion(version string) ConfigOpts {
+	return func(c *Config) {
+		c.StripeWebhookAPIVersion = version
+	}
+}
+
+// WithStripeWebhookDiscardAPIVersion sets the Stripe API version to discard during migration
+func WithStripeWebhookDiscardAPIVersion(version string) ConfigOpts {
+	return func(c *Config) {
+		c.StripeWebhookDiscardAPIVersion = version
 	}
 }
 

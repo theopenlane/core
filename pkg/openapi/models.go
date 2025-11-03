@@ -2096,6 +2096,21 @@ var ExampleOAuthCallbackResponse = OAuthCallbackResponse{
 }
 
 // =========
+// STRIPE WEBHOOK
+// =========
+
+// StripeWebhookRequest contains the query parameters for Stripe webhook requests
+type StripeWebhookRequest struct {
+	APIVersion string `query:"api_version" description:"Stripe API version for this webhook request" example:"2024-11-20.acacia"`
+}
+
+// Validate ensures the StripeWebhookRequest is valid
+func (r *StripeWebhookRequest) Validate() error {
+	// API version is optional, no validation required
+	return nil
+}
+
+// =========
 // PRODUCTS
 // =========
 

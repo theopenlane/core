@@ -76,6 +76,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	testCases := []struct {
 		name           string
 		payload        *stripe.Event
+		queryParams    string
 		expectedStatus int
 	}{
 		{
@@ -89,6 +90,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusOK,
 		},
 		{
@@ -101,6 +103,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusBadRequest,
 		},
 		{
@@ -114,6 +117,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusOK,
 		},
 		{
@@ -127,6 +131,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusOK,
 		},
 		{
@@ -140,6 +145,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonPaymentUpdate),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusOK,
 		},
 		{
@@ -153,6 +159,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(`{"id":"cus_test","object":"customer"}`),
 				},
 			},
+			queryParams:    "",
 			expectedStatus: http.StatusOK,
 		},
 	}
@@ -168,7 +175,12 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 
 			signedPayload := webhook.GenerateTestSignedPayload(&webhook.UnsignedPayload{Payload: payloadBytes, Secret: webhookSecret})
 
-			req := httptest.NewRequest(http.MethodPost, "/webhook", io.NopCloser(strings.NewReader(string(signedPayload.Payload))))
+			reqURL := "/webhook"
+			if tc.queryParams != "" {
+				reqURL += "?" + tc.queryParams
+			}
+
+			req := httptest.NewRequest(http.MethodPost, reqURL, io.NopCloser(strings.NewReader(string(signedPayload.Payload))))
 
 			req.Header.Set("Content-Type", "application/json")
 			req.Header.Set("Stripe-Signature", signedPayload.Header)
@@ -205,6 +217,132 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				require.NoError(t, err)
 				require.Len(t, pat.Edges.Organizations, 0)
 			}
+		})
+	}
+}
+
+func (suite *HandlerTestSuite) TestWebhookReceiverHandlerAPIVersionFiltering() {
+	t := suite.T()
+
+	suite.db.OrgSubscription.Create().
+		SetStripeSubscriptionStatus("active").
+		SetStripeSubscriptionID("PENDING_UPDATE").
+		SetOwnerID(testUser1.OrganizationID).
+		SetStripeSubscriptionID(seedStripeSubscriptionID).
+		ExecX(testUser1.UserCtx)
+
+	operation := suite.createImpersonationOperation("WebhookReceiverHandler", "Webhook receiver handler")
+	suite.registerTestHandler("POST", "/webhook", operation, suite.h.WebhookReceiverHandler)
+
+	dataUpdate := mockCustomer
+	dataUpdate.Subscriptions.Data[0].Items.Data[0].Price.UnitAmount = 900
+	sub := dataUpdate.Subscriptions.Data[0]
+	jsonDataUpdate, err := json.Marshal(sub)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name                   string
+		payload                *stripe.Event
+		queryParams            string
+		configAPIVersion       string
+		configDiscardAPIVersion string
+		expectedStatus         int
+	}{
+		{
+			name: "webhook with discard API version is ignored",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_discard",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			queryParams:             "api_version=2024-10-28.acacia",
+			configAPIVersion:        "2024-11-20.acacia",
+			configDiscardAPIVersion: "2024-10-28.acacia",
+			expectedStatus:          http.StatusOK,
+		},
+		{
+			name: "webhook with mismatched API version is ignored",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_mismatch",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			queryParams:             "api_version=2024-09-15.acacia",
+			configAPIVersion:        "2024-11-20.acacia",
+			configDiscardAPIVersion: "",
+			expectedStatus:          http.StatusOK,
+		},
+		{
+			name: "webhook with matching API version is processed",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_match",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			queryParams:             "api_version=2024-11-20.acacia",
+			configAPIVersion:        "2024-11-20.acacia",
+			configDiscardAPIVersion: "2024-10-28.acacia",
+			expectedStatus:          http.StatusOK,
+		},
+		{
+			name: "webhook without API version query param is processed when no config",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_no_param",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			queryParams:             "",
+			configAPIVersion:        "",
+			configDiscardAPIVersion: "",
+			expectedStatus:          http.StatusOK,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			suite.h.Entitlements.Config.StripeWebhookAPIVersion = tc.configAPIVersion
+			suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion = tc.configDiscardAPIVersion
+
+			suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]
+			suite.orgSubscriptionMocks()
+
+			payloadBytes, err := json.Marshal(tc.payload)
+			require.NoError(t, err)
+
+			signedPayload := webhook.GenerateTestSignedPayload(&webhook.UnsignedPayload{Payload: payloadBytes, Secret: webhookSecret})
+
+			reqURL := "/webhook"
+			if tc.queryParams != "" {
+				reqURL += "?" + tc.queryParams
+			}
+
+			req := httptest.NewRequest(http.MethodPost, reqURL, io.NopCloser(strings.NewReader(string(signedPayload.Payload))))
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("Stripe-Signature", signedPayload.Header)
+
+			recorder := httptest.NewRecorder()
+			suite.e.ServeHTTP(recorder, req)
+
+			res := recorder.Result()
+			defer res.Body.Close()
+
+			require.Equal(t, tc.expectedStatus, recorder.Code)
 		})
 	}
 }
