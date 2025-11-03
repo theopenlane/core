@@ -8,6 +8,24 @@ import (
 	"github.com/cenkalti/backoff/v5"
 )
 
+func defaultTopic() TypedTopic[Event] {
+	return NewEventTopic("testTopic")
+}
+
+func subscribeDefaultTopic(pool *EventPool, listener Listener, opts ...ListenerOption) (string, error) {
+	return OnTopic(pool, defaultTopic(), TypedListener[Event](listener), opts...)
+}
+
+func emitDefaultTopicSync(pool *EventPool, payload any) []error {
+	topic := defaultTopic()
+	return EmitTopicSync(pool, topic, Event(NewBaseEvent(topic.Name(), payload)))
+}
+
+func emitDefaultTopicAsync(pool *EventPool, payload any) <-chan error {
+	topic := defaultTopic()
+	return EmitTopic(pool, topic, Event(NewBaseEvent(topic.Name(), payload)))
+}
+
 const errorMessage = "On() failed with error: %v"
 
 // TestWithErrorHandler tests that the custom error handler is called on error
@@ -37,13 +55,12 @@ func TestWithErrorHandler(t *testing.T) {
 		return customError
 	}
 
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
 	// Emit the event synchronously to trigger the error
-	soiree.EmitSync("testTopic", NewBaseEvent("testTopic", "testPayload"))
+	emitDefaultTopicSync(soiree, "testPayload")
 
 	// Check if the custom error handler was called
 	if !handlerCalled {
@@ -82,13 +99,12 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("Error occurred: %v", err)
 	}
 
 	// Emit the event asynchronously to trigger the error
-	errChan := soiree.Emit("testTopic", NewBaseEvent("testTopic", "testPayload"))
+	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
 	// Wait for all errors to be processed
 	for err := range errChan {
@@ -127,8 +143,7 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("errorMessage: %v", err)
 	}
 
@@ -141,7 +156,7 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	}()
 
 	// Emit the event synchronously to trigger the panic
-	soiree.EmitSync("testTopic", "testPayload")
+	emitDefaultTopicSync(soiree, "testPayload")
 
 	// Verify that the custom panic handler was invoked
 	if !panicHandlerInvoked {
@@ -174,13 +189,12 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
 	// Emit the event asynchronously to trigger the panic
-	errChan := soiree.Emit("testTopic", "testPayload")
+	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
 	// Wait for all events to be processed (which includes recovering from panic)
 	for range errChan {
@@ -215,7 +229,7 @@ func TestWithIDGenerator(t *testing.T) {
 	}
 
 	// Subscribe the listener to a topic and capture the returned ID
-	returnedID, err := soiree.On("testTopic", listener)
+	returnedID, err := subscribeDefaultTopic(soiree, listener)
 	if err != nil {
 		t.Fatalf(errorMessage, err)
 	}

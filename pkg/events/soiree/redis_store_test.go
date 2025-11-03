@@ -16,7 +16,7 @@ import (
 func newTestRedis(t *testing.T) *redis.Client {
 	mr, err := miniredis.Run()
 	if err != nil {
-		t.Fatalf("failed to start miniredis: %v", err)
+		t.Skipf("skipping redis-backed tests: %v", err)
 	}
 
 	t.Cleanup(mr.Close)
@@ -28,17 +28,15 @@ func TestRedisEventPersistence(t *testing.T) {
 	client := newTestRedis(t)
 	store := NewRedisStore(client)
 	soiree := NewEventPool(WithEventStore(store))
+	topic := NewEventTopic("topic")
 
 	done := make(chan struct{}, 1)
-	_, err := soiree.On("topic", func(e Event) error {
+	MustOn(soiree, topic, TypedListener[Event](func(e Event) error {
 		done <- struct{}{}
 		return nil
-	})
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
+	}))
 
-	soiree.Emit("topic", "data")
+	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 
 	select {
 	case <-done:
@@ -70,18 +68,16 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 	)
 
 	attempts := 0
-	_, err := soiree.On("topic", func(e Event) error {
+	topic := NewEventTopic("topic")
+	MustOn(soiree, topic, TypedListener[Event](func(e Event) error {
 		attempts++
 		if attempts < 2 {
 			return errors.New("fail")
 		}
 		return nil
-	})
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
+	}))
 
-	soiree.Emit("topic", "data")
+	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -98,13 +94,11 @@ func TestRedisMetrics(t *testing.T) {
 	metrics := newRedisMetrics(reg)
 	store := NewRedisStoreWithMetrics(client, metrics)
 	soiree := NewEventPool(WithEventStore(store))
+	topic := NewEventTopic("topic")
 
-	_, err := soiree.On("topic", func(e Event) error { return nil })
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
+	MustOn(soiree, topic, TypedListener[Event](func(e Event) error { return nil }))
 
-	soiree.Emit("topic", "data")
+	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 
 	time.Sleep(100 * time.Millisecond)
 

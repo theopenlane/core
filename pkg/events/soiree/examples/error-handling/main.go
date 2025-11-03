@@ -23,6 +23,7 @@ func CustomErrorHandler(event soiree.Event, err error) error {
 func main() {
 	// Create a new soiree instance with the custom error handler
 	e := soiree.NewEventPool(soiree.WithErrorHandler(CustomErrorHandler))
+	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener that intentionally causes an error
 	listener := func(evt soiree.Event) error {
@@ -31,10 +32,10 @@ func main() {
 	}
 
 	// Subscribe the listener to a topic
-	e.On("user.created", listener)
+	soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
 
 	// Emit an event which will cause the listener to error
-	errChan := e.Emit("user.created", "Lady Sansa Stark of Witerfell")
+	errChan := soiree.EmitTopic(e, userCreated, soiree.Event(soiree.NewBaseEvent(userCreated.Name(), "Lady Sansa Stark of Witerfell")))
 
 	// Wait and collect errors from the error channel
 	for err := range errChan {

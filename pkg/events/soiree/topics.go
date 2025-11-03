@@ -61,6 +61,8 @@ func (t *Topic) AddListener(id string, listener Listener, opts ...ListenerOption
 		opt(item)
 	}
 
+	item.listener = applyListenerMiddlewares(item.listener, item.mws)
+
 	t.listeners[id] = item
 	t.addSortedListenerID(id, item.priority)
 }

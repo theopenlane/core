@@ -12,6 +12,7 @@ import (
 func main() {
 	// Initialize the soiree - invite your friends
 	e := soiree.NewEventPool()
+	orderCreated := soiree.NewEventTopic("order.created")
 
 	// High-priority listener for order validation
 	validateOrderListener := func(evt soiree.Event) error {
@@ -56,14 +57,14 @@ func main() {
 	}
 
 	// Subscribe listeners with specified priorities
-	e.On("order.created", validateOrderListener, soiree.WithPriority(soiree.Highest))
-	e.On("order.created", processPaymentListener, soiree.WithPriority(soiree.Normal))
-	e.On("order.created", sendConfirmationEmailListener, soiree.WithPriority(soiree.Low))
+	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](validateOrderListener), soiree.WithPriority(soiree.Highest))
+	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](processPaymentListener), soiree.WithPriority(soiree.Normal))
+	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](sendConfirmationEmailListener), soiree.WithPriority(soiree.Low))
 
 	// Emit events for order creation
 	fmt.Println("Emitting event for order creation...")
-	e.Emit("order.created", "order123") // This order will fail validation
-	e.Emit("order.created", "order456") // This order will pass validation
+	soiree.EmitTopic(e, orderCreated, soiree.Event(soiree.NewBaseEvent(orderCreated.Name(), "order123")))
+	soiree.EmitTopic(e, orderCreated, soiree.Event(soiree.NewBaseEvent(orderCreated.Name(), "order456")))
 
 	// Allow time for events to be processed
 	time.Sleep(1 * time.Second) // Replace with proper synchronization in production

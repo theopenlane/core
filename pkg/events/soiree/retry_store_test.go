@@ -12,12 +12,12 @@ func TestEventPersistence(t *testing.T) {
 	store := NewInMemoryStore()
 	soiree := NewEventPool(WithEventStore(store))
 
-	_, err := soiree.On("topic", func(e Event) error { return nil })
-	if err != nil {
+	topic := NewEventTopic("topic")
+	if _, err := OnTopic(soiree, topic, TypedListener[Event](func(e Event) error { return nil })); err != nil {
 		t.Fatalf("On() error: %v", err)
 	}
 
-	soiree.EmitSync("topic", "payload")
+	EmitTopicSync(soiree, topic, Event(NewBaseEvent(topic.Name(), "payload")))
 
 	if len(store.Events()) == 0 {
 		t.Fatalf("expected event to be stored")
@@ -34,18 +34,18 @@ func TestRetryWithBackoff(t *testing.T) {
 		WithRetry(3, func() backoff.BackOff { return backoff.NewConstantBackOff(10 * time.Millisecond) }),
 	)
 
-	_, err := soiree.On("topic", func(e Event) error {
+	topic := NewEventTopic("topic")
+	if _, err := OnTopic(soiree, topic, TypedListener[Event](func(e Event) error {
 		attempts++
 		if attempts < 3 {
 			return errors.New("fail")
 		}
 		return nil
-	})
-	if err != nil {
+	})); err != nil {
 		t.Fatalf("On() error: %v", err)
 	}
 
-	errs := soiree.EmitSync("topic", "data")
+	errs := EmitTopicSync(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 	if len(errs) != 0 {
 		t.Fatalf("unexpected errors: %v", errs)
 	}

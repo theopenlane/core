@@ -18,6 +18,7 @@ func main() {
 
 	// Start a soiree but invite UUID instead of ULID
 	e := soiree.NewEventPool(soiree.WithIDGenerator(uuidGenerator))
+	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener
 	listener := func(evt soiree.Event) error {
@@ -27,15 +28,11 @@ func main() {
 	}
 
 	// Subscribe the listener to a topic and retrieve the listener's unique ID
-	listenerID, err := e.On("user.created", listener)
-	if err != nil {
-		fmt.Printf("Error subscribing listener: %v\n", err)
-		return
-	}
+	listenerID := soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
 
 	// The listenerID returned from the subscription is the unique UUID generated for the listener
 	fmt.Printf("Listener with ID %s subscribed to topic 'user.created'\n", listenerID)
 
 	// Emit an event
-	e.Emit("user.created", "John Snow")
+	soiree.EmitTopic(e, userCreated, soiree.Event(soiree.NewBaseEvent(userCreated.Name(), "John Snow")))
 }
