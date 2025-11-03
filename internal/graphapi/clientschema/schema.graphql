@@ -1957,15 +1957,6 @@ enum AssessmentAssesmentType @goModel(model: "github.com/theopenlane/core/pkg/en
 	EXTERNAL
 }
 """
-Return response for createBulkAssessment mutation
-"""
-type AssessmentBulkCreatePayload {
-	"""
-	Created assessments
-	"""
-	assessments: [Assessment!]
-}
-"""
 A connection to a list of items.
 """
 type AssessmentConnection {
@@ -2110,7 +2101,7 @@ enum AssessmentHistoryOrderField {
 	created_at
 	updated_at
 	name
-	ASSESMENT_TYPE
+	assessment_type
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -2335,7 +2326,7 @@ enum AssessmentOrderField {
 	created_at
 	updated_at
 	name
-	ASSESMENT_TYPE
+	assessment_type
 }
 type AssessmentResponse implements Node {
 	id: ID!
@@ -2344,7 +2335,7 @@ type AssessmentResponse implements Node {
 	createdBy: String
 	updatedBy: String
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: ID
 	"""
@@ -2465,7 +2456,7 @@ type AssessmentResponseHistory implements Node {
 	createdBy: String
 	updatedBy: String
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -2572,7 +2563,7 @@ enum AssessmentResponseHistoryOrderField {
 	created_at
 	updated_at
 	send_attempts
-	STATUS
+	status
 	ASSIGNED_AT
 	STARTED_AT
 	COMPLETED_AT
@@ -2852,7 +2843,7 @@ enum AssessmentResponseOrderField {
 	created_at
 	updated_at
 	send_attempts
-	STATUS
+	status
 	ASSIGNED_AT
 	STARTED_AT
 	COMPLETED_AT
@@ -30474,24 +30465,6 @@ type Mutation {
 		input: CreateAssessmentInput!
 	): AssessmentCreatePayload!
 	"""
-	Create multiple new assessments
-	"""
-	createBulkAssessment(
-		"""
-		values of the assessment
-		"""
-		input: [CreateAssessmentInput!]
-	): AssessmentBulkCreatePayload!
-	"""
-	Create multiple new assessments via file upload
-	"""
-	createBulkCSVAssessment(
-		"""
-		csv file containing values of the assessment
-		"""
-		input: Upload!
-	): AssessmentBulkCreatePayload!
-	"""
 	Update an existing assessment
 	"""
 	updateAssessment(
@@ -30523,24 +30496,6 @@ type Mutation {
 		"""
 		input: CreateAssessmentResponseInput!
 	): AssessmentResponseCreatePayload!
-	"""
-	Create multiple new assessmentResponses
-	"""
-	createBulkAssessmentResponse(
-		"""
-		values of the assessmentResponse
-		"""
-		input: [CreateAssessmentResponseInput!]
-	): AssessmentResponseBulkCreatePayload!
-	"""
-	Create multiple new assessmentResponses via file upload
-	"""
-	createBulkCSVAssessmentResponse(
-		"""
-		csv file containing values of the assessmentResponse
-		"""
-		input: Upload!
-	): AssessmentResponseBulkCreatePayload!
 	"""
 	Update an existing assessmentResponse
 	"""
@@ -60918,7 +60873,7 @@ enum TemplateHistoryOrderField {
 	history_time
 	created_at
 	updated_at
-	NAME
+	name
 	TEMPLATE_TYPE
 	KIND
 }
@@ -61197,7 +61152,7 @@ Properties by which Template connections can be ordered.
 enum TemplateOrderField {
 	created_at
 	updated_at
-	NAME
+	name
 	TEMPLATE_TYPE
 	KIND
 }
@@ -65951,8 +65906,6 @@ input UpdateAssessmentResponseInput {
 	"""
 	dueDate: Time
 	clearDueDate: Boolean
-	ownerID: ID
-	clearOwner: Boolean
 	documentID: ID
 	clearDocument: Boolean
 	assessmentID: ID

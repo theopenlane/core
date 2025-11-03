@@ -88,12 +88,6 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
-// Return response for createBulkAssessment mutation
-type AssessmentBulkCreatePayload struct {
-	// Created assessments
-	Assessments []*generated.Assessment `json:"assessments,omitempty"`
-}
-
 // Return response for createAssessment mutation
 type AssessmentCreatePayload struct {
 	// Created assessment

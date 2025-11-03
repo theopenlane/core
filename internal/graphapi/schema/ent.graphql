@@ -1941,7 +1941,7 @@ enum AssessmentHistoryOrderField {
   created_at
   updated_at
   name
-  ASSESMENT_TYPE
+  assessment_type
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -2158,7 +2158,7 @@ enum AssessmentOrderField {
   created_at
   updated_at
   name
-  ASSESMENT_TYPE
+  assessment_type
 }
 type AssessmentResponse implements Node {
   id: ID!
@@ -2368,7 +2368,7 @@ enum AssessmentResponseHistoryOrderField {
   created_at
   updated_at
   send_attempts
-  STATUS
+  status
   ASSIGNED_AT
   STARTED_AT
   COMPLETED_AT
@@ -2648,7 +2648,7 @@ enum AssessmentResponseOrderField {
   created_at
   updated_at
   send_attempts
-  STATUS
+  status
   ASSIGNED_AT
   STARTED_AT
   COMPLETED_AT
@@ -51126,7 +51126,7 @@ enum TemplateHistoryOrderField {
   history_time
   created_at
   updated_at
-  NAME
+  name
   TEMPLATE_TYPE
   KIND
 }
@@ -51405,7 +51405,7 @@ Properties by which Template connections can be ordered.
 enum TemplateOrderField {
   created_at
   updated_at
-  NAME
+  name
   TEMPLATE_TYPE
   KIND
 }

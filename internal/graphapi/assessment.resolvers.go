@@ -7,7 +7,6 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
@@ -32,47 +31,6 @@ func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated
 	return &model.AssessmentCreatePayload{
 		Assessment: res,
 	}, nil
-}
-
-// CreateBulkAssessment is the resolver for the createBulkAssessment field.
-func (r *mutationResolver) CreateBulkAssessment(ctx context.Context, input []*generated.CreateAssessmentInput) (*model.AssessmentBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateAssessment(ctx, input)
-}
-
-// CreateBulkCSVAssessment is the resolver for the createBulkCSVAssessment field.
-func (r *mutationResolver) CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload) (*model.AssessmentBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateAssessmentInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateAssessment(ctx, data)
 }
 
 // UpdateAssessment is the resolver for the updateAssessment field.

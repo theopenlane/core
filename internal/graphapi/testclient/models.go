@@ -1225,12 +1225,6 @@ type Assessment struct {
 
 func (Assessment) IsNode() {}
 
-// Return response for createBulkAssessment mutation
-type AssessmentBulkCreatePayload struct {
-	// Created assessments
-	Assessments []*Assessment `json:"assessments,omitempty"`
-}
-
 // A connection to a list of items.
 type AssessmentConnection struct {
 	// A list of edges.
@@ -1493,7 +1487,7 @@ type AssessmentResponse struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessmentID"`
@@ -1566,7 +1560,7 @@ type AssessmentResponseHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessmentID"`
@@ -33551,8 +33545,6 @@ type UpdateAssessmentResponseInput struct {
 	// when the assessment is due
 	DueDate       *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate  *bool      `json:"clearDueDate,omitempty"`
-	OwnerID       *string    `json:"ownerID,omitempty"`
-	ClearOwner    *bool      `json:"clearOwner,omitempty"`
 	DocumentID    *string    `json:"documentID,omitempty"`
 	ClearDocument *bool      `json:"clearDocument,omitempty"`
 	AssessmentID  *string    `json:"assessmentID,omitempty"`
@@ -37892,11 +37884,11 @@ func (e ActionPlanOrderField) MarshalJSON() ([]byte, error) {
 type AssessmentHistoryOrderField string
 
 const (
-	AssessmentHistoryOrderFieldHistoryTime   AssessmentHistoryOrderField = "history_time"
-	AssessmentHistoryOrderFieldCreatedAt     AssessmentHistoryOrderField = "created_at"
-	AssessmentHistoryOrderFieldUpdatedAt     AssessmentHistoryOrderField = "updated_at"
-	AssessmentHistoryOrderFieldName          AssessmentHistoryOrderField = "name"
-	AssessmentHistoryOrderFieldAssesmentType AssessmentHistoryOrderField = "ASSESMENT_TYPE"
+	AssessmentHistoryOrderFieldHistoryTime    AssessmentHistoryOrderField = "history_time"
+	AssessmentHistoryOrderFieldCreatedAt      AssessmentHistoryOrderField = "created_at"
+	AssessmentHistoryOrderFieldUpdatedAt      AssessmentHistoryOrderField = "updated_at"
+	AssessmentHistoryOrderFieldName           AssessmentHistoryOrderField = "name"
+	AssessmentHistoryOrderFieldAssessmentType AssessmentHistoryOrderField = "assessment_type"
 )
 
 var AllAssessmentHistoryOrderField = []AssessmentHistoryOrderField{
@@ -37904,12 +37896,12 @@ var AllAssessmentHistoryOrderField = []AssessmentHistoryOrderField{
 	AssessmentHistoryOrderFieldCreatedAt,
 	AssessmentHistoryOrderFieldUpdatedAt,
 	AssessmentHistoryOrderFieldName,
-	AssessmentHistoryOrderFieldAssesmentType,
+	AssessmentHistoryOrderFieldAssessmentType,
 }
 
 func (e AssessmentHistoryOrderField) IsValid() bool {
 	switch e {
-	case AssessmentHistoryOrderFieldHistoryTime, AssessmentHistoryOrderFieldCreatedAt, AssessmentHistoryOrderFieldUpdatedAt, AssessmentHistoryOrderFieldName, AssessmentHistoryOrderFieldAssesmentType:
+	case AssessmentHistoryOrderFieldHistoryTime, AssessmentHistoryOrderFieldCreatedAt, AssessmentHistoryOrderFieldUpdatedAt, AssessmentHistoryOrderFieldName, AssessmentHistoryOrderFieldAssessmentType:
 		return true
 	}
 	return false
@@ -37954,22 +37946,22 @@ func (e AssessmentHistoryOrderField) MarshalJSON() ([]byte, error) {
 type AssessmentOrderField string
 
 const (
-	AssessmentOrderFieldCreatedAt     AssessmentOrderField = "created_at"
-	AssessmentOrderFieldUpdatedAt     AssessmentOrderField = "updated_at"
-	AssessmentOrderFieldName          AssessmentOrderField = "name"
-	AssessmentOrderFieldAssesmentType AssessmentOrderField = "ASSESMENT_TYPE"
+	AssessmentOrderFieldCreatedAt      AssessmentOrderField = "created_at"
+	AssessmentOrderFieldUpdatedAt      AssessmentOrderField = "updated_at"
+	AssessmentOrderFieldName           AssessmentOrderField = "name"
+	AssessmentOrderFieldAssessmentType AssessmentOrderField = "assessment_type"
 )
 
 var AllAssessmentOrderField = []AssessmentOrderField{
 	AssessmentOrderFieldCreatedAt,
 	AssessmentOrderFieldUpdatedAt,
 	AssessmentOrderFieldName,
-	AssessmentOrderFieldAssesmentType,
+	AssessmentOrderFieldAssessmentType,
 }
 
 func (e AssessmentOrderField) IsValid() bool {
 	switch e {
-	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssesmentType:
+	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssessmentType:
 		return true
 	}
 	return false
@@ -38018,7 +38010,7 @@ const (
 	AssessmentResponseHistoryOrderFieldCreatedAt    AssessmentResponseHistoryOrderField = "created_at"
 	AssessmentResponseHistoryOrderFieldUpdatedAt    AssessmentResponseHistoryOrderField = "updated_at"
 	AssessmentResponseHistoryOrderFieldSendAttempts AssessmentResponseHistoryOrderField = "send_attempts"
-	AssessmentResponseHistoryOrderFieldStatus       AssessmentResponseHistoryOrderField = "STATUS"
+	AssessmentResponseHistoryOrderFieldStatus       AssessmentResponseHistoryOrderField = "status"
 	AssessmentResponseHistoryOrderFieldAssignedAt   AssessmentResponseHistoryOrderField = "ASSIGNED_AT"
 	AssessmentResponseHistoryOrderFieldStartedAt    AssessmentResponseHistoryOrderField = "STARTED_AT"
 	AssessmentResponseHistoryOrderFieldCompletedAt  AssessmentResponseHistoryOrderField = "COMPLETED_AT"
@@ -38087,7 +38079,7 @@ const (
 	AssessmentResponseOrderFieldCreatedAt    AssessmentResponseOrderField = "created_at"
 	AssessmentResponseOrderFieldUpdatedAt    AssessmentResponseOrderField = "updated_at"
 	AssessmentResponseOrderFieldSendAttempts AssessmentResponseOrderField = "send_attempts"
-	AssessmentResponseOrderFieldStatus       AssessmentResponseOrderField = "STATUS"
+	AssessmentResponseOrderFieldStatus       AssessmentResponseOrderField = "status"
 	AssessmentResponseOrderFieldAssignedAt   AssessmentResponseOrderField = "ASSIGNED_AT"
 	AssessmentResponseOrderFieldStartedAt    AssessmentResponseOrderField = "STARTED_AT"
 	AssessmentResponseOrderFieldCompletedAt  AssessmentResponseOrderField = "COMPLETED_AT"
@@ -43649,7 +43641,7 @@ const (
 	TemplateHistoryOrderFieldHistoryTime  TemplateHistoryOrderField = "history_time"
 	TemplateHistoryOrderFieldCreatedAt    TemplateHistoryOrderField = "created_at"
 	TemplateHistoryOrderFieldUpdatedAt    TemplateHistoryOrderField = "updated_at"
-	TemplateHistoryOrderFieldName         TemplateHistoryOrderField = "NAME"
+	TemplateHistoryOrderFieldName         TemplateHistoryOrderField = "name"
 	TemplateHistoryOrderFieldTemplateType TemplateHistoryOrderField = "TEMPLATE_TYPE"
 	TemplateHistoryOrderFieldKind         TemplateHistoryOrderField = "KIND"
 )
@@ -43712,7 +43704,7 @@ type TemplateOrderField string
 const (
 	TemplateOrderFieldCreatedAt    TemplateOrderField = "created_at"
 	TemplateOrderFieldUpdatedAt    TemplateOrderField = "updated_at"
-	TemplateOrderFieldName         TemplateOrderField = "NAME"
+	TemplateOrderFieldName         TemplateOrderField = "name"
 	TemplateOrderFieldTemplateType TemplateOrderField = "TEMPLATE_TYPE"
 	TemplateOrderFieldKind         TemplateOrderField = "KIND"
 )

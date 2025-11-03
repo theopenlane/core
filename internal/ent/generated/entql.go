@@ -333,8 +333,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponse.FieldOwnerID:        {Type: field.TypeString, Column: assessmentresponse.FieldOwnerID},
 			assessmentresponse.FieldAssessmentID:   {Type: field.TypeString, Column: assessmentresponse.FieldAssessmentID},
 			assessmentresponse.FieldEmail:          {Type: field.TypeString, Column: assessmentresponse.FieldEmail},
-			assessmentresponse.FieldToken:          {Type: field.TypeString, Column: assessmentresponse.FieldToken},
-			assessmentresponse.FieldSecret:         {Type: field.TypeBytes, Column: assessmentresponse.FieldSecret},
 			assessmentresponse.FieldSendAttempts:   {Type: field.TypeInt, Column: assessmentresponse.FieldSendAttempts},
 			assessmentresponse.FieldStatus:         {Type: field.TypeEnum, Column: assessmentresponse.FieldStatus},
 			assessmentresponse.FieldAssignedAt:     {Type: field.TypeTime, Column: assessmentresponse.FieldAssignedAt},
@@ -367,8 +365,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponsehistory.FieldOwnerID:        {Type: field.TypeString, Column: assessmentresponsehistory.FieldOwnerID},
 			assessmentresponsehistory.FieldAssessmentID:   {Type: field.TypeString, Column: assessmentresponsehistory.FieldAssessmentID},
 			assessmentresponsehistory.FieldEmail:          {Type: field.TypeString, Column: assessmentresponsehistory.FieldEmail},
-			assessmentresponsehistory.FieldToken:          {Type: field.TypeString, Column: assessmentresponsehistory.FieldToken},
-			assessmentresponsehistory.FieldSecret:         {Type: field.TypeBytes, Column: assessmentresponsehistory.FieldSecret},
 			assessmentresponsehistory.FieldSendAttempts:   {Type: field.TypeInt, Column: assessmentresponsehistory.FieldSendAttempts},
 			assessmentresponsehistory.FieldStatus:         {Type: field.TypeEnum, Column: assessmentresponsehistory.FieldStatus},
 			assessmentresponsehistory.FieldAssignedAt:     {Type: field.TypeTime, Column: assessmentresponsehistory.FieldAssignedAt},
@@ -10973,16 +10969,6 @@ func (f *AssessmentResponseFilter) WhereEmail(p entql.StringP) {
 	f.Where(p.Field(assessmentresponse.FieldEmail))
 }
 
-// WhereToken applies the entql string predicate on the token field.
-func (f *AssessmentResponseFilter) WhereToken(p entql.StringP) {
-	f.Where(p.Field(assessmentresponse.FieldToken))
-}
-
-// WhereSecret applies the entql []byte predicate on the secret field.
-func (f *AssessmentResponseFilter) WhereSecret(p entql.BytesP) {
-	f.Where(p.Field(assessmentresponse.FieldSecret))
-}
-
 // WhereSendAttempts applies the entql int predicate on the send_attempts field.
 func (f *AssessmentResponseFilter) WhereSendAttempts(p entql.IntP) {
 	f.Where(p.Field(assessmentresponse.FieldSendAttempts))
@@ -11158,16 +11144,6 @@ func (f *AssessmentResponseHistoryFilter) WhereAssessmentID(p entql.StringP) {
 // WhereEmail applies the entql string predicate on the email field.
 func (f *AssessmentResponseHistoryFilter) WhereEmail(p entql.StringP) {
 	f.Where(p.Field(assessmentresponsehistory.FieldEmail))
-}
-
-// WhereToken applies the entql string predicate on the token field.
-func (f *AssessmentResponseHistoryFilter) WhereToken(p entql.StringP) {
-	f.Where(p.Field(assessmentresponsehistory.FieldToken))
-}
-
-// WhereSecret applies the entql []byte predicate on the secret field.
-func (f *AssessmentResponseHistoryFilter) WhereSecret(p entql.BytesP) {
-	f.Where(p.Field(assessmentresponsehistory.FieldSecret))
 }
 
 // WhereSendAttempts applies the entql int predicate on the send_attempts field.

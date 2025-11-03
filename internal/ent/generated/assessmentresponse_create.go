@@ -134,26 +134,6 @@ func (_c *AssessmentResponseCreate) SetEmail(v string) *AssessmentResponseCreate
 	return _c
 }
 
-// SetToken sets the "token" field.
-func (_c *AssessmentResponseCreate) SetToken(v string) *AssessmentResponseCreate {
-	_c.mutation.SetToken(v)
-	return _c
-}
-
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (_c *AssessmentResponseCreate) SetNillableToken(v *string) *AssessmentResponseCreate {
-	if v != nil {
-		_c.SetToken(*v)
-	}
-	return _c
-}
-
-// SetSecret sets the "secret" field.
-func (_c *AssessmentResponseCreate) SetSecret(v []byte) *AssessmentResponseCreate {
-	_c.mutation.SetSecret(v)
-	return _c
-}
-
 // SetSendAttempts sets the "send_attempts" field.
 func (_c *AssessmentResponseCreate) SetSendAttempts(v int) *AssessmentResponseCreate {
 	_c.mutation.SetSendAttempts(v)
@@ -338,13 +318,6 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		v := assessmentresponse.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.Token(); !ok {
-		if assessmentresponse.DefaultToken == nil {
-			return fmt.Errorf("generated: uninitialized assessmentresponse.DefaultToken (forgotten import generated/runtime?)")
-		}
-		v := assessmentresponse.DefaultToken()
-		_c.mutation.SetToken(v)
-	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := assessmentresponse.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
@@ -388,17 +361,6 @@ func (_c *AssessmentResponseCreate) check() error {
 	if v, ok := _c.mutation.Email(); ok {
 		if err := assessmentresponse.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.email": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.Token(); !ok {
-		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "AssessmentResponse.token"`)}
-	}
-	if _, ok := _c.mutation.Secret(); !ok {
-		return &ValidationError{Name: "secret", err: errors.New(`generated: missing required field "AssessmentResponse.secret"`)}
-	}
-	if v, ok := _c.mutation.Secret(); ok {
-		if err := assessmentresponse.SecretValidator(v); err != nil {
-			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.secret": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
@@ -484,14 +446,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponse.FieldEmail, field.TypeString, value)
 		_node.Email = value
-	}
-	if value, ok := _c.mutation.Token(); ok {
-		_spec.SetField(assessmentresponse.FieldToken, field.TypeString, value)
-		_node.Token = value
-	}
-	if value, ok := _c.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponse.FieldSecret, field.TypeBytes, value)
-		_node.Secret = value
 	}
 	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)

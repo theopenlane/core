@@ -42,10 +42,6 @@ const (
 	FieldAssessmentID = "assessment_id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldToken holds the string denoting the token field in the database.
-	FieldToken = "token"
-	// FieldSecret holds the string denoting the secret field in the database.
-	FieldSecret = "secret"
 	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
 	FieldSendAttempts = "send_attempts"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -79,8 +75,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldAssessmentID,
 	FieldEmail,
-	FieldToken,
-	FieldSecret,
 	FieldSendAttempts,
 	FieldStatus,
 	FieldAssignedAt,
@@ -117,8 +111,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultToken holds the default value on creation for the "token" field.
-	DefaultToken func() string
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
@@ -215,11 +207,6 @@ func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByToken orders the results by the token field.
-func ByToken(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldToken, opts...).ToFunc()
 }
 
 // BySendAttempts orders the results by the send_attempts field.

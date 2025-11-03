@@ -15,12 +15,10 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -60,25 +58,6 @@ func (AssessmentResponse) Fields() []ent.Field {
 				return err
 			}),
 
-		field.String("token").
-			Immutable().
-			Unique().
-			Comment("for external assessments, we want to be able to track the user").
-			Annotations(
-				entgql.Skip(entgql.SkipAll),
-			).
-			DefaultFunc(func() string {
-				token := keygen.PrefixedSecret("tolq")
-				return token
-			}),
-
-		field.Bytes("secret").
-			Comment("the comparison secret to verify the token's signature").
-			Annotations(
-				entgql.Skip(entgql.SkipAll),
-			).
-			NotEmpty(),
-
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send to the recipient about this assessment, maximum of 5").
 			Annotations(
@@ -92,7 +71,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Default(enums.AssesmentResponseStatusNotStarted.String()).
 			Comment("the current status of the assessment for this user").
 			Annotations(
-				entgql.OrderField("STATUS"),
+				entgql.OrderField("status"),
 			),
 
 		field.Time("assigned_at").
@@ -161,12 +140,7 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.AllowIfAssessmentResponseQueryOwner(),
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
-			rule.AllowIfAssessmentResponseOwner(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
@@ -183,7 +157,7 @@ func (AssessmentResponse) Annotations() []schema.Annotation {
 // Interceptors of the AssessmentResponse
 func (AssessmentResponse) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// interceptors.FilterQueryResults[generated.AssessmentResponse](), // Filter results based on FGA permissions
+		interceptors.FilterQueryResults[generated.AssessmentResponse](),
 	}
 }
 

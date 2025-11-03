@@ -166,26 +166,6 @@ func (_c *AssessmentResponseHistoryCreate) SetEmail(v string) *AssessmentRespons
 	return _c
 }
 
-// SetToken sets the "token" field.
-func (_c *AssessmentResponseHistoryCreate) SetToken(v string) *AssessmentResponseHistoryCreate {
-	_c.mutation.SetToken(v)
-	return _c
-}
-
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (_c *AssessmentResponseHistoryCreate) SetNillableToken(v *string) *AssessmentResponseHistoryCreate {
-	if v != nil {
-		_c.SetToken(*v)
-	}
-	return _c
-}
-
-// SetSecret sets the "secret" field.
-func (_c *AssessmentResponseHistoryCreate) SetSecret(v []byte) *AssessmentResponseHistoryCreate {
-	_c.mutation.SetSecret(v)
-	return _c
-}
-
 // SetSendAttempts sets the "send_attempts" field.
 func (_c *AssessmentResponseHistoryCreate) SetSendAttempts(v int) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetSendAttempts(v)
@@ -348,13 +328,6 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		v := assessmentresponsehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.Token(); !ok {
-		if assessmentresponsehistory.DefaultToken == nil {
-			return fmt.Errorf("generated: uninitialized assessmentresponsehistory.DefaultToken (forgotten import generated/runtime?)")
-		}
-		v := assessmentresponsehistory.DefaultToken()
-		_c.mutation.SetToken(v)
-	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := assessmentresponsehistory.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
@@ -395,12 +368,6 @@ func (_c *AssessmentResponseHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "AssessmentResponseHistory.email"`)}
-	}
-	if _, ok := _c.mutation.Token(); !ok {
-		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "AssessmentResponseHistory.token"`)}
-	}
-	if _, ok := _c.mutation.Secret(); !ok {
-		return &ValidationError{Name: "secret", err: errors.New(`generated: missing required field "AssessmentResponseHistory.secret"`)}
 	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		return &ValidationError{Name: "send_attempts", err: errors.New(`generated: missing required field "AssessmentResponseHistory.send_attempts"`)}
@@ -502,14 +469,6 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldEmail, field.TypeString, value)
 		_node.Email = value
-	}
-	if value, ok := _c.mutation.Token(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldToken, field.TypeString, value)
-		_node.Token = value
-	}
-	if value, ok := _c.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldSecret, field.TypeBytes, value)
-		_node.Secret = value
 	}
 	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)

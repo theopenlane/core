@@ -447,9 +447,11 @@ func init() {
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters2 := assessmentMixin[2].Interceptors()
 	assessmentMixinInters6 := assessmentMixin[6].Interceptors()
+	assessmentInters := schema.Assessment{}.Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
 	assessment.Interceptors[1] = assessmentMixinInters2[0]
 	assessment.Interceptors[2] = assessmentMixinInters6[0]
+	assessment.Interceptors[3] = assessmentInters[0]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields3 := assessmentMixin[3].Fields()
@@ -548,10 +550,12 @@ func init() {
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
+	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters2[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters5[0]
 	assessmentresponse.Interceptors[3] = assessmentresponseMixinInters5[1]
+	assessmentresponse.Interceptors[4] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields3 := assessmentresponseMixin[3].Fields()
@@ -582,20 +586,12 @@ func init() {
 	assessmentresponseDescEmail := assessmentresponseFields[1].Descriptor()
 	// assessmentresponse.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	assessmentresponse.EmailValidator = assessmentresponseDescEmail.Validators[0].(func(string) error)
-	// assessmentresponseDescToken is the schema descriptor for token field.
-	assessmentresponseDescToken := assessmentresponseFields[2].Descriptor()
-	// assessmentresponse.DefaultToken holds the default value on creation for the token field.
-	assessmentresponse.DefaultToken = assessmentresponseDescToken.Default.(func() string)
-	// assessmentresponseDescSecret is the schema descriptor for secret field.
-	assessmentresponseDescSecret := assessmentresponseFields[3].Descriptor()
-	// assessmentresponse.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
-	assessmentresponse.SecretValidator = assessmentresponseDescSecret.Validators[0].(func([]byte) error)
 	// assessmentresponseDescSendAttempts is the schema descriptor for send_attempts field.
-	assessmentresponseDescSendAttempts := assessmentresponseFields[4].Descriptor()
+	assessmentresponseDescSendAttempts := assessmentresponseFields[2].Descriptor()
 	// assessmentresponse.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponse.DefaultSendAttempts = assessmentresponseDescSendAttempts.Default.(int)
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
-	assessmentresponseDescStartedAt := assessmentresponseFields[7].Descriptor()
+	assessmentresponseDescStartedAt := assessmentresponseFields[5].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
 	// assessmentresponseDescID is the schema descriptor for id field.
@@ -629,16 +625,12 @@ func init() {
 	assessmentresponsehistory.DefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.Default.(func() time.Time)
 	// assessmentresponsehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	assessmentresponsehistory.UpdateDefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// assessmentresponsehistoryDescToken is the schema descriptor for token field.
-	assessmentresponsehistoryDescToken := assessmentresponsehistoryFields[13].Descriptor()
-	// assessmentresponsehistory.DefaultToken holds the default value on creation for the token field.
-	assessmentresponsehistory.DefaultToken = assessmentresponsehistoryDescToken.Default.(func() string)
 	// assessmentresponsehistoryDescSendAttempts is the schema descriptor for send_attempts field.
-	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[15].Descriptor()
+	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[13].Descriptor()
 	// assessmentresponsehistory.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponsehistory.DefaultSendAttempts = assessmentresponsehistoryDescSendAttempts.Default.(int)
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
-	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[18].Descriptor()
+	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[16].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.

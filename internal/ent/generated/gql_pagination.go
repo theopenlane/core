@@ -1953,7 +1953,7 @@ func (f AssessmentOrderField) String() string {
 	case AssessmentOrderFieldName.column:
 		str = "name"
 	case AssessmentOrderFieldAssessmentType.column:
-		str = "ASSESMENT_TYPE"
+		str = "assessment_type"
 	}
 	return str
 }
@@ -1976,7 +1976,7 @@ func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentOrderFieldUpdatedAt
 	case "name":
 		*f = *AssessmentOrderFieldName
-	case "ASSESMENT_TYPE":
+	case "assessment_type":
 		*f = *AssessmentOrderFieldAssessmentType
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentOrderField", str)
@@ -2319,7 +2319,7 @@ func (f AssessmentHistoryOrderField) String() string {
 	case AssessmentHistoryOrderFieldName.column:
 		str = "name"
 	case AssessmentHistoryOrderFieldAssessmentType.column:
-		str = "ASSESMENT_TYPE"
+		str = "assessment_type"
 	}
 	return str
 }
@@ -2344,7 +2344,7 @@ func (f *AssessmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentHistoryOrderFieldUpdatedAt
 	case "name":
 		*f = *AssessmentHistoryOrderFieldName
-	case "ASSESMENT_TYPE":
+	case "assessment_type":
 		*f = *AssessmentHistoryOrderFieldAssessmentType
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentHistoryOrderField", str)
@@ -2766,7 +2766,7 @@ func (f AssessmentResponseOrderField) String() string {
 	case AssessmentResponseOrderFieldSendAttempts.column:
 		str = "send_attempts"
 	case AssessmentResponseOrderFieldStatus.column:
-		str = "STATUS"
+		str = "status"
 	case AssessmentResponseOrderFieldAssignedAt.column:
 		str = "ASSIGNED_AT"
 	case AssessmentResponseOrderFieldStartedAt.column:
@@ -2797,7 +2797,7 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldUpdatedAt
 	case "send_attempts":
 		*f = *AssessmentResponseOrderFieldSendAttempts
-	case "STATUS":
+	case "status":
 		*f = *AssessmentResponseOrderFieldStatus
 	case "ASSIGNED_AT":
 		*f = *AssessmentResponseOrderFieldAssignedAt
@@ -3204,7 +3204,7 @@ func (f AssessmentResponseHistoryOrderField) String() string {
 	case AssessmentResponseHistoryOrderFieldSendAttempts.column:
 		str = "send_attempts"
 	case AssessmentResponseHistoryOrderFieldStatus.column:
-		str = "STATUS"
+		str = "status"
 	case AssessmentResponseHistoryOrderFieldAssignedAt.column:
 		str = "ASSIGNED_AT"
 	case AssessmentResponseHistoryOrderFieldStartedAt.column:
@@ -3237,7 +3237,7 @@ func (f *AssessmentResponseHistoryOrderField) UnmarshalGQL(v interface{}) error 
 		*f = *AssessmentResponseHistoryOrderFieldUpdatedAt
 	case "send_attempts":
 		*f = *AssessmentResponseHistoryOrderFieldSendAttempts
-	case "STATUS":
+	case "status":
 		*f = *AssessmentResponseHistoryOrderFieldStatus
 	case "ASSIGNED_AT":
 		*f = *AssessmentResponseHistoryOrderFieldAssignedAt
@@ -37853,7 +37853,7 @@ func (f TemplateOrderField) String() string {
 	case TemplateOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case TemplateOrderFieldName.column:
-		str = "NAME"
+		str = "name"
 	case TemplateOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
 	case TemplateOrderFieldKind.column:
@@ -37878,7 +37878,7 @@ func (f *TemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateOrderFieldUpdatedAt
-	case "NAME":
+	case "name":
 		*f = *TemplateOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateOrderFieldTemplateType
@@ -38237,7 +38237,7 @@ func (f TemplateHistoryOrderField) String() string {
 	case TemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case TemplateHistoryOrderFieldName.column:
-		str = "NAME"
+		str = "name"
 	case TemplateHistoryOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
 	case TemplateHistoryOrderFieldKind.column:
@@ -38264,7 +38264,7 @@ func (f *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateHistoryOrderFieldUpdatedAt
-	case "NAME":
+	case "name":
 		*f = *TemplateHistoryOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateHistoryOrderFieldTemplateType

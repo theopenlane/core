@@ -121,16 +121,6 @@ func Email(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldEmail, v))
 }
 
-// Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
-func Token(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldToken, v))
-}
-
-// Secret applies equality check predicate on the "secret" field. It's identical to SecretEQ.
-func Secret(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldSecret, v))
-}
-
 // SendAttempts applies equality check predicate on the "send_attempts" field. It's identical to SendAttemptsEQ.
 func SendAttempts(v int) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldSendAttempts, v))
@@ -874,111 +864,6 @@ func EmailEqualFold(v string) predicate.AssessmentResponseHistory {
 // EmailContainsFold applies the ContainsFold predicate on the "email" field.
 func EmailContainsFold(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldEmail, v))
-}
-
-// TokenEQ applies the EQ predicate on the "token" field.
-func TokenEQ(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldToken, v))
-}
-
-// TokenNEQ applies the NEQ predicate on the "token" field.
-func TokenNEQ(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldToken, v))
-}
-
-// TokenIn applies the In predicate on the "token" field.
-func TokenIn(vs ...string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldToken, vs...))
-}
-
-// TokenNotIn applies the NotIn predicate on the "token" field.
-func TokenNotIn(vs ...string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldToken, vs...))
-}
-
-// TokenGT applies the GT predicate on the "token" field.
-func TokenGT(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldToken, v))
-}
-
-// TokenGTE applies the GTE predicate on the "token" field.
-func TokenGTE(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldToken, v))
-}
-
-// TokenLT applies the LT predicate on the "token" field.
-func TokenLT(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldToken, v))
-}
-
-// TokenLTE applies the LTE predicate on the "token" field.
-func TokenLTE(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldToken, v))
-}
-
-// TokenContains applies the Contains predicate on the "token" field.
-func TokenContains(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldContains(FieldToken, v))
-}
-
-// TokenHasPrefix applies the HasPrefix predicate on the "token" field.
-func TokenHasPrefix(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldHasPrefix(FieldToken, v))
-}
-
-// TokenHasSuffix applies the HasSuffix predicate on the "token" field.
-func TokenHasSuffix(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldHasSuffix(FieldToken, v))
-}
-
-// TokenEqualFold applies the EqualFold predicate on the "token" field.
-func TokenEqualFold(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldEqualFold(FieldToken, v))
-}
-
-// TokenContainsFold applies the ContainsFold predicate on the "token" field.
-func TokenContainsFold(v string) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldToken, v))
-}
-
-// SecretEQ applies the EQ predicate on the "secret" field.
-func SecretEQ(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldSecret, v))
-}
-
-// SecretNEQ applies the NEQ predicate on the "secret" field.
-func SecretNEQ(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldSecret, v))
-}
-
-// SecretIn applies the In predicate on the "secret" field.
-func SecretIn(vs ...[]byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldSecret, vs...))
-}
-
-// SecretNotIn applies the NotIn predicate on the "secret" field.
-func SecretNotIn(vs ...[]byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldSecret, vs...))
-}
-
-// SecretGT applies the GT predicate on the "secret" field.
-func SecretGT(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldSecret, v))
-}
-
-// SecretGTE applies the GTE predicate on the "secret" field.
-func SecretGTE(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldSecret, v))
-}
-
-// SecretLT applies the LT predicate on the "secret" field.
-func SecretLT(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldSecret, v))
-}
-
-// SecretLTE applies the LTE predicate on the "secret" field.
-func SecretLTE(v []byte) predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldSecret, v))
 }
 
 // SendAttemptsEQ applies the EQ predicate on the "send_attempts" field.

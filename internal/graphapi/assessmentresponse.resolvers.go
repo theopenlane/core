@@ -7,7 +7,6 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -32,47 +31,6 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 	return &model.AssessmentResponseCreatePayload{
 		AssessmentResponse: res,
 	}, nil
-}
-
-// CreateBulkAssessmentResponse is the resolver for the createBulkAssessmentResponse field.
-func (r *mutationResolver) CreateBulkAssessmentResponse(ctx context.Context, input []*generated.CreateAssessmentResponseInput) (*model.AssessmentResponseBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateAssessmentResponse(ctx, input)
-}
-
-// CreateBulkCSVAssessmentResponse is the resolver for the createBulkCSVAssessmentResponse field.
-func (r *mutationResolver) CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload) (*model.AssessmentResponseBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateAssessmentResponseInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateAssessmentResponse(ctx, data)
 }
 
 // UpdateAssessmentResponse is the resolver for the updateAssessmentResponse field.

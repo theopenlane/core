@@ -757,14 +757,6 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetEmail(email)
 	}
 
-	if token, exists := m.Token(); exists {
-		create = create.SetToken(token)
-	}
-
-	if secret, exists := m.Secret(); exists {
-		create = create.SetSecret(secret)
-	}
-
 	if sendAttempts, exists := m.SendAttempts(); exists {
 		create = create.SetSendAttempts(sendAttempts)
 	}
@@ -878,18 +870,6 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetEmail(assessmentresponse.Email)
 		}
 
-		if token, exists := m.Token(); exists {
-			create = create.SetToken(token)
-		} else {
-			create = create.SetToken(assessmentresponse.Token)
-		}
-
-		if secret, exists := m.Secret(); exists {
-			create = create.SetSecret(secret)
-		} else {
-			create = create.SetSecret(assessmentresponse.Secret)
-		}
-
 		if sendAttempts, exists := m.SendAttempts(); exists {
 			create = create.SetSendAttempts(sendAttempts)
 		} else {
@@ -976,8 +956,6 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetOwnerID(assessmentresponse.OwnerID).
 			SetAssessmentID(assessmentresponse.AssessmentID).
 			SetEmail(assessmentresponse.Email).
-			SetToken(assessmentresponse.Token).
-			SetSecret(assessmentresponse.Secret).
 			SetSendAttempts(assessmentresponse.SendAttempts).
 			SetStatus(assessmentresponse.Status).
 			SetAssignedAt(assessmentresponse.AssignedAt).

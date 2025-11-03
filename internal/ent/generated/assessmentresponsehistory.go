@@ -43,10 +43,6 @@ type AssessmentResponseHistory struct {
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// the email address of the recipient
 	Email string `json:"email,omitempty"`
-	// for external assessments, we want to be able to track the user
-	Token string `json:"token,omitempty"`
-	// the comparison secret to verify the token's signature
-	Secret []byte `json:"secret,omitempty"`
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
 	// the current status of the assessment for this user
@@ -69,13 +65,11 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case assessmentresponsehistory.FieldSecret:
-			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case assessmentresponsehistory.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldToken, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
+		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
 			values[i] = new(sql.NullString)
 		case assessmentresponsehistory.FieldHistoryTime, assessmentresponsehistory.FieldCreatedAt, assessmentresponsehistory.FieldUpdatedAt, assessmentresponsehistory.FieldDeletedAt, assessmentresponsehistory.FieldAssignedAt, assessmentresponsehistory.FieldStartedAt, assessmentresponsehistory.FieldCompletedAt, assessmentresponsehistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -171,18 +165,6 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				_m.Email = value.String
-			}
-		case assessmentresponsehistory.FieldToken:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field token", values[i])
-			} else if value.Valid {
-				_m.Token = value.String
-			}
-		case assessmentresponsehistory.FieldSecret:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field secret", values[i])
-			} else if value != nil {
-				_m.Secret = *value
 			}
 		case assessmentresponsehistory.FieldSendAttempts:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -297,12 +279,6 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
-	builder.WriteString(", ")
-	builder.WriteString("token=")
-	builder.WriteString(_m.Token)
-	builder.WriteString(", ")
-	builder.WriteString("secret=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Secret))
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))

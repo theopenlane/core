@@ -271,10 +271,6 @@ type ComplexityRoot struct {
 		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
-	AssessmentBulkCreatePayload struct {
-		Assessments func(childComplexity int) int
-	}
-
 	AssessmentConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2729,13 +2725,9 @@ type ComplexityRoot struct {
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkAssessment                 func(childComplexity int, input []*generated.CreateAssessmentInput) int
-		CreateBulkAssessmentResponse         func(childComplexity int, input []*generated.CreateAssessmentResponseInput) int
 		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
 		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAssessment              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAssessmentResponse      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
@@ -6956,13 +6948,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "AssessmentBulkCreatePayload.assessments":
-		if e.complexity.AssessmentBulkCreatePayload.Assessments == nil {
-			break
-		}
-
-		return e.complexity.AssessmentBulkCreatePayload.Assessments(childComplexity), true
 
 	case "AssessmentConnection.edges":
 		if e.complexity.AssessmentConnection.Edges == nil {
@@ -18531,30 +18516,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkActionPlan(childComplexity, args["input"].([]*generated.CreateActionPlanInput)), true
 
-	case "Mutation.createBulkAssessment":
-		if e.complexity.Mutation.CreateBulkAssessment == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkAssessment_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkAssessment(childComplexity, args["input"].([]*generated.CreateAssessmentInput)), true
-
-	case "Mutation.createBulkAssessmentResponse":
-		if e.complexity.Mutation.CreateBulkAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkAssessmentResponse(childComplexity, args["input"].([]*generated.CreateAssessmentResponseInput)), true
-
 	case "Mutation.createBulkAsset":
 		if e.complexity.Mutation.CreateBulkAsset == nil {
 			break
@@ -18590,30 +18551,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
-
-	case "Mutation.createBulkCSVAssessment":
-		if e.complexity.Mutation.CreateBulkCSVAssessment == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVAssessment_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVAssessment(childComplexity, args["input"].(graphql.Upload)), true
-
-	case "Mutation.createBulkCSVAssessmentResponse":
-		if e.complexity.Mutation.CreateBulkCSVAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVAssessmentResponse(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVAsset":
 		if e.complexity.Mutation.CreateBulkCSVAsset == nil {
@@ -40358,24 +40295,6 @@ extend type Mutation{
         input: CreateAssessmentInput!
     ): AssessmentCreatePayload!
     """
-    Create multiple new assessments
-    """
-    createBulkAssessment(
-        """
-        values of the assessment
-        """
-        input: [CreateAssessmentInput!]
-    ): AssessmentBulkCreatePayload!
-    """
-    Create multiple new assessments via file upload
-    """
-    createBulkCSVAssessment(
-        """
-        csv file containing values of the assessment
-        """
-        input: Upload!
-    ): AssessmentBulkCreatePayload!
-    """
     Update an existing assessment
     """
     updateAssessment(
@@ -40429,15 +40348,7 @@ type AssessmentDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessment mutation
-"""
-type AssessmentBulkCreatePayload {
-    """
-    Created assessments
-    """
-    assessments: [Assessment!]
-}`, BuiltIn: false},
+`, BuiltIn: false},
 	{Name: "../schema/assessmentresponse.graphql", Input: `extend type Query {
     """
     Look up assessmentResponse by ID
@@ -40460,24 +40371,6 @@ extend type Mutation{
         """
         input: CreateAssessmentResponseInput!
     ): AssessmentResponseCreatePayload!
-    """
-    Create multiple new assessmentResponses
-    """
-    createBulkAssessmentResponse(
-        """
-        values of the assessmentResponse
-        """
-        input: [CreateAssessmentResponseInput!]
-    ): AssessmentResponseBulkCreatePayload!
-    """
-    Create multiple new assessmentResponses via file upload
-    """
-    createBulkCSVAssessmentResponse(
-        """
-        csv file containing values of the assessmentResponse
-        """
-        input: Upload!
-    ): AssessmentResponseBulkCreatePayload!
     """
     Update an existing assessmentResponse
     """
@@ -40540,7 +40433,8 @@ type AssessmentResponseBulkCreatePayload {
     Created assessmentResponses
     """
     assessmentResponses: [AssessmentResponse!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
     Look up asset by ID
@@ -43917,7 +43811,7 @@ enum AssessmentHistoryOrderField {
   created_at
   updated_at
   name
-  ASSESMENT_TYPE
+  assessment_type
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -44134,7 +44028,7 @@ enum AssessmentOrderField {
   created_at
   updated_at
   name
-  ASSESMENT_TYPE
+  assessment_type
 }
 type AssessmentResponse implements Node {
   id: ID!
@@ -44143,7 +44037,7 @@ type AssessmentResponse implements Node {
   createdBy: String
   updatedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -44237,7 +44131,7 @@ type AssessmentResponseHistory implements Node {
   createdBy: String
   updatedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -44344,7 +44238,7 @@ enum AssessmentResponseHistoryOrderField {
   created_at
   updated_at
   send_attempts
-  STATUS
+  status
   ASSIGNED_AT
   STARTED_AT
   COMPLETED_AT
@@ -44624,7 +44518,7 @@ enum AssessmentResponseOrderField {
   created_at
   updated_at
   send_attempts
-  STATUS
+  status
   ASSIGNED_AT
   STARTED_AT
   COMPLETED_AT
@@ -93102,7 +92996,7 @@ enum TemplateHistoryOrderField {
   history_time
   created_at
   updated_at
-  NAME
+  name
   TEMPLATE_TYPE
   KIND
 }
@@ -93381,7 +93275,7 @@ Properties by which Template connections can be ordered.
 enum TemplateOrderField {
   created_at
   updated_at
-  NAME
+  name
   TEMPLATE_TYPE
   KIND
 }
@@ -97879,8 +97773,6 @@ input UpdateAssessmentResponseInput {
   """
   dueDate: Time
   clearDueDate: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   documentID: ID
   clearDocument: Boolean
   assessmentID: ID

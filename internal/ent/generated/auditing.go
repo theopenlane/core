@@ -448,12 +448,6 @@ func (_m *AssessmentResponseHistory) changes(new *AssessmentResponseHistory) []C
 	if !reflect.DeepEqual(_m.Email, new.Email) {
 		changes = append(changes, NewChange(assessmentresponsehistory.FieldEmail, _m.Email, new.Email))
 	}
-	if !reflect.DeepEqual(_m.Token, new.Token) {
-		changes = append(changes, NewChange(assessmentresponsehistory.FieldToken, _m.Token, new.Token))
-	}
-	if !reflect.DeepEqual(_m.Secret, new.Secret) {
-		changes = append(changes, NewChange(assessmentresponsehistory.FieldSecret, _m.Secret, new.Secret))
-	}
 	if !reflect.DeepEqual(_m.SendAttempts, new.SendAttempts) {
 		changes = append(changes, NewChange(assessmentresponsehistory.FieldSendAttempts, _m.SendAttempts, new.SendAttempts))
 	}

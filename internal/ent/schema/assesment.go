@@ -12,10 +12,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -47,7 +48,7 @@ func (Assessment) Fields() []ent.Field {
 			Default(enums.AssesmentTypeInternal.String()).
 			Immutable().
 			Annotations(
-				entgql.OrderField("ASSESMENT_TYPE"),
+				entgql.OrderField("assessment_type"),
 			),
 		field.String("template_id").
 			Comment("the template id associated with the assessment"),
@@ -82,12 +83,8 @@ func (a Assessment) Edges() []ent.Edge {
 
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.AllowIfAssessmentQueryCreatedBy(),
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			rule.AllowIfAssessmentCreatedBy(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -111,7 +108,7 @@ func (Assessment) Indexes() []ent.Index {
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// interceptors.FilterQueryResults[generated.Assessment](),
+		interceptors.FilterQueryResults[generated.Assessment](),
 	}
 }
 

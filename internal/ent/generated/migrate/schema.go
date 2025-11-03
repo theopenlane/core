@@ -303,8 +303,6 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
-		{Name: "token", Type: field.TypeString, Unique: true},
-		{Name: "secret", Type: field.TypeBytes},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
 		{Name: "assigned_at", Type: field.TypeTime},
@@ -323,19 +321,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessment_responses_assessments_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[16]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[14]},
 				RefColumns: []*schema.Column{AssessmentsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "assessment_responses_document_data_document",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[17]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[15]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessment_responses_organizations_assessment_responses",
-				Columns:    []*schema.Column{AssessmentResponsesColumns[18]},
+				Columns:    []*schema.Column{AssessmentResponsesColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -344,7 +342,7 @@ var (
 			{
 				Name:    "assessmentresponse_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[18]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -352,7 +350,7 @@ var (
 			{
 				Name:    "assessmentresponse_assessment_id_email",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentResponsesColumns[16], AssessmentResponsesColumns[7]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[14], AssessmentResponsesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -360,22 +358,22 @@ var (
 			{
 				Name:    "assessmentresponse_status",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[11]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[9]},
 			},
 			{
 				Name:    "assessmentresponse_due_date",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[15]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[13]},
 			},
 			{
 				Name:    "assessmentresponse_assigned_at",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[12]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[10]},
 			},
 			{
 				Name:    "assessmentresponse_completed_at",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentResponsesColumns[14]},
+				Columns: []*schema.Column{AssessmentResponsesColumns[12]},
 			},
 		},
 	}
@@ -394,8 +392,6 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
-		{Name: "token", Type: field.TypeString},
-		{Name: "secret", Type: field.TypeBytes},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
 		{Name: "assigned_at", Type: field.TypeTime},

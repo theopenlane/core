@@ -118,12 +118,6 @@ func (_u *AssessmentResponseHistoryUpdate) SetNillableAssessmentID(v *string) *A
 	return _u
 }
 
-// SetSecret sets the "secret" field.
-func (_u *AssessmentResponseHistoryUpdate) SetSecret(v []byte) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetSecret(v)
-	return _u
-}
-
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseHistoryUpdate) SetSendAttempts(v int) *AssessmentResponseHistoryUpdate {
 	_u.mutation.ResetSendAttempts()
@@ -347,9 +341,6 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldSecret, field.TypeBytes, value)
-	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -487,12 +478,6 @@ func (_u *AssessmentResponseHistoryUpdateOne) SetNillableAssessmentID(v *string)
 	if v != nil {
 		_u.SetAssessmentID(*v)
 	}
-	return _u
-}
-
-// SetSecret sets the "secret" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetSecret(v []byte) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetSecret(v)
 	return _u
 }
 
@@ -748,9 +733,6 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldSecret, field.TypeBytes, value)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)

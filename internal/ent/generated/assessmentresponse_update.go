@@ -120,12 +120,6 @@ func (_u *AssessmentResponseUpdate) SetNillableAssessmentID(v *string) *Assessme
 	return _u
 }
 
-// SetSecret sets the "secret" field.
-func (_u *AssessmentResponseUpdate) SetSecret(v []byte) *AssessmentResponseUpdate {
-	_u.mutation.SetSecret(v)
-	return _u
-}
-
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseUpdate) SetSendAttempts(v int) *AssessmentResponseUpdate {
 	_u.mutation.ResetSendAttempts()
@@ -325,11 +319,6 @@ func (_u *AssessmentResponseUpdate) check() error {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Secret(); ok {
-		if err := assessmentresponse.SecretValidator(v); err != nil {
-			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.secret": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := assessmentresponse.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.status": %w`, err)}
@@ -388,9 +377,6 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponse.FieldSecret, field.TypeBytes, value)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
@@ -585,12 +571,6 @@ func (_u *AssessmentResponseUpdateOne) SetNillableAssessmentID(v *string) *Asses
 	if v != nil {
 		_u.SetAssessmentID(*v)
 	}
-	return _u
-}
-
-// SetSecret sets the "secret" field.
-func (_u *AssessmentResponseUpdateOne) SetSecret(v []byte) *AssessmentResponseUpdateOne {
-	_u.mutation.SetSecret(v)
 	return _u
 }
 
@@ -806,11 +786,6 @@ func (_u *AssessmentResponseUpdateOne) check() error {
 			return &ValidationError{Name: "assessment_id", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.assessment_id": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Secret(); ok {
-		if err := assessmentresponse.SecretValidator(v); err != nil {
-			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.secret": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := assessmentresponse.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.status": %w`, err)}
@@ -886,9 +861,6 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Secret(); ok {
-		_spec.SetField(assessmentresponse.FieldSecret, field.TypeBytes, value)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
