@@ -68,7 +68,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipAll),
 			).
 			DefaultFunc(func() string {
-				token := keygen.PrefixedSecret("questionnaire")
+				token := keygen.PrefixedSecret("tolq")
 				return token
 			}),
 
