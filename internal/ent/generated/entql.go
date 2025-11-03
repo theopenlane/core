@@ -4011,18 +4011,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Template",
 	)
 	graph.MustAddE(
-		"users",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-		},
-		"Assessment",
-		"User",
-	)
-	graph.MustAddE(
 		"assessment_responses",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -10735,20 +10723,6 @@ func (f *AssessmentFilter) WhereHasTemplate() {
 // WhereHasTemplateWith applies a predicate to check if query has an edge template with a given conditions (other predicates).
 func (f *AssessmentFilter) WhereHasTemplateWith(preds ...predicate.Template) {
 	f.Where(entql.HasEdgeWith("template", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasUsers applies a predicate to check if query has an edge users.
-func (f *AssessmentFilter) WhereHasUsers() {
-	f.Where(entql.HasEdge("users"))
-}
-
-// WhereHasUsersWith applies a predicate to check if query has an edge users with a given conditions (other predicates).
-func (f *AssessmentFilter) WhereHasUsersWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("users", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

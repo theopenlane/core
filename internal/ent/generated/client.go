@@ -2183,25 +2183,6 @@ func (c *AssessmentClient) QueryTemplate(_m *Assessment) *TemplateQuery {
 	return query
 }
 
-// QueryUsers queries the users edge of a Assessment.
-func (c *AssessmentClient) QueryUsers(_m *Assessment) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessment.Table, assessment.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, assessment.UsersTable, assessment.UsersColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.User
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryAssessmentResponses queries the assessment_responses edge of a Assessment.
 func (c *AssessmentClient) QueryAssessmentResponses(_m *Assessment) *AssessmentResponseQuery {
 	query := (&AssessmentResponseClient{config: c.config}).Query()

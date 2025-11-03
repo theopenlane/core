@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -237,21 +236,6 @@ func (_c *AssessmentCreate) AddViewers(v ...*Group) *AssessmentCreate {
 // SetTemplate sets the "template" edge to the Template entity.
 func (_c *AssessmentCreate) SetTemplate(v *Template) *AssessmentCreate {
 	return _c.SetTemplateID(v.ID)
-}
-
-// AddUserIDs adds the "users" edge to the User entity by IDs.
-func (_c *AssessmentCreate) AddUserIDs(ids ...string) *AssessmentCreate {
-	_c.mutation.AddUserIDs(ids...)
-	return _c
-}
-
-// AddUsers adds the "users" edges to the User entity.
-func (_c *AssessmentCreate) AddUsers(v ...*User) *AssessmentCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddUserIDs(ids...)
 }
 
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
@@ -528,23 +512,6 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TemplateID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.User
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssessmentResponsesIDs(); len(nodes) > 0 {

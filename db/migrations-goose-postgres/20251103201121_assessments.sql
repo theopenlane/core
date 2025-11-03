@@ -31,12 +31,8 @@ CREATE INDEX "assessmentresponse_owner_id" ON "assessment_responses" ("owner_id"
 CREATE INDEX "assessmentresponse_status" ON "assessment_responses" ("status");
 -- modify "groups" table
 ALTER TABLE "groups" ADD COLUMN "assessment_blocked_groups" character varying NULL, ADD COLUMN "assessment_editors" character varying NULL, ADD COLUMN "assessment_viewers" character varying NULL, ADD CONSTRAINT "groups_assessments_blocked_groups" FOREIGN KEY ("assessment_blocked_groups") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_assessments_editors" FOREIGN KEY ("assessment_editors") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_assessments_viewers" FOREIGN KEY ("assessment_viewers") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
--- modify "users" table
-ALTER TABLE "users" ADD COLUMN "assessment_users" character varying NULL, ADD CONSTRAINT "users_assessments_users" FOREIGN KEY ("assessment_users") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 
 -- +goose Down
--- reverse: modify "users" table
-ALTER TABLE "users" DROP CONSTRAINT "users_assessments_users", DROP COLUMN "assessment_users";
 -- reverse: modify "groups" table
 ALTER TABLE "groups" DROP CONSTRAINT "groups_assessments_viewers", DROP CONSTRAINT "groups_assessments_editors", DROP CONSTRAINT "groups_assessments_blocked_groups", DROP COLUMN "assessment_viewers", DROP COLUMN "assessment_editors", DROP COLUMN "assessment_blocked_groups";
 -- reverse: create index "assessmentresponse_status" to table: "assessment_responses"

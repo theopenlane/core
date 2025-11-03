@@ -68,7 +68,6 @@ type UserQuery struct {
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
-	withFKs                          bool
 	loadTotal                        []func(context.Context, []*User) error
 	modifiers                        []func(*sql.Selector)
 	withNamedPersonalAccessTokens    map[string]*PersonalAccessTokenQuery
@@ -1260,7 +1259,6 @@ func (_q *UserQuery) prepareQuery(ctx context.Context) error {
 func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, error) {
 	var (
 		nodes       = []*User{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [23]bool{
 			_q.withPersonalAccessTokens != nil,
@@ -1288,9 +1286,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withProgramMemberships != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, user.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*User).scanValues(nil, columns)
 	}

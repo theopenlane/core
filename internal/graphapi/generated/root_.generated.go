@@ -267,7 +267,6 @@ type ComplexityRoot struct {
 		TemplateID          func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
-		Users               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
@@ -6924,18 +6923,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.UpdatedBy(childComplexity), true
-
-	case "Assessment.users":
-		if e.complexity.Assessment.Users == nil {
-			break
-		}
-
-		args, err := ec.field_Assessment_users_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Assessment.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "Assessment.viewers":
 		if e.complexity.Assessment.Viewers == nil {
@@ -43614,37 +43601,6 @@ type Assessment implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   template: Template!
-  users(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Users returned from the connection.
-    """
-    orderBy: [UserOrder!]
-
-    """
-    Filtering options for Users returned from the connection.
-    """
-    where: UserWhereInput
-  ): UserConnection!
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -44940,11 +44896,6 @@ input AssessmentWhereInput {
   """
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
-  """
-  users edge predicates
-  """
-  hasUsers: Boolean
-  hasUsersWith: [UserWhereInput!]
   """
   assessment_responses edge predicates
   """
@@ -51072,7 +51023,6 @@ input CreateAssessmentInput {
   editorIDs: [ID!]
   viewerIDs: [ID!]
   templateID: ID!
-  userIDs: [ID!]
   assessmentResponseIDs: [ID!]
 }
 """
@@ -97743,9 +97693,6 @@ input UpdateAssessmentInput {
   removeViewerIDs: [ID!]
   clearViewers: Boolean
   templateID: ID
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean

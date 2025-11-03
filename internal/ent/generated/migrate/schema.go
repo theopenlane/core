@@ -5704,7 +5704,6 @@ var (
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "scim_preferred_language", Type: field.TypeString, Nullable: true},
 		{Name: "scim_locale", Type: field.TypeString, Nullable: true},
-		{Name: "assessment_users", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -5714,14 +5713,8 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "users_assessments_users",
-				Columns:    []*schema.Column{UsersColumns[26]},
-				RefColumns: []*schema.Column{AssessmentsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "users_files_avatar_file",
-				Columns:    []*schema.Column{UsersColumns[27]},
+				Columns:    []*schema.Column{UsersColumns[26]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -9256,8 +9249,7 @@ func init() {
 	TrustCenterWatermarkConfigHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_watermark_config_history",
 	}
-	UsersTable.ForeignKeys[0].RefTable = AssessmentsTable
-	UsersTable.ForeignKeys[1].RefTable = FilesTable
+	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",
 	}

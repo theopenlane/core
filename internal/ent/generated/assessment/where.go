@@ -958,35 +958,6 @@ func HasTemplateWith(preds ...predicate.Template) predicate.Assessment {
 	})
 }
 
-// HasUsers applies the HasEdge predicate on the "users" edge.
-func HasUsers() predicate.Assessment {
-	return predicate.Assessment(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, UsersTable, UsersColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.User
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
-func HasUsersWith(preds ...predicate.User) predicate.Assessment {
-	return predicate.Assessment(func(s *sql.Selector) {
-		step := newUsersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.User
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasAssessmentResponses applies the HasEdge predicate on the "assessment_responses" edge.
 func HasAssessmentResponses() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {

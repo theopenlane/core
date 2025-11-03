@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -36,14 +35,12 @@ type AssessmentQuery struct {
 	withEditors                  *GroupQuery
 	withViewers                  *GroupQuery
 	withTemplate                 *TemplateQuery
-	withUsers                    *UserQuery
 	withAssessmentResponses      *AssessmentResponseQuery
 	loadTotal                    []func(context.Context, []*Assessment) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
 	withNamedEditors             map[string]*GroupQuery
 	withNamedViewers             map[string]*GroupQuery
-	withNamedUsers               map[string]*UserQuery
 	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -200,31 +197,6 @@ func (_q *AssessmentQuery) QueryTemplate() *TemplateQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.Assessment
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryUsers chains the current query on the "users" edge.
-func (_q *AssessmentQuery) QueryUsers() *UserQuery {
-	query := (&UserClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, assessment.UsersTable, assessment.UsersColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.User
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -453,7 +425,6 @@ func (_q *AssessmentQuery) Clone() *AssessmentQuery {
 		withEditors:             _q.withEditors.Clone(),
 		withViewers:             _q.withViewers.Clone(),
 		withTemplate:            _q.withTemplate.Clone(),
-		withUsers:               _q.withUsers.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -514,17 +485,6 @@ func (_q *AssessmentQuery) WithTemplate(opts ...func(*TemplateQuery)) *Assessmen
 		opt(query)
 	}
 	_q.withTemplate = query
-	return _q
-}
-
-// WithUsers tells the query-builder to eager-load the nodes that are connected to
-// the "users" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *AssessmentQuery) WithUsers(opts ...func(*UserQuery)) *AssessmentQuery {
-	query := (&UserClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withUsers = query
 	return _q
 }
 
@@ -623,13 +583,12 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	var (
 		nodes       = []*Assessment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withTemplate != nil,
-			_q.withUsers != nil,
 			_q.withAssessmentResponses != nil,
 		}
 	)
@@ -689,13 +648,6 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
-	if query := _q.withUsers; query != nil {
-		if err := _q.loadUsers(ctx, query, nodes,
-			func(n *Assessment) { n.Edges.Users = []*User{} },
-			func(n *Assessment, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withAssessmentResponses; query != nil {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
@@ -723,13 +675,6 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedViewers(name) },
 			func(n *Assessment, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedUsers {
-		if err := _q.loadUsers(ctx, query, nodes,
-			func(n *Assessment) { n.appendNamedUsers(name) },
-			func(n *Assessment, e *User) { n.appendNamedUsers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -896,37 +841,6 @@ func (_q *AssessmentQuery) loadTemplate(ctx context.Context, query *TemplateQuer
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
-	}
-	return nil
-}
-func (_q *AssessmentQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *User)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Assessment)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.User(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(assessment.UsersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.assessment_users
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "assessment_users" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "assessment_users" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
 	}
 	return nil
 }
@@ -1104,20 +1018,6 @@ func (_q *AssessmentQuery) WithNamedViewers(name string, opts ...func(*GroupQuer
 		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
 	_q.withNamedViewers[name] = query
-	return _q
-}
-
-// WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *AssessmentQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *AssessmentQuery {
-	query := (&UserClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedUsers == nil {
-		_q.withNamedUsers = make(map[string]*UserQuery)
-	}
-	_q.withNamedUsers[name] = query
 	return _q
 }
 

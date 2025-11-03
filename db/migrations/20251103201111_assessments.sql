@@ -30,5 +30,3 @@ CREATE INDEX "assessmentresponse_owner_id" ON "assessment_responses" ("owner_id"
 CREATE INDEX "assessmentresponse_status" ON "assessment_responses" ("status");
 -- Modify "groups" table
 ALTER TABLE "groups" ADD COLUMN "assessment_blocked_groups" character varying NULL, ADD COLUMN "assessment_editors" character varying NULL, ADD COLUMN "assessment_viewers" character varying NULL, ADD CONSTRAINT "groups_assessments_blocked_groups" FOREIGN KEY ("assessment_blocked_groups") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_assessments_editors" FOREIGN KEY ("assessment_editors") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_assessments_viewers" FOREIGN KEY ("assessment_viewers") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
--- Modify "users" table
-ALTER TABLE "users" ADD COLUMN "assessment_users" character varying NULL, ADD CONSTRAINT "users_assessments_users" FOREIGN KEY ("assessment_users") REFERENCES "assessments" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;

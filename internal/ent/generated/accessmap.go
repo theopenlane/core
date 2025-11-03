@@ -65,10 +65,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "users": {
-	ObjectType:      "user",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "assessment_responses": {
 	ObjectType:      "assessment_response",
 	SkipEditCheck:   false,

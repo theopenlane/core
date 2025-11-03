@@ -52,8 +52,6 @@ const (
 	EdgeViewers = "viewers"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
-	// EdgeUsers holds the string denoting the users edge name in mutations.
-	EdgeUsers = "users"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
 	// Table holds the table name of the assessment in the database.
@@ -93,13 +91,6 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
-	// UsersTable is the table that holds the users relation/edge.
-	UsersTable = "users"
-	// UsersInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UsersInverseTable = "users"
-	// UsersColumn is the table column denoting the users relation/edge.
-	UsersColumn = "assessment_users"
 	// AssessmentResponsesTable is the table that holds the assessment_responses relation/edge.
 	AssessmentResponsesTable = "assessment_responses"
 	// AssessmentResponsesInverseTable is the table name for the AssessmentResponse entity.
@@ -292,20 +283,6 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByUsersCount orders the results by users count.
-func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
-	}
-}
-
-// ByUsers orders the results by users terms.
-func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByAssessmentResponsesCount orders the results by assessment_responses count.
 func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -352,13 +329,6 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
-	)
-}
-func newUsersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UsersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, UsersTable, UsersColumn),
 	)
 }
 func newAssessmentResponsesStep() *sqlgraph.Step {

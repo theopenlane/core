@@ -1219,7 +1219,6 @@ type Assessment struct {
 	Editors             *GroupConnection              `json:"editors"`
 	Viewers             *GroupConnection              `json:"viewers"`
 	Template            *Template                     `json:"template"`
-	Users               *UserConnection               `json:"users"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 }
 
@@ -2194,9 +2193,6 @@ type AssessmentWhereInput struct {
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
-	// users edge predicates
-	HasUsers     *bool             `json:"hasUsers,omitempty"`
-	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 	// assessment_responses edge predicates
 	HasAssessmentResponses     *bool                           `json:"hasAssessmentResponses,omitempty"`
 	HasAssessmentResponsesWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponsesWith,omitempty"`
@@ -6021,7 +6017,6 @@ type CreateAssessmentInput struct {
 	EditorIDs             []string `json:"editorIDs,omitempty"`
 	ViewerIDs             []string `json:"viewerIDs,omitempty"`
 	TemplateID            string   `json:"templateID"`
-	UserIDs               []string `json:"userIDs,omitempty"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 }
 
@@ -33524,9 +33519,6 @@ type UpdateAssessmentInput struct {
 	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
 	ClearViewers                *bool    `json:"clearViewers,omitempty"`
 	TemplateID                  *string  `json:"templateID,omitempty"`
-	AddUserIDs                  []string `json:"addUserIDs,omitempty"`
-	RemoveUserIDs               []string `json:"removeUserIDs,omitempty"`
-	ClearUsers                  *bool    `json:"clearUsers,omitempty"`
 	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
 	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
 	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`

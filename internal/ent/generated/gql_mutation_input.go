@@ -592,7 +592,6 @@ type CreateAssessmentInput struct {
 	EditorIDs             []string
 	ViewerIDs             []string
 	TemplateID            string
-	UserIDs               []string
 	AssessmentResponseIDs []string
 }
 
@@ -621,9 +620,6 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 		m.AddViewerIDs(v...)
 	}
 	m.SetTemplateID(i.TemplateID)
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
 		m.AddAssessmentResponseIDs(v...)
 	}
@@ -655,9 +651,6 @@ type UpdateAssessmentInput struct {
 	AddViewerIDs                []string
 	RemoveViewerIDs             []string
 	TemplateID                  *string
-	ClearUsers                  bool
-	AddUserIDs                  []string
-	RemoveUserIDs               []string
 	ClearAssessmentResponses    bool
 	AddAssessmentResponseIDs    []string
 	RemoveAssessmentResponseIDs []string
@@ -718,15 +711,6 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearAssessmentResponses {
 		m.ClearAssessmentResponses()

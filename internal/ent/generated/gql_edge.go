@@ -190,27 +190,6 @@ func (_m *Assessment) Template(ctx context.Context) (*Template, error) {
 	return result, err
 }
 
-func (_m *Assessment) Users(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*UserOrder, where *UserWhereInput,
-) (*UserConnection, error) {
-	opts := []UserPaginateOption{
-		WithUserOrder(orderBy),
-		WithUserFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
-	if nodes, err := _m.NamedUsers(alias); err == nil || hasTotalCount {
-		pager, err := newUserPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &UserConnection{Edges: []*UserEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return _m.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
-}
-
 func (_m *Assessment) AssessmentResponses(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssessmentResponseOrder, where *AssessmentResponseWhereInput,
 ) (*AssessmentResponseConnection, error) {
@@ -219,7 +198,7 @@ func (_m *Assessment) AssessmentResponses(
 		WithAssessmentResponseFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
 	if nodes, err := _m.NamedAssessmentResponses(alias); err == nil || hasTotalCount {
 		pager, err := newAssessmentResponsePager(opts, last != nil)
 		if err != nil {

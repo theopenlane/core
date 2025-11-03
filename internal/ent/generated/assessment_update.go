@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -250,21 +249,6 @@ func (_u *AssessmentUpdate) SetTemplate(v *Template) *AssessmentUpdate {
 	return _u.SetTemplateID(v.ID)
 }
 
-// AddUserIDs adds the "users" edge to the User entity by IDs.
-func (_u *AssessmentUpdate) AddUserIDs(ids ...string) *AssessmentUpdate {
-	_u.mutation.AddUserIDs(ids...)
-	return _u
-}
-
-// AddUsers adds the "users" edges to the User entity.
-func (_u *AssessmentUpdate) AddUsers(v ...*User) *AssessmentUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserIDs(ids...)
-}
-
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
 func (_u *AssessmentUpdate) AddAssessmentResponseIDs(ids ...string) *AssessmentUpdate {
 	_u.mutation.AddAssessmentResponseIDs(ids...)
@@ -358,27 +342,6 @@ func (_u *AssessmentUpdate) RemoveViewers(v ...*Group) *AssessmentUpdate {
 func (_u *AssessmentUpdate) ClearTemplate() *AssessmentUpdate {
 	_u.mutation.ClearTemplate()
 	return _u
-}
-
-// ClearUsers clears all "users" edges to the User entity.
-func (_u *AssessmentUpdate) ClearUsers() *AssessmentUpdate {
-	_u.mutation.ClearUsers()
-	return _u
-}
-
-// RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (_u *AssessmentUpdate) RemoveUserIDs(ids ...string) *AssessmentUpdate {
-	_u.mutation.RemoveUserIDs(ids...)
-	return _u
-}
-
-// RemoveUsers removes "users" edges to User entities.
-func (_u *AssessmentUpdate) RemoveUsers(v ...*User) *AssessmentUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
@@ -736,54 +699,6 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.AssessmentResponsesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1069,21 +984,6 @@ func (_u *AssessmentUpdateOne) SetTemplate(v *Template) *AssessmentUpdateOne {
 	return _u.SetTemplateID(v.ID)
 }
 
-// AddUserIDs adds the "users" edge to the User entity by IDs.
-func (_u *AssessmentUpdateOne) AddUserIDs(ids ...string) *AssessmentUpdateOne {
-	_u.mutation.AddUserIDs(ids...)
-	return _u
-}
-
-// AddUsers adds the "users" edges to the User entity.
-func (_u *AssessmentUpdateOne) AddUsers(v ...*User) *AssessmentUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserIDs(ids...)
-}
-
 // AddAssessmentResponseIDs adds the "assessment_responses" edge to the AssessmentResponse entity by IDs.
 func (_u *AssessmentUpdateOne) AddAssessmentResponseIDs(ids ...string) *AssessmentUpdateOne {
 	_u.mutation.AddAssessmentResponseIDs(ids...)
@@ -1177,27 +1077,6 @@ func (_u *AssessmentUpdateOne) RemoveViewers(v ...*Group) *AssessmentUpdateOne {
 func (_u *AssessmentUpdateOne) ClearTemplate() *AssessmentUpdateOne {
 	_u.mutation.ClearTemplate()
 	return _u
-}
-
-// ClearUsers clears all "users" edges to the User entity.
-func (_u *AssessmentUpdateOne) ClearUsers() *AssessmentUpdateOne {
-	_u.mutation.ClearUsers()
-	return _u
-}
-
-// RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (_u *AssessmentUpdateOne) RemoveUserIDs(ids ...string) *AssessmentUpdateOne {
-	_u.mutation.RemoveUserIDs(ids...)
-	return _u
-}
-
-// RemoveUsers removes "users" edges to User entities.
-func (_u *AssessmentUpdateOne) RemoveUsers(v ...*User) *AssessmentUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearAssessmentResponses clears all "assessment_responses" edges to the AssessmentResponse entity.
@@ -1580,54 +1459,6 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.Assessment
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.UsersTable,
-			Columns: []string{assessment.UsersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.User
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

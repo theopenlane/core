@@ -63,20 +63,17 @@ type AssessmentEdges struct {
 	Viewers []*Group `json:"viewers,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
-	// Users holds the value of the users edge.
-	Users []*User `json:"users,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [6]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
 	namedViewers             map[string][]*Group
-	namedUsers               map[string][]*User
 	namedAssessmentResponses map[string][]*AssessmentResponse
 }
 
@@ -129,19 +126,10 @@ func (e AssessmentEdges) TemplateOrErr() (*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
-// UsersOrErr returns the Users value or an error if the edge
-// was not loaded in eager-loading.
-func (e AssessmentEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[5] {
-		return e.Users, nil
-	}
-	return nil, &NotLoadedError{edge: "users"}
-}
-
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -291,11 +279,6 @@ func (_m *Assessment) QueryTemplate() *TemplateQuery {
 	return NewAssessmentClient(_m.config).QueryTemplate(_m)
 }
 
-// QueryUsers queries the "users" edge of the Assessment entity.
-func (_m *Assessment) QueryUsers() *UserQuery {
-	return NewAssessmentClient(_m.config).QueryUsers(_m)
-}
-
 // QueryAssessmentResponses queries the "assessment_responses" edge of the Assessment entity.
 func (_m *Assessment) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return NewAssessmentClient(_m.config).QueryAssessmentResponses(_m)
@@ -432,30 +415,6 @@ func (_m *Assessment) appendNamedViewers(name string, edges ...*Group) {
 		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
 		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
-	}
-}
-
-// NamedUsers returns the Users named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Assessment) NamedUsers(name string) ([]*User, error) {
-	if _m.Edges.namedUsers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedUsers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Assessment) appendNamedUsers(name string, edges ...*User) {
-	if _m.Edges.namedUsers == nil {
-		_m.Edges.namedUsers = make(map[string][]*User)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedUsers[name] = []*User{}
-	} else {
-		_m.Edges.namedUsers[name] = append(_m.Edges.namedUsers[name], edges...)
 	}
 }
 

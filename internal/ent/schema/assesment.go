@@ -76,7 +76,6 @@ func (a Assessment) Edges() []ent.Edge {
 			field:      "template_id",
 			required:   true,
 		}),
-		defaultEdgeToWithPagination(a, User{}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}
 }
