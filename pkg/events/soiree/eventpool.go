@@ -300,6 +300,157 @@ func (m *EventPool) SetRetry(retries int, factory func() backoff.BackOff) {
 	}
 }
 
+// OnTopic registers a strongly-typed listener on the provided topic.
+func OnTopic[T any](pool *EventPool, topic TypedTopic[T], listener TypedListener[T], opts ...ListenerOption) (string, error) {
+	if pool == nil {
+		return "", errNilEventPool
+	}
+
+	if listener == nil {
+		return "", ErrNilListener
+	}
+
+	if !isValidTopicName(topic.Name()) {
+		return "", ErrInvalidTopicName
+	}
+
+	if topic.unwrap == nil {
+		return "", fmt.Errorf("missing unwrap helper for topic %s", topic.Name())
+	}
+
+	wrapped := func(event Event) error {
+		payload, err := topic.unwrap(event)
+		if err != nil {
+			return err
+		}
+
+		return listener(payload)
+	}
+
+	return pool.On(topic.Name(), wrapped, opts...)
+}
+
+// OnTopicContext registers a context-aware listener on the provided topic.
+func OnTopicContext[C any, T any](pool *EventPool, topic TypedTopic[T], listener ContextListener[C, T], opts ...ListenerOption) (string, error) {
+	if pool == nil {
+		return "", errNilEventPool
+	}
+
+	if listener == nil {
+		return "", ErrNilListener
+	}
+
+	if !isValidTopicName(topic.Name()) {
+		return "", ErrInvalidTopicName
+	}
+
+	if topic.unwrap == nil {
+		return "", fmt.Errorf("missing unwrap helper for topic %s", topic.Name())
+	}
+
+	base := func(event Event) error {
+		payload, err := topic.unwrap(event)
+		if err != nil {
+			return err
+		}
+
+		ctx := newListenerContext[C](event, payload)
+
+		return listener(ctx)
+	}
+
+	return pool.On(topic.Name(), base, opts...)
+}
+
+// EmitTopic dispatches an event for the provided typed topic.
+func EmitTopic[T any](pool *EventPool, topic TypedTopic[T], payload T) <-chan error {
+	if pool == nil {
+		errChan := make(chan error, 1)
+		errChan <- errNilEventPool
+		close(errChan)
+
+		return errChan
+	}
+
+	if topic.wrap == nil {
+		errChan := make(chan error, 1)
+		errChan <- fmt.Errorf("missing wrap helper for topic %s", topic.Name())
+		close(errChan)
+
+		return errChan
+	}
+
+	return pool.Emit(topic.Name(), topic.wrap(payload))
+}
+
+// EmitTopicSync dispatches an event synchronously for a typed topic.
+func EmitTopicSync[T any](pool *EventPool, topic TypedTopic[T], payload T) []error {
+	if pool == nil {
+		return []error{errNilEventPool}
+	}
+
+	if topic.wrap == nil {
+		return []error{fmt.Errorf("missing wrap helper for topic %s", topic.Name())}
+	}
+
+	return pool.EmitSync(topic.Name(), topic.wrap(payload))
+}
+
+// RegisterListeners registers all provided listener bindings on the pool and returns the generated listener IDs
+func (m *EventPool) RegisterListeners(bindings ...ListenerBinding) ([]string, error) {
+	ids := make([]string, 0, len(bindings))
+
+	for _, binding := range bindings {
+		id, err := binding.registerWith(m)
+		if err != nil {
+			return ids, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
+// MustOn registers the listener on the topic or panics if registration fails
+func MustOn[T any](pool *EventPool, topic TypedTopic[T], listener TypedListener[T], opts ...ListenerOption) string {
+	id, err := OnTopic(pool, topic, listener, opts...)
+	if err != nil {
+		panic(err)
+	}
+
+	return id
+}
+
+// EmitAsync emits a typed event and mirrors errors until completion or context cancellation
+func EmitAsync[T any](ctx context.Context, pool *EventPool, topic TypedTopic[T], payload T) <-chan error {
+	upstream := EmitTopic(pool, topic, payload)
+	errChan := make(chan error, cap(upstream))
+
+	go func() {
+		defer close(errChan)
+
+		for {
+			select {
+			case <-ctx.Done():
+				errChan <- ctx.Err()
+				// drain upstream to avoid goroutine leaks
+				for range upstream {
+				}
+				return
+			case err, ok := <-upstream:
+				if !ok {
+					return
+				}
+
+				errChan <- err
+			}
+		}
+	}()
+
+	return errChan
+}
+
 // triggerWithRetry executes topic listeners with retry and persistence
 func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 	topic.mu.RLock()

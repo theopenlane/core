@@ -1,11 +1,25 @@
 package soiree
 
 import (
+	"context"
 	"errors"
+	"reflect"
 	"sync"
 	"testing"
 	"time"
 )
+
+func mustOnTopic(pool *EventPool, topic string, listener Listener, opts ...ListenerOption) string {
+	return MustOn(pool, NewEventTopic(topic), TypedListener[Event](listener), opts...)
+}
+
+func emitTopicWithPayload(pool *EventPool, topic string, payload any) <-chan error {
+	return EmitTopic(pool, NewEventTopic(topic), Event(NewBaseEvent(topic, payload)))
+}
+
+func emitExistingEvent(pool *EventPool, event Event) <-chan error {
+	return EmitTopic(pool, NewEventTopic(event.Topic()), event)
+}
 
 // TestNewEventPool tests the creation of a new EventPool
 func TestNewEventPool(t *testing.T) {
@@ -18,23 +32,21 @@ func TestNewEventPool(t *testing.T) {
 // TestOnOff tests subscribing to and unsubscribing from a topic
 func TestOnOff(t *testing.T) {
 	soiree := NewEventPool()
+	topic := "testTopic"
 
 	listener := func(e Event) error {
 		return nil
 	}
 
 	// On to a topic
-	id, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	id := mustOnTopic(soiree, topic, listener)
 
 	if id == "" {
 		t.Fatal("Onrned an empty ID")
 	}
 
 	// Now unsubscribe and ensure the listener is removed
-	if err := soiree.Off("testTopic", id); err != nil {
+	if err := soiree.Off(topic, id); err != nil {
 		t.Fatalf("Off() failed with error: %v", err)
 	}
 }
@@ -42,6 +54,7 @@ func TestOnOff(t *testing.T) {
 // TestEmitAsyncSuccess tests the asynchronous Emit method for successful event handling
 func TestEmitAsyncSuccess(t *testing.T) {
 	soiree := NewEventPool()
+	topic := "testTopic"
 
 	// Create a listener that does not return an error
 	listener := func(e Event) error {
@@ -51,13 +64,10 @@ func TestEmitAsyncSuccess(t *testing.T) {
 	}
 
 	// Subscribe the listener to the "testTopic"
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, topic, listener)
 
 	// Emit the event asynchronously
-	errChan := soiree.Emit("testTopic", "testPayload")
+	errChan := emitTopicWithPayload(soiree, topic, "testPayload")
 
 	// Collect errors from the error channel
 	var emitErrors []error
@@ -74,6 +84,83 @@ func TestEmitAsyncSuccess(t *testing.T) {
 	}
 }
 
+func TestMustOnRegistersListener(t *testing.T) {
+	pool := NewEventPool()
+	topic := NewEventTopic("must.on")
+
+	id := MustOn(pool, topic, func(event Event) error {
+		return nil
+	})
+
+	if id == "" {
+		t.Fatal("MustOn returned empty listener ID")
+	}
+}
+
+func TestMustOnPanicsOnInvalidTopic(t *testing.T) {
+	pool := NewEventPool()
+	topic := NewEventTopic("bad?[topic")
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatal("expected MustOn to panic for invalid topic")
+		}
+	}()
+
+	MustOn(pool, topic, func(event Event) error {
+		return nil
+	})
+}
+
+func TestEmitAsyncContextCancellation(t *testing.T) {
+	pool := NewEventPool()
+	topic := NewEventTopic("async.cancel")
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	errChan := EmitAsync(ctx, pool, topic, Event(NewBaseEvent(topic.Name(), nil)))
+
+	err, ok := <-errChan
+	if !ok {
+		t.Fatal("expected an error from EmitAsync when context is canceled")
+	}
+
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("expected context.Canceled, got %v", err)
+	}
+}
+
+func TestListenerMiddlewareOrder(t *testing.T) {
+	pool := NewEventPool()
+	defer pool.Close()
+
+	topic := NewEventTopic("middleware.test")
+	var calls []string
+
+	middleware := func(next Listener) Listener {
+		return func(event Event) error {
+			calls = append(calls, "middleware-before")
+			err := next(event)
+			calls = append(calls, "middleware-after")
+			return err
+		}
+	}
+
+	MustOn(pool, topic, func(event Event) error {
+		calls = append(calls, "listener")
+		return nil
+	}, WithMiddleware(middleware))
+
+	errs := EmitTopic(pool, topic, Event(NewBaseEvent(topic.Name(), nil)))
+	for range errs {
+	}
+
+	expected := []string{"middleware-before", "listener", "middleware-after"}
+	if !reflect.DeepEqual(calls, expected) {
+		t.Fatalf("execution order mismatch: got %v want %v", calls, expected)
+	}
+}
+
 type TestEvent struct {
 	*BaseEvent
 }
@@ -87,7 +174,8 @@ func NewTestEvent(topic string, payload any) *TestEvent {
 // TestEmitAsyncFailure tests the asynchronous Emit method for event handling that returns an error
 func TestEmitAsyncFailure(t *testing.T) {
 	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "test payload")
+	topic := "testTopic"
+	event := NewTestEvent(topic, "test payload")
 
 	// Create a listener that returns an error
 	listener := func(e Event) error {
@@ -98,13 +186,10 @@ func TestEmitAsyncFailure(t *testing.T) {
 	}
 
 	// Subscribe the listener to the "testTopic"
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, topic, listener)
 
 	// Emit the event asynchronously
-	errChan := soiree.Emit(event.Topic(), event)
+	errChan := emitExistingEvent(soiree, event)
 
 	// Collect errors from the error channel
 	var emitErrors []error
@@ -125,23 +210,21 @@ func TestEmitAsyncFailure(t *testing.T) {
 func TestEmitSyncSuccess(t *testing.T) {
 	soiree := NewEventPool()
 	received := make(chan string, 1) // Buffered channel to receive one message
-	event := NewTestEvent("testTopic", "testPayload")
+	topic := "testTopic"
+	event := NewTestEvent(topic, "testPayload")
 
 	// Prepare the listener
 	listener := createTestListener(received)
 
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, topic, listener)
 
-	soiree.Emit(event.Topic(), event)
+	emitExistingEvent(soiree, event)
 
 	// Wait for the listener to handle the event or timeout after a specific duration
 	select {
 	case topic := <-received:
-		if topic != "testTopic" {
-			t.Fatalf("Expected to receive event on 'testTopic', got '%v'", topic)
+		if topic != event.Topic() {
+			t.Fatalf("Expected to receive event on '%s', got '%v'", event.Topic(), topic)
 		}
 
 	case <-time.After(5 * time.Second):
@@ -152,23 +235,21 @@ func TestEmitSyncSuccess(t *testing.T) {
 // TestEmitSyncFailure tests the synchronous EmitSync method for event handling that returns an error
 func TestEmitSyncFailure(t *testing.T) {
 	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "testPayload")
+	topic := "testTopic"
+	event := NewTestEvent(topic, "testPayload")
 
 	// Create a listener that returns an error
 	listener := func(e Event) error {
 		return errors.New("listener error") // nolint: err113
 	}
 
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, topic, listener)
 
 	// Emit the event synchronously and collect errors
-	errors := soiree.EmitSync(event.Topic(), event)
+	errsSync := EmitTopicSync(soiree, NewEventTopic(event.Topic()), Event(event))
 
 	// Check that the errors juicy slice is not empty
-	if len(errors) == 0 {
+	if len(errsSync) == 0 {
 		t.Error("EmitSync() should have resulted in errors, but none were returned")
 	}
 }
@@ -179,10 +260,7 @@ func TestGetTopic(t *testing.T) {
 	event := NewTestEvent("testTopic", "testPayload")
 
 	// Creating a topic by subscribing to it
-	_, err := soiree.On("testTopic", func(e Event) error { return nil })
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, event.Topic(), func(e Event) error { return nil })
 
 	topic, err := soiree.GetTopic(event.Topic())
 
@@ -238,7 +316,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 	for _, topic := range topics {
 		event := NewTestEvent(topic, "testPayload")
 		topicName := topic
-		_, err := soiree.On(event.Topic(), func(e Event) error {
+		_, err := OnTopic(soiree, NewEventTopic(event.Topic()), func(e Event) error {
 			// Record the event in the receivedEvents map
 			eventPayload := e.Payload().(string)
 			t.Logf("Listener received event on topic: %s with payload: %s", topicName, eventPayload)
@@ -257,7 +335,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 	for eventKey := range expectedMatches {
 		event := NewTestEvent(eventKey, eventKey)
 		t.Logf("Emitting event: %s", eventKey)
-		soiree.Emit(event.Topic(), event) // Use the eventKey as the payload for identification
+		emitExistingEvent(soiree, event) // Use the eventKey as the payload for identification
 	}
 
 	// Allow some time for the events to be processed asynchronously
@@ -292,20 +370,13 @@ func TestEventPoolClose(t *testing.T) {
 	// Set up topics and listeners
 	topic1 := "topic1"
 	listener1 := func(e Event) error { return nil }
-
-	_, err := soiree.On(topic1, listener1)
-
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	mustOnTopic(soiree, topic1, listener1)
 
 	topic2 := "topic2"
 	listener2 := func(e Event) error { return nil }
+	mustOnTopic(soiree, topic2, listener2)
 
-	_, err = soiree.On(topic2, listener2)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	var err error
 
 	// Use a Pool
 	pool := NewPondPool(WithMaxWorkers(10))
@@ -333,7 +404,7 @@ func TestEventPoolClose(t *testing.T) {
 	}
 
 	// Verify that no new events can be emitted
-	errChan := soiree.Emit(topic1, "payload")
+	errChan := emitTopicWithPayload(soiree, topic1, "payload")
 	select {
 	case err := <-errChan:
 		if err == nil {

@@ -19,11 +19,12 @@ func main() {
 			return backoff.NewConstantBackOff(500 * time.Millisecond)
 		}),
 	)
+	taskCreated := soiree.NewEventTopic("task.created")
 
-	e.On("task.created", func(evt soiree.Event) error {
+	soiree.MustOn(e, taskCreated, soiree.TypedListener[soiree.Event](func(evt soiree.Event) error {
 		// Handle the event and return an error to trigger retries
 		return nil
-	})
+	}))
 
-	e.Emit("task.created", "some payload")
+	soiree.EmitTopic(e, taskCreated, soiree.Event(soiree.NewBaseEvent(taskCreated.Name(), "some payload")))
 }

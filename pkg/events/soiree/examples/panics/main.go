@@ -18,6 +18,7 @@ func CustomPanicHandler(recoveredPanic any) {
 func main() {
 	// Create a new soiree instance with the custom panic handler
 	e := soiree.NewEventPool(soiree.WithPanicHandler(CustomPanicHandler))
+	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener that intentionally causes a panic
 	listener := func(evt soiree.Event) error {
@@ -26,11 +27,11 @@ func main() {
 	}
 
 	// Subscribe the listener to a topic
-	e.On("user.created", listener)
+	soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
 
 	// Emit an event which will cause the listener to panic
 	// Normally, you would check for errors and handle the error channel
-	e.Emit("user.created", "sfunk")
+	soiree.EmitTopic(e, userCreated, soiree.Event(soiree.NewBaseEvent(userCreated.Name(), "sfunk")))
 
 	// Assuming there's additional application logic that continues after event emission,
 	// it would carry on uninterrupted thanks to our handy panic handler

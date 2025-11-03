@@ -15,6 +15,7 @@ func main() {
 
 	// Create a new soiree instance using the custom pool
 	e := soiree.NewEventPool(soiree.WithPool(pool))
+	userSignup := soiree.NewEventTopic("user.signup")
 
 	// Define a listener that simulates a time-consuming task - dealing with humans usually
 	userSignupListener := func(evt soiree.Event) error {
@@ -27,13 +28,13 @@ func main() {
 	}
 
 	// Subscribe a listener to a topic
-	e.On("user.signup", userSignupListener)
+	soiree.MustOn(e, userSignup, soiree.TypedListener[soiree.Event](userSignupListener))
 
 	// Emit several events concurrently
 	for i := 0; i < 100; i++ {
 		go func(index int) {
 			payload := fmt.Sprintf("User #%d", index)
-			e.Emit("user.signup", payload)
+			soiree.EmitTopic(e, userSignup, soiree.Event(soiree.NewBaseEvent(userSignup.Name(), payload)))
 		}(i)
 	}
 
