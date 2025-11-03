@@ -34,11 +34,15 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	user, err := h.getUserByEmail(reqCtx, req.Username)
 	if err != nil {
 		metrics.RecordLogin(false)
+		log.Info().Str("username", reg.Username).Msg("provided email address not found")
+		
 		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.RecordLogin(false)
+		log.Info().Str("username", reg.Username).Msg("provided email address not associated to active account") 
+		
 		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
@@ -52,6 +56,8 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	if user.Password == nil {
 		metrics.RecordLogin(false)
+		log.Info().Str("username", reg.Username).Msg("no password provided during login")
+		
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
@@ -59,11 +65,15 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	valid, err := passwd.VerifyDerivedKey(*user.Password, req.Password)
 	if err != nil || !valid {
 		metrics.RecordLogin(false)
+		log.Info().Str("username", reg.Username).Msg("invalid password provided during login")
+		
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
 		metrics.RecordLogin(false)
+		log.Info().Str("username", reg.Username).Msg("email not confirmed, user not allowed to login")
+		
 		return h.BadRequest(ctx, auth.ErrUnverifiedUser, openapi)
 	}
 
