@@ -53,7 +53,7 @@ func (Template) Fields() []ent.Field {
 			Comment("the name of the template").
 			NotEmpty().
 			Annotations(
-				entgql.OrderField("NAME"),
+				entgql.OrderField("name"),
 				entx.FieldSearchable(),
 			),
 		field.Enum("template_type").
