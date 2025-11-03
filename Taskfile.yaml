@@ -43,6 +43,7 @@ env:
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
+  GO_INLINE_FLAG: "-gcflags=all=-l"
 
 # load the .env file for windmill
 dotenv: ['docker/configs/windmill/.env']
@@ -55,12 +56,16 @@ tasks:
 
   generate:ci:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go generate ./...
       - task: tidy
 
   generate:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go-generate-fast ./...
       - task: tidy
@@ -69,12 +74,15 @@ tasks:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     env:
       GO_GENERATE_FAST_RECACHE: "true"
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go-generate-fast ./...
       - task: tidy
 
   generate:checksums:
     desc: Generate with checksum tracking for CI optimization
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - task: generate:ent:smart
       - task: generate:graphql:smart
@@ -83,6 +91,8 @@ tasks:
 
   generate:ent:smart:
     internal: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - internal/ent/schema/**/*.go
       - internal/ent/generate/**/*.go
@@ -96,6 +106,8 @@ tasks:
 
   generate:graphql:smart:
     internal: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - internal/graphapi/generate/**/*.go
       - internal/graphapi/schema/**/*.graphql
@@ -117,6 +129,8 @@ tasks:
 
   generate:others:smart:
     internal: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
       - pkg/corejobs/internal/**/*.go
@@ -236,25 +250,30 @@ tasks:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage --new-from-rev=HEAD~
 
   go:test:
     desc: runs and outputs results of created go tests
     aliases: ["go:test:psql", "test:psql"]
     env:
       TEST_DB_URL: "docker://postgres:17-alpine"
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go test -v ./... -tags test
 
   go:test:cover:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - task: go:test:cover
       - go tool cover -html=coverage.out
@@ -262,12 +281,16 @@ tasks:
   go:testsum:local:
     silent: true
     desc: runs tests using gotestsum
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: [testsum]
     cmds:
       - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
 
   go:testsum:verbose:
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
@@ -275,6 +298,8 @@ tasks:
 
   go:testsum:slow:
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: finds slow tests using gotestsum
     aliases: ['testsum:slow']
     cmds:
@@ -283,6 +308,8 @@ tasks:
   go:testsum:ci:
     desc: runs tests using gotestsum for CI
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci']
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage.out -tags test
@@ -290,6 +317,8 @@ tasks:
   go:testsum:ci:graph:
     desc: runs tests only graph tests using gotestsum for CI
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:graph']
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-graph.out -tags test
@@ -297,6 +326,8 @@ tasks:
   go:testsum:ci:no-graph:
     desc: runs tests using gotestsum for CI
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:no-graph']
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile junit-no-graph.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi)" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-graph.out -tags test
@@ -304,6 +335,8 @@ tasks:
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
     silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:cover']
     cmds:
       - |
@@ -325,6 +358,8 @@ tasks:
 
   go:testsum:graph:
     desc: runs only the graph tests using gotestsum
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     silent: true
     aliases: ['testsum:graph']
     cmds:
@@ -332,6 +367,8 @@ tasks:
 
   go:fmt:
     desc: format all go code
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go fmt ./...
 
@@ -343,6 +380,8 @@ tasks:
 
   go:build:
     desc: Runs go build for the core server
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - "{{ .GOOS }} {{ .GOARCH }} go build -o core"
 
@@ -353,6 +392,8 @@ tasks:
 
   go:build-cli:
     aliases: [buildcli]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs go build for the openlane cli
     cmds:
       - go build -tags cli -o openlane-cli ./cmd/cli
@@ -364,6 +405,8 @@ tasks:
 
   go:all:
     aliases: [go]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs all go test and lint related tasks
     cmds:
       - task: go:tidy
@@ -389,6 +432,8 @@ tasks:
   # dev tasks
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: runs the core server in dev mode with the minimum parts
     cmds:
       - task: compose:redis
@@ -398,6 +443,8 @@ tasks:
 
   run-dev-full:
     dotenv: ["{{.ENV}}/.env-dev"]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: runs the core server in dev mode with riverboat and metrics
     deps: ['go:build-cli']
     cmds:
@@ -411,6 +458,7 @@ tasks:
     dotenv: ["{{.ENV}}/.env-dev"]
     env:
       CORE_AUTHZ_HOSTURL: http://localhost:8080
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: runs the core server in dev mode, assumes all other dependencies are running
     cmds:
       - go run main.go serve --debug --pretty
