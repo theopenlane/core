@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -83,13 +82,13 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
-		log.Error().Err(err).Msg("unable to update last seen")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to update last seen")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
