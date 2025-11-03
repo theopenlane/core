@@ -250,7 +250,7 @@ tasks:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage --new
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage --new-from-rev=HEAD~
 
   go:test:
     desc: runs and outputs results of created go tests
