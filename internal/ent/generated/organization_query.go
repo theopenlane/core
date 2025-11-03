@@ -15,6 +15,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -146,6 +148,8 @@ type OrganizationQuery struct {
 	withExports                            *ExportQuery
 	withTrustCenterWatermarkConfigs        *TrustCenterWatermarkConfigQuery
 	withImpersonationEvents                *ImpersonationEventQuery
+	withAssessments                        *AssessmentQuery
+	withAssessmentResponses                *AssessmentResponseQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -214,6 +218,8 @@ type OrganizationQuery struct {
 	withNamedExports                       map[string]*ExportQuery
 	withNamedTrustCenterWatermarkConfigs   map[string]*TrustCenterWatermarkConfigQuery
 	withNamedImpersonationEvents           map[string]*ImpersonationEventQuery
+	withNamedAssessments                   map[string]*AssessmentQuery
+	withNamedAssessmentResponses           map[string]*AssessmentResponseQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1951,6 +1957,56 @@ func (_q *OrganizationQuery) QueryImpersonationEvents() *ImpersonationEventQuery
 	return query
 }
 
+// QueryAssessments chains the current query on the "assessments" edge.
+func (_q *OrganizationQuery) QueryAssessments() *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentsTable, organization.AssessmentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses chains the current query on the "assessment_responses" edge.
+func (_q *OrganizationQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentResponsesTable, organization.AssessmentResponsesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2236,6 +2292,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withExports:                       _q.withExports.Clone(),
 		withTrustCenterWatermarkConfigs:   _q.withTrustCenterWatermarkConfigs.Clone(),
 		withImpersonationEvents:           _q.withImpersonationEvents.Clone(),
+		withAssessments:                   _q.withAssessments.Clone(),
+		withAssessmentResponses:           _q.withAssessmentResponses.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -2992,6 +3050,28 @@ func (_q *OrganizationQuery) WithImpersonationEvents(opts ...func(*Impersonation
 	return _q
 }
 
+// WithAssessments tells the query-builder to eager-load the nodes that are connected to
+// the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssessments(opts ...func(*AssessmentQuery)) *OrganizationQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessments = query
+	return _q
+}
+
+// WithAssessmentResponses tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_responses" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQuery)) *OrganizationQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentResponses = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3087,7 +3167,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [69]bool{
+		loadedTypes = [71]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3156,6 +3236,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withExports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
 			_q.withImpersonationEvents != nil,
+			_q.withAssessments != nil,
+			_q.withAssessmentResponses != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3685,6 +3767,22 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withAssessments; query != nil {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Assessments = []*Assessment{} },
+			func(n *Organization, e *Assessment) { n.Edges.Assessments = append(n.Edges.Assessments, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentResponses; query != nil {
+		if err := _q.loadAssessmentResponses(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
+			func(n *Organization, e *AssessmentResponse) {
+				n.Edges.AssessmentResponses = append(n.Edges.AssessmentResponses, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4148,6 +4246,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadImpersonationEvents(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedImpersonationEvents(name) },
 			func(n *Organization, e *ImpersonationEvent) { n.appendNamedImpersonationEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessments {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssessments(name) },
+			func(n *Organization, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessmentResponses {
+		if err := _q.loadAssessmentResponses(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssessmentResponses(name) },
+			func(n *Organization, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6362,6 +6474,66 @@ func (_q *OrganizationQuery) loadImpersonationEvents(ctx context.Context, query 
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Assessment)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessment.FieldOwnerID)
+	}
+	query.Where(predicate.Assessment(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssessmentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadAssessmentResponses(ctx context.Context, query *AssessmentResponseQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *AssessmentResponse)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentresponse.FieldOwnerID)
+	}
+	query.Where(predicate.AssessmentResponse(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssessmentResponsesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7404,6 +7576,34 @@ func (_q *OrganizationQuery) WithNamedImpersonationEvents(name string, opts ...f
 		_q.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery)
 	}
 	_q.withNamedImpersonationEvents[name] = query
+	return _q
+}
+
+// WithNamedAssessments tells the query-builder to eager-load the nodes that are connected to the "assessments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssessments(name string, opts ...func(*AssessmentQuery)) *OrganizationQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessments == nil {
+		_q.withNamedAssessments = make(map[string]*AssessmentQuery)
+	}
+	_q.withNamedAssessments[name] = query
+	return _q
+}
+
+// WithNamedAssessmentResponses tells the query-builder to eager-load the nodes that are connected to the "assessment_responses"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssessmentResponses(name string, opts ...func(*AssessmentResponseQuery)) *OrganizationQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessmentResponses == nil {
+		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
+	}
+	_q.withNamedAssessmentResponses[name] = query
 	return _q
 }
 

@@ -210,6 +210,10 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_exports(ctx, field)
 			case "trustCenterWatermarkConfigs":
 				return ec.fieldContext_Organization_trustCenterWatermarkConfigs(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Organization_assessments(ctx, field)
+			case "assessmentResponses":
+				return ec.fieldContext_Organization_assessmentResponses(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

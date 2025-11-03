@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -176,6 +178,72 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 				actionplan.InternalNotesContainsFold(query),    // search by InternalNotes
 				actionplan.SystemInternalIDContainsFold(query), // search by SystemInternalID
 				actionplan.SourceContainsFold(query),           // search by Source
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessment searches for Assessment based on the query string looking for matches
+func searchAssessments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	request := withTransactionalMutation(ctx).Assessment.Query().
+		Where(
+			assessment.Or(
+				assessment.ID(query),               // search equal to ID
+				assessment.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessment searches for Assessment based on the query string looking for matches
+func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	request := withTransactionalMutation(ctx).Assessment.Query().
+		Where(
+			assessment.Or(
+				assessment.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				assessment.OwnerIDContainsFold(query),           // search by OwnerID
+				assessment.NameContainsFold(query),              // search by Name
+				assessment.TemplateIDContainsFold(query),        // search by TemplateID
+				assessment.AssessmentOwnerIDContainsFold(query), // search by AssessmentOwnerID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessmentResponse searches for AssessmentResponse based on the query string looking for matches
+func searchAssessmentResponses(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
+		Where(
+			assessmentresponse.Or(
+				assessmentresponse.EmailContainsFold(query), // search by Email
+				assessmentresponse.ID(query),                // search equal to ID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAssessmentResponse searches for AssessmentResponse based on the query string looking for matches
+func adminSearchAssessmentResponses(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
+		Where(
+			assessmentresponse.Or(
+				assessmentresponse.ID(query),                         // search equal to ID
+				assessmentresponse.OwnerIDContainsFold(query),        // search by OwnerID
+				assessmentresponse.AssessmentIDContainsFold(query),   // search by AssessmentID
+				assessmentresponse.EmailContainsFold(query),          // search by Email
+				assessmentresponse.DocumentDataIDContainsFold(query), // search by DocumentDataID
 			),
 		)
 

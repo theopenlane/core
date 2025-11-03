@@ -185,6 +185,10 @@ const (
 	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
 	EdgeImpersonationEvents = "impersonation_events"
+	// EdgeAssessments holds the string denoting the assessments edge name in mutations.
+	EdgeAssessments = "assessments"
+	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
+	EdgeAssessmentResponses = "assessment_responses"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -651,6 +655,20 @@ const (
 	ImpersonationEventsInverseTable = "impersonation_events"
 	// ImpersonationEventsColumn is the table column denoting the impersonation_events relation/edge.
 	ImpersonationEventsColumn = "organization_id"
+	// AssessmentsTable is the table that holds the assessments relation/edge.
+	AssessmentsTable = "assessments"
+	// AssessmentsInverseTable is the table name for the Assessment entity.
+	// It exists in this package in order to avoid circular dependency with the "assessment" package.
+	AssessmentsInverseTable = "assessments"
+	// AssessmentsColumn is the table column denoting the assessments relation/edge.
+	AssessmentsColumn = "owner_id"
+	// AssessmentResponsesTable is the table that holds the assessment_responses relation/edge.
+	AssessmentResponsesTable = "assessment_responses"
+	// AssessmentResponsesInverseTable is the table name for the AssessmentResponse entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentresponse" package.
+	AssessmentResponsesInverseTable = "assessment_responses"
+	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
+	AssessmentResponsesColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1763,6 +1781,34 @@ func ByImpersonationEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByAssessmentsCount orders the results by assessments count.
+func ByAssessmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentsStep(), opts...)
+	}
+}
+
+// ByAssessments orders the results by assessments terms.
+func ByAssessments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssessmentResponsesCount orders the results by assessment_responses count.
+func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentResponsesStep(), opts...)
+	}
+}
+
+// ByAssessmentResponses orders the results by assessment_responses terms.
+func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2250,6 +2296,20 @@ func newImpersonationEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ImpersonationEventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ImpersonationEventsTable, ImpersonationEventsColumn),
+	)
+}
+func newAssessmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentsTable, AssessmentsColumn),
+	)
+}
+func newAssessmentResponsesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

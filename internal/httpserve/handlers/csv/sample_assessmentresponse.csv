@@ -1,0 +1,2 @@
+Email,Status,AssignedAt,StartedAt,CompletedAt,DueDate,OwnerId,DocumentId,AssessmentId
+example_email,example_status,example_assignedat,example_startedat,example_completedat,example_duedate,example_ownerid,example_documentid,example_assessmentid
