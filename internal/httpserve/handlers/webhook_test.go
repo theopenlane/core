@@ -21,6 +21,14 @@ import (
 func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	t := suite.T()
 
+	// add the customer ID on the organization so isOrgValid can find it
+	// and it does not just keep failing
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	suite.db.Organization.UpdateOneID(testUser1.OrganizationID).
+		SetStripeCustomerID("cus_test_customer").
+		ExecX(allowCtx)
+
 	// manually create an org subscription for the org and set it as active since this does not happen automatically
 	// in tests
 	suite.db.OrgSubscription.Create().
@@ -53,7 +61,6 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	require.NoError(t, err)
 
 	// create api token and personal access token to ensure they are revoked when subscription is paused
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	apiToken := suite.db.APIToken.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName(
