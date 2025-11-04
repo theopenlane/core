@@ -67,7 +67,10 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 	}
 
 	if config.Logger == nil {
-		config.Logger = New(os.Stdout, WithTimestamp())
+		config.Logger = Configure(LoggerConfig{
+			Writer:   os.Stdout,
+			WithEcho: true,
+		}).Echo
 	}
 
 	if config.RequestIDKey == "" {
@@ -95,7 +98,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 
 			id := getRequestID(c, config)
 			if id != "" {
-				logger = From(logger.log, WithField(config.RequestIDKey, id))
+				logger = newLoggerFromExisting(logger.log.With().Str(config.RequestIDKey, id).Logger(), logger.out, logger.setters)
 			}
 
 			// The request context is retrieved and set to the logger's context
@@ -140,7 +143,7 @@ func getRequestID(c echo.Context, config Config) string {
 // enrichLogger enriches the logger (lulz) with additional information using the provided Enricher function
 func enrichLogger(c echo.Context, logger *Logger, config Config) *Logger {
 	if config.Enricher != nil {
-		logger = From(logger.log)
+		logger = newLoggerFromExisting(logger.log, logger.out, logger.setters)
 		logger.log = config.Enricher(c, logger.log.With()).Logger()
 	}
 
@@ -185,6 +188,18 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("client_ip", c.RealIP())
 	evt.Str("request_protocol", req.Proto)
 
+	if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
+		evt.Str("true_client_ip", trueClientIP)
+	}
+
+	if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
+		evt.Str("x_forwarded_for", forwardedFor)
+	}
+
+	if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
+		evt.Str("x_real_ip", realIP)
+	}
+
 	cl := req.Header.Get(echo.HeaderContentLength)
 	if cl == "" {
 		cl = "0"
@@ -194,8 +209,8 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("bytes_out", strconv.FormatInt(res.Size, 10))
 
 	if config.NestKey != "" {
-		mainEvt.Dict(config.NestKey, evt).Msg("request details")
+		mainEvt.Dict(config.NestKey, evt).Msgf("request details for request to %s %s", req.Method, req.RequestURI)
 	} else {
-		mainEvt.Msg("request details")
+		mainEvt.Msgf("request details for request to %s %s", req.Method, req.RequestURI)
 	}
 }

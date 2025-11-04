@@ -9,7 +9,6 @@ import (
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
-	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/httpsling"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/summarizer"
@@ -300,7 +300,7 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 		return h.InternalServerError(ctx, err, openapi)
 	}
 

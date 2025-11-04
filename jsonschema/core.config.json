@@ -8,6 +8,12 @@
       },
       "type": "array"
     },
+    "[]ratelimit.RateOption": {
+      "items": {
+        "$ref": "#/$defs/ratelimit.RateOption"
+      },
+      "type": "array"
+    },
     "[]rivertype.Hook": {
       "items": true,
       "type": "array"
@@ -928,19 +934,73 @@
         "enabled": {
           "type": "boolean"
         },
-        "limit": {
-          "type": "number"
+        "options": {
+          "$ref": "#/$defs/[]ratelimit.RateOption",
+          "description": "Options enables configuring multiple concurrent rate windows that must all pass."
         },
-        "burst": {
-          "type": "integer"
+        "headers": {
+          "$ref": "#/$defs/[]string",
+          "description": "Headers determines which headers are inspected to determine the origin IP.\nDefaults to X-Forwarded-For, True-Client-IP, RemoteAddr."
         },
-        "expires": {
-          "type": "integer"
+        "forwardedIndexFromBehind": {
+          "type": "integer",
+          "description": "ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.\n0 means the closest client, 1 the proxy behind it, etc."
+        },
+        "includePath": {
+          "type": "boolean",
+          "description": "IncludePath appends the request path to the limiter key when true."
+        },
+        "includeMethod": {
+          "type": "boolean",
+          "description": "IncludeMethod appends the request method to the limiter key when true."
+        },
+        "keyPrefix": {
+          "type": "string",
+          "description": "KeyPrefix allows scoping the limiter key space with a static prefix."
+        },
+        "denyStatus": {
+          "type": "integer",
+          "description": "DenyStatus overrides the HTTP status code returned when a rate limit is exceeded."
+        },
+        "denyMessage": {
+          "type": "string",
+          "description": "DenyMessage customises the error payload when a rate limit is exceeded."
+        },
+        "sendRetryAfterHeader": {
+          "type": "boolean",
+          "description": "SendRetryAfterHeader toggles whether the Retry-After header should be added when available."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "DryRun enables logging rate limit decisions without blocking requests."
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "Config defines the configuration settings for the default rate limiter"
+      "description": "Config defines the configuration settings for the rate limiter middleware."
+    },
+    "ratelimit.RateOption": {
+      "properties": {
+        "requests": {
+          "type": "integer",
+          "description": "Requests is the number of requests allowed within the configured window."
+        },
+        "window": {
+          "type": "integer",
+          "description": "Window is the duration of the sliding window."
+        },
+        "expiration": {
+          "type": "integer",
+          "description": "Expiration controls how long counters are retained before eviction.\nWhen unset, Expiration defaults to twice the Window duration."
+        },
+        "flushInterval": {
+          "type": "integer",
+          "description": "FlushInterval defines how frequently expired values are purged from memory.\nWhen unset, FlushInterval defaults to 10s."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "RateOption defines a distinct rate limiting window and request allowance."
     },
     "redirect.Config": {
       "properties": {

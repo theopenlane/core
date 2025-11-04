@@ -166,6 +166,62 @@ func (_c *RiskHistoryCreate) SetNillableOwnerID(v *string) *RiskHistoryCreate {
 	return _c
 }
 
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_c *RiskHistoryCreate) SetRiskKindName(v string) *RiskHistoryCreate {
+	_c.mutation.SetRiskKindName(v)
+	return _c
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableRiskKindName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetRiskKindName(*v)
+	}
+	return _c
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_c *RiskHistoryCreate) SetRiskKindID(v string) *RiskHistoryCreate {
+	_c.mutation.SetRiskKindID(v)
+	return _c
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableRiskKindID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetRiskKindID(*v)
+	}
+	return _c
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_c *RiskHistoryCreate) SetRiskCategoryName(v string) *RiskHistoryCreate {
+	_c.mutation.SetRiskCategoryName(v)
+	return _c
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableRiskCategoryName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetRiskCategoryName(*v)
+	}
+	return _c
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_c *RiskHistoryCreate) SetRiskCategoryID(v string) *RiskHistoryCreate {
+	_c.mutation.SetRiskCategoryID(v)
+	return _c
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableRiskCategoryID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetRiskCategoryID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *RiskHistoryCreate) SetName(v string) *RiskHistoryCreate {
 	_c.mutation.SetName(v)
@@ -541,6 +597,22 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.RiskKindName(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindName, field.TypeString, value)
+		_node.RiskKindName = value
+	}
+	if value, ok := _c.mutation.RiskKindID(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindID, field.TypeString, value)
+		_node.RiskKindID = value
+	}
+	if value, ok := _c.mutation.RiskCategoryName(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryName, field.TypeString, value)
+		_node.RiskCategoryName = value
+	}
+	if value, ok := _c.mutation.RiskCategoryID(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryID, field.TypeString, value)
+		_node.RiskCategoryID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)

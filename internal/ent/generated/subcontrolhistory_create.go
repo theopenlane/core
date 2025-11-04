@@ -467,6 +467,34 @@ func (_c *SubcontrolHistoryCreate) SetNillableSystemInternalID(v *string) *Subco
 	return _c
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_c *SubcontrolHistoryCreate) SetSubcontrolKindName(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSubcontrolKindName(v)
+	return _c
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSubcontrolKindName(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSubcontrolKindName(*v)
+	}
+	return _c
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_c *SubcontrolHistoryCreate) SetSubcontrolKindID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSubcontrolKindID(v)
+	return _c
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSubcontrolKindID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSubcontrolKindID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *SubcontrolHistoryCreate) SetRefCode(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetRefCode(v)
@@ -805,6 +833,14 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(subcontrolhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindName, field.TypeString, value)
+		_node.SubcontrolKindName = value
+	}
+	if value, ok := _c.mutation.SubcontrolKindID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString, value)
+		_node.SubcontrolKindID = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

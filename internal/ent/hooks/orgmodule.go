@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
@@ -40,7 +40,7 @@ func HookOrgModule() ent.Hook {
 			feats := []models.OrgModule{orgModule.Module}
 
 			if err := entitlements.CreateFeatureTuples(ctx, &omm.Authz, orgID, feats); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("error creating feature tuples")
+				logx.FromContext(ctx).Error().Err(err).Msg("error creating feature tuples")
 				return nil, err
 			}
 
@@ -119,7 +119,7 @@ func handleActivation(ctx context.Context, omm *generated.OrgModuleMutation, v g
 
 	feats := []models.OrgModule{orgModule.Module}
 	if err := entitlements.CreateFeatureTuples(ctx, &omm.Authz, orgModule.OwnerID, feats); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating feature tuples on activating module again")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating feature tuples on activating module again")
 		return nil, err
 	}
 

@@ -31,6 +31,12 @@ type MutationResolver interface {
 	UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error)
 	DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error)
 	DeleteBulkAPIToken(ctx context.Context, ids []string) (*model.APITokenBulkDeletePayload, error)
+	CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error)
+	UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error)
+	DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error)
+	CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error)
+	UpdateAssessmentResponse(ctx context.Context, id string, input generated.UpdateAssessmentResponseInput) (*model.AssessmentResponseUpdatePayload, error)
+	DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error)
 	CreateAsset(ctx context.Context, input generated.CreateAssetInput) (*model.AssetCreatePayload, error)
 	CreateBulkAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error)
 	CreateBulkCSVAsset(ctx context.Context, input graphql.Upload) (*model.AssetBulkCreatePayload, error)
@@ -71,6 +77,11 @@ type MutationResolver interface {
 	UpdateCustomDomain(ctx context.Context, id string, input generated.UpdateCustomDomainInput) (*model.CustomDomainUpdatePayload, error)
 	DeleteCustomDomain(ctx context.Context, id string) (*model.CustomDomainDeletePayload, error)
 	DeleteBulkCustomDomain(ctx context.Context, ids []string) (*model.CustomDomainBulkDeletePayload, error)
+	CreateCustomTypeEnum(ctx context.Context, input generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumCreatePayload, error)
+	CreateBulkCustomTypeEnum(ctx context.Context, input []*generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumBulkCreatePayload, error)
+	CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload) (*model.CustomTypeEnumBulkCreatePayload, error)
+	UpdateCustomTypeEnum(ctx context.Context, id string, input generated.UpdateCustomTypeEnumInput) (*model.CustomTypeEnumUpdatePayload, error)
+	DeleteCustomTypeEnum(ctx context.Context, id string) (*model.CustomTypeEnumDeletePayload, error)
 	CreateDNSVerification(ctx context.Context, input generated.CreateDNSVerificationInput) (*model.DNSVerificationCreatePayload, error)
 	CreateBulkDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error)
 	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkCreatePayload, error)
@@ -279,6 +290,11 @@ type MutationResolver interface {
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error)
 	UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*model.SubscriberUpdatePayload, error)
 	DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*model.SubscriberDeletePayload, error)
+	CreateTagDefinition(ctx context.Context, input generated.CreateTagDefinitionInput) (*model.TagDefinitionCreatePayload, error)
+	CreateBulkTagDefinition(ctx context.Context, input []*generated.CreateTagDefinitionInput) (*model.TagDefinitionBulkCreatePayload, error)
+	CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload) (*model.TagDefinitionBulkCreatePayload, error)
+	UpdateTagDefinition(ctx context.Context, id string, input generated.UpdateTagDefinitionInput) (*model.TagDefinitionUpdatePayload, error)
+	DeleteTagDefinition(ctx context.Context, id string) (*model.TagDefinitionDeletePayload, error)
 	CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error)
 	CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkCreatePayload, error)
@@ -367,6 +383,28 @@ func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Con
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createAssessmentResponse_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssessmentResponseInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssessmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -496,6 +534,17 @@ func (ec *executionContext) field_Mutation_createBulkCSVControl_args(ctx context
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBulkCSVCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
@@ -792,6 +841,17 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createBulkCSVTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createBulkCSVTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -906,6 +966,17 @@ func (ec *executionContext) field_Mutation_createBulkCustomDomain_args(ctx conte
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBulkCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1199,6 +1270,17 @@ func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createBulkTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTagDefinitionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTagDefinitionInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1335,6 +1417,17 @@ func (ec *executionContext) field_Mutation_createCustomDomain_args(ctx context.C
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1865,6 +1958,17 @@ func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTagDefinitionInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2076,6 +2180,28 @@ func (ec *executionContext) field_Mutation_deleteAPIToken_args(ctx context.Conte
 }
 
 func (ec *executionContext) field_Mutation_deleteActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteAssessmentResponse_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
@@ -2592,6 +2718,17 @@ func (ec *executionContext) field_Mutation_deleteCustomDomain_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3026,6 +3163,17 @@ func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3194,6 +3342,38 @@ func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Con
 	}
 	args["id"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateAssessmentResponse_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssessmentResponseInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssessmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssessmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -3455,6 +3635,22 @@ func (ec *executionContext) field_Mutation_updateCustomDomain_args(ctx context.C
 	}
 	args["id"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomDomainInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomTypeEnumInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4126,6 +4322,22 @@ func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTagDefinitionInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateTaskComment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -4448,6 +4660,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
+			case "actionPlanKindName":
+				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
+			case "actionPlanKindID":
+				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -4460,6 +4676,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "actionPlanKind":
+				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
@@ -4586,6 +4804,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
+			case "actionPlanKindName":
+				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
+			case "actionPlanKindID":
+				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -4598,6 +4820,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "actionPlanKind":
+				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
@@ -4724,6 +4948,10 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
+			case "actionPlanKindName":
+				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
+			case "actionPlanKindID":
+				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -4736,6 +4964,8 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "actionPlanKind":
+				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
@@ -4862,6 +5092,10 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
+			case "actionPlanKindName":
+				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
+			case "actionPlanKindID":
+				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -4874,6 +5108,8 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "actionPlanKind":
+				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
@@ -5470,6 +5706,276 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkAPIToken(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteBulkAPIToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createAssessment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createAssessment,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateAssessment(ctx, fc.Args["input"].(generated.CreateAssessmentInput))
+		},
+		nil,
+		ec.marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createAssessment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "assessment":
+				return ec.fieldContext_AssessmentCreatePayload_assessment(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateAssessment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateAssessment,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateAssessment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssessmentInput))
+		},
+		nil,
+		ec.marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateAssessment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "assessment":
+				return ec.fieldContext_AssessmentUpdatePayload_assessment(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteAssessment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteAssessment,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteAssessment(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteAssessment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_AssessmentDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createAssessmentResponse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createAssessmentResponse,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateAssessmentResponse(ctx, fc.Args["input"].(generated.CreateAssessmentResponseInput))
+		},
+		nil,
+		ec.marshalNAssessmentResponseCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createAssessmentResponse(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "assessmentResponse":
+				return ec.fieldContext_AssessmentResponseCreatePayload_assessmentResponse(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createAssessmentResponse_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateAssessmentResponse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateAssessmentResponse,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateAssessmentResponse(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssessmentResponseInput))
+		},
+		nil,
+		ec.marshalNAssessmentResponseUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateAssessmentResponse(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "assessmentResponse":
+				return ec.fieldContext_AssessmentResponseUpdatePayload_assessmentResponse(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateAssessmentResponse_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteAssessmentResponse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteAssessmentResponse,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteAssessmentResponse(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNAssessmentResponseDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteAssessmentResponse(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_AssessmentResponseDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteAssessmentResponse_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -7274,6 +7780,231 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkCustomDomain(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteBulkCustomDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createCustomTypeEnum,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateCustomTypeEnum(ctx, fc.Args["input"].(generated.CreateCustomTypeEnumInput))
+		},
+		nil,
+		ec.marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "customTypeEnum":
+				return ec.fieldContext_CustomTypeEnumCreatePayload_customTypeEnum(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkCustomTypeEnum,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBulkCustomTypeEnum(ctx, fc.Args["input"].([]*generated.CreateCustomTypeEnumInput))
+		},
+		nil,
+		ec.marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "customTypeEnums":
+				return ec.fieldContext_CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkCSVCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkCSVCustomTypeEnum,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBulkCSVCustomTypeEnum(ctx, fc.Args["input"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkCSVCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "customTypeEnums":
+				return ec.fieldContext_CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkCSVCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateCustomTypeEnum,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateCustomTypeEnum(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCustomTypeEnumInput))
+		},
+		nil,
+		ec.marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "customTypeEnum":
+				return ec.fieldContext_CustomTypeEnumUpdatePayload_customTypeEnum(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteCustomTypeEnum,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteCustomTypeEnum(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteCustomTypeEnum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_CustomTypeEnumDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16652,6 +17383,231 @@ func (ec *executionContext) fieldContext_Mutation_deleteSubscriber(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createTagDefinition,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateTagDefinition(ctx, fc.Args["input"].(generated.CreateTagDefinitionInput))
+		},
+		nil,
+		ec.marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createTagDefinition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "tagDefinition":
+				return ec.fieldContext_TagDefinitionCreatePayload_tagDefinition(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createTagDefinition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkTagDefinition,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBulkTagDefinition(ctx, fc.Args["input"].([]*generated.CreateTagDefinitionInput))
+		},
+		nil,
+		ec.marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkTagDefinition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "tagDefinitions":
+				return ec.fieldContext_TagDefinitionBulkCreatePayload_tagDefinitions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkTagDefinition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkCSVTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkCSVTagDefinition,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBulkCSVTagDefinition(ctx, fc.Args["input"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkCSVTagDefinition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "tagDefinitions":
+				return ec.fieldContext_TagDefinitionBulkCreatePayload_tagDefinitions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkCSVTagDefinition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateTagDefinition,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateTagDefinition(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTagDefinitionInput))
+		},
+		nil,
+		ec.marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateTagDefinition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "tagDefinition":
+				return ec.fieldContext_TagDefinitionUpdatePayload_tagDefinition(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateTagDefinition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteTagDefinition,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteTagDefinition(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteTagDefinition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_TagDefinitionDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteTagDefinition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createTask(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -19536,6 +20492,48 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createAssessment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createAssessment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateAssessment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateAssessment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteAssessment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteAssessment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createAssessmentResponse":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createAssessmentResponse(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateAssessmentResponse":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateAssessmentResponse(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteAssessmentResponse":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteAssessmentResponse(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createAsset":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAsset(ctx, field)
@@ -19812,6 +20810,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteBulkCustomDomain":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBulkCustomDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCustomTypeEnum":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCustomTypeEnum(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkCustomTypeEnum":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkCustomTypeEnum(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkCSVCustomTypeEnum":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkCSVCustomTypeEnum(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCustomTypeEnum":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCustomTypeEnum(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteCustomTypeEnum":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteCustomTypeEnum(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -21268,6 +22301,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteSubscriber":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteSubscriber(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createTagDefinition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createTagDefinition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkTagDefinition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkTagDefinition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkCSVTagDefinition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkCSVTagDefinition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateTagDefinition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateTagDefinition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteTagDefinition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteTagDefinition(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

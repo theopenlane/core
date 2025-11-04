@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
@@ -209,7 +209,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -251,7 +251,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 
 	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(reqCtx, ctx.Response().Writer, setSessionMap, credential.Response.Challenge.String())
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to save session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to save session")
 		metrics.RecordLogin(false)
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -262,7 +262,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 	// server side
 	s, err := sessions.SessionToken(sessionCtx)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get session token")
 		metrics.RecordLogin(false)
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -289,7 +289,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session from cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get session from cookie")
 		metrics.RecordLogin(false)
 
 		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
@@ -314,14 +314,14 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 
 	response, err := protocol.ParseCredentialRequestResponseBytes(data)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
 		metrics.RecordLogin(false)
 
 		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
 	}
 
 	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(reqCtx), wd, response); err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to validate webauthn login")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate webauthn login")
 		metrics.RecordLogin(false)
 
 		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
@@ -333,7 +333,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 
 	// ensure the user is the same as the one who started the login based on the challenge
 	if userIDFromCookie != response.Response.CollectedClientData.Challenge {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("challenge ids do not match")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("challenge ids do not match")
 		metrics.RecordLogin(false)
 
 		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
@@ -342,7 +342,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	// get user from the database
 	entUser, reqCtx, err := h.getUserByID(reqCtx, userID)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get user by id")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by id")
 		metrics.RecordLogin(false)
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -358,7 +358,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	// create claims for verified user
 	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 		metrics.RecordLogin(false)
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -366,7 +366,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 
 	// set the last seen for the user
 	if err := h.updateUserLastSeen(reqCtx, userID, enums.AuthProviderCredentials); err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to update last seen")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 		metrics.RecordLogin(false)
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)

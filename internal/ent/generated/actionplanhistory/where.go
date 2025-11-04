@@ -181,6 +181,16 @@ func SystemInternalID(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// ActionPlanKindName applies equality check predicate on the "action_plan_kind_name" field. It's identical to ActionPlanKindNameEQ.
+func ActionPlanKindName(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindID applies equality check predicate on the "action_plan_kind_id" field. It's identical to ActionPlanKindIDEQ.
+func ActionPlanKindID(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldActionPlanKindID, v))
+}
+
 // DueDate applies equality check predicate on the "due_date" field. It's identical to DueDateEQ.
 func DueDate(v time.Time) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldDueDate, v))
@@ -1829,6 +1839,156 @@ func SystemInternalIDEqualFold(v string) predicate.ActionPlanHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// ActionPlanKindNameEQ applies the EQ predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameNEQ applies the NEQ predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameNEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNEQ(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameIn applies the In predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIn(FieldActionPlanKindName, vs...))
+}
+
+// ActionPlanKindNameNotIn applies the NotIn predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameNotIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotIn(FieldActionPlanKindName, vs...))
+}
+
+// ActionPlanKindNameGT applies the GT predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameGT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGT(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameGTE applies the GTE predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameGTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGTE(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameLT applies the LT predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameLT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLT(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameLTE applies the LTE predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameLTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLTE(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameContains applies the Contains predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameContains(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContains(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameHasPrefix applies the HasPrefix predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameHasPrefix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasPrefix(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameHasSuffix applies the HasSuffix predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameHasSuffix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasSuffix(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameIsNil applies the IsNil predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldActionPlanKindName))
+}
+
+// ActionPlanKindNameNotNil applies the NotNil predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldActionPlanKindName))
+}
+
+// ActionPlanKindNameEqualFold applies the EqualFold predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameEqualFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEqualFold(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindNameContainsFold applies the ContainsFold predicate on the "action_plan_kind_name" field.
+func ActionPlanKindNameContainsFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldActionPlanKindName, v))
+}
+
+// ActionPlanKindIDEQ applies the EQ predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDNEQ applies the NEQ predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDNEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNEQ(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDIn applies the In predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIn(FieldActionPlanKindID, vs...))
+}
+
+// ActionPlanKindIDNotIn applies the NotIn predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDNotIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotIn(FieldActionPlanKindID, vs...))
+}
+
+// ActionPlanKindIDGT applies the GT predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDGT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGT(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDGTE applies the GTE predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDGTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGTE(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDLT applies the LT predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDLT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLT(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDLTE applies the LTE predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDLTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLTE(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDContains applies the Contains predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDContains(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContains(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDHasPrefix applies the HasPrefix predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDHasPrefix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasPrefix(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDHasSuffix applies the HasSuffix predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDHasSuffix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasSuffix(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDIsNil applies the IsNil predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldActionPlanKindID))
+}
+
+// ActionPlanKindIDNotNil applies the NotNil predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldActionPlanKindID))
+}
+
+// ActionPlanKindIDEqualFold applies the EqualFold predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDEqualFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEqualFold(FieldActionPlanKindID, v))
+}
+
+// ActionPlanKindIDContainsFold applies the ContainsFold predicate on the "action_plan_kind_id" field.
+func ActionPlanKindIDContainsFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldActionPlanKindID, v))
 }
 
 // DueDateEQ applies the EQ predicate on the "due_date" field.

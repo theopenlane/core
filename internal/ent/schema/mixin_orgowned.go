@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -113,7 +113,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			// set owner on create mutation
 			if err := o.setOwnerIDField(ctx, m); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to set owner id field")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to set owner id field")
 
 				return nil, err
 			}
@@ -126,13 +126,13 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			// add organization owner editor relation to the object
 			id, err := hooks.GetObjectIDFromEntValue(retVal)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get object id from ent value")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get object id from ent value")
 
 				return nil, err
 			}
 
 			if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to add organization owner editor relation")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to add organization owner editor relation")
 
 				return nil, err
 			}
@@ -195,7 +195,7 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		zerolog.Ctx(ctx).Debug().Str("query", q.Type()).Msg("defaultOrgInterceptorFunc")
+		logx.FromContext(ctx).Debug().Str("query", q.Type()).Msg("defaultOrgInterceptorFunc")
 
 		if skip := o.orgInterceptorSkipper(ctx, q); skip {
 			return nil
@@ -224,7 +224,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		if len(orgIDs) == 0 {
-			zerolog.Ctx(ctx).Warn().Msg("no organization ids found in context, but interceptor was not skipped, no results will be returned")
+			logx.FromContext(ctx).Warn().Msg("no organization ids found in context, but interceptor was not skipped, no results will be returned")
 		}
 
 		// sets the owner id on the query for the current organization

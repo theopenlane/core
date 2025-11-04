@@ -112,6 +112,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
+			case "procedureKindName":
+				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
+			case "procedureKindID":
+				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -122,6 +126,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -260,6 +266,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
+			case "procedureKindName":
+				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
+			case "procedureKindID":
+				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -270,6 +280,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -408,6 +420,10 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
+			case "procedureKindName":
+				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
+			case "procedureKindID":
+				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -418,6 +434,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":
@@ -556,6 +574,10 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
+			case "procedureKindName":
+				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
+			case "procedureKindID":
+				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -566,6 +588,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Procedure_delegate(ctx, field)
+			case "procedureKind":
+				return ec.fieldContext_Procedure_procedureKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "subcontrols":

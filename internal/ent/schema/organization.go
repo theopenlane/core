@@ -16,13 +16,14 @@ import (
 
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx/accessmap"
+
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 const (
@@ -430,6 +431,26 @@ func (o Organization) Edges() []ent.Edge {
 			cascadeDeleteOwner: true,
 		}),
 		defaultEdgeToWithPagination(o, ImpersonationEvent{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Assessment{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         AssessmentResponse{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         CustomTypeEnum{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         TagDefinition{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

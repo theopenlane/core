@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const appName = "openlane"
@@ -71,24 +71,18 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
-	output := consolelog.NewConsoleWriter()
-	log.Logger = zerolog.New(os.Stderr).
-		With().Timestamp().
-		Logger()
+	level := zerolog.InfoLevel
+	debug := k.Bool("debug")
 
-	// set the log level
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	// set the log level to debug if the debug flag is set and add additional information
-	if k.Bool("debug") {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-
-		log.Logger = log.Logger.With().
-			Caller().Logger()
+	if debug {
+		level = zerolog.DebugLevel
 	}
 
-	// pretty logging for development
-	if k.Bool("pretty") {
-		log.Logger = log.Output(&output)
-	}
+	logx.Configure(logx.LoggerConfig{
+		Level:         level,
+		Pretty:        k.Bool("pretty"),
+		Writer:        os.Stderr,
+		IncludeCaller: debug,
+		SetGlobal:     true,
+	})
 }

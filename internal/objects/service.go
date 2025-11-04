@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/rs/zerolog"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
@@ -150,13 +150,13 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 	result := s.resolver.Resolve(enrichedCtx)
 
 	if !result.IsPresent() {
-		zerolog.Ctx(ctx).Error().Msg("storage provider resolution failed: no provider resolved")
+		logx.FromContext(ctx).Error().Msg("storage provider resolution failed: no provider resolved")
 		return nil, ErrProviderResolutionFailed
 	}
 
 	res := result.MustGet()
 	if res.Builder == nil {
-		zerolog.Ctx(ctx).Error().Msg("storage provider resolution failed: resolved provider missing builder")
+		logx.FromContext(ctx).Error().Msg("storage provider resolution failed: resolved provider missing builder")
 		return nil, ErrProviderResolutionFailed
 	}
 
@@ -173,7 +173,7 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 
 	client := s.clientService.GetClient(ctx, cacheKey, res.Builder, res.Output, res.Config)
 	if !client.IsPresent() {
-		zerolog.Ctx(ctx).Error().Str("integration_type", res.Builder.ProviderType()).Msg("storage provider resolution failed: provider client unavailable")
+		logx.FromContext(ctx).Error().Str("integration_type", res.Builder.ProviderType()).Msg("storage provider resolution failed: provider client unavailable")
 		return nil, ErrProviderResolutionFailed
 	}
 
@@ -187,7 +187,7 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 
 	res, hasResult := result.Get()
 	if !hasResult {
-		zerolog.Ctx(ctx).Error().Msgf("storage provider resolution failed for file %s", file.ID)
+		logx.FromContext(ctx).Error().Msgf("storage provider resolution failed for file %s", file.ID)
 		return nil, ErrProviderResolutionFailed
 	}
 

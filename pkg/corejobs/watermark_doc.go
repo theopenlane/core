@@ -12,12 +12,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/riverqueue/river"
-	"github.com/rs/zerolog"
 
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -67,7 +67,7 @@ func (w *WatermarkDocWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *Wat
 
 // Work satisfies the river.Worker interface for the watermark doc worker
 func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkDocArgs]) error {
-	logger := zerolog.Ctx(ctx).With().Str("trust_center_document_id", job.Args.TrustCenterDocumentID).Logger()
+	logger := logx.FromContext(ctx).With().Str("trust_center_document_id", job.Args.TrustCenterDocumentID).Logger()
 	logger.Info().Msg("starting document watermarking")
 
 	if w.olClient == nil {
@@ -250,7 +250,7 @@ func (w *WatermarkDocWorker) setWatermarkStatus(ctx context.Context, docID strin
 		WatermarkStatus: &status,
 	}, nil, nil)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("doc_id", docID).Str("status", status.String()).Msg("failed to set watermark status")
+		logx.FromContext(ctx).Error().Err(err).Str("doc_id", docID).Str("status", status.String()).Msg("failed to set watermark status")
 	}
 }
 

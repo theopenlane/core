@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -160,7 +160,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 
 	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
+		logx.FromContext(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
 
 		return false, err
 	}
@@ -282,7 +282,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get authenticated user context")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get authenticated user context")
 
 		return "", err
 	}
@@ -302,7 +302,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	allow, err := a.db.Authz.CheckOrgReadAccess(ctx, req)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check access")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to check access")
 
 		return "", err
 	}
@@ -316,12 +316,12 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	// to authenticate
 	newOrgID, err := a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update default org")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to update default org")
 
 		return "", err
 	}
 
-	zerolog.Ctx(ctx).Error().Str("user_id", user.ID).Str("attempted_org_id", orgID).Str("new_org_id", newOrgID).Msg("user does not have access to the requested organization, switching to new default organization")
+	logx.FromContext(ctx).Error().Str("user_id", user.ID).Str("attempted_org_id", orgID).Str("new_org_id", newOrgID).Msg("user does not have access to the requested organization, switching to new default organization")
 
 	return newOrgID, generated.ErrPermissionDenied
 }
@@ -339,7 +339,7 @@ func (a *Client) getUserDefaultOrg(ctx context.Context, user *generated.User) (s
 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error obtaining default org")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining default org")
 
 		return "", err
 	}
@@ -371,7 +371,7 @@ func (a *Client) updateDefaultOrg(ctx context.Context, user *generated.User, org
 	// update default org to personal org
 	newOrgID, err := a.updateDefaultOrgToPersonal(ctx, user)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error updating default org to personal org")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating default org to personal org")
 
 		return "", err
 	}
@@ -381,11 +381,11 @@ func (a *Client) updateDefaultOrg(ctx context.Context, user *generated.User, org
 
 // updateDefaultOrgToPersonal updates the default org for the user to the personal org
 func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated.User) (string, error) {
-	zerolog.Ctx(ctx).Debug().Str("user", user.ID).Msg("user no longer has access to their default org, switching the default to their personal org")
+	logx.FromContext(ctx).Debug().Str("user", user.ID).Msg("user no longer has access to their default org, switching the default to their personal org")
 
 	personalOrg, err := a.getPersonalOrgID(ctx, user)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error obtaining personal org")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining personal org")
 
 		return "", err
 	}
@@ -397,7 +397,7 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 		Where(usersetting.UserID(user.ID)).
 		Exec(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error updating default org")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating default org")
 
 		return "", err
 	}
@@ -407,7 +407,7 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 		user.Edges.Setting, err = a.db.UserSetting.Query().
 			Where(usersetting.UserID(user.ID)).Only(ctx)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error obtaining user setting")
+			logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user setting")
 
 			return "", err
 		}

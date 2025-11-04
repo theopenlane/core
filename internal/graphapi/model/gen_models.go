@@ -88,6 +88,48 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Return response for createAssessment mutation
+type AssessmentCreatePayload struct {
+	// Created assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
+// Return response for deleteAssessment mutation
+type AssessmentDeletePayload struct {
+	// Deleted assessment ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkAssessmentResponse mutation
+type AssessmentResponseBulkCreatePayload struct {
+	// Created assessmentResponses
+	AssessmentResponses []*generated.AssessmentResponse `json:"assessmentResponses,omitempty"`
+}
+
+// Return response for createAssessmentResponse mutation
+type AssessmentResponseCreatePayload struct {
+	// Created assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for deleteAssessmentResponse mutation
+type AssessmentResponseDeletePayload struct {
+	// Deleted assessmentResponse ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAssessmentResponse mutation
+type AssessmentResponseUpdatePayload struct {
+	// Updated assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for updateAssessment mutation
+type AssessmentUpdatePayload struct {
+	// Updated assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
 // Return response for createBulkAsset mutation
 type AssetBulkCreatePayload struct {
 	// Created assets
@@ -424,6 +466,30 @@ type CustomDomainDeletePayload struct {
 type CustomDomainUpdatePayload struct {
 	// Updated customDomain
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
+// Return response for createBulkCustomTypeEnum mutation
+type CustomTypeEnumBulkCreatePayload struct {
+	// Created customTypeEnums
+	CustomTypeEnums []*generated.CustomTypeEnum `json:"customTypeEnums,omitempty"`
+}
+
+// Return response for createCustomTypeEnum mutation
+type CustomTypeEnumCreatePayload struct {
+	// Created customTypeEnum
+	CustomTypeEnum *generated.CustomTypeEnum `json:"customTypeEnum"`
+}
+
+// Return response for deleteCustomTypeEnum mutation
+type CustomTypeEnumDeletePayload struct {
+	// Deleted customTypeEnum ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateCustomTypeEnum mutation
+type CustomTypeEnumUpdatePayload struct {
+	// Updated customTypeEnum
+	CustomTypeEnum *generated.CustomTypeEnum `json:"customTypeEnum"`
 }
 
 // Return response for createBulkDNSVerification mutation
@@ -1498,12 +1564,15 @@ type SearchResults struct {
 	TotalCount                  int                                             `json:"totalCount"`
 	APITokens                   *generated.APITokenConnection                   `json:"apiTokens,omitempty"`
 	ActionPlans                 *generated.ActionPlanConnection                 `json:"actionPlans,omitempty"`
+	Assessments                 *generated.AssessmentConnection                 `json:"assessments,omitempty"`
+	AssessmentResponses         *generated.AssessmentResponseConnection         `json:"assessmentResponses,omitempty"`
 	Assets                      *generated.AssetConnection                      `json:"assets,omitempty"`
 	Contacts                    *generated.ContactConnection                    `json:"contacts,omitempty"`
 	Controls                    *generated.ControlConnection                    `json:"controls,omitempty"`
 	ControlImplementations      *generated.ControlImplementationConnection      `json:"controlImplementations,omitempty"`
 	ControlObjectives           *generated.ControlObjectiveConnection           `json:"controlObjectives,omitempty"`
 	CustomDomains               *generated.CustomDomainConnection               `json:"customDomains,omitempty"`
+	CustomTypeEnums             *generated.CustomTypeEnumConnection             `json:"customTypeEnums,omitempty"`
 	DNSVerifications            *generated.DNSVerificationConnection            `json:"dnsVerifications,omitempty"`
 	DocumentData                *generated.DocumentDataConnection               `json:"documentData,omitempty"`
 	Entities                    *generated.EntityConnection                     `json:"entities,omitempty"`
@@ -1534,6 +1603,7 @@ type SearchResults struct {
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
+	TagDefinitions              *generated.TagDefinitionConnection              `json:"tagDefinitions,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
@@ -1690,6 +1760,30 @@ type TFASettingUpdatePayload struct {
 	TfaSecret     *string               `json:"tfaSecret,omitempty"`
 	QRCode        *string               `json:"qrCode,omitempty"`
 	RecoveryCodes []string              `json:"recoveryCodes,omitempty"`
+}
+
+// Return response for createBulkTagDefinition mutation
+type TagDefinitionBulkCreatePayload struct {
+	// Created tagDefinitions
+	TagDefinitions []*generated.TagDefinition `json:"tagDefinitions,omitempty"`
+}
+
+// Return response for createTagDefinition mutation
+type TagDefinitionCreatePayload struct {
+	// Created tagDefinition
+	TagDefinition *generated.TagDefinition `json:"tagDefinition"`
+}
+
+// Return response for deleteTagDefinition mutation
+type TagDefinitionDeletePayload struct {
+	// Deleted tagDefinition ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTagDefinition mutation
+type TagDefinitionUpdatePayload struct {
+	// Updated tagDefinition
+	TagDefinition *generated.TagDefinition `json:"tagDefinition"`
 }
 
 // Return response for createBulkTask mutation

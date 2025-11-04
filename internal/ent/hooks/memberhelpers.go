@@ -9,13 +9,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -67,7 +67,7 @@ func HookMembershipSelf(table string) ent.Hook {
 				}
 
 				if err := createMembershipCheck(mutationMember, au.SubjectID); err != nil {
-					zerolog.Ctx(ctx).Error().Msg("cannot create membership")
+					logx.FromContext(ctx).Error().Msg("cannot create membership")
 
 					return nil, err
 				}
@@ -115,7 +115,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 
 	var rows sql.Rows
 	if err := generated.FromContext(ctx).Driver().Query(ctx, query, []any{strings.Join(memberIDs, ",")}, &rows); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get user ID from membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get user ID from membership")
 
 		return err
 	}
@@ -126,13 +126,13 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		var userID string
 
 		if err := rows.Scan(&userID); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to scan user ID from membership")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to scan user ID from membership")
 
 			return err
 		}
 
 		if userID == actorID {
-			zerolog.Ctx(ctx).Error().Msg("user cannot update their own membership")
+			logx.FromContext(ctx).Error().Msg("user cannot update their own membership")
 
 			return generated.ErrPermissionDenied
 		}

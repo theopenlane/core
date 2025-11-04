@@ -15,6 +15,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -27,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -105,6 +110,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -190,6 +196,10 @@ func checkColumn(t, c string) error {
 			apitoken.Table:                          apitoken.ValidColumn,
 			actionplan.Table:                        actionplan.ValidColumn,
 			actionplanhistory.Table:                 actionplanhistory.ValidColumn,
+			assessment.Table:                        assessment.ValidColumn,
+			assessmenthistory.Table:                 assessmenthistory.ValidColumn,
+			assessmentresponse.Table:                assessmentresponse.ValidColumn,
+			assessmentresponsehistory.Table:         assessmentresponsehistory.ValidColumn,
 			asset.Table:                             asset.ValidColumn,
 			assethistory.Table:                      assethistory.ValidColumn,
 			contact.Table:                           contact.ValidColumn,
@@ -202,6 +212,7 @@ func checkColumn(t, c string) error {
 			controlobjectivehistory.Table:           controlobjectivehistory.ValidColumn,
 			customdomain.Table:                      customdomain.ValidColumn,
 			customdomainhistory.Table:               customdomainhistory.ValidColumn,
+			customtypeenum.Table:                    customtypeenum.ValidColumn,
 			dnsverification.Table:                   dnsverification.ValidColumn,
 			dnsverificationhistory.Table:            dnsverificationhistory.ValidColumn,
 			documentdata.Table:                      documentdata.ValidColumn,
@@ -281,6 +292,7 @@ func checkColumn(t, c string) error {
 			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,
 			subscriber.Table:                        subscriber.ValidColumn,
 			tfasetting.Table:                        tfasetting.ValidColumn,
+			tagdefinition.Table:                     tagdefinition.ValidColumn,
 			task.Table:                              task.ValidColumn,
 			taskhistory.Table:                       taskhistory.ValidColumn,
 			template.Table:                          template.ValidColumn,

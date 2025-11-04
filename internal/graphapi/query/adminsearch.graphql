@@ -51,7 +51,46 @@ query AdminSearch($query: String!) {
           ownerID
           internalNotes
           systemInternalID
+          actionPlanKindName
+          actionPlanKindID
           source
+        }
+      }
+    }
+    assessments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          name
+          templateID
+          assessmentOwnerID
+        }
+      }
+    }
+    assessmentResponses {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          ownerID
+          assessmentID
+          email
+          documentDataID
         }
       }
     }
@@ -136,6 +175,8 @@ query AdminSearch($query: String!) {
           ownerID
           internalNotes
           systemInternalID
+          controlKindName
+          controlKindID
           refCode
           standardID
         }
@@ -203,6 +244,28 @@ query AdminSearch($query: String!) {
           cnameRecord
           mappableDomainID
           dnsVerificationID
+        }
+      }
+    }
+    customTypeEnums {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          ownerID
+          internalNotes
+          systemInternalID
+          objectType
+          field
+          name
+          description
+          color
         }
       }
     }
@@ -436,6 +499,8 @@ query AdminSearch($query: String!) {
           dismissedImprovementSuggestions
           url
           fileID
+          internalPolicyKindName
+          internalPolicyKindID
         }
       }
     }
@@ -713,6 +778,8 @@ query AdminSearch($query: String!) {
           fileID
           internalNotes
           systemInternalID
+          procedureKindName
+          procedureKindID
         }
       }
     }
@@ -730,6 +797,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          programKindName
+          programKindID
           name
           description
           frameworkName
@@ -754,6 +823,10 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          riskKindName
+          riskKindID
+          riskCategoryName
+          riskCategoryID
           name
           riskType
           category
@@ -848,6 +921,8 @@ query AdminSearch($query: String!) {
           ownerID
           internalNotes
           systemInternalID
+          subcontrolKindName
+          subcontrolKindID
           refCode
           controlID
         }
@@ -893,6 +968,28 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    tagDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          ownerID
+          internalNotes
+          systemInternalID
+          name
+          aliases
+          slug
+          description
+          color
+        }
+      }
+    }
     tasks {
       totalCount
       pageInfo {
@@ -907,11 +1004,15 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          taskKindName
+          taskKindID
           title
           details
           category
           assigneeID
           assignerID
+          idempotencyKey
+          externalReferenceURL
         }
       }
     }

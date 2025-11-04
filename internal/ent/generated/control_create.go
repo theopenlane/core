@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -452,6 +453,34 @@ func (_c *ControlCreate) SetNillableSystemInternalID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetControlKindName sets the "control_kind_name" field.
+func (_c *ControlCreate) SetControlKindName(v string) *ControlCreate {
+	_c.mutation.SetControlKindName(v)
+	return _c
+}
+
+// SetNillableControlKindName sets the "control_kind_name" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableControlKindName(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetControlKindName(*v)
+	}
+	return _c
+}
+
+// SetControlKindID sets the "control_kind_id" field.
+func (_c *ControlCreate) SetControlKindID(v string) *ControlCreate {
+	_c.mutation.SetControlKindID(v)
+	return _c
+}
+
+// SetNillableControlKindID sets the "control_kind_id" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableControlKindID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetControlKindID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *ControlCreate) SetRefCode(v string) *ControlCreate {
 	_c.mutation.SetRefCode(v)
@@ -669,6 +698,11 @@ func (_c *ControlCreate) AddEditors(v ...*Group) *ControlCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEditorIDs(ids...)
+}
+
+// SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
+func (_c *ControlCreate) SetControlKind(v *CustomTypeEnum) *ControlCreate {
+	return _c.SetControlKindID(v.ID)
 }
 
 // SetStandard sets the "standard" edge to the Standard entity.
@@ -1075,6 +1109,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.ControlKindName(); ok {
+		_spec.SetField(control.FieldControlKindName, field.TypeString, value)
+		_node.ControlKindName = value
+	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
@@ -1336,6 +1374,24 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlKindTable,
+			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ControlKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.StandardIDs(); len(nodes) > 0 {

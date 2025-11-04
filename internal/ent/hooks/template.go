@@ -6,11 +6,11 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -106,7 +106,7 @@ func templateCreateHook(ctx context.Context, m *generated.TemplateMutation) erro
 	}
 
 	wildcardTuple := fgax.CreateWildcardViewerTuple(objID, generated.TypeTemplate)
-	zerolog.Ctx(ctx).Debug().Interface("request", wildcardTuple).
+	logx.FromContext(ctx).Debug().Interface("request", wildcardTuple).
 		Msg("creating public viewer relationship tuples")
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {

@@ -88,6 +88,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldSubcontrolKindName holds the string denoting the subcontrol_kind_name field in the database.
+	FieldSubcontrolKindName = "subcontrol_kind_name"
+	// FieldSubcontrolKindID holds the string denoting the subcontrol_kind_id field in the database.
+	FieldSubcontrolKindID = "subcontrol_kind_id"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldControlID holds the string denoting the control_id field in the database.
@@ -118,6 +122,8 @@ const (
 	EdgeResponsibleParty = "responsible_party"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeSubcontrolKind holds the string denoting the subcontrol_kind edge name in mutations.
+	EdgeSubcontrolKind = "subcontrol_kind"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
@@ -209,6 +215,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// SubcontrolKindTable is the table that holds the subcontrol_kind relation/edge.
+	SubcontrolKindTable = "subcontrols"
+	// SubcontrolKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	SubcontrolKindInverseTable = "custom_type_enums"
+	// SubcontrolKindColumn is the table column denoting the subcontrol_kind relation/edge.
+	SubcontrolKindColumn = "subcontrol_kind_id"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "subcontrols"
 	// ControlInverseTable is the table name for the Control entity.
@@ -276,6 +289,8 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldSubcontrolKindName,
+	FieldSubcontrolKindID,
 	FieldRefCode,
 	FieldControlID,
 }
@@ -283,6 +298,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"custom_type_enum_subcontrols",
 	"program_subcontrols",
 	"user_subcontrols",
 }
@@ -341,7 +357,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -540,6 +556,16 @@ func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
+// BySubcontrolKindName orders the results by the subcontrol_kind_name field.
+func BySubcontrolKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcontrolKindName, opts...).ToFunc()
+}
+
+// BySubcontrolKindID orders the results by the subcontrol_kind_id field.
+func BySubcontrolKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcontrolKindID, opts...).ToFunc()
+}
+
 // ByRefCode orders the results by the ref_code field.
 func ByRefCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRefCode, opts...).ToFunc()
@@ -704,6 +730,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// BySubcontrolKindField orders the results by subcontrol_kind field.
+func BySubcontrolKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByControlField orders the results by control field.
 func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -855,6 +888,13 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newSubcontrolKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolKindTable, SubcontrolKindColumn),
 	)
 }
 func newControlStep() *sqlgraph.Step {

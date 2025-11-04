@@ -16,7 +16,7 @@ require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.5
+	entgo.io/ent v0.14.6-0.20251007203935-4d347cae9748
 	github.com/99designs/gqlgen v0.17.81
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -28,7 +28,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.20
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.2
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.89.1
-	github.com/brianvoe/gofakeit/v7 v7.8.1
+	github.com/brianvoe/gofakeit/v7 v7.8.2
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.2.0
 	github.com/didasy/tldr v0.7.0
@@ -104,7 +104,7 @@ require (
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.5.0
 	github.com/vektah/gqlparser/v2 v2.5.31
-	github.com/windmill-labs/windmill-go-client v1.569.0
+	github.com/windmill-labs/windmill-go-client v1.572.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	gocloud.dev v0.43.0

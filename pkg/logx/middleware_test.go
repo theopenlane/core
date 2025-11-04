@@ -80,7 +80,10 @@ func TestMiddleware(t *testing.T) {
 
 		b := &bytes.Buffer{}
 
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 			Enricher: func(c echo.Context, logger zerolog.Context) zerolog.Context {
@@ -109,7 +112,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
@@ -139,7 +145,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
@@ -171,7 +180,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
@@ -201,7 +213,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
@@ -221,5 +236,36 @@ func TestMiddleware(t *testing.T) {
 
 		str := b.String()
 		assert.Empty(t, str, "should not log anything")
+	})
+
+	t.Run("should log client ip headers when provided", func(t *testing.T) {
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		req.Header.Set("True-Client-IP", "1.1.1.1")
+		req.Header.Set("X-Forwarded-For", "1.1.1.1, 2.2.2.2")
+		req.Header.Set("X-Real-IP", "3.3.3.3")
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		b := &bytes.Buffer{}
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
+		m := logx.LoggingMiddleware(logx.Config{
+			Logger: l,
+		})
+
+		handler := m(func(c echo.Context) error {
+			return nil
+		})
+		err := handler(c)
+		assert.NoError(t, err, "should not return error")
+
+		str := b.String()
+		assert.Contains(t, str, `"true_client_ip":"1.1.1.1"`)
+		assert.Contains(t, str, `"x_forwarded_for":"1.1.1.1, 2.2.2.2"`)
+		assert.Contains(t, str, `"x_real_ip":"3.3.3.3"`)
 	})
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -448,6 +449,34 @@ func (_c *SubcontrolCreate) SetNillableSystemInternalID(v *string) *SubcontrolCr
 	return _c
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_c *SubcontrolCreate) SetSubcontrolKindName(v string) *SubcontrolCreate {
+	_c.mutation.SetSubcontrolKindName(v)
+	return _c
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSubcontrolKindName(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetSubcontrolKindName(*v)
+	}
+	return _c
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_c *SubcontrolCreate) SetSubcontrolKindID(v string) *SubcontrolCreate {
+	_c.mutation.SetSubcontrolKindID(v)
+	return _c
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSubcontrolKindID(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetSubcontrolKindID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *SubcontrolCreate) SetRefCode(v string) *SubcontrolCreate {
 	_c.mutation.SetRefCode(v)
@@ -627,6 +656,11 @@ func (_c *SubcontrolCreate) SetResponsibleParty(v *Entity) *SubcontrolCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *SubcontrolCreate) SetOwner(v *Organization) *SubcontrolCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_c *SubcontrolCreate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolCreate {
+	return _c.SetSubcontrolKindID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -984,6 +1018,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrol.FieldSubcontrolKindName, field.TypeString, value)
+		_node.SubcontrolKindName = value
+	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
@@ -1211,6 +1249,24 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SubcontrolKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {

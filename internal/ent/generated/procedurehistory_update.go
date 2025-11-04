@@ -545,6 +545,46 @@ func (_u *ProcedureHistoryUpdate) ClearSystemInternalID() *ProcedureHistoryUpdat
 	return _u
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_u *ProcedureHistoryUpdate) SetProcedureKindName(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetProcedureKindName(v)
+	return _u
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableProcedureKindName(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetProcedureKindName(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
+func (_u *ProcedureHistoryUpdate) ClearProcedureKindName() *ProcedureHistoryUpdate {
+	_u.mutation.ClearProcedureKindName()
+	return _u
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_u *ProcedureHistoryUpdate) SetProcedureKindID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetProcedureKindID(v)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableProcedureKindID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetProcedureKindID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
+func (_u *ProcedureHistoryUpdate) ClearProcedureKindID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearProcedureKindID()
+	return _u
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (_u *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return _u.mutation
@@ -830,6 +870,18 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindNameCleared() {
+		_spec.ClearField(procedurehistory.FieldProcedureKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProcedureKindID(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindIDCleared() {
+		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1367,6 +1419,46 @@ func (_u *ProcedureHistoryUpdateOne) ClearSystemInternalID() *ProcedureHistoryUp
 	return _u
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_u *ProcedureHistoryUpdateOne) SetProcedureKindName(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetProcedureKindName(v)
+	return _u
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableProcedureKindName(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetProcedureKindName(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
+func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindName() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearProcedureKindName()
+	return _u
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetProcedureKindID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetProcedureKindID(v)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableProcedureKindID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetProcedureKindID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearProcedureKindID()
+	return _u
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (_u *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return _u.mutation
@@ -1682,6 +1774,18 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindNameCleared() {
+		_spec.ClearField(procedurehistory.FieldProcedureKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProcedureKindID(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindIDCleared() {
+		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

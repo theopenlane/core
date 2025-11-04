@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 type skipCreateUserPermissions func(context.Context, ent.Mutation) bool
@@ -77,11 +77,11 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 				}
 
 				if len(addTuples) != 0 {
-					zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added object permissions")
+					logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added object permissions")
 				}
 
 				if len(removeTuples) != 0 {
-					zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+					logx.FromContext(ctx).Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
 				}
 			}
 
@@ -123,8 +123,8 @@ func HookGroupPermissionsTuples() ent.Hook {
 					return nil, err
 				}
 
-				zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
-				zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+				logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
+				logx.FromContext(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
 			}
 
 			return retVal, err
@@ -172,8 +172,8 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 					return nil, err
 				}
 
-				zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
-				zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+				logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
+				logx.FromContext(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
 			}
 
 			return retVal, err

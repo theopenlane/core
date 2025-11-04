@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -132,6 +133,86 @@ func (_u *RiskUpdate) AppendTags(v []string) *RiskUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *RiskUpdate) ClearTags() *RiskUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_u *RiskUpdate) SetRiskKindName(v string) *RiskUpdate {
+	_u.mutation.SetRiskKindName(v)
+	return _u
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableRiskKindName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskKindName(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindName clears the value of the "risk_kind_name" field.
+func (_u *RiskUpdate) ClearRiskKindName() *RiskUpdate {
+	_u.mutation.ClearRiskKindName()
+	return _u
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_u *RiskUpdate) SetRiskKindID(v string) *RiskUpdate {
+	_u.mutation.SetRiskKindID(v)
+	return _u
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableRiskKindID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskKindID(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindID clears the value of the "risk_kind_id" field.
+func (_u *RiskUpdate) ClearRiskKindID() *RiskUpdate {
+	_u.mutation.ClearRiskKindID()
+	return _u
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_u *RiskUpdate) SetRiskCategoryName(v string) *RiskUpdate {
+	_u.mutation.SetRiskCategoryName(v)
+	return _u
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableRiskCategoryName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryName clears the value of the "risk_category_name" field.
+func (_u *RiskUpdate) ClearRiskCategoryName() *RiskUpdate {
+	_u.mutation.ClearRiskCategoryName()
+	return _u
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_u *RiskUpdate) SetRiskCategoryID(v string) *RiskUpdate {
+	_u.mutation.SetRiskCategoryID(v)
+	return _u
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableRiskCategoryID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryID clears the value of the "risk_category_id" field.
+func (_u *RiskUpdate) ClearRiskCategoryID() *RiskUpdate {
+	_u.mutation.ClearRiskCategoryID()
 	return _u
 }
 
@@ -421,6 +502,16 @@ func (_u *RiskUpdate) AddViewers(v ...*Group) *RiskUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) SetRiskKind(v *CustomTypeEnum) *RiskUpdate {
+	return _u.SetRiskKindID(v.ID)
+}
+
+// SetRiskCategory sets the "risk_category" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) SetRiskCategory(v *CustomTypeEnum) *RiskUpdate {
+	return _u.SetRiskCategoryID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *RiskUpdate) AddControlIDs(ids ...string) *RiskUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -662,6 +753,18 @@ func (_u *RiskUpdate) RemoveViewers(v ...*Group) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearRiskKind clears the "risk_kind" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) ClearRiskKind() *RiskUpdate {
+	_u.mutation.ClearRiskKind()
+	return _u
+}
+
+// ClearRiskCategory clears the "risk_category" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdate) ClearRiskCategory() *RiskUpdate {
+	_u.mutation.ClearRiskCategory()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1033,6 +1136,18 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(risk.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.RiskKindName(); ok {
+		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindNameCleared() {
+		_spec.ClearField(risk.FieldRiskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryName(); ok {
+		_spec.SetField(risk.FieldRiskCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryNameCleared() {
+		_spec.ClearField(risk.FieldRiskCategoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
@@ -1232,6 +1347,68 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskKindTable,
+			Columns: []string{risk.RiskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskKindTable,
+			Columns: []string{risk.RiskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskCategoryTable,
+			Columns: []string{risk.RiskCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskCategoryTable,
+			Columns: []string{risk.RiskCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1941,6 +2118,86 @@ func (_u *RiskUpdateOne) ClearTags() *RiskUpdateOne {
 	return _u
 }
 
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_u *RiskUpdateOne) SetRiskKindName(v string) *RiskUpdateOne {
+	_u.mutation.SetRiskKindName(v)
+	return _u
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableRiskKindName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskKindName(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindName clears the value of the "risk_kind_name" field.
+func (_u *RiskUpdateOne) ClearRiskKindName() *RiskUpdateOne {
+	_u.mutation.ClearRiskKindName()
+	return _u
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_u *RiskUpdateOne) SetRiskKindID(v string) *RiskUpdateOne {
+	_u.mutation.SetRiskKindID(v)
+	return _u
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableRiskKindID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskKindID(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindID clears the value of the "risk_kind_id" field.
+func (_u *RiskUpdateOne) ClearRiskKindID() *RiskUpdateOne {
+	_u.mutation.ClearRiskKindID()
+	return _u
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_u *RiskUpdateOne) SetRiskCategoryName(v string) *RiskUpdateOne {
+	_u.mutation.SetRiskCategoryName(v)
+	return _u
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableRiskCategoryName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryName clears the value of the "risk_category_name" field.
+func (_u *RiskUpdateOne) ClearRiskCategoryName() *RiskUpdateOne {
+	_u.mutation.ClearRiskCategoryName()
+	return _u
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_u *RiskUpdateOne) SetRiskCategoryID(v string) *RiskUpdateOne {
+	_u.mutation.SetRiskCategoryID(v)
+	return _u
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableRiskCategoryID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryID clears the value of the "risk_category_id" field.
+func (_u *RiskUpdateOne) ClearRiskCategoryID() *RiskUpdateOne {
+	_u.mutation.ClearRiskCategoryID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskUpdateOne) SetName(v string) *RiskUpdateOne {
 	_u.mutation.SetName(v)
@@ -2227,6 +2484,16 @@ func (_u *RiskUpdateOne) AddViewers(v ...*Group) *RiskUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) SetRiskKind(v *CustomTypeEnum) *RiskUpdateOne {
+	return _u.SetRiskKindID(v.ID)
+}
+
+// SetRiskCategory sets the "risk_category" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) SetRiskCategory(v *CustomTypeEnum) *RiskUpdateOne {
+	return _u.SetRiskCategoryID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *RiskUpdateOne) AddControlIDs(ids ...string) *RiskUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -2468,6 +2735,18 @@ func (_u *RiskUpdateOne) RemoveViewers(v ...*Group) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearRiskKind clears the "risk_kind" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) ClearRiskKind() *RiskUpdateOne {
+	_u.mutation.ClearRiskKind()
+	return _u
+}
+
+// ClearRiskCategory clears the "risk_category" edge to the CustomTypeEnum entity.
+func (_u *RiskUpdateOne) ClearRiskCategory() *RiskUpdateOne {
+	_u.mutation.ClearRiskCategory()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2869,6 +3148,18 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(risk.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.RiskKindName(); ok {
+		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindNameCleared() {
+		_spec.ClearField(risk.FieldRiskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryName(); ok {
+		_spec.SetField(risk.FieldRiskCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryNameCleared() {
+		_spec.ClearField(risk.FieldRiskCategoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
@@ -3068,6 +3359,68 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskKindTable,
+			Columns: []string{risk.RiskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskKindTable,
+			Columns: []string{risk.RiskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskCategoryTable,
+			Columns: []string{risk.RiskCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskCategoryTable,
+			Columns: []string{risk.RiskCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

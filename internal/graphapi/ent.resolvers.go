@@ -134,6 +134,138 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// Assessments is the resolver for the assessments field.
+func (r *queryResolver) Assessments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) (*generated.AssessmentConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AssessmentOrder{
+			{
+				Field:     generated.AssessmentOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Assessment.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentOrder(orderBy),
+		generated.WithAssessmentFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+	}
+
+	return res, err
+}
+
+// AssessmentHistories is the resolver for the assessmentHistories field.
+func (r *queryResolver) AssessmentHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) (*generated.AssessmentHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.AssessmentHistoryOrder{
+			Field:     generated.AssessmentHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentHistoryOrder(orderBy),
+		generated.WithAssessmentHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+	}
+
+	return res, err
+}
+
+// AssessmentResponses is the resolver for the assessmentResponses field.
+func (r *queryResolver) AssessmentResponses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) (*generated.AssessmentResponseConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AssessmentResponseOrder{
+			{
+				Field:     generated.AssessmentResponseOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentResponseOrder(orderBy),
+		generated.WithAssessmentResponseFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+	}
+
+	return res, err
+}
+
+// AssessmentResponseHistories is the resolver for the assessmentResponseHistories field.
+func (r *queryResolver) AssessmentResponseHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentResponseHistoryOrder, where *generated.AssessmentResponseHistoryWhereInput) (*generated.AssessmentResponseHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.AssessmentResponseHistoryOrder{
+			Field:     generated.AssessmentResponseHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentResponseHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssessmentResponseHistoryOrder(orderBy),
+		generated.WithAssessmentResponseHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+	}
+
+	return res, err
+}
+
 // Assets is the resolver for the assets field.
 func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) (*generated.AssetConnection, error) {
 	// set page limit if nothing was set
@@ -525,6 +657,40 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 		generated.WithCustomDomainHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
+	}
+
+	return res, err
+}
+
+// CustomTypeEnums is the resolver for the customTypeEnums field.
+func (r *queryResolver) CustomTypeEnums(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) (*generated.CustomTypeEnumConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.CustomTypeEnumOrder{
+			{
+				Field:     generated.CustomTypeEnumOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).CustomTypeEnum.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCustomTypeEnumOrder(orderBy),
+		generated.WithCustomTypeEnumFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
 	}
 
 	return res, err
@@ -2870,6 +3036,40 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 		generated.WithTFASettingFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+	}
+
+	return res, err
+}
+
+// TagDefinitions is the resolver for the tagDefinitions field.
+func (r *queryResolver) TagDefinitions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) (*generated.TagDefinitionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TagDefinitionOrder{
+			{
+				Field:     generated.TagDefinitionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TagDefinition.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTagDefinitionOrder(orderBy),
+		generated.WithTagDefinitionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
 	}
 
 	return res, err

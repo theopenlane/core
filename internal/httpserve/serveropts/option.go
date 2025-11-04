@@ -414,7 +414,7 @@ func WithOTP() ServerOption {
 // WithRateLimiter sets up the rate limiter for the server
 func WithRateLimiter() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Ratelimit.Enabled {
+		if s.Config.Settings.Ratelimit.Enabled || s.Config.Settings.Ratelimit.DryRun {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, ratelimit.RateLimiterWithConfig(&s.Config.Settings.Ratelimit))
 		}
 	})

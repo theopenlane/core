@@ -10,6 +10,10 @@ type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
 	ActionPlanHistory                  string // ActionPlanHistory table.
+	Assessment                         string // Assessment table.
+	AssessmentHistory                  string // AssessmentHistory table.
+	AssessmentResponse                 string // AssessmentResponse table.
+	AssessmentResponseHistory          string // AssessmentResponseHistory table.
 	Asset                              string // Asset table.
 	AssetHistory                       string // AssetHistory table.
 	Contact                            string // Contact table.
@@ -41,6 +45,7 @@ type SchemaConfig struct {
 	ControlObjectiveHistory            string // ControlObjectiveHistory table.
 	CustomDomain                       string // CustomDomain table.
 	CustomDomainHistory                string // CustomDomainHistory table.
+	CustomTypeEnum                     string // CustomTypeEnum table.
 	DNSVerification                    string // DNSVerification table.
 	DNSVerificationHistory             string // DNSVerificationHistory table.
 	DocumentData                       string // DocumentData table.
@@ -207,6 +212,7 @@ type SchemaConfig struct {
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	TFASetting                         string // TFASetting table.
+	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
 	TaskEvidence                       string // Task-evidence->Evidence table.
 	TaskHistory                        string // TaskHistory table.

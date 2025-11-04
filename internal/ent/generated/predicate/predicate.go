@@ -15,6 +15,18 @@ type ActionPlan func(*sql.Selector)
 // ActionPlanHistory is the predicate function for actionplanhistory builders.
 type ActionPlanHistory func(*sql.Selector)
 
+// Assessment is the predicate function for assessment builders.
+type Assessment func(*sql.Selector)
+
+// AssessmentHistory is the predicate function for assessmenthistory builders.
+type AssessmentHistory func(*sql.Selector)
+
+// AssessmentResponse is the predicate function for assessmentresponse builders.
+type AssessmentResponse func(*sql.Selector)
+
+// AssessmentResponseHistory is the predicate function for assessmentresponsehistory builders.
+type AssessmentResponseHistory func(*sql.Selector)
+
 // Asset is the predicate function for asset builders.
 type Asset func(*sql.Selector)
 
@@ -50,6 +62,9 @@ type CustomDomain func(*sql.Selector)
 
 // CustomDomainHistory is the predicate function for customdomainhistory builders.
 type CustomDomainHistory func(*sql.Selector)
+
+// CustomTypeEnum is the predicate function for customtypeenum builders.
+type CustomTypeEnum func(*sql.Selector)
 
 // DNSVerification is the predicate function for dnsverification builders.
 type DNSVerification func(*sql.Selector)
@@ -287,6 +302,9 @@ type Subscriber func(*sql.Selector)
 
 // TFASetting is the predicate function for tfasetting builders.
 type TFASetting func(*sql.Selector)
+
+// TagDefinition is the predicate function for tagdefinition builders.
+type TagDefinition func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)

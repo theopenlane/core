@@ -135,14 +135,20 @@ func testEchoServer(c *ent.Client, u *objects.Service, includeMiddleware bool) *
 
 	e := echo.New()
 
-	logger := logx.CreateLogger(log.ERROR, true)
-	e.Logger = logger
+	zLvl, _ := logx.MatchEchoLevel(log.ERROR)
+	loggers := logx.Configure(logx.LoggerConfig{
+		Level:         zLvl,
+		Pretty:        true,
+		IncludeCaller: true,
+		WithEcho:      true,
+	})
+	e.Logger = loggers.Echo
 
 	if includeMiddleware {
 		e.Use(echocontext.EchoContextToContextMiddleware())
 		e.Use(auth.Authenticate(createAuthConfig(c)))
 		e.Use(logx.LoggingMiddleware(logx.Config{
-			Logger:          logger,
+			Logger:          loggers.Echo,
 			RequestIDHeader: "X-Request-ID",
 			RequestIDKey:    "request_id",
 			HandleError:     true,
