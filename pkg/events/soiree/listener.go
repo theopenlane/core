@@ -67,27 +67,19 @@ func (item *listenerItem) call(ctx *EventContext) error {
 	return err
 }
 
-// Context bundles the event, payload, properties, and client for a listener.
+// Context bundles the event, payload, and client for a listener.
 type EventContext struct {
-	event      Event
-	payload    any
-	properties PropertyView
-	client     any
-	hasClient  bool
+	event     Event
+	payload   any
+	client    any
+	hasClient bool
 }
 
 func newEventContext(event Event) *EventContext {
-	props := event.Properties()
-	if props == nil {
-		props = NewProperties()
-		event.SetProperties(props)
-	}
-
 	ctx := &EventContext{
-		event:      event,
-		payload:    event.Payload(),
-		properties: NewPropertyView(props),
-		client:     event.Client(),
+		event:   event,
+		payload: event.Payload(),
+		client:  event.Client(),
 	}
 
 	if ctx.client != nil {
@@ -144,13 +136,53 @@ func (c *EventContext) Client() (any, bool) {
 	return c.client, true
 }
 
-// Properties exposes the typed property view.
-func (c *EventContext) Properties() PropertyView {
-	if c == nil {
-		return NewPropertyView(nil)
+// Properties exposes the underlying property map, ensuring one exists.
+func (c *EventContext) Properties() Properties {
+	if c == nil || c.event == nil {
+		return NewProperties()
 	}
 
-	return c.properties
+	props := c.event.Properties()
+	if props == nil {
+		// Older callers sometimes left properties unset; hydrate an empty map on demand so helper
+		// methods can safely mutate it and downstream listeners all see the same backing map.
+		props = NewProperties()
+		c.event.SetProperties(props)
+	}
+
+	return props
+}
+
+// Property fetches a property by key.
+func (c *EventContext) Property(key string) (any, bool) {
+	props := c.Properties()
+	if props == nil {
+		return nil, false
+	}
+
+	val, ok := props[key]
+	if !ok || val == nil {
+		// Treat zero values the same way legacy code did—absence and explicit nil should both
+		// short circuit so callers can distinguish “not present” from empty strings.
+		return nil, false
+	}
+
+	return val, true
+}
+
+// PropertyString fetches a string property by key.
+func (c *EventContext) PropertyString(key string) (string, bool) {
+	val, ok := c.Property(key)
+	if !ok {
+		return "", false
+	}
+
+	str, ok := val.(string)
+	if !ok {
+		return "", false
+	}
+
+	return str, true
 }
 
 // SetProperty mutates a property on the event.
@@ -159,7 +191,7 @@ func (c *EventContext) SetProperty(key string, value any) {
 		return
 	}
 
-	c.properties.Set(key, value)
+	c.Properties().Set(key, value)
 }
 
 // Abort marks the event as aborted.
