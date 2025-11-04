@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -623,6 +624,46 @@ func (_u *SubcontrolUpdate) ClearSystemInternalID() *SubcontrolUpdate {
 	return _u
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_u *SubcontrolUpdate) SetSubcontrolKindName(v string) *SubcontrolUpdate {
+	_u.mutation.SetSubcontrolKindName(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableSubcontrolKindName(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetSubcontrolKindName(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindName clears the value of the "subcontrol_kind_name" field.
+func (_u *SubcontrolUpdate) ClearSubcontrolKindName() *SubcontrolUpdate {
+	_u.mutation.ClearSubcontrolKindName()
+	return _u
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_u *SubcontrolUpdate) SetSubcontrolKindID(v string) *SubcontrolUpdate {
+	_u.mutation.SetSubcontrolKindID(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableSubcontrolKindID(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetSubcontrolKindID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindID clears the value of the "subcontrol_kind_id" field.
+func (_u *SubcontrolUpdate) ClearSubcontrolKindID() *SubcontrolUpdate {
+	_u.mutation.ClearSubcontrolKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolUpdate) SetRefCode(v string) *SubcontrolUpdate {
 	_u.mutation.SetRefCode(v)
@@ -799,6 +840,11 @@ func (_u *SubcontrolUpdate) SetDelegate(v *Group) *SubcontrolUpdate {
 // SetResponsibleParty sets the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdate) SetResponsibleParty(v *Entity) *SubcontrolUpdate {
 	return _u.SetResponsiblePartyID(v.ID)
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdate {
+	return _u.SetSubcontrolKindID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -1075,6 +1121,12 @@ func (_u *SubcontrolUpdate) ClearDelegate() *SubcontrolUpdate {
 // ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdate) ClearResponsibleParty() *SubcontrolUpdate {
 	_u.mutation.ClearResponsibleParty()
+	return _u
+}
+
+// ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) ClearSubcontrolKind() *SubcontrolUpdate {
+	_u.mutation.ClearSubcontrolKind()
 	return _u
 }
 
@@ -1476,6 +1528,12 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(subcontrol.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrol.FieldSubcontrolKindName, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindNameCleared() {
+		_spec.ClearField(subcontrol.FieldSubcontrolKindName, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)
@@ -1997,6 +2055,37 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subcontrol
@@ -2826,6 +2915,46 @@ func (_u *SubcontrolUpdateOne) ClearSystemInternalID() *SubcontrolUpdateOne {
 	return _u
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_u *SubcontrolUpdateOne) SetSubcontrolKindName(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetSubcontrolKindName(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableSubcontrolKindName(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetSubcontrolKindName(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindName clears the value of the "subcontrol_kind_name" field.
+func (_u *SubcontrolUpdateOne) ClearSubcontrolKindName() *SubcontrolUpdateOne {
+	_u.mutation.ClearSubcontrolKindName()
+	return _u
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_u *SubcontrolUpdateOne) SetSubcontrolKindID(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetSubcontrolKindID(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableSubcontrolKindID(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetSubcontrolKindID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindID clears the value of the "subcontrol_kind_id" field.
+func (_u *SubcontrolUpdateOne) ClearSubcontrolKindID() *SubcontrolUpdateOne {
+	_u.mutation.ClearSubcontrolKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolUpdateOne) SetRefCode(v string) *SubcontrolUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -3002,6 +3131,11 @@ func (_u *SubcontrolUpdateOne) SetDelegate(v *Group) *SubcontrolUpdateOne {
 // SetResponsibleParty sets the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdateOne) SetResponsibleParty(v *Entity) *SubcontrolUpdateOne {
 	return _u.SetResponsiblePartyID(v.ID)
+}
+
+// SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdateOne {
+	return _u.SetSubcontrolKindID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -3278,6 +3412,12 @@ func (_u *SubcontrolUpdateOne) ClearDelegate() *SubcontrolUpdateOne {
 // ClearResponsibleParty clears the "responsible_party" edge to the Entity entity.
 func (_u *SubcontrolUpdateOne) ClearResponsibleParty() *SubcontrolUpdateOne {
 	_u.mutation.ClearResponsibleParty()
+	return _u
+}
+
+// ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) ClearSubcontrolKind() *SubcontrolUpdateOne {
+	_u.mutation.ClearSubcontrolKind()
 	return _u
 }
 
@@ -3709,6 +3849,12 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(subcontrol.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrol.FieldSubcontrolKindName, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindNameCleared() {
+		_spec.ClearField(subcontrol.FieldSubcontrolKindName, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)
@@ -4230,6 +4376,37 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.SubcontrolKindTable,
+			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subcontrol

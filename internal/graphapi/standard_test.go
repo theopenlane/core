@@ -699,6 +699,13 @@ func TestMutationUpdateStandard(t *testing.T) {
 				for _, tag := range tc.request.AppendTags {
 					assert.Check(t, is.Contains(resp.UpdateStandard.Standard.Tags, tag))
 				}
+
+				tagDefs, err := tc.client.GetTagDefinitions(tc.ctx, nil, nil, &testclient.TagDefinitionWhereInput{
+					NameIn: tc.request.AppendTags,
+				})
+
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(tagDefs.TagDefinitions.Edges, len(tc.request.AppendTags)))
 			}
 
 			if tc.request.GoverningBody != nil {

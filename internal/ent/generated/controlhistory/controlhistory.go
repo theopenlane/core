@@ -94,6 +94,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldControlKindName holds the string denoting the control_kind_name field in the database.
+	FieldControlKindName = "control_kind_name"
+	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
+	FieldControlKindID = "control_kind_id"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
@@ -143,6 +147,8 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldControlKindName,
+	FieldControlKindID,
 	FieldRefCode,
 	FieldStandardID,
 }
@@ -379,6 +385,16 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByControlKindName orders the results by the control_kind_name field.
+func ByControlKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlKindName, opts...).ToFunc()
+}
+
+// ByControlKindID orders the results by the control_kind_id field.
+func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
 }
 
 // ByRefCode orders the results by the ref_code field.

@@ -87,8 +87,12 @@ type InternalPolicyHistory struct {
 	// This will contain the url used to create or update the policy
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
-	FileID       *string `json:"file_id,omitempty"`
-	selectValues sql.SelectValues
+	FileID *string `json:"file_id,omitempty"`
+	// the kind of the internal_policy
+	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
+	// the kind of the internal_policy
+	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
+	selectValues         sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -102,7 +106,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -349,6 +353,18 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 				_m.FileID = new(string)
 				*_m.FileID = value.String
 			}
+		case internalpolicyhistory.FieldInternalPolicyKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_kind_name", values[i])
+			} else if value.Valid {
+				_m.InternalPolicyKindName = value.String
+			}
+		case internalpolicyhistory.FieldInternalPolicyKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_kind_id", values[i])
+			} else if value.Valid {
+				_m.InternalPolicyKindID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -494,6 +510,12 @@ func (_m *InternalPolicyHistory) String() string {
 		builder.WriteString("file_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("internal_policy_kind_name=")
+	builder.WriteString(_m.InternalPolicyKindName)
+	builder.WriteString(", ")
+	builder.WriteString("internal_policy_kind_id=")
+	builder.WriteString(_m.InternalPolicyKindID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -140,6 +141,62 @@ func (_c *RiskCreate) SetOwnerID(v string) *RiskCreate {
 func (_c *RiskCreate) SetNillableOwnerID(v *string) *RiskCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_c *RiskCreate) SetRiskKindName(v string) *RiskCreate {
+	_c.mutation.SetRiskKindName(v)
+	return _c
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableRiskKindName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetRiskKindName(*v)
+	}
+	return _c
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_c *RiskCreate) SetRiskKindID(v string) *RiskCreate {
+	_c.mutation.SetRiskKindID(v)
+	return _c
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableRiskKindID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetRiskKindID(*v)
+	}
+	return _c
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_c *RiskCreate) SetRiskCategoryName(v string) *RiskCreate {
+	_c.mutation.SetRiskCategoryName(v)
+	return _c
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableRiskCategoryName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetRiskCategoryName(*v)
+	}
+	return _c
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_c *RiskCreate) SetRiskCategoryID(v string) *RiskCreate {
+	_c.mutation.SetRiskCategoryID(v)
+	return _c
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableRiskCategoryID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetRiskCategoryID(*v)
 	}
 	return _c
 }
@@ -366,6 +423,16 @@ func (_c *RiskCreate) AddViewers(v ...*Group) *RiskCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddViewerIDs(ids...)
+}
+
+// SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
+func (_c *RiskCreate) SetRiskKind(v *CustomTypeEnum) *RiskCreate {
+	return _c.SetRiskKindID(v.ID)
+}
+
+// SetRiskCategory sets the "risk_category" edge to the CustomTypeEnum entity.
+func (_c *RiskCreate) SetRiskCategory(v *CustomTypeEnum) *RiskCreate {
+	return _c.SetRiskCategoryID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -726,6 +793,14 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.RiskKindName(); ok {
+		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
+		_node.RiskKindName = value
+	}
+	if value, ok := _c.mutation.RiskCategoryName(); ok {
+		_spec.SetField(risk.FieldRiskCategoryName, field.TypeString, value)
+		_node.RiskCategoryName = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -833,6 +908,42 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RiskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskKindTable,
+			Columns: []string{risk.RiskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.RiskKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RiskCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.RiskCategoryTable,
+			Columns: []string{risk.RiskCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.RiskCategoryID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {

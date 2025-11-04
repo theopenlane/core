@@ -164,6 +164,14 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if actionPlanKindName, exists := m.ActionPlanKindName(); exists {
+		create = create.SetActionPlanKindName(actionPlanKindName)
+	}
+
+	if actionPlanKindID, exists := m.ActionPlanKindID(); exists {
+		create = create.SetActionPlanKindID(actionPlanKindID)
+	}
+
 	if dueDate, exists := m.DueDate(); exists {
 		create = create.SetDueDate(dueDate)
 	}
@@ -387,6 +395,18 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableSystemInternalID(actionplan.SystemInternalID)
 		}
 
+		if actionPlanKindName, exists := m.ActionPlanKindName(); exists {
+			create = create.SetActionPlanKindName(actionPlanKindName)
+		} else {
+			create = create.SetActionPlanKindName(actionplan.ActionPlanKindName)
+		}
+
+		if actionPlanKindID, exists := m.ActionPlanKindID(); exists {
+			create = create.SetActionPlanKindID(actionPlanKindID)
+		} else {
+			create = create.SetActionPlanKindID(actionplan.ActionPlanKindID)
+		}
+
 		if dueDate, exists := m.DueDate(); exists {
 			create = create.SetDueDate(dueDate)
 		} else {
@@ -470,6 +490,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSystemOwned(actionplan.SystemOwned).
 			SetNillableInternalNotes(actionplan.InternalNotes).
 			SetNillableSystemInternalID(actionplan.SystemInternalID).
+			SetActionPlanKindName(actionplan.ActionPlanKindName).
+			SetActionPlanKindID(actionplan.ActionPlanKindID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
 			SetSource(actionplan.Source).
@@ -1673,6 +1695,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if controlKindName, exists := m.ControlKindName(); exists {
+		create = create.SetControlKindName(controlKindName)
+	}
+
+	if controlKindID, exists := m.ControlKindID(); exists {
+		create = create.SetControlKindID(controlKindID)
+	}
+
 	if refCode, exists := m.RefCode(); exists {
 		create = create.SetRefCode(refCode)
 	}
@@ -1922,6 +1952,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(control.SystemInternalID)
 		}
 
+		if controlKindName, exists := m.ControlKindName(); exists {
+			create = create.SetControlKindName(controlKindName)
+		} else {
+			create = create.SetControlKindName(control.ControlKindName)
+		}
+
+		if controlKindID, exists := m.ControlKindID(); exists {
+			create = create.SetControlKindID(controlKindID)
+		} else {
+			create = create.SetControlKindID(control.ControlKindID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -2004,6 +2046,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(control.SystemOwned).
 			SetNillableInternalNotes(control.InternalNotes).
 			SetNillableSystemInternalID(control.SystemInternalID).
+			SetControlKindName(control.ControlKindName).
+			SetControlKindID(control.ControlKindID).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -5893,6 +5937,14 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableFileID(&fileID)
 	}
 
+	if internalPolicyKindName, exists := m.InternalPolicyKindName(); exists {
+		create = create.SetInternalPolicyKindName(internalPolicyKindName)
+	}
+
+	if internalPolicyKindID, exists := m.InternalPolicyKindID(); exists {
+		create = create.SetInternalPolicyKindID(internalPolicyKindID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6110,6 +6162,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableFileID(internalpolicy.FileID)
 		}
 
+		if internalPolicyKindName, exists := m.InternalPolicyKindName(); exists {
+			create = create.SetInternalPolicyKindName(internalPolicyKindName)
+		} else {
+			create = create.SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName)
+		}
+
+		if internalPolicyKindID, exists := m.InternalPolicyKindID(); exists {
+			create = create.SetInternalPolicyKindID(internalPolicyKindID)
+		} else {
+			create = create.SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6176,6 +6240,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
 			SetNillableURL(internalpolicy.URL).
 			SetNillableFileID(internalpolicy.FileID).
+			SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName).
+			SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8651,6 +8717,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if procedureKindName, exists := m.ProcedureKindName(); exists {
+		create = create.SetProcedureKindName(procedureKindName)
+	}
+
+	if procedureKindID, exists := m.ProcedureKindID(); exists {
+		create = create.SetProcedureKindID(procedureKindID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8868,6 +8942,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(procedure.SystemInternalID)
 		}
 
+		if procedureKindName, exists := m.ProcedureKindName(); exists {
+			create = create.SetProcedureKindName(procedureKindName)
+		} else {
+			create = create.SetProcedureKindName(procedure.ProcedureKindName)
+		}
+
+		if procedureKindID, exists := m.ProcedureKindID(); exists {
+			create = create.SetProcedureKindID(procedureKindID)
+		} else {
+			create = create.SetProcedureKindID(procedure.ProcedureKindID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8934,6 +9020,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(procedure.SystemOwned).
 			SetNillableInternalNotes(procedure.InternalNotes).
 			SetNillableSystemInternalID(procedure.SystemInternalID).
+			SetProcedureKindName(procedure.ProcedureKindName).
+			SetProcedureKindID(procedure.ProcedureKindID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8993,6 +9081,14 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if programKindName, exists := m.ProgramKindName(); exists {
+		create = create.SetProgramKindName(programKindName)
+	}
+
+	if programKindID, exists := m.ProgramKindID(); exists {
+		create = create.SetProgramKindID(programKindID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -9136,6 +9232,18 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(program.OwnerID)
 		}
 
+		if programKindName, exists := m.ProgramKindName(); exists {
+			create = create.SetProgramKindName(programKindName)
+		} else {
+			create = create.SetProgramKindName(program.ProgramKindName)
+		}
+
+		if programKindID, exists := m.ProgramKindID(); exists {
+			create = create.SetProgramKindID(programKindID)
+		} else {
+			create = create.SetProgramKindID(program.ProgramKindID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -9264,6 +9372,8 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(program.DisplayID).
 			SetTags(program.Tags).
 			SetOwnerID(program.OwnerID).
+			SetProgramKindName(program.ProgramKindName).
+			SetProgramKindID(program.ProgramKindID).
 			SetName(program.Name).
 			SetDescription(program.Description).
 			SetStatus(program.Status).
@@ -9507,6 +9617,22 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if riskKindName, exists := m.RiskKindName(); exists {
+		create = create.SetRiskKindName(riskKindName)
+	}
+
+	if riskKindID, exists := m.RiskKindID(); exists {
+		create = create.SetRiskKindID(riskKindID)
+	}
+
+	if riskCategoryName, exists := m.RiskCategoryName(); exists {
+		create = create.SetRiskCategoryName(riskCategoryName)
+	}
+
+	if riskCategoryID, exists := m.RiskCategoryID(); exists {
+		create = create.SetRiskCategoryID(riskCategoryID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -9640,6 +9766,30 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(risk.OwnerID)
 		}
 
+		if riskKindName, exists := m.RiskKindName(); exists {
+			create = create.SetRiskKindName(riskKindName)
+		} else {
+			create = create.SetRiskKindName(risk.RiskKindName)
+		}
+
+		if riskKindID, exists := m.RiskKindID(); exists {
+			create = create.SetRiskKindID(riskKindID)
+		} else {
+			create = create.SetRiskKindID(risk.RiskKindID)
+		}
+
+		if riskCategoryName, exists := m.RiskCategoryName(); exists {
+			create = create.SetRiskCategoryName(riskCategoryName)
+		} else {
+			create = create.SetRiskCategoryName(risk.RiskCategoryName)
+		}
+
+		if riskCategoryID, exists := m.RiskCategoryID(); exists {
+			create = create.SetRiskCategoryID(riskCategoryID)
+		} else {
+			create = create.SetRiskCategoryID(risk.RiskCategoryID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -9756,6 +9906,10 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(risk.DisplayID).
 			SetTags(risk.Tags).
 			SetOwnerID(risk.OwnerID).
+			SetRiskKindName(risk.RiskKindName).
+			SetRiskKindID(risk.RiskKindID).
+			SetRiskCategoryName(risk.RiskCategoryName).
+			SetRiskCategoryID(risk.RiskCategoryID).
 			SetName(risk.Name).
 			SetStatus(risk.Status).
 			SetRiskType(risk.RiskType).
@@ -10756,6 +10910,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if subcontrolKindName, exists := m.SubcontrolKindName(); exists {
+		create = create.SetSubcontrolKindName(subcontrolKindName)
+	}
+
+	if subcontrolKindID, exists := m.SubcontrolKindID(); exists {
+		create = create.SetSubcontrolKindID(subcontrolKindID)
+	}
+
 	if refCode, exists := m.RefCode(); exists {
 		create = create.SetRefCode(refCode)
 	}
@@ -11005,6 +11167,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableSystemInternalID(subcontrol.SystemInternalID)
 		}
 
+		if subcontrolKindName, exists := m.SubcontrolKindName(); exists {
+			create = create.SetSubcontrolKindName(subcontrolKindName)
+		} else {
+			create = create.SetSubcontrolKindName(subcontrol.SubcontrolKindName)
+		}
+
+		if subcontrolKindID, exists := m.SubcontrolKindID(); exists {
+			create = create.SetSubcontrolKindID(subcontrolKindID)
+		} else {
+			create = create.SetSubcontrolKindID(subcontrol.SubcontrolKindID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -11087,6 +11261,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSystemOwned(subcontrol.SystemOwned).
 			SetNillableInternalNotes(subcontrol.InternalNotes).
 			SetNillableSystemInternalID(subcontrol.SystemInternalID).
+			SetSubcontrolKindName(subcontrol.SubcontrolKindName).
+			SetSubcontrolKindID(subcontrol.SubcontrolKindID).
 			SetRefCode(subcontrol.RefCode).
 			SetControlID(subcontrol.ControlID).
 			Save(ctx)
@@ -11406,6 +11582,14 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if taskKindName, exists := m.TaskKindName(); exists {
+		create = create.SetTaskKindName(taskKindName)
+	}
+
+	if taskKindID, exists := m.TaskKindID(); exists {
+		create = create.SetTaskKindID(taskKindID)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -11436,6 +11620,18 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if assignerID, exists := m.AssignerID(); exists {
 		create = create.SetAssignerID(assignerID)
+	}
+
+	if systemGenerated, exists := m.SystemGenerated(); exists {
+		create = create.SetSystemGenerated(systemGenerated)
+	}
+
+	if idempotencyKey, exists := m.IdempotencyKey(); exists {
+		create = create.SetIdempotencyKey(idempotencyKey)
+	}
+
+	if externalReferenceURL, exists := m.ExternalReferenceURL(); exists {
+		create = create.SetExternalReferenceURL(externalReferenceURL)
 	}
 
 	_, err := create.Save(ctx)
@@ -11523,6 +11719,18 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(task.OwnerID)
 		}
 
+		if taskKindName, exists := m.TaskKindName(); exists {
+			create = create.SetTaskKindName(taskKindName)
+		} else {
+			create = create.SetTaskKindName(task.TaskKindName)
+		}
+
+		if taskKindID, exists := m.TaskKindID(); exists {
+			create = create.SetTaskKindID(taskKindID)
+		} else {
+			create = create.SetTaskKindID(task.TaskKindID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -11571,6 +11779,24 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAssignerID(task.AssignerID)
 		}
 
+		if systemGenerated, exists := m.SystemGenerated(); exists {
+			create = create.SetSystemGenerated(systemGenerated)
+		} else {
+			create = create.SetSystemGenerated(task.SystemGenerated)
+		}
+
+		if idempotencyKey, exists := m.IdempotencyKey(); exists {
+			create = create.SetIdempotencyKey(idempotencyKey)
+		} else {
+			create = create.SetIdempotencyKey(task.IdempotencyKey)
+		}
+
+		if externalReferenceURL, exists := m.ExternalReferenceURL(); exists {
+			create = create.SetExternalReferenceURL(externalReferenceURL)
+		} else {
+			create = create.SetExternalReferenceURL(task.ExternalReferenceURL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11615,6 +11841,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(task.DisplayID).
 			SetTags(task.Tags).
 			SetOwnerID(task.OwnerID).
+			SetTaskKindName(task.TaskKindName).
+			SetTaskKindID(task.TaskKindID).
 			SetTitle(task.Title).
 			SetDetails(task.Details).
 			SetStatus(task.Status).
@@ -11623,6 +11851,9 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableCompleted(task.Completed).
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).
+			SetSystemGenerated(task.SystemGenerated).
+			SetIdempotencyKey(task.IdempotencyKey).
+			SetExternalReferenceURL(task.ExternalReferenceURL).
 			Save(ctx)
 		if err != nil {
 			return err

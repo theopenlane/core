@@ -123,6 +123,86 @@ func (_u *RiskHistoryUpdate) ClearTags() *RiskHistoryUpdate {
 	return _u
 }
 
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_u *RiskHistoryUpdate) SetRiskKindName(v string) *RiskHistoryUpdate {
+	_u.mutation.SetRiskKindName(v)
+	return _u
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableRiskKindName(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetRiskKindName(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindName clears the value of the "risk_kind_name" field.
+func (_u *RiskHistoryUpdate) ClearRiskKindName() *RiskHistoryUpdate {
+	_u.mutation.ClearRiskKindName()
+	return _u
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_u *RiskHistoryUpdate) SetRiskKindID(v string) *RiskHistoryUpdate {
+	_u.mutation.SetRiskKindID(v)
+	return _u
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableRiskKindID(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetRiskKindID(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindID clears the value of the "risk_kind_id" field.
+func (_u *RiskHistoryUpdate) ClearRiskKindID() *RiskHistoryUpdate {
+	_u.mutation.ClearRiskKindID()
+	return _u
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_u *RiskHistoryUpdate) SetRiskCategoryName(v string) *RiskHistoryUpdate {
+	_u.mutation.SetRiskCategoryName(v)
+	return _u
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableRiskCategoryName(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetRiskCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryName clears the value of the "risk_category_name" field.
+func (_u *RiskHistoryUpdate) ClearRiskCategoryName() *RiskHistoryUpdate {
+	_u.mutation.ClearRiskCategoryName()
+	return _u
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_u *RiskHistoryUpdate) SetRiskCategoryID(v string) *RiskHistoryUpdate {
+	_u.mutation.SetRiskCategoryID(v)
+	return _u
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableRiskCategoryID(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetRiskCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryID clears the value of the "risk_category_id" field.
+func (_u *RiskHistoryUpdate) ClearRiskCategoryID() *RiskHistoryUpdate {
+	_u.mutation.ClearRiskCategoryID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskHistoryUpdate) SetName(v string) *RiskHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -496,6 +576,30 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.RiskKindName(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindName, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindNameCleared() {
+		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskKindID(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindID, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindIDCleared() {
+		_spec.ClearField(riskhistory.FieldRiskKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryName(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryNameCleared() {
+		_spec.ClearField(riskhistory.FieldRiskCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryID(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryID, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryIDCleared() {
+		_spec.ClearField(riskhistory.FieldRiskCategoryID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
@@ -679,6 +783,86 @@ func (_u *RiskHistoryUpdateOne) AppendTags(v []string) *RiskHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *RiskHistoryUpdateOne) ClearTags() *RiskHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetRiskKindName sets the "risk_kind_name" field.
+func (_u *RiskHistoryUpdateOne) SetRiskKindName(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetRiskKindName(v)
+	return _u
+}
+
+// SetNillableRiskKindName sets the "risk_kind_name" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableRiskKindName(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskKindName(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindName clears the value of the "risk_kind_name" field.
+func (_u *RiskHistoryUpdateOne) ClearRiskKindName() *RiskHistoryUpdateOne {
+	_u.mutation.ClearRiskKindName()
+	return _u
+}
+
+// SetRiskKindID sets the "risk_kind_id" field.
+func (_u *RiskHistoryUpdateOne) SetRiskKindID(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetRiskKindID(v)
+	return _u
+}
+
+// SetNillableRiskKindID sets the "risk_kind_id" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableRiskKindID(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskKindID(*v)
+	}
+	return _u
+}
+
+// ClearRiskKindID clears the value of the "risk_kind_id" field.
+func (_u *RiskHistoryUpdateOne) ClearRiskKindID() *RiskHistoryUpdateOne {
+	_u.mutation.ClearRiskKindID()
+	return _u
+}
+
+// SetRiskCategoryName sets the "risk_category_name" field.
+func (_u *RiskHistoryUpdateOne) SetRiskCategoryName(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetRiskCategoryName(v)
+	return _u
+}
+
+// SetNillableRiskCategoryName sets the "risk_category_name" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableRiskCategoryName(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryName clears the value of the "risk_category_name" field.
+func (_u *RiskHistoryUpdateOne) ClearRiskCategoryName() *RiskHistoryUpdateOne {
+	_u.mutation.ClearRiskCategoryName()
+	return _u
+}
+
+// SetRiskCategoryID sets the "risk_category_id" field.
+func (_u *RiskHistoryUpdateOne) SetRiskCategoryID(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetRiskCategoryID(v)
+	return _u
+}
+
+// SetNillableRiskCategoryID sets the "risk_category_id" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableRiskCategoryID(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearRiskCategoryID clears the value of the "risk_category_id" field.
+func (_u *RiskHistoryUpdateOne) ClearRiskCategoryID() *RiskHistoryUpdateOne {
+	_u.mutation.ClearRiskCategoryID()
 	return _u
 }
 
@@ -1084,6 +1268,30 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskKindName(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindName, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindNameCleared() {
+		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskKindID(); ok {
+		_spec.SetField(riskhistory.FieldRiskKindID, field.TypeString, value)
+	}
+	if _u.mutation.RiskKindIDCleared() {
+		_spec.ClearField(riskhistory.FieldRiskKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryName(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryNameCleared() {
+		_spec.ClearField(riskhistory.FieldRiskCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskCategoryID(); ok {
+		_spec.SetField(riskhistory.FieldRiskCategoryID, field.TypeString, value)
+	}
+	if _u.mutation.RiskCategoryIDCleared() {
+		_spec.ClearField(riskhistory.FieldRiskCategoryID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)

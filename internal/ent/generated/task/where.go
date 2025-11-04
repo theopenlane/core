@@ -109,6 +109,16 @@ func OwnerID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// TaskKindName applies equality check predicate on the "task_kind_name" field. It's identical to TaskKindNameEQ.
+func TaskKindName(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldTaskKindName, v))
+}
+
+// TaskKindID applies equality check predicate on the "task_kind_id" field. It's identical to TaskKindIDEQ.
+func TaskKindID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldTaskKindID, v))
+}
+
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldTitle, v))
@@ -142,6 +152,16 @@ func AssigneeID(v string) predicate.Task {
 // AssignerID applies equality check predicate on the "assigner_id" field. It's identical to AssignerIDEQ.
 func AssignerID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldAssignerID, v))
+}
+
+// SystemGenerated applies equality check predicate on the "system_generated" field. It's identical to SystemGeneratedEQ.
+func SystemGenerated(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSystemGenerated, v))
+}
+
+// IdempotencyKey applies equality check predicate on the "idempotency_key" field. It's identical to IdempotencyKeyEQ.
+func IdempotencyKey(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIdempotencyKey, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -669,6 +689,156 @@ func OwnerIDContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// TaskKindNameEQ applies the EQ predicate on the "task_kind_name" field.
+func TaskKindNameEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldTaskKindName, v))
+}
+
+// TaskKindNameNEQ applies the NEQ predicate on the "task_kind_name" field.
+func TaskKindNameNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldTaskKindName, v))
+}
+
+// TaskKindNameIn applies the In predicate on the "task_kind_name" field.
+func TaskKindNameIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldTaskKindName, vs...))
+}
+
+// TaskKindNameNotIn applies the NotIn predicate on the "task_kind_name" field.
+func TaskKindNameNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldTaskKindName, vs...))
+}
+
+// TaskKindNameGT applies the GT predicate on the "task_kind_name" field.
+func TaskKindNameGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldTaskKindName, v))
+}
+
+// TaskKindNameGTE applies the GTE predicate on the "task_kind_name" field.
+func TaskKindNameGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldTaskKindName, v))
+}
+
+// TaskKindNameLT applies the LT predicate on the "task_kind_name" field.
+func TaskKindNameLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldTaskKindName, v))
+}
+
+// TaskKindNameLTE applies the LTE predicate on the "task_kind_name" field.
+func TaskKindNameLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldTaskKindName, v))
+}
+
+// TaskKindNameContains applies the Contains predicate on the "task_kind_name" field.
+func TaskKindNameContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldTaskKindName, v))
+}
+
+// TaskKindNameHasPrefix applies the HasPrefix predicate on the "task_kind_name" field.
+func TaskKindNameHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldTaskKindName, v))
+}
+
+// TaskKindNameHasSuffix applies the HasSuffix predicate on the "task_kind_name" field.
+func TaskKindNameHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldTaskKindName, v))
+}
+
+// TaskKindNameIsNil applies the IsNil predicate on the "task_kind_name" field.
+func TaskKindNameIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldTaskKindName))
+}
+
+// TaskKindNameNotNil applies the NotNil predicate on the "task_kind_name" field.
+func TaskKindNameNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldTaskKindName))
+}
+
+// TaskKindNameEqualFold applies the EqualFold predicate on the "task_kind_name" field.
+func TaskKindNameEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldTaskKindName, v))
+}
+
+// TaskKindNameContainsFold applies the ContainsFold predicate on the "task_kind_name" field.
+func TaskKindNameContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldTaskKindName, v))
+}
+
+// TaskKindIDEQ applies the EQ predicate on the "task_kind_id" field.
+func TaskKindIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldTaskKindID, v))
+}
+
+// TaskKindIDNEQ applies the NEQ predicate on the "task_kind_id" field.
+func TaskKindIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldTaskKindID, v))
+}
+
+// TaskKindIDIn applies the In predicate on the "task_kind_id" field.
+func TaskKindIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldTaskKindID, vs...))
+}
+
+// TaskKindIDNotIn applies the NotIn predicate on the "task_kind_id" field.
+func TaskKindIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldTaskKindID, vs...))
+}
+
+// TaskKindIDGT applies the GT predicate on the "task_kind_id" field.
+func TaskKindIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldTaskKindID, v))
+}
+
+// TaskKindIDGTE applies the GTE predicate on the "task_kind_id" field.
+func TaskKindIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldTaskKindID, v))
+}
+
+// TaskKindIDLT applies the LT predicate on the "task_kind_id" field.
+func TaskKindIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldTaskKindID, v))
+}
+
+// TaskKindIDLTE applies the LTE predicate on the "task_kind_id" field.
+func TaskKindIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldTaskKindID, v))
+}
+
+// TaskKindIDContains applies the Contains predicate on the "task_kind_id" field.
+func TaskKindIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldTaskKindID, v))
+}
+
+// TaskKindIDHasPrefix applies the HasPrefix predicate on the "task_kind_id" field.
+func TaskKindIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldTaskKindID, v))
+}
+
+// TaskKindIDHasSuffix applies the HasSuffix predicate on the "task_kind_id" field.
+func TaskKindIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldTaskKindID, v))
+}
+
+// TaskKindIDIsNil applies the IsNil predicate on the "task_kind_id" field.
+func TaskKindIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldTaskKindID))
+}
+
+// TaskKindIDNotNil applies the NotNil predicate on the "task_kind_id" field.
+func TaskKindIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldTaskKindID))
+}
+
+// TaskKindIDEqualFold applies the EqualFold predicate on the "task_kind_id" field.
+func TaskKindIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldTaskKindID, v))
+}
+
+// TaskKindIDContainsFold applies the ContainsFold predicate on the "task_kind_id" field.
+func TaskKindIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldTaskKindID, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldTitle, v))
@@ -1164,6 +1334,101 @@ func AssignerIDContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldAssignerID, v))
 }
 
+// SystemGeneratedEQ applies the EQ predicate on the "system_generated" field.
+func SystemGeneratedEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSystemGenerated, v))
+}
+
+// SystemGeneratedNEQ applies the NEQ predicate on the "system_generated" field.
+func SystemGeneratedNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldSystemGenerated, v))
+}
+
+// IdempotencyKeyEQ applies the EQ predicate on the "idempotency_key" field.
+func IdempotencyKeyEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyNEQ applies the NEQ predicate on the "idempotency_key" field.
+func IdempotencyKeyNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyIn applies the In predicate on the "idempotency_key" field.
+func IdempotencyKeyIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldIdempotencyKey, vs...))
+}
+
+// IdempotencyKeyNotIn applies the NotIn predicate on the "idempotency_key" field.
+func IdempotencyKeyNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldIdempotencyKey, vs...))
+}
+
+// IdempotencyKeyGT applies the GT predicate on the "idempotency_key" field.
+func IdempotencyKeyGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyGTE applies the GTE predicate on the "idempotency_key" field.
+func IdempotencyKeyGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyLT applies the LT predicate on the "idempotency_key" field.
+func IdempotencyKeyLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyLTE applies the LTE predicate on the "idempotency_key" field.
+func IdempotencyKeyLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyContains applies the Contains predicate on the "idempotency_key" field.
+func IdempotencyKeyContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyHasPrefix applies the HasPrefix predicate on the "idempotency_key" field.
+func IdempotencyKeyHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyHasSuffix applies the HasSuffix predicate on the "idempotency_key" field.
+func IdempotencyKeyHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyIsNil applies the IsNil predicate on the "idempotency_key" field.
+func IdempotencyKeyIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldIdempotencyKey))
+}
+
+// IdempotencyKeyNotNil applies the NotNil predicate on the "idempotency_key" field.
+func IdempotencyKeyNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldIdempotencyKey))
+}
+
+// IdempotencyKeyEqualFold applies the EqualFold predicate on the "idempotency_key" field.
+func IdempotencyKeyEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldIdempotencyKey, v))
+}
+
+// IdempotencyKeyContainsFold applies the ContainsFold predicate on the "idempotency_key" field.
+func IdempotencyKeyContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldIdempotencyKey, v))
+}
+
+// ExternalReferenceURLIsNil applies the IsNil predicate on the "external_reference_url" field.
+func ExternalReferenceURLIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldExternalReferenceURL))
+}
+
+// ExternalReferenceURLNotNil applies the NotNil predicate on the "external_reference_url" field.
+func ExternalReferenceURLNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldExternalReferenceURL))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
@@ -1184,6 +1449,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Task {
 		step := newOwnerStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTaskKind applies the HasEdge predicate on the "task_kind" edge.
+func HasTaskKind() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, TaskKindTable, TaskKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTaskKindWith applies the HasEdge predicate on the "task_kind" edge with a given conditions (other predicates).
+func HasTaskKindWith(preds ...predicate.CustomTypeEnum) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newTaskKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -116,6 +117,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -201,6 +203,8 @@ type Client struct {
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
 	CustomDomainHistory *CustomDomainHistoryClient
+	// CustomTypeEnum is the client for interacting with the CustomTypeEnum builders.
+	CustomTypeEnum *CustomTypeEnumClient
 	// DNSVerification is the client for interacting with the DNSVerification builders.
 	DNSVerification *DNSVerificationClient
 	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
@@ -359,6 +363,8 @@ type Client struct {
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
+	// TagDefinition is the client for interacting with the TagDefinition builders.
+	TagDefinition *TagDefinitionClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
@@ -440,6 +446,7 @@ func (c *Client) init() {
 	c.ControlObjectiveHistory = NewControlObjectiveHistoryClient(c.config)
 	c.CustomDomain = NewCustomDomainClient(c.config)
 	c.CustomDomainHistory = NewCustomDomainHistoryClient(c.config)
+	c.CustomTypeEnum = NewCustomTypeEnumClient(c.config)
 	c.DNSVerification = NewDNSVerificationClient(c.config)
 	c.DNSVerificationHistory = NewDNSVerificationHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
@@ -519,6 +526,7 @@ func (c *Client) init() {
 	c.SubprocessorHistory = NewSubprocessorHistoryClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
 	c.TFASetting = NewTFASettingClient(c.config)
+	c.TagDefinition = NewTagDefinitionClient(c.config)
 	c.Task = NewTaskClient(c.config)
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
@@ -760,6 +768,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
 		CustomDomain:                      NewCustomDomainClient(cfg),
 		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
+		CustomTypeEnum:                    NewCustomTypeEnumClient(cfg),
 		DNSVerification:                   NewDNSVerificationClient(cfg),
 		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
@@ -839,6 +848,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
 		Subscriber:                        NewSubscriberClient(cfg),
 		TFASetting:                        NewTFASettingClient(cfg),
+		TagDefinition:                     NewTagDefinitionClient(cfg),
 		Task:                              NewTaskClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		Template:                          NewTemplateClient(cfg),
@@ -898,6 +908,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
 		CustomDomain:                      NewCustomDomainClient(cfg),
 		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
+		CustomTypeEnum:                    NewCustomTypeEnumClient(cfg),
 		DNSVerification:                   NewDNSVerificationClient(cfg),
 		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
@@ -977,6 +988,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
 		Subscriber:                        NewSubscriberClient(cfg),
 		TFASetting:                        NewTFASettingClient(cfg),
+		TagDefinition:                     NewTagDefinitionClient(cfg),
 		Task:                              NewTaskClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		Template:                          NewTemplateClient(cfg),
@@ -1032,14 +1044,14 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Asset, c.AssetHistory, c.Contact, c.ContactHistory, c.Control,
 		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
 		c.ControlObjective, c.ControlObjectiveHistory, c.CustomDomain,
-		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
-		c.EvidenceHistory, c.Export, c.File, c.FileDownloadToken, c.FileHistory,
-		c.Group, c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory,
-		c.GroupSetting, c.GroupSettingHistory, c.Hush, c.HushHistory,
-		c.ImpersonationEvent, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
+		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
+		c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.ImpersonationEvent, c.Integration, c.IntegrationHistory,
+		c.InternalPolicy, c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
 		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
@@ -1052,13 +1064,13 @@ func (c *Client) Use(hooks ...Hook) {
 		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.TFASetting, c.TagDefinition, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -1073,14 +1085,14 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Asset, c.AssetHistory, c.Contact, c.ContactHistory, c.Control,
 		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
 		c.ControlObjective, c.ControlObjectiveHistory, c.CustomDomain,
-		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
-		c.EvidenceHistory, c.Export, c.File, c.FileDownloadToken, c.FileHistory,
-		c.Group, c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory,
-		c.GroupSetting, c.GroupSettingHistory, c.Hush, c.HushHistory,
-		c.ImpersonationEvent, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
+		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
+		c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.ImpersonationEvent, c.Integration, c.IntegrationHistory,
+		c.InternalPolicy, c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
 		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
@@ -1093,13 +1105,13 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
-		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.TFASetting, c.TagDefinition, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterComplianceHistory, c.TrustCenterDoc, c.TrustCenterDocHistory,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1218,6 +1230,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.CustomDomain.mutate(ctx, m)
 	case *CustomDomainHistoryMutation:
 		return c.CustomDomainHistory.mutate(ctx, m)
+	case *CustomTypeEnumMutation:
+		return c.CustomTypeEnum.mutate(ctx, m)
 	case *DNSVerificationMutation:
 		return c.DNSVerification.mutate(ctx, m)
 	case *DNSVerificationHistoryMutation:
@@ -1376,6 +1390,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Subscriber.mutate(ctx, m)
 	case *TFASettingMutation:
 		return c.TFASetting.mutate(ctx, m)
+	case *TagDefinitionMutation:
+		return c.TagDefinition.mutate(ctx, m)
 	case *TaskMutation:
 		return c.Task.mutate(ctx, m)
 	case *TaskHistoryMutation:
@@ -1735,6 +1751,25 @@ func (c *ActionPlanClient) QueryOwner(_m *ActionPlan) *OrganizationQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlanKind queries the action_plan_kind edge of a ActionPlan.
+func (c *ActionPlanClient) QueryActionPlanKind(_m *ActionPlan) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ActionPlanKindTable, actionplan.ActionPlanKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -3814,6 +3849,25 @@ func (c *ControlClient) QueryEditors(_m *Control) *GroupQuery {
 	return query
 }
 
+// QueryControlKind queries the control_kind edge of a Control.
+func (c *ControlClient) QueryControlKind(_m *Control) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlKindTable, control.ControlKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryStandard queries the standard edge of a Control.
 func (c *ControlClient) QueryStandard(_m *Control) *StandardQuery {
 	query := (&StandardClient{config: c.config}).Query()
@@ -5391,6 +5445,331 @@ func (c *CustomDomainHistoryClient) mutate(ctx context.Context, m *CustomDomainH
 		return (&CustomDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown CustomDomainHistory mutation op: %q", m.Op())
+	}
+}
+
+// CustomTypeEnumClient is a client for the CustomTypeEnum schema.
+type CustomTypeEnumClient struct {
+	config
+}
+
+// NewCustomTypeEnumClient returns a client for the CustomTypeEnum from the given config.
+func NewCustomTypeEnumClient(c config) *CustomTypeEnumClient {
+	return &CustomTypeEnumClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `customtypeenum.Hooks(f(g(h())))`.
+func (c *CustomTypeEnumClient) Use(hooks ...Hook) {
+	c.hooks.CustomTypeEnum = append(c.hooks.CustomTypeEnum, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `customtypeenum.Intercept(f(g(h())))`.
+func (c *CustomTypeEnumClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CustomTypeEnum = append(c.inters.CustomTypeEnum, interceptors...)
+}
+
+// Create returns a builder for creating a CustomTypeEnum entity.
+func (c *CustomTypeEnumClient) Create() *CustomTypeEnumCreate {
+	mutation := newCustomTypeEnumMutation(c.config, OpCreate)
+	return &CustomTypeEnumCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CustomTypeEnum entities.
+func (c *CustomTypeEnumClient) CreateBulk(builders ...*CustomTypeEnumCreate) *CustomTypeEnumCreateBulk {
+	return &CustomTypeEnumCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CustomTypeEnumClient) MapCreateBulk(slice any, setFunc func(*CustomTypeEnumCreate, int)) *CustomTypeEnumCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CustomTypeEnumCreateBulk{err: fmt.Errorf("calling to CustomTypeEnumClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CustomTypeEnumCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CustomTypeEnumCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CustomTypeEnum.
+func (c *CustomTypeEnumClient) Update() *CustomTypeEnumUpdate {
+	mutation := newCustomTypeEnumMutation(c.config, OpUpdate)
+	return &CustomTypeEnumUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CustomTypeEnumClient) UpdateOne(_m *CustomTypeEnum) *CustomTypeEnumUpdateOne {
+	mutation := newCustomTypeEnumMutation(c.config, OpUpdateOne, withCustomTypeEnum(_m))
+	return &CustomTypeEnumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CustomTypeEnumClient) UpdateOneID(id string) *CustomTypeEnumUpdateOne {
+	mutation := newCustomTypeEnumMutation(c.config, OpUpdateOne, withCustomTypeEnumID(id))
+	return &CustomTypeEnumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CustomTypeEnum.
+func (c *CustomTypeEnumClient) Delete() *CustomTypeEnumDelete {
+	mutation := newCustomTypeEnumMutation(c.config, OpDelete)
+	return &CustomTypeEnumDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CustomTypeEnumClient) DeleteOne(_m *CustomTypeEnum) *CustomTypeEnumDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CustomTypeEnumClient) DeleteOneID(id string) *CustomTypeEnumDeleteOne {
+	builder := c.Delete().Where(customtypeenum.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CustomTypeEnumDeleteOne{builder}
+}
+
+// Query returns a query builder for CustomTypeEnum.
+func (c *CustomTypeEnumClient) Query() *CustomTypeEnumQuery {
+	return &CustomTypeEnumQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCustomTypeEnum},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CustomTypeEnum entity by its id.
+func (c *CustomTypeEnumClient) Get(ctx context.Context, id string) (*CustomTypeEnum, error) {
+	return c.Query().Where(customtypeenum.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CustomTypeEnumClient) GetX(ctx context.Context, id string) *CustomTypeEnum {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryOwner(_m *CustomTypeEnum) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, customtypeenum.OwnerTable, customtypeenum.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryTasks(_m *CustomTypeEnum) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.TasksTable, customtypeenum.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryControls(_m *CustomTypeEnum) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ControlsTable, customtypeenum.ControlsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QuerySubcontrols(_m *CustomTypeEnum) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.SubcontrolsTable, customtypeenum.SubcontrolsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryRisks(_m *CustomTypeEnum) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.RisksTable, customtypeenum.RisksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRiskCategories queries the risk_categories edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryRiskCategories(_m *CustomTypeEnum) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.RiskCategoriesTable, customtypeenum.RiskCategoriesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies queries the internal_policies edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryInternalPolicies(_m *CustomTypeEnum) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.InternalPoliciesTable, customtypeenum.InternalPoliciesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedures queries the procedures edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryProcedures(_m *CustomTypeEnum) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ProceduresTable, customtypeenum.ProceduresColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryActionPlans(_m *CustomTypeEnum) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ActionPlansTable, customtypeenum.ActionPlansColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a CustomTypeEnum.
+func (c *CustomTypeEnumClient) QueryPrograms(_m *CustomTypeEnum) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ProgramsTable, customtypeenum.ProgramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CustomTypeEnumClient) Hooks() []Hook {
+	hooks := c.hooks.CustomTypeEnum
+	return append(hooks[:len(hooks):len(hooks)], customtypeenum.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CustomTypeEnumClient) Interceptors() []Interceptor {
+	inters := c.inters.CustomTypeEnum
+	return append(inters[:len(inters):len(inters)], customtypeenum.Interceptors[:]...)
+}
+
+func (c *CustomTypeEnumClient) mutate(ctx context.Context, m *CustomTypeEnumMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CustomTypeEnumCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CustomTypeEnumUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CustomTypeEnumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CustomTypeEnumDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown CustomTypeEnum mutation op: %q", m.Op())
 	}
 }
 
@@ -11400,6 +11779,25 @@ func (c *InternalPolicyClient) QueryDelegate(_m *InternalPolicy) *GroupQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicyKind queries the internal_policy_kind edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryInternalPolicyKind(_m *InternalPolicy) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.InternalPolicyKindTable, internalpolicy.InternalPolicyKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -17440,6 +17838,44 @@ func (c *OrganizationClient) QueryAssessmentResponses(_m *Organization) *Assessm
 	return query
 }
 
+// QueryCustomTypeEnums queries the custom_type_enums edge of a Organization.
+func (c *OrganizationClient) QueryCustomTypeEnums(_m *Organization) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomTypeEnumsTable, organization.CustomTypeEnumsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTagDefinitions queries the tag_definitions edge of a Organization.
+func (c *OrganizationClient) QueryTagDefinitions(_m *Organization) *TagDefinitionQuery {
+	query := (&TagDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(tagdefinition.Table, tagdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TagDefinitionsTable, organization.TagDefinitionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TagDefinition
+		step.Edge.Schema = schemaConfig.TagDefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -18478,6 +18914,25 @@ func (c *ProcedureClient) QueryDelegate(_m *Procedure) *GroupQuery {
 	return query
 }
 
+// QueryProcedureKind queries the procedure_kind edge of a Procedure.
+func (c *ProcedureClient) QueryProcedureKind(_m *Procedure) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ProcedureKindTable, procedure.ProcedureKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControls queries the controls edge of a Procedure.
 func (c *ProcedureClient) QueryControls(_m *Procedure) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -18989,6 +19444,25 @@ func (c *ProgramClient) QueryViewers(_m *Program) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProgramViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgramKind queries the program_kind edge of a Program.
+func (c *ProgramClient) QueryProgramKind(_m *Program) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.ProgramKindTable, program.ProgramKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Program
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -19947,6 +20421,44 @@ func (c *RiskClient) QueryViewers(_m *Risk) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.RiskViewers
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRiskKind queries the risk_kind edge of a Risk.
+func (c *RiskClient) QueryRiskKind(_m *Risk) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.RiskKindTable, risk.RiskKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRiskCategory queries the risk_category edge of a Risk.
+func (c *RiskClient) QueryRiskCategory(_m *Risk) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.RiskCategoryTable, risk.RiskCategoryColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -21985,6 +22497,25 @@ func (c *SubcontrolClient) QueryOwner(_m *Subcontrol) *OrganizationQuery {
 	return query
 }
 
+// QuerySubcontrolKind queries the subcontrol_kind edge of a Subcontrol.
+func (c *SubcontrolClient) QuerySubcontrolKind(_m *Subcontrol) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.SubcontrolKindTable, subcontrol.SubcontrolKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControl queries the control edge of a Subcontrol.
 func (c *SubcontrolClient) QueryControl(_m *Subcontrol) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -22915,6 +23446,160 @@ func (c *TFASettingClient) mutate(ctx context.Context, m *TFASettingMutation) (V
 	}
 }
 
+// TagDefinitionClient is a client for the TagDefinition schema.
+type TagDefinitionClient struct {
+	config
+}
+
+// NewTagDefinitionClient returns a client for the TagDefinition from the given config.
+func NewTagDefinitionClient(c config) *TagDefinitionClient {
+	return &TagDefinitionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `tagdefinition.Hooks(f(g(h())))`.
+func (c *TagDefinitionClient) Use(hooks ...Hook) {
+	c.hooks.TagDefinition = append(c.hooks.TagDefinition, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `tagdefinition.Intercept(f(g(h())))`.
+func (c *TagDefinitionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TagDefinition = append(c.inters.TagDefinition, interceptors...)
+}
+
+// Create returns a builder for creating a TagDefinition entity.
+func (c *TagDefinitionClient) Create() *TagDefinitionCreate {
+	mutation := newTagDefinitionMutation(c.config, OpCreate)
+	return &TagDefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TagDefinition entities.
+func (c *TagDefinitionClient) CreateBulk(builders ...*TagDefinitionCreate) *TagDefinitionCreateBulk {
+	return &TagDefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TagDefinitionClient) MapCreateBulk(slice any, setFunc func(*TagDefinitionCreate, int)) *TagDefinitionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TagDefinitionCreateBulk{err: fmt.Errorf("calling to TagDefinitionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TagDefinitionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TagDefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TagDefinition.
+func (c *TagDefinitionClient) Update() *TagDefinitionUpdate {
+	mutation := newTagDefinitionMutation(c.config, OpUpdate)
+	return &TagDefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TagDefinitionClient) UpdateOne(_m *TagDefinition) *TagDefinitionUpdateOne {
+	mutation := newTagDefinitionMutation(c.config, OpUpdateOne, withTagDefinition(_m))
+	return &TagDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TagDefinitionClient) UpdateOneID(id string) *TagDefinitionUpdateOne {
+	mutation := newTagDefinitionMutation(c.config, OpUpdateOne, withTagDefinitionID(id))
+	return &TagDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TagDefinition.
+func (c *TagDefinitionClient) Delete() *TagDefinitionDelete {
+	mutation := newTagDefinitionMutation(c.config, OpDelete)
+	return &TagDefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TagDefinitionClient) DeleteOne(_m *TagDefinition) *TagDefinitionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TagDefinitionClient) DeleteOneID(id string) *TagDefinitionDeleteOne {
+	builder := c.Delete().Where(tagdefinition.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TagDefinitionDeleteOne{builder}
+}
+
+// Query returns a query builder for TagDefinition.
+func (c *TagDefinitionClient) Query() *TagDefinitionQuery {
+	return &TagDefinitionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTagDefinition},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TagDefinition entity by its id.
+func (c *TagDefinitionClient) Get(ctx context.Context, id string) (*TagDefinition, error) {
+	return c.Query().Where(tagdefinition.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TagDefinitionClient) GetX(ctx context.Context, id string) *TagDefinition {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a TagDefinition.
+func (c *TagDefinitionClient) QueryOwner(_m *TagDefinition) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tagdefinition.Table, tagdefinition.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tagdefinition.OwnerTable, tagdefinition.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TagDefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TagDefinitionClient) Hooks() []Hook {
+	hooks := c.hooks.TagDefinition
+	return append(hooks[:len(hooks):len(hooks)], tagdefinition.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TagDefinitionClient) Interceptors() []Interceptor {
+	inters := c.inters.TagDefinition
+	return append(inters[:len(inters):len(inters)], tagdefinition.Interceptors[:]...)
+}
+
+func (c *TagDefinitionClient) mutate(ctx context.Context, m *TagDefinitionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TagDefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TagDefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TagDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TagDefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TagDefinition mutation op: %q", m.Op())
+	}
+}
+
 // TaskClient is a client for the Task schema.
 type TaskClient struct {
 	config
@@ -23035,6 +23720,25 @@ func (c *TaskClient) QueryOwner(_m *Task) *OrganizationQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTaskKind queries the task_kind edge of a Task.
+func (c *TaskClient) QueryTaskKind(_m *Task) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.TaskKindTable, task.TaskKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Task
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -27030,60 +27734,60 @@ type (
 		AssessmentResponse, AssessmentResponseHistory, Asset, AssetHistory, Contact,
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
-		CustomDomain, CustomDomainHistory, DNSVerification, DNSVerificationHistory,
-		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
-		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
-		Export, File, FileDownloadToken, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, ImpersonationEvent, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
-		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
-		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
-		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
-		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
-		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
-		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
-		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
-		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, TrustCenterSubprocessor,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
-		TrustCenterWatermarkConfigHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Hook
+		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
+		DNSVerificationHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
+		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
+		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
+		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
+		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
+		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
+		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
+		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
+		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
+		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
+		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
 		AssessmentResponse, AssessmentResponseHistory, Asset, AssetHistory, Contact,
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
-		CustomDomain, CustomDomainHistory, DNSVerification, DNSVerificationHistory,
-		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
-		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
-		Export, File, FileDownloadToken, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, ImpersonationEvent, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
-		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
-		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
-		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
-		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
-		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
-		Task, TaskHistory, Template, TemplateHistory, TrustCenter,
-		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
-		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, TrustCenterSubprocessor,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
-		TrustCenterWatermarkConfigHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Interceptor
+		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
+		DNSVerificationHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
+		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
+		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
+		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
+		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
+		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
+		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
+		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
+		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
+		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
+		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

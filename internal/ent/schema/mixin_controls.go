@@ -199,6 +199,9 @@ var controlFields = []ent.Field{
 		Default(enums.ControlTypePreventative.String()).
 		Annotations(
 			entgql.OrderField("CONTROL_TYPE"),
+			entgql.Directives(
+				entgql.Deprecated("Use `control_kind_name` instead."),
+			),
 		).
 		Optional().
 		Comment("type of the control e.g. preventive, detective, corrective, or deterrent."),

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -61,6 +62,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -194,6 +196,12 @@ func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
 
 func CustomDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomainhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func CustomTypeEnumEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customtypeenum edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -898,6 +906,20 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).CustomTypeEnum.Query().Where((customtypeenum.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if customtypeenumCount, err := FromContext(ctx).CustomTypeEnum.Delete().Where(customtypeenum.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", customtypeenumCount).Msg("deleting customtypeenum")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TagDefinition.Query().Where((tagdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if tagdefinitionCount, err := FromContext(ctx).TagDefinition.Delete().Where(tagdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", tagdefinitionCount).Msg("deleting tagdefinition")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -1067,6 +1089,12 @@ func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 
 func TFASettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TagDefinitionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tagdefinition edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

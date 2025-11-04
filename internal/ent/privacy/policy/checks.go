@@ -118,6 +118,14 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 	})
 }
 
+// CheckOrgAccess checks if the requestor has access to read the organization
+func CheckOrgAccess() privacy.MutationRule {
+	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		zerolog.Ctx(ctx).Debug().Msg("checking org read access")
+		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView)
+	})
+}
+
 // DenyQueryIfNotAuthenticated denies a query if the user is not authenticated
 func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {

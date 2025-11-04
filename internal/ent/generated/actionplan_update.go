@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -551,6 +552,46 @@ func (_u *ActionPlanUpdate) ClearSystemInternalID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_u *ActionPlanUpdate) SetActionPlanKindName(v string) *ActionPlanUpdate {
+	_u.mutation.SetActionPlanKindName(v)
+	return _u
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableActionPlanKindName(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetActionPlanKindName(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindName clears the value of the "action_plan_kind_name" field.
+func (_u *ActionPlanUpdate) ClearActionPlanKindName() *ActionPlanUpdate {
+	_u.mutation.ClearActionPlanKindName()
+	return _u
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_u *ActionPlanUpdate) SetActionPlanKindID(v string) *ActionPlanUpdate {
+	_u.mutation.SetActionPlanKindID(v)
+	return _u
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableActionPlanKindID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetActionPlanKindID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindID clears the value of the "action_plan_kind_id" field.
+func (_u *ActionPlanUpdate) ClearActionPlanKindID() *ActionPlanUpdate {
+	_u.mutation.ClearActionPlanKindID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdate) SetDueDate(v time.Time) *ActionPlanUpdate {
 	_u.mutation.SetDueDate(v)
@@ -626,6 +667,11 @@ func (_u *ActionPlanUpdate) SetOwner(v *Organization) *ActionPlanUpdate {
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_u *ActionPlanUpdate) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanUpdate {
+	return _u.SetActionPlanKindID(v.ID)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_u *ActionPlanUpdate) AddRiskIDs(ids ...string) *ActionPlanUpdate {
 	_u.mutation.AddRiskIDs(ids...)
@@ -696,6 +742,12 @@ func (_u *ActionPlanUpdate) ClearDelegate() *ActionPlanUpdate {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *ActionPlanUpdate) ClearOwner() *ActionPlanUpdate {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearActionPlanKind clears the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_u *ActionPlanUpdate) ClearActionPlanKind() *ActionPlanUpdate {
+	_u.mutation.ClearActionPlanKind()
 	return _u
 }
 
@@ -1037,6 +1089,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(actionplan.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplan.FieldActionPlanKindName, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindNameCleared() {
+		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
@@ -1140,6 +1198,37 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.ActionPlan
@@ -1859,6 +1948,46 @@ func (_u *ActionPlanUpdateOne) ClearSystemInternalID() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_u *ActionPlanUpdateOne) SetActionPlanKindName(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetActionPlanKindName(v)
+	return _u
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableActionPlanKindName(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetActionPlanKindName(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindName clears the value of the "action_plan_kind_name" field.
+func (_u *ActionPlanUpdateOne) ClearActionPlanKindName() *ActionPlanUpdateOne {
+	_u.mutation.ClearActionPlanKindName()
+	return _u
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_u *ActionPlanUpdateOne) SetActionPlanKindID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetActionPlanKindID(v)
+	return _u
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableActionPlanKindID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetActionPlanKindID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindID clears the value of the "action_plan_kind_id" field.
+func (_u *ActionPlanUpdateOne) ClearActionPlanKindID() *ActionPlanUpdateOne {
+	_u.mutation.ClearActionPlanKindID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdateOne) SetDueDate(v time.Time) *ActionPlanUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -1934,6 +2063,11 @@ func (_u *ActionPlanUpdateOne) SetOwner(v *Organization) *ActionPlanUpdateOne {
 	return _u.SetOwnerID(v.ID)
 }
 
+// SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_u *ActionPlanUpdateOne) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanUpdateOne {
+	return _u.SetActionPlanKindID(v.ID)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_u *ActionPlanUpdateOne) AddRiskIDs(ids ...string) *ActionPlanUpdateOne {
 	_u.mutation.AddRiskIDs(ids...)
@@ -2004,6 +2138,12 @@ func (_u *ActionPlanUpdateOne) ClearDelegate() *ActionPlanUpdateOne {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *ActionPlanUpdateOne) ClearOwner() *ActionPlanUpdateOne {
 	_u.mutation.ClearOwner()
+	return _u
+}
+
+// ClearActionPlanKind clears the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_u *ActionPlanUpdateOne) ClearActionPlanKind() *ActionPlanUpdateOne {
+	_u.mutation.ClearActionPlanKind()
 	return _u
 }
 
@@ -2375,6 +2515,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(actionplan.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplan.FieldActionPlanKindName, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindNameCleared() {
+		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
@@ -2478,6 +2624,37 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.ActionPlan

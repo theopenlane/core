@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -40,6 +41,7 @@ type TaskQuery struct {
 	inters                          []Interceptor
 	predicates                      []predicate.Task
 	withOwner                       *OrganizationQuery
+	withTaskKind                    *CustomTypeEnumQuery
 	withAssigner                    *UserQuery
 	withAssignee                    *UserQuery
 	withComments                    *NoteQuery
@@ -53,6 +55,7 @@ type TaskQuery struct {
 	withRisks                       *RiskQuery
 	withControlImplementations      *ControlImplementationQuery
 	withEvidence                    *EvidenceQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Task) error
 	modifiers                       []func(*sql.Selector)
 	withNamedComments               map[string]*NoteQuery
@@ -120,6 +123,31 @@ func (_q *TaskQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTaskKind chains the current query on the "task_kind" edge.
+func (_q *TaskQuery) QueryTaskKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.TaskKindTable, task.TaskKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -645,6 +673,7 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		inters:                     append([]Interceptor{}, _q.inters...),
 		predicates:                 append([]predicate.Task{}, _q.predicates...),
 		withOwner:                  _q.withOwner.Clone(),
+		withTaskKind:               _q.withTaskKind.Clone(),
 		withAssigner:               _q.withAssigner.Clone(),
 		withAssignee:               _q.withAssignee.Clone(),
 		withComments:               _q.withComments.Clone(),
@@ -673,6 +702,17 @@ func (_q *TaskQuery) WithOwner(opts ...func(*OrganizationQuery)) *TaskQuery {
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithTaskKind tells the query-builder to eager-load the nodes that are connected to
+// the "task_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithTaskKind(opts ...func(*CustomTypeEnumQuery)) *TaskQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTaskKind = query
 	return _q
 }
 
@@ -902,9 +942,11 @@ func (_q *TaskQuery) prepareQuery(ctx context.Context) error {
 func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, error) {
 	var (
 		nodes       = []*Task{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [15]bool{
 			_q.withOwner != nil,
+			_q.withTaskKind != nil,
 			_q.withAssigner != nil,
 			_q.withAssignee != nil,
 			_q.withComments != nil,
@@ -920,6 +962,9 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			_q.withEvidence != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, task.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Task).scanValues(nil, columns)
 	}
@@ -946,6 +991,12 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Task, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTaskKind; query != nil {
+		if err := _q.loadTaskKind(ctx, query, nodes, nil,
+			func(n *Task, e *CustomTypeEnum) { n.Edges.TaskKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1147,6 +1198,35 @@ func (_q *TaskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TaskQuery) loadTaskKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Task, init func(*Task), assign func(*Task, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Task)
+	for i := range nodes {
+		fk := nodes[i].TaskKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "task_kind_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1896,6 +1976,9 @@ func (_q *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(task.FieldOwnerID)
+		}
+		if _q.withTaskKind != nil {
+			_spec.Node.AddColumnOnce(task.FieldTaskKindID)
 		}
 		if _q.withAssigner != nil {
 			_spec.Node.AddColumnOnce(task.FieldAssignerID)

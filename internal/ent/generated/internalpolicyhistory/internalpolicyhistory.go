@@ -86,6 +86,10 @@ const (
 	FieldURL = "url"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldInternalPolicyKindName holds the string denoting the internal_policy_kind_name field in the database.
+	FieldInternalPolicyKindName = "internal_policy_kind_name"
+	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
+	FieldInternalPolicyKindID = "internal_policy_kind_id"
 	// Table holds the table name of the internalpolicyhistory in the database.
 	Table = "internal_policy_history"
 )
@@ -127,6 +131,8 @@ var Columns = []string{
 	FieldDismissedImprovementSuggestions,
 	FieldURL,
 	FieldFileID,
+	FieldInternalPolicyKindName,
+	FieldInternalPolicyKindID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -357,6 +363,16 @@ func ByURL(opts ...sql.OrderTermOption) OrderOption {
 // ByFileID orders the results by the file_id field.
 func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByInternalPolicyKindName orders the results by the internal_policy_kind_name field.
+func ByInternalPolicyKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyKindName, opts...).ToFunc()
+}
+
+// ByInternalPolicyKindID orders the results by the internal_policy_kind_id field.
+func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
 }
 
 var (

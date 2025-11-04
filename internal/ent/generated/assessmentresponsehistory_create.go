@@ -181,13 +181,13 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableSendAttempts(v *int) *Asse
 }
 
 // SetStatus sets the "status" field.
-func (_c *AssessmentResponseHistoryCreate) SetStatus(v enums.AssesmentResponseStatus) *AssessmentResponseHistoryCreate {
+func (_c *AssessmentResponseHistoryCreate) SetStatus(v enums.AssessmentResponseStatus) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *AssessmentResponseHistoryCreate) SetNillableStatus(v *enums.AssesmentResponseStatus) *AssessmentResponseHistoryCreate {
+func (_c *AssessmentResponseHistoryCreate) SetNillableStatus(v *enums.AssessmentResponseStatus) *AssessmentResponseHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}

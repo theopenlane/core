@@ -143,6 +143,46 @@ func (_u *ProgramHistoryUpdate) ClearOwnerID() *ProgramHistoryUpdate {
 	return _u
 }
 
+// SetProgramKindName sets the "program_kind_name" field.
+func (_u *ProgramHistoryUpdate) SetProgramKindName(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetProgramKindName(v)
+	return _u
+}
+
+// SetNillableProgramKindName sets the "program_kind_name" field if the given value is not nil.
+func (_u *ProgramHistoryUpdate) SetNillableProgramKindName(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetProgramKindName(*v)
+	}
+	return _u
+}
+
+// ClearProgramKindName clears the value of the "program_kind_name" field.
+func (_u *ProgramHistoryUpdate) ClearProgramKindName() *ProgramHistoryUpdate {
+	_u.mutation.ClearProgramKindName()
+	return _u
+}
+
+// SetProgramKindID sets the "program_kind_id" field.
+func (_u *ProgramHistoryUpdate) SetProgramKindID(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetProgramKindID(v)
+	return _u
+}
+
+// SetNillableProgramKindID sets the "program_kind_id" field if the given value is not nil.
+func (_u *ProgramHistoryUpdate) SetNillableProgramKindID(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetProgramKindID(*v)
+	}
+	return _u
+}
+
+// ClearProgramKindID clears the value of the "program_kind_id" field.
+func (_u *ProgramHistoryUpdate) ClearProgramKindID() *ProgramHistoryUpdate {
+	_u.mutation.ClearProgramKindID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *ProgramHistoryUpdate) SetName(v string) *ProgramHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -517,6 +557,18 @@ func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ProgramKindName(); ok {
+		_spec.SetField(programhistory.FieldProgramKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProgramKindNameCleared() {
+		_spec.ClearField(programhistory.FieldProgramKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProgramKindID(); ok {
+		_spec.SetField(programhistory.FieldProgramKindID, field.TypeString, value)
+	}
+	if _u.mutation.ProgramKindIDCleared() {
+		_spec.ClearField(programhistory.FieldProgramKindID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
 	}
@@ -714,6 +766,46 @@ func (_u *ProgramHistoryUpdateOne) SetNillableOwnerID(v *string) *ProgramHistory
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *ProgramHistoryUpdateOne) ClearOwnerID() *ProgramHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetProgramKindName sets the "program_kind_name" field.
+func (_u *ProgramHistoryUpdateOne) SetProgramKindName(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetProgramKindName(v)
+	return _u
+}
+
+// SetNillableProgramKindName sets the "program_kind_name" field if the given value is not nil.
+func (_u *ProgramHistoryUpdateOne) SetNillableProgramKindName(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetProgramKindName(*v)
+	}
+	return _u
+}
+
+// ClearProgramKindName clears the value of the "program_kind_name" field.
+func (_u *ProgramHistoryUpdateOne) ClearProgramKindName() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearProgramKindName()
+	return _u
+}
+
+// SetProgramKindID sets the "program_kind_id" field.
+func (_u *ProgramHistoryUpdateOne) SetProgramKindID(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetProgramKindID(v)
+	return _u
+}
+
+// SetNillableProgramKindID sets the "program_kind_id" field if the given value is not nil.
+func (_u *ProgramHistoryUpdateOne) SetNillableProgramKindID(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetProgramKindID(*v)
+	}
+	return _u
+}
+
+// ClearProgramKindID clears the value of the "program_kind_id" field.
+func (_u *ProgramHistoryUpdateOne) ClearProgramKindID() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearProgramKindID()
 	return _u
 }
 
@@ -1120,6 +1212,18 @@ func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramH
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProgramKindName(); ok {
+		_spec.SetField(programhistory.FieldProgramKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProgramKindNameCleared() {
+		_spec.ClearField(programhistory.FieldProgramKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProgramKindID(); ok {
+		_spec.SetField(programhistory.FieldProgramKindID, field.TypeString, value)
+	}
+	if _u.mutation.ProgramKindIDCleared() {
+		_spec.ClearField(programhistory.FieldProgramKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)

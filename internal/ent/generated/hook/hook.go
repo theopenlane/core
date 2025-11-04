@@ -237,6 +237,18 @@ func (f CustomDomainHistoryFunc) Mutate(ctx context.Context, m generated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CustomDomainHistoryMutation", m)
 }
 
+// The CustomTypeEnumFunc type is an adapter to allow the use of ordinary
+// function as CustomTypeEnum mutator.
+type CustomTypeEnumFunc func(context.Context, *generated.CustomTypeEnumMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CustomTypeEnumFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CustomTypeEnumMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CustomTypeEnumMutation", m)
+}
+
 // The DNSVerificationFunc type is an adapter to allow the use of ordinary
 // function as DNSVerification mutator.
 type DNSVerificationFunc func(context.Context, *generated.DNSVerificationMutation) (generated.Value, error)
@@ -1183,6 +1195,18 @@ func (f TFASettingFunc) Mutate(ctx context.Context, m generated.Mutation) (gener
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TFASettingMutation", m)
+}
+
+// The TagDefinitionFunc type is an adapter to allow the use of ordinary
+// function as TagDefinition mutator.
+type TagDefinitionFunc func(context.Context, *generated.TagDefinitionMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TagDefinitionFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TagDefinitionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TagDefinitionMutation", m)
 }
 
 // The TaskFunc type is an adapter to allow the use of ordinary

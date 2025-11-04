@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -104,6 +105,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -8482,6 +8484,359 @@ func (_m *CustomDomainHistory) ToEdge(order *CustomDomainHistoryOrder) *CustomDo
 		order = DefaultCustomDomainHistoryOrder
 	}
 	return &CustomDomainHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// CustomTypeEnumEdge is the edge representation of CustomTypeEnum.
+type CustomTypeEnumEdge struct {
+	Node   *CustomTypeEnum `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// CustomTypeEnumConnection is the connection containing edges to CustomTypeEnum.
+type CustomTypeEnumConnection struct {
+	Edges      []*CustomTypeEnumEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *CustomTypeEnumConnection) build(nodes []*CustomTypeEnum, pager *customtypeenumPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CustomTypeEnum
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CustomTypeEnum {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CustomTypeEnum {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CustomTypeEnumEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CustomTypeEnumEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CustomTypeEnumPaginateOption enables pagination customization.
+type CustomTypeEnumPaginateOption func(*customtypeenumPager) error
+
+// WithCustomTypeEnumOrder configures pagination ordering.
+func WithCustomTypeEnumOrder(order []*CustomTypeEnumOrder) CustomTypeEnumPaginateOption {
+	return func(pager *customtypeenumPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithCustomTypeEnumFilter configures pagination filter.
+func WithCustomTypeEnumFilter(filter func(*CustomTypeEnumQuery) (*CustomTypeEnumQuery, error)) CustomTypeEnumPaginateOption {
+	return func(pager *customtypeenumPager) error {
+		if filter == nil {
+			return errors.New("CustomTypeEnumQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type customtypeenumPager struct {
+	reverse bool
+	order   []*CustomTypeEnumOrder
+	filter  func(*CustomTypeEnumQuery) (*CustomTypeEnumQuery, error)
+}
+
+func newCustomTypeEnumPager(opts []CustomTypeEnumPaginateOption, reverse bool) (*customtypeenumPager, error) {
+	pager := &customtypeenumPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *customtypeenumPager) applyFilter(query *CustomTypeEnumQuery) (*CustomTypeEnumQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *customtypeenumPager) toCursor(_m *CustomTypeEnum) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *customtypeenumPager) applyCursors(query *CustomTypeEnumQuery, after, before *Cursor) (*CustomTypeEnumQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultCustomTypeEnumOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *customtypeenumPager) applyOrder(query *CustomTypeEnumQuery) *CustomTypeEnumQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultCustomTypeEnumOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultCustomTypeEnumOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *customtypeenumPager) orderExpr(query *CustomTypeEnumQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultCustomTypeEnumOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CustomTypeEnum.
+func (_m *CustomTypeEnumQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CustomTypeEnumPaginateOption,
+) (*CustomTypeEnumConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCustomTypeEnumPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CustomTypeEnumConnection{Edges: []*CustomTypeEnumEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CustomTypeEnumOrderFieldCreatedAt orders CustomTypeEnum by created_at.
+	CustomTypeEnumOrderFieldCreatedAt = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: customtypeenum.FieldCreatedAt,
+		toTerm: customtypeenum.ByCreatedAt,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CustomTypeEnumOrderFieldUpdatedAt orders CustomTypeEnum by updated_at.
+	CustomTypeEnumOrderFieldUpdatedAt = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: customtypeenum.FieldUpdatedAt,
+		toTerm: customtypeenum.ByUpdatedAt,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CustomTypeEnumOrderField) String() string {
+	var str string
+	switch f.column {
+	case CustomTypeEnumOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CustomTypeEnumOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CustomTypeEnumOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CustomTypeEnumOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CustomTypeEnumOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *CustomTypeEnumOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CustomTypeEnumOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid CustomTypeEnumOrderField", str)
+	}
+	return nil
+}
+
+// CustomTypeEnumOrderField defines the ordering field of CustomTypeEnum.
+type CustomTypeEnumOrderField struct {
+	// Value extracts the ordering value from the given CustomTypeEnum.
+	Value    func(*CustomTypeEnum) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) customtypeenum.OrderOption
+	toCursor func(*CustomTypeEnum) Cursor
+}
+
+// CustomTypeEnumOrder defines the ordering of CustomTypeEnum.
+type CustomTypeEnumOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *CustomTypeEnumOrderField `json:"field"`
+}
+
+// DefaultCustomTypeEnumOrder is the default ordering of CustomTypeEnum.
+var DefaultCustomTypeEnumOrder = &CustomTypeEnumOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: customtypeenum.FieldID,
+		toTerm: customtypeenum.ByID,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts CustomTypeEnum into CustomTypeEnumEdge.
+func (_m *CustomTypeEnum) ToEdge(order *CustomTypeEnumOrder) *CustomTypeEnumEdge {
+	if order == nil {
+		order = DefaultCustomTypeEnumOrder
+	}
+	return &CustomTypeEnumEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -36602,6 +36957,359 @@ func (_m *TFASetting) ToEdge(order *TFASettingOrder) *TFASettingEdge {
 		order = DefaultTFASettingOrder
 	}
 	return &TFASettingEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// TagDefinitionEdge is the edge representation of TagDefinition.
+type TagDefinitionEdge struct {
+	Node   *TagDefinition `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// TagDefinitionConnection is the connection containing edges to TagDefinition.
+type TagDefinitionConnection struct {
+	Edges      []*TagDefinitionEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *TagDefinitionConnection) build(nodes []*TagDefinition, pager *tagdefinitionPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TagDefinition
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TagDefinition {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TagDefinition {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TagDefinitionEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TagDefinitionEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TagDefinitionPaginateOption enables pagination customization.
+type TagDefinitionPaginateOption func(*tagdefinitionPager) error
+
+// WithTagDefinitionOrder configures pagination ordering.
+func WithTagDefinitionOrder(order []*TagDefinitionOrder) TagDefinitionPaginateOption {
+	return func(pager *tagdefinitionPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTagDefinitionFilter configures pagination filter.
+func WithTagDefinitionFilter(filter func(*TagDefinitionQuery) (*TagDefinitionQuery, error)) TagDefinitionPaginateOption {
+	return func(pager *tagdefinitionPager) error {
+		if filter == nil {
+			return errors.New("TagDefinitionQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type tagdefinitionPager struct {
+	reverse bool
+	order   []*TagDefinitionOrder
+	filter  func(*TagDefinitionQuery) (*TagDefinitionQuery, error)
+}
+
+func newTagDefinitionPager(opts []TagDefinitionPaginateOption, reverse bool) (*tagdefinitionPager, error) {
+	pager := &tagdefinitionPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *tagdefinitionPager) applyFilter(query *TagDefinitionQuery) (*TagDefinitionQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *tagdefinitionPager) toCursor(_m *TagDefinition) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *tagdefinitionPager) applyCursors(query *TagDefinitionQuery, after, before *Cursor) (*TagDefinitionQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTagDefinitionOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *tagdefinitionPager) applyOrder(query *TagDefinitionQuery) *TagDefinitionQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTagDefinitionOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTagDefinitionOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *tagdefinitionPager) orderExpr(query *TagDefinitionQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTagDefinitionOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TagDefinition.
+func (_m *TagDefinitionQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TagDefinitionPaginateOption,
+) (*TagDefinitionConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTagDefinitionPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TagDefinitionConnection{Edges: []*TagDefinitionEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TagDefinitionOrderFieldCreatedAt orders TagDefinition by created_at.
+	TagDefinitionOrderFieldCreatedAt = &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: tagdefinition.FieldCreatedAt,
+		toTerm: tagdefinition.ByCreatedAt,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TagDefinitionOrderFieldUpdatedAt orders TagDefinition by updated_at.
+	TagDefinitionOrderFieldUpdatedAt = &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: tagdefinition.FieldUpdatedAt,
+		toTerm: tagdefinition.ByUpdatedAt,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TagDefinitionOrderField) String() string {
+	var str string
+	switch f.column {
+	case TagDefinitionOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TagDefinitionOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TagDefinitionOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TagDefinitionOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TagDefinitionOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TagDefinitionOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TagDefinitionOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TagDefinitionOrderField", str)
+	}
+	return nil
+}
+
+// TagDefinitionOrderField defines the ordering field of TagDefinition.
+type TagDefinitionOrderField struct {
+	// Value extracts the ordering value from the given TagDefinition.
+	Value    func(*TagDefinition) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) tagdefinition.OrderOption
+	toCursor func(*TagDefinition) Cursor
+}
+
+// TagDefinitionOrder defines the ordering of TagDefinition.
+type TagDefinitionOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *TagDefinitionOrderField `json:"field"`
+}
+
+// DefaultTagDefinitionOrder is the default ordering of TagDefinition.
+var DefaultTagDefinitionOrder = &TagDefinitionOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: tagdefinition.FieldID,
+		toTerm: tagdefinition.ByID,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TagDefinition into TagDefinitionEdge.
+func (_m *TagDefinition) ToEdge(order *TagDefinitionOrder) *TagDefinitionEdge {
+	if order == nil {
+		order = DefaultTagDefinitionOrder
+	}
+	return &TagDefinitionEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

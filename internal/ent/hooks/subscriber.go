@@ -26,6 +26,7 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, gqlerrors.NewCustomError(
 					gqlerrors.BadRequestErrorCode,
 					"subscriber email is required, please provide a valid email",
+
 					ErrEmailRequired)
 			}
 

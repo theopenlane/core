@@ -121,6 +121,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),
+			newCustomEnumMixin(s),
 		},
 	}.getMixins(s)
 }

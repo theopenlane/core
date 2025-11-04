@@ -80,6 +80,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldProcedureKindName holds the string denoting the procedure_kind_name field in the database.
+	FieldProcedureKindName = "procedure_kind_name"
+	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
+	FieldProcedureKindID = "procedure_kind_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -90,6 +94,8 @@ const (
 	EdgeApprover = "approver"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
 	EdgeDelegate = "delegate"
+	// EdgeProcedureKind holds the string denoting the procedure_kind edge name in mutations.
+	EdgeProcedureKind = "procedure_kind"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -141,6 +147,13 @@ const (
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "delegate_id"
+	// ProcedureKindTable is the table that holds the procedure_kind relation/edge.
+	ProcedureKindTable = "procedures"
+	// ProcedureKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ProcedureKindInverseTable = "custom_type_enums"
+	// ProcedureKindColumn is the table column denoting the procedure_kind relation/edge.
+	ProcedureKindColumn = "procedure_kind_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_procedures"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -226,12 +239,15 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldProcedureKindName,
+	FieldProcedureKindID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_procedures",
+	"custom_type_enum_procedures",
 }
 
 var (
@@ -285,7 +301,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [16]ent.Hook
+	Hooks        [18]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -478,6 +494,16 @@ func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
+// ByProcedureKindName orders the results by the procedure_kind_name field.
+func ByProcedureKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindName, opts...).ToFunc()
+}
+
+// ByProcedureKindID orders the results by the procedure_kind_id field.
+func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -524,6 +550,13 @@ func ByApproverField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProcedureKindField orders the results by procedure_kind field.
+func ByProcedureKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -678,6 +711,13 @@ func newDelegateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DelegateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newProcedureKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ProcedureKindTable, ProcedureKindColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
