@@ -17,6 +17,7 @@ import (
 	"github.com/stripe/stripe-go/v83/webhook"
 	echo "github.com/theopenlane/echox"
 
+	entEvent "github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -105,6 +106,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	require.NoError(t, err)
 
 	strPtr := func(s string) *string { return &s }
+	boolPtr := func(b bool) *bool { return &b }
 
 	currentAPIVersion := stripe.APIVersion
 	parts := strings.SplitN(currentAPIVersion, ".", 2)
@@ -142,6 +144,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		configDiscardAPIVersion *string
 		signatureOverride       string
 		expectRevocation        bool
+		expectProcessed         *bool
 	}{
 		{
 			name: "valid payload - paused subscription",
@@ -172,6 +175,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			expectedStatus:          http.StatusBadRequest,
 			configAPIVersion:        strPtr(currentAPIVersion),
 			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectProcessed:         boolPtr(false),
 		},
 		{
 			name: "valid payload - subscription updated",
@@ -232,6 +236,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			expectedStatus:          http.StatusOK,
 			configAPIVersion:        strPtr(currentAPIVersion),
 			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectProcessed:         boolPtr(false),
 		},
 		{
 			name:                    "webhook with discard API version is ignored",
@@ -247,7 +252,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:  http.StatusOK,
+			expectProcessed: boolPtr(false),
 		},
 		{
 			name:                    "webhook with mismatched API version is ignored",
@@ -263,7 +269,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:  http.StatusOK,
+			expectProcessed: boolPtr(false),
 		},
 		{
 			name:                    "webhook with matching API version is processed",
@@ -272,6 +279,22 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			configDiscardAPIVersion: strPtr(discardAPIVersion),
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook_match",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name:                    "webhook with API version query param is processed when config unset",
+			queryParams:             "api_version=" + currentAPIVersion,
+			configAPIVersion:        strPtr(""),
+			configDiscardAPIVersion: strPtr(""),
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_param_config_empty",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
 				APIVersion: currentAPIVersion,
@@ -297,6 +320,21 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			configDiscardAPIVersion: strPtr(""),
 		},
 		{
+			name: "webhook without API version query param is processed when config set",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_no_param_configured",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+		},
+		{
 			name: "invalid signature returns bad request",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook_invalid_signature",
@@ -311,6 +349,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			signatureOverride:       "invalid",
 			configAPIVersion:        strPtr(currentAPIVersion),
 			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectProcessed:         boolPtr(false),
 		},
 	}
 
@@ -439,6 +478,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, patID)
 				require.NoError(t, err)
 				require.Len(t, pat.Edges.Organizations, 0)
+			}
+
+			if tc.expectProcessed != nil {
+				exists, err := suite.db.Event.Query().
+					Where(entEvent.IDEQ(tc.payload.ID)).
+					Exist(testUser1.UserCtx)
+				require.NoError(t, err)
+				assert.Equal(t, *tc.expectProcessed, exists)
 			}
 		})
 	}
