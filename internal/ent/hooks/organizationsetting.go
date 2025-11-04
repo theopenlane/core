@@ -6,7 +6,6 @@ import (
 	"slices"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookOrganizationCreatePolicy is used on organization and organization setting creation mutations
@@ -79,7 +79,7 @@ func HookOrganizationCreatePolicy() ent.Hook {
 			}
 
 			if client.EmailVerifier.IncludesFreeDomain(allowedDomains) {
-				zerolog.Ctx(ctx).Warn().Strs("domains", allowedDomains).Msg("organization allowed email domains include free email domains")
+				logx.FromContext(ctx).Warn().Strs("domains", allowedDomains).Msg("organization allowed email domains include free email domains")
 
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
@@ -112,7 +112,7 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 
 			allowedEmailDomains, okSet := m.AllowedEmailDomains()
 			if m.EmailVerifier.IncludesFreeDomain(allowedEmailDomains) {
-				zerolog.Ctx(ctx).Warn().Strs("domains", allowedEmailDomains).Msg("organization allowed email domains include free email domains")
+				logx.FromContext(ctx).Warn().Strs("domains", allowedEmailDomains).Msg("organization allowed email domains include free email domains")
 
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
@@ -122,7 +122,7 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 			appendedDomains, okAppend := m.AppendedAllowedEmailDomains()
 
 			if m.EmailVerifier.IncludesFreeDomain(appendedDomains) {
-				zerolog.Ctx(ctx).Warn().Strs("domains", appendedDomains).Msg("organization allowed email domains include free email domains")
+				logx.FromContext(ctx).Warn().Strs("domains", appendedDomains).Msg("organization allowed email domains include free email domains")
 
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
@@ -193,7 +193,7 @@ func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID strin
 	}
 
 	if _, err := utils.AuthzClient(ctx, m).UpdateConditionalTupleKey(ctx, fgax.GetTupleKey(tk)); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create org access restriction tuple")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create org access restriction tuple")
 
 		return err
 	}

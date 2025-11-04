@@ -12,7 +12,10 @@ import (
 
 func TestCtx(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := logx.New(b)
+	l := logx.Configure(logx.LoggerConfig{
+		Writer:   b,
+		WithEcho: true,
+	}).Echo
 	zerologger := l.Unwrap()
 	ctx := l.WithContext(context.Background())
 

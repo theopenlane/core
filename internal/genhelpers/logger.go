@@ -4,24 +4,17 @@ import (
 	"os"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // SetupLogging sets up the logging for the code generation process
 func SetupLogging() {
-	output := consolelog.NewConsoleWriter()
-	log.Logger = zerolog.New(os.Stderr).
-		With().Timestamp().
-		Logger()
-
-	// set the log level
-	zerolog.SetGlobalLevel(zerolog.DebugLevel)
-
-	log.Logger = log.Logger.With().
-		Caller().Logger()
-
-	// pretty logging
-	log.Logger = log.Output(&output)
+	logx.Configure(logx.LoggerConfig{
+		Level:         zerolog.DebugLevel,
+		Pretty:        true,
+		Writer:        os.Stderr,
+		IncludeCaller: true,
+		SetGlobal:     true,
+	})
 }

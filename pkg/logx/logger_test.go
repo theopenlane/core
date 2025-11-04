@@ -2,7 +2,9 @@ package logx_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/labstack/gommon/log"
@@ -15,81 +17,55 @@ import (
 func TestNew(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := logx.New(b)
+	result := logx.Configure(logx.LoggerConfig{
+		Writer:   b,
+		WithEcho: true,
+	})
+
+	l := result.Echo
 
 	l.Print("foo")
 
-	assert.Equal(
-		t,
-		`{"level":"-","message":"foo"}
-`,
-		b.String(),
-	)
-}
-
-func TestNewWithZerolog(t *testing.T) {
-	b := &bytes.Buffer{}
-	zl := zerolog.New(b)
-
-	l := logx.New(zl.With().Str("key", "test").Logger())
-
-	l.Print("foo")
-
-	assert.Equal(
-		t,
-		`{"key":"test","level":"-","message":"foo"}
-`,
-		b.String(),
-	)
-}
-
-func TestFrom(t *testing.T) {
-	b := &bytes.Buffer{}
-
-	zl := zerolog.New(b)
-	l := logx.From(zl.With().Str("key", "test").Logger())
-
-	l.Print("foo")
-
-	assert.Equal(
-		t,
-		`{"key":"test","level":"-","message":"foo"}
-`,
-		b.String(),
-	)
+	var entry map[string]any
+	err := json.Unmarshal(b.Bytes(), &entry)
+	assert.NoError(t, err)
+	assert.Equal(t, "-", entry["level"])
+	assert.Equal(t, "foo", entry["message"])
 }
 
 func TestLogger_SetPrefix(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := logx.New(b)
+	l := logx.Configure(logx.LoggerConfig{
+		Writer:   b,
+		WithEcho: true,
+	}).Echo
 
 	l.Print("t-e-s-t")
 
-	assert.Equal(
-		t,
-		`{"level":"-","message":"t-e-s-t"}
-`,
-		b.String(),
-	)
+	var entry map[string]any
+	err := json.Unmarshal(b.Bytes(), &entry)
+	assert.NoError(t, err)
+	assert.Equal(t, "t-e-s-t", entry["message"])
 
 	b.Reset()
 
 	l.SetPrefix("foo")
 	l.Print("test")
 
-	assert.Equal(
-		t,
-		`{"prefix":"foo","level":"-","message":"test"}
-`,
-		b.String(),
-	)
+	err = json.Unmarshal(b.Bytes(), &entry)
+	assert.NoError(t, err)
+	assert.Equal(t, "foo", entry["prefix"])
+	assert.Equal(t, "test", entry["message"])
 }
 
 func TestLogger_Output(t *testing.T) {
 	out1 := &bytes.Buffer{}
 
-	l := logx.New(out1)
+	l := logx.Configure(logx.LoggerConfig{
+		Writer:   out1,
+		WithEcho: true,
+	}).Echo
 
 	l.Print("foo")
 	l.Print("bar")
@@ -99,35 +75,38 @@ func TestLogger_Output(t *testing.T) {
 
 	l.Print("baz")
 
-	assert.Equal(
-		t,
-		`{"level":"-","message":"foo"}
-{"level":"-","message":"bar"}
-`,
-		out1.String(),
-	)
+	lines := strings.Split(strings.TrimSpace(out1.String()), "\n")
+	if len(lines) != 2 {
+		t.Fatalf("expected 2 lines, got %d", len(lines))
+	}
+	for idx, expected := range []string{"foo", "bar"} {
+		var entry map[string]any
+		err := json.Unmarshal([]byte(lines[idx]), &entry)
+		assert.NoError(t, err)
+		assert.Equal(t, expected, entry["message"])
+	}
 
-	assert.Equal(
-		t,
-		`{"level":"-","message":"baz"}
-`,
-		out2.String(),
-	)
+	var entry map[string]any
+	err := json.Unmarshal(out2.Bytes(), &entry)
+	assert.NoError(t, err)
+	assert.Equal(t, "baz", entry["message"])
 }
 
 func TestLogger_SetLevel(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := logx.New(b)
+	l := logx.Configure(logx.LoggerConfig{
+		Writer:   b,
+		WithEcho: true,
+	}).Echo
 
 	l.Debug("foo")
 
-	assert.Equal(
-		t,
-		`{"level":"debug","message":"foo"}
-`,
-		b.String(),
-	)
+	var entry map[string]any
+	err := json.Unmarshal(b.Bytes(), &entry)
+	assert.NoError(t, err)
+	assert.Equal(t, "foo", entry["message"])
+	assert.Equal(t, "debug", entry["level"])
 
 	b.Reset()
 

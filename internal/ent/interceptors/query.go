@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // QueryLogger is an interceptor that logs the duration of each query.
@@ -23,7 +23,7 @@ func QueryLogger() ent.InterceptFunc {
 			start := time.Now()
 
 			defer func() {
-				zerolog.Ctx(ctx).Info().
+				logx.FromContext(ctx).Info().
 					Str("duration", time.Since(start).String()).
 					Str("schema", q.Type()).
 					Msg("query duration")

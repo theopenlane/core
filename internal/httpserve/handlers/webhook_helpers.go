@@ -5,7 +5,6 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v83"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 
@@ -44,14 +44,14 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 			return err
 		}
 
-		zerolog.Ctx(ctx).Info().Str("product_id", prod.StripeProductID).Msg("org product created")
+		logx.FromContext(ctx).Info().Str("product_id", prod.StripeProductID).Msg("org product created")
 
 		price, err := upsertOrgPrice(ctx, orgSub, prod, item.Price)
 		if err != nil {
 			return err
 		}
 
-		zerolog.Ctx(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
+		logx.FromContext(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
 
 		mod, err := upsertOrgModule(ctx, orgSub, price, item, h.Entitlements, string(subStatus))
 		if err != nil {

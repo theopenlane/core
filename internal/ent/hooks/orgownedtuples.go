@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // OrgOwnedTuplesHookWithAdmin is a hook that adds organization owned tuples for the object being created
@@ -78,7 +78,7 @@ func hookOrgOwnedTuples(includeAdminRelation bool) ent.Hook {
 				}
 			}
 
-			zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added organization permissions")
+			logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added organization permissions")
 
 			return retVal, err
 		},

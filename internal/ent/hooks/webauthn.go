@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookWebauthnDelete runs on passkey delete mutations to ensure
@@ -24,7 +24,7 @@ func HookWebauthnDelete() ent.Hook {
 			count, err := m.Client().Webauthn.Query().
 				Count(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("could not get count of webauthns")
+				logx.FromContext(ctx).Error().Err(err).Msg("could not get count of webauthns")
 
 				return nil, err
 			}
@@ -34,7 +34,7 @@ func HookWebauthnDelete() ent.Hook {
 				if err = m.Client().UserSetting.Update().
 					SetIsWebauthnAllowed(false).
 					Exec(ctx); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("could not disable webauthn from user")
+					logx.FromContext(ctx).Error().Err(err).Msg("could not disable webauthn from user")
 
 					return nil, err
 				}

@@ -3,7 +3,6 @@ package handlers
 import (
 	"sort"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -27,7 +27,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

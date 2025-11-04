@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/rs/zerolog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Metrics struct holds a distinct echo instance to report system metrics
@@ -109,7 +109,9 @@ func New(port string) *Metrics {
 
 // Start starts the metrics server
 func (m *Metrics) Start(ctx context.Context) error {
-	zerolog.Ctx(ctx).Info().Msg("starting metrics server")
+	ctx = logx.SeedContext(ctx)
+	logger := logx.FromContext(ctx)
+	logger.Info().Msg("starting metrics server")
 
 	srv := &http.Server{ // nolint:gosec
 		Addr:    m.port,
@@ -123,8 +125,8 @@ func (m *Metrics) Start(ctx context.Context) error {
 
 		defer cancel()
 
-		if err := srv.Shutdown(shutdownCtx); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to shutdown metrics server")
+		if err := srv.Shutdown(logx.SeedContext(shutdownCtx)); err != nil {
+			logger.Error().Err(err).Msg("failed to shutdown metrics server")
 		}
 	}()
 
@@ -137,7 +139,8 @@ func (m *Metrics) Start(ctx context.Context) error {
 
 // Stop stops the metrics server
 func (m *Metrics) Stop(ctx context.Context) error {
-	zerolog.Ctx(ctx).Info().Msg("stopping metrics server")
+	ctx = logx.SeedContext(ctx)
+	logx.FromContext(ctx).Info().Msg("stopping metrics server")
 
 	return m.e.Shutdown(ctx)
 }

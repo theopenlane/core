@@ -20,7 +20,7 @@ import (
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -278,20 +278,15 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 }
 
 func setupLogging(debug bool) {
-	output := consolelog.NewConsoleWriter()
-	log.Logger = zerolog.New(os.Stderr).
-		With().
-		Logger()
-
-	// make pretty logging output
-	log.Logger = log.Output(&output)
-
-	// set the log level
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	// set the log level to debug if the debug flag is set and add additional information
+	level := zerolog.InfoLevel
 	if debug {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		level = zerolog.DebugLevel
 	}
 
+	logx.Configure(logx.LoggerConfig{
+		Level:     level,
+		Pretty:    true,
+		Writer:    os.Stderr,
+		SetGlobal: true,
+	})
 }

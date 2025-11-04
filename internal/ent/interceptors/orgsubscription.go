@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // InterceptorBillingPortalURLs is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
@@ -40,7 +40,7 @@ func InterceptorBillingPortalURLs() ent.Interceptor {
 			if ok {
 				for _, orgSub := range orgSubResult {
 					if err := setPortalURLs(ctx, orgSub, q); err != nil {
-						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
+						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 					}
 				}
 
@@ -51,7 +51,7 @@ func InterceptorBillingPortalURLs() ent.Interceptor {
 			orgSub, ok := v.(*generated.OrgSubscription)
 			if ok {
 				if err := setPortalURLs(ctx, orgSub, q); err != nil {
-					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
+					logx.FromContext(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 				}
 
 				return v, nil
@@ -65,7 +65,7 @@ func InterceptorBillingPortalURLs() ent.Interceptor {
 // setPortalURLs sets the subscription URL for the org subscription response
 func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
 	if orgSub == nil || !q.EntitlementManager.Config.IsEnabled() {
-		zerolog.Ctx(ctx).Debug().Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
+		logx.FromContext(ctx).Debug().Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
 
 		return nil
 	}
@@ -77,18 +77,18 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 
 	client := generated.FromContext(ctx)
 	if client == nil {
-		zerolog.Ctx(ctx).Error().Msg("ent client not found in context")
+		logx.FromContext(ctx).Error().Msg("ent client not found in context")
 		return nil
 	}
 
 	org, err := client.Organization.Get(ctx, orgSub.OwnerID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Str("owner_id", orgSub.OwnerID).Msg("failed to fetch organization")
+		logx.FromContext(ctx).Err(err).Str("owner_id", orgSub.OwnerID).Msg("failed to fetch organization")
 		return err
 	}
 
 	if org.StripeCustomerID == nil || *org.StripeCustomerID == "" {
-		zerolog.Ctx(ctx).Warn().Str("owner_id", orgSub.OwnerID).Msg("organization does not have a stripe customer ID")
+		logx.FromContext(ctx).Warn().Str("owner_id", orgSub.OwnerID).Msg("organization does not have a stripe customer ID")
 		return nil
 	}
 
@@ -96,7 +96,7 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 
 	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(ctx, customerID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
+		logx.FromContext(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
 
 		return err
 	}

@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -54,7 +54,7 @@ func trustCenterComplianceCreateHook(ctx context.Context, m *generated.TrustCent
 		}
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, writeTuples, nil); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 			return ErrInternalServerError
 		}
@@ -79,7 +79,7 @@ func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCent
 		Relation:    "associated_with",
 	})
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tupleKey}); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuple")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple")
 
 		return ErrInternalServerError
 	}

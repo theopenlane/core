@@ -11,12 +11,12 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
@@ -24,9 +24,10 @@ import (
 
 // CreateControlsByClone is the resolver for the createControlsByClone field.
 func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error) {
+	logger := logx.FromContext(ctx)
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logger.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -73,9 +74,10 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 // CloneBulkCSVControl is the resolver for the cloneBulkCSVControl field.
 func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
+	logger := logx.FromContext(ctx)
 	data, err := unmarshalBulkData[model.CloneControlUploadInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logger.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -86,7 +88,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 
 	convertedInput, err := convertToCloneControlInput(data)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to convert clone control input")
+		logger.Error().Err(err).Msg("failed to convert clone control input")
 
 		return nil, err
 	}
@@ -116,7 +118,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 
 		controlID, isSubControl := getControlIDFromRefCode(*c.RefCode, out.Controls)
 		if controlID == nil || *controlID == "" {
-			log.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
+			logger.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
 
 			continue
 		}
@@ -127,15 +129,23 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		}
 
 		if isSubControl {
-			hasUpdate := false
-			scInput, hasUpdate := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+			scInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+			if convErr != nil {
+				logger.Error().Err(convErr).Msg("error preparing subcontrol update fields")
+			}
 
 			if len(commentIDs) > 0 {
+				if scInput == nil {
+					scInput = &generated.UpdateSubcontrolInput{}
+				}
 				scInput.AddCommentIDs = commentIDs
 				hasUpdate = true
 			}
 
 			if c.InternalPolicyID != nil {
+				if scInput == nil {
+					scInput = &generated.UpdateSubcontrolInput{}
+				}
 				scInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
 				hasUpdate = true
 			}
@@ -155,21 +165,28 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 					}
 				}
 
-				err := base.Exec(ctx)
-				if err != nil {
+				if err := base.Exec(ctx); err != nil {
 					return nil, err
 				}
 			}
 		} else {
-			hasUpdate := false
-			cInput, hasUpdate := getFieldsToUpdate[generated.UpdateControlInput](c)
+			cInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateControlInput](c)
+			if convErr != nil {
+				logger.Error().Err(convErr).Msg("error preparing control update fields")
+			}
 
 			if len(commentIDs) > 0 {
+				if cInput == nil {
+					cInput = &generated.UpdateControlInput{}
+				}
 				cInput.AddCommentIDs = commentIDs
 				hasUpdate = true
 			}
 
 			if c.InternalPolicyID != nil {
+				if cInput == nil {
+					cInput = &generated.UpdateControlInput{}
+				}
 				cInput.AddInternalPolicyIDs = []string{*c.InternalPolicyID}
 				hasUpdate = true
 			}
@@ -189,8 +206,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 					}
 				}
 
-				err := base.Exec(ctx)
-				if err != nil {
+				if err := base.Exec(ctx); err != nil {
 					return nil, err
 				}
 			}
@@ -320,8 +336,9 @@ func (r *queryResolver) ControlSubcategoriesByFramework(ctx context.Context, ord
 
 // ControlsGroupByCategory is the resolver for the controlsGroupByCategory field.
 func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) (*model.ControlGroupConnection, error) {
+	logger := logx.FromContext(ctx)
 	if category == nil && after != nil || before != nil {
-		log.Info().Msg("category must be provided when using pagination with after or before")
+		logger.Info().Msg("category must be provided when using pagination with after or before")
 
 		return nil, fmt.Errorf("%w: category must be provided when using pagination with after or before", rout.ErrBadRequest)
 	}

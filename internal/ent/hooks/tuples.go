@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/fgax"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookDeletePermissions is an ent hook that deletes all relationship tuples associated with an object
@@ -54,19 +54,19 @@ func HookDeletePermissions() ent.Hook {
 func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 	client := utils.AuthzClientFromContext(ctx)
 	if client == nil {
-		zerolog.Ctx(ctx).Warn().Msg("Authz client not found in context, skipping deleting relationship tuples")
+		logx.FromContext(ctx).Warn().Msg("Authz client not found in context, skipping deleting relationship tuples")
 		return nil
 	}
 
 	if skipDeleteHook(ctx, m) {
-		zerolog.Ctx(ctx).Debug().Msg("skipping delete permissions hook")
+		logx.FromContext(ctx).Debug().Msg("skipping delete permissions hook")
 
 		return nil
 	}
 
 	objIDs := getMutationIDs(ctx, m)
 	if len(objIDs) == 0 {
-		zerolog.Ctx(ctx).Debug().Msg("no object IDs found in mutation, skipping deleting relationship tuples")
+		logx.FromContext(ctx).Debug().Msg("no object IDs found in mutation, skipping deleting relationship tuples")
 
 		return nil
 	}
@@ -75,15 +75,15 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 		objType := strcase.SnakeCase(m.Type())
 		object := fmt.Sprintf("%s:%s", objType, objID)
 
-		zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
+		logx.FromContext(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 		if err := client.DeleteAllObjectRelations(ctx, object, []string{}); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 			return ErrInternalServerError
 		}
 
-		zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
+		logx.FromContext(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
 	}
 
 	return nil

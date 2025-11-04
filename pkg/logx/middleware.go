@@ -67,7 +67,10 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 	}
 
 	if config.Logger == nil {
-		config.Logger = New(os.Stdout, WithTimestamp())
+		config.Logger = Configure(LoggerConfig{
+			Writer:   os.Stdout,
+			WithEcho: true,
+		}).Echo
 	}
 
 	if config.RequestIDKey == "" {
@@ -95,7 +98,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 
 			id := getRequestID(c, config)
 			if id != "" {
-				logger = From(logger.log, WithField(config.RequestIDKey, id))
+				logger = newLoggerFromExisting(logger.log.With().Str(config.RequestIDKey, id).Logger(), logger.out, logger.setters)
 			}
 
 			// The request context is retrieved and set to the logger's context
@@ -140,7 +143,7 @@ func getRequestID(c echo.Context, config Config) string {
 // enrichLogger enriches the logger (lulz) with additional information using the provided Enricher function
 func enrichLogger(c echo.Context, logger *Logger, config Config) *Logger {
 	if config.Enricher != nil {
-		logger = From(logger.log)
+		logger = newLoggerFromExisting(logger.log, logger.out, logger.setters)
 		logger.log = config.Enricher(c, logger.log.With()).Logger()
 	}
 

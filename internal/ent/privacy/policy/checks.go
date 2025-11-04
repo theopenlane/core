@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -69,7 +69,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 		}
 
 		if err := CheckEdgesForAddedAccess(ctx, m, edgesToCheck); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("access not allowed to parent, cannot authorize creation")
+			logx.FromContext(ctx).Error().Err(err).Msg("access not allowed to parent, cannot authorize creation")
 
 			return privacy.Deny
 		}
@@ -113,7 +113,7 @@ func CheckOrgEditAccess() privacy.QueryRule {
 // CheckOrgWriteAccess checks if the requestor has access to edit the organization
 func CheckOrgWriteAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		zerolog.Ctx(ctx).Debug().Msg("checking org write access")
+		logx.FromContext(ctx).Debug().Msg("checking org write access")
 		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanEdit)
 	})
 }
@@ -169,7 +169,7 @@ func CheckEdgesForRemovedAccess(ctx context.Context, m ent.Mutation, edges []str
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, added bool) error {
 	actor, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get user id from context")
 
 		return err
 	}
@@ -197,13 +197,13 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 		for _, id := range ids {
 			idStr, ok := id.(string)
 			if !ok {
-				zerolog.Ctx(ctx).Warn().Interface("id", id).Msg("id is not a string, unable to check access")
+				logx.FromContext(ctx).Warn().Interface("id", id).Msg("id is not a string, unable to check access")
 
 				continue
 			}
 
 			if idStr == "" {
-				zerolog.Ctx(ctx).Debug().Msg("id is empty, nothing to check, validation will catch this later")
+				logx.FromContext(ctx).Debug().Msg("id is empty, nothing to check, validation will catch this later")
 
 				continue
 			}
@@ -214,13 +214,13 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			if edgeMap.ObjectType == organization.Label {
 				orgID, err := auth.GetOrganizationIDFromContext(ctx)
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get organization id from context")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization id from context")
 
 					return err
 				}
 
 				if err := ensureObjectInOrganization(ctx, m, edge, idStr, orgID); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("object is not part of the organization")
+					logx.FromContext(ctx).Error().Err(err).Msg("object is not part of the organization")
 
 					return err
 				}
@@ -238,7 +238,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
-				zerolog.Ctx(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Msg("user does not have access to the object for edge permissions")
+				logx.FromContext(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Msg("user does not have access to the object for edge permissions")
 
 				return generated.ErrPermissionDenied
 			}
@@ -251,18 +251,18 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 // mapEdgeToObjectType maps the edge to the object type and returns the EdgeAccess
 // based on the generated access map
 func mapEdgeToObjectType(ctx context.Context, schema string, edge string) generated.EdgeAccess {
-	zerolog.Ctx(ctx).Debug().Str("schema", schema).Str("edge", edge).Msg("mapping edge to object type")
+	logx.FromContext(ctx).Debug().Str("schema", schema).Str("edge", edge).Msg("mapping edge to object type")
 	schemaType := strcase.SnakeCase(schema)
 
 	schemaMap, ok := generated.EdgeAccessMap[schemaType]
 	if !ok {
-		zerolog.Ctx(ctx).Error().Str("schema", schema).Msg("schema not found in edge access map")
+		logx.FromContext(ctx).Error().Str("schema", schema).Msg("schema not found in edge access map")
 		return generated.EdgeAccess{}
 	}
 
 	edgeAccess, ok := schemaMap[edge]
 	if !ok {
-		zerolog.Ctx(ctx).Error().Str("edge", edge).Msg("edge not found in edge access map for schema")
+		logx.FromContext(ctx).Error().Str("edge", edge).Msg("edge not found in edge access map for schema")
 
 		return generated.EdgeAccess{}
 	}
@@ -275,7 +275,7 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 	// also ensure the id is part of the organization
 	mut, ok := m.(utils.GenericMutation)
 	if !ok {
-		zerolog.Ctx(ctx).Error().Msg("unable to determine access")
+		logx.FromContext(ctx).Error().Msg("unable to determine access")
 		return privacy.Deny
 	}
 
@@ -285,7 +285,7 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 			return nil
 		}
 
-		zerolog.Ctx(ctx).Error().Msg("user does not have access to the organization")
+		logx.FromContext(ctx).Error().Msg("user does not have access to the organization")
 
 		return privacy.Deny
 	}
@@ -296,7 +296,7 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 
 	var rows sql.Rows
 	if err := mut.Client().Driver().Query(ctx, query, []any{objectID, orgID}, &rows); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to check for object in organization")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for object in organization")
 
 		return privacy.Deny
 	}

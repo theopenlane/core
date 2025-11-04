@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookProgramAuthz runs on program mutations to setup or remove relationship tuples
@@ -66,7 +66,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			ObjectType:  GetObjectTypeFromEntMutation(m),
 		}
 
-		zerolog.Ctx(ctx).Debug().Interface("request", req).
+		logx.FromContext(ctx).Debug().Interface("request", req).
 			Msg("creating parent relationship tuples")
 
 		orgTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
@@ -75,7 +75,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 		}
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 			return ErrInternalServerError
 		}
@@ -88,7 +88,7 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
 
 		return err
 	}
@@ -103,7 +103,7 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 	// allow before the permissions have been added for the program itself
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating program membership for admin")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating program membership for admin")
 
 		return err
 	}

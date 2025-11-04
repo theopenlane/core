@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookInvite runs on invite create mutations
@@ -33,14 +33,14 @@ func HookInvite() ent.Hook {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
 			m, err := setRequestor(ctx, m)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to determine requestor")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to determine requestor")
 
 				return nil, err
 			}
 
 			// validate the invite
 			if err := validateCanCreateInvite(ctx, m); err != nil {
-				zerolog.Ctx(ctx).Info().Err(err).Msg("unable to add user to specified organization")
+				logx.FromContext(ctx).Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
 			}
@@ -48,7 +48,7 @@ func HookInvite() ent.Hook {
 			// generate token based on recipient + target org ID
 			m, err = setRecipientAndToken(m)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to create verification token")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to create verification token")
 
 				return nil, err
 			}
@@ -61,12 +61,12 @@ func HookInvite() ent.Hook {
 
 			// if the invite exists, update the token and resend
 			if existingInvite != nil && err == nil {
-				zerolog.Ctx(ctx).Info().Msg("invitation for user already exists")
+				logx.FromContext(ctx).Info().Msg("invitation for user already exists")
 
 				// update invite instead
 				retValue, err = updateInvite(ctx, m)
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update invitation")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to update invitation")
 
 					return retValue, err
 				}
@@ -80,7 +80,7 @@ func HookInvite() ent.Hook {
 
 			// queue the email to be sent
 			if err := createInviteToSend(ctx, m); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("error sending email to user")
+				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 			}
 
 			return retValue, err
@@ -103,7 +103,7 @@ func HookInviteGroups() ent.Hook {
 			// get the user ID from the context
 			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user ID from context")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user ID from context")
 				return nil, err
 			}
 
@@ -117,12 +117,12 @@ func HookInviteGroups() ent.Hook {
 					ObjectID:    groupID,
 				})
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check group access")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to check group access")
 
 					return nil, err
 				} else if !ok {
 					// user does not have access to the group, return an error
-					zerolog.Ctx(ctx).Error().Msgf("user %s does not have access to group %s", userID, groupID)
+					logx.FromContext(ctx).Error().Msgf("user %s does not have access to group %s", userID, groupID)
 
 					return nil, generated.ErrPermissionDenied
 				}
@@ -157,7 +157,7 @@ func HookInviteAccepted() ent.Hook {
 				// bypass interceptors that filters results
 				invite, err := m.Client().Invite.Query().Where(invite.ID(id)).Only(ctx)
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get existing invite")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to get existing invite")
 
 					return nil, err
 				}
@@ -171,7 +171,7 @@ func HookInviteAccepted() ent.Hook {
 			// add the org to the authenticated context for querying
 			err := auth.AddOrganizationIDToContext(ctx, ownerID)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add organization ID to context")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to add organization ID to context")
 				return nil, err
 			}
 
@@ -192,7 +192,7 @@ func HookInviteAccepted() ent.Hook {
 			// user must be authenticated to accept an invite, get their id from the context
 			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user to add to organization")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user to add to organization")
 
 				return nil, err
 			}
@@ -205,7 +205,7 @@ func HookInviteAccepted() ent.Hook {
 
 			// add user to the inviting org, allow the context to bypass privacy checks
 			if err := m.Client().OrgMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to organization")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
 			}
@@ -221,7 +221,7 @@ func HookInviteAccepted() ent.Hook {
 					).
 					All(allowCtx)
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to query current organization owners")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to query current organization owners")
 					return nil, err
 				}
 
@@ -231,14 +231,14 @@ func HookInviteAccepted() ent.Hook {
 					if err := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
 						SetRole(adminRole).
 						Exec(allowCtx); err != nil {
-						zerolog.Ctx(ctx).Error().Err(err).
+						logx.FromContext(ctx).Error().Err(err).
 							Str("user_id", currentOwner.UserID).
 							Msg("unable to demote current owner to admin")
 						return nil, err
 					}
 				}
 
-				zerolog.Ctx(ctx).Info().
+				logx.FromContext(ctx).Info().
 					Str("organization_id", ownerID).
 					Str("new_owner_id", userID).
 					Int("demoted_owners", len(currentOwners)).
@@ -253,7 +253,7 @@ func HookInviteAccepted() ent.Hook {
 
 			// add user to the group, allow the context to bypass privacy checks
 			if err := m.Client().GroupMembership.CreateBulk(builders...).Exec(allowCtx); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to group")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to group")
 
 				return nil, err
 			}
@@ -267,7 +267,7 @@ func HookInviteAccepted() ent.Hook {
 			// fetch org details to pass the name in the email
 			org, err := m.Client().Organization.Query().Clone().Where(organization.ID(ownerID)).Only(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get organization")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization")
 
 				return retValue, err
 			}
@@ -283,7 +283,7 @@ func HookInviteAccepted() ent.Hook {
 
 			// delete the invite that has been accepted
 			if err := deleteInvite(ctx, m); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to delete invite")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to delete invite")
 				return retValue, err
 			}
 
@@ -453,7 +453,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		Email: emailAddress,
 	}, invite, token)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error rendering email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
 
 		return err
 	}
@@ -462,7 +462,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}
@@ -476,7 +476,7 @@ func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutat
 		Email: recipient,
 	}, i)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error rendering email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
 
 		return err
 	}
@@ -485,7 +485,7 @@ func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutat
 	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v83"
 
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -103,7 +103,7 @@ func HookOrganization() ent.Hook {
 
 					settings, err := orgCreated.Setting(allowCtx)
 					if err != nil {
-						zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get organization settings")
+						logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization settings")
 
 						return nil, err
 					}
@@ -206,7 +206,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 		// sets up default org settings using schema defaults
 		orgSettingID, err := defaultOrganizationSettings(ctx, m)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default organization settings")
+			logx.FromContext(ctx).Error().Err(err).Msg("error creating default organization settings")
 
 			return err
 		}
@@ -225,7 +225,7 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org subscriptions")
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting org subscriptions")
 		return nil, err
 	}
 
@@ -233,7 +233,7 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 	if len(orgSubscriptions) == 0 {
 		sub, err := defaultOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default org subscription")
+			logx.FromContext(ctx).Error().Err(err).Msg("error creating default org subscription")
 
 			return nil, err
 		}
@@ -241,7 +241,7 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 		orgSubscriptions = []*generated.OrgSubscription{sub}
 	}
 
-	zerolog.Ctx(ctx).Debug().Msg("created default org subscription")
+	logx.FromContext(ctx).Debug().Msg("created default org subscription")
 
 	return orgSubscriptions[0], nil
 }
@@ -260,7 +260,7 @@ func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organizat
 		SetActive(true).
 		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Save(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default orgsubscription")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating default orgsubscription")
 
 		return nil, err
 	}
@@ -283,7 +283,7 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 	}
 
 	if err := m.Client().EntityType.CreateBulk(builders...).Exec(ctx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating entity types")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating entity types")
 
 		return err
 	}
@@ -309,7 +309,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// create generated groups
 	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating generated groups")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
 
 		return err
 	}
@@ -354,7 +354,7 @@ func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation)
 		Exist(ctx)
 
 	if exists {
-		zerolog.Ctx(ctx).Debug().Msg("attempt to delete personal org detected")
+		logx.FromContext(ctx).Debug().Msg("attempt to delete personal org detected")
 
 		return fmt.Errorf("%w: %s", ErrInvalidInput, "cannot delete personal organizations")
 	}
@@ -442,13 +442,13 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 	if !personalOrg {
 		userID, err := auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to get user id from context")
 			return "", err
 		}
 
 		user, err := m.Client().User.Get(ctx, userID)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to fetch user from database")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to fetch user from database")
 			return "", err
 		}
 
@@ -466,7 +466,7 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 
 	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating organization settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating organization settings")
 		return "", err
 	}
 
@@ -511,7 +511,7 @@ func createParentOrgTuple(ctx context.Context, m *generated.OrganizationMutation
 	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{
 		tuple,
 	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 		return err
 	}
@@ -541,7 +541,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
 
 		return err
 	}
@@ -555,7 +555,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	}
 
 	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(ctx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating org membership for owner")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating org membership for owner")
 
 		return err
 	}
