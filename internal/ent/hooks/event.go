@@ -181,8 +181,19 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 	return func(ctx context.Context, m entgen.Mutation) bool {
-		if e == nil {
+		if e == nil || m == nil {
 			return false
+		}
+
+		entity := m.Type()
+		if entity == "" {
+			return false
+		}
+
+		// Prefer the live pool state so dynamically registered listeners are honoured even when they bypass
+		// Eventer bookkeeping (e.g. direct EventPool.On calls in tests)
+		if e.Emitter != nil && e.Emitter.InterestedIn(entity) {
+			return true
 		}
 
 		if e.listeners == nil {
@@ -192,7 +203,7 @@ func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 		// Listener registration drives emission: if no subscribers, we avoid creating events altogether
 		// This mirrors the old static allowlist, but removes the need to keep two separate sources of truth in sync
 		_ = ctx
-		listeners, ok := e.listeners[m.Type()]
+		listeners, ok := e.listeners[entity]
 		return ok && len(listeners) > 0
 	}
 }

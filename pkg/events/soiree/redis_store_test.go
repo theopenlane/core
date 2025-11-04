@@ -16,7 +16,7 @@ import (
 func mustRegisterListener(t *testing.T, pool *EventPool, topic TypedTopic[Event], listener TypedListener[Event], opts ...ListenerOption) string {
 	t.Helper()
 
-	id, err := OnTopic(pool, topic, listener, opts...)
+	id, err := BindListener(topic, listener, opts...).Register(pool)
 	if err != nil {
 		t.Fatalf("failed to register listener: %v", err)
 	}
@@ -39,7 +39,7 @@ func TestRedisEventPersistence(t *testing.T) {
 	client := newTestRedis(t)
 	store := NewRedisStore(client)
 	soiree := NewEventPool(WithEventStore(store))
-	topic := NewEventTopic("topic")
+	topic := typedEventTopic("topic")
 
 	done := make(chan struct{}, 1)
 	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
@@ -47,7 +47,7 @@ func TestRedisEventPersistence(t *testing.T) {
 		return nil
 	})
 
-	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	select {
 	case <-done:
@@ -79,7 +79,7 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 	)
 
 	attempts := 0
-	topic := NewEventTopic("topic")
+	topic := typedEventTopic("topic")
 	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
 		attempts++
 		if attempts < 2 {
@@ -88,7 +88,7 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 		return nil
 	})
 
-	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -105,11 +105,11 @@ func TestRedisMetrics(t *testing.T) {
 	metrics := newRedisMetrics(reg)
 	store := NewRedisStoreWithMetrics(client, metrics)
 	soiree := NewEventPool(WithEventStore(store))
-	topic := NewEventTopic("topic")
+	topic := typedEventTopic("topic")
 
 	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error { return nil })
 
-	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	time.Sleep(100 * time.Millisecond)
 
