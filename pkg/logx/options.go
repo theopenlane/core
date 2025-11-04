@@ -74,9 +74,3 @@ func withPrefix(prefix string) ConfigSetter {
 		opts.prefix = prefix
 	}
 }
-
-func withField(name string, value any) ConfigSetter {
-	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.Interface(name, value)
-	}
-}
