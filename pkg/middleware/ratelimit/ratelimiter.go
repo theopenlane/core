@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -213,11 +213,7 @@ func buildLimiterKey(c echo.Context, headers []string, conf *Config) string {
 }
 
 func deriveRateLimitLogger(c echo.Context, key string) zerolog.Logger {
-	base := zerolog.Ctx(c.Request().Context())
-	if base == nil {
-		fallback := log.Logger
-		base = &fallback
-	}
+	base := logx.FromContext(c.Request().Context())
 
 	return base.With().
 		Str("component", rateLimitLogComponent).
