@@ -121,7 +121,7 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 // CheckOrgAccess checks if the requestor has access to read the organization
 func CheckOrgAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		zerolog.Ctx(ctx).Debug().Msg("checking org read access")
+		logx.FromContext(ctx).Debug().Msg("checking org read access")
 		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView)
 	})
 }

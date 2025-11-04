@@ -257,7 +257,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			Where(usersetting.UserID(user.ID), usersetting.DeletedAtIsNil()).
 			SetDefaultOrgID(lastOrgID).
 			Save(ctx); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update user's default organization after auto-join")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to update user's default organization after auto-join")
 
 			return err
 		}
