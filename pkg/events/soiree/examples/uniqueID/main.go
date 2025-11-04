@@ -21,14 +21,17 @@ func main() {
 	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener
-	listener := func(evt soiree.Event) error {
+	listener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		// The listener does something with the event
 		fmt.Printf("I have become aware of an event: %s with payload: %+v\n", evt.Topic(), evt.Payload())
 		return nil
 	}
 
 	// Subscribe the listener to a topic and retrieve the listener's unique ID
-	listenerID := soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
+	listenerID, err := soiree.OnTopic(e, userCreated, listener)
+	if err != nil {
+		panic(err)
+	}
 
 	// The listenerID returned from the subscription is the unique UUID generated for the listener
 	fmt.Printf("Listener with ID %s subscribed to topic 'user.created'\n", listenerID)

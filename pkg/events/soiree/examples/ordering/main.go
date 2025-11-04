@@ -15,7 +15,7 @@ func main() {
 	orderCreated := soiree.NewEventTopic("order.created")
 
 	// High-priority listener for order validation
-	validateOrderListener := func(evt soiree.Event) error {
+	validateOrderListener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		orderID := evt.Payload().(string)
 		// Perform validation logic...
 		fmt.Printf("Validating order: %s\n", orderID)
@@ -29,7 +29,7 @@ func main() {
 	}
 
 	// Listener for processing the payment
-	processPaymentListener := func(evt soiree.Event) error {
+	processPaymentListener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		if evt.IsAborted() {
 			fmt.Println("Payment processing skipped due to previous validation failure")
 			return nil
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// Listener for sending confirmation email
-	sendConfirmationEmailListener := func(evt soiree.Event) error {
+	sendConfirmationEmailListener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		if evt.IsAborted() {
 			fmt.Println("Confirmation email not sent due to event abort")
 			return nil
@@ -57,9 +57,15 @@ func main() {
 	}
 
 	// Subscribe listeners with specified priorities
-	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](validateOrderListener), soiree.WithPriority(soiree.Highest))
-	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](processPaymentListener), soiree.WithPriority(soiree.Normal))
-	soiree.MustOn(e, orderCreated, soiree.TypedListener[soiree.Event](sendConfirmationEmailListener), soiree.WithPriority(soiree.Low))
+	if _, err := soiree.OnTopic(e, orderCreated, validateOrderListener, soiree.WithPriority(soiree.Highest)); err != nil {
+		panic(err)
+	}
+	if _, err := soiree.OnTopic(e, orderCreated, processPaymentListener, soiree.WithPriority(soiree.Normal)); err != nil {
+		panic(err)
+	}
+	if _, err := soiree.OnTopic(e, orderCreated, sendConfirmationEmailListener, soiree.WithPriority(soiree.Low)); err != nil {
+		panic(err)
+	}
 
 	// Emit events for order creation
 	fmt.Println("Emitting event for order creation...")

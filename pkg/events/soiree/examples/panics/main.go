@@ -21,13 +21,15 @@ func main() {
 	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener that intentionally causes a panic
-	listener := func(evt soiree.Event) error {
+	listener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		// Simulating a panic situation
 		panic(fmt.Sprintf("George Costanza when there's a fire: %s", evt.Topic()))
 	}
 
 	// Subscribe the listener to a topic
-	soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
+	if _, err := soiree.OnTopic(e, userCreated, listener); err != nil {
+		panic(err)
+	}
 
 	// Emit an event which will cause the listener to panic
 	// Normally, you would check for errors and handle the error channel

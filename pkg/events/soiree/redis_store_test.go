@@ -13,6 +13,17 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+func mustRegisterListener(t *testing.T, pool *EventPool, topic TypedTopic[Event], listener TypedListener[Event], opts ...ListenerOption) string {
+	t.Helper()
+
+	id, err := OnTopic(pool, topic, listener, opts...)
+	if err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	return id
+}
+
 func newTestRedis(t *testing.T) *redis.Client {
 	mr, err := miniredis.Run()
 	if err != nil {
@@ -31,10 +42,10 @@ func TestRedisEventPersistence(t *testing.T) {
 	topic := NewEventTopic("topic")
 
 	done := make(chan struct{}, 1)
-	MustOn(soiree, topic, TypedListener[Event](func(e Event) error {
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
 		done <- struct{}{}
 		return nil
-	}))
+	})
 
 	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 
@@ -69,13 +80,13 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 
 	attempts := 0
 	topic := NewEventTopic("topic")
-	MustOn(soiree, topic, TypedListener[Event](func(e Event) error {
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
 		attempts++
 		if attempts < 2 {
 			return errors.New("fail")
 		}
 		return nil
-	}))
+	})
 
 	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 
@@ -96,7 +107,7 @@ func TestRedisMetrics(t *testing.T) {
 	soiree := NewEventPool(WithEventStore(store))
 	topic := NewEventTopic("topic")
 
-	MustOn(soiree, topic, TypedListener[Event](func(e Event) error { return nil }))
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error { return nil })
 
 	EmitTopic(soiree, topic, Event(NewBaseEvent(topic.Name(), "data")))
 

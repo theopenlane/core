@@ -26,13 +26,15 @@ func main() {
 	userCreated := soiree.NewEventTopic("user.created")
 
 	// Define an event listener that intentionally causes an error
-	listener := func(evt soiree.Event) error {
+	listener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		// Simulate an error
 		return fmt.Errorf("simulated error in listener for event: %s", evt.Topic())
 	}
 
 	// Subscribe the listener to a topic
-	soiree.MustOn(e, userCreated, soiree.TypedListener[soiree.Event](listener))
+	if _, err := soiree.OnTopic(e, userCreated, listener); err != nil {
+		panic(err)
+	}
 
 	// Emit an event which will cause the listener to error
 	errChan := soiree.EmitTopic(e, userCreated, soiree.Event(soiree.NewBaseEvent(userCreated.Name(), "Lady Sansa Stark of Witerfell")))

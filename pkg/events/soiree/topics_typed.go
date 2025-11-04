@@ -1,9 +1,6 @@
 package soiree
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
 var errNilEventPool = errors.New("event pool is nil")
 
@@ -16,7 +13,7 @@ type TypedTopic[T any] struct {
 }
 
 // TypedListener represents a listener that expects a strongly typed payload.
-type TypedListener[T any] func(T) error
+type TypedListener[T any] func(*EventContext, T) error
 
 // NewTypedTopic constructs a new typed topic with custom conversion helpers.
 func NewTypedTopic[T any](name string, wrap func(T) Event, unwrap func(Event) (T, error)) TypedTopic[T] {
@@ -36,11 +33,6 @@ func NewEventTopic(name string) TypedTopic[Event] {
 	)
 }
 
-// MutationTopic builds a topic following the `<entity>.<operation>` convention that we use for ent mutations.
-func MutationTopic(entity, operation string) TypedTopic[Event] {
-	return NewEventTopic(fmt.Sprintf("%s.%s", entity, operation))
-}
-
 // Name exposes the string representation of the topic.
 func (t TypedTopic[T]) Name() string {
 	return t.name
@@ -56,15 +48,6 @@ func BindListener[T any](topic TypedTopic[T], listener TypedListener[T], opts ..
 	return ListenerBinding{
 		register: func(pool *EventPool) (string, error) {
 			return OnTopic(pool, topic, listener, opts...)
-		},
-	}
-}
-
-// BindContextListener produces a binding for context-aware listeners.
-func BindContextListener[C any, T any](topic TypedTopic[T], listener ContextListener[C, T], opts ...ListenerOption) ListenerBinding {
-	return ListenerBinding{
-		register: func(pool *EventPool) (string, error) {
-			return OnTopicContext(pool, topic, listener, opts...)
 		},
 	}
 }

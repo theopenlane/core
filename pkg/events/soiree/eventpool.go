@@ -244,6 +244,16 @@ func (m *EventPool) EnsureTopic(topicName string) *Topic {
 	return topic.(*Topic)
 }
 
+// InterestedIn reports whether any listeners are registered for the given topic.
+func (m *EventPool) InterestedIn(topicName string) bool {
+	topic, err := m.GetTopic(topicName)
+	if err != nil {
+		return false
+	}
+
+	return topic.HasListeners()
+}
+
 // SetErrorHandler sets the error handler for the event pool
 func (m *EventPool) SetErrorHandler(handler func(Event, error) error) {
 	if handler != nil {
@@ -318,48 +328,18 @@ func OnTopic[T any](pool *EventPool, topic TypedTopic[T], listener TypedListener
 		return "", fmt.Errorf("missing unwrap helper for topic %s", topic.Name())
 	}
 
-	wrapped := func(event Event) error {
-		payload, err := topic.unwrap(event)
+	wrapped := func(ctx *EventContext) error {
+		payload, err := topic.unwrap(ctx.Event())
 		if err != nil {
 			return err
 		}
 
-		return listener(payload)
+		ctx.setPayload(payload)
+
+		return listener(ctx, payload)
 	}
 
 	return pool.On(topic.Name(), wrapped, opts...)
-}
-
-// OnTopicContext registers a context-aware listener on the provided topic.
-func OnTopicContext[C any, T any](pool *EventPool, topic TypedTopic[T], listener ContextListener[C, T], opts ...ListenerOption) (string, error) {
-	if pool == nil {
-		return "", errNilEventPool
-	}
-
-	if listener == nil {
-		return "", ErrNilListener
-	}
-
-	if !isValidTopicName(topic.Name()) {
-		return "", ErrInvalidTopicName
-	}
-
-	if topic.unwrap == nil {
-		return "", fmt.Errorf("missing unwrap helper for topic %s", topic.Name())
-	}
-
-	base := func(event Event) error {
-		payload, err := topic.unwrap(event)
-		if err != nil {
-			return err
-		}
-
-		ctx := newListenerContext[C](event, payload)
-
-		return listener(ctx)
-	}
-
-	return pool.On(topic.Name(), base, opts...)
 }
 
 // EmitTopic dispatches an event for the provided typed topic.
@@ -412,45 +392,6 @@ func (m *EventPool) RegisterListeners(bindings ...ListenerBinding) ([]string, er
 	return ids, nil
 }
 
-// MustOn registers the listener on the topic or panics if registration fails
-func MustOn[T any](pool *EventPool, topic TypedTopic[T], listener TypedListener[T], opts ...ListenerOption) string {
-	id, err := OnTopic(pool, topic, listener, opts...)
-	if err != nil {
-		panic(err)
-	}
-
-	return id
-}
-
-// EmitAsync emits a typed event and mirrors errors until completion or context cancellation
-func EmitAsync[T any](ctx context.Context, pool *EventPool, topic TypedTopic[T], payload T) <-chan error {
-	upstream := EmitTopic(pool, topic, payload)
-	errChan := make(chan error, cap(upstream))
-
-	go func() {
-		defer close(errChan)
-
-		for {
-			select {
-			case <-ctx.Done():
-				errChan <- ctx.Err()
-				// drain upstream to avoid goroutine leaks
-				for range upstream {
-				}
-				return
-			case err, ok := <-upstream:
-				if !ok {
-					return
-				}
-
-				errChan <- err
-			}
-		}
-	}()
-
-	return errChan
-}
-
 // triggerWithRetry executes topic listeners with retry and persistence
 func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 	topic.mu.RLock()
@@ -464,7 +405,7 @@ func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 			continue
 		}
 
-		if err := m.runListenerWithRetry(event, id, item.listener); err != nil {
+		if err := m.runListenerWithRetry(event, id, item); err != nil {
 			errs = append(errs, err)
 		}
 
@@ -476,8 +417,8 @@ func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 	return errs
 }
 
-// runListenerWithRetry executes a listener with retry logic and persistence
-func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listener) error {
+// runListenerWithRetry executes a listener with retry logic and persistence.
+func (m *EventPool) runListenerWithRetry(event Event, id string, item *listenerItem) error {
 	retries := m.maxRetries
 	if retries <= 0 {
 		retries = 1
@@ -488,9 +429,11 @@ func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listen
 	var lastErr error
 
 	for i := 0; i < retries; i++ {
-		lastErr = listener(event)
+		ctx := newEventContext(event)
+
+		lastErr = item.call(ctx)
 		if m.store != nil {
-			_ = m.store.SaveHandlerResult(event, id, lastErr)
+			_ = m.store.SaveHandlerResult(ctx.Event(), id, lastErr)
 		}
 
 		if lastErr == nil {
