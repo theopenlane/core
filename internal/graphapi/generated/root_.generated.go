@@ -88,6 +88,8 @@ type ComplexityRoot struct {
 		Scopes            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Token             func(childComplexity int) int
+		TokenPublicID     func(childComplexity int) int
+		TokenSecret       func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -3703,6 +3705,8 @@ type ComplexityRoot struct {
 		Scopes            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Token             func(childComplexity int) int
+		TokenPublicID     func(childComplexity int) int
+		TokenSecret       func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -6232,6 +6236,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APIToken.Token(childComplexity), true
+
+	case "APIToken.tokenPublicID":
+		if e.complexity.APIToken.TokenPublicID == nil {
+			break
+		}
+
+		return e.complexity.APIToken.TokenPublicID(childComplexity), true
+
+	case "APIToken.tokenSecret":
+		if e.complexity.APIToken.TokenSecret == nil {
+			break
+		}
+
+		return e.complexity.APIToken.TokenSecret(childComplexity), true
 
 	case "APIToken.updatedAt":
 		if e.complexity.APIToken.UpdatedAt == nil {
@@ -26160,6 +26178,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessToken.Token(childComplexity), true
 
+	case "PersonalAccessToken.tokenPublicID":
+		if e.complexity.PersonalAccessToken.TokenPublicID == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.TokenPublicID(childComplexity), true
+
+	case "PersonalAccessToken.tokenSecret":
+		if e.complexity.PersonalAccessToken.TokenSecret == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.TokenSecret(childComplexity), true
+
 	case "PersonalAccessToken.updatedAt":
 		if e.complexity.PersonalAccessToken.UpdatedAt == nil {
 			break
@@ -43265,6 +43297,14 @@ type APIToken implements Node {
   name: String!
   token: String!
   """
+  public identifier for the token (used to lookup token record)
+  """
+  tokenPublicID: String
+  """
+  secret portion of the token key material (stored for verification by token manager)
+  """
+  tokenSecret: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -43467,6 +43507,42 @@ input APITokenWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  token_public_id field predicates
+  """
+  tokenPublicID: String
+  tokenPublicIDNEQ: String
+  tokenPublicIDIn: [String!]
+  tokenPublicIDNotIn: [String!]
+  tokenPublicIDGT: String
+  tokenPublicIDGTE: String
+  tokenPublicIDLT: String
+  tokenPublicIDLTE: String
+  tokenPublicIDContains: String
+  tokenPublicIDHasPrefix: String
+  tokenPublicIDHasSuffix: String
+  tokenPublicIDIsNil: Boolean
+  tokenPublicIDNotNil: Boolean
+  tokenPublicIDEqualFold: String
+  tokenPublicIDContainsFold: String
+  """
+  token_secret field predicates
+  """
+  tokenSecret: String
+  tokenSecretNEQ: String
+  tokenSecretIn: [String!]
+  tokenSecretNotIn: [String!]
+  tokenSecretGT: String
+  tokenSecretGTE: String
+  tokenSecretLT: String
+  tokenSecretLTE: String
+  tokenSecretContains: String
+  tokenSecretHasPrefix: String
+  tokenSecretHasSuffix: String
+  tokenSecretIsNil: Boolean
+  tokenSecretNotNil: Boolean
+  tokenSecretEqualFold: String
+  tokenSecretContainsFold: String
   """
   expires_at field predicates
   """
@@ -52452,6 +52528,14 @@ input CreateAPITokenInput {
   """
   name: String!
   """
+  public identifier for the token (used to lookup token record)
+  """
+  tokenPublicID: String
+  """
+  secret portion of the token key material (stored for verification by token manager)
+  """
+  tokenSecret: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -54193,6 +54277,14 @@ input CreatePersonalAccessTokenInput {
   the name associated with the token
   """
   name: String!
+  """
+  public identifier for the token (used to lookup token record)
+  """
+  tokenPublicID: String
+  """
+  secret portion of the token key material (stored for verification by token manager)
+  """
+  tokenSecret: String
   """
   when the token expires
   """
@@ -79559,6 +79651,14 @@ type PersonalAccessToken implements Node {
   name: String!
   token: String!
   """
+  public identifier for the token (used to lookup token record)
+  """
+  tokenPublicID: String
+  """
+  secret portion of the token key material (stored for verification by token manager)
+  """
+  tokenSecret: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -79805,6 +79905,42 @@ input PersonalAccessTokenWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  token_public_id field predicates
+  """
+  tokenPublicID: String
+  tokenPublicIDNEQ: String
+  tokenPublicIDIn: [String!]
+  tokenPublicIDNotIn: [String!]
+  tokenPublicIDGT: String
+  tokenPublicIDGTE: String
+  tokenPublicIDLT: String
+  tokenPublicIDLTE: String
+  tokenPublicIDContains: String
+  tokenPublicIDHasPrefix: String
+  tokenPublicIDHasSuffix: String
+  tokenPublicIDIsNil: Boolean
+  tokenPublicIDNotNil: Boolean
+  tokenPublicIDEqualFold: String
+  tokenPublicIDContainsFold: String
+  """
+  token_secret field predicates
+  """
+  tokenSecret: String
+  tokenSecretNEQ: String
+  tokenSecretIn: [String!]
+  tokenSecretNotIn: [String!]
+  tokenSecretGT: String
+  tokenSecretGTE: String
+  tokenSecretLT: String
+  tokenSecretLTE: String
+  tokenSecretContains: String
+  tokenSecretHasPrefix: String
+  tokenSecretHasSuffix: String
+  tokenSecretIsNil: Boolean
+  tokenSecretNotNil: Boolean
+  tokenSecretEqualFold: String
+  tokenSecretContainsFold: String
   """
   expires_at field predicates
   """

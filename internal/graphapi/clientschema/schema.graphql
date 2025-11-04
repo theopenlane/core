@@ -46,6 +46,14 @@ type APIToken implements Node {
 	name: String!
 	token: String!
 	"""
+	public identifier for the token (used to lookup token record)
+	"""
+	tokenPublicID: String
+	"""
+	secret portion of the token key material (stored for verification by token manager)
+	"""
+	tokenSecret: String
+	"""
 	when the token expires
 	"""
 	expiresAt: Time
@@ -293,6 +301,42 @@ input APITokenWhereInput {
 	nameHasSuffix: String
 	nameEqualFold: String
 	nameContainsFold: String
+	"""
+	token_public_id field predicates
+	"""
+	tokenPublicID: String
+	tokenPublicIDNEQ: String
+	tokenPublicIDIn: [String!]
+	tokenPublicIDNotIn: [String!]
+	tokenPublicIDGT: String
+	tokenPublicIDGTE: String
+	tokenPublicIDLT: String
+	tokenPublicIDLTE: String
+	tokenPublicIDContains: String
+	tokenPublicIDHasPrefix: String
+	tokenPublicIDHasSuffix: String
+	tokenPublicIDIsNil: Boolean
+	tokenPublicIDNotNil: Boolean
+	tokenPublicIDEqualFold: String
+	tokenPublicIDContainsFold: String
+	"""
+	token_secret field predicates
+	"""
+	tokenSecret: String
+	tokenSecretNEQ: String
+	tokenSecretIn: [String!]
+	tokenSecretNotIn: [String!]
+	tokenSecretGT: String
+	tokenSecretGTE: String
+	tokenSecretLT: String
+	tokenSecretLTE: String
+	tokenSecretContains: String
+	tokenSecretHasPrefix: String
+	tokenSecretHasSuffix: String
+	tokenSecretIsNil: Boolean
+	tokenSecretNotNil: Boolean
+	tokenSecretEqualFold: String
+	tokenSecretContainsFold: String
 	"""
 	expires_at field predicates
 	"""
@@ -9913,6 +9957,14 @@ input CreateAPITokenInput {
 	"""
 	name: String!
 	"""
+	public identifier for the token (used to lookup token record)
+	"""
+	tokenPublicID: String
+	"""
+	secret portion of the token key material (stored for verification by token manager)
+	"""
+	tokenSecret: String
+	"""
 	when the token expires
 	"""
 	expiresAt: Time
@@ -11690,6 +11742,14 @@ input CreatePersonalAccessTokenInput {
 	the name associated with the token
 	"""
 	name: String!
+	"""
+	public identifier for the token (used to lookup token record)
+	"""
+	tokenPublicID: String
+	"""
+	secret portion of the token key material (stored for verification by token manager)
+	"""
+	tokenSecret: String
 	"""
 	when the token expires
 	"""
@@ -41911,6 +41971,14 @@ type PersonalAccessToken implements Node {
 	name: String!
 	token: String!
 	"""
+	public identifier for the token (used to lookup token record)
+	"""
+	tokenPublicID: String
+	"""
+	secret portion of the token key material (stored for verification by token manager)
+	"""
+	tokenSecret: String
+	"""
 	when the token expires
 	"""
 	expiresAt: Time
@@ -42193,6 +42261,42 @@ input PersonalAccessTokenWhereInput {
 	nameHasSuffix: String
 	nameEqualFold: String
 	nameContainsFold: String
+	"""
+	token_public_id field predicates
+	"""
+	tokenPublicID: String
+	tokenPublicIDNEQ: String
+	tokenPublicIDIn: [String!]
+	tokenPublicIDNotIn: [String!]
+	tokenPublicIDGT: String
+	tokenPublicIDGTE: String
+	tokenPublicIDLT: String
+	tokenPublicIDLTE: String
+	tokenPublicIDContains: String
+	tokenPublicIDHasPrefix: String
+	tokenPublicIDHasSuffix: String
+	tokenPublicIDIsNil: Boolean
+	tokenPublicIDNotNil: Boolean
+	tokenPublicIDEqualFold: String
+	tokenPublicIDContainsFold: String
+	"""
+	token_secret field predicates
+	"""
+	tokenSecret: String
+	tokenSecretNEQ: String
+	tokenSecretIn: [String!]
+	tokenSecretNotIn: [String!]
+	tokenSecretGT: String
+	tokenSecretGTE: String
+	tokenSecretLT: String
+	tokenSecretLTE: String
+	tokenSecretContains: String
+	tokenSecretHasPrefix: String
+	tokenSecretHasSuffix: String
+	tokenSecretIsNil: Boolean
+	tokenSecretNotNil: Boolean
+	tokenSecretEqualFold: String
+	tokenSecretContainsFold: String
 	"""
 	expires_at field predicates
 	"""

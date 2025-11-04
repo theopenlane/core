@@ -33,9 +33,10 @@ func HookCreatePersonalAccessToken() ent.Hook {
 			m.SetOwnerID(userID)
 
 			// generate key material and store in new token fields
+
 			if v, s, err := tokens.GenerateAPITokenKeyMaterial(); err == nil {
 				m.SetTokenPublicID(v)
-				m.SetTokenSecret(s)
+				m.SetTokenSecret(string(s))
 			} else {
 				return nil, err
 			}
@@ -67,6 +68,9 @@ func HookUpdatePersonalAccessToken() ent.Hook {
 			}
 
 			pat.Token = redacted
+			// redact token secret pointer safely
+			r := redacted
+			pat.TokenSecret = &r
 
 			return pat, nil
 		})

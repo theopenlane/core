@@ -73,6 +73,9 @@ func (APIToken) Fields() []ent.Field {
 			Immutable().
 			Optional().
 			Nillable().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
 			Comment("secret portion of the token key material (stored for verification by token manager)"),
 		field.Time("expires_at").
 			Comment("when the token expires").

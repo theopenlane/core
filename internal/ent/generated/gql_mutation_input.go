@@ -13,6 +13,8 @@ import (
 type CreateAPITokenInput struct {
 	Tags          []string
 	Name          string
+	TokenPublicID *string
+	TokenSecret   *string
 	ExpiresAt     *time.Time
 	Description   *string
 	Scopes        []string
@@ -30,6 +32,12 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
+	}
 	if v := i.ExpiresAt; v != nil {
 		m.SetExpiresAt(*v)
 	}
@@ -9307,6 +9315,8 @@ func (c *OrganizationSettingUpdateOne) SetInput(i UpdateOrganizationSettingInput
 type CreatePersonalAccessTokenInput struct {
 	Tags            []string
 	Name            string
+	TokenPublicID   *string
+	TokenSecret     *string
 	ExpiresAt       *time.Time
 	Description     *string
 	Scopes          []string
@@ -9322,6 +9332,12 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
+	}
 	if v := i.ExpiresAt; v != nil {
 		m.SetExpiresAt(*v)
 	}
