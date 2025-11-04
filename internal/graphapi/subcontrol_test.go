@@ -472,6 +472,8 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	kind := (&CustomTypeEnumBuilder{client: suite.client, ObjectType: "control"}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateSubcontrolInput
@@ -490,11 +492,12 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateSubcontrolInput{
-				Status:         &enums.ControlStatusPreparing,
-				Tags:           []string{"tag1", "tag2"},
-				Source:         lo.ToPtr(enums.ControlSourceUserDefined),
-				ControlOwnerID: &ownerGroup.ID,
-				DelegateID:     &delegateGroup.ID,
+				Status:             &enums.ControlStatusPreparing,
+				Tags:               []string{"tag1", "tag2"},
+				Source:             lo.ToPtr(enums.ControlSourceUserDefined),
+				ControlOwnerID:     &ownerGroup.ID,
+				DelegateID:         &delegateGroup.ID,
+				SubcontrolKindName: &kind.Name,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -568,6 +571,11 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.UpdateSubcontrol.Subcontrol.Delegate.ID))
 			} else {
 				assert.Check(t, is.Nil(resp.UpdateSubcontrol.Subcontrol.Delegate))
+			}
+
+			if tc.request.SubcontrolKindName != nil {
+				assert.Assert(t, resp.UpdateSubcontrol.Subcontrol.SubcontrolKindName != nil)
+				assert.Check(t, is.Equal(*tc.request.SubcontrolKindName, *resp.UpdateSubcontrol.Subcontrol.SubcontrolKindName))
 			}
 		})
 	}

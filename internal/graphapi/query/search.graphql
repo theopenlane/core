@@ -169,6 +169,22 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    customTypeEnums {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          objectType
+        }
+      }
+    }
     dnsVerifications {
       totalCount
       pageInfo {
@@ -661,6 +677,21 @@ query GlobalSearch($query: String!) {
           email
           id
           tags
+        }
+      }
+    }
+    tagDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
         }
       }
     }

@@ -102,7 +102,7 @@ func (m mixinConfig) getMixins(schema ent.Interface) []ent.Mixin {
 
 	// exclude tags if specified
 	if !m.excludeTags {
-		mixins = append(mixins, emixin.TagMixin{})
+		mixins = append(mixins, mixin.TagMixin{})
 	}
 
 	// include revision if specified
