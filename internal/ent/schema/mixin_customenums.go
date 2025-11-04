@@ -111,11 +111,6 @@ func (c CustomEnumMixin) Hooks() []ent.Hook {
 	}
 }
 
-// getEnumTypeField returns the name of the field on the object the enum applies to
-func (c CustomEnumMixin) getEnumTypeField() string {
-	return c.fieldName
-}
-
 // getEnumTypeValue returns the value of the enum type for the object the enum applies to
 func (c CustomEnumMixin) getEnumEdgeName() string {
 	sch := toSchemaFuncs(c.schemaType)
