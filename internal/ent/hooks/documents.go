@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
@@ -79,7 +80,7 @@ func HookImportDocument() ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			mut, ok := m.(importSchemaMutation)
 			if !ok {
-				log.Info().Msg("import document hook used on unsupported mutation type")
+				logx.FromContext(ctx).Info().Msg("import document hook used on unsupported mutation type")
 
 				return next.Mutate(ctx, m)
 			}

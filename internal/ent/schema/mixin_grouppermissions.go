@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -196,7 +196,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 			),
 		).IDs(ctx)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group IDs for user")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to get group IDs for user")
 
 			return err
 		}

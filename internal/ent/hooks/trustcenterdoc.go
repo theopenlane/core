@@ -5,12 +5,12 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -29,7 +29,7 @@ type internalTrustCenterDocUpdateKey struct{}
 func HookCreateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
-			zerolog.Ctx(ctx).Debug().Msg("trust center doc create hook")
+			logx.FromContext(ctx).Debug().Msg("trust center doc create hook")
 			// check for uploaded files (e.g. logo image)
 			fileIDs, _ := objects.FilesFromContextWithKey(ctx, "watermarkedTrustCenterDocFile")
 
@@ -106,7 +106,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			if trustCenterDoc.WatermarkingEnabled {
-				zerolog.Ctx(ctx).Debug().Msg("watermarking enabled, queuing job")
+				logx.FromContext(ctx).Debug().Msg("watermarking enabled, queuing job")
 				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
@@ -125,11 +125,11 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
 			if _, isInternal := contextx.From[internalTrustCenterDocUpdateKey](ctx); isInternal {
-				zerolog.Ctx(ctx).Debug().Msg("skipping update hook for internal operation")
+				logx.FromContext(ctx).Debug().Msg("skipping update hook for internal operation")
 				return next.Mutate(ctx, m)
 			}
 
-			zerolog.Ctx(ctx).Debug().Msg("trust center doc hook")
+			logx.FromContext(ctx).Debug().Msg("trust center doc hook")
 
 			// Process trust center doc file
 			docFiles, _ := objects.FilesFromContextWithKey(ctx, "trustCenterDocFile")
@@ -175,7 +175,7 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			_, mutationSetFileID := m.FileID()
 
-			zerolog.Ctx(ctx).Debug().Bool("file_uploaded", len(docFiles) > 0).Bool("watermark_file_uploaded", len(watermarkedFiles) > 0).Bool("mutation_sets_original_file_id", mutationSetsOriginalFileID).Bool("mutation_set_file_id", mutationSetFileID).Msg("trust center doc hook")
+			logx.FromContext(ctx).Debug().Bool("file_uploaded", len(docFiles) > 0).Bool("watermark_file_uploaded", len(watermarkedFiles) > 0).Bool("mutation_sets_original_file_id", mutationSetsOriginalFileID).Bool("mutation_set_file_id", mutationSetFileID).Msg("trust center doc hook")
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -292,7 +292,7 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 	// Apply the tuple changes if any
 	if len(writes) > 0 || len(deletes) > 0 {
 		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to update file access permissions")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to update file access permissions")
 			return err
 		}
 	}

@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -48,12 +48,12 @@ func HookDeleteCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
-				zerolog.Ctx(ctx).Debug().Msg("custom domain delete hook")
+				logx.FromContext(ctx).Debug().Msg("custom domain delete hook")
 
 				if !isDeleteOp(ctx, m) {
 					// only allow system admin to update
 					if !auth.IsSystemAdminFromContext(ctx) {
-						zerolog.Ctx(ctx).Warn().Msg("only system admins can update custom domains")
+						logx.FromContext(ctx).Warn().Msg("only system admins can update custom domains")
 
 						return nil, generated.ErrPermissionDenied
 					}

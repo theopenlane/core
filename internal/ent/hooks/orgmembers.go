@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func HookOrgMembers() ent.Hook {
@@ -67,7 +67,7 @@ func HookOrgMembers() ent.Hook {
 			// get the organization
 			org, err := m.Client().Organization.Query().WithSetting().Where(organization.ID(orgID)).Only(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get organization")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization")
 
 				return nil, err
 			}
@@ -83,7 +83,7 @@ func HookOrgMembers() ent.Hook {
 			// ensure user email can be added to the org
 			user, err := m.Client().User.Get(allowCtx, userID)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get user")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get user")
 
 				if generated.IsNotFound(err) {
 					// use a different error message for user not found
@@ -148,7 +148,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
-				zerolog.Ctx(ctx).Info().Msg("skipping org membership delete hook")
+				logx.FromContext(ctx).Info().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
 			}
@@ -182,7 +182,7 @@ func HookOrgMembersDelete() ent.Hook {
 			}
 
 			if err := deleteSystemManagedUserGroup(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group from organization")
+				logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's system managed group from organization")
 				return nil, err
 			}
 
@@ -198,7 +198,7 @@ func HookOrgMembersDelete() ent.Hook {
 				tuple := fgax.GetTupleKey(req)
 
 				if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
+					logx.FromContext(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
 					return nil, err
 				}
 			}
@@ -229,7 +229,7 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 	m *generated.OrgMembershipMutation, userID, orgID string) error {
 	user, err := m.Client().User.Get(ctx, userID)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user for managed group deletion")
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting user for managed group deletion")
 		return err
 	}
 
@@ -241,7 +241,7 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 			group.Name(getUserGroupName(user.DisplayName, user.ID)),
 		).Exec(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error deleting user's system managed group")
+		logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's system managed group")
 		return err
 	}
 
@@ -259,7 +259,7 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 
 	dbUser, err := m.Client().User.Get(allowCtx, member.UserID)
 	if err != nil {
-		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error fetching user from the database")
+		logx.FromContext(allowCtx).Error().Err(err).Msg("error fetching user from the database")
 		return err
 	}
 
@@ -289,8 +289,7 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		SetOwnerID(member.OrgID).
 		Save(allowCtx)
 	if err != nil {
-		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error creating user managed group")
-
+		logx.FromContext(allowCtx).Error().Err(err).Msg("error creating user managed group")
 		return err
 	}
 
@@ -301,7 +300,7 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 	}
 
 	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error adding user to their managed group")
+		logx.FromContext(allowCtx).Error().Err(err).Msg("error adding user to their managed group")
 		return err
 	}
 

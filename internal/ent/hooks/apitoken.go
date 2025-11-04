@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/fgax"
 
@@ -13,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func validateExpirationTime(m mutationWithExpirationTime) error {
@@ -78,7 +78,7 @@ func HookCreateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}
@@ -120,7 +120,7 @@ func HookUpdateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}

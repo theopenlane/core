@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
@@ -23,7 +23,7 @@ import (
 // then other schemas and is not always required so keeping it separate
 func InterceptorFile() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		zerolog.Ctx(ctx).Debug().Msg("InterceptorFile")
+		logx.FromContext(ctx).Debug().Msg("InterceptorFile")
 
 		var orgs []string
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
@@ -36,7 +36,7 @@ func InterceptorFile() ent.Interceptor {
 			}
 
 			if au.IsSystemAdmin {
-				zerolog.Ctx(ctx).Debug().Msg("user is system admin, skipping organization filter")
+				logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
 
 				return nil
 			}
@@ -66,7 +66,7 @@ func InterceptorFile() ent.Interceptor {
 func InterceptorPresignedURL() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.FileFunc(func(ctx context.Context, q *generated.FileQuery) (generated.Value, error) {
-			zerolog.Ctx(ctx).Debug().Msg("InterceptorPresignedURL")
+			logx.FromContext(ctx).Debug().Msg("InterceptorPresignedURL")
 
 			if proxy.ShouldBypassPresignInterceptor(ctx) {
 				return next.Query(ctx, q)
@@ -78,7 +78,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			}
 
 			if q.ObjectManager == nil {
-				zerolog.Ctx(ctx).Warn().Msg("object manager is nil, skipping presignedURL")
+				logx.FromContext(ctx).Warn().Msg("object manager is nil, skipping presignedURL")
 
 				return v, nil
 			}
@@ -96,7 +96,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			if ok {
 				for _, f := range res {
 					if err := setPresignedURL(ctx, f, q); err != nil {
-						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURL")
+						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURL")
 					}
 				}
 
@@ -107,7 +107,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			f, ok := v.(*generated.File)
 			if ok {
 				if err := setPresignedURL(ctx, f, q); err != nil {
-					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
+					logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
 				}
 
 				return v, nil
@@ -160,7 +160,7 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 
 	url, err := q.ObjectManager.GetPresignedURL(ctx, storageFile, presignedURLDuration)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to get presigned URL")
+		logx.FromContext(ctx).Err(err).Msg("failed to get presigned URL")
 
 		return err
 	}

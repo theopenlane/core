@@ -5,12 +5,11 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookProgramMembers is a hook that ensures that the user is a member of the organization
@@ -43,7 +42,7 @@ func HookProgramMembers() ent.Hook {
 				Where(orgmembership.OrganizationID(program.OwnerID)).
 				OnlyID(ctx)
 			if err != nil || orgMemberID == "" {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get org membership, cannot add user to program")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get org membership, cannot add user to program")
 
 				return nil, ErrUserNotInOrg
 			}

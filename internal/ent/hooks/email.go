@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // MutationWithEmail is an interface that mutations that require email validation must implement
@@ -45,13 +45,13 @@ func HookEmailValidation() ent.Hook {
 			// if email validation is enabled, verify the email address
 			verified, res, err := mut.Client().EmailVerifier.VerifyEmailAddress(email)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Str("email", email).Msg("error verifying email address")
+				logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error verifying email address")
 
 				return nil, validator.ErrEmailNotAllowed
 			}
 
 			if !verified {
-				zerolog.Ctx(ctx).Error().Str("email", email).Interface("result", res).Msg("email address not allowed")
+				logx.FromContext(ctx).Error().Str("email", email).Interface("result", res).Msg("email address not allowed")
 
 				return nil, validator.ErrEmailNotAllowed
 			}

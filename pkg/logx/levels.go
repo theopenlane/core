@@ -20,7 +20,10 @@ var (
 		zerolog.InfoLevel:  log.INFO,
 		zerolog.WarnLevel:  log.WARN,
 		zerolog.ErrorLevel: log.ERROR,
+		zerolog.FatalLevel: log.ERROR,
+		zerolog.PanicLevel: log.ERROR,
 		zerolog.NoLevel:    log.OFF,
+		zerolog.Disabled:   log.OFF,
 	}
 )
 

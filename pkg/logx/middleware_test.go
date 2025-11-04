@@ -80,7 +80,10 @@ func TestMiddleware(t *testing.T) {
 
 		b := &bytes.Buffer{}
 
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 			Enricher: func(c echo.Context, logger zerolog.Context) zerolog.Context {
@@ -109,7 +112,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
@@ -139,7 +145,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
@@ -171,7 +180,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
@@ -201,7 +213,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		l.SetLevel(log.INFO)
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,

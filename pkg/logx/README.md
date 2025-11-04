@@ -22,8 +22,11 @@ import (
 )
 
 func main() {
-    e := echo.New()
-    e.Logger = logx.New(os.Stdout)
+	e := echo.New()
+	loggers := logx.Configure(logx.LoggerConfig{
+		WithEcho: true,
+	})
+	e.Logger = loggers.Echo
 }
 ```
 
@@ -32,45 +35,21 @@ func main() {
 ```go
 package main
 
-import (
-	"os"
-	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/core/pkg/logx"
-    "github.com/rs/zerolog"
-)
-
 func main() {
-    log := zerolog.New(os.Stdout)
-    e := echo.New()
-    e.Logger = logx.From(log)
-}
-
-```
-
-## Options
-
-```go
-
-import (
-	"os",
-	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/core/pkg/logx"
-)
-
-func main() {
-    e := echo.New()
-    e.Logger = logx.New(
-       os.Stdout,
-       logx.WithLevel(log.DEBUG),
-       logx.WithFields(map[string]interface{}{ "name": "hot diggity dogs"}),
-       logx.WithTimestamp(),
-       logx.WithCaller(),
-       logx.WithPrefix("❤️ MITB"),
-       logx.WithHook(...),
-       logx.WithHookFunc(...),
-    )
+	e := echo.New()
+	loggers := logx.Configure(logx.LoggerConfig{
+		Writer:        os.Stdout,
+		Level:         zerolog.DebugLevel,
+		Pretty:        true,
+		IncludeCaller: true,
+		Hooks: []zerolog.HookFunc{
+			func(e *zerolog.Event, level zerolog.Level, msg string) {
+				e.Str("component", "api")
+			},
+		},
+		WithEcho: true,
+	})
+	e.Logger = loggers.Echo
 }
 ```
 
@@ -89,25 +68,26 @@ import (
 )
 
 func main() {
-    e := echo.New()
-    logger := logx.New(
-            os.Stdout,
-            logx.WithLevel(log.DEBUG),
-            logx.WithTimestamp(),
-            logx.WithCaller(),
-         )
-    e.Logger = logger
+	e := echo.New()
+loggers := logx.Configure(logx.LoggerConfig{
+		Writer:        os.Stdout,
+		Level:         zerolog.DebugLevel,
+		IncludeCaller: true,
+		WithEcho:      true,
+	})
+	logger := loggers.Echo
+	e.Logger = logger
 
-    e.Use(middleware.RequestID())
-    e.Use(logx.Middleware(logx.Config{
-    	Logger: logger
-    }))
-    e.GET("/", func(c echo.Context) error {
-        c.Logger().Print("echos interface")
-        zerolog.Ctx(c.Request().Context()).Print("zerlogs interface")
+	e.Use(middleware.RequestID())
+	e.Use(logx.LoggingMiddleware(logx.Config{
+		Logger: logger,
+	}))
+	e.GET("/", func(c echo.Context) error {
+		c.Logger().Print("echos interface")
+		logx.FromContext(c.Request().Context()).Print("zerlogs interface")
 
-	return c.String(http.StatusOK, "MITB babbyyyyy")
-    })
+		return c.String(http.StatusOK, "MITB babbyyyyy")
+	})
 }
 
 ```
@@ -199,20 +179,30 @@ func main() {
 
 ## Multiple Log output
 
-logx.New(zerolog.MultiLevelWriter(consoleWriter, os.Stdout))
-
-logx.From(zerolog.New(zerolog.MultiLevelWriter(consoleWriter, os.Stdout)))
-
-logx.Middleware(logx.Config{
-    Logger: logx.New(zerolog.MultiLevelWriter(consoleWriter, os.Stdout)),
+```go
+writer := zerolog.MultiLevelWriter(consoleWriter, os.Stdout)
+loggers := logx.Configure(logx.LoggerConfig{
+	Writer:   writer,
+	WithEcho: true,
 })
+middleware := logx.LoggingMiddleware(logx.Config{
+	Logger: loggers.Echo,
+})
+```
 
 ### Writing to a file with Lumberjack
 
-logx.New(&lumberjack.Logger{
-    Filename:   "/var/log/myapp/foo.log",
-    MaxSize:    500, // megabytes
-    MaxBackups: 3,
-    MaxAge:     28, //days
-    Compress:   true, // disabled by default
+```go
+fileLogger := &lumberjack.Logger{
+	Filename:   "/var/log/myapp/foo.log",
+	MaxSize:    500, // megabytes
+	MaxBackups: 3,
+	MaxAge:     28, // days
+	Compress:   true,
+}
+
+loggers := logx.Configure(logx.LoggerConfig{
+	Writer:   fileLogger,
+	WithEcho: true,
 })
+```

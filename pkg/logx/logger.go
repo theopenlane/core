@@ -3,11 +3,9 @@ package logx
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/labstack/gommon/log"
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/core/pkg/logx/consolelog"
 )
 
 // Logger is a wrapper around zerolog.Logger that provides an implementation of the echo.Logger interface
@@ -19,61 +17,24 @@ type Logger struct {
 	setters []ConfigSetter
 }
 
-// New returns a new Logger instance
-func New(out io.Writer, setters ...ConfigSetter) *Logger {
-	switch l := out.(type) {
-	case zerolog.Logger:
-		return newLogger(l, setters)
-	default:
-		return newLogger(zerolog.New(out), setters)
+func newLoggerFromExisting(logger zerolog.Logger, out io.Writer, setters []ConfigSetter) *Logger {
+	elvl, _ := MatchZeroLevel(logger.GetLevel())
+
+	var stored []ConfigSetter
+	if len(setters) > 0 {
+		stored = append([]ConfigSetter(nil), setters...)
 	}
-}
-
-// CreateLogger creates a new logger for the echo server based on the provided configuration
-func CreateLogger(level log.Lvl, pretty bool) *Logger {
-	var logger *Logger
-
-	setters := []ConfigSetter{
-		WithLevel(level),
-		WithTimestamp(),
-		WithCaller(),
-	}
-
-	// if PrettyLog is enabled, use the console writer for pretty logging
-	// otherwise, use the default stdout writer (json format)
-	if pretty {
-		cw := consolelog.NewConsoleWriter()
-		logger = New(
-			&cw,
-			setters...,
-		)
-	} else {
-		logger = New(
-			os.Stdout,
-			setters...,
-		)
-	}
-
-	return logger
-}
-
-// From returns a new Logger instance using existing zerolog log
-func From(log zerolog.Logger, setters ...ConfigSetter) *Logger {
-	return newLogger(log, setters)
-}
-
-// newLogger returns a new Logger instance
-func newLogger(log zerolog.Logger, setters []ConfigSetter) *Logger {
-	opts := newOptions(log, setters)
 
 	return &Logger{
-		log:     opts.zcontext.Logger(),
-		out:     nil,
-		level:   opts.level,
-		prefix:  opts.prefix,
-		setters: setters,
+		log:     logger,
+		out:     out,
+		level:   elvl,
+		prefix:  "",
+		setters: stored,
 	}
 }
+
+// These are all implementations of the echo.Logger interface that we have to satisfy
 
 // Write implements the io.Writer interface for Logger
 func (l *Logger) Write(p []byte) (n int, err error) {
@@ -194,6 +155,11 @@ func (l *Logger) Output() io.Writer {
 func (l *Logger) SetOutput(newOut io.Writer) {
 	l.out = newOut
 	l.log = l.log.Output(newOut)
+	if len(l.setters) > 0 {
+		cloned := append([]ConfigSetter(nil), l.setters...)
+		opts := newOptions(l.log, cloned)
+		l.log = opts.zcontext.Logger()
+	}
 }
 
 // Level implements echo.Logger interface
@@ -222,7 +188,7 @@ func (l *Logger) SetHeader(_ string) {
 
 // SetPrefix implements echo.Logger interface
 func (l *Logger) SetPrefix(newPrefix string) {
-	l.setters = append(l.setters, WithPrefix(newPrefix))
+	l.setters = append(l.setters, withPrefix(newPrefix))
 
 	opts := newOptions(l.log, l.setters)
 

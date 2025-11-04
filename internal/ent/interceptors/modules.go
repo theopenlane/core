@@ -8,12 +8,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	features "github.com/theopenlane/core/internal/entitlements/features"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -62,7 +62,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				err = ErrFeatureNotEnabled
 			}
 
-			zerolog.Ctx(ctx).Info().Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
+			logx.FromContext(ctx).Info().Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found
@@ -129,7 +129,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 			} else if fieldCheck != "search" {
 				// this shouldn't happen unless a REST request is requesting data that isn't in the base module
 				// adding warning here to indicate potential misconfiguration
-				zerolog.Ctx(ctx).Info().Str("field", fieldCheck).Msg("graphql operation not found, unable to set graphql error for missing module")
+				logx.FromContext(ctx).Info().Str("field", fieldCheck).Msg("graphql operation not found, unable to set graphql error for missing module")
 
 				return generated.ErrPermissionDenied
 			}

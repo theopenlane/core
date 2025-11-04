@@ -4,18 +4,18 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
 func HookTrustCenterWatermarkConfig() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterWatermarkConfigFunc(func(ctx context.Context, m *generated.TrustCenterWatermarkConfigMutation) (generated.Value, error) {
-			zerolog.Ctx(ctx).Debug().Msg("trust center watermark config hook")
+			logx.FromContext(ctx).Debug().Msg("trust center watermark config hook")
 
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
