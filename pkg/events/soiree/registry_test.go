@@ -10,10 +10,10 @@ import (
 func TestShutdownAll(t *testing.T) {
 	p1 := NewEventPool()
 	p2 := NewEventPool()
-	topic := NewEventTopic("a")
+	topic := "a"
 
 	// ensure pools accept events before shutdown
-	errChan := EmitTopic(p1, topic, Event(NewBaseEvent(topic.Name(), nil)))
+	errChan := p1.Emit(topic, NewBaseEvent(topic, nil))
 	for err := range errChan {
 		require.NoError(t, err)
 	}
@@ -21,11 +21,11 @@ func TestShutdownAll(t *testing.T) {
 	require.NoError(t, ShutdownAll())
 
 	// both pools should be closed
-	ch1 := EmitTopic(p1, topic, Event(NewBaseEvent(topic.Name(), nil)))
+	ch1 := p1.Emit(topic, NewBaseEvent(topic, nil))
 	err1 := <-ch1
 	require.ErrorIs(t, err1, ErrEmitterClosed)
 
-	ch2 := EmitTopic(p2, topic, Event(NewBaseEvent(topic.Name(), nil)))
+	ch2 := p2.Emit(topic, NewBaseEvent(topic, nil))
 	err2 := <-ch2
 	require.ErrorIs(t, err2, ErrEmitterClosed)
 

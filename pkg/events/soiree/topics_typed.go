@@ -1,5 +1,7 @@
 package soiree
 
+import "fmt"
+
 // TypedTopic represents a strongly typed event topic. It carries helpers that convert
 // between the strongly typed payload and the internal soiree.Event representation.
 type TypedTopic[T any] struct {
@@ -20,15 +22,6 @@ func NewTypedTopic[T any](name string, wrap func(T) Event, unwrap func(Event) (T
 	}
 }
 
-// NewEventTopic creates a typed topic that uses the raw soiree.Event interface as the payload type.
-func NewEventTopic(name string) TypedTopic[Event] {
-	return NewTypedTopic(
-		name,
-		func(e Event) Event { return e },
-		func(e Event) (Event, error) { return e, nil },
-	)
-}
-
 // Name exposes the string representation of the topic.
 func (t TypedTopic[T]) Name() string {
 	return t.name
@@ -43,7 +36,34 @@ type ListenerBinding struct {
 func BindListener[T any](topic TypedTopic[T], listener TypedListener[T], opts ...ListenerOption) ListenerBinding {
 	return ListenerBinding{
 		register: func(pool *EventPool) (string, error) {
-			return OnTopic(pool, topic, listener, opts...)
+			if pool == nil {
+				return "", errNilEventPool
+			}
+
+			if listener == nil {
+				return "", ErrNilListener
+			}
+
+			if !isValidTopicName(topic.Name()) {
+				return "", ErrInvalidTopicName
+			}
+
+			if topic.unwrap == nil {
+				return "", fmt.Errorf("%w: %s", errMissingTypedUnwrap, topic.Name())
+			}
+
+			wrapped := func(ctx *EventContext) error {
+				payload, err := topic.unwrap(ctx.Event())
+				if err != nil {
+					return err
+				}
+
+				ctx.setPayload(payload)
+
+				return listener(ctx, payload)
+			}
+
+			return pool.On(topic.Name(), wrapped, opts...)
 		},
 	}
 }
@@ -57,4 +77,9 @@ func (b ListenerBinding) registerWith(pool *EventPool) (string, error) {
 	}
 
 	return b.register(pool)
+}
+
+// Register registers the listener binding on the provided pool
+func (b ListenerBinding) Register(pool *EventPool) (string, error) {
+	return b.registerWith(pool)
 }

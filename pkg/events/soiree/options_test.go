@@ -9,21 +9,25 @@ import (
 )
 
 func defaultTopic() TypedTopic[Event] {
-	return NewEventTopic("testTopic")
+	return NewTypedTopic(
+		"testTopic",
+		func(e Event) Event { return e },
+		func(e Event) (Event, error) { return e, nil },
+	)
 }
 
 func subscribeDefaultTopic(pool *EventPool, listener TypedListener[Event], opts ...ListenerOption) (string, error) {
-	return OnTopic(pool, defaultTopic(), listener, opts...)
+	return BindListener(defaultTopic(), listener, opts...).Register(pool)
 }
 
 func emitDefaultTopicSync(pool *EventPool, payload any) []error {
 	topic := defaultTopic()
-	return EmitTopicSync(pool, topic, Event(NewBaseEvent(topic.Name(), payload)))
+	return pool.EmitSync(topic.Name(), NewBaseEvent(topic.Name(), payload))
 }
 
 func emitDefaultTopicAsync(pool *EventPool, payload any) <-chan error {
 	topic := defaultTopic()
-	return EmitTopic(pool, topic, Event(NewBaseEvent(topic.Name(), payload)))
+	return pool.Emit(topic.Name(), NewBaseEvent(topic.Name(), payload))
 }
 
 const errorMessage = "On() failed with error: %v"

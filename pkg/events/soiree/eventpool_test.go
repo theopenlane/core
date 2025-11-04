@@ -8,7 +8,7 @@ import (
 )
 
 func mustOnTopic(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
-	id, err := OnTopic(pool, NewEventTopic(topic), listener, opts...)
+	id, err := BindListener(typedEventTopic(topic), listener, opts...).Register(pool)
 	if err != nil {
 		panic(err)
 	}
@@ -17,11 +17,11 @@ func mustOnTopic(pool *EventPool, topic string, listener TypedListener[Event], o
 }
 
 func emitTopicWithPayload(pool *EventPool, topic string, payload any) <-chan error {
-	return EmitTopic(pool, NewEventTopic(topic), Event(NewBaseEvent(topic, payload)))
+	return pool.Emit(topic, Event(NewBaseEvent(topic, payload)))
 }
 
 func emitExistingEvent(pool *EventPool, event Event) <-chan error {
-	return EmitTopic(pool, NewEventTopic(event.Topic()), event)
+	return pool.Emit(event.Topic(), event)
 }
 
 func TestEventPoolBasics(t *testing.T) {
@@ -68,7 +68,7 @@ func NewTestEvent(topic string, payload any) *TestEvent {
 }
 
 func TestEmitSync(t *testing.T) {
-	soiree := NewEventPool()
+	pool := NewEventPool()
 	topic := "testTopic"
 	event := NewTestEvent(topic, "testPayload")
 
@@ -96,13 +96,13 @@ func TestEmitSync(t *testing.T) {
 	for _, tc := range cases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			soiree.topics.Range(func(key, value any) bool {
-				soiree.topics.Delete(key)
+			pool.topics.Range(func(key, value any) bool {
+				pool.topics.Delete(key)
 				return true
 			})
 
-			mustOnTopic(soiree, topic, tc.listener)
-			errs := EmitTopicSync(soiree, NewEventTopic(event.Topic()), Event(event))
+			mustOnTopic(pool, topic, tc.listener)
+			errs := pool.EmitSync(event.Topic(), Event(event))
 
 			if tc.expectErr && len(errs) == 0 {
 				t.Fatal("expected emit sync to return errors")
@@ -137,7 +137,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 	for _, topic := range topics {
 		event := NewTestEvent(topic, "testPayload")
 		topicName := topic
-		_, err := OnTopic(soiree, NewEventTopic(event.Topic()), func(ctx *EventContext, e Event) error {
+		_, err := BindListener(typedEventTopic(event.Topic()), func(ctx *EventContext, e Event) error {
 			// Record the event in the receivedEvents map
 			eventKey := e.Topic()
 			t.Logf("Listener received event on topic: %s with payload: %s", topicName, eventKey)
@@ -145,7 +145,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 			payloadEvents.(*sync.Map).Store(topicName, struct{}{})
 
 			return nil
-		})
+		}).Register(soiree)
 
 		if err != nil {
 			t.Fatalf("Failed to subscribe to topic %s: %s", topic, err)

@@ -13,20 +13,22 @@ import (
 func main() {
 	client := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 
-	e := soiree.NewEventPool(
+	pool := soiree.NewEventPool(
 		soiree.WithRedisStore(client),
 		soiree.WithRetry(3, func() backoff.BackOff {
 			return backoff.NewConstantBackOff(500 * time.Millisecond)
 		}),
 	)
-	taskCreated := soiree.NewEventTopic("task.created")
 
-	if _, err := soiree.OnTopic(e, taskCreated, func(_ *soiree.EventContext, evt soiree.Event) error {
+	topic := "task.created"
+
+	if _, err := pool.On(topic, func(ctx *soiree.EventContext) error {
 		// Handle the event and return an error to trigger retries
+		_ = ctx
 		return nil
 	}); err != nil {
 		panic(err)
 	}
 
-	soiree.EmitTopic(e, taskCreated, soiree.Event(soiree.NewBaseEvent(taskCreated.Name(), "some payload")))
+	pool.Emit(topic, soiree.NewBaseEvent(topic, "some payload"))
 }

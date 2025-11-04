@@ -12,7 +12,7 @@ import (
 )
 
 func mustSubscribe(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
-	id, err := OnTopic(pool, NewEventTopic(topic), listener, opts...)
+	id, err := BindListener(typedEventTopic(topic), listener, opts...).Register(pool)
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +21,7 @@ func mustSubscribe(pool *EventPool, topic string, listener TypedListener[Event],
 }
 
 func emitPayload(pool *EventPool, topic string, payload any) <-chan error {
-	return EmitTopic(pool, NewEventTopic(topic), Event(NewBaseEvent(topic, payload)))
+	return pool.Emit(topic, Event(NewBaseEvent(topic, payload)))
 }
 
 func TestEmitEventWithPool(t *testing.T) {
