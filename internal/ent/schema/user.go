@@ -66,7 +66,7 @@ func (User) Mixin() []ent.Mixin {
 			HumanIdentifierPrefix: "USR",
 			SingleFieldIndex:      true,
 		},
-		emixin.TagMixin{},
+		mixin.TagMixin{},
 		mixin.GraphQLAnnotationMixin{},
 	}
 }

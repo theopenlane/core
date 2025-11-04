@@ -120,6 +120,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Control_systemInternalID(ctx, field)
+			case "controlKindName":
+				return ec.fieldContext_Control_controlKindName(ctx, field)
+			case "controlKindID":
+				return ec.fieldContext_Control_controlKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -154,6 +158,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
+			case "controlKind":
+				return ec.fieldContext_Control_controlKind(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -296,6 +302,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Control_systemInternalID(ctx, field)
+			case "controlKindName":
+				return ec.fieldContext_Control_controlKindName(ctx, field)
+			case "controlKindID":
+				return ec.fieldContext_Control_controlKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -330,6 +340,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
+			case "controlKind":
+				return ec.fieldContext_Control_controlKind(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -472,6 +484,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Control_systemInternalID(ctx, field)
+			case "controlKindName":
+				return ec.fieldContext_Control_controlKindName(ctx, field)
+			case "controlKindID":
+				return ec.fieldContext_Control_controlKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -506,6 +522,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
+			case "controlKind":
+				return ec.fieldContext_Control_controlKind(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -648,6 +666,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Control_systemInternalID(ctx, field)
+			case "controlKindName":
+				return ec.fieldContext_Control_controlKindName(ctx, field)
+			case "controlKindID":
+				return ec.fieldContext_Control_controlKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -682,6 +704,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
+			case "controlKind":
+				return ec.fieldContext_Control_controlKind(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":

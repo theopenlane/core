@@ -95,6 +95,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
+			newCustomEnumMixin(i),
 		},
 	}.getMixins(i)
 }

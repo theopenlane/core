@@ -787,19 +787,19 @@ func NameContainsFold(v string) predicate.AssessmentHistory {
 }
 
 // AssessmentTypeEQ applies the EQ predicate on the "assessment_type" field.
-func AssessmentTypeEQ(v enums.AssesmentType) predicate.AssessmentHistory {
+func AssessmentTypeEQ(v enums.AssessmentType) predicate.AssessmentHistory {
 	vc := v
 	return predicate.AssessmentHistory(sql.FieldEQ(FieldAssessmentType, vc))
 }
 
 // AssessmentTypeNEQ applies the NEQ predicate on the "assessment_type" field.
-func AssessmentTypeNEQ(v enums.AssesmentType) predicate.AssessmentHistory {
+func AssessmentTypeNEQ(v enums.AssessmentType) predicate.AssessmentHistory {
 	vc := v
 	return predicate.AssessmentHistory(sql.FieldNEQ(FieldAssessmentType, vc))
 }
 
 // AssessmentTypeIn applies the In predicate on the "assessment_type" field.
-func AssessmentTypeIn(vs ...enums.AssesmentType) predicate.AssessmentHistory {
+func AssessmentTypeIn(vs ...enums.AssessmentType) predicate.AssessmentHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -808,7 +808,7 @@ func AssessmentTypeIn(vs ...enums.AssesmentType) predicate.AssessmentHistory {
 }
 
 // AssessmentTypeNotIn applies the NotIn predicate on the "assessment_type" field.
-func AssessmentTypeNotIn(vs ...enums.AssesmentType) predicate.AssessmentHistory {
+func AssessmentTypeNotIn(vs ...enums.AssessmentType) predicate.AssessmentHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]

@@ -186,6 +186,16 @@ func SystemInternalID(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// ProcedureKindName applies equality check predicate on the "procedure_kind_name" field. It's identical to ProcedureKindNameEQ.
+func ProcedureKindName(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindID applies equality check predicate on the "procedure_kind_id" field. It's identical to ProcedureKindIDEQ.
+func ProcedureKindID(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureKindID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1889,6 +1899,156 @@ func SystemInternalIDEqualFold(v string) predicate.ProcedureHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// ProcedureKindNameEQ applies the EQ predicate on the "procedure_kind_name" field.
+func ProcedureKindNameEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameNEQ applies the NEQ predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameIn applies the In predicate on the "procedure_kind_name" field.
+func ProcedureKindNameIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldProcedureKindName, vs...))
+}
+
+// ProcedureKindNameNotIn applies the NotIn predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldProcedureKindName, vs...))
+}
+
+// ProcedureKindNameGT applies the GT predicate on the "procedure_kind_name" field.
+func ProcedureKindNameGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameGTE applies the GTE predicate on the "procedure_kind_name" field.
+func ProcedureKindNameGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameLT applies the LT predicate on the "procedure_kind_name" field.
+func ProcedureKindNameLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameLTE applies the LTE predicate on the "procedure_kind_name" field.
+func ProcedureKindNameLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameContains applies the Contains predicate on the "procedure_kind_name" field.
+func ProcedureKindNameContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameHasPrefix applies the HasPrefix predicate on the "procedure_kind_name" field.
+func ProcedureKindNameHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameHasSuffix applies the HasSuffix predicate on the "procedure_kind_name" field.
+func ProcedureKindNameHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameIsNil applies the IsNil predicate on the "procedure_kind_name" field.
+func ProcedureKindNameIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldProcedureKindName))
+}
+
+// ProcedureKindNameNotNil applies the NotNil predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldProcedureKindName))
+}
+
+// ProcedureKindNameEqualFold applies the EqualFold predicate on the "procedure_kind_name" field.
+func ProcedureKindNameEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameContainsFold applies the ContainsFold predicate on the "procedure_kind_name" field.
+func ProcedureKindNameContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldProcedureKindName, v))
+}
+
+// ProcedureKindIDEQ applies the EQ predicate on the "procedure_kind_id" field.
+func ProcedureKindIDEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDNEQ applies the NEQ predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDIn applies the In predicate on the "procedure_kind_id" field.
+func ProcedureKindIDIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldProcedureKindID, vs...))
+}
+
+// ProcedureKindIDNotIn applies the NotIn predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldProcedureKindID, vs...))
+}
+
+// ProcedureKindIDGT applies the GT predicate on the "procedure_kind_id" field.
+func ProcedureKindIDGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDGTE applies the GTE predicate on the "procedure_kind_id" field.
+func ProcedureKindIDGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDLT applies the LT predicate on the "procedure_kind_id" field.
+func ProcedureKindIDLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDLTE applies the LTE predicate on the "procedure_kind_id" field.
+func ProcedureKindIDLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDContains applies the Contains predicate on the "procedure_kind_id" field.
+func ProcedureKindIDContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDHasPrefix applies the HasPrefix predicate on the "procedure_kind_id" field.
+func ProcedureKindIDHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDHasSuffix applies the HasSuffix predicate on the "procedure_kind_id" field.
+func ProcedureKindIDHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDIsNil applies the IsNil predicate on the "procedure_kind_id" field.
+func ProcedureKindIDIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldProcedureKindID))
+}
+
+// ProcedureKindIDNotNil applies the NotNil predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldProcedureKindID))
+}
+
+// ProcedureKindIDEqualFold applies the EqualFold predicate on the "procedure_kind_id" field.
+func ProcedureKindIDEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDContainsFold applies the ContainsFold predicate on the "procedure_kind_id" field.
+func ProcedureKindIDContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldProcedureKindID, v))
 }
 
 // And groups predicates with the AND operator between them.

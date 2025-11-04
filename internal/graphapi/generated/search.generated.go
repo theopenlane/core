@@ -466,6 +466,43 @@ func (ec *executionContext) fieldContext_SearchResults_customDomains(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_customTypeEnums(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_customTypeEnums,
+		func(ctx context.Context) (any, error) {
+			return obj.CustomTypeEnums, nil
+		},
+		nil,
+		ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_CustomTypeEnumConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CustomTypeEnumConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CustomTypeEnumConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1576,6 +1613,43 @@ func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_tagDefinitions(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_tagDefinitions,
+		func(ctx context.Context) (any, error) {
+			return obj.TagDefinitions, nil
+		},
+		nil,
+		ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_tagDefinitions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_TagDefinitionConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_TagDefinitionConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_TagDefinitionConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_tasks(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1964,6 +2038,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
 		case "customDomains":
 			out.Values[i] = ec._SearchResults_customDomains(ctx, field, obj)
+		case "customTypeEnums":
+			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
 		case "dnsVerifications":
 			out.Values[i] = ec._SearchResults_dnsVerifications(ctx, field, obj)
 		case "documentData":
@@ -2024,6 +2100,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_subprocessors(ctx, field, obj)
 		case "subscribers":
 			out.Values[i] = ec._SearchResults_subscribers(ctx, field, obj)
+		case "tagDefinitions":
+			out.Values[i] = ec._SearchResults_tagDefinitions(ctx, field, obj)
 		case "tasks":
 			out.Values[i] = ec._SearchResults_tasks(ctx, field, obj)
 		case "templates":

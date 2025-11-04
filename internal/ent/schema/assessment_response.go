@@ -67,8 +67,8 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Default(1),
 
 		field.Enum("status").
-			GoType(enums.AssesmentResponseStatus("")).
-			Default(enums.AssesmentResponseStatusNotStarted.String()).
+			GoType(enums.AssessmentResponseStatus("")).
+			Default(enums.AssessmentResponseStatusNotStarted.String()).
 			Comment("the current status of the assessment for this user").
 			Annotations(
 				entgql.OrderField("status"),

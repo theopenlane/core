@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -109,6 +110,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -210,6 +212,7 @@ func checkColumn(t, c string) error {
 			controlobjectivehistory.Table:           controlobjectivehistory.ValidColumn,
 			customdomain.Table:                      customdomain.ValidColumn,
 			customdomainhistory.Table:               customdomainhistory.ValidColumn,
+			customtypeenum.Table:                    customtypeenum.ValidColumn,
 			dnsverification.Table:                   dnsverification.ValidColumn,
 			dnsverificationhistory.Table:            dnsverificationhistory.ValidColumn,
 			documentdata.Table:                      documentdata.ValidColumn,
@@ -289,6 +292,7 @@ func checkColumn(t, c string) error {
 			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,
 			subscriber.Table:                        subscriber.ValidColumn,
 			tfasetting.Table:                        tfasetting.ValidColumn,
+			tagdefinition.Table:                     tagdefinition.ValidColumn,
 			task.Table:                              task.ValidColumn,
 			taskhistory.Table:                       taskhistory.ValidColumn,
 			template.Table:                          template.ValidColumn,

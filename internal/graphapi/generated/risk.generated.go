@@ -68,6 +68,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Risk_ownerID(ctx, field)
+			case "riskKindName":
+				return ec.fieldContext_Risk_riskKindName(ctx, field)
+			case "riskKindID":
+				return ec.fieldContext_Risk_riskKindID(ctx, field)
+			case "riskCategoryName":
+				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
+			case "riskCategoryID":
+				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -100,6 +108,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -202,6 +214,14 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Risk_ownerID(ctx, field)
+			case "riskKindName":
+				return ec.fieldContext_Risk_riskKindName(ctx, field)
+			case "riskKindID":
+				return ec.fieldContext_Risk_riskKindID(ctx, field)
+			case "riskCategoryName":
+				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
+			case "riskCategoryID":
+				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -234,6 +254,10 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -336,6 +360,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Risk_ownerID(ctx, field)
+			case "riskKindName":
+				return ec.fieldContext_Risk_riskKindName(ctx, field)
+			case "riskKindID":
+				return ec.fieldContext_Risk_riskKindID(ctx, field)
+			case "riskCategoryName":
+				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
+			case "riskCategoryID":
+				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -368,6 +400,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -470,6 +506,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Risk_ownerID(ctx, field)
+			case "riskKindName":
+				return ec.fieldContext_Risk_riskKindName(ctx, field)
+			case "riskKindID":
+				return ec.fieldContext_Risk_riskKindID(ctx, field)
+			case "riskCategoryName":
+				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
+			case "riskCategoryID":
+				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -502,6 +546,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "riskKind":
+				return ec.fieldContext_Risk_riskKind(ctx, field)
+			case "riskCategory":
+				return ec.fieldContext_Risk_riskCategory(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":

@@ -31,13 +31,13 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 	otherOwner := suite.userBuilder(context.Background(), t)
 
 	testCases := []struct {
-		name            string
-		newOwnerEmail   string
-		client          *testclient.TestClient
-		ctx             context.Context
-		expectedInvite  bool
-		expectedErr     string
-		checkTransfer   bool
+		name           string
+		newOwnerEmail  string
+		client         *testclient.TestClient
+		ctx            context.Context
+		expectedInvite bool
+		expectedErr    string
+		checkTransfer  bool
 	}{
 		{
 			name:           "happy path, transfer to existing member",

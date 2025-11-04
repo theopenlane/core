@@ -609,6 +609,13 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 					for _, tag := range tc.input.AppendTags {
 						assert.Check(t, slices.Contains(contact.Tags, tag))
 					}
+
+					tagDefs, err := tc.client.GetTagDefinitions(tc.ctx, nil, nil, &testclient.TagDefinitionWhereInput{
+						NameIn: tc.input.AppendTags,
+					})
+
+					assert.NilError(t, err)
+					assert.Check(t, is.Len(tagDefs.TagDefinitions.Edges, len(tc.input.AppendTags)))
 				}
 
 				if tc.input.ClearTags != nil && *tc.input.ClearTags {

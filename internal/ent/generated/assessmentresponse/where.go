@@ -764,19 +764,19 @@ func SendAttemptsLTE(v int) predicate.AssessmentResponse {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v enums.AssesmentResponseStatus) predicate.AssessmentResponse {
+func StatusEQ(v enums.AssessmentResponseStatus) predicate.AssessmentResponse {
 	vc := v
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v enums.AssesmentResponseStatus) predicate.AssessmentResponse {
+func StatusNEQ(v enums.AssessmentResponseStatus) predicate.AssessmentResponse {
 	vc := v
 	return predicate.AssessmentResponse(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...enums.AssesmentResponseStatus) predicate.AssessmentResponse {
+func StatusIn(vs ...enums.AssessmentResponseStatus) predicate.AssessmentResponse {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -785,7 +785,7 @@ func StatusIn(vs ...enums.AssesmentResponseStatus) predicate.AssessmentResponse 
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...enums.AssesmentResponseStatus) predicate.AssessmentResponse {
+func StatusNotIn(vs ...enums.AssessmentResponseStatus) predicate.AssessmentResponse {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]

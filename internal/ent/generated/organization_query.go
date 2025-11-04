@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -64,6 +65,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -150,6 +152,8 @@ type OrganizationQuery struct {
 	withImpersonationEvents                *ImpersonationEventQuery
 	withAssessments                        *AssessmentQuery
 	withAssessmentResponses                *AssessmentResponseQuery
+	withCustomTypeEnums                    *CustomTypeEnumQuery
+	withTagDefinitions                     *TagDefinitionQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -220,6 +224,8 @@ type OrganizationQuery struct {
 	withNamedImpersonationEvents           map[string]*ImpersonationEventQuery
 	withNamedAssessments                   map[string]*AssessmentQuery
 	withNamedAssessmentResponses           map[string]*AssessmentResponseQuery
+	withNamedCustomTypeEnums               map[string]*CustomTypeEnumQuery
+	withNamedTagDefinitions                map[string]*TagDefinitionQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -2007,6 +2013,56 @@ func (_q *OrganizationQuery) QueryAssessmentResponses() *AssessmentResponseQuery
 	return query
 }
 
+// QueryCustomTypeEnums chains the current query on the "custom_type_enums" edge.
+func (_q *OrganizationQuery) QueryCustomTypeEnums() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomTypeEnumsTable, organization.CustomTypeEnumsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTagDefinitions chains the current query on the "tag_definitions" edge.
+func (_q *OrganizationQuery) QueryTagDefinitions() *TagDefinitionQuery {
+	query := (&TagDefinitionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(tagdefinition.Table, tagdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TagDefinitionsTable, organization.TagDefinitionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TagDefinition
+		step.Edge.Schema = schemaConfig.TagDefinition
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2294,6 +2350,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withImpersonationEvents:           _q.withImpersonationEvents.Clone(),
 		withAssessments:                   _q.withAssessments.Clone(),
 		withAssessmentResponses:           _q.withAssessmentResponses.Clone(),
+		withCustomTypeEnums:               _q.withCustomTypeEnums.Clone(),
+		withTagDefinitions:                _q.withTagDefinitions.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -3072,6 +3130,28 @@ func (_q *OrganizationQuery) WithAssessmentResponses(opts ...func(*AssessmentRes
 	return _q
 }
 
+// WithCustomTypeEnums tells the query-builder to eager-load the nodes that are connected to
+// the "custom_type_enums" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCustomTypeEnums(opts ...func(*CustomTypeEnumQuery)) *OrganizationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCustomTypeEnums = query
+	return _q
+}
+
+// WithTagDefinitions tells the query-builder to eager-load the nodes that are connected to
+// the "tag_definitions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithTagDefinitions(opts ...func(*TagDefinitionQuery)) *OrganizationQuery {
+	query := (&TagDefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTagDefinitions = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3167,7 +3247,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [71]bool{
+		loadedTypes = [73]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3238,6 +3318,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withImpersonationEvents != nil,
 			_q.withAssessments != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withCustomTypeEnums != nil,
+			_q.withTagDefinitions != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3783,6 +3865,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withCustomTypeEnums; query != nil {
+		if err := _q.loadCustomTypeEnums(ctx, query, nodes,
+			func(n *Organization) { n.Edges.CustomTypeEnums = []*CustomTypeEnum{} },
+			func(n *Organization, e *CustomTypeEnum) { n.Edges.CustomTypeEnums = append(n.Edges.CustomTypeEnums, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTagDefinitions; query != nil {
+		if err := _q.loadTagDefinitions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.TagDefinitions = []*TagDefinition{} },
+			func(n *Organization, e *TagDefinition) { n.Edges.TagDefinitions = append(n.Edges.TagDefinitions, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4260,6 +4356,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAssessmentResponses(name) },
 			func(n *Organization, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCustomTypeEnums {
+		if err := _q.loadCustomTypeEnums(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCustomTypeEnums(name) },
+			func(n *Organization, e *CustomTypeEnum) { n.appendNamedCustomTypeEnums(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTagDefinitions {
+		if err := _q.loadTagDefinitions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedTagDefinitions(name) },
+			func(n *Organization, e *TagDefinition) { n.appendNamedTagDefinitions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5574,6 +5684,7 @@ func (_q *OrganizationQuery) loadTasks(ctx context.Context, query *TaskQuery, no
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(task.FieldOwnerID)
 	}
@@ -5604,6 +5715,7 @@ func (_q *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(program.FieldOwnerID)
 	}
@@ -5665,6 +5777,7 @@ func (_q *OrganizationQuery) loadInternalPolicies(ctx context.Context, query *In
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(internalpolicy.FieldOwnerID)
 	}
@@ -5787,6 +5900,7 @@ func (_q *OrganizationQuery) loadControls(ctx context.Context, query *ControlQue
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(control.FieldOwnerID)
 	}
@@ -6519,6 +6633,66 @@ func (_q *OrganizationQuery) loadAssessmentResponses(ctx context.Context, query 
 	}
 	query.Where(predicate.AssessmentResponse(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.AssessmentResponsesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadCustomTypeEnums(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *CustomTypeEnum)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(customtypeenum.FieldOwnerID)
+	}
+	query.Where(predicate.CustomTypeEnum(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CustomTypeEnumsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadTagDefinitions(ctx context.Context, query *TagDefinitionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TagDefinition)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(tagdefinition.FieldOwnerID)
+	}
+	query.Where(predicate.TagDefinition(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TagDefinitionsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -7604,6 +7778,34 @@ func (_q *OrganizationQuery) WithNamedAssessmentResponses(name string, opts ...f
 		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
 	}
 	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedCustomTypeEnums tells the query-builder to eager-load the nodes that are connected to the "custom_type_enums"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCustomTypeEnums(name string, opts ...func(*CustomTypeEnumQuery)) *OrganizationQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCustomTypeEnums == nil {
+		_q.withNamedCustomTypeEnums = make(map[string]*CustomTypeEnumQuery)
+	}
+	_q.withNamedCustomTypeEnums[name] = query
+	return _q
+}
+
+// WithNamedTagDefinitions tells the query-builder to eager-load the nodes that are connected to the "tag_definitions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedTagDefinitions(name string, opts ...func(*TagDefinitionQuery)) *OrganizationQuery {
+	query := (&TagDefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTagDefinitions == nil {
+		_q.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery)
+	}
+	_q.withNamedTagDefinitions[name] = query
 	return _q
 }
 

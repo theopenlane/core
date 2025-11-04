@@ -183,6 +183,16 @@ func SystemInternalID(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// SubcontrolKindName applies equality check predicate on the "subcontrol_kind_name" field. It's identical to SubcontrolKindNameEQ.
+func SubcontrolKindName(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindID applies equality check predicate on the "subcontrol_kind_id" field. It's identical to SubcontrolKindIDEQ.
+func SubcontrolKindID(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSubcontrolKindID, v))
+}
+
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
 func RefCode(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldRefCode, v))
@@ -1988,6 +1998,156 @@ func SystemInternalIDContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
+// SubcontrolKindNameEQ applies the EQ predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameNEQ applies the NEQ predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameIn applies the In predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldSubcontrolKindName, vs...))
+}
+
+// SubcontrolKindNameNotIn applies the NotIn predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldSubcontrolKindName, vs...))
+}
+
+// SubcontrolKindNameGT applies the GT predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameGTE applies the GTE predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameLT applies the LT predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameLTE applies the LTE predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameContains applies the Contains predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameHasPrefix applies the HasPrefix predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameHasSuffix applies the HasSuffix predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameIsNil applies the IsNil predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldSubcontrolKindName))
+}
+
+// SubcontrolKindNameNotNil applies the NotNil predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldSubcontrolKindName))
+}
+
+// SubcontrolKindNameEqualFold applies the EqualFold predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindNameContainsFold applies the ContainsFold predicate on the "subcontrol_kind_name" field.
+func SubcontrolKindNameContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldSubcontrolKindName, v))
+}
+
+// SubcontrolKindIDEQ applies the EQ predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDNEQ applies the NEQ predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDIn applies the In predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldSubcontrolKindID, vs...))
+}
+
+// SubcontrolKindIDNotIn applies the NotIn predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldSubcontrolKindID, vs...))
+}
+
+// SubcontrolKindIDGT applies the GT predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDGTE applies the GTE predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDLT applies the LT predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDLTE applies the LTE predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDContains applies the Contains predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDHasPrefix applies the HasPrefix predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDHasSuffix applies the HasSuffix predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDIsNil applies the IsNil predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldSubcontrolKindID))
+}
+
+// SubcontrolKindIDNotNil applies the NotNil predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldSubcontrolKindID))
+}
+
+// SubcontrolKindIDEqualFold applies the EqualFold predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldSubcontrolKindID, v))
+}
+
+// SubcontrolKindIDContainsFold applies the ContainsFold predicate on the "subcontrol_kind_id" field.
+func SubcontrolKindIDContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldSubcontrolKindID, v))
+}
+
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.
 func RefCodeEQ(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldRefCode, v))
@@ -2486,6 +2646,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Subcontrol {
 		step := newOwnerStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubcontrolKind applies the HasEdge predicate on the "subcontrol_kind" edge.
+func HasSubcontrolKind() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolKindTable, SubcontrolKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolKindWith applies the HasEdge predicate on the "subcontrol_kind" edge with a given conditions (other predicates).
+func HasSubcontrolKindWith(preds ...predicate.CustomTypeEnum) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newSubcontrolKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

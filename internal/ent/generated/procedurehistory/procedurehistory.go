@@ -86,6 +86,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldProcedureKindName holds the string denoting the procedure_kind_name field in the database.
+	FieldProcedureKindName = "procedure_kind_name"
+	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
+	FieldProcedureKindID = "procedure_kind_id"
 	// Table holds the table name of the procedurehistory in the database.
 	Table = "procedure_history"
 )
@@ -127,6 +131,8 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldProcedureKindName,
+	FieldProcedureKindID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -357,6 +363,16 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByProcedureKindName orders the results by the procedure_kind_name field.
+func ByProcedureKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindName, opts...).ToFunc()
+}
+
+// ByProcedureKindID orders the results by the procedure_kind_id field.
+func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
 }
 
 var (

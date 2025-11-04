@@ -136,13 +136,13 @@ func (_c *AssessmentCreate) SetName(v string) *AssessmentCreate {
 }
 
 // SetAssessmentType sets the "assessment_type" field.
-func (_c *AssessmentCreate) SetAssessmentType(v enums.AssesmentType) *AssessmentCreate {
+func (_c *AssessmentCreate) SetAssessmentType(v enums.AssessmentType) *AssessmentCreate {
 	_c.mutation.SetAssessmentType(v)
 	return _c
 }
 
 // SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
-func (_c *AssessmentCreate) SetNillableAssessmentType(v *enums.AssesmentType) *AssessmentCreate {
+func (_c *AssessmentCreate) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentCreate {
 	if v != nil {
 		_c.SetAssessmentType(*v)
 	}

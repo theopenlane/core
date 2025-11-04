@@ -167,6 +167,34 @@ func (_c *TaskHistoryCreate) SetNillableOwnerID(v *string) *TaskHistoryCreate {
 	return _c
 }
 
+// SetTaskKindName sets the "task_kind_name" field.
+func (_c *TaskHistoryCreate) SetTaskKindName(v string) *TaskHistoryCreate {
+	_c.mutation.SetTaskKindName(v)
+	return _c
+}
+
+// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableTaskKindName(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetTaskKindName(*v)
+	}
+	return _c
+}
+
+// SetTaskKindID sets the "task_kind_id" field.
+func (_c *TaskHistoryCreate) SetTaskKindID(v string) *TaskHistoryCreate {
+	_c.mutation.SetTaskKindID(v)
+	return _c
+}
+
+// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableTaskKindID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetTaskKindID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *TaskHistoryCreate) SetTitle(v string) *TaskHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -271,6 +299,40 @@ func (_c *TaskHistoryCreate) SetNillableAssignerID(v *string) *TaskHistoryCreate
 	return _c
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_c *TaskHistoryCreate) SetSystemGenerated(v bool) *TaskHistoryCreate {
+	_c.mutation.SetSystemGenerated(v)
+	return _c
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableSystemGenerated(v *bool) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetSystemGenerated(*v)
+	}
+	return _c
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_c *TaskHistoryCreate) SetIdempotencyKey(v string) *TaskHistoryCreate {
+	_c.mutation.SetIdempotencyKey(v)
+	return _c
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableIdempotencyKey(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetIdempotencyKey(*v)
+	}
+	return _c
+}
+
+// SetExternalReferenceURL sets the "external_reference_url" field.
+func (_c *TaskHistoryCreate) SetExternalReferenceURL(v []string) *TaskHistoryCreate {
+	_c.mutation.SetExternalReferenceURL(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TaskHistoryCreate) SetID(v string) *TaskHistoryCreate {
 	_c.mutation.SetID(v)
@@ -351,6 +413,10 @@ func (_c *TaskHistoryCreate) defaults() error {
 		v := taskhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.SystemGenerated(); !ok {
+		v := taskhistory.DefaultSystemGenerated
+		_c.mutation.SetSystemGenerated(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if taskhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.DefaultID (forgotten import generated/runtime?)")
@@ -387,6 +453,9 @@ func (_c *TaskHistoryCreate) check() error {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.SystemGenerated(); !ok {
+		return &ValidationError{Name: "system_generated", err: errors.New(`generated: missing required field "TaskHistory.system_generated"`)}
 	}
 	return nil
 }
@@ -472,6 +541,14 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(taskhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.TaskKindName(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindName, field.TypeString, value)
+		_node.TaskKindName = value
+	}
+	if value, ok := _c.mutation.TaskKindID(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
+		_node.TaskKindID = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -503,6 +580,18 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.AssignerID(); ok {
 		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 		_node.AssignerID = value
+	}
+	if value, ok := _c.mutation.SystemGenerated(); ok {
+		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+		_node.SystemGenerated = value
+	}
+	if value, ok := _c.mutation.IdempotencyKey(); ok {
+		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
+		_node.IdempotencyKey = value
+	}
+	if value, ok := _c.mutation.ExternalReferenceURL(); ok {
+		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
+		_node.ExternalReferenceURL = value
 	}
 	return _node, _spec
 }

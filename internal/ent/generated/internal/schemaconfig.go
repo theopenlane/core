@@ -45,6 +45,7 @@ type SchemaConfig struct {
 	ControlObjectiveHistory            string // ControlObjectiveHistory table.
 	CustomDomain                       string // CustomDomain table.
 	CustomDomainHistory                string // CustomDomainHistory table.
+	CustomTypeEnum                     string // CustomTypeEnum table.
 	DNSVerification                    string // DNSVerification table.
 	DNSVerificationHistory             string // DNSVerificationHistory table.
 	DocumentData                       string // DocumentData table.
@@ -211,6 +212,7 @@ type SchemaConfig struct {
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	TFASetting                         string // TFASetting table.
+	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
 	TaskEvidence                       string // Task-evidence->Evidence table.
 	TaskHistory                        string // TaskHistory table.

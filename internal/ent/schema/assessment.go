@@ -44,8 +44,8 @@ func (Assessment) Fields() []ent.Field {
 			),
 
 		field.Enum("assessment_type").
-			GoType(enums.AssesmentType("")).
-			Default(enums.AssesmentTypeInternal.String()).
+			GoType(enums.AssessmentType("")).
+			Default(enums.AssessmentTypeInternal.String()).
 			Immutable().
 			Annotations(
 				entgql.OrderField("assessment_type"),

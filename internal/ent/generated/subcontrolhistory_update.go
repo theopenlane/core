@@ -608,6 +608,46 @@ func (_u *SubcontrolHistoryUpdate) ClearSystemInternalID() *SubcontrolHistoryUpd
 	return _u
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_u *SubcontrolHistoryUpdate) SetSubcontrolKindName(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetSubcontrolKindName(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableSubcontrolKindName(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetSubcontrolKindName(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindName clears the value of the "subcontrol_kind_name" field.
+func (_u *SubcontrolHistoryUpdate) ClearSubcontrolKindName() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearSubcontrolKindName()
+	return _u
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_u *SubcontrolHistoryUpdate) SetSubcontrolKindID(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetSubcontrolKindID(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableSubcontrolKindID(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetSubcontrolKindID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindID clears the value of the "subcontrol_kind_id" field.
+func (_u *SubcontrolHistoryUpdate) ClearSubcontrolKindID() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearSubcontrolKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdate) SetRefCode(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetRefCode(v)
@@ -960,6 +1000,18 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindName, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)
@@ -1565,6 +1617,46 @@ func (_u *SubcontrolHistoryUpdateOne) ClearSystemInternalID() *SubcontrolHistory
 	return _u
 }
 
+// SetSubcontrolKindName sets the "subcontrol_kind_name" field.
+func (_u *SubcontrolHistoryUpdateOne) SetSubcontrolKindName(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetSubcontrolKindName(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindName sets the "subcontrol_kind_name" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableSubcontrolKindName(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubcontrolKindName(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindName clears the value of the "subcontrol_kind_name" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearSubcontrolKindName() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearSubcontrolKindName()
+	return _u
+}
+
+// SetSubcontrolKindID sets the "subcontrol_kind_id" field.
+func (_u *SubcontrolHistoryUpdateOne) SetSubcontrolKindID(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetSubcontrolKindID(v)
+	return _u
+}
+
+// SetNillableSubcontrolKindID sets the "subcontrol_kind_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableSubcontrolKindID(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubcontrolKindID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolKindID clears the value of the "subcontrol_kind_id" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearSubcontrolKindID() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearSubcontrolKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdateOne) SetRefCode(v string) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -1947,6 +2039,18 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindName, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubcontrolKindID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString, value)
+	}
+	if _u.mutation.SubcontrolKindIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

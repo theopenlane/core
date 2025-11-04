@@ -88,6 +88,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 			NewDocumentMixin(a),
 			newOrgOwnedMixin(a),
 			mixin.NewSystemOwnedMixin(),
+			newCustomEnumMixin(a),
 		}}.getMixins(a)
 }
 

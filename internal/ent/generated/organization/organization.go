@@ -189,6 +189,10 @@ const (
 	EdgeAssessments = "assessments"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeCustomTypeEnums holds the string denoting the custom_type_enums edge name in mutations.
+	EdgeCustomTypeEnums = "custom_type_enums"
+	// EdgeTagDefinitions holds the string denoting the tag_definitions edge name in mutations.
+	EdgeTagDefinitions = "tag_definitions"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -669,6 +673,20 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "owner_id"
+	// CustomTypeEnumsTable is the table that holds the custom_type_enums relation/edge.
+	CustomTypeEnumsTable = "custom_type_enums"
+	// CustomTypeEnumsInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	CustomTypeEnumsInverseTable = "custom_type_enums"
+	// CustomTypeEnumsColumn is the table column denoting the custom_type_enums relation/edge.
+	CustomTypeEnumsColumn = "owner_id"
+	// TagDefinitionsTable is the table that holds the tag_definitions relation/edge.
+	TagDefinitionsTable = "tag_definitions"
+	// TagDefinitionsInverseTable is the table name for the TagDefinition entity.
+	// It exists in this package in order to avoid circular dependency with the "tagdefinition" package.
+	TagDefinitionsInverseTable = "tag_definitions"
+	// TagDefinitionsColumn is the table column denoting the tag_definitions relation/edge.
+	TagDefinitionsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -731,7 +749,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [21]ent.Hook
+	Hooks        [22]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1809,6 +1827,34 @@ func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByCustomTypeEnumsCount orders the results by custom_type_enums count.
+func ByCustomTypeEnumsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCustomTypeEnumsStep(), opts...)
+	}
+}
+
+// ByCustomTypeEnums orders the results by custom_type_enums terms.
+func ByCustomTypeEnums(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCustomTypeEnumsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTagDefinitionsCount orders the results by tag_definitions count.
+func ByTagDefinitionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTagDefinitionsStep(), opts...)
+	}
+}
+
+// ByTagDefinitions orders the results by tag_definitions terms.
+func ByTagDefinitions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTagDefinitionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2310,6 +2356,20 @@ func newAssessmentResponsesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newCustomTypeEnumsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CustomTypeEnumsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CustomTypeEnumsTable, CustomTypeEnumsColumn),
+	)
+}
+func newTagDefinitionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TagDefinitionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TagDefinitionsTable, TagDefinitionsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

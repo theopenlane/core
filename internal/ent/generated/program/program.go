@@ -36,6 +36,10 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldProgramKindName holds the string denoting the program_kind_name field in the database.
+	FieldProgramKindName = "program_kind_name"
+	// FieldProgramKindID holds the string denoting the program_kind_id field in the database.
+	FieldProgramKindID = "program_kind_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -72,6 +76,8 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeProgramKind holds the string denoting the program_kind edge name in mutations.
+	EdgeProgramKind = "program_kind"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -126,6 +132,13 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// ProgramKindTable is the table that holds the program_kind relation/edge.
+	ProgramKindTable = "programs"
+	// ProgramKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ProgramKindInverseTable = "custom_type_enums"
+	// ProgramKindColumn is the table column denoting the program_kind relation/edge.
+	ProgramKindColumn = "program_kind_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "program_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -223,6 +236,8 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldProgramKindName,
+	FieldProgramKindID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -237,6 +252,12 @@ var Columns = []string{
 	FieldAuditor,
 	FieldAuditorEmail,
 	FieldProgramOwnerID,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "programs"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"custom_type_enum_programs",
 }
 
 var (
@@ -291,6 +312,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -300,7 +326,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -399,6 +425,16 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByProgramKindName orders the results by the program_kind_name field.
+func ByProgramKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramKindName, opts...).ToFunc()
+}
+
+// ByProgramKindID orders the results by the program_kind_id field.
+func ByProgramKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramKindID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -517,6 +553,13 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramKindField orders the results by program_kind field.
+func ByProgramKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -748,6 +791,13 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newProgramKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ProgramKindTable, ProgramKindColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
