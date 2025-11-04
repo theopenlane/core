@@ -285,10 +285,18 @@ objectStorage:
             proxyPresignEnabled: false
             region: ""
 ratelimit:
-    burst: 30
+    denyMessage: Too many requests
+    denyStatus: 429
+    dryRun: true
     enabled: false
-    expires: 600000000000
-    limit: 10
+    forwardedIndexFromBehind: 0
+    headers:
+        - True-Client-IP
+    includeMethod: false
+    includePath: false
+    keyPrefix: ""
+    options: null
+    sendRetryAfterHeader: true
 redis:
     address: localhost:6379
     db: 0

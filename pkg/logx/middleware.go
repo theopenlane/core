@@ -188,6 +188,18 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("client_ip", c.RealIP())
 	evt.Str("request_protocol", req.Proto)
 
+	if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
+		evt.Str("true_client_ip", trueClientIP)
+	}
+
+	if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
+		evt.Str("x_forwarded_for", forwardedFor)
+	}
+
+	if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
+		evt.Str("x_real_ip", realIP)
+	}
+
 	cl := req.Header.Get(echo.HeaderContentLength)
 	if cl == "" {
 		cl = "0"

@@ -50,7 +50,7 @@ func main() {
 func rateLimitMiddleware(rateLimiter *ratelimiter.RateLimiter) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			remoteIP := GetRemoteIP([]string{"X-Forwarded-For", "RemoteAddr", "X-Real-IP"}, 0, r)
+			remoteIP := GetRemoteIP([]string{"X-Forwarded-For", "RemoteAddr", "True-Client-IP"}, 0, r)
 			key := fmt.Sprintf("%s_%s_%s", remoteIP, r.URL.String(), r.Method)
 
 			limitStatus, err := rateLimiter.Check(key)
@@ -109,3 +109,7 @@ func (f FakeDataStore) Get(key string, previousWindow, currentWindow time.Time) 
 rateLimiter := ratelimiter.New(FakeDataStore{}, maxLimit, windowSize)
 
 ```
+
+### Dry-run mode
+
+When the middleware is configured with `dryRun: true`, limit checks are still executed and logged using `zerolog`, but requests are not blocked. This is useful for validating rate limit settings in production before enforcing them.

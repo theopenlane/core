@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
@@ -16,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -147,10 +145,6 @@ var (
 	mw = []echo.MiddlewareFunc{}
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
-
-	restrictedRateLimit = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
-	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
-	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
@@ -159,8 +153,6 @@ var (
 	authenticatedEndpoint = &authMW
 	// publicEndpoint for standard public endpoints
 	publicEndpoint = &mw
-	// restrictedEndpoint for rate-limited endpoints
-	restrictedEndpoint = &restrictedEndpointsMW
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
 	unauthenticatedEndpoint = &baseMW
 )
@@ -573,8 +565,6 @@ func (r *Router) AddGraphQLToOpenAPI() {
 func RegisterRoutes(router *Router) error {
 	// base middleware for all routes that does not included additional middleware
 	baseMW = baseMiddleware(router)
-	// Middleware for restricted endpoints
-	restrictedEndpointsMW = restrictedMiddleware(router)
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
@@ -675,16 +665,6 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
 
 	return append(mw, middleware.Recover(), mimeMiddleware, transactionConfig.Middleware)
-}
-
-// restrictedMiddleware returns the middleware for the router that is used on restricted routes
-// it includes the base middleware, the rate limiter, and any additional middleware
-func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
-	mw := baseMW
-	// add the restricted endpoints middleware (includes csrf)
-	mw = append(mw, router.Handler.AdditionalMiddleware...)
-	// add the rate limiter middleware
-	return append(mw, ratelimit.RateLimiterWithConfig(restrictedRateLimit))
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes

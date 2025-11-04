@@ -20,7 +20,7 @@ Config contains the configuration for the core server
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
-|[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
+|[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
 |[**objectStorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
@@ -103,7 +103,11 @@ Config contains the configuration for the core server
     },
     "sessions": {},
     "totp": {},
-    "ratelimit": {},
+    "ratelimit": {
+        "options": [
+            {}
+        ]
+    },
     "objectStorage": {
         "providers": {
             "s3": {
@@ -1242,7 +1246,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 <a name="ratelimit"></a>
 ## ratelimit: object
 
-Config defines the configuration settings for the default rate limiter
+Config defines the configuration settings for the rate limiter middleware.
 
 
 **Properties**
@@ -1250,11 +1254,47 @@ Config defines the configuration settings for the default rate limiter
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|**limit**|`number`|||
-|**burst**|`integer`|||
-|**expires**|`integer`|||
+|[**options**](#ratelimitoptions)|`array`|||
+|[**headers**](#ratelimitheaders)|`string[]`|||
+|**forwardedIndexFromBehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
+|**includePath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
+|**includeMethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
+|**keyPrefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
+|**denyStatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
+|**denyMessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
+|**sendRetryAfterHeader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
+|**dryRun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "options": [
+        {}
+    ]
+}
+```
+
+<a name="ratelimitoptions"></a>
+### ratelimit\.options: array
+
+**Items**
+
+**Example**
+
+```json
+[
+    {}
+]
+```
+
+<a name="ratelimitheaders"></a>
+### ratelimit\.headers: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="objectstorage"></a>
 ## objectStorage: object
 

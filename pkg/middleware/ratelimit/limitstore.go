@@ -1,4 +1,4 @@
-package ratelimiter
+package ratelimit
 
 import (
 	"time"
@@ -31,6 +31,16 @@ func New(dataStore LimitStore, requestsLimit int64, windowSize time.Duration) *R
 		requestsLimit: requestsLimit,
 		windowSize:    windowSize,
 	}
+}
+
+// RequestsLimit returns the maximum number of requests allowed within the window.
+func (r *RateLimiter) RequestsLimit() int64 {
+	return r.requestsLimit
+}
+
+// WindowSize returns the duration of the configured window.
+func (r *RateLimiter) WindowSize() time.Duration {
+	return r.windowSize
 }
 
 // Inc increments the limit counter for a given key
