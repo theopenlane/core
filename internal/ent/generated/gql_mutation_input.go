@@ -609,7 +609,7 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 type CreateAssessmentInput struct {
 	Tags                  []string
 	Name                  string
-	AssessmentType        *enums.AssesmentType
+	AssessmentType        *enums.AssessmentType
 	AssessmentOwnerID     *string
 	OwnerID               *string
 	BlockedGroupIDs       []string
@@ -762,7 +762,7 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
 	Email        string
-	Status       *enums.AssesmentResponseStatus
+	Status       *enums.AssessmentResponseStatus
 	AssignedAt   time.Time
 	StartedAt    *time.Time
 	CompletedAt  *time.Time
@@ -805,7 +805,7 @@ func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *As
 
 // UpdateAssessmentResponseInput represents a mutation input for updating assessmentresponses.
 type UpdateAssessmentResponseInput struct {
-	Status           *enums.AssesmentResponseStatus
+	Status           *enums.AssessmentResponseStatus
 	StartedAt        *time.Time
 	ClearCompletedAt bool
 	CompletedAt      *time.Time

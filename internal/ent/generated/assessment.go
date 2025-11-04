@@ -40,7 +40,7 @@ type Assessment struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
-	AssessmentType enums.AssesmentType `json:"assessment_type,omitempty"`
+	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
 	// the template id associated with the assessment
 	TemplateID string `json:"template_id,omitempty"`
 	// the id of the group that owns the assessment
@@ -227,7 +227,7 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_type", values[i])
 			} else if value.Valid {
-				_m.AssessmentType = enums.AssesmentType(value.String)
+				_m.AssessmentType = enums.AssessmentType(value.String)
 			}
 		case assessment.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {

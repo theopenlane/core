@@ -3789,17 +3789,17 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 }
 
 type CreateAssessment_CreateAssessment_Assessment struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentOwnerID() *string {
@@ -3924,17 +3924,17 @@ func (t *GetAllAssessments_Assessments_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllAssessments_Assessments_Edges_Node struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
@@ -4041,17 +4041,17 @@ func (t *GetAllAssessments_Assessments) GetTotalCount() int64 {
 }
 
 type GetAssessmentByID_Assessment struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentByID_Assessment) GetAssessmentOwnerID() *string {
@@ -4154,17 +4154,17 @@ func (t *GetAssessments_Assessments_PageInfo) GetStartCursor() *string {
 }
 
 type GetAssessments_Assessments_Edges_Node struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
@@ -4271,17 +4271,17 @@ func (t *GetAssessments_Assessments) GetTotalCount() int64 {
 }
 
 type UpdateAssessment_UpdateAssessment_Assessment struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentOwnerID() *string {
@@ -4395,20 +4395,20 @@ func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor(
 }
 
 type GetAllAssessmentHistories_AssessmentHistories_Edges_Node struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime       time.Time           "json:\"historyTime\" graphql:\"historyTime\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	Operation         history.OpType      "json:\"operation\" graphql:\"operation\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref               *string             "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	Operation         history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
@@ -4565,20 +4565,20 @@ func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *
 }
 
 type GetAssessmentHistories_AssessmentHistories_Edges_Node struct {
-	AssessmentOwnerID *string             "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
 	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt         *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime       time.Time           "json:\"historyTime\" graphql:\"historyTime\""
-	ID                string              "json:\"id\" graphql:\"id\""
-	Name              string              "json:\"name\" graphql:\"name\""
-	Operation         history.OpType      "json:\"operation\" graphql:\"operation\""
-	OwnerID           *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref               *string             "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags              []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID        string              "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt         *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	Operation         history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
@@ -4703,21 +4703,21 @@ func (t *GetAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
 }
 
 type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
@@ -4866,21 +4866,21 @@ func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor(
 }
 
 type GetAllAssessmentResponses_AssessmentResponses_Edges_Node struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
@@ -5011,21 +5011,21 @@ func (t *GetAllAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
 }
 
 type GetAssessmentResponseByID_AssessmentResponse struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentResponseByID_AssessmentResponse) GetAssessmentID() string {
@@ -5152,21 +5152,21 @@ func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor() *
 }
 
 type GetAssessmentResponses_AssessmentResponses_Edges_Node struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
@@ -5297,21 +5297,21 @@ func (t *GetAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
 }
 
 type UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
@@ -5449,24 +5449,24 @@ func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo)
 }
 
 type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	HistoryTime    time.Time                     "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	Operation      history.OpType                "json:\"operation\" graphql:\"operation\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref            *string                       "json:\"ref,omitempty\" graphql:\"ref\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                 "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                        "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {
@@ -5647,24 +5647,24 @@ func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) Ge
 }
 
 type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
-	AssessmentID   string                        "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt     time.Time                     "json:\"assignedAt\" graphql:\"assignedAt\""
-	CompletedAt    *time.Time                    "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
-	DueDate        *time.Time                    "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	Email          string                        "json:\"email\" graphql:\"email\""
-	HistoryTime    time.Time                     "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string                        "json:\"id\" graphql:\"id\""
-	Operation      history.OpType                "json:\"operation\" graphql:\"operation\""
-	OwnerID        *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref            *string                       "json:\"ref,omitempty\" graphql:\"ref\""
-	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
-	StartedAt      time.Time                     "json:\"startedAt\" graphql:\"startedAt\""
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                 "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                        "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {

@@ -45118,7 +45118,7 @@ type Assessment implements Node {
 """
 AssessmentAssessmentType is enum for the field assessment_type
 """
-enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -45186,7 +45186,7 @@ type AssessmentHistory implements Node {
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
 """
-enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -45524,7 +45524,7 @@ type AssessmentResponse implements Node {
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
   COMPLETED
   OVERDUE
@@ -45612,7 +45612,7 @@ type AssessmentResponseHistory implements Node {
 """
 AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
   COMPLETED
   OVERDUE

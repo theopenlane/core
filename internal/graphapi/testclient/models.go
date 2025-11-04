@@ -1284,7 +1284,7 @@ type Assessment struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name           string              `json:"name"`
+	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
 	// the template id associated with the assessment
 	TemplateID string `json:"templateID"`
@@ -1344,7 +1344,7 @@ type AssessmentHistory struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name           string              `json:"name"`
+	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
 	// the template id associated with the assessment
 	TemplateID string `json:"templateID"`
@@ -6163,7 +6163,7 @@ type CreateAssessmentInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name           string               `json:"name"`
+	Name           string                `json:"name"`
 	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
 	// the id of the group that owns the assessment
 	AssessmentOwnerID     *string  `json:"assessmentOwnerID,omitempty"`

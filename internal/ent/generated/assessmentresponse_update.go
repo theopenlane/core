@@ -142,13 +142,13 @@ func (_u *AssessmentResponseUpdate) AddSendAttempts(v int) *AssessmentResponseUp
 }
 
 // SetStatus sets the "status" field.
-func (_u *AssessmentResponseUpdate) SetStatus(v enums.AssesmentResponseStatus) *AssessmentResponseUpdate {
+func (_u *AssessmentResponseUpdate) SetStatus(v enums.AssessmentResponseStatus) *AssessmentResponseUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *AssessmentResponseUpdate) SetNillableStatus(v *enums.AssesmentResponseStatus) *AssessmentResponseUpdate {
+func (_u *AssessmentResponseUpdate) SetNillableStatus(v *enums.AssessmentResponseStatus) *AssessmentResponseUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -596,13 +596,13 @@ func (_u *AssessmentResponseUpdateOne) AddSendAttempts(v int) *AssessmentRespons
 }
 
 // SetStatus sets the "status" field.
-func (_u *AssessmentResponseUpdateOne) SetStatus(v enums.AssesmentResponseStatus) *AssessmentResponseUpdateOne {
+func (_u *AssessmentResponseUpdateOne) SetStatus(v enums.AssessmentResponseStatus) *AssessmentResponseUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *AssessmentResponseUpdateOne) SetNillableStatus(v *enums.AssesmentResponseStatus) *AssessmentResponseUpdateOne {
+func (_u *AssessmentResponseUpdateOne) SetNillableStatus(v *enums.AssessmentResponseStatus) *AssessmentResponseUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}

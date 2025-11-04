@@ -46,7 +46,7 @@ type AssessmentResponseHistory struct {
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
 	// the current status of the assessment for this user
-	Status enums.AssesmentResponseStatus `json:"status,omitempty"`
+	Status enums.AssessmentResponseStatus `json:"status,omitempty"`
 	// when the assessment was assigned to the user
 	AssignedAt time.Time `json:"assigned_at,omitempty"`
 	// when the user started the assessment
@@ -176,7 +176,7 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = enums.AssesmentResponseStatus(value.String)
+				_m.Status = enums.AssessmentResponseStatus(value.String)
 			}
 		case assessmentresponsehistory.FieldAssignedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {

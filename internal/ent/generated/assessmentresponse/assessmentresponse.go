@@ -141,10 +141,10 @@ var (
 	DefaultID func() string
 )
 
-const DefaultStatus enums.AssesmentResponseStatus = "NOT_STARTED"
+const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s enums.AssesmentResponseStatus) error {
+func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
 	case "NOT_STARTED", "COMPLETED", "OVERDUE":
 		return nil
@@ -284,8 +284,8 @@ func newAssessmentStep() *sqlgraph.Step {
 }
 
 var (
-	// enums.AssesmentResponseStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.AssesmentResponseStatus)(nil)
-	// enums.AssesmentResponseStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.AssesmentResponseStatus)(nil)
+	// enums.AssessmentResponseStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.AssessmentResponseStatus)(nil)
+	// enums.AssessmentResponseStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.AssessmentResponseStatus)(nil)
 )
