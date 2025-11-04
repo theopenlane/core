@@ -112,6 +112,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "fileID":
 				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "internalPolicyKindName":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
+			case "internalPolicyKindID":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -122,6 +126,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
+			case "internalPolicyKind":
+				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -264,6 +270,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "fileID":
 				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "internalPolicyKindName":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
+			case "internalPolicyKindID":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -274,6 +284,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
+			case "internalPolicyKind":
+				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -416,6 +428,10 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "fileID":
 				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "internalPolicyKindName":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
+			case "internalPolicyKindID":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -426,6 +442,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
+			case "internalPolicyKind":
+				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":
@@ -568,6 +586,10 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "fileID":
 				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "internalPolicyKindName":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
+			case "internalPolicyKindID":
+				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -578,6 +600,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_approver(ctx, field)
 			case "delegate":
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
+			case "internalPolicyKind":
+				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controlImplementations":

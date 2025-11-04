@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -61,6 +62,7 @@ type ControlQuery struct {
 	withOwner                       *OrganizationQuery
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
+	withControlKind                 *CustomTypeEnumQuery
 	withStandard                    *StandardQuery
 	withPrograms                    *ProgramQuery
 	withAssets                      *AssetQuery
@@ -70,6 +72,7 @@ type ControlQuery struct {
 	withScheduledJobs               *ScheduledJobQuery
 	withMappedToControls            *MappedControlQuery
 	withMappedFromControls          *MappedControlQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -496,6 +499,31 @@ func (_q *ControlQuery) QueryEditors() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ControlEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlKind chains the current query on the "control_kind" edge.
+func (_q *ControlQuery) QueryControlKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlKindTable, control.ControlKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -934,6 +962,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withOwner:                  _q.withOwner.Clone(),
 		withBlockedGroups:          _q.withBlockedGroups.Clone(),
 		withEditors:                _q.withEditors.Clone(),
+		withControlKind:            _q.withControlKind.Clone(),
 		withStandard:               _q.withStandard.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withAssets:                 _q.withAssets.Clone(),
@@ -1112,6 +1141,17 @@ func (_q *ControlQuery) WithEditors(opts ...func(*GroupQuery)) *ControlQuery {
 		opt(query)
 	}
 	_q.withEditors = query
+	return _q
+}
+
+// WithControlKind tells the query-builder to eager-load the nodes that are connected to
+// the "control_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithControlKind(opts ...func(*CustomTypeEnumQuery)) *ControlQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlKind = query
 	return _q
 }
 
@@ -1297,8 +1337,9 @@ func (_q *ControlQuery) prepareQuery(ctx context.Context) error {
 func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Control, error) {
 	var (
 		nodes       = []*Control{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [25]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1314,6 +1355,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
+			_q.withControlKind != nil,
 			_q.withStandard != nil,
 			_q.withPrograms != nil,
 			_q.withAssets != nil,
@@ -1325,6 +1367,9 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withMappedFromControls != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, control.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Control).scanValues(nil, columns)
 	}
@@ -1448,6 +1493,12 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Control) { n.Edges.Editors = []*Group{} },
 			func(n *Control, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControlKind; query != nil {
+		if err := _q.loadControlKind(ctx, query, nodes, nil,
+			func(n *Control, e *CustomTypeEnum) { n.Edges.ControlKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2426,6 +2477,35 @@ func (_q *ControlQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 	}
 	return nil
 }
+func (_q *ControlQuery) loadControlKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Control, init func(*Control), assign func(*Control, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].ControlKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadStandard(ctx context.Context, query *StandardQuery, nodes []*Control, init func(*Control), assign func(*Control, *Standard)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
@@ -2931,6 +3011,9 @@ func (_q *ControlQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(control.FieldOwnerID)
+		}
+		if _q.withControlKind != nil {
+			_spec.Node.AddColumnOnce(control.FieldControlKindID)
 		}
 		if _q.withStandard != nil {
 			_spec.Node.AddColumnOnce(control.FieldStandardID)

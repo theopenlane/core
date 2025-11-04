@@ -42,6 +42,10 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldProgramKindName holds the string denoting the program_kind_name field in the database.
+	FieldProgramKindName = "program_kind_name"
+	// FieldProgramKindID holds the string denoting the program_kind_id field in the database.
+	FieldProgramKindID = "program_kind_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -89,6 +93,8 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldProgramKindName,
+	FieldProgramKindID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -239,6 +245,16 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByProgramKindName orders the results by the program_kind_name field.
+func ByProgramKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramKindName, opts...).ToFunc()
+}
+
+// ByProgramKindID orders the results by the program_kind_id field.
+func ByProgramKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramKindID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

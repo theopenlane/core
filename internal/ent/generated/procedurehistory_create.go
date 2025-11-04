@@ -418,6 +418,34 @@ func (_c *ProcedureHistoryCreate) SetNillableSystemInternalID(v *string) *Proced
 	return _c
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_c *ProcedureHistoryCreate) SetProcedureKindName(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetProcedureKindName(v)
+	return _c
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableProcedureKindName(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetProcedureKindName(*v)
+	}
+	return _c
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_c *ProcedureHistoryCreate) SetProcedureKindID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetProcedureKindID(v)
+	return _c
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableProcedureKindID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetProcedureKindID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProcedureHistoryCreate) SetID(v string) *ProcedureHistoryCreate {
 	_c.mutation.SetID(v)
@@ -752,6 +780,14 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindName, field.TypeString, value)
+		_node.ProcedureKindName = value
+	}
+	if value, ok := _c.mutation.ProcedureKindID(); ok {
+		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
+		_node.ProcedureKindID = value
 	}
 	return _node, _spec
 }

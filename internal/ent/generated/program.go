@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -39,6 +40,10 @@ type Program struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the kind of the program
+	ProgramKindName string `json:"program_kind_name,omitempty"`
+	// the kind of the program
+	ProgramKindID string `json:"program_kind_id,omitempty"`
 	// the name of the program
 	Name string `json:"name,omitempty"`
 	// the description of the program
@@ -69,8 +74,9 @@ type Program struct {
 	ProgramOwnerID string `json:"program_owner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProgramQuery when eager-loading is set.
-	Edges        ProgramEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                     ProgramEdges `json:"edges"`
+	custom_type_enum_programs *string
+	selectValues              sql.SelectValues
 }
 
 // ProgramEdges holds the relations/edges for other nodes in the graph.
@@ -83,6 +89,8 @@ type ProgramEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// ProgramKind holds the value of the program_kind edge.
+	ProgramKind *CustomTypeEnum `json:"program_kind,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -115,9 +123,9 @@ type ProgramEdges struct {
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -176,10 +184,21 @@ func (e ProgramEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// ProgramKindOrErr returns the ProgramKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramEdges) ProgramKindOrErr() (*CustomTypeEnum, error) {
+	if e.ProgramKind != nil {
+		return e.ProgramKind, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "program_kind"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -188,7 +207,7 @@ func (e ProgramEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -197,7 +216,7 @@ func (e ProgramEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -206,7 +225,7 @@ func (e ProgramEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -215,7 +234,7 @@ func (e ProgramEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -224,7 +243,7 @@ func (e ProgramEdges) ProceduresOrErr() ([]*Procedure, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -233,7 +252,7 @@ func (e ProgramEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -242,7 +261,7 @@ func (e ProgramEdges) TasksOrErr() ([]*Task, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -251,7 +270,7 @@ func (e ProgramEdges) NotesOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -260,7 +279,7 @@ func (e ProgramEdges) FilesOrErr() ([]*File, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -269,7 +288,7 @@ func (e ProgramEdges) EvidenceOrErr() ([]*Evidence, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -278,7 +297,7 @@ func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -287,7 +306,7 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -298,7 +317,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 func (e ProgramEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -307,7 +326,7 @@ func (e ProgramEdges) UserOrErr() (*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -322,10 +341,12 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
+		case program.ForeignKeys[0]: // custom_type_enum_programs
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -402,6 +423,18 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case program.FieldProgramKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_kind_name", values[i])
+			} else if value.Valid {
+				_m.ProgramKindName = value.String
+			}
+		case program.FieldProgramKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_kind_id", values[i])
+			} else if value.Valid {
+				_m.ProgramKindID = value.String
 			}
 		case program.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -487,6 +520,13 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ProgramOwnerID = value.String
 			}
+		case program.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_programs", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_programs = new(string)
+				*_m.custom_type_enum_programs = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -518,6 +558,11 @@ func (_m *Program) QueryEditors() *GroupQuery {
 // QueryViewers queries the "viewers" edge of the Program entity.
 func (_m *Program) QueryViewers() *GroupQuery {
 	return NewProgramClient(_m.config).QueryViewers(_m)
+}
+
+// QueryProgramKind queries the "program_kind" edge of the Program entity.
+func (_m *Program) QueryProgramKind() *CustomTypeEnumQuery {
+	return NewProgramClient(_m.config).QueryProgramKind(_m)
 }
 
 // QueryControls queries the "controls" edge of the Program entity.
@@ -644,6 +689,12 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("program_kind_name=")
+	builder.WriteString(_m.ProgramKindName)
+	builder.WriteString(", ")
+	builder.WriteString("program_kind_id=")
+	builder.WriteString(_m.ProgramKindID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

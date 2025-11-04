@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Task_ownerID(ctx, field)
+			case "taskKindName":
+				return ec.fieldContext_Task_taskKindName(ctx, field)
+			case "taskKindID":
+				return ec.fieldContext_Task_taskKindID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -84,8 +88,16 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_assigneeID(ctx, field)
 			case "assignerID":
 				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "systemGenerated":
+				return ec.fieldContext_Task_systemGenerated(ctx, field)
+			case "idempotencyKey":
+				return ec.fieldContext_Task_idempotencyKey(ctx, field)
+			case "externalReferenceURL":
+				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
+			case "taskKind":
+				return ec.fieldContext_Task_taskKind(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -188,6 +200,10 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Task_ownerID(ctx, field)
+			case "taskKindName":
+				return ec.fieldContext_Task_taskKindName(ctx, field)
+			case "taskKindID":
+				return ec.fieldContext_Task_taskKindID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -204,8 +220,16 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_assigneeID(ctx, field)
 			case "assignerID":
 				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "systemGenerated":
+				return ec.fieldContext_Task_systemGenerated(ctx, field)
+			case "idempotencyKey":
+				return ec.fieldContext_Task_idempotencyKey(ctx, field)
+			case "externalReferenceURL":
+				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
+			case "taskKind":
+				return ec.fieldContext_Task_taskKind(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -308,6 +332,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Task_ownerID(ctx, field)
+			case "taskKindName":
+				return ec.fieldContext_Task_taskKindName(ctx, field)
+			case "taskKindID":
+				return ec.fieldContext_Task_taskKindID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -324,8 +352,16 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assigneeID(ctx, field)
 			case "assignerID":
 				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "systemGenerated":
+				return ec.fieldContext_Task_systemGenerated(ctx, field)
+			case "idempotencyKey":
+				return ec.fieldContext_Task_idempotencyKey(ctx, field)
+			case "externalReferenceURL":
+				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
+			case "taskKind":
+				return ec.fieldContext_Task_taskKind(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -428,6 +464,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Task_ownerID(ctx, field)
+			case "taskKindName":
+				return ec.fieldContext_Task_taskKindName(ctx, field)
+			case "taskKindID":
+				return ec.fieldContext_Task_taskKindID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -444,8 +484,16 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assigneeID(ctx, field)
 			case "assignerID":
 				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "systemGenerated":
+				return ec.fieldContext_Task_systemGenerated(ctx, field)
+			case "idempotencyKey":
+				return ec.fieldContext_Task_idempotencyKey(ctx, field)
+			case "externalReferenceURL":
+				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
+			case "taskKind":
+				return ec.fieldContext_Task_taskKind(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":

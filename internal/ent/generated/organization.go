@@ -202,13 +202,17 @@ type OrganizationEdges struct {
 	Assessments []*Assessment `json:"assessments,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
+	// CustomTypeEnums holds the value of the custom_type_enums edge.
+	CustomTypeEnums []*CustomTypeEnum `json:"custom_type_enums,omitempty"`
+	// TagDefinitions holds the value of the tag_definitions edge.
+	TagDefinitions []*TagDefinition `json:"tag_definitions,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [71]bool
+	loadedTypes [73]bool
 	// totalCount holds the count of the edges above.
-	totalCount [67]map[string]int
+	totalCount [69]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -277,6 +281,8 @@ type OrganizationEdges struct {
 	namedImpersonationEvents           map[string][]*ImpersonationEvent
 	namedAssessments                   map[string][]*Assessment
 	namedAssessmentResponses           map[string][]*AssessmentResponse
+	namedCustomTypeEnums               map[string][]*CustomTypeEnum
+	namedTagDefinitions                map[string][]*TagDefinition
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -916,10 +922,28 @@ func (e OrganizationEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, er
 	return nil, &NotLoadedError{edge: "assessment_responses"}
 }
 
+// CustomTypeEnumsOrErr returns the CustomTypeEnums value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) CustomTypeEnumsOrErr() ([]*CustomTypeEnum, error) {
+	if e.loadedTypes[70] {
+		return e.CustomTypeEnums, nil
+	}
+	return nil, &NotLoadedError{edge: "custom_type_enums"}
+}
+
+// TagDefinitionsOrErr returns the TagDefinitions value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TagDefinitionsOrErr() ([]*TagDefinition, error) {
+	if e.loadedTypes[71] {
+		return e.TagDefinitions, nil
+	}
+	return nil, &NotLoadedError{edge: "tag_definitions"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[70] {
+	if e.loadedTypes[72] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1428,6 +1452,16 @@ func (_m *Organization) QueryAssessments() *AssessmentQuery {
 // QueryAssessmentResponses queries the "assessment_responses" edge of the Organization entity.
 func (_m *Organization) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return NewOrganizationClient(_m.config).QueryAssessmentResponses(_m)
+}
+
+// QueryCustomTypeEnums queries the "custom_type_enums" edge of the Organization entity.
+func (_m *Organization) QueryCustomTypeEnums() *CustomTypeEnumQuery {
+	return NewOrganizationClient(_m.config).QueryCustomTypeEnums(_m)
+}
+
+// QueryTagDefinitions queries the "tag_definitions" edge of the Organization entity.
+func (_m *Organization) QueryTagDefinitions() *TagDefinitionQuery {
+	return NewOrganizationClient(_m.config).QueryTagDefinitions(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3125,6 +3159,54 @@ func (_m *Organization) appendNamedAssessmentResponses(name string, edges ...*As
 		_m.Edges.namedAssessmentResponses[name] = []*AssessmentResponse{}
 	} else {
 		_m.Edges.namedAssessmentResponses[name] = append(_m.Edges.namedAssessmentResponses[name], edges...)
+	}
+}
+
+// NamedCustomTypeEnums returns the CustomTypeEnums named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedCustomTypeEnums(name string) ([]*CustomTypeEnum, error) {
+	if _m.Edges.namedCustomTypeEnums == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCustomTypeEnums[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedCustomTypeEnums(name string, edges ...*CustomTypeEnum) {
+	if _m.Edges.namedCustomTypeEnums == nil {
+		_m.Edges.namedCustomTypeEnums = make(map[string][]*CustomTypeEnum)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCustomTypeEnums[name] = []*CustomTypeEnum{}
+	} else {
+		_m.Edges.namedCustomTypeEnums[name] = append(_m.Edges.namedCustomTypeEnums[name], edges...)
+	}
+}
+
+// NamedTagDefinitions returns the TagDefinitions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedTagDefinitions(name string) ([]*TagDefinition, error) {
+	if _m.Edges.namedTagDefinitions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTagDefinitions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedTagDefinitions(name string, edges ...*TagDefinition) {
+	if _m.Edges.namedTagDefinitions == nil {
+		_m.Edges.namedTagDefinitions = make(map[string][]*TagDefinition)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTagDefinitions[name] = []*TagDefinition{}
+	} else {
+		_m.Edges.namedTagDefinitions[name] = append(_m.Edges.namedTagDefinitions[name], edges...)
 	}
 }
 

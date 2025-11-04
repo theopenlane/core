@@ -406,7 +406,7 @@ type ActionPlan implements Node {
 	"""
 	type of the action_plan, e.g. compliance, operational, health and safety, etc.
 	"""
-	actionPlanType: String
+	actionPlanType: String @deprecated(reason: "Use `action_plan_kind_name` instead.")
 	"""
 	details of the action_plan
 	"""
@@ -481,6 +481,14 @@ type ActionPlan implements Node {
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindName: String
+	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindID: ID
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -501,6 +509,7 @@ type ActionPlan implements Node {
 	"""
 	delegate: Group
 	owner: Organization
+	actionPlanKind: CustomTypeEnum
 	risks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -722,7 +731,7 @@ type ActionPlanHistory implements Node {
 	"""
 	type of the action_plan, e.g. compliance, operational, health and safety, etc.
 	"""
-	actionPlanType: String
+	actionPlanType: String @deprecated(reason: "Use `action_plan_kind_name` instead.")
 	"""
 	details of the action_plan
 	"""
@@ -796,6 +805,14 @@ type ActionPlanHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindName: String
+	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindID: String
 	"""
 	due date of the action plan
 	"""
@@ -1265,6 +1282,42 @@ input ActionPlanHistoryWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	action_plan_kind_name field predicates
+	"""
+	actionPlanKindName: String
+	actionPlanKindNameNEQ: String
+	actionPlanKindNameIn: [String!]
+	actionPlanKindNameNotIn: [String!]
+	actionPlanKindNameGT: String
+	actionPlanKindNameGTE: String
+	actionPlanKindNameLT: String
+	actionPlanKindNameLTE: String
+	actionPlanKindNameContains: String
+	actionPlanKindNameHasPrefix: String
+	actionPlanKindNameHasSuffix: String
+	actionPlanKindNameIsNil: Boolean
+	actionPlanKindNameNotNil: Boolean
+	actionPlanKindNameEqualFold: String
+	actionPlanKindNameContainsFold: String
+	"""
+	action_plan_kind_id field predicates
+	"""
+	actionPlanKindID: String
+	actionPlanKindIDNEQ: String
+	actionPlanKindIDIn: [String!]
+	actionPlanKindIDNotIn: [String!]
+	actionPlanKindIDGT: String
+	actionPlanKindIDGTE: String
+	actionPlanKindIDLT: String
+	actionPlanKindIDLTE: String
+	actionPlanKindIDContains: String
+	actionPlanKindIDHasPrefix: String
+	actionPlanKindIDHasSuffix: String
+	actionPlanKindIDIsNil: Boolean
+	actionPlanKindIDNotNil: Boolean
+	actionPlanKindIDEqualFold: String
+	actionPlanKindIDContainsFold: String
+	"""
 	due_date field predicates
 	"""
 	dueDate: Time
@@ -1676,6 +1729,42 @@ input ActionPlanWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	action_plan_kind_name field predicates
+	"""
+	actionPlanKindName: String
+	actionPlanKindNameNEQ: String
+	actionPlanKindNameIn: [String!]
+	actionPlanKindNameNotIn: [String!]
+	actionPlanKindNameGT: String
+	actionPlanKindNameGTE: String
+	actionPlanKindNameLT: String
+	actionPlanKindNameLTE: String
+	actionPlanKindNameContains: String
+	actionPlanKindNameHasPrefix: String
+	actionPlanKindNameHasSuffix: String
+	actionPlanKindNameIsNil: Boolean
+	actionPlanKindNameNotNil: Boolean
+	actionPlanKindNameEqualFold: String
+	actionPlanKindNameContainsFold: String
+	"""
+	action_plan_kind_id field predicates
+	"""
+	actionPlanKindID: ID
+	actionPlanKindIDNEQ: ID
+	actionPlanKindIDIn: [ID!]
+	actionPlanKindIDNotIn: [ID!]
+	actionPlanKindIDGT: ID
+	actionPlanKindIDGTE: ID
+	actionPlanKindIDLT: ID
+	actionPlanKindIDLTE: ID
+	actionPlanKindIDContains: ID
+	actionPlanKindIDHasPrefix: ID
+	actionPlanKindIDHasSuffix: ID
+	actionPlanKindIDIsNil: Boolean
+	actionPlanKindIDNotNil: Boolean
+	actionPlanKindIDEqualFold: ID
+	actionPlanKindIDContainsFold: ID
+	"""
 	due_date field predicates
 	"""
 	dueDate: Time
@@ -1731,6 +1820,11 @@ input ActionPlanWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
+	action_plan_kind edge predicates
+	"""
+	hasActionPlanKind: Boolean
+	hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
+	"""
 	risks edge predicates
 	"""
 	hasRisks: Boolean
@@ -1782,7 +1876,7 @@ type Assessment implements Node {
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
-	assessmentType: AssessmentAssesmentType!
+	assessmentType: AssessmentAssessmentType!
 	"""
 	the template id associated with the assessment
 	"""
@@ -1919,9 +2013,9 @@ type Assessment implements Node {
 	): AssessmentResponseConnection!
 }
 """
-AssessmentAssesmentType is enum for the field assessment_type
+AssessmentAssessmentType is enum for the field assessment_type
 """
-enum AssessmentAssesmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
 	INTERNAL
 	EXTERNAL
 }
@@ -1994,7 +2088,7 @@ type AssessmentHistory implements Node {
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
-	assessmentType: AssessmentHistoryAssesmentType!
+	assessmentType: AssessmentHistoryAssessmentType!
 	"""
 	the template id associated with the assessment
 	"""
@@ -2005,9 +2099,9 @@ type AssessmentHistory implements Node {
 	assessmentOwnerID: String
 }
 """
-AssessmentHistoryAssesmentType is enum for the field assessment_type
+AssessmentHistoryAssessmentType is enum for the field assessment_type
 """
-enum AssessmentHistoryAssesmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
+enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentType") {
 	INTERNAL
 	EXTERNAL
 }
@@ -2228,10 +2322,10 @@ input AssessmentHistoryWhereInput {
 	"""
 	assessment_type field predicates
 	"""
-	assessmentType: AssessmentHistoryAssesmentType
-	assessmentTypeNEQ: AssessmentHistoryAssesmentType
-	assessmentTypeIn: [AssessmentHistoryAssesmentType!]
-	assessmentTypeNotIn: [AssessmentHistoryAssesmentType!]
+	assessmentType: AssessmentHistoryAssessmentType
+	assessmentTypeNEQ: AssessmentHistoryAssessmentType
+	assessmentTypeIn: [AssessmentHistoryAssessmentType!]
+	assessmentTypeNotIn: [AssessmentHistoryAssessmentType!]
 	"""
 	template_id field predicates
 	"""
@@ -2322,7 +2416,7 @@ type AssessmentResponse implements Node {
 	"""
 	the current status of the assessment for this user
 	"""
-	status: AssessmentResponseAssesmentResponseStatus!
+	status: AssessmentResponseAssessmentResponseStatus!
 	"""
 	when the assessment was assigned to the user
 	"""
@@ -2351,9 +2445,9 @@ type AssessmentResponse implements Node {
 	assessment: Assessment!
 }
 """
-AssessmentResponseAssesmentResponseStatus is enum for the field status
+AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseAssesmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
 	NOT_STARTED
 	COMPLETED
 	OVERDUE
@@ -2443,7 +2537,7 @@ type AssessmentResponseHistory implements Node {
 	"""
 	the current status of the assessment for this user
 	"""
-	status: AssessmentResponseHistoryAssesmentResponseStatus!
+	status: AssessmentResponseHistoryAssessmentResponseStatus!
 	"""
 	when the assessment was assigned to the user
 	"""
@@ -2466,9 +2560,9 @@ type AssessmentResponseHistory implements Node {
 	documentDataID: String
 }
 """
-AssessmentResponseHistoryAssesmentResponseStatus is enum for the field status
+AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseHistoryAssesmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
+enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssesmentResponseStatus") {
 	NOT_STARTED
 	COMPLETED
 	OVERDUE
@@ -2721,10 +2815,10 @@ input AssessmentResponseHistoryWhereInput {
 	"""
 	status field predicates
 	"""
-	status: AssessmentResponseHistoryAssesmentResponseStatus
-	statusNEQ: AssessmentResponseHistoryAssesmentResponseStatus
-	statusIn: [AssessmentResponseHistoryAssesmentResponseStatus!]
-	statusNotIn: [AssessmentResponseHistoryAssesmentResponseStatus!]
+	status: AssessmentResponseHistoryAssessmentResponseStatus
+	statusNEQ: AssessmentResponseHistoryAssessmentResponseStatus
+	statusIn: [AssessmentResponseHistoryAssessmentResponseStatus!]
+	statusNotIn: [AssessmentResponseHistoryAssessmentResponseStatus!]
 	"""
 	assigned_at field predicates
 	"""
@@ -2974,10 +3068,10 @@ input AssessmentResponseWhereInput {
 	"""
 	status field predicates
 	"""
-	status: AssessmentResponseAssesmentResponseStatus
-	statusNEQ: AssessmentResponseAssesmentResponseStatus
-	statusIn: [AssessmentResponseAssesmentResponseStatus!]
-	statusNotIn: [AssessmentResponseAssesmentResponseStatus!]
+	status: AssessmentResponseAssessmentResponseStatus
+	statusNEQ: AssessmentResponseAssessmentResponseStatus
+	statusIn: [AssessmentResponseAssessmentResponseStatus!]
+	statusNotIn: [AssessmentResponseAssessmentResponseStatus!]
 	"""
 	assigned_at field predicates
 	"""
@@ -3189,10 +3283,10 @@ input AssessmentWhereInput {
 	"""
 	assessment_type field predicates
 	"""
-	assessmentType: AssessmentAssesmentType
-	assessmentTypeNEQ: AssessmentAssesmentType
-	assessmentTypeIn: [AssessmentAssesmentType!]
-	assessmentTypeNotIn: [AssessmentAssesmentType!]
+	assessmentType: AssessmentAssessmentType
+	assessmentTypeNEQ: AssessmentAssessmentType
+	assessmentTypeIn: [AssessmentAssessmentType!]
+	assessmentTypeNotIn: [AssessmentAssessmentType!]
 	"""
 	template_id field predicates
 	"""
@@ -5311,7 +5405,7 @@ type Control implements Node {
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	controlType: ControlControlType
+	controlType: ControlControlType @deprecated(reason: "Use `control_kind_name` instead.")
 	"""
 	category of the control
 	"""
@@ -5376,6 +5470,14 @@ type Control implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the control
+	"""
+	controlKindName: String
+	"""
+	the kind of the control
+	"""
+	controlKindID: ID
 	"""
 	the unique reference code for the control
 	"""
@@ -5738,6 +5840,7 @@ type Control implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	controlKind: CustomTypeEnum
 	standard: Standard
 	programs(
 		"""
@@ -6156,7 +6259,7 @@ type ControlHistory implements Node {
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	controlType: ControlHistoryControlType
+	controlType: ControlHistoryControlType @deprecated(reason: "Use `control_kind_name` instead.")
 	"""
 	category of the control
 	"""
@@ -6221,6 +6324,14 @@ type ControlHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the control
+	"""
+	controlKindName: String
+	"""
+	the kind of the control
+	"""
+	controlKindID: String
 	"""
 	the unique reference code for the control
 	"""
@@ -6766,6 +6877,42 @@ input ControlHistoryWhereInput {
 	systemInternalIDNotNil: Boolean
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
+	"""
+	control_kind_name field predicates
+	"""
+	controlKindName: String
+	controlKindNameNEQ: String
+	controlKindNameIn: [String!]
+	controlKindNameNotIn: [String!]
+	controlKindNameGT: String
+	controlKindNameGTE: String
+	controlKindNameLT: String
+	controlKindNameLTE: String
+	controlKindNameContains: String
+	controlKindNameHasPrefix: String
+	controlKindNameHasSuffix: String
+	controlKindNameIsNil: Boolean
+	controlKindNameNotNil: Boolean
+	controlKindNameEqualFold: String
+	controlKindNameContainsFold: String
+	"""
+	control_kind_id field predicates
+	"""
+	controlKindID: String
+	controlKindIDNEQ: String
+	controlKindIDIn: [String!]
+	controlKindIDNotIn: [String!]
+	controlKindIDGT: String
+	controlKindIDGTE: String
+	controlKindIDLT: String
+	controlKindIDLTE: String
+	controlKindIDContains: String
+	controlKindIDHasPrefix: String
+	controlKindIDHasSuffix: String
+	controlKindIDIsNil: Boolean
+	controlKindIDNotNil: Boolean
+	controlKindIDEqualFold: String
+	controlKindIDContainsFold: String
 	"""
 	ref_code field predicates
 	"""
@@ -9567,6 +9714,42 @@ input ControlWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	control_kind_name field predicates
+	"""
+	controlKindName: String
+	controlKindNameNEQ: String
+	controlKindNameIn: [String!]
+	controlKindNameNotIn: [String!]
+	controlKindNameGT: String
+	controlKindNameGTE: String
+	controlKindNameLT: String
+	controlKindNameLTE: String
+	controlKindNameContains: String
+	controlKindNameHasPrefix: String
+	controlKindNameHasSuffix: String
+	controlKindNameIsNil: Boolean
+	controlKindNameNotNil: Boolean
+	controlKindNameEqualFold: String
+	controlKindNameContainsFold: String
+	"""
+	control_kind_id field predicates
+	"""
+	controlKindID: ID
+	controlKindIDNEQ: ID
+	controlKindIDIn: [ID!]
+	controlKindIDNotIn: [ID!]
+	controlKindIDGT: ID
+	controlKindIDGTE: ID
+	controlKindIDLT: ID
+	controlKindIDLTE: ID
+	controlKindIDContains: ID
+	controlKindIDHasPrefix: ID
+	controlKindIDHasSuffix: ID
+	controlKindIDIsNil: Boolean
+	controlKindIDNotNil: Boolean
+	controlKindIDEqualFold: ID
+	controlKindIDContainsFold: ID
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -9675,6 +9858,11 @@ input ControlWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	control_kind edge predicates
+	"""
+	hasControlKind: Boolean
+	hasControlKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	standard edge predicates
 	"""
@@ -9830,6 +10018,10 @@ input CreateActionPlanInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindName: String
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -9844,6 +10036,7 @@ input CreateActionPlanInput {
 	approverID: ID
 	delegateID: ID
 	ownerID: ID
+	actionPlanKindID: ID
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	programIDs: [ID!]
@@ -9862,7 +10055,7 @@ input CreateAssessmentInput {
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
-	assessmentType: AssessmentAssesmentType
+	assessmentType: AssessmentAssessmentType
 	"""
 	the id of the group that owns the assessment
 	"""
@@ -9886,7 +10079,7 @@ input CreateAssessmentResponseInput {
 	"""
 	the current status of the assessment for this user
 	"""
-	status: AssessmentResponseAssesmentResponseStatus
+	status: AssessmentResponseAssessmentResponseStatus
 	"""
 	when the assessment was assigned to the user
 	"""
@@ -10141,6 +10334,10 @@ input CreateControlInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	the kind of the control
+	"""
+	controlKindName: String
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String! @externalReadOnly(source: FRAMEWORK)
@@ -10159,6 +10356,7 @@ input CreateControlInput {
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	controlKindID: ID
 	standardID: ID
 	programIDs: [ID!]
 	assetIDs: [ID!]
@@ -10258,6 +10456,50 @@ input CreateCustomDomainInput {
 	ownerID: ID
 	mappableDomainID: ID!
 	dnsVerificationID: ID
+}
+"""
+CreateCustomTypeEnumInput is used for create CustomTypeEnum object.
+Input was generated by ent.
+"""
+input CreateCustomTypeEnumInput {
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
+	the kind of object the type applies to, for example task
+	"""
+	objectType: String!
+	"""
+	the field on the object the type applies to, for example kind or category
+	"""
+	field: String
+	"""
+	The name of the enum value, for example evidence request
+	"""
+	name: String!
+	"""
+	The description of the custom type
+	"""
+	description: String
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	ownerID: ID
+	taskIDs: [ID!]
+	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
+	riskIDs: [ID!]
+	riskCategoryIDs: [ID!]
+	internalPolicyIDs: [ID!]
+	procedureIDs: [ID!]
+	actionPlanIDs: [ID!]
+	programIDs: [ID!]
 }
 """
 CreateDNSVerificationInput is used for create DNSVerification object.
@@ -10842,11 +11084,16 @@ input CreateInternalPolicyInput {
 	This will contain the url used to create or update the policy
 	"""
 	url: String
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindName: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	approverID: ID
 	delegateID: ID
+	internalPolicyKindID: ID
 	controlObjectiveIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	controlIDs: [ID!]
@@ -11326,6 +11573,8 @@ input CreateOrganizationInput {
 	impersonationEventIDs: [ID!]
 	assessmentIDs: [ID!]
 	assessmentResponseIDs: [ID!]
+	customTypeEnumIDs: [ID!]
+	tagDefinitionIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -11535,11 +11784,16 @@ input CreateProcedureInput {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @readOnly
+	"""
+	the kind of the procedure
+	"""
+	procedureKindName: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	approverID: ID
 	delegateID: ID
+	procedureKindID: ID
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	internalPolicyIDs: [ID!]
@@ -11559,6 +11813,10 @@ input CreateProgramInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the kind of the program
+	"""
+	programKindName: String
 	"""
 	the name of the program
 	"""
@@ -11615,6 +11873,7 @@ input CreateProgramInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	programKindID: ID
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	controlObjectiveIDs: [ID!]
@@ -11674,6 +11933,14 @@ input CreateRiskInput {
 	"""
 	tags: [String!]
 	"""
+	the kind of the risk
+	"""
+	riskKindName: String
+	"""
+	the category of the risk
+	"""
+	riskCategoryName: String
+	"""
 	the name of the risk
 	"""
 	name: String!
@@ -11717,6 +11984,8 @@ input CreateRiskInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	riskKindID: ID
+	riskCategoryID: ID
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	procedureIDs: [ID!]
@@ -11984,6 +12253,10 @@ input CreateSubcontrolInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindName: String
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String! @externalReadOnly(source: FRAMEWORK)
@@ -12000,6 +12273,7 @@ input CreateSubcontrolInput {
 	delegateID: ID
 	responsiblePartyID: ID
 	ownerID: ID
+	subcontrolKindID: ID
 	controlID: ID!
 	controlImplementationIDs: [ID!]
 	scheduledJobIDs: [ID!]
@@ -12069,6 +12343,37 @@ input CreateTFASettingInput {
 	totpAllowed: Boolean
 }
 """
+CreateTagDefinitionInput is used for create TagDefinition object.
+Input was generated by ent.
+"""
+input CreateTagDefinitionInput {
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
+	The name of the tag definition
+	"""
+	name: String!
+	"""
+	common aliases or misspellings for the tag definition
+	"""
+	aliases: [String!]
+	"""
+	The description of the tag definition
+	"""
+	description: String
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	ownerID: ID
+}
+"""
 CreateTaskInput is used for create Task object.
 Input was generated by ent.
 """
@@ -12077,6 +12382,10 @@ input CreateTaskInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the kind of the task
+	"""
+	taskKindName: String
 	"""
 	the title of the task
 	"""
@@ -12101,7 +12410,16 @@ input CreateTaskInput {
 	the completion date of the task
 	"""
 	completed: DateTime
+	"""
+	indicates if the task was generated by the system
+	"""
+	systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+	"""
+	an optional external reference URL for the task
+	"""
+	externalReferenceURL: [String!]
 	ownerID: ID
+	taskKindID: ID
 	assignerID: ID
 	assigneeID: ID
 	commentIDs: [ID!]
@@ -13168,6 +13486,694 @@ input CustomDomainWhereInput {
 	"""
 	hasDNSVerification: Boolean
 	hasDNSVerificationWith: [DNSVerificationWhereInput!]
+}
+type CustomTypeEnum implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of object the type applies to, for example task
+	"""
+	objectType: String!
+	"""
+	the field on the object the type applies to, for example kind or category
+	"""
+	field: String!
+	"""
+	The name of the enum value, for example evidence request
+	"""
+	name: String!
+	"""
+	The description of the custom type
+	"""
+	description: String
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	owner: Organization
+	tasks(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Tasks returned from the connection.
+		"""
+		orderBy: [TaskOrder!]
+
+		"""
+		Filtering options for Tasks returned from the connection.
+		"""
+		where: TaskWhereInput
+	): TaskConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
+	risks(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	riskCategories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
+	procedures(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
+		Filtering options for Procedures returned from the connection.
+		"""
+		where: ProcedureWhereInput
+	): ProcedureConnection!
+	actionPlans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ActionPlans returned from the connection.
+		"""
+		orderBy: [ActionPlanOrder!]
+
+		"""
+		Filtering options for ActionPlans returned from the connection.
+		"""
+		where: ActionPlanWhereInput
+	): ActionPlanConnection!
+	programs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+}
+"""
+Return response for createBulkCustomTypeEnum mutation
+"""
+type CustomTypeEnumBulkCreatePayload {
+	"""
+	Created customTypeEnums
+	"""
+	customTypeEnums: [CustomTypeEnum!]
+}
+"""
+A connection to a list of items.
+"""
+type CustomTypeEnumConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [CustomTypeEnumEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createCustomTypeEnum mutation
+"""
+type CustomTypeEnumCreatePayload {
+	"""
+	Created customTypeEnum
+	"""
+	customTypeEnum: CustomTypeEnum!
+}
+"""
+Return response for deleteCustomTypeEnum mutation
+"""
+type CustomTypeEnumDeletePayload {
+	"""
+	Deleted customTypeEnum ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type CustomTypeEnumEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: CustomTypeEnum
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for CustomTypeEnum connections
+"""
+input CustomTypeEnumOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order CustomTypeEnums.
+	"""
+	field: CustomTypeEnumOrderField!
+}
+"""
+Properties by which CustomTypeEnum connections can be ordered.
+"""
+enum CustomTypeEnumOrderField {
+	created_at
+	updated_at
+}
+"""
+Return response for updateCustomTypeEnum mutation
+"""
+type CustomTypeEnumUpdatePayload {
+	"""
+	Updated customTypeEnum
+	"""
+	customTypeEnum: CustomTypeEnum!
+}
+"""
+CustomTypeEnumWhereInput is used for filtering CustomTypeEnum objects.
+Input was generated by ent.
+"""
+input CustomTypeEnumWhereInput {
+	not: CustomTypeEnumWhereInput
+	and: [CustomTypeEnumWhereInput!]
+	or: [CustomTypeEnumWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
+	object_type field predicates
+	"""
+	objectType: String
+	objectTypeNEQ: String
+	objectTypeIn: [String!]
+	objectTypeNotIn: [String!]
+	objectTypeGT: String
+	objectTypeGTE: String
+	objectTypeLT: String
+	objectTypeLTE: String
+	objectTypeContains: String
+	objectTypeHasPrefix: String
+	objectTypeHasSuffix: String
+	objectTypeEqualFold: String
+	objectTypeContainsFold: String
+	"""
+	field field predicates
+	"""
+	field: String
+	fieldNEQ: String
+	fieldIn: [String!]
+	fieldNotIn: [String!]
+	fieldGT: String
+	fieldGTE: String
+	fieldLT: String
+	fieldLTE: String
+	fieldContains: String
+	fieldHasPrefix: String
+	fieldHasSuffix: String
+	fieldEqualFold: String
+	fieldContainsFold: String
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	description field predicates
+	"""
+	description: String
+	descriptionNEQ: String
+	descriptionIn: [String!]
+	descriptionNotIn: [String!]
+	descriptionGT: String
+	descriptionGTE: String
+	descriptionLT: String
+	descriptionLTE: String
+	descriptionContains: String
+	descriptionHasPrefix: String
+	descriptionHasSuffix: String
+	descriptionIsNil: Boolean
+	descriptionNotNil: Boolean
+	descriptionEqualFold: String
+	descriptionContainsFold: String
+	"""
+	color field predicates
+	"""
+	color: String
+	colorNEQ: String
+	colorIn: [String!]
+	colorNotIn: [String!]
+	colorGT: String
+	colorGTE: String
+	colorLT: String
+	colorLTE: String
+	colorContains: String
+	colorHasPrefix: String
+	colorHasSuffix: String
+	colorIsNil: Boolean
+	colorNotNil: Boolean
+	colorEqualFold: String
+	colorContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	tasks edge predicates
+	"""
+	hasTasks: Boolean
+	hasTasksWith: [TaskWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	risks edge predicates
+	"""
+	hasRisks: Boolean
+	hasRisksWith: [RiskWhereInput!]
+	"""
+	risk_categories edge predicates
+	"""
+	hasRiskCategories: Boolean
+	hasRiskCategoriesWith: [RiskWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
+	procedures edge predicates
+	"""
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
+	"""
+	action_plans edge predicates
+	"""
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
+	"""
+	programs edge predicates
+	"""
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 }
 type DNSVerification implements Node {
 	id: ID!
@@ -24746,7 +25752,7 @@ type InternalPolicy implements Node {
 	"""
 	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
-	policyType: String
+	policyType: String @deprecated(reason: "Use `policy_kind_name` instead.")
 	"""
 	details of the policy
 	"""
@@ -24804,6 +25810,14 @@ type InternalPolicy implements Node {
 	This will contain the most recent file id if this policy was created from a file
 	"""
 	fileID: ID
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindName: String
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindID: ID
 	owner: Organization
 	blockedGroups(
 		"""
@@ -24875,6 +25889,7 @@ type InternalPolicy implements Node {
 	temporary delegates for the policy, used for temporary approval
 	"""
 	delegate: Group
+	internalPolicyKind: CustomTypeEnum
 	controlObjectives(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -25333,7 +26348,7 @@ type InternalPolicyHistory implements Node {
 	"""
 	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
-	policyType: String
+	policyType: String @deprecated(reason: "Use `policy_kind_name` instead.")
 	"""
 	details of the policy
 	"""
@@ -25391,6 +26406,14 @@ type InternalPolicyHistory implements Node {
 	This will contain the most recent file id if this policy was created from a file
 	"""
 	fileID: String
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindName: String
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindID: String
 }
 """
 A connection to a list of items.
@@ -25851,6 +26874,42 @@ input InternalPolicyHistoryWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: String
 	fileIDContainsFold: String
+	"""
+	internal_policy_kind_name field predicates
+	"""
+	internalPolicyKindName: String
+	internalPolicyKindNameNEQ: String
+	internalPolicyKindNameIn: [String!]
+	internalPolicyKindNameNotIn: [String!]
+	internalPolicyKindNameGT: String
+	internalPolicyKindNameGTE: String
+	internalPolicyKindNameLT: String
+	internalPolicyKindNameLTE: String
+	internalPolicyKindNameContains: String
+	internalPolicyKindNameHasPrefix: String
+	internalPolicyKindNameHasSuffix: String
+	internalPolicyKindNameIsNil: Boolean
+	internalPolicyKindNameNotNil: Boolean
+	internalPolicyKindNameEqualFold: String
+	internalPolicyKindNameContainsFold: String
+	"""
+	internal_policy_kind_id field predicates
+	"""
+	internalPolicyKindID: String
+	internalPolicyKindIDNEQ: String
+	internalPolicyKindIDIn: [String!]
+	internalPolicyKindIDNotIn: [String!]
+	internalPolicyKindIDGT: String
+	internalPolicyKindIDGTE: String
+	internalPolicyKindIDLT: String
+	internalPolicyKindIDLTE: String
+	internalPolicyKindIDContains: String
+	internalPolicyKindIDHasPrefix: String
+	internalPolicyKindIDHasSuffix: String
+	internalPolicyKindIDIsNil: Boolean
+	internalPolicyKindIDNotNil: Boolean
+	internalPolicyKindIDEqualFold: String
+	internalPolicyKindIDContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -26227,6 +27286,42 @@ input InternalPolicyWhereInput {
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
 	"""
+	internal_policy_kind_name field predicates
+	"""
+	internalPolicyKindName: String
+	internalPolicyKindNameNEQ: String
+	internalPolicyKindNameIn: [String!]
+	internalPolicyKindNameNotIn: [String!]
+	internalPolicyKindNameGT: String
+	internalPolicyKindNameGTE: String
+	internalPolicyKindNameLT: String
+	internalPolicyKindNameLTE: String
+	internalPolicyKindNameContains: String
+	internalPolicyKindNameHasPrefix: String
+	internalPolicyKindNameHasSuffix: String
+	internalPolicyKindNameIsNil: Boolean
+	internalPolicyKindNameNotNil: Boolean
+	internalPolicyKindNameEqualFold: String
+	internalPolicyKindNameContainsFold: String
+	"""
+	internal_policy_kind_id field predicates
+	"""
+	internalPolicyKindID: ID
+	internalPolicyKindIDNEQ: ID
+	internalPolicyKindIDIn: [ID!]
+	internalPolicyKindIDNotIn: [ID!]
+	internalPolicyKindIDGT: ID
+	internalPolicyKindIDGTE: ID
+	internalPolicyKindIDLT: ID
+	internalPolicyKindIDLTE: ID
+	internalPolicyKindIDContains: ID
+	internalPolicyKindIDHasPrefix: ID
+	internalPolicyKindIDHasSuffix: ID
+	internalPolicyKindIDIsNil: Boolean
+	internalPolicyKindIDNotNil: Boolean
+	internalPolicyKindIDEqualFold: ID
+	internalPolicyKindIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -26251,6 +27346,11 @@ input InternalPolicyWhereInput {
 	"""
 	hasDelegate: Boolean
 	hasDelegateWith: [GroupWhereInput!]
+	"""
+	internal_policy_kind edge predicates
+	"""
+	hasInternalPolicyKind: Boolean
+	hasInternalPolicyKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	control_objectives edge predicates
 	"""
@@ -30878,6 +31978,56 @@ type Mutation {
 		ids: [ID!]!
 	): CustomDomainBulkDeletePayload!
 	"""
+	Create a new customTypeEnum
+	"""
+	createCustomTypeEnum(
+		"""
+		values of the customTypeEnum
+		"""
+		input: CreateCustomTypeEnumInput!
+	): CustomTypeEnumCreatePayload!
+	"""
+	Create multiple new customTypeEnums
+	"""
+	createBulkCustomTypeEnum(
+		"""
+		values of the customTypeEnum
+		"""
+		input: [CreateCustomTypeEnumInput!]
+	): CustomTypeEnumBulkCreatePayload!
+	"""
+	Create multiple new customTypeEnums via file upload
+	"""
+	createBulkCSVCustomTypeEnum(
+		"""
+		csv file containing values of the customTypeEnum
+		"""
+		input: Upload!
+	): CustomTypeEnumBulkCreatePayload!
+	"""
+	Update an existing customTypeEnum
+	"""
+	updateCustomTypeEnum(
+		"""
+		ID of the customTypeEnum
+		"""
+		id: ID!
+
+		"""
+		New values for the customTypeEnum
+		"""
+		input: UpdateCustomTypeEnumInput!
+	): CustomTypeEnumUpdatePayload!
+	"""
+	Delete an existing customTypeEnum
+	"""
+	deleteCustomTypeEnum(
+		"""
+		ID of the customTypeEnum
+		"""
+		id: ID!
+	): CustomTypeEnumDeletePayload!
+	"""
 	Create a new dnsVerification
 	"""
 	createDNSVerification(
@@ -33066,6 +34216,56 @@ type Mutation {
 		"""
 		ownerID: ID
 	): SubscriberDeletePayload!
+	"""
+	Create a new tagDefinition
+	"""
+	createTagDefinition(
+		"""
+		values of the tagDefinition
+		"""
+		input: CreateTagDefinitionInput!
+	): TagDefinitionCreatePayload!
+	"""
+	Create multiple new tagDefinitions
+	"""
+	createBulkTagDefinition(
+		"""
+		values of the tagDefinition
+		"""
+		input: [CreateTagDefinitionInput!]
+	): TagDefinitionBulkCreatePayload!
+	"""
+	Create multiple new tagDefinitions via file upload
+	"""
+	createBulkCSVTagDefinition(
+		"""
+		csv file containing values of the tagDefinition
+		"""
+		input: Upload!
+	): TagDefinitionBulkCreatePayload!
+	"""
+	Update an existing tagDefinition
+	"""
+	updateTagDefinition(
+		"""
+		ID of the tagDefinition
+		"""
+		id: ID!
+
+		"""
+		New values for the tagDefinition
+		"""
+		input: UpdateTagDefinitionInput!
+	): TagDefinitionUpdatePayload!
+	"""
+	Delete an existing tagDefinition
+	"""
+	deleteTagDefinition(
+		"""
+		ID of the tagDefinition
+		"""
+		id: ID!
+	): TagDefinitionDeletePayload!
 	"""
 	Create a new task
 	"""
@@ -38368,6 +39568,68 @@ type Organization implements Node {
 		"""
 		where: AssessmentResponseWhereInput
 	): AssessmentResponseConnection!
+	customTypeEnums(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CustomTypeEnums returned from the connection.
+		"""
+		orderBy: [CustomTypeEnumOrder!]
+
+		"""
+		Filtering options for CustomTypeEnums returned from the connection.
+		"""
+		where: CustomTypeEnumWhereInput
+	): CustomTypeEnumConnection!
+	tagDefinitions(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TagDefinitions returned from the connection.
+		"""
+		orderBy: [TagDefinitionOrder!]
+
+		"""
+		Filtering options for TagDefinitions returned from the connection.
+		"""
+		where: TagDefinitionWhereInput
+	): TagDefinitionConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -40587,6 +41849,16 @@ input OrganizationWhereInput {
 	hasAssessmentResponses: Boolean
 	hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
 	"""
+	custom_type_enums edge predicates
+	"""
+	hasCustomTypeEnums: Boolean
+	hasCustomTypeEnumsWith: [CustomTypeEnumWhereInput!]
+	"""
+	tag_definitions edge predicates
+	"""
+	hasTagDefinitions: Boolean
+	hasTagDefinitionsWith: [TagDefinitionWhereInput!]
+	"""
 	members edge predicates
 	"""
 	hasMembers: Boolean
@@ -41056,7 +42328,7 @@ type Procedure implements Node {
 	"""
 	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
-	procedureType: String
+	procedureType: String @deprecated(reason: "Use `procedure_kind_name` instead.")
 	"""
 	details of the procedure
 	"""
@@ -41126,6 +42398,14 @@ type Procedure implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the procedure
+	"""
+	procedureKindName: String
+	"""
+	the kind of the procedure
+	"""
+	procedureKindID: ID
 	owner: Organization
 	blockedGroups(
 		"""
@@ -41197,6 +42477,7 @@ type Procedure implements Node {
 	temporary delegates for the procedure, used for temporary approval
 	"""
 	delegate: Group
+	procedureKind: CustomTypeEnum
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -41581,7 +42862,7 @@ type ProcedureHistory implements Node {
 	"""
 	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
-	procedureType: String
+	procedureType: String @deprecated(reason: "Use `procedure_kind_name` instead.")
 	"""
 	details of the procedure
 	"""
@@ -41651,6 +42932,14 @@ type ProcedureHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the procedure
+	"""
+	procedureKindName: String
+	"""
+	the kind of the procedure
+	"""
+	procedureKindID: String
 }
 """
 A connection to a list of items.
@@ -42111,6 +43400,42 @@ input ProcedureHistoryWhereInput {
 	systemInternalIDNotNil: Boolean
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
+	"""
+	procedure_kind_name field predicates
+	"""
+	procedureKindName: String
+	procedureKindNameNEQ: String
+	procedureKindNameIn: [String!]
+	procedureKindNameNotIn: [String!]
+	procedureKindNameGT: String
+	procedureKindNameGTE: String
+	procedureKindNameLT: String
+	procedureKindNameLTE: String
+	procedureKindNameContains: String
+	procedureKindNameHasPrefix: String
+	procedureKindNameHasSuffix: String
+	procedureKindNameIsNil: Boolean
+	procedureKindNameNotNil: Boolean
+	procedureKindNameEqualFold: String
+	procedureKindNameContainsFold: String
+	"""
+	procedure_kind_id field predicates
+	"""
+	procedureKindID: String
+	procedureKindIDNEQ: String
+	procedureKindIDIn: [String!]
+	procedureKindIDNotIn: [String!]
+	procedureKindIDGT: String
+	procedureKindIDGTE: String
+	procedureKindIDLT: String
+	procedureKindIDLTE: String
+	procedureKindIDContains: String
+	procedureKindIDHasPrefix: String
+	procedureKindIDHasSuffix: String
+	procedureKindIDIsNil: Boolean
+	procedureKindIDNotNil: Boolean
+	procedureKindIDEqualFold: String
+	procedureKindIDContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -42487,6 +43812,42 @@ input ProcedureWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	procedure_kind_name field predicates
+	"""
+	procedureKindName: String
+	procedureKindNameNEQ: String
+	procedureKindNameIn: [String!]
+	procedureKindNameNotIn: [String!]
+	procedureKindNameGT: String
+	procedureKindNameGTE: String
+	procedureKindNameLT: String
+	procedureKindNameLTE: String
+	procedureKindNameContains: String
+	procedureKindNameHasPrefix: String
+	procedureKindNameHasSuffix: String
+	procedureKindNameIsNil: Boolean
+	procedureKindNameNotNil: Boolean
+	procedureKindNameEqualFold: String
+	procedureKindNameContainsFold: String
+	"""
+	procedure_kind_id field predicates
+	"""
+	procedureKindID: ID
+	procedureKindIDNEQ: ID
+	procedureKindIDIn: [ID!]
+	procedureKindIDNotIn: [ID!]
+	procedureKindIDGT: ID
+	procedureKindIDGTE: ID
+	procedureKindIDLT: ID
+	procedureKindIDLTE: ID
+	procedureKindIDContains: ID
+	procedureKindIDHasPrefix: ID
+	procedureKindIDHasSuffix: ID
+	procedureKindIDIsNil: Boolean
+	procedureKindIDNotNil: Boolean
+	procedureKindIDEqualFold: ID
+	procedureKindIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -42511,6 +43872,11 @@ input ProcedureWhereInput {
 	"""
 	hasDelegate: Boolean
 	hasDelegateWith: [GroupWhereInput!]
+	"""
+	procedure_kind edge predicates
+	"""
+	hasProcedureKind: Boolean
+	hasProcedureKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -42576,6 +43942,14 @@ type Program implements Node {
 	"""
 	ownerID: ID
 	"""
+	the kind of the program
+	"""
+	programKindName: String
+	"""
+	the kind of the program
+	"""
+	programKindID: ID
+	"""
 	the name of the program
 	"""
 	name: String!
@@ -42590,7 +43964,7 @@ type Program implements Node {
 	"""
 	the type of the program
 	"""
-	programType: ProgramProgramType!
+	programType: ProgramProgramType! @deprecated(reason: "Use `program_kind` instead.")
 	"""
 	the short name of the compliance standard the program is based on, only used for framework type programs
 	"""
@@ -42725,6 +44099,7 @@ type Program implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	programKind: CustomTypeEnum
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -43249,6 +44624,14 @@ type ProgramHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the kind of the program
+	"""
+	programKindName: String
+	"""
+	the kind of the program
+	"""
+	programKindID: String
+	"""
 	the name of the program
 	"""
 	name: String!
@@ -43263,7 +44646,7 @@ type ProgramHistory implements Node {
 	"""
 	the type of the program
 	"""
-	programType: ProgramHistoryProgramType!
+	programType: ProgramHistoryProgramType! @deprecated(reason: "Use `program_kind` instead.")
 	"""
 	the short name of the compliance standard the program is based on, only used for framework type programs
 	"""
@@ -43543,6 +44926,42 @@ input ProgramHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	program_kind_name field predicates
+	"""
+	programKindName: String
+	programKindNameNEQ: String
+	programKindNameIn: [String!]
+	programKindNameNotIn: [String!]
+	programKindNameGT: String
+	programKindNameGTE: String
+	programKindNameLT: String
+	programKindNameLTE: String
+	programKindNameContains: String
+	programKindNameHasPrefix: String
+	programKindNameHasSuffix: String
+	programKindNameIsNil: Boolean
+	programKindNameNotNil: Boolean
+	programKindNameEqualFold: String
+	programKindNameContainsFold: String
+	"""
+	program_kind_id field predicates
+	"""
+	programKindID: String
+	programKindIDNEQ: String
+	programKindIDIn: [String!]
+	programKindIDNotIn: [String!]
+	programKindIDGT: String
+	programKindIDGTE: String
+	programKindIDLT: String
+	programKindIDLTE: String
+	programKindIDContains: String
+	programKindIDHasPrefix: String
+	programKindIDHasSuffix: String
+	programKindIDIsNil: Boolean
+	programKindIDNotNil: Boolean
+	programKindIDEqualFold: String
+	programKindIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -44343,6 +45762,42 @@ input ProgramWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	program_kind_name field predicates
+	"""
+	programKindName: String
+	programKindNameNEQ: String
+	programKindNameIn: [String!]
+	programKindNameNotIn: [String!]
+	programKindNameGT: String
+	programKindNameGTE: String
+	programKindNameLT: String
+	programKindNameLTE: String
+	programKindNameContains: String
+	programKindNameHasPrefix: String
+	programKindNameHasSuffix: String
+	programKindNameIsNil: Boolean
+	programKindNameNotNil: Boolean
+	programKindNameEqualFold: String
+	programKindNameContainsFold: String
+	"""
+	program_kind_id field predicates
+	"""
+	programKindID: ID
+	programKindIDNEQ: ID
+	programKindIDIn: [ID!]
+	programKindIDNotIn: [ID!]
+	programKindIDGT: ID
+	programKindIDGTE: ID
+	programKindIDLT: ID
+	programKindIDLTE: ID
+	programKindIDContains: ID
+	programKindIDHasPrefix: ID
+	programKindIDHasSuffix: ID
+	programKindIDIsNil: Boolean
+	programKindIDNotNil: Boolean
+	programKindIDEqualFold: ID
+	programKindIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -44541,6 +45996,11 @@ input ProgramWhereInput {
 	"""
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
+	"""
+	program_kind edge predicates
+	"""
+	hasProgramKind: Boolean
+	hasProgramKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -45225,6 +46685,37 @@ type Query {
 		"""
 		where: CustomDomainHistoryWhereInput
 	): CustomDomainHistoryConnection!
+	customTypeEnums(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CustomTypeEnums returned from the connection.
+		"""
+		orderBy: [CustomTypeEnumOrder!]
+
+		"""
+		Filtering options for CustomTypeEnums returned from the connection.
+		"""
+		where: CustomTypeEnumWhereInput
+	): CustomTypeEnumConnection!
 	dnsVerifications(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -47426,6 +48917,37 @@ type Query {
 		"""
 		where: TFASettingWhereInput
 	): TFASettingConnection!
+	tagDefinitions(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TagDefinitions returned from the connection.
+		"""
+		orderBy: [TagDefinitionOrder!]
+
+		"""
+		Filtering options for TagDefinitions returned from the connection.
+		"""
+		where: TagDefinitionWhereInput
+	): TagDefinitionConnection!
 	tasks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -48377,6 +49899,35 @@ type Query {
 		last: Int
 	): CustomDomainConnection
 	"""
+	Search across CustomTypeEnum objects
+	"""
+	adminCustomTypeEnumSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): CustomTypeEnumConnection
+	"""
 	Search across DNSVerification objects
 	"""
 	adminDNSVerificationSearch(
@@ -49247,6 +50798,35 @@ type Query {
 		last: Int
 	): SubscriberConnection
 	"""
+	Search across TagDefinition objects
+	"""
+	adminTagDefinitionSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): TagDefinitionConnection
+	"""
 	Search across Task objects
 	"""
 	adminTaskSearch(
@@ -49665,6 +51245,15 @@ type Query {
 		"""
 		id: ID!
 	): CustomDomain!
+	"""
+	Look up customTypeEnum by ID
+	"""
+	customTypeEnum(
+		"""
+		ID of the customTypeEnum
+		"""
+		id: ID!
+	): CustomTypeEnum!
 	"""
 	Look up dnsVerification by ID
 	"""
@@ -50279,6 +51868,35 @@ type Query {
 		"""
 		last: Int
 	): CustomDomainConnection
+	"""
+	Search across CustomTypeEnum objects
+	"""
+	customTypeEnumSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): CustomTypeEnumConnection
 	"""
 	Search across DNSVerification objects
 	"""
@@ -51150,6 +52768,35 @@ type Query {
 		last: Int
 	): SubscriberConnection
 	"""
+	Search across TagDefinition objects
+	"""
+	tagDefinitionSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): TagDefinitionConnection
+	"""
 	Search across Task objects
 	"""
 	taskSearch(
@@ -51476,6 +53123,15 @@ type Query {
 		email: String!
 	): Subscriber!
 	"""
+	Look up tagDefinition by ID
+	"""
+	tagDefinition(
+		"""
+		ID of the tagDefinition
+		"""
+		id: ID!
+	): TagDefinition!
+	"""
 	Look up task by ID
 	"""
 	task(
@@ -51602,6 +53258,22 @@ type Risk implements Node {
 	"""
 	ownerID: ID
 	"""
+	the kind of the risk
+	"""
+	riskKindName: String
+	"""
+	the kind of the risk
+	"""
+	riskKindID: ID
+	"""
+	the category of the risk
+	"""
+	riskCategoryName: String
+	"""
+	the category of the risk
+	"""
+	riskCategoryID: ID
+	"""
 	the name of the risk
 	"""
 	name: String!
@@ -51612,11 +53284,11 @@ type Risk implements Node {
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
 	"""
-	riskType: String
+	riskType: String @deprecated(reason: "Use `risk_kind_name` instead.")
 	"""
 	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	category: String
+	category: String @deprecated(reason: "Use `risk_category_name` instead.")
 	"""
 	impact of the risk -critical, high, medium, low
 	"""
@@ -51743,6 +53415,8 @@ type Risk implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	riskKind: CustomTypeEnum
+	riskCategory: CustomTypeEnum
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -52194,6 +53868,22 @@ type RiskHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the kind of the risk
+	"""
+	riskKindName: String
+	"""
+	the kind of the risk
+	"""
+	riskKindID: String
+	"""
+	the category of the risk
+	"""
+	riskCategoryName: String
+	"""
+	the category of the risk
+	"""
+	riskCategoryID: String
+	"""
 	the name of the risk
 	"""
 	name: String!
@@ -52204,11 +53894,11 @@ type RiskHistory implements Node {
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
 	"""
-	riskType: String
+	riskType: String @deprecated(reason: "Use `risk_kind_name` instead.")
 	"""
 	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	category: String
+	category: String @deprecated(reason: "Use `risk_category_name` instead.")
 	"""
 	impact of the risk -critical, high, medium, low
 	"""
@@ -52489,6 +54179,78 @@ input RiskHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	risk_kind_name field predicates
+	"""
+	riskKindName: String
+	riskKindNameNEQ: String
+	riskKindNameIn: [String!]
+	riskKindNameNotIn: [String!]
+	riskKindNameGT: String
+	riskKindNameGTE: String
+	riskKindNameLT: String
+	riskKindNameLTE: String
+	riskKindNameContains: String
+	riskKindNameHasPrefix: String
+	riskKindNameHasSuffix: String
+	riskKindNameIsNil: Boolean
+	riskKindNameNotNil: Boolean
+	riskKindNameEqualFold: String
+	riskKindNameContainsFold: String
+	"""
+	risk_kind_id field predicates
+	"""
+	riskKindID: String
+	riskKindIDNEQ: String
+	riskKindIDIn: [String!]
+	riskKindIDNotIn: [String!]
+	riskKindIDGT: String
+	riskKindIDGTE: String
+	riskKindIDLT: String
+	riskKindIDLTE: String
+	riskKindIDContains: String
+	riskKindIDHasPrefix: String
+	riskKindIDHasSuffix: String
+	riskKindIDIsNil: Boolean
+	riskKindIDNotNil: Boolean
+	riskKindIDEqualFold: String
+	riskKindIDContainsFold: String
+	"""
+	risk_category_name field predicates
+	"""
+	riskCategoryName: String
+	riskCategoryNameNEQ: String
+	riskCategoryNameIn: [String!]
+	riskCategoryNameNotIn: [String!]
+	riskCategoryNameGT: String
+	riskCategoryNameGTE: String
+	riskCategoryNameLT: String
+	riskCategoryNameLTE: String
+	riskCategoryNameContains: String
+	riskCategoryNameHasPrefix: String
+	riskCategoryNameHasSuffix: String
+	riskCategoryNameIsNil: Boolean
+	riskCategoryNameNotNil: Boolean
+	riskCategoryNameEqualFold: String
+	riskCategoryNameContainsFold: String
+	"""
+	risk_category_id field predicates
+	"""
+	riskCategoryID: String
+	riskCategoryIDNEQ: String
+	riskCategoryIDIn: [String!]
+	riskCategoryIDNotIn: [String!]
+	riskCategoryIDGT: String
+	riskCategoryIDGTE: String
+	riskCategoryIDLT: String
+	riskCategoryIDLTE: String
+	riskCategoryIDContains: String
+	riskCategoryIDHasPrefix: String
+	riskCategoryIDHasSuffix: String
+	riskCategoryIDIsNil: Boolean
+	riskCategoryIDNotNil: Boolean
+	riskCategoryIDEqualFold: String
+	riskCategoryIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -52854,6 +54616,78 @@ input RiskWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	risk_kind_name field predicates
+	"""
+	riskKindName: String
+	riskKindNameNEQ: String
+	riskKindNameIn: [String!]
+	riskKindNameNotIn: [String!]
+	riskKindNameGT: String
+	riskKindNameGTE: String
+	riskKindNameLT: String
+	riskKindNameLTE: String
+	riskKindNameContains: String
+	riskKindNameHasPrefix: String
+	riskKindNameHasSuffix: String
+	riskKindNameIsNil: Boolean
+	riskKindNameNotNil: Boolean
+	riskKindNameEqualFold: String
+	riskKindNameContainsFold: String
+	"""
+	risk_kind_id field predicates
+	"""
+	riskKindID: ID
+	riskKindIDNEQ: ID
+	riskKindIDIn: [ID!]
+	riskKindIDNotIn: [ID!]
+	riskKindIDGT: ID
+	riskKindIDGTE: ID
+	riskKindIDLT: ID
+	riskKindIDLTE: ID
+	riskKindIDContains: ID
+	riskKindIDHasPrefix: ID
+	riskKindIDHasSuffix: ID
+	riskKindIDIsNil: Boolean
+	riskKindIDNotNil: Boolean
+	riskKindIDEqualFold: ID
+	riskKindIDContainsFold: ID
+	"""
+	risk_category_name field predicates
+	"""
+	riskCategoryName: String
+	riskCategoryNameNEQ: String
+	riskCategoryNameIn: [String!]
+	riskCategoryNameNotIn: [String!]
+	riskCategoryNameGT: String
+	riskCategoryNameGTE: String
+	riskCategoryNameLT: String
+	riskCategoryNameLTE: String
+	riskCategoryNameContains: String
+	riskCategoryNameHasPrefix: String
+	riskCategoryNameHasSuffix: String
+	riskCategoryNameIsNil: Boolean
+	riskCategoryNameNotNil: Boolean
+	riskCategoryNameEqualFold: String
+	riskCategoryNameContainsFold: String
+	"""
+	risk_category_id field predicates
+	"""
+	riskCategoryID: ID
+	riskCategoryIDNEQ: ID
+	riskCategoryIDIn: [ID!]
+	riskCategoryIDNotIn: [ID!]
+	riskCategoryIDGT: ID
+	riskCategoryIDGTE: ID
+	riskCategoryIDLT: ID
+	riskCategoryIDLTE: ID
+	riskCategoryIDContains: ID
+	riskCategoryIDHasPrefix: ID
+	riskCategoryIDHasSuffix: ID
+	riskCategoryIDIsNil: Boolean
+	riskCategoryIDNotNil: Boolean
+	riskCategoryIDEqualFold: ID
+	riskCategoryIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -53055,6 +54889,16 @@ input RiskWhereInput {
 	"""
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
+	"""
+	risk_kind edge predicates
+	"""
+	hasRiskKind: Boolean
+	hasRiskKindWith: [CustomTypeEnumWhereInput!]
+	"""
+	risk_category edge predicates
+	"""
+	hasRiskCategory: Boolean
+	hasRiskCategoryWith: [CustomTypeEnumWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -54894,6 +56738,7 @@ type SearchResults {
 	controlImplementations: ControlImplementationConnection
 	controlObjectives: ControlObjectiveConnection
 	customDomains: CustomDomainConnection
+	customTypeEnums: CustomTypeEnumConnection
 	dnsVerifications: DNSVerificationConnection
 	documentData: DocumentDataConnection
 	entities: EntityConnection
@@ -54924,6 +56769,7 @@ type SearchResults {
 	subcontrols: SubcontrolConnection
 	subprocessors: SubprocessorConnection
 	subscribers: SubscriberConnection
+	tagDefinitions: TagDefinitionConnection
 	tasks: TaskConnection
 	templates: TemplateConnection
 	trustCenters: TrustCenterConnection
@@ -56167,7 +58013,7 @@ type Subcontrol implements Node {
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	controlType: SubcontrolControlType
+	controlType: SubcontrolControlType @deprecated(reason: "Use `control_kind_name` instead.")
 	"""
 	category of the control
 	"""
@@ -56232,6 +58078,14 @@ type Subcontrol implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindName: String
+	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindID: ID
 	"""
 	the unique reference code for the control
 	"""
@@ -56532,6 +58386,7 @@ type Subcontrol implements Node {
 	"""
 	responsibleParty: Entity
 	owner: Organization
+	subcontrolKind: CustomTypeEnum
 	control: Control!
 	controlImplementations(
 		"""
@@ -56752,7 +58607,7 @@ type SubcontrolHistory implements Node {
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
-	controlType: SubcontrolHistoryControlType
+	controlType: SubcontrolHistoryControlType @deprecated(reason: "Use `control_kind_name` instead.")
 	"""
 	category of the control
 	"""
@@ -56817,6 +58672,14 @@ type SubcontrolHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindName: String
+	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindID: String
 	"""
 	the unique reference code for the control
 	"""
@@ -57363,6 +59226,42 @@ input SubcontrolHistoryWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	subcontrol_kind_name field predicates
+	"""
+	subcontrolKindName: String
+	subcontrolKindNameNEQ: String
+	subcontrolKindNameIn: [String!]
+	subcontrolKindNameNotIn: [String!]
+	subcontrolKindNameGT: String
+	subcontrolKindNameGTE: String
+	subcontrolKindNameLT: String
+	subcontrolKindNameLTE: String
+	subcontrolKindNameContains: String
+	subcontrolKindNameHasPrefix: String
+	subcontrolKindNameHasSuffix: String
+	subcontrolKindNameIsNil: Boolean
+	subcontrolKindNameNotNil: Boolean
+	subcontrolKindNameEqualFold: String
+	subcontrolKindNameContainsFold: String
+	"""
+	subcontrol_kind_id field predicates
+	"""
+	subcontrolKindID: String
+	subcontrolKindIDNEQ: String
+	subcontrolKindIDIn: [String!]
+	subcontrolKindIDNotIn: [String!]
+	subcontrolKindIDGT: String
+	subcontrolKindIDGTE: String
+	subcontrolKindIDLT: String
+	subcontrolKindIDLTE: String
+	subcontrolKindIDContains: String
+	subcontrolKindIDHasPrefix: String
+	subcontrolKindIDHasSuffix: String
+	subcontrolKindIDIsNil: Boolean
+	subcontrolKindIDNotNil: Boolean
+	subcontrolKindIDEqualFold: String
+	subcontrolKindIDContainsFold: String
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -57839,6 +59738,42 @@ input SubcontrolWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	subcontrol_kind_name field predicates
+	"""
+	subcontrolKindName: String
+	subcontrolKindNameNEQ: String
+	subcontrolKindNameIn: [String!]
+	subcontrolKindNameNotIn: [String!]
+	subcontrolKindNameGT: String
+	subcontrolKindNameGTE: String
+	subcontrolKindNameLT: String
+	subcontrolKindNameLTE: String
+	subcontrolKindNameContains: String
+	subcontrolKindNameHasPrefix: String
+	subcontrolKindNameHasSuffix: String
+	subcontrolKindNameIsNil: Boolean
+	subcontrolKindNameNotNil: Boolean
+	subcontrolKindNameEqualFold: String
+	subcontrolKindNameContainsFold: String
+	"""
+	subcontrol_kind_id field predicates
+	"""
+	subcontrolKindID: ID
+	subcontrolKindIDNEQ: ID
+	subcontrolKindIDIn: [ID!]
+	subcontrolKindIDNotIn: [ID!]
+	subcontrolKindIDGT: ID
+	subcontrolKindIDGTE: ID
+	subcontrolKindIDLT: ID
+	subcontrolKindIDLTE: ID
+	subcontrolKindIDContains: ID
+	subcontrolKindIDHasPrefix: ID
+	subcontrolKindIDHasSuffix: ID
+	subcontrolKindIDIsNil: Boolean
+	subcontrolKindIDNotNil: Boolean
+	subcontrolKindIDEqualFold: ID
+	subcontrolKindIDContainsFold: ID
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -57935,6 +59870,11 @@ input SubcontrolWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	subcontrol_kind edge predicates
+	"""
+	hasSubcontrolKind: Boolean
+	hasSubcontrolKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	control edge predicates
 	"""
@@ -59291,6 +61231,356 @@ input TFASettingWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [UserWhereInput!]
 }
+type TagDefinition implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
+	The name of the tag definition
+	"""
+	name: String!
+	"""
+	common aliases or misspellings for the tag definition
+	"""
+	aliases: [String!]
+	"""
+	The slug of the tag definition, derived from the name, unique per organization
+	"""
+	slug: String
+	"""
+	The description of the tag definition
+	"""
+	description: String
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	owner: Organization
+}
+"""
+Return response for createBulkTagDefinition mutation
+"""
+type TagDefinitionBulkCreatePayload {
+	"""
+	Created tagDefinitions
+	"""
+	tagDefinitions: [TagDefinition!]
+}
+"""
+A connection to a list of items.
+"""
+type TagDefinitionConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [TagDefinitionEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createTagDefinition mutation
+"""
+type TagDefinitionCreatePayload {
+	"""
+	Created tagDefinition
+	"""
+	tagDefinition: TagDefinition!
+}
+"""
+Return response for deleteTagDefinition mutation
+"""
+type TagDefinitionDeletePayload {
+	"""
+	Deleted tagDefinition ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type TagDefinitionEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: TagDefinition
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for TagDefinition connections
+"""
+input TagDefinitionOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order TagDefinitions.
+	"""
+	field: TagDefinitionOrderField!
+}
+"""
+Properties by which TagDefinition connections can be ordered.
+"""
+enum TagDefinitionOrderField {
+	created_at
+	updated_at
+}
+"""
+Return response for updateTagDefinition mutation
+"""
+type TagDefinitionUpdatePayload {
+	"""
+	Updated tagDefinition
+	"""
+	tagDefinition: TagDefinition!
+}
+"""
+TagDefinitionWhereInput is used for filtering TagDefinition objects.
+Input was generated by ent.
+"""
+input TagDefinitionWhereInput {
+	not: TagDefinitionWhereInput
+	and: [TagDefinitionWhereInput!]
+	or: [TagDefinitionWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	slug field predicates
+	"""
+	slug: String
+	slugNEQ: String
+	slugIn: [String!]
+	slugNotIn: [String!]
+	slugGT: String
+	slugGTE: String
+	slugLT: String
+	slugLTE: String
+	slugContains: String
+	slugHasPrefix: String
+	slugHasSuffix: String
+	slugIsNil: Boolean
+	slugNotNil: Boolean
+	slugEqualFold: String
+	slugContainsFold: String
+	"""
+	description field predicates
+	"""
+	description: String
+	descriptionNEQ: String
+	descriptionIn: [String!]
+	descriptionNotIn: [String!]
+	descriptionGT: String
+	descriptionGTE: String
+	descriptionLT: String
+	descriptionLTE: String
+	descriptionContains: String
+	descriptionHasPrefix: String
+	descriptionHasSuffix: String
+	descriptionIsNil: Boolean
+	descriptionNotNil: Boolean
+	descriptionEqualFold: String
+	descriptionContainsFold: String
+	"""
+	color field predicates
+	"""
+	color: String
+	colorNEQ: String
+	colorIn: [String!]
+	colorNotIn: [String!]
+	colorGT: String
+	colorGTE: String
+	colorLT: String
+	colorLTE: String
+	colorContains: String
+	colorHasPrefix: String
+	colorHasSuffix: String
+	colorIsNil: Boolean
+	colorNotNil: Boolean
+	colorEqualFold: String
+	colorContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+}
 type Task implements Node {
 	id: ID!
 	createdAt: Time
@@ -59310,6 +61600,14 @@ type Task implements Node {
 	"""
 	ownerID: ID
 	"""
+	the kind of the task
+	"""
+	taskKindName: String
+	"""
+	the kind of the task
+	"""
+	taskKindID: ID
+	"""
 	the title of the task
 	"""
 	title: String!
@@ -59324,7 +61622,7 @@ type Task implements Node {
 	"""
 	the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	"""
-	category: String
+	category: String @deprecated(reason: "Use `task_kind_name` instead.")
 	"""
 	the due date of the task
 	"""
@@ -59341,7 +61639,20 @@ type Task implements Node {
 	the id of the user who assigned the task, can be left empty if created by the system or a service token
 	"""
 	assignerID: ID
+	"""
+	indicates if the task was generated by the system
+	"""
+	systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+	"""
+	key to prevent duplicates for auto-generated task based on rules
+	"""
+	idempotencyKey: String
+	"""
+	an optional external reference URL for the task
+	"""
+	externalReferenceURL: [String!]
 	owner: Organization
+	taskKind: CustomTypeEnum
 	assigner: User
 	assignee: User
 	comments(
@@ -59787,6 +62098,14 @@ type TaskHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the kind of the task
+	"""
+	taskKindName: String
+	"""
+	the kind of the task
+	"""
+	taskKindID: String
+	"""
 	the title of the task
 	"""
 	title: String!
@@ -59801,7 +62120,7 @@ type TaskHistory implements Node {
 	"""
 	the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	"""
-	category: String
+	category: String @deprecated(reason: "Use `task_kind_name` instead.")
 	"""
 	the due date of the task
 	"""
@@ -59818,6 +62137,18 @@ type TaskHistory implements Node {
 	the id of the user who assigned the task, can be left empty if created by the system or a service token
 	"""
 	assignerID: String
+	"""
+	indicates if the task was generated by the system
+	"""
+	systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
+	"""
+	key to prevent duplicates for auto-generated task based on rules
+	"""
+	idempotencyKey: String
+	"""
+	an optional external reference URL for the task
+	"""
+	externalReferenceURL: [String!]
 }
 """
 A connection to a list of items.
@@ -60047,6 +62378,42 @@ input TaskHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	task_kind_name field predicates
+	"""
+	taskKindName: String
+	taskKindNameNEQ: String
+	taskKindNameIn: [String!]
+	taskKindNameNotIn: [String!]
+	taskKindNameGT: String
+	taskKindNameGTE: String
+	taskKindNameLT: String
+	taskKindNameLTE: String
+	taskKindNameContains: String
+	taskKindNameHasPrefix: String
+	taskKindNameHasSuffix: String
+	taskKindNameIsNil: Boolean
+	taskKindNameNotNil: Boolean
+	taskKindNameEqualFold: String
+	taskKindNameContainsFold: String
+	"""
+	task_kind_id field predicates
+	"""
+	taskKindID: String
+	taskKindIDNEQ: String
+	taskKindIDIn: [String!]
+	taskKindIDNotIn: [String!]
+	taskKindIDGT: String
+	taskKindIDGTE: String
+	taskKindIDLT: String
+	taskKindIDLTE: String
+	taskKindIDContains: String
+	taskKindIDHasPrefix: String
+	taskKindIDHasSuffix: String
+	taskKindIDIsNil: Boolean
+	taskKindIDNotNil: Boolean
+	taskKindIDEqualFold: String
+	taskKindIDContainsFold: String
+	"""
 	title field predicates
 	"""
 	title: String
@@ -60167,6 +62534,29 @@ input TaskHistoryWhereInput {
 	assignerIDNotNil: Boolean
 	assignerIDEqualFold: String
 	assignerIDContainsFold: String
+	"""
+	system_generated field predicates
+	"""
+	systemGenerated: Boolean
+	systemGeneratedNEQ: Boolean
+	"""
+	idempotency_key field predicates
+	"""
+	idempotencyKey: String
+	idempotencyKeyNEQ: String
+	idempotencyKeyIn: [String!]
+	idempotencyKeyNotIn: [String!]
+	idempotencyKeyGT: String
+	idempotencyKeyGTE: String
+	idempotencyKeyLT: String
+	idempotencyKeyLTE: String
+	idempotencyKeyContains: String
+	idempotencyKeyHasPrefix: String
+	idempotencyKeyHasSuffix: String
+	idempotencyKeyIsNil: Boolean
+	idempotencyKeyNotNil: Boolean
+	idempotencyKeyEqualFold: String
+	idempotencyKeyContainsFold: String
 }
 """
 Ordering options for Task connections
@@ -60330,6 +62720,42 @@ input TaskWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	task_kind_name field predicates
+	"""
+	taskKindName: String
+	taskKindNameNEQ: String
+	taskKindNameIn: [String!]
+	taskKindNameNotIn: [String!]
+	taskKindNameGT: String
+	taskKindNameGTE: String
+	taskKindNameLT: String
+	taskKindNameLTE: String
+	taskKindNameContains: String
+	taskKindNameHasPrefix: String
+	taskKindNameHasSuffix: String
+	taskKindNameIsNil: Boolean
+	taskKindNameNotNil: Boolean
+	taskKindNameEqualFold: String
+	taskKindNameContainsFold: String
+	"""
+	task_kind_id field predicates
+	"""
+	taskKindID: ID
+	taskKindIDNEQ: ID
+	taskKindIDIn: [ID!]
+	taskKindIDNotIn: [ID!]
+	taskKindIDGT: ID
+	taskKindIDGTE: ID
+	taskKindIDLT: ID
+	taskKindIDLTE: ID
+	taskKindIDContains: ID
+	taskKindIDHasPrefix: ID
+	taskKindIDHasSuffix: ID
+	taskKindIDIsNil: Boolean
+	taskKindIDNotNil: Boolean
+	taskKindIDEqualFold: ID
+	taskKindIDContainsFold: ID
+	"""
 	title field predicates
 	"""
 	title: String
@@ -60451,10 +62877,38 @@ input TaskWhereInput {
 	assignerIDEqualFold: ID
 	assignerIDContainsFold: ID
 	"""
+	system_generated field predicates
+	"""
+	systemGenerated: Boolean
+	systemGeneratedNEQ: Boolean
+	"""
+	idempotency_key field predicates
+	"""
+	idempotencyKey: String
+	idempotencyKeyNEQ: String
+	idempotencyKeyIn: [String!]
+	idempotencyKeyNotIn: [String!]
+	idempotencyKeyGT: String
+	idempotencyKeyGTE: String
+	idempotencyKeyLT: String
+	idempotencyKeyLTE: String
+	idempotencyKeyContains: String
+	idempotencyKeyHasPrefix: String
+	idempotencyKeyHasSuffix: String
+	idempotencyKeyIsNil: Boolean
+	idempotencyKeyNotNil: Boolean
+	idempotencyKeyEqualFold: String
+	idempotencyKeyContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	task_kind edge predicates
+	"""
+	hasTaskKind: Boolean
+	hasTaskKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	assigner edge predicates
 	"""
@@ -65774,6 +68228,11 @@ input UpdateActionPlanInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
+	the kind of the action_plan
+	"""
+	actionPlanKindName: String
+	clearActionPlanKindName: Boolean
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -65794,6 +68253,8 @@ input UpdateActionPlanInput {
 	clearDelegate: Boolean
 	ownerID: ID
 	clearOwner: Boolean
+	actionPlanKindID: ID
+	clearActionPlanKind: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
@@ -65851,7 +68312,7 @@ input UpdateAssessmentResponseInput {
 	"""
 	the current status of the assessment for this user
 	"""
-	status: AssessmentResponseAssesmentResponseStatus
+	status: AssessmentResponseAssessmentResponseStatus
 	"""
 	when the user started the assessment
 	"""
@@ -66186,6 +68647,11 @@ input UpdateControlInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
+	the kind of the control
+	"""
+	controlKindName: String
+	clearControlKindName: Boolean
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String @externalReadOnly(source: FRAMEWORK)
@@ -66228,6 +68694,8 @@ input UpdateControlInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	controlKindID: ID
+	clearControlKind: Boolean
 	standardID: ID
 	clearStandard: Boolean
 	addProgramIDs: [ID!]
@@ -66374,6 +68842,65 @@ input UpdateCustomDomainInput {
 	clearOwner: Boolean
 	dnsVerificationID: ID
 	clearDNSVerification: Boolean
+}
+"""
+UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.
+Input was generated by ent.
+"""
+input UpdateCustomTypeEnumInput {
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
+	The name of the enum value, for example evidence request
+	"""
+	name: String
+	"""
+	The description of the custom type
+	"""
+	description: String
+	clearDescription: Boolean
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	clearColor: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+	addRiskIDs: [ID!]
+	removeRiskIDs: [ID!]
+	clearRisks: Boolean
+	addRiskCategoryIDs: [ID!]
+	removeRiskCategoryIDs: [ID!]
+	clearRiskCategories: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
+	addProcedureIDs: [ID!]
+	removeProcedureIDs: [ID!]
+	clearProcedures: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
+	addProgramIDs: [ID!]
+	removeProgramIDs: [ID!]
+	clearPrograms: Boolean
 }
 """
 UpdateDNSVerificationInput is used for update DNSVerification object.
@@ -67212,6 +69739,11 @@ input UpdateInternalPolicyInput {
 	"""
 	url: String
 	clearURL: Boolean
+	"""
+	the kind of the internal_policy
+	"""
+	internalPolicyKindName: String
+	clearInternalPolicyKindName: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -67224,6 +69756,8 @@ input UpdateInternalPolicyInput {
 	clearApprover: Boolean
 	delegateID: ID
 	clearDelegate: Boolean
+	internalPolicyKindID: ID
+	clearInternalPolicyKind: Boolean
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
@@ -67863,6 +70397,12 @@ input UpdateOrganizationInput {
 	addAssessmentResponseIDs: [ID!]
 	removeAssessmentResponseIDs: [ID!]
 	clearAssessmentResponses: Boolean
+	addCustomTypeEnumIDs: [ID!]
+	removeCustomTypeEnumIDs: [ID!]
+	clearCustomTypeEnums: Boolean
+	addTagDefinitionIDs: [ID!]
+	removeTagDefinitionIDs: [ID!]
+	clearTagDefinitions: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -68137,6 +70677,11 @@ input UpdateProcedureInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
+	"""
+	the kind of the procedure
+	"""
+	procedureKindName: String
+	clearProcedureKindName: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -68149,6 +70694,8 @@ input UpdateProcedureInput {
 	clearApprover: Boolean
 	delegateID: ID
 	clearDelegate: Boolean
+	procedureKindID: ID
+	clearProcedureKind: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -68190,6 +70737,11 @@ input UpdateProgramInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	the kind of the program
+	"""
+	programKindName: String
+	clearProgramKindName: Boolean
 	"""
 	the name of the program
 	"""
@@ -68260,6 +70812,8 @@ input UpdateProgramInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	programKindID: ID
+	clearProgramKind: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -68320,6 +70874,16 @@ input UpdateRiskInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	the kind of the risk
+	"""
+	riskKindName: String
+	clearRiskKindName: Boolean
+	"""
+	the category of the risk
+	"""
+	riskCategoryName: String
+	clearRiskCategoryName: Boolean
+	"""
 	the name of the risk
 	"""
 	name: String
@@ -68377,6 +70941,10 @@ input UpdateRiskInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	riskKindID: ID
+	clearRiskKind: Boolean
+	riskCategoryID: ID
+	clearRiskCategory: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -68734,6 +71302,11 @@ input UpdateSubcontrolInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
+	the kind of the subcontrol
+	"""
+	subcontrolKindName: String
+	clearSubcontrolKindName: Boolean
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String @externalReadOnly(source: FRAMEWORK)
@@ -68770,6 +71343,8 @@ input UpdateSubcontrolInput {
 	clearDelegate: Boolean
 	responsiblePartyID: ID
 	clearResponsibleParty: Boolean
+	subcontrolKindID: ID
+	clearSubcontrolKind: Boolean
 	controlID: ID
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
@@ -68876,6 +71451,44 @@ input UpdateTFASettingInput {
 	regenBackupCodes: Boolean
 }
 """
+UpdateTagDefinitionInput is used for update TagDefinition object.
+Input was generated by ent.
+"""
+input UpdateTagDefinitionInput {
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
+	The name of the tag definition
+	"""
+	name: String
+	"""
+	common aliases or misspellings for the tag definition
+	"""
+	aliases: [String!]
+	appendAliases: [String!]
+	clearAliases: Boolean
+	"""
+	The description of the tag definition
+	"""
+	description: String
+	clearDescription: Boolean
+	"""
+	The color of the tag definition in hex format
+	"""
+	color: String
+	clearColor: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+}
+"""
 UpdateTaskInput is used for update Task object.
 Input was generated by ent.
 """
@@ -68886,6 +71499,11 @@ input UpdateTaskInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	the kind of the task
+	"""
+	taskKindName: String
+	clearTaskKindName: Boolean
 	"""
 	the title of the task
 	"""
@@ -68914,6 +71532,18 @@ input UpdateTaskInput {
 	"""
 	completed: DateTime
 	clearCompleted: Boolean
+	"""
+	indicates if the task was generated by the system
+	"""
+	systemGenerated: Boolean @externalReadOnly(source: FRAMEWORK)
+	"""
+	an optional external reference URL for the task
+	"""
+	externalReferenceURL: [String!]
+	appendExternalReferenceURL: [String!]
+	clearExternalReferenceURL: Boolean
+	taskKindID: ID
+	clearTaskKind: Boolean
 	assignerID: ID
 	clearAssigner: Boolean
 	assigneeID: ID

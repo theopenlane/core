@@ -412,6 +412,34 @@ func (_c *ActionPlanHistoryCreate) SetNillableSystemInternalID(v *string) *Actio
 	return _c
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_c *ActionPlanHistoryCreate) SetActionPlanKindName(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetActionPlanKindName(v)
+	return _c
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableActionPlanKindName(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetActionPlanKindName(*v)
+	}
+	return _c
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_c *ActionPlanHistoryCreate) SetActionPlanKindID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetActionPlanKindID(v)
+	return _c
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableActionPlanKindID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetActionPlanKindID(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanHistoryCreate) SetDueDate(v time.Time) *ActionPlanHistoryCreate {
 	_c.mutation.SetDueDate(v)
@@ -786,6 +814,14 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(actionplanhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindName, field.TypeString, value)
+		_node.ActionPlanKindName = value
+	}
+	if value, ok := _c.mutation.ActionPlanKindID(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindID, field.TypeString, value)
+		_node.ActionPlanKindID = value
 	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)

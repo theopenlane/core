@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -60,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -1370,6 +1372,36 @@ func (_c *OrganizationCreate) AddAssessmentResponses(v ...*AssessmentResponse) *
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentResponseIDs(ids...)
+}
+
+// AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
+func (_c *OrganizationCreate) AddCustomTypeEnumIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCustomTypeEnumIDs(ids...)
+	return _c
+}
+
+// AddCustomTypeEnums adds the "custom_type_enums" edges to the CustomTypeEnum entity.
+func (_c *OrganizationCreate) AddCustomTypeEnums(v ...*CustomTypeEnum) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCustomTypeEnumIDs(ids...)
+}
+
+// AddTagDefinitionIDs adds the "tag_definitions" edge to the TagDefinition entity by IDs.
+func (_c *OrganizationCreate) AddTagDefinitionIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTagDefinitionIDs(ids...)
+	return _c
+}
+
+// AddTagDefinitions adds the "tag_definitions" edges to the TagDefinition entity.
+func (_c *OrganizationCreate) AddTagDefinitions(v ...*TagDefinition) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTagDefinitionIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2787,6 +2819,40 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CustomTypeEnumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TagDefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

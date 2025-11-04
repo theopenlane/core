@@ -322,6 +322,12 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.ActionPlanKindName, new.ActionPlanKindName) {
+		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanKindName, _m.ActionPlanKindName, new.ActionPlanKindName))
+	}
+	if !reflect.DeepEqual(_m.ActionPlanKindID, new.ActionPlanKindID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanKindID, _m.ActionPlanKindID, new.ActionPlanKindID))
+	}
 	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, _m.DueDate, new.DueDate))
 	}
@@ -753,6 +759,12 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(controlhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
+	if !reflect.DeepEqual(_m.ControlKindName, new.ControlKindName) {
+		changes = append(changes, NewChange(controlhistory.FieldControlKindName, _m.ControlKindName, new.ControlKindName))
+	}
+	if !reflect.DeepEqual(_m.ControlKindID, new.ControlKindID) {
+		changes = append(changes, NewChange(controlhistory.FieldControlKindID, _m.ControlKindID, new.ControlKindID))
 	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(controlhistory.FieldRefCode, _m.RefCode, new.RefCode))
@@ -1930,6 +1942,12 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(_m.FileID, new.FileID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldFileID, _m.FileID, new.FileID))
 	}
+	if !reflect.DeepEqual(_m.InternalPolicyKindName, new.InternalPolicyKindName) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalPolicyKindName, _m.InternalPolicyKindName, new.InternalPolicyKindName))
+	}
+	if !reflect.DeepEqual(_m.InternalPolicyKindID, new.InternalPolicyKindID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalPolicyKindID, _m.InternalPolicyKindID, new.InternalPolicyKindID))
+	}
 	return changes
 }
 
@@ -2704,6 +2722,12 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(procedurehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.ProcedureKindName, new.ProcedureKindName) {
+		changes = append(changes, NewChange(procedurehistory.FieldProcedureKindName, _m.ProcedureKindName, new.ProcedureKindName))
+	}
+	if !reflect.DeepEqual(_m.ProcedureKindID, new.ProcedureKindID) {
+		changes = append(changes, NewChange(procedurehistory.FieldProcedureKindID, _m.ProcedureKindID, new.ProcedureKindID))
+	}
 	return changes
 }
 
@@ -2757,6 +2781,12 @@ func (_m *ProgramHistory) changes(new *ProgramHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(programhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.ProgramKindName, new.ProgramKindName) {
+		changes = append(changes, NewChange(programhistory.FieldProgramKindName, _m.ProgramKindName, new.ProgramKindName))
+	}
+	if !reflect.DeepEqual(_m.ProgramKindID, new.ProgramKindID) {
+		changes = append(changes, NewChange(programhistory.FieldProgramKindID, _m.ProgramKindID, new.ProgramKindID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(programhistory.FieldName, _m.Name, new.Name))
@@ -2901,6 +2931,18 @@ func (_m *RiskHistory) changes(new *RiskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(riskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.RiskKindName, new.RiskKindName) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskKindName, _m.RiskKindName, new.RiskKindName))
+	}
+	if !reflect.DeepEqual(_m.RiskKindID, new.RiskKindID) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskKindID, _m.RiskKindID, new.RiskKindID))
+	}
+	if !reflect.DeepEqual(_m.RiskCategoryName, new.RiskCategoryName) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskCategoryName, _m.RiskCategoryName, new.RiskCategoryName))
+	}
+	if !reflect.DeepEqual(_m.RiskCategoryID, new.RiskCategoryID) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskCategoryID, _m.RiskCategoryID, new.RiskCategoryID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(riskhistory.FieldName, _m.Name, new.Name))
@@ -3301,6 +3343,12 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.SubcontrolKindName, new.SubcontrolKindName) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolKindName, _m.SubcontrolKindName, new.SubcontrolKindName))
+	}
+	if !reflect.DeepEqual(_m.SubcontrolKindID, new.SubcontrolKindID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolKindID, _m.SubcontrolKindID, new.SubcontrolKindID))
+	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
@@ -3433,6 +3481,12 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(taskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.TaskKindName, new.TaskKindName) {
+		changes = append(changes, NewChange(taskhistory.FieldTaskKindName, _m.TaskKindName, new.TaskKindName))
+	}
+	if !reflect.DeepEqual(_m.TaskKindID, new.TaskKindID) {
+		changes = append(changes, NewChange(taskhistory.FieldTaskKindID, _m.TaskKindID, new.TaskKindID))
+	}
 	if !reflect.DeepEqual(_m.Title, new.Title) {
 		changes = append(changes, NewChange(taskhistory.FieldTitle, _m.Title, new.Title))
 	}
@@ -3456,6 +3510,15 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.AssignerID, new.AssignerID) {
 		changes = append(changes, NewChange(taskhistory.FieldAssignerID, _m.AssignerID, new.AssignerID))
+	}
+	if !reflect.DeepEqual(_m.SystemGenerated, new.SystemGenerated) {
+		changes = append(changes, NewChange(taskhistory.FieldSystemGenerated, _m.SystemGenerated, new.SystemGenerated))
+	}
+	if !reflect.DeepEqual(_m.IdempotencyKey, new.IdempotencyKey) {
+		changes = append(changes, NewChange(taskhistory.FieldIdempotencyKey, _m.IdempotencyKey, new.IdempotencyKey))
+	}
+	if !reflect.DeepEqual(_m.ExternalReferenceURL, new.ExternalReferenceURL) {
+		changes = append(changes, NewChange(taskhistory.FieldExternalReferenceURL, _m.ExternalReferenceURL, new.ExternalReferenceURL))
 	}
 	return changes
 }

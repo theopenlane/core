@@ -116,6 +116,16 @@ func OwnerID(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// ProgramKindName applies equality check predicate on the "program_kind_name" field. It's identical to ProgramKindNameEQ.
+func ProgramKindName(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindID applies equality check predicate on the "program_kind_id" field. It's identical to ProgramKindIDEQ.
+func ProgramKindID(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramKindID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldName, v))
@@ -834,6 +844,156 @@ func OwnerIDEqualFold(v string) predicate.ProgramHistory {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// ProgramKindNameEQ applies the EQ predicate on the "program_kind_name" field.
+func ProgramKindNameEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindNameNEQ applies the NEQ predicate on the "program_kind_name" field.
+func ProgramKindNameNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindNameIn applies the In predicate on the "program_kind_name" field.
+func ProgramKindNameIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldProgramKindName, vs...))
+}
+
+// ProgramKindNameNotIn applies the NotIn predicate on the "program_kind_name" field.
+func ProgramKindNameNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldProgramKindName, vs...))
+}
+
+// ProgramKindNameGT applies the GT predicate on the "program_kind_name" field.
+func ProgramKindNameGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldProgramKindName, v))
+}
+
+// ProgramKindNameGTE applies the GTE predicate on the "program_kind_name" field.
+func ProgramKindNameGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldProgramKindName, v))
+}
+
+// ProgramKindNameLT applies the LT predicate on the "program_kind_name" field.
+func ProgramKindNameLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldProgramKindName, v))
+}
+
+// ProgramKindNameLTE applies the LTE predicate on the "program_kind_name" field.
+func ProgramKindNameLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldProgramKindName, v))
+}
+
+// ProgramKindNameContains applies the Contains predicate on the "program_kind_name" field.
+func ProgramKindNameContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldProgramKindName, v))
+}
+
+// ProgramKindNameHasPrefix applies the HasPrefix predicate on the "program_kind_name" field.
+func ProgramKindNameHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldProgramKindName, v))
+}
+
+// ProgramKindNameHasSuffix applies the HasSuffix predicate on the "program_kind_name" field.
+func ProgramKindNameHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldProgramKindName, v))
+}
+
+// ProgramKindNameIsNil applies the IsNil predicate on the "program_kind_name" field.
+func ProgramKindNameIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldProgramKindName))
+}
+
+// ProgramKindNameNotNil applies the NotNil predicate on the "program_kind_name" field.
+func ProgramKindNameNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldProgramKindName))
+}
+
+// ProgramKindNameEqualFold applies the EqualFold predicate on the "program_kind_name" field.
+func ProgramKindNameEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldProgramKindName, v))
+}
+
+// ProgramKindNameContainsFold applies the ContainsFold predicate on the "program_kind_name" field.
+func ProgramKindNameContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldProgramKindName, v))
+}
+
+// ProgramKindIDEQ applies the EQ predicate on the "program_kind_id" field.
+func ProgramKindIDEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramKindID, v))
+}
+
+// ProgramKindIDNEQ applies the NEQ predicate on the "program_kind_id" field.
+func ProgramKindIDNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldProgramKindID, v))
+}
+
+// ProgramKindIDIn applies the In predicate on the "program_kind_id" field.
+func ProgramKindIDIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldProgramKindID, vs...))
+}
+
+// ProgramKindIDNotIn applies the NotIn predicate on the "program_kind_id" field.
+func ProgramKindIDNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldProgramKindID, vs...))
+}
+
+// ProgramKindIDGT applies the GT predicate on the "program_kind_id" field.
+func ProgramKindIDGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldProgramKindID, v))
+}
+
+// ProgramKindIDGTE applies the GTE predicate on the "program_kind_id" field.
+func ProgramKindIDGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldProgramKindID, v))
+}
+
+// ProgramKindIDLT applies the LT predicate on the "program_kind_id" field.
+func ProgramKindIDLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldProgramKindID, v))
+}
+
+// ProgramKindIDLTE applies the LTE predicate on the "program_kind_id" field.
+func ProgramKindIDLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldProgramKindID, v))
+}
+
+// ProgramKindIDContains applies the Contains predicate on the "program_kind_id" field.
+func ProgramKindIDContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldProgramKindID, v))
+}
+
+// ProgramKindIDHasPrefix applies the HasPrefix predicate on the "program_kind_id" field.
+func ProgramKindIDHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldProgramKindID, v))
+}
+
+// ProgramKindIDHasSuffix applies the HasSuffix predicate on the "program_kind_id" field.
+func ProgramKindIDHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldProgramKindID, v))
+}
+
+// ProgramKindIDIsNil applies the IsNil predicate on the "program_kind_id" field.
+func ProgramKindIDIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldProgramKindID))
+}
+
+// ProgramKindIDNotNil applies the NotNil predicate on the "program_kind_id" field.
+func ProgramKindIDNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldProgramKindID))
+}
+
+// ProgramKindIDEqualFold applies the EqualFold predicate on the "program_kind_id" field.
+func ProgramKindIDEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldProgramKindID, v))
+}
+
+// ProgramKindIDContainsFold applies the ContainsFold predicate on the "program_kind_id" field.
+func ProgramKindIDContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldProgramKindID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

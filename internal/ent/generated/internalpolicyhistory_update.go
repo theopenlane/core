@@ -545,6 +545,46 @@ func (_u *InternalPolicyHistoryUpdate) ClearFileID() *InternalPolicyHistoryUpdat
 	return _u
 }
 
+// SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
+func (_u *InternalPolicyHistoryUpdate) SetInternalPolicyKindName(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetInternalPolicyKindName(v)
+	return _u
+}
+
+// SetNillableInternalPolicyKindName sets the "internal_policy_kind_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableInternalPolicyKindName(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetInternalPolicyKindName(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyKindName clears the value of the "internal_policy_kind_name" field.
+func (_u *InternalPolicyHistoryUpdate) ClearInternalPolicyKindName() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearInternalPolicyKindName()
+	return _u
+}
+
+// SetInternalPolicyKindID sets the "internal_policy_kind_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetInternalPolicyKindID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetInternalPolicyKindID(v)
+	return _u
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableInternalPolicyKindID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetInternalPolicyKindID(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyKindID clears the value of the "internal_policy_kind_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearInternalPolicyKindID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearInternalPolicyKindID()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -830,6 +870,18 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyKindNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyKindID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyKindIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1367,6 +1419,46 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearFileID() *InternalPolicyHistoryUp
 	return _u
 }
 
+// SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetInternalPolicyKindName(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetInternalPolicyKindName(v)
+	return _u
+}
+
+// SetNillableInternalPolicyKindName sets the "internal_policy_kind_name" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableInternalPolicyKindName(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalPolicyKindName(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyKindName clears the value of the "internal_policy_kind_name" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearInternalPolicyKindName() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearInternalPolicyKindName()
+	return _u
+}
+
+// SetInternalPolicyKindID sets the "internal_policy_kind_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetInternalPolicyKindID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetInternalPolicyKindID(v)
+	return _u
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableInternalPolicyKindID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalPolicyKindID(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyKindID clears the value of the "internal_policy_kind_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearInternalPolicyKindID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearInternalPolicyKindID()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -1682,6 +1774,18 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyKindNameCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyKindID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyKindIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

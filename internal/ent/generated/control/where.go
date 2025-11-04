@@ -183,6 +183,16 @@ func SystemInternalID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// ControlKindName applies equality check predicate on the "control_kind_name" field. It's identical to ControlKindNameEQ.
+func ControlKindName(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlKindName, v))
+}
+
+// ControlKindID applies equality check predicate on the "control_kind_id" field. It's identical to ControlKindIDEQ.
+func ControlKindID(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlKindID, v))
+}
+
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
 func RefCode(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldRefCode, v))
@@ -1988,6 +1998,156 @@ func SystemInternalIDContainsFold(v string) predicate.Control {
 	return predicate.Control(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
+// ControlKindNameEQ applies the EQ predicate on the "control_kind_name" field.
+func ControlKindNameEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlKindName, v))
+}
+
+// ControlKindNameNEQ applies the NEQ predicate on the "control_kind_name" field.
+func ControlKindNameNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldControlKindName, v))
+}
+
+// ControlKindNameIn applies the In predicate on the "control_kind_name" field.
+func ControlKindNameIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldControlKindName, vs...))
+}
+
+// ControlKindNameNotIn applies the NotIn predicate on the "control_kind_name" field.
+func ControlKindNameNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldControlKindName, vs...))
+}
+
+// ControlKindNameGT applies the GT predicate on the "control_kind_name" field.
+func ControlKindNameGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldControlKindName, v))
+}
+
+// ControlKindNameGTE applies the GTE predicate on the "control_kind_name" field.
+func ControlKindNameGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldControlKindName, v))
+}
+
+// ControlKindNameLT applies the LT predicate on the "control_kind_name" field.
+func ControlKindNameLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldControlKindName, v))
+}
+
+// ControlKindNameLTE applies the LTE predicate on the "control_kind_name" field.
+func ControlKindNameLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldControlKindName, v))
+}
+
+// ControlKindNameContains applies the Contains predicate on the "control_kind_name" field.
+func ControlKindNameContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldControlKindName, v))
+}
+
+// ControlKindNameHasPrefix applies the HasPrefix predicate on the "control_kind_name" field.
+func ControlKindNameHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldControlKindName, v))
+}
+
+// ControlKindNameHasSuffix applies the HasSuffix predicate on the "control_kind_name" field.
+func ControlKindNameHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldControlKindName, v))
+}
+
+// ControlKindNameIsNil applies the IsNil predicate on the "control_kind_name" field.
+func ControlKindNameIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldControlKindName))
+}
+
+// ControlKindNameNotNil applies the NotNil predicate on the "control_kind_name" field.
+func ControlKindNameNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldControlKindName))
+}
+
+// ControlKindNameEqualFold applies the EqualFold predicate on the "control_kind_name" field.
+func ControlKindNameEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldControlKindName, v))
+}
+
+// ControlKindNameContainsFold applies the ContainsFold predicate on the "control_kind_name" field.
+func ControlKindNameContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldControlKindName, v))
+}
+
+// ControlKindIDEQ applies the EQ predicate on the "control_kind_id" field.
+func ControlKindIDEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlKindID, v))
+}
+
+// ControlKindIDNEQ applies the NEQ predicate on the "control_kind_id" field.
+func ControlKindIDNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldControlKindID, v))
+}
+
+// ControlKindIDIn applies the In predicate on the "control_kind_id" field.
+func ControlKindIDIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldControlKindID, vs...))
+}
+
+// ControlKindIDNotIn applies the NotIn predicate on the "control_kind_id" field.
+func ControlKindIDNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldControlKindID, vs...))
+}
+
+// ControlKindIDGT applies the GT predicate on the "control_kind_id" field.
+func ControlKindIDGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldControlKindID, v))
+}
+
+// ControlKindIDGTE applies the GTE predicate on the "control_kind_id" field.
+func ControlKindIDGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldControlKindID, v))
+}
+
+// ControlKindIDLT applies the LT predicate on the "control_kind_id" field.
+func ControlKindIDLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldControlKindID, v))
+}
+
+// ControlKindIDLTE applies the LTE predicate on the "control_kind_id" field.
+func ControlKindIDLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldControlKindID, v))
+}
+
+// ControlKindIDContains applies the Contains predicate on the "control_kind_id" field.
+func ControlKindIDContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldControlKindID, v))
+}
+
+// ControlKindIDHasPrefix applies the HasPrefix predicate on the "control_kind_id" field.
+func ControlKindIDHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldControlKindID, v))
+}
+
+// ControlKindIDHasSuffix applies the HasSuffix predicate on the "control_kind_id" field.
+func ControlKindIDHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldControlKindID, v))
+}
+
+// ControlKindIDIsNil applies the IsNil predicate on the "control_kind_id" field.
+func ControlKindIDIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldControlKindID))
+}
+
+// ControlKindIDNotNil applies the NotNil predicate on the "control_kind_id" field.
+func ControlKindIDNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldControlKindID))
+}
+
+// ControlKindIDEqualFold applies the EqualFold predicate on the "control_kind_id" field.
+func ControlKindIDEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldControlKindID, v))
+}
+
+// ControlKindIDContainsFold applies the ContainsFold predicate on the "control_kind_id" field.
+func ControlKindIDContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldControlKindID, v))
+}
+
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.
 func RefCodeEQ(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldRefCode, v))
@@ -2555,6 +2715,35 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Control {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ControlEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControlKind applies the HasEdge predicate on the "control_kind" edge.
+func HasControlKind() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ControlKindTable, ControlKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlKindWith applies the HasEdge predicate on the "control_kind" edge with a given conditions (other predicates).
+func HasControlKindWith(preds ...predicate.CustomTypeEnum) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newControlKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
