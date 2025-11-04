@@ -15,44 +15,10 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
 )
 
-type EventID struct {
-	ID string `json:"id,omitempty"`
-}
-
-func parseEventID(retVal ent.Value) (*EventID, error) {
-	out, err := json.Marshal(retVal)
-	if err != nil {
-		log.Err(err).Msg("Failed to marshal return value")
-		return nil, fmt.Errorf("failed to fetch organization from subscription: %w", err)
-	}
-
-	event := EventID{}
-	if err := json.Unmarshal(out, &event); err != nil {
-		log.Err(err).Msg("Failed to unmarshal return value")
-		return nil, err
-	}
-
-	return &event, nil
-}
-
-func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
-	m, ok := mutation.(*entgen.OrganizationMutation)
-	if !ok {
-		return nil, ErrUnableToDetermineEventID
-	}
-
-	id, ok := m.ID()
-	if !ok {
-		return nil, ErrUnableToDetermineEventID
-	}
-
-	return &EventID{ID: id}, nil
-}
-
+// EmitEventHook returns a hook that emits events after mutations
 func EmitEventHook(e *Eventer) ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
@@ -67,8 +33,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			// Delete operations return an int of the number of rows deleted
 			// so we do not want to skip emitting events for those operations
 			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
-				logx.FromContext(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
-				// TODO: determine if we need to emit events for mutations that return an int
+				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
 				return retVal, err
 			}
 
@@ -155,6 +120,44 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	)
 }
 
+// EventID represents the ID structure used in events
+type EventID struct {
+	ID string `json:"id,omitempty"`
+}
+
+// parseEventID extracts the EventID from the returned value of a mutation
+func parseEventID(retVal ent.Value) (*EventID, error) {
+	out, err := json.Marshal(retVal)
+	if err != nil {
+		log.Err(err).Msg("Failed to marshal return value")
+		return nil, fmt.Errorf("failed to fetch organization from subscription: %w", err)
+	}
+
+	event := EventID{}
+	if err := json.Unmarshal(out, &event); err != nil {
+		log.Err(err).Msg("Failed to unmarshal return value")
+		return nil, err
+	}
+
+	return &event, nil
+}
+
+// parseSoftDeleteEventID extracts the EventID from a soft delete mutation
+func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
+	m, ok := mutation.(*entgen.OrganizationMutation)
+	if !ok {
+		return nil, ErrUnableToDetermineEventID
+	}
+
+	id, ok := m.ID()
+	if !ok {
+		return nil, ErrUnableToDetermineEventID
+	}
+
+	return &EventID{ID: id}, nil
+}
+
+// getOperation determines the operation type from the context and mutation
 func getOperation(ctx context.Context, mutation ent.Mutation) string {
 	// determine if this is a soft delete operation
 	// this isn't in the context when we reach here, but incase it is in the future, we check
@@ -175,18 +178,22 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 	return mutation.Op().String()
 }
 
+// emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 	return func(ctx context.Context, m entgen.Mutation) bool {
 		if e == nil {
 			return false
 		}
 
-		if e.entities == nil {
+		if e.listeners == nil {
 			return false
 		}
 
-		_, ok := e.entities[m.Type()]
-		return ok
+		// Listener registration drives emission: if no subscribers, we avoid creating events altogether
+		// This mirrors the old static allowlist, but removes the need to keep two separate sources of truth in sync
+		_ = ctx
+		listeners, ok := e.listeners[m.Type()]
+		return ok && len(listeners) > 0
 	}
 }
 
@@ -194,6 +201,7 @@ const (
 	SoftDeleteOne = "SoftDeleteOne"
 )
 
+// RegisterListeners registers all listeners on the Eventer with the emitter
 func RegisterListeners(e *Eventer) error {
 	if e.Emitter == nil {
 		log.Error().Msg("Emitter is nil on Eventer, cannot register listeners")
@@ -201,13 +209,18 @@ func RegisterListeners(e *Eventer) error {
 		return ErrFailedToRegisterListener
 	}
 
-	bindings := make([]soiree.ListenerBinding, 0, len(e.listeners))
-	for _, listener := range e.listeners {
-		bindings = append(bindings, listener.binding)
+	total := 0
+	for _, entries := range e.listeners {
+		total += len(entries)
 	}
 
-	if len(bindings) == 0 {
+	if total == 0 {
 		return nil
+	}
+
+	bindings := make([]soiree.ListenerBinding, 0, total)
+	for _, entries := range e.listeners {
+		bindings = append(bindings, entries...)
 	}
 
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
@@ -218,6 +231,7 @@ func RegisterListeners(e *Eventer) error {
 	return nil
 }
 
+// addMutationFields adds all fields from the mutation to the event properties
 func addMutationFields(props soiree.Properties, mutation ent.Mutation) {
 	if props == nil || mutation == nil {
 		return

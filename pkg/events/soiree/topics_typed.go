@@ -1,9 +1,5 @@
 package soiree
 
-import "errors"
-
-var errNilEventPool = errors.New("event pool is nil")
-
 // TypedTopic represents a strongly typed event topic. It carries helpers that convert
 // between the strongly typed payload and the internal soiree.Event representation.
 type TypedTopic[T any] struct {

@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent"
@@ -11,50 +12,56 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	entreconciler "github.com/theopenlane/core/internal/entitlements/reconciler"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 )
 
+var errMissingOrgCustomerPrereqs = errors.New("entitlement invocation missing prerequisites")
+
+// entitlementInvocation bundles the data required for entitlement listeners to perform their work
 type entitlementInvocation struct {
-	event   *soiree.EventContext
-	payload *MutationPayload
-	client  *entgen.Client
-	orgID   string
-	allow   context.Context
+	event    *soiree.EventContext
+	payload  *MutationPayload
+	client   *entgen.Client
+	orgID    string
+	entityID string
+	allow    context.Context
 }
 
+// Context returns the listener context associated with the invocation
 func (inv *entitlementInvocation) Context() context.Context {
 	return inv.event.Context()
 }
 
+// Logger returns a contextual logger for the invocation
 func (inv *entitlementInvocation) Logger() *zerolog.Logger {
 	return zerolog.Ctx(inv.Context())
 }
 
+// Allow returns the elevated context used for entitlement operations
 func (inv *entitlementInvocation) Allow() context.Context {
 	return inv.allow
 }
 
+// orgAllowContext returns a context that bypasses privacy rules when running entitlement logic against an organization
 func orgAllowContext(ctx context.Context) context.Context {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	return contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 }
 
+// softDeleteAllowContext extends orgAllowContext to skip soft delete filters so listeners can access archived records
 func softDeleteAllowContext(ctx context.Context) context.Context {
 	ctx = orgAllowContext(ctx)
 	return context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
 }
 
+// newEntitlementInvocation gathers the elements required to run entitlement logic for a mutation
 func newEntitlementInvocation(event *soiree.EventContext, payload *MutationPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
 	client := mutationClient(event, payload)
 	if client == nil || client.EntitlementManager == nil {
-		return nil, false
-	}
-
-	orgID, ok := mutationOrganizationID(event, payload)
-	if !ok {
 		return nil, false
 	}
 
@@ -62,16 +69,39 @@ func newEntitlementInvocation(event *soiree.EventContext, payload *MutationPaylo
 		allow = orgAllowContext
 	}
 
+	allowCtx := allow(event.Context())
+
+	entityID, ok := mutationEntityID(event, payload)
+	if !ok {
+		return nil, false
+	}
+
+	orgID := entityID
+	if payload != nil && payload.Mutation != nil && payload.Mutation.Type() == entgen.TypeOrganizationSetting {
+		// OrganizationSetting mutations carry the setting ID, but the reconciler needs the owning
+		// organization. Resolve it once here so every downstream flow (reconciliation and Stripe
+		// updates) has a consistent view of the org.
+		setting, err := client.OrganizationSetting.Get(allowCtx, entityID)
+		if err != nil {
+			zerolog.Ctx(event.Context()).Err(err).Str("organization_setting_id", entityID).Msg("failed to resolve organization from organization setting")
+			return nil, false
+		}
+
+		orgID = setting.OrganizationID
+	}
+
 	return &entitlementInvocation{
-		event:   event,
-		payload: payload,
-		client:  client,
-		orgID:   orgID,
-		allow:   allow(event.Context()),
+		event:    event,
+		payload:  payload,
+		client:   client,
+		orgID:    orgID,
+		entityID: entityID,
+		allow:    allowCtx,
 	}, true
 }
 
-func mutationOrganizationID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
+// mutationEntityID derives the entity identifier from the payload or event properties
+func mutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
 	if payload != nil && payload.EntityID != "" {
 		return payload.EntityID, true
 	}
@@ -80,11 +110,11 @@ func mutationOrganizationID(ctx *soiree.EventContext, payload *MutationPayload) 
 		return "", false
 	}
 
-	if id, ok := ctx.Properties().String("ID"); ok && id != "" {
+	if id, ok := ctx.PropertyString("ID"); ok && id != "" {
 		return id, true
 	}
 
-	if raw, ok := ctx.Properties().Get("ID"); ok && raw != nil {
+	if raw, ok := ctx.Property("ID"); ok && raw != nil {
 		if str, ok := raw.(fmt.Stringer); ok {
 			value := str.String()
 			if value == "" {
@@ -105,6 +135,7 @@ func mutationOrganizationID(ctx *soiree.EventContext, payload *MutationPayload) 
 	return "", false
 }
 
+// mutationClient returns the ent client associated with the mutation
 func mutationClient(ctx *soiree.EventContext, payload *MutationPayload) *entgen.Client {
 	if payload != nil && payload.Client != nil {
 		return payload.Client
@@ -118,6 +149,7 @@ func mutationClient(ctx *soiree.EventContext, payload *MutationPayload) *entgen.
 	return client
 }
 
+// mutationTouches reports whether the mutation updates any of the requested fields
 func mutationTouches(m ent.Mutation, fields ...string) bool {
 	if m == nil {
 		return false
@@ -132,6 +164,48 @@ func mutationTouches(m ent.Mutation, fields ...string) bool {
 	return false
 }
 
+// fetchOrganizationCustomerByOrgSettingID loads the organization and customer data linked to an organization setting
+func fetchOrganizationCustomerByOrgSettingID(inv *entitlementInvocation, orgSettingID string) (*entitlements.OrganizationCustomer, error) {
+	if inv == nil || inv.client == nil || orgSettingID == "" {
+		return nil, fmt.Errorf("%w: organization_setting_id=%s", errMissingOrgCustomerPrereqs, orgSettingID)
+	}
+
+	orgSetting, err := inv.client.OrganizationSetting.Get(inv.Allow(), orgSettingID)
+	if err != nil {
+		return nil, err
+	}
+
+	org, err := inv.client.Organization.Query().
+		Where(organization.ID(orgSetting.OrganizationID)).
+		Only(inv.Allow())
+	if err != nil {
+		return nil, err
+	}
+
+	stripeCustomerID := ""
+	if org.StripeCustomerID != nil {
+		stripeCustomerID = *org.StripeCustomerID
+	}
+
+	return &entitlements.OrganizationCustomer{
+		OrganizationID:         org.ID,
+		OrganizationName:       org.Name,
+		OrganizationSettingsID: orgSetting.ID,
+		StripeCustomerID:       stripeCustomerID,
+		ContactInfo: entitlements.ContactInfo{
+			Email:      orgSetting.BillingEmail,
+			Phone:      orgSetting.BillingPhone,
+			Line1:      &orgSetting.BillingAddress.Line1,
+			Line2:      &orgSetting.BillingAddress.Line2,
+			City:       &orgSetting.BillingAddress.City,
+			State:      &orgSetting.BillingAddress.State,
+			Country:    &orgSetting.BillingAddress.Country,
+			PostalCode: &orgSetting.BillingAddress.PostalCode,
+		},
+	}, nil
+}
+
+// handleOrganizationMutation routes organization mutations to the correct entitlement handler
 func handleOrganizationMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
 	if payload == nil {
 		return nil
@@ -147,6 +221,7 @@ func handleOrganizationMutation(ctx *soiree.EventContext, payload *MutationPaylo
 	}
 }
 
+// reconcile runs the entitlement reconciler for the invocation's organization
 func (inv *entitlementInvocation) reconcile() error {
 	if inv == nil || inv.client == nil || inv.client.EntitlementManager == nil {
 		return nil
@@ -171,6 +246,7 @@ func (inv *entitlementInvocation) reconcile() error {
 	return nil
 }
 
+// handleOrganizationSettingMutation handles billing-related updates on organization settings
 func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
 	if payload == nil {
 		return nil
@@ -184,6 +260,7 @@ func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *Mutati
 	}
 }
 
+// handleOrganizationDelete deactivates an organization's customer subscription when it is deleted
 func handleOrganizationDelete(ctx *soiree.EventContext, payload *MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
@@ -213,6 +290,7 @@ func handleOrganizationDelete(ctx *soiree.EventContext, payload *MutationPayload
 	return nil
 }
 
+// handleOrganizationCreated reconciles entitlements after an organization is created
 func handleOrganizationCreated(ctx *soiree.EventContext, payload *MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
 	if !ok {
@@ -222,6 +300,7 @@ func handleOrganizationCreated(ctx *soiree.EventContext, payload *MutationPayloa
 	return inv.reconcile()
 }
 
+// handleOrganizationSettingsUpdateOne updates Stripe customer details when billing fields change
 func handleOrganizationSettingsUpdateOne(ctx *soiree.EventContext, payload *MutationPayload) error {
 	if !mutationTouches(payload.Mutation, "billing_email", "billing_phone", "billing_address") {
 		return nil
@@ -230,6 +309,41 @@ func handleOrganizationSettingsUpdateOne(ctx *soiree.EventContext, payload *Muta
 	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
 	if !ok {
 		return nil
+	}
+
+	orgSettingID := inv.entityID
+	if orgSettingID == "" {
+		if id, ok := mutationEntityID(ctx, payload); ok {
+			orgSettingID = id
+		}
+	}
+
+	if orgSettingID == "" {
+		inv.Logger().Warn().Msg("organization settings update missing entity id; skipping stripe update")
+		return nil
+	}
+
+	orgCustomer, err := fetchOrganizationCustomerByOrgSettingID(inv, orgSettingID)
+	if err != nil {
+		// We deliberately bubble the failure so the GraphQL mutation surfaces the issue to the
+		// caller—silently ignoring Stripe sync errors would leave billing details out of date.
+		inv.Logger().Err(err).Str("organization_setting_id", orgSettingID).Msg("failed to fetch organization customer")
+		return err
+	}
+
+	if orgCustomer == nil || orgCustomer.StripeCustomerID == "" {
+		return inv.reconcile()
+	}
+
+	params := entitlements.GetUpdatedFields(ctx.Properties(), orgCustomer)
+	if params != nil {
+		if _, err := inv.client.EntitlementManager.UpdateCustomer(inv.Context(), orgCustomer.StripeCustomerID, params); err != nil {
+			// Stripe update failures should not fall back to reconciliation because the reconciler
+			// assumes the customer metadata is already aligned. Log and return so the caller can
+			// retry with corrected data.
+			inv.Logger().Err(err).Str("stripe_customer_id", orgCustomer.StripeCustomerID).Msg("failed to update stripe customer metadata")
+			return err
+		}
 	}
 
 	return inv.reconcile()

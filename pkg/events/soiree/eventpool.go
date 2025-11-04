@@ -2,12 +2,19 @@ package soiree
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/cenkalti/backoff/v5"
+)
+
+var (
+	errNilEventPool       = errors.New("event pool is nil")
+	errMissingTypedUnwrap = errors.New("soiree: missing unwrap helper for typed topic")
+	errMissingTypedWrap   = errors.New("soiree: missing wrap helper for typed topic")
 )
 
 // EventPool struct is controlling subscribing and unsubscribing listeners to topics, and emitting events to all subscribers
@@ -325,7 +332,7 @@ func OnTopic[T any](pool *EventPool, topic TypedTopic[T], listener TypedListener
 	}
 
 	if topic.unwrap == nil {
-		return "", fmt.Errorf("missing unwrap helper for topic %s", topic.Name())
+		return "", fmt.Errorf("%w: %s", errMissingTypedUnwrap, topic.Name())
 	}
 
 	wrapped := func(ctx *EventContext) error {
@@ -354,7 +361,7 @@ func EmitTopic[T any](pool *EventPool, topic TypedTopic[T], payload T) <-chan er
 
 	if topic.wrap == nil {
 		errChan := make(chan error, 1)
-		errChan <- fmt.Errorf("missing wrap helper for topic %s", topic.Name())
+		errChan <- fmt.Errorf("%w: %s", errMissingTypedWrap, topic.Name())
 		close(errChan)
 
 		return errChan
@@ -370,7 +377,7 @@ func EmitTopicSync[T any](pool *EventPool, topic TypedTopic[T], payload T) []err
 	}
 
 	if topic.wrap == nil {
-		return []error{fmt.Errorf("missing wrap helper for topic %s", topic.Name())}
+		return []error{fmt.Errorf("%w: %s", errMissingTypedWrap, topic.Name())}
 	}
 
 	return pool.EmitSync(topic.Name(), topic.wrap(payload))

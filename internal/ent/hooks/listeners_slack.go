@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/slack"
 )
 
+// SlackConfig defines the runtime configuration for Slack notifications emitted by listeners
 type SlackConfig struct {
 	WebhookURL               string
 	NewSubscriberMessageFile string
@@ -21,128 +22,84 @@ type SlackConfig struct {
 
 var slackCfg SlackConfig
 
+// SetSlackConfig replaces the active Slack notification configuration
 func SetSlackConfig(cfg SlackConfig) {
 	slackCfg = cfg
 }
 
+// handleSubscriberMutation processes subscriber mutations and publishes Slack notifications when a record is created
 func handleSubscriberMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
 	if payload.Operation != ent.OpCreate.String() {
 		return nil
 	}
 
-	return handleSubscriberCreate(ctx, payload)
+	return sendSlackNotification(
+		ctx,
+		slackCfg.NewSubscriberMessageFile,
+		slacktemplates.SubscriberTemplateName,
+	)
 }
 
+// handleUserMutation processes user mutations and publishes Slack notifications when a record is created
 func handleUserMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
 	if payload.Operation != ent.OpCreate.String() {
 		return nil
 	}
 
-	return handleUserCreate(ctx, payload)
+	return sendSlackNotification(
+		ctx,
+		slackCfg.NewUserMessageFile,
+		slacktemplates.UserTemplateName,
+	)
 }
 
-func handleSubscriberCreate(ctx *soiree.EventContext, _ *MutationPayload) error {
+// sendSlackNotification renders the desired Slack template and posts the resulting message to the configured webhook
+func sendSlackNotification(ctx *soiree.EventContext, overrideFile, embeddedTemplate string) error {
 	if slackCfg.WebhookURL == "" {
 		return nil
 	}
 
-	email, _ := ctx.Properties().String("email")
+	email, _ := ctx.PropertyString("email")
 
-	var (
-		t   *template.Template
-		err error
-		msg string
-	)
-
-	if slackCfg.NewSubscriberMessageFile != "" {
-		b, err := os.ReadFile(slackCfg.NewSubscriberMessageFile)
-		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to read slack template")
-
-			return err
-		}
-
-		t, err = template.New("slack").Parse(string(b))
-		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse slack template")
-
-			return err
-		}
-	} else {
-		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.SubscriberTemplateName)
-		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
-
-			return err
-		}
-	}
-
-	var buf bytes.Buffer
-
-	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to execute slack template")
-
+	tmpl, err := loadSlackTemplate(ctx, overrideFile, embeddedTemplate)
+	if err != nil {
 		return err
 	}
 
-	msg = buf.String()
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
+		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to execute slack template")
+		return err
+	}
 
-	client := slack.New(slackCfg.WebhookURL)
-
-	payload := &slack.Payload{Text: msg}
-
-	return client.Post(ctx.Context(), payload)
+	return slack.New(slackCfg.WebhookURL).Post(ctx.Context(), &slack.Payload{Text: buf.String()})
 }
 
-func handleUserCreate(ctx *soiree.EventContext, _ *MutationPayload) error {
-	if slackCfg.WebhookURL == "" {
-		return nil
-	}
-
-	email, _ := ctx.Properties().String("email")
-
-	var (
-		t   *template.Template
-		err error
-		msg string
-	)
-
-	if slackCfg.NewUserMessageFile != "" {
-		b, err := os.ReadFile(slackCfg.NewUserMessageFile)
+// loadSlackTemplate resolves either an override template from disk or a bundled template for Slack notifications
+func loadSlackTemplate(ctx *soiree.EventContext, fileOverride, embeddedTemplate string) (*template.Template, error) {
+	if fileOverride != "" {
+		// Allow operators to provide a bespoke template from disk; fall back to the embedded
+		// version when it is absent so environments without customisation still behave.
+		b, err := os.ReadFile(fileOverride)
 		if err != nil {
 			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to read slack template")
-
-			return err
+			return nil, err
 		}
 
-		t, err = template.New("slack").Parse(string(b))
+		t, err := template.New("slack").Parse(string(b))
 		if err != nil {
 			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse slack template")
-
-			return err
+			return nil, err
 		}
-	} else {
-		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.UserTemplateName)
-		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
 
-			return err
-		}
+		return t, nil
 	}
 
-	var buf bytes.Buffer
-
-	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to execute slack template")
-
-		return err
+	t, err := template.ParseFS(slacktemplates.Templates, embeddedTemplate)
+	if err != nil {
+		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
+		return nil, err
 	}
 
-	msg = buf.String()
-
-	client := slack.New(slackCfg.WebhookURL)
-
-	payload := &slack.Payload{Text: msg}
-
-	return client.Post(ctx.Context(), payload)
+	return t, nil
 }

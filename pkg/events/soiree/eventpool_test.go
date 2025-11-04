@@ -24,33 +24,36 @@ func emitExistingEvent(pool *EventPool, event Event) <-chan error {
 	return EmitTopic(pool, NewEventTopic(event.Topic()), event)
 }
 
-// TestNewEventPool tests the creation of a new EventPool
-func TestNewEventPool(t *testing.T) {
-	soiree := NewEventPool()
-	if soiree == nil {
+func TestEventPoolBasics(t *testing.T) {
+	pool := NewEventPool()
+	if pool == nil {
 		t.Fatal("NewEventPool() should not return nil")
 	}
-}
 
-// TestOnOff tests subscribing to and unsubscribing from a topic
-func TestOnOff(t *testing.T) {
-	soiree := NewEventPool()
 	topic := "testTopic"
+	listener := func(_ *EventContext, e Event) error { return nil }
 
-	listener := func(_ *EventContext, e Event) error {
-		return nil
-	}
-
-	// On to a topic
-	id := mustOnTopic(soiree, topic, listener)
-
+	id := mustOnTopic(pool, topic, listener)
 	if id == "" {
-		t.Fatal("Onrned an empty ID")
+		t.Fatal("expected listener id")
 	}
 
-	// Now unsubscribe and ensure the listener is removed
-	if err := soiree.Off(topic, id); err != nil {
+	if err := pool.Off(topic, id); err != nil {
 		t.Fatalf("Off() failed with error: %v", err)
+	}
+
+	// EnsureTopic should always return the same instance.
+	created := pool.EnsureTopic("newTopic")
+	if created == nil {
+		t.Fatal("EnsureTopic() should not return nil")
+	}
+
+	retrieved, err := pool.GetTopic("newTopic")
+	if err != nil {
+		t.Fatalf("GetTopic() failed with error: %v", err)
+	}
+	if created != retrieved {
+		t.Fatal("EnsureTopic() should return the same topic instance")
 	}
 }
 
@@ -64,91 +67,51 @@ func NewTestEvent(topic string, payload any) *TestEvent {
 	}
 }
 
-// TestEmitSyncSuccess tests emitting to a topic
-func TestEmitSyncSuccess(t *testing.T) {
-	soiree := NewEventPool()
-	received := make(chan string, 1) // Buffered channel to receive one message
-	topic := "testTopic"
-	event := NewTestEvent(topic, "testPayload")
-
-	// Prepare the listener
-	listener := createTestListener(received)
-
-	mustOnTopic(soiree, topic, listener)
-
-	emitExistingEvent(soiree, event)
-
-	// Wait for the listener to handle the event or timeout after a specific duration
-	select {
-	case topic := <-received:
-		if topic != event.Topic() {
-			t.Fatalf("Expected to receive event on '%s', got '%v'", event.Topic(), topic)
-		}
-
-	case <-time.After(5 * time.Second):
-		t.Fatal("Test timed out waiting for the event to be received")
-	}
-}
-
-// TestEmitSyncFailure tests the synchronous EmitSync method for event handling that returns an error
-func TestEmitSyncFailure(t *testing.T) {
+func TestEmitSync(t *testing.T) {
 	soiree := NewEventPool()
 	topic := "testTopic"
 	event := NewTestEvent(topic, "testPayload")
 
-	// Create a listener that returns an error
-	listener := func(_ *EventContext, e Event) error {
-		return errors.New("listener error") // nolint: err113
+	cases := []struct {
+		name      string
+		listener  func(*EventContext, Event) error
+		expectErr bool
+	}{
+		{
+			name: "success",
+			listener: func(_ *EventContext, e Event) error {
+				return nil
+			},
+			expectErr: false,
+		},
+		{
+			name: "failure",
+			listener: func(_ *EventContext, e Event) error {
+				return errors.New("listener error") // nolint: err113
+			},
+			expectErr: true,
+		},
 	}
 
-	mustOnTopic(soiree, topic, listener)
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			soiree.topics.Range(func(key, value any) bool {
+				soiree.topics.Delete(key)
+				return true
+			})
 
-	// Emit the event synchronously and collect errors
-	errsSync := EmitTopicSync(soiree, NewEventTopic(event.Topic()), Event(event))
+			mustOnTopic(soiree, topic, tc.listener)
+			errs := EmitTopicSync(soiree, NewEventTopic(event.Topic()), Event(event))
 
-	// Check that the errors juicy slice is not empty
-	if len(errsSync) == 0 {
-		t.Error("EmitSync() should have resulted in errors, but none were returned")
-	}
-}
+			if tc.expectErr && len(errs) == 0 {
+				t.Fatal("expected emit sync to return errors")
+			}
 
-// TestGetTopic tests getting a topic
-func TestGetTopic(t *testing.T) {
-	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "testPayload")
-
-	// Creating a topic by subscribing to it
-	mustOnTopic(soiree, event.Topic(), func(_ *EventContext, e Event) error { return nil })
-
-	topic, err := soiree.GetTopic(event.Topic())
-
-	if err != nil {
-		t.Fatalf("GetTopic() failed with error: %v", err)
-	}
-
-	if topic == nil {
-		t.Fatal("GetTopic() returned nil")
-	}
-}
-
-// TestEnsureTopic tests getting or creating a topic
-func TestEnsureTopic(t *testing.T) {
-	soiree := NewEventPool()
-
-	// Get or create a new topic
-	topic := soiree.EnsureTopic("newTopic")
-	if topic == nil {
-		t.Fatal("EnsureTopic() should not return nil")
-	}
-
-	// Try to retrieve the same topic and check if it's the same instance
-	sameTopic, err := soiree.GetTopic("newTopic")
-	if err != nil {
-		t.Fatalf("GetTopic() failed with error: %v", err)
-	}
-
-	if sameTopic != topic {
-		t.Fatal("EnsureTopic() did not return the same instance of the topic")
+			if !tc.expectErr && len(errs) > 0 {
+				t.Fatalf("unexpected errors: %v", errs)
+			}
+		})
 	}
 }
 
