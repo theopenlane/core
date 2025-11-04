@@ -451,6 +451,14 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 				return nil, err
 			}
 
+			// pull latest user settings to ensure any hook updates are included
+			entUser.Edges.Setting, err = entUser.QuerySetting().Only(ctx)
+			if err != nil {
+				log.Error().Err(err).Msg("error fetching user settings")
+
+				return nil, err
+			}
+
 			// return newly created user
 			return entUser, nil
 		}
