@@ -124,6 +124,46 @@ func (_u *TaskHistoryUpdate) ClearTags() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetTaskKindName sets the "task_kind_name" field.
+func (_u *TaskHistoryUpdate) SetTaskKindName(v string) *TaskHistoryUpdate {
+	_u.mutation.SetTaskKindName(v)
+	return _u
+}
+
+// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableTaskKindName(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetTaskKindName(*v)
+	}
+	return _u
+}
+
+// ClearTaskKindName clears the value of the "task_kind_name" field.
+func (_u *TaskHistoryUpdate) ClearTaskKindName() *TaskHistoryUpdate {
+	_u.mutation.ClearTaskKindName()
+	return _u
+}
+
+// SetTaskKindID sets the "task_kind_id" field.
+func (_u *TaskHistoryUpdate) SetTaskKindID(v string) *TaskHistoryUpdate {
+	_u.mutation.SetTaskKindID(v)
+	return _u
+}
+
+// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableTaskKindID(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetTaskKindID(*v)
+	}
+	return _u
+}
+
+// ClearTaskKindID clears the value of the "task_kind_id" field.
+func (_u *TaskHistoryUpdate) ClearTaskKindID() *TaskHistoryUpdate {
+	_u.mutation.ClearTaskKindID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TaskHistoryUpdate) SetTitle(v string) *TaskHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -272,6 +312,58 @@ func (_u *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskHistoryUpdate) SetSystemGenerated(v bool) *TaskHistoryUpdate {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskHistoryUpdate) SetIdempotencyKey(v string) *TaskHistoryUpdate {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskHistoryUpdate) ClearIdempotencyKey() *TaskHistoryUpdate {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
+// SetExternalReferenceURL sets the "external_reference_url" field.
+func (_u *TaskHistoryUpdate) SetExternalReferenceURL(v []string) *TaskHistoryUpdate {
+	_u.mutation.SetExternalReferenceURL(v)
+	return _u
+}
+
+// AppendExternalReferenceURL appends value to the "external_reference_url" field.
+func (_u *TaskHistoryUpdate) AppendExternalReferenceURL(v []string) *TaskHistoryUpdate {
+	_u.mutation.AppendExternalReferenceURL(v)
+	return _u
+}
+
+// ClearExternalReferenceURL clears the value of the "external_reference_url" field.
+func (_u *TaskHistoryUpdate) ClearExternalReferenceURL() *TaskHistoryUpdate {
+	_u.mutation.ClearExternalReferenceURL()
+	return _u
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (_u *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 	return _u.mutation
@@ -394,6 +486,18 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.TaskKindName(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindName, field.TypeString, value)
+	}
+	if _u.mutation.TaskKindNameCleared() {
+		_spec.ClearField(taskhistory.FieldTaskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TaskKindID(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
+	}
+	if _u.mutation.TaskKindIDCleared() {
+		_spec.ClearField(taskhistory.FieldTaskKindID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
@@ -435,6 +539,26 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalReferenceURL(); ok {
+		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedExternalReferenceURL(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, taskhistory.FieldExternalReferenceURL, value)
+		})
+	}
+	if _u.mutation.ExternalReferenceURLCleared() {
+		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -547,6 +671,46 @@ func (_u *TaskHistoryUpdateOne) AppendTags(v []string) *TaskHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *TaskHistoryUpdateOne) ClearTags() *TaskHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetTaskKindName sets the "task_kind_name" field.
+func (_u *TaskHistoryUpdateOne) SetTaskKindName(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetTaskKindName(v)
+	return _u
+}
+
+// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableTaskKindName(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetTaskKindName(*v)
+	}
+	return _u
+}
+
+// ClearTaskKindName clears the value of the "task_kind_name" field.
+func (_u *TaskHistoryUpdateOne) ClearTaskKindName() *TaskHistoryUpdateOne {
+	_u.mutation.ClearTaskKindName()
+	return _u
+}
+
+// SetTaskKindID sets the "task_kind_id" field.
+func (_u *TaskHistoryUpdateOne) SetTaskKindID(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetTaskKindID(v)
+	return _u
+}
+
+// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableTaskKindID(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetTaskKindID(*v)
+	}
+	return _u
+}
+
+// ClearTaskKindID clears the value of the "task_kind_id" field.
+func (_u *TaskHistoryUpdateOne) ClearTaskKindID() *TaskHistoryUpdateOne {
+	_u.mutation.ClearTaskKindID()
 	return _u
 }
 
@@ -695,6 +859,58 @@ func (_u *TaskHistoryUpdateOne) SetNillableAssignerID(v *string) *TaskHistoryUpd
 // ClearAssignerID clears the value of the "assigner_id" field.
 func (_u *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
 	_u.mutation.ClearAssignerID()
+	return _u
+}
+
+// SetSystemGenerated sets the "system_generated" field.
+func (_u *TaskHistoryUpdateOne) SetSystemGenerated(v bool) *TaskHistoryUpdateOne {
+	_u.mutation.SetSystemGenerated(v)
+	return _u
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemGenerated(*v)
+	}
+	return _u
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_u *TaskHistoryUpdateOne) SetIdempotencyKey(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetIdempotencyKey(v)
+	return _u
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdempotencyKey(*v)
+	}
+	return _u
+}
+
+// ClearIdempotencyKey clears the value of the "idempotency_key" field.
+func (_u *TaskHistoryUpdateOne) ClearIdempotencyKey() *TaskHistoryUpdateOne {
+	_u.mutation.ClearIdempotencyKey()
+	return _u
+}
+
+// SetExternalReferenceURL sets the "external_reference_url" field.
+func (_u *TaskHistoryUpdateOne) SetExternalReferenceURL(v []string) *TaskHistoryUpdateOne {
+	_u.mutation.SetExternalReferenceURL(v)
+	return _u
+}
+
+// AppendExternalReferenceURL appends value to the "external_reference_url" field.
+func (_u *TaskHistoryUpdateOne) AppendExternalReferenceURL(v []string) *TaskHistoryUpdateOne {
+	_u.mutation.AppendExternalReferenceURL(v)
+	return _u
+}
+
+// ClearExternalReferenceURL clears the value of the "external_reference_url" field.
+func (_u *TaskHistoryUpdateOne) ClearExternalReferenceURL() *TaskHistoryUpdateOne {
+	_u.mutation.ClearExternalReferenceURL()
 	return _u
 }
 
@@ -850,6 +1066,18 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.TaskKindName(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindName, field.TypeString, value)
+	}
+	if _u.mutation.TaskKindNameCleared() {
+		_spec.ClearField(taskhistory.FieldTaskKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TaskKindID(); ok {
+		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
+	}
+	if _u.mutation.TaskKindIDCleared() {
+		_spec.ClearField(taskhistory.FieldTaskKindID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
@@ -891,6 +1119,26 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemGenerated(); ok {
+		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdempotencyKey(); ok {
+		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
+	}
+	if _u.mutation.IdempotencyKeyCleared() {
+		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalReferenceURL(); ok {
+		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedExternalReferenceURL(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, taskhistory.FieldExternalReferenceURL, value)
+		})
+	}
+	if _u.mutation.ExternalReferenceURLCleared() {
+		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

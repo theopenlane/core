@@ -467,6 +467,34 @@ func (_c *ControlHistoryCreate) SetNillableSystemInternalID(v *string) *ControlH
 	return _c
 }
 
+// SetControlKindName sets the "control_kind_name" field.
+func (_c *ControlHistoryCreate) SetControlKindName(v string) *ControlHistoryCreate {
+	_c.mutation.SetControlKindName(v)
+	return _c
+}
+
+// SetNillableControlKindName sets the "control_kind_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableControlKindName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetControlKindName(*v)
+	}
+	return _c
+}
+
+// SetControlKindID sets the "control_kind_id" field.
+func (_c *ControlHistoryCreate) SetControlKindID(v string) *ControlHistoryCreate {
+	_c.mutation.SetControlKindID(v)
+	return _c
+}
+
+// SetNillableControlKindID sets the "control_kind_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableControlKindID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetControlKindID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *ControlHistoryCreate) SetRefCode(v string) *ControlHistoryCreate {
 	_c.mutation.SetRefCode(v)
@@ -810,6 +838,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(controlhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ControlKindName(); ok {
+		_spec.SetField(controlhistory.FieldControlKindName, field.TypeString, value)
+		_node.ControlKindName = value
+	}
+	if value, ok := _c.mutation.ControlKindID(); ok {
+		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
+		_node.ControlKindID = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

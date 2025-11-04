@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -94,16 +95,21 @@ type Subcontrol struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the kind of the subcontrol
+	SubcontrolKindName string `json:"subcontrol_kind_name,omitempty"`
+	// the kind of the subcontrol
+	SubcontrolKindID string `json:"subcontrol_kind_id,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the parent control
 	ControlID string `json:"control_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
-	Edges               SubcontrolEdges `json:"edges"`
-	program_subcontrols *string
-	user_subcontrols    *string
-	selectValues        sql.SelectValues
+	Edges                        SubcontrolEdges `json:"edges"`
+	custom_type_enum_subcontrols *string
+	program_subcontrols          *string
+	user_subcontrols             *string
+	selectValues                 sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
@@ -134,6 +140,8 @@ type SubcontrolEdges struct {
 	ResponsibleParty *Entity `json:"responsible_party,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// SubcontrolKind holds the value of the subcontrol_kind edge.
+	SubcontrolKind *CustomTypeEnum `json:"subcontrol_kind,omitempty"`
 	// Control holds the value of the control edge.
 	Control *Control `json:"control,omitempty"`
 	// the implementation(s) of the subcontrol
@@ -146,9 +154,9 @@ type SubcontrolEdges struct {
 	MappedFromSubcontrols []*MappedControl `json:"mapped_from_subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -290,12 +298,23 @@ func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// SubcontrolKindOrErr returns the SubcontrolKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) SubcontrolKindOrErr() (*CustomTypeEnum, error) {
+	if e.SubcontrolKind != nil {
+		return e.SubcontrolKind, nil
+	} else if e.loadedTypes[13] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "subcontrol_kind"}
+}
+
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
 	if e.Control != nil {
 		return e.Control, nil
-	} else if e.loadedTypes[13] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: control.Label}
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -304,7 +323,7 @@ func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -313,7 +332,7 @@ func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -322,7 +341,7 @@ func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 // MappedToSubcontrolsOrErr returns the MappedToSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.MappedToSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_subcontrols"}
@@ -331,7 +350,7 @@ func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
 // MappedFromSubcontrolsOrErr returns the MappedFromSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.MappedFromSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_subcontrols"}
@@ -346,13 +365,15 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrol.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case subcontrol.ForeignKeys[0]: // program_subcontrols
+		case subcontrol.ForeignKeys[0]: // custom_type_enum_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // user_subcontrols
+		case subcontrol.ForeignKeys[1]: // program_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[2]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -608,6 +629,18 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case subcontrol.FieldSubcontrolKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_kind_name", values[i])
+			} else if value.Valid {
+				_m.SubcontrolKindName = value.String
+			}
+		case subcontrol.FieldSubcontrolKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_kind_id", values[i])
+			} else if value.Valid {
+				_m.SubcontrolKindID = value.String
+			}
 		case subcontrol.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
@@ -622,12 +655,19 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_subcontrols", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_subcontrols = new(string)
+				*_m.custom_type_enum_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
 				_m.program_subcontrols = new(string)
 				*_m.program_subcontrols = value.String
 			}
-		case subcontrol.ForeignKeys[1]:
+		case subcontrol.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
@@ -710,6 +750,11 @@ func (_m *Subcontrol) QueryResponsibleParty() *EntityQuery {
 // QueryOwner queries the "owner" edge of the Subcontrol entity.
 func (_m *Subcontrol) QueryOwner() *OrganizationQuery {
 	return NewSubcontrolClient(_m.config).QueryOwner(_m)
+}
+
+// QuerySubcontrolKind queries the "subcontrol_kind" edge of the Subcontrol entity.
+func (_m *Subcontrol) QuerySubcontrolKind() *CustomTypeEnumQuery {
+	return NewSubcontrolClient(_m.config).QuerySubcontrolKind(_m)
 }
 
 // QueryControl queries the "control" edge of the Subcontrol entity.
@@ -874,6 +919,12 @@ func (_m *Subcontrol) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("subcontrol_kind_name=")
+	builder.WriteString(_m.SubcontrolKindName)
+	builder.WriteString(", ")
+	builder.WriteString("subcontrol_kind_id=")
+	builder.WriteString(_m.SubcontrolKindID)
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(_m.RefCode)

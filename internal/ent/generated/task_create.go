@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -145,6 +146,34 @@ func (_c *TaskCreate) SetNillableOwnerID(v *string) *TaskCreate {
 	return _c
 }
 
+// SetTaskKindName sets the "task_kind_name" field.
+func (_c *TaskCreate) SetTaskKindName(v string) *TaskCreate {
+	_c.mutation.SetTaskKindName(v)
+	return _c
+}
+
+// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableTaskKindName(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetTaskKindName(*v)
+	}
+	return _c
+}
+
+// SetTaskKindID sets the "task_kind_id" field.
+func (_c *TaskCreate) SetTaskKindID(v string) *TaskCreate {
+	_c.mutation.SetTaskKindID(v)
+	return _c
+}
+
+// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableTaskKindID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetTaskKindID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *TaskCreate) SetTitle(v string) *TaskCreate {
 	_c.mutation.SetTitle(v)
@@ -249,6 +278,40 @@ func (_c *TaskCreate) SetNillableAssignerID(v *string) *TaskCreate {
 	return _c
 }
 
+// SetSystemGenerated sets the "system_generated" field.
+func (_c *TaskCreate) SetSystemGenerated(v bool) *TaskCreate {
+	_c.mutation.SetSystemGenerated(v)
+	return _c
+}
+
+// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableSystemGenerated(v *bool) *TaskCreate {
+	if v != nil {
+		_c.SetSystemGenerated(*v)
+	}
+	return _c
+}
+
+// SetIdempotencyKey sets the "idempotency_key" field.
+func (_c *TaskCreate) SetIdempotencyKey(v string) *TaskCreate {
+	_c.mutation.SetIdempotencyKey(v)
+	return _c
+}
+
+// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableIdempotencyKey(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetIdempotencyKey(*v)
+	}
+	return _c
+}
+
+// SetExternalReferenceURL sets the "external_reference_url" field.
+func (_c *TaskCreate) SetExternalReferenceURL(v []string) *TaskCreate {
+	_c.mutation.SetExternalReferenceURL(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TaskCreate) SetID(v string) *TaskCreate {
 	_c.mutation.SetID(v)
@@ -266,6 +329,11 @@ func (_c *TaskCreate) SetNillableID(v *string) *TaskCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *TaskCreate) SetOwner(v *Organization) *TaskCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// SetTaskKind sets the "task_kind" edge to the CustomTypeEnum entity.
+func (_c *TaskCreate) SetTaskKind(v *CustomTypeEnum) *TaskCreate {
+	return _c.SetTaskKindID(v.ID)
 }
 
 // SetAssigner sets the "assigner" edge to the User entity.
@@ -502,6 +570,10 @@ func (_c *TaskCreate) defaults() error {
 		v := task.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.SystemGenerated(); !ok {
+		v := task.DefaultSystemGenerated
+		_c.mutation.SetSystemGenerated(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if task.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultID (forgotten import generated/runtime?)")
@@ -541,6 +613,14 @@ func (_c *TaskCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := task.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.SystemGenerated(); !ok {
+		return &ValidationError{Name: "system_generated", err: errors.New(`generated: missing required field "Task.system_generated"`)}
+	}
+	if v, ok := _c.mutation.ExternalReferenceURL(); ok {
+		if err := task.ExternalReferenceURLValidator(v); err != nil {
+			return &ValidationError{Name: "external_reference_url", err: fmt.Errorf(`generated: validator failed for field "Task.external_reference_url": %w`, err)}
 		}
 	}
 	return nil
@@ -611,6 +691,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.TaskKindName(); ok {
+		_spec.SetField(task.FieldTaskKindName, field.TypeString, value)
+		_node.TaskKindName = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -635,6 +719,18 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 		_node.Completed = &value
 	}
+	if value, ok := _c.mutation.SystemGenerated(); ok {
+		_spec.SetField(task.FieldSystemGenerated, field.TypeBool, value)
+		_node.SystemGenerated = value
+	}
+	if value, ok := _c.mutation.IdempotencyKey(); ok {
+		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)
+		_node.IdempotencyKey = value
+	}
+	if value, ok := _c.mutation.ExternalReferenceURL(); ok {
+		_spec.SetField(task.FieldExternalReferenceURL, field.TypeJSON, value)
+		_node.ExternalReferenceURL = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -651,6 +747,24 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TaskKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.TaskKindTable,
+			Columns: []string{task.TaskKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TaskKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssignerIDs(); len(nodes) > 0 {

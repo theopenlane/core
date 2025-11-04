@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -106,6 +107,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -697,6 +699,33 @@ func (f TraverseCustomDomainHistory) Traverse(ctx context.Context, q generated.Q
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainHistoryQuery", q)
+}
+
+// The CustomTypeEnumFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CustomTypeEnumFunc func(context.Context, *generated.CustomTypeEnumQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CustomTypeEnumFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CustomTypeEnumQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CustomTypeEnumQuery", q)
+}
+
+// The TraverseCustomTypeEnum type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCustomTypeEnum func(context.Context, *generated.CustomTypeEnumQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCustomTypeEnum) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCustomTypeEnum) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomTypeEnumQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CustomTypeEnumQuery", q)
 }
 
 // The DNSVerificationFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2832,6 +2861,33 @@ func (f TraverseTFASetting) Traverse(ctx context.Context, q generated.Query) err
 	return fmt.Errorf("unexpected query type %T. expect *generated.TFASettingQuery", q)
 }
 
+// The TagDefinitionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TagDefinitionFunc func(context.Context, *generated.TagDefinitionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TagDefinitionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TagDefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TagDefinitionQuery", q)
+}
+
+// The TraverseTagDefinition type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTagDefinition func(context.Context, *generated.TagDefinitionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTagDefinition) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTagDefinition) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TagDefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TagDefinitionQuery", q)
+}
+
 // The TaskFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TaskFunc func(context.Context, *generated.TaskQuery) (generated.Value, error)
 
@@ -3440,6 +3496,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.CustomDomainQuery, predicate.CustomDomain, customdomain.OrderOption]{typ: generated.TypeCustomDomain, tq: q}, nil
 	case *generated.CustomDomainHistoryQuery:
 		return &query[*generated.CustomDomainHistoryQuery, predicate.CustomDomainHistory, customdomainhistory.OrderOption]{typ: generated.TypeCustomDomainHistory, tq: q}, nil
+	case *generated.CustomTypeEnumQuery:
+		return &query[*generated.CustomTypeEnumQuery, predicate.CustomTypeEnum, customtypeenum.OrderOption]{typ: generated.TypeCustomTypeEnum, tq: q}, nil
 	case *generated.DNSVerificationQuery:
 		return &query[*generated.DNSVerificationQuery, predicate.DNSVerification, dnsverification.OrderOption]{typ: generated.TypeDNSVerification, tq: q}, nil
 	case *generated.DNSVerificationHistoryQuery:
@@ -3598,6 +3656,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
 	case *generated.TFASettingQuery:
 		return &query[*generated.TFASettingQuery, predicate.TFASetting, tfasetting.OrderOption]{typ: generated.TypeTFASetting, tq: q}, nil
+	case *generated.TagDefinitionQuery:
+		return &query[*generated.TagDefinitionQuery, predicate.TagDefinition, tagdefinition.OrderOption]{typ: generated.TypeTagDefinition, tq: q}, nil
 	case *generated.TaskQuery:
 		return &query[*generated.TaskQuery, predicate.Task, task.OrderOption]{typ: generated.TypeTask, tq: q}, nil
 	case *generated.TaskHistoryQuery:

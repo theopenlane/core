@@ -84,6 +84,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldActionPlanKindName holds the string denoting the action_plan_kind_name field in the database.
+	FieldActionPlanKindName = "action_plan_kind_name"
+	// FieldActionPlanKindID holds the string denoting the action_plan_kind_id field in the database.
+	FieldActionPlanKindID = "action_plan_kind_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
@@ -130,6 +134,8 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldActionPlanKindName,
+	FieldActionPlanKindID,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
@@ -368,6 +374,16 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByActionPlanKindName orders the results by the action_plan_kind_name field.
+func ByActionPlanKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanKindName, opts...).ToFunc()
+}
+
+// ByActionPlanKindID orders the results by the action_plan_kind_id field.
+func ByActionPlanKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanKindID, opts...).ToFunc()
 }
 
 // ByDueDate orders the results by the due_date field.

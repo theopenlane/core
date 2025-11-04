@@ -44,6 +44,14 @@ type RiskHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the kind of the risk
+	RiskKindName string `json:"risk_kind_name,omitempty"`
+	// the kind of the risk
+	RiskKindID string `json:"risk_kind_id,omitempty"`
+	// the category of the risk
+	RiskCategoryName string `json:"risk_category_name,omitempty"`
+	// the category of the risk
+	RiskCategoryID string `json:"risk_category_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
 	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
@@ -82,7 +90,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case riskhistory.FieldScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -180,6 +188,30 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case riskhistory.FieldRiskKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_kind_name", values[i])
+			} else if value.Valid {
+				_m.RiskKindName = value.String
+			}
+		case riskhistory.FieldRiskKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_kind_id", values[i])
+			} else if value.Valid {
+				_m.RiskKindID = value.String
+			}
+		case riskhistory.FieldRiskCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_category_name", values[i])
+			} else if value.Valid {
+				_m.RiskCategoryName = value.String
+			}
+		case riskhistory.FieldRiskCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_category_id", values[i])
+			} else if value.Valid {
+				_m.RiskCategoryID = value.String
 			}
 		case riskhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -324,6 +356,18 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("risk_kind_name=")
+	builder.WriteString(_m.RiskKindName)
+	builder.WriteString(", ")
+	builder.WriteString("risk_kind_id=")
+	builder.WriteString(_m.RiskKindID)
+	builder.WriteString(", ")
+	builder.WriteString("risk_category_name=")
+	builder.WriteString(_m.RiskCategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("risk_category_id=")
+	builder.WriteString(_m.RiskCategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

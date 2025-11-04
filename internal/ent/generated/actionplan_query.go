@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -28,23 +29,24 @@ import (
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx               *QueryContext
-	order             []actionplan.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.ActionPlan
-	withApprover      *GroupQuery
-	withDelegate      *GroupQuery
-	withOwner         *OrganizationQuery
-	withRisks         *RiskQuery
-	withControls      *ControlQuery
-	withPrograms      *ProgramQuery
-	withFile          *FileQuery
-	withFKs           bool
-	loadTotal         []func(context.Context, []*ActionPlan) error
-	modifiers         []func(*sql.Selector)
-	withNamedRisks    map[string]*RiskQuery
-	withNamedControls map[string]*ControlQuery
-	withNamedPrograms map[string]*ProgramQuery
+	ctx                *QueryContext
+	order              []actionplan.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.ActionPlan
+	withApprover       *GroupQuery
+	withDelegate       *GroupQuery
+	withOwner          *OrganizationQuery
+	withActionPlanKind *CustomTypeEnumQuery
+	withRisks          *RiskQuery
+	withControls       *ControlQuery
+	withPrograms       *ProgramQuery
+	withFile           *FileQuery
+	withFKs            bool
+	loadTotal          []func(context.Context, []*ActionPlan) error
+	modifiers          []func(*sql.Selector)
+	withNamedRisks     map[string]*RiskQuery
+	withNamedControls  map[string]*ControlQuery
+	withNamedPrograms  map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -149,6 +151,31 @@ func (_q *ActionPlanQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionPlanKind chains the current query on the "action_plan_kind" edge.
+func (_q *ActionPlanQuery) QueryActionPlanKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ActionPlanKindTable, actionplan.ActionPlanKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -443,18 +470,19 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:       _q.config,
-		ctx:          _q.ctx.Clone(),
-		order:        append([]actionplan.OrderOption{}, _q.order...),
-		inters:       append([]Interceptor{}, _q.inters...),
-		predicates:   append([]predicate.ActionPlan{}, _q.predicates...),
-		withApprover: _q.withApprover.Clone(),
-		withDelegate: _q.withDelegate.Clone(),
-		withOwner:    _q.withOwner.Clone(),
-		withRisks:    _q.withRisks.Clone(),
-		withControls: _q.withControls.Clone(),
-		withPrograms: _q.withPrograms.Clone(),
-		withFile:     _q.withFile.Clone(),
+		config:             _q.config,
+		ctx:                _q.ctx.Clone(),
+		order:              append([]actionplan.OrderOption{}, _q.order...),
+		inters:             append([]Interceptor{}, _q.inters...),
+		predicates:         append([]predicate.ActionPlan{}, _q.predicates...),
+		withApprover:       _q.withApprover.Clone(),
+		withDelegate:       _q.withDelegate.Clone(),
+		withOwner:          _q.withOwner.Clone(),
+		withActionPlanKind: _q.withActionPlanKind.Clone(),
+		withRisks:          _q.withRisks.Clone(),
+		withControls:       _q.withControls.Clone(),
+		withPrograms:       _q.withPrograms.Clone(),
+		withFile:           _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -492,6 +520,17 @@ func (_q *ActionPlanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ActionPl
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithActionPlanKind tells the query-builder to eager-load the nodes that are connected to
+// the "action_plan_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithActionPlanKind(opts ...func(*CustomTypeEnumQuery)) *ActionPlanQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionPlanKind = query
 	return _q
 }
 
@@ -624,10 +663,11 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withOwner != nil,
+			_q.withActionPlanKind != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
 			_q.withPrograms != nil,
@@ -675,6 +715,12 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *ActionPlan, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionPlanKind; query != nil {
+		if err := _q.loadActionPlanKind(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *CustomTypeEnum) { n.Edges.ActionPlanKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -814,6 +860,35 @@ func (_q *ActionPlanQuery) loadOwner(ctx context.Context, query *OrganizationQue
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadActionPlanKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].ActionPlanKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "action_plan_kind_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1078,6 +1153,9 @@ func (_q *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldOwnerID)
+		}
+		if _q.withActionPlanKind != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldActionPlanKindID)
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldFileID)

@@ -115,10 +115,10 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultAssessmentType enums.AssesmentType = "INTERNAL"
+const DefaultAssessmentType enums.AssessmentType = "INTERNAL"
 
 // AssessmentTypeValidator is a validator for the "assessment_type" field enum values. It is called by the builders before save.
-func AssessmentTypeValidator(at enums.AssesmentType) error {
+func AssessmentTypeValidator(at enums.AssessmentType) error {
 	switch at.String() {
 	case "INTERNAL", "EXTERNAL":
 		return nil
@@ -213,8 +213,8 @@ var (
 )
 
 var (
-	// enums.AssesmentType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.AssesmentType)(nil)
-	// enums.AssesmentType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.AssesmentType)(nil)
+	// enums.AssessmentType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.AssessmentType)(nil)
+	// enums.AssessmentType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.AssessmentType)(nil)
 )

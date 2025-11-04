@@ -191,6 +191,16 @@ func SystemInternalID(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// ControlKindName applies equality check predicate on the "control_kind_name" field. It's identical to ControlKindNameEQ.
+func ControlKindName(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldControlKindName, v))
+}
+
+// ControlKindID applies equality check predicate on the "control_kind_id" field. It's identical to ControlKindIDEQ.
+func ControlKindID(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldControlKindID, v))
+}
+
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
 func RefCode(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldRefCode, v))
@@ -2129,6 +2139,156 @@ func SystemInternalIDEqualFold(v string) predicate.ControlHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// ControlKindNameEQ applies the EQ predicate on the "control_kind_name" field.
+func ControlKindNameEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldControlKindName, v))
+}
+
+// ControlKindNameNEQ applies the NEQ predicate on the "control_kind_name" field.
+func ControlKindNameNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldControlKindName, v))
+}
+
+// ControlKindNameIn applies the In predicate on the "control_kind_name" field.
+func ControlKindNameIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldControlKindName, vs...))
+}
+
+// ControlKindNameNotIn applies the NotIn predicate on the "control_kind_name" field.
+func ControlKindNameNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldControlKindName, vs...))
+}
+
+// ControlKindNameGT applies the GT predicate on the "control_kind_name" field.
+func ControlKindNameGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldControlKindName, v))
+}
+
+// ControlKindNameGTE applies the GTE predicate on the "control_kind_name" field.
+func ControlKindNameGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldControlKindName, v))
+}
+
+// ControlKindNameLT applies the LT predicate on the "control_kind_name" field.
+func ControlKindNameLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldControlKindName, v))
+}
+
+// ControlKindNameLTE applies the LTE predicate on the "control_kind_name" field.
+func ControlKindNameLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldControlKindName, v))
+}
+
+// ControlKindNameContains applies the Contains predicate on the "control_kind_name" field.
+func ControlKindNameContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldControlKindName, v))
+}
+
+// ControlKindNameHasPrefix applies the HasPrefix predicate on the "control_kind_name" field.
+func ControlKindNameHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldControlKindName, v))
+}
+
+// ControlKindNameHasSuffix applies the HasSuffix predicate on the "control_kind_name" field.
+func ControlKindNameHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldControlKindName, v))
+}
+
+// ControlKindNameIsNil applies the IsNil predicate on the "control_kind_name" field.
+func ControlKindNameIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldControlKindName))
+}
+
+// ControlKindNameNotNil applies the NotNil predicate on the "control_kind_name" field.
+func ControlKindNameNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldControlKindName))
+}
+
+// ControlKindNameEqualFold applies the EqualFold predicate on the "control_kind_name" field.
+func ControlKindNameEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldControlKindName, v))
+}
+
+// ControlKindNameContainsFold applies the ContainsFold predicate on the "control_kind_name" field.
+func ControlKindNameContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlKindName, v))
+}
+
+// ControlKindIDEQ applies the EQ predicate on the "control_kind_id" field.
+func ControlKindIDEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldControlKindID, v))
+}
+
+// ControlKindIDNEQ applies the NEQ predicate on the "control_kind_id" field.
+func ControlKindIDNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldControlKindID, v))
+}
+
+// ControlKindIDIn applies the In predicate on the "control_kind_id" field.
+func ControlKindIDIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldControlKindID, vs...))
+}
+
+// ControlKindIDNotIn applies the NotIn predicate on the "control_kind_id" field.
+func ControlKindIDNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldControlKindID, vs...))
+}
+
+// ControlKindIDGT applies the GT predicate on the "control_kind_id" field.
+func ControlKindIDGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldControlKindID, v))
+}
+
+// ControlKindIDGTE applies the GTE predicate on the "control_kind_id" field.
+func ControlKindIDGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldControlKindID, v))
+}
+
+// ControlKindIDLT applies the LT predicate on the "control_kind_id" field.
+func ControlKindIDLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldControlKindID, v))
+}
+
+// ControlKindIDLTE applies the LTE predicate on the "control_kind_id" field.
+func ControlKindIDLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldControlKindID, v))
+}
+
+// ControlKindIDContains applies the Contains predicate on the "control_kind_id" field.
+func ControlKindIDContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldControlKindID, v))
+}
+
+// ControlKindIDHasPrefix applies the HasPrefix predicate on the "control_kind_id" field.
+func ControlKindIDHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldControlKindID, v))
+}
+
+// ControlKindIDHasSuffix applies the HasSuffix predicate on the "control_kind_id" field.
+func ControlKindIDHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldControlKindID, v))
+}
+
+// ControlKindIDIsNil applies the IsNil predicate on the "control_kind_id" field.
+func ControlKindIDIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldControlKindID))
+}
+
+// ControlKindIDNotNil applies the NotNil predicate on the "control_kind_id" field.
+func ControlKindIDNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldControlKindID))
+}
+
+// ControlKindIDEqualFold applies the EqualFold predicate on the "control_kind_id" field.
+func ControlKindIDEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldControlKindID, v))
+}
+
+// ControlKindIDContainsFold applies the ContainsFold predicate on the "control_kind_id" field.
+func ControlKindIDContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlKindID, v))
 }
 
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up tagDefinition by ID
+    """
+     tagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+    ):  TagDefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new tagDefinition
+    """
+    createTagDefinition(
+        """
+        values of the tagDefinition
+        """
+        input: CreateTagDefinitionInput!
+    ): TagDefinitionCreatePayload!
+    """
+    Create multiple new tagDefinitions
+    """
+    createBulkTagDefinition(
+        """
+        values of the tagDefinition
+        """
+        input: [CreateTagDefinitionInput!]
+    ): TagDefinitionBulkCreatePayload!
+    """
+    Create multiple new tagDefinitions via file upload
+    """
+    createBulkCSVTagDefinition(
+        """
+        csv file containing values of the tagDefinition
+        """
+        input: Upload!
+    ): TagDefinitionBulkCreatePayload!
+    """
+    Update an existing tagDefinition
+    """
+    updateTagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+        """
+        New values for the tagDefinition
+        """
+        input: UpdateTagDefinitionInput!
+    ): TagDefinitionUpdatePayload!
+    """
+    Delete an existing tagDefinition
+    """
+    deleteTagDefinition(
+        """
+        ID of the tagDefinition
+        """
+        id: ID!
+    ): TagDefinitionDeletePayload!
+}
+
+"""
+Return response for createTagDefinition mutation
+"""
+type TagDefinitionCreatePayload {
+    """
+    Created tagDefinition
+    """
+    tagDefinition: TagDefinition!
+}
+
+"""
+Return response for updateTagDefinition mutation
+"""
+type TagDefinitionUpdatePayload {
+    """
+    Updated tagDefinition
+    """
+    tagDefinition: TagDefinition!
+}
+
+"""
+Return response for deleteTagDefinition mutation
+"""
+type TagDefinitionDeletePayload {
+    """
+    Deleted tagDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTagDefinition mutation
+"""
+type TagDefinitionBulkCreatePayload {
+    """
+    Created tagDefinitions
+    """
+    tagDefinitions: [TagDefinition!]
+}

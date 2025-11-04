@@ -108,6 +108,16 @@ func OwnerID(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// ProgramKindName applies equality check predicate on the "program_kind_name" field. It's identical to ProgramKindNameEQ.
+func ProgramKindName(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindID applies equality check predicate on the "program_kind_id" field. It's identical to ProgramKindIDEQ.
+func ProgramKindID(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramKindID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldName, v))
@@ -691,6 +701,156 @@ func OwnerIDEqualFold(v string) predicate.Program {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Program {
 	return predicate.Program(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// ProgramKindNameEQ applies the EQ predicate on the "program_kind_name" field.
+func ProgramKindNameEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindNameNEQ applies the NEQ predicate on the "program_kind_name" field.
+func ProgramKindNameNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldProgramKindName, v))
+}
+
+// ProgramKindNameIn applies the In predicate on the "program_kind_name" field.
+func ProgramKindNameIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldProgramKindName, vs...))
+}
+
+// ProgramKindNameNotIn applies the NotIn predicate on the "program_kind_name" field.
+func ProgramKindNameNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldProgramKindName, vs...))
+}
+
+// ProgramKindNameGT applies the GT predicate on the "program_kind_name" field.
+func ProgramKindNameGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldProgramKindName, v))
+}
+
+// ProgramKindNameGTE applies the GTE predicate on the "program_kind_name" field.
+func ProgramKindNameGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldProgramKindName, v))
+}
+
+// ProgramKindNameLT applies the LT predicate on the "program_kind_name" field.
+func ProgramKindNameLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldProgramKindName, v))
+}
+
+// ProgramKindNameLTE applies the LTE predicate on the "program_kind_name" field.
+func ProgramKindNameLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldProgramKindName, v))
+}
+
+// ProgramKindNameContains applies the Contains predicate on the "program_kind_name" field.
+func ProgramKindNameContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldProgramKindName, v))
+}
+
+// ProgramKindNameHasPrefix applies the HasPrefix predicate on the "program_kind_name" field.
+func ProgramKindNameHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldProgramKindName, v))
+}
+
+// ProgramKindNameHasSuffix applies the HasSuffix predicate on the "program_kind_name" field.
+func ProgramKindNameHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldProgramKindName, v))
+}
+
+// ProgramKindNameIsNil applies the IsNil predicate on the "program_kind_name" field.
+func ProgramKindNameIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldProgramKindName))
+}
+
+// ProgramKindNameNotNil applies the NotNil predicate on the "program_kind_name" field.
+func ProgramKindNameNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldProgramKindName))
+}
+
+// ProgramKindNameEqualFold applies the EqualFold predicate on the "program_kind_name" field.
+func ProgramKindNameEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldProgramKindName, v))
+}
+
+// ProgramKindNameContainsFold applies the ContainsFold predicate on the "program_kind_name" field.
+func ProgramKindNameContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldProgramKindName, v))
+}
+
+// ProgramKindIDEQ applies the EQ predicate on the "program_kind_id" field.
+func ProgramKindIDEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldProgramKindID, v))
+}
+
+// ProgramKindIDNEQ applies the NEQ predicate on the "program_kind_id" field.
+func ProgramKindIDNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldProgramKindID, v))
+}
+
+// ProgramKindIDIn applies the In predicate on the "program_kind_id" field.
+func ProgramKindIDIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldProgramKindID, vs...))
+}
+
+// ProgramKindIDNotIn applies the NotIn predicate on the "program_kind_id" field.
+func ProgramKindIDNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldProgramKindID, vs...))
+}
+
+// ProgramKindIDGT applies the GT predicate on the "program_kind_id" field.
+func ProgramKindIDGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldProgramKindID, v))
+}
+
+// ProgramKindIDGTE applies the GTE predicate on the "program_kind_id" field.
+func ProgramKindIDGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldProgramKindID, v))
+}
+
+// ProgramKindIDLT applies the LT predicate on the "program_kind_id" field.
+func ProgramKindIDLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldProgramKindID, v))
+}
+
+// ProgramKindIDLTE applies the LTE predicate on the "program_kind_id" field.
+func ProgramKindIDLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldProgramKindID, v))
+}
+
+// ProgramKindIDContains applies the Contains predicate on the "program_kind_id" field.
+func ProgramKindIDContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldProgramKindID, v))
+}
+
+// ProgramKindIDHasPrefix applies the HasPrefix predicate on the "program_kind_id" field.
+func ProgramKindIDHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldProgramKindID, v))
+}
+
+// ProgramKindIDHasSuffix applies the HasSuffix predicate on the "program_kind_id" field.
+func ProgramKindIDHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldProgramKindID, v))
+}
+
+// ProgramKindIDIsNil applies the IsNil predicate on the "program_kind_id" field.
+func ProgramKindIDIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldProgramKindID))
+}
+
+// ProgramKindIDNotNil applies the NotNil predicate on the "program_kind_id" field.
+func ProgramKindIDNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldProgramKindID))
+}
+
+// ProgramKindIDEqualFold applies the EqualFold predicate on the "program_kind_id" field.
+func ProgramKindIDEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldProgramKindID, v))
+}
+
+// ProgramKindIDContainsFold applies the ContainsFold predicate on the "program_kind_id" field.
+func ProgramKindIDContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldProgramKindID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -1506,6 +1666,35 @@ func HasViewersWith(preds ...predicate.Group) predicate.Program {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProgramViewers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProgramKind applies the HasEdge predicate on the "program_kind" edge.
+func HasProgramKind() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ProgramKindTable, ProgramKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Program
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramKindWith applies the HasEdge predicate on the "program_kind" edge with a given conditions (other predicates).
+func HasProgramKindWith(preds ...predicate.CustomTypeEnum) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newProgramKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Program
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

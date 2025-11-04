@@ -166,6 +166,34 @@ func (_c *ProgramHistoryCreate) SetNillableOwnerID(v *string) *ProgramHistoryCre
 	return _c
 }
 
+// SetProgramKindName sets the "program_kind_name" field.
+func (_c *ProgramHistoryCreate) SetProgramKindName(v string) *ProgramHistoryCreate {
+	_c.mutation.SetProgramKindName(v)
+	return _c
+}
+
+// SetNillableProgramKindName sets the "program_kind_name" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableProgramKindName(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetProgramKindName(*v)
+	}
+	return _c
+}
+
+// SetProgramKindID sets the "program_kind_id" field.
+func (_c *ProgramHistoryCreate) SetProgramKindID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetProgramKindID(v)
+	return _c
+}
+
+// SetNillableProgramKindID sets the "program_kind_id" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableProgramKindID(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetProgramKindID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ProgramHistoryCreate) SetName(v string) *ProgramHistoryCreate {
 	_c.mutation.SetName(v)
@@ -587,6 +615,14 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.ProgramKindName(); ok {
+		_spec.SetField(programhistory.FieldProgramKindName, field.TypeString, value)
+		_node.ProgramKindName = value
+	}
+	if value, ok := _c.mutation.ProgramKindID(); ok {
+		_spec.SetField(programhistory.FieldProgramKindID, field.TypeString, value)
+		_node.ProgramKindID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)

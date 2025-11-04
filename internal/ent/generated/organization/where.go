@@ -3147,6 +3147,64 @@ func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate
 	})
 }
 
+// HasCustomTypeEnums applies the HasEdge predicate on the "custom_type_enums" edge.
+func HasCustomTypeEnums() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CustomTypeEnumsTable, CustomTypeEnumsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCustomTypeEnumsWith applies the HasEdge predicate on the "custom_type_enums" edge with a given conditions (other predicates).
+func HasCustomTypeEnumsWith(preds ...predicate.CustomTypeEnum) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newCustomTypeEnumsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.CustomTypeEnum
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTagDefinitions applies the HasEdge predicate on the "tag_definitions" edge.
+func HasTagDefinitions() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TagDefinitionsTable, TagDefinitionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TagDefinition
+		step.Edge.Schema = schemaConfig.TagDefinition
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTagDefinitionsWith applies the HasEdge predicate on the "tag_definitions" edge with a given conditions (other predicates).
+func HasTagDefinitionsWith(preds ...predicate.TagDefinition) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTagDefinitionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TagDefinition
+		step.Edge.Schema = schemaConfig.TagDefinition
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

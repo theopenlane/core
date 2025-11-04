@@ -2189,6 +2189,7 @@ func (_q *UserQuery) loadAssignerTasks(ctx context.Context, query *TaskQuery, no
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(task.FieldAssignerID)
 	}
@@ -2219,6 +2220,7 @@ func (_q *UserQuery) loadAssigneeTasks(ctx context.Context, query *TaskQuery, no
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(task.FieldAssigneeID)
 	}
@@ -2308,6 +2310,7 @@ func (_q *UserQuery) loadProgramOwner(ctx context.Context, query *ProgramQuery, 
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(program.FieldProgramOwnerID)
 	}

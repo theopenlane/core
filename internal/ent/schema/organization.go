@@ -441,6 +441,16 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         AssessmentResponse{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         CustomTypeEnum{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         TagDefinition{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

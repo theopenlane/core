@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -63,6 +64,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -1351,6 +1353,36 @@ func (_u *OrganizationUpdate) AddAssessmentResponses(v ...*AssessmentResponse) *
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
+func (_u *OrganizationUpdate) AddCustomTypeEnumIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddCustomTypeEnumIDs(ids...)
+	return _u
+}
+
+// AddCustomTypeEnums adds the "custom_type_enums" edges to the CustomTypeEnum entity.
+func (_u *OrganizationUpdate) AddCustomTypeEnums(v ...*CustomTypeEnum) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCustomTypeEnumIDs(ids...)
+}
+
+// AddTagDefinitionIDs adds the "tag_definitions" edge to the TagDefinition entity by IDs.
+func (_u *OrganizationUpdate) AddTagDefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTagDefinitionIDs(ids...)
+	return _u
+}
+
+// AddTagDefinitions adds the "tag_definitions" edges to the TagDefinition entity.
+func (_u *OrganizationUpdate) AddTagDefinitions(v ...*TagDefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTagDefinitionIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2790,6 +2822,48 @@ func (_u *OrganizationUpdate) RemoveAssessmentResponses(v ...*AssessmentResponse
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
+func (_u *OrganizationUpdate) ClearCustomTypeEnums() *OrganizationUpdate {
+	_u.mutation.ClearCustomTypeEnums()
+	return _u
+}
+
+// RemoveCustomTypeEnumIDs removes the "custom_type_enums" edge to CustomTypeEnum entities by IDs.
+func (_u *OrganizationUpdate) RemoveCustomTypeEnumIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveCustomTypeEnumIDs(ids...)
+	return _u
+}
+
+// RemoveCustomTypeEnums removes "custom_type_enums" edges to CustomTypeEnum entities.
+func (_u *OrganizationUpdate) RemoveCustomTypeEnums(v ...*CustomTypeEnum) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCustomTypeEnumIDs(ids...)
+}
+
+// ClearTagDefinitions clears all "tag_definitions" edges to the TagDefinition entity.
+func (_u *OrganizationUpdate) ClearTagDefinitions() *OrganizationUpdate {
+	_u.mutation.ClearTagDefinitions()
+	return _u
+}
+
+// RemoveTagDefinitionIDs removes the "tag_definitions" edge to TagDefinition entities by IDs.
+func (_u *OrganizationUpdate) RemoveTagDefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTagDefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveTagDefinitions removes "tag_definitions" edges to TagDefinition entities.
+func (_u *OrganizationUpdate) RemoveTagDefinitions(v ...*TagDefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTagDefinitionIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -6276,6 +6350,102 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CustomTypeEnumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCustomTypeEnumsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CustomTypeEnumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TagDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTagDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TagDefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7613,6 +7783,36 @@ func (_u *OrganizationUpdateOne) AddAssessmentResponses(v ...*AssessmentResponse
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
+func (_u *OrganizationUpdateOne) AddCustomTypeEnumIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddCustomTypeEnumIDs(ids...)
+	return _u
+}
+
+// AddCustomTypeEnums adds the "custom_type_enums" edges to the CustomTypeEnum entity.
+func (_u *OrganizationUpdateOne) AddCustomTypeEnums(v ...*CustomTypeEnum) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCustomTypeEnumIDs(ids...)
+}
+
+// AddTagDefinitionIDs adds the "tag_definitions" edge to the TagDefinition entity by IDs.
+func (_u *OrganizationUpdateOne) AddTagDefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTagDefinitionIDs(ids...)
+	return _u
+}
+
+// AddTagDefinitions adds the "tag_definitions" edges to the TagDefinition entity.
+func (_u *OrganizationUpdateOne) AddTagDefinitions(v ...*TagDefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTagDefinitionIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -9052,6 +9252,48 @@ func (_u *OrganizationUpdateOne) RemoveAssessmentResponses(v ...*AssessmentRespo
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
+func (_u *OrganizationUpdateOne) ClearCustomTypeEnums() *OrganizationUpdateOne {
+	_u.mutation.ClearCustomTypeEnums()
+	return _u
+}
+
+// RemoveCustomTypeEnumIDs removes the "custom_type_enums" edge to CustomTypeEnum entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveCustomTypeEnumIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveCustomTypeEnumIDs(ids...)
+	return _u
+}
+
+// RemoveCustomTypeEnums removes "custom_type_enums" edges to CustomTypeEnum entities.
+func (_u *OrganizationUpdateOne) RemoveCustomTypeEnums(v ...*CustomTypeEnum) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCustomTypeEnumIDs(ids...)
+}
+
+// ClearTagDefinitions clears all "tag_definitions" edges to the TagDefinition entity.
+func (_u *OrganizationUpdateOne) ClearTagDefinitions() *OrganizationUpdateOne {
+	_u.mutation.ClearTagDefinitions()
+	return _u
+}
+
+// RemoveTagDefinitionIDs removes the "tag_definitions" edge to TagDefinition entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveTagDefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTagDefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveTagDefinitions removes "tag_definitions" edges to TagDefinition entities.
+func (_u *OrganizationUpdateOne) RemoveTagDefinitions(v ...*TagDefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTagDefinitionIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -12563,6 +12805,102 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CustomTypeEnumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCustomTypeEnumsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CustomTypeEnumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumsTable,
+			Columns: []string{organization.CustomTypeEnumsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CustomTypeEnum
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TagDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTagDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TagDefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionsTable,
+			Columns: []string{organization.TagDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

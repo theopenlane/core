@@ -120,6 +120,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -150,6 +154,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -284,6 +290,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -314,6 +324,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -448,6 +460,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -478,6 +494,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":

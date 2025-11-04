@@ -608,6 +608,46 @@ func (_u *ControlHistoryUpdate) ClearSystemInternalID() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetControlKindName sets the "control_kind_name" field.
+func (_u *ControlHistoryUpdate) SetControlKindName(v string) *ControlHistoryUpdate {
+	_u.mutation.SetControlKindName(v)
+	return _u
+}
+
+// SetNillableControlKindName sets the "control_kind_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableControlKindName(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetControlKindName(*v)
+	}
+	return _u
+}
+
+// ClearControlKindName clears the value of the "control_kind_name" field.
+func (_u *ControlHistoryUpdate) ClearControlKindName() *ControlHistoryUpdate {
+	_u.mutation.ClearControlKindName()
+	return _u
+}
+
+// SetControlKindID sets the "control_kind_id" field.
+func (_u *ControlHistoryUpdate) SetControlKindID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetControlKindID(v)
+	return _u
+}
+
+// SetNillableControlKindID sets the "control_kind_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableControlKindID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetControlKindID(*v)
+	}
+	return _u
+}
+
+// ClearControlKindID clears the value of the "control_kind_id" field.
+func (_u *ControlHistoryUpdate) ClearControlKindID() *ControlHistoryUpdate {
+	_u.mutation.ClearControlKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *ControlHistoryUpdate) SetRefCode(v string) *ControlHistoryUpdate {
 	_u.mutation.SetRefCode(v)
@@ -966,6 +1006,18 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(controlhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlKindName(); ok {
+		_spec.SetField(controlhistory.FieldControlKindName, field.TypeString, value)
+	}
+	if _u.mutation.ControlKindNameCleared() {
+		_spec.ClearField(controlhistory.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlKindID(); ok {
+		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
+	}
+	if _u.mutation.ControlKindIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
@@ -1574,6 +1626,46 @@ func (_u *ControlHistoryUpdateOne) ClearSystemInternalID() *ControlHistoryUpdate
 	return _u
 }
 
+// SetControlKindName sets the "control_kind_name" field.
+func (_u *ControlHistoryUpdateOne) SetControlKindName(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetControlKindName(v)
+	return _u
+}
+
+// SetNillableControlKindName sets the "control_kind_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableControlKindName(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetControlKindName(*v)
+	}
+	return _u
+}
+
+// ClearControlKindName clears the value of the "control_kind_name" field.
+func (_u *ControlHistoryUpdateOne) ClearControlKindName() *ControlHistoryUpdateOne {
+	_u.mutation.ClearControlKindName()
+	return _u
+}
+
+// SetControlKindID sets the "control_kind_id" field.
+func (_u *ControlHistoryUpdateOne) SetControlKindID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetControlKindID(v)
+	return _u
+}
+
+// SetNillableControlKindID sets the "control_kind_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableControlKindID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetControlKindID(*v)
+	}
+	return _u
+}
+
+// ClearControlKindID clears the value of the "control_kind_id" field.
+func (_u *ControlHistoryUpdateOne) ClearControlKindID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearControlKindID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *ControlHistoryUpdateOne) SetRefCode(v string) *ControlHistoryUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -1962,6 +2054,18 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(controlhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlKindName(); ok {
+		_spec.SetField(controlhistory.FieldControlKindName, field.TypeString, value)
+	}
+	if _u.mutation.ControlKindNameCleared() {
+		_spec.ClearField(controlhistory.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlKindID(); ok {
+		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
+	}
+	if _u.mutation.ControlKindIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

@@ -42,6 +42,10 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldTaskKindName holds the string denoting the task_kind_name field in the database.
+	FieldTaskKindName = "task_kind_name"
+	// FieldTaskKindID holds the string denoting the task_kind_id field in the database.
+	FieldTaskKindID = "task_kind_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
@@ -58,6 +62,12 @@ const (
 	FieldAssigneeID = "assignee_id"
 	// FieldAssignerID holds the string denoting the assigner_id field in the database.
 	FieldAssignerID = "assigner_id"
+	// FieldSystemGenerated holds the string denoting the system_generated field in the database.
+	FieldSystemGenerated = "system_generated"
+	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
+	FieldIdempotencyKey = "idempotency_key"
+	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
+	FieldExternalReferenceURL = "external_reference_url"
 	// Table holds the table name of the taskhistory in the database.
 	Table = "task_history"
 )
@@ -77,6 +87,8 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldTaskKindName,
+	FieldTaskKindID,
 	FieldTitle,
 	FieldDetails,
 	FieldStatus,
@@ -85,6 +97,9 @@ var Columns = []string{
 	FieldCompleted,
 	FieldAssigneeID,
 	FieldAssignerID,
+	FieldSystemGenerated,
+	FieldIdempotencyKey,
+	FieldExternalReferenceURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -116,6 +131,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultSystemGenerated holds the default value on creation for the "system_generated" field.
+	DefaultSystemGenerated bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -205,6 +222,16 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByTaskKindName orders the results by the task_kind_name field.
+func ByTaskKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaskKindName, opts...).ToFunc()
+}
+
+// ByTaskKindID orders the results by the task_kind_id field.
+func ByTaskKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaskKindID, opts...).ToFunc()
+}
+
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
@@ -243,6 +270,16 @@ func ByAssigneeID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssignerID orders the results by the assigner_id field.
 func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignerID, opts...).ToFunc()
+}
+
+// BySystemGenerated orders the results by the system_generated field.
+func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemGenerated, opts...).ToFunc()
+}
+
+// ByIdempotencyKey orders the results by the idempotency_key field.
+func ByIdempotencyKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdempotencyKey, opts...).ToFunc()
 }
 
 var (
