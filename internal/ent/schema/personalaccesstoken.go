@@ -63,6 +63,17 @@ func (PersonalAccessToken) Fields() []ent.Field {
 				token := keygen.PrefixedSecret("tolp") // token prefix
 				return token
 			}),
+		field.String("token_public_id").
+			Unique().
+			Immutable().
+			Optional().
+			Nillable().
+			Comment("public identifier for the token (used to lookup token record)"),
+		field.String("token_secret").
+			Immutable().
+			Optional().
+			Nillable().
+			Comment("secret portion of the token key material (stored for verification by token manager)"),
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(

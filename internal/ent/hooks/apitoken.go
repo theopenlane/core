@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/iam/auth"
+    "github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -43,6 +44,15 @@ func HookCreateAPIToken() ent.Hook {
 
 			// set organization on the token
 			m.SetOwnerID(orgID)
+
+		// generate new key material and store public id + secret
+		if v, s, err := tokens.GenerateAPITokenKeyMaterial(); err == nil {
+			// store the pieces; keep legacy `token` field for compatibility
+			m.SetTokenPublicID(v)
+			m.SetTokenSecret(s)
+		} else {
+			return nil, err
+		}
 
 			if err := validateExpirationTime(m); err != nil {
 				return nil, err

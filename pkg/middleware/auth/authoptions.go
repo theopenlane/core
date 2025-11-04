@@ -50,6 +50,8 @@ type Options struct {
 	DBClient *ent.Client
 	// RedisClient is used to set the permission cache in the context
 	RedisClient *redis.Client
+	// TokenManager used to verify api/personal access tokens and to create jwks validators
+	TokenManager *tokens.TokenManager
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -246,6 +248,13 @@ func WithBeforeFunc(before middleware.BeforeFunc) Option {
 func WithDBClient(client *ent.Client) Option {
 	return func(opts *Options) {
 		opts.DBClient = client
+	}
+}
+
+// WithTokenManager allows the user to supply a TokenManager instance to the auth middleware
+func WithTokenManager(tm *tokens.TokenManager) Option {
+	return func(opts *Options) {
+		opts.TokenManager = tm
 	}
 }
 

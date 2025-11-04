@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -30,6 +31,14 @@ func HookCreatePersonalAccessToken() ent.Hook {
 
 			// set user on the token
 			m.SetOwnerID(userID)
+
+			// generate key material and store in new token fields
+			if v, s, err := tokens.GenerateAPITokenKeyMaterial(); err == nil {
+				m.SetTokenPublicID(v)
+				m.SetTokenSecret(s)
+			} else {
+				return nil, err
+			}
 
 			return next.Mutate(ctx, m)
 		})
