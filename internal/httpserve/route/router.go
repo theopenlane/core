@@ -570,8 +570,6 @@ func (r *Router) AddGraphQLToOpenAPI() {
 func RegisterRoutes(router *Router) error {
 	// base middleware for all routes that does not included additional middleware
 	baseMW = baseMiddleware(router)
-	// Middleware for restricted endpoints
-	restrictedEndpointsMW = restrictedMiddleware(router)
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
@@ -672,16 +670,6 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
 
 	return append(mw, middleware.Recover(), mimeMiddleware, transactionConfig.Middleware)
-}
-
-// restrictedMiddleware returns the middleware for the router that is used on restricted routes
-// it includes the base middleware, the rate limiter, and any additional middleware
-func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
-	mw := baseMW
-	// add the restricted endpoints middleware (includes csrf)
-	mw = append(mw, router.Handler.AdditionalMiddleware...)
-
-	return mw
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes
