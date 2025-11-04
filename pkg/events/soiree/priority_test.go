@@ -5,8 +5,13 @@ import (
 	"testing"
 )
 
-func mustOnWithPriority(pool *EventPool, topic string, priority Priority, listener Listener) string {
-	return MustOn(pool, NewEventTopic(topic), TypedListener[Event](listener), WithPriority(priority))
+func mustOnWithPriority(pool *EventPool, topic string, priority Priority, listener TypedListener[Event]) string {
+	id, err := OnTopic(pool, NewEventTopic(topic), listener, WithPriority(priority))
+	if err != nil {
+		panic(err)
+	}
+
+	return id
 }
 
 func emitTopicEvent(pool *EventPool, event Event) {
@@ -31,7 +36,7 @@ func TestPriorityOrdering(t *testing.T) {
 	subscribeWithPriority := func(priority Priority) {
 		wg.Add(1) // Increment the WaitGroup counter
 
-		_, err := OnTopic(em, NewEventTopic(event.Topic()), func(e Event) error {
+		_, err := OnTopic(em, NewEventTopic(event.Topic()), func(_ *EventContext, e Event) error {
 			defer wg.Done() // Decrement the counter when the function completes
 			mu.Lock()       // Lock the mutex to safely append to callOrder
 			callOrder = append(callOrder, priority)
@@ -80,19 +85,19 @@ func TestEmitSyncWithAbort(t *testing.T) {
 	topic := NewEventTopic("testTopic")
 
 	// Create three listeners with different priorities
-	highPriorityListener := func(e Event) error {
+	highPriorityListener := func(_ *EventContext, e Event) error {
 		// This listener has the lowest priority and should be called first
 		return nil
 	}
 
-	abortingListener := func(e Event) error {
+	abortingListener := func(_ *EventContext, e Event) error {
 		// This listener aborts the event processing
 		e.SetAborted(true)
 
 		return nil
 	}
 
-	lowPriorityListener := func(e Event) error {
+	lowPriorityListener := func(_ *EventContext, e Event) error {
 		t.Error("The low priority listener should not be called after the event is aborted")
 
 		return nil
@@ -121,19 +126,19 @@ func TestEmitWithAbort(t *testing.T) {
 	topic := NewEventTopic("testTopic")
 
 	// Create three listeners with different priorities
-	highPriorityListener := func(e Event) error {
+	highPriorityListener := func(_ *EventContext, e Event) error {
 		// This listener has the highest priority and should be called first
 		return nil
 	}
 
-	abortingListener := func(e Event) error {
+	abortingListener := func(_ *EventContext, e Event) error {
 		// This listener aborts the event processing
 		e.SetAborted(true)
 		return nil
 	}
 
 	lowPriorityListenerCalled := false
-	lowPriorityListener := func(e Event) error {
+	lowPriorityListener := func(_ *EventContext, e Event) error {
 		// This flag should remain false if the event processing is correctly aborted
 		lowPriorityListenerCalled = true
 		return nil

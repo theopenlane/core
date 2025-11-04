@@ -13,7 +13,7 @@ func TestEventPersistence(t *testing.T) {
 	soiree := NewEventPool(WithEventStore(store))
 
 	topic := NewEventTopic("topic")
-	if _, err := OnTopic(soiree, topic, TypedListener[Event](func(e Event) error { return nil })); err != nil {
+	if _, err := OnTopic(soiree, topic, func(_ *EventContext, e Event) error { return nil }); err != nil {
 		t.Fatalf("On() error: %v", err)
 	}
 
@@ -35,13 +35,13 @@ func TestRetryWithBackoff(t *testing.T) {
 	)
 
 	topic := NewEventTopic("topic")
-	if _, err := OnTopic(soiree, topic, TypedListener[Event](func(e Event) error {
+	if _, err := OnTopic(soiree, topic, func(_ *EventContext, e Event) error {
 		attempts++
 		if attempts < 3 {
 			return errors.New("fail")
 		}
 		return nil
-	})); err != nil {
+	}); err != nil {
 		t.Fatalf("On() error: %v", err)
 	}
 

@@ -1,7 +1,7 @@
 package hooks
 
 import (
-	"context"
+	"fmt"
 
 	"entgo.io/ent"
 
@@ -9,27 +9,21 @@ import (
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
-// Eventer is a wrapper struct for having a soiree as well as a list of listeners
 type Eventer struct {
-	Emitter *soiree.EventPool
-
-	listenerBindings   []soiree.ListenerBinding
-	propertyExtractors map[string][]PropertyExtractor
+	Emitter   *soiree.EventPool
+	listeners []mutationListener
+	entities  map[string]struct{}
 }
 
-// PropertyExtractor allows callers to augment event properties produced by the hook.
-type PropertyExtractor func(context.Context, ent.Mutation) soiree.Properties
+type mutationListener struct {
+	entity  string
+	binding soiree.ListenerBinding
+}
 
-const globalPropertyScope = "*"
-
-// EventerOpts is a functional options wrapper
 type EventerOpts func(*Eventer)
 
-// NewEventer creates a new Eventer with the provided options
 func NewEventer(opts ...EventerOpts) *Eventer {
-	e := &Eventer{
-		propertyExtractors: make(map[string][]PropertyExtractor),
-	}
+	e := &Eventer{entities: make(map[string]struct{})}
 
 	for _, opt := range opts {
 		opt(e)
@@ -38,78 +32,53 @@ func NewEventer(opts ...EventerOpts) *Eventer {
 	return e
 }
 
-// WithEventerEmitter sets the emitter for the Eventer if there's an existing soiree pool that needs to be passed in
 func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 	return func(e *Eventer) {
 		e.Emitter = emitter
 	}
 }
 
-// WithEventerListenerBindings allows callers to provide pre-built listener bindings that will be registered alongside the defaults.
-func WithEventerListenerBindings(bindings ...soiree.ListenerBinding) EventerOpts {
-	return func(e *Eventer) {
-		e.listenerBindings = append(e.listenerBindings, bindings...)
-	}
+type MutationHandler func(*soiree.EventContext, *MutationPayload) error
+
+type MutationPayload struct {
+	Mutation  ent.Mutation
+	Operation string
+	EntityID  string
+	Client    *entgen.Client
 }
 
-// WithEventerPropertyExtractor registers a property extractor for a specific topic.
-func WithEventerPropertyExtractor(topic soiree.TypedTopic[soiree.Event], extractor PropertyExtractor) EventerOpts {
-	return func(e *Eventer) {
-		if extractor == nil {
-			return
-		}
+func mutationTopic(entity string) soiree.TypedTopic[*MutationPayload] {
+	return soiree.NewTypedTopic(
+		entity,
+		func(payload *MutationPayload) soiree.Event { return soiree.NewBaseEvent(entity, payload) },
+		func(event soiree.Event) (*MutationPayload, error) {
+			payload, ok := event.Payload().(*MutationPayload)
+			if !ok {
+				return nil, fmt.Errorf("soiree: mutation payload unavailable for topic %s", entity)
+			}
 
-		e.propertyExtractors[topic.Name()] = append(e.propertyExtractors[topic.Name()], extractor)
-	}
+			return payload, nil
+		},
+	)
 }
 
-// WithEventerGlobalPropertyExtractor registers a property extractor that runs for every topic.
-func WithEventerGlobalPropertyExtractor(extractor PropertyExtractor) EventerOpts {
-	return func(e *Eventer) {
-		if extractor == nil {
-			return
-		}
-
-		e.propertyExtractors[globalPropertyScope] = append(e.propertyExtractors[globalPropertyScope], extractor)
-	}
-}
-
-func (e *Eventer) applyPropertyExtractors(ctx context.Context, topic string, mutation ent.Mutation, target soiree.Properties) {
-	if e == nil || target == nil {
+func (e *Eventer) AddMutationListener(entity string, handler MutationHandler, opts ...soiree.ListenerOption) {
+	if e == nil || handler == nil || entity == "" {
 		return
 	}
 
-	run := func(extractors []PropertyExtractor) {
-		for _, extractor := range extractors {
-			if extractor == nil {
-				continue
-			}
+	bound := soiree.BindListener(
+		mutationTopic(entity),
+		func(ctx *soiree.EventContext, payload *MutationPayload) error {
+			return handler(ctx, payload)
+		},
+		opts...,
+	)
 
-			props := extractor(ctx, mutation)
-			for key, value := range props {
-				target.Set(key, value)
-			}
-		}
-	}
-
-	run(e.propertyExtractors[globalPropertyScope])
-	run(e.propertyExtractors[topic])
+	e.listeners = append(e.listeners, mutationListener{entity: entity, binding: bound})
+	e.entities[entity] = struct{}{}
 }
 
-func mutationFieldExtractor(_ context.Context, mutation ent.Mutation) soiree.Properties {
-	props := soiree.NewProperties()
-
-	for _, field := range mutation.Fields() {
-		value, exists := mutation.Field(field)
-		if exists {
-			props.Set(field, value)
-		}
-	}
-
-	return props
-}
-
-// NewEventerPool initializes a new Eventer and takes a client to be used as the client for the soiree pool
 func NewEventerPool(client interface{}) *Eventer {
 	pool := soiree.NewEventPool(
 		soiree.WithPool(
@@ -118,14 +87,22 @@ func NewEventerPool(client interface{}) *Eventer {
 				soiree.WithName("ent_event_pool"))),
 		soiree.WithClient(client))
 
-	return NewEventer(
+	eventer := NewEventer(
 		WithEventerEmitter(pool),
-		WithEventerGlobalPropertyExtractor(mutationFieldExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganization, ent.OpCreate.String()), organizationCreatePropertyExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganization, ent.OpDelete.String()), organizationDeletePropertyExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganization, ent.OpDeleteOne.String()), organizationDeletePropertyExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganization, SoftDeleteOne), organizationDeletePropertyExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganizationSetting, ent.OpUpdate.String()), organizationSettingPropertyExtractor),
-		WithEventerPropertyExtractor(soiree.MutationTopic(entgen.TypeOrganizationSetting, ent.OpUpdateOne.String()), organizationSettingPropertyExtractor),
 	)
+
+	registerDefaultMutationListeners(eventer)
+
+	return eventer
+}
+
+func registerDefaultMutationListeners(e *Eventer) {
+	if e == nil {
+		return
+	}
+
+	e.AddMutationListener(entgen.TypeOrganization, handleOrganizationMutation)
+	e.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationSettingMutation)
+	e.AddMutationListener(entgen.TypeSubscriber, handleSubscriberMutation)
+	e.AddMutationListener(entgen.TypeUser, handleUserMutation)
 }

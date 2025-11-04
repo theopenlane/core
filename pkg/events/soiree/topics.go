@@ -61,8 +61,6 @@ func (t *Topic) AddListener(id string, listener Listener, opts ...ListenerOption
 		opt(item)
 	}
 
-	item.listener = applyListenerMiddlewares(item.listener, item.mws)
-
 	t.listeners[id] = item
 	t.addSortedListenerID(id, item.priority)
 }
@@ -96,14 +94,24 @@ func (t *Topic) Trigger(event Event) []error {
 			continue // Listener was removed; skip it
 		}
 
-		if err := item.listener(event); err != nil {
+		ctx := newEventContext(event)
+
+		if err := item.call(ctx); err != nil {
 			errs = append(errs, err)
 		}
 
-		if event.IsAborted() {
+		if ctx.Event().IsAborted() {
 			break // Stop notifying listeners if the event is aborted
 		}
 	}
 
 	return errs
+}
+
+// HasListeners reports whether the topic currently has listeners registered.
+func (t *Topic) HasListeners() bool {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	return len(t.listeners) > 0
 }

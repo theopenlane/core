@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 
+	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -12,7 +13,6 @@ import (
 	"github.com/theopenlane/utils/slack"
 )
 
-// SlackConfig holds configuration for Slack notifications
 type SlackConfig struct {
 	WebhookURL               string
 	NewSubscriberMessageFile string
@@ -21,13 +21,27 @@ type SlackConfig struct {
 
 var slackCfg SlackConfig
 
-// SetSlackConfig sets the Slack configuration for event handlers
 func SetSlackConfig(cfg SlackConfig) {
 	slackCfg = cfg
 }
 
-// handleSubscriberCreate sends a Slack notification when a new subscriber is created
-func handleSubscriberCreate(ctx *soiree.ListenerContext[any, soiree.Event]) error {
+func handleSubscriberMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+	if payload.Operation != ent.OpCreate.String() {
+		return nil
+	}
+
+	return handleSubscriberCreate(ctx, payload)
+}
+
+func handleUserMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+	if payload.Operation != ent.OpCreate.String() {
+		return nil
+	}
+
+	return handleUserCreate(ctx, payload)
+}
+
+func handleSubscriberCreate(ctx *soiree.EventContext, _ *MutationPayload) error {
 	if slackCfg.WebhookURL == "" {
 		return nil
 	}
@@ -80,8 +94,7 @@ func handleSubscriberCreate(ctx *soiree.ListenerContext[any, soiree.Event]) erro
 	return client.Post(ctx.Context(), payload)
 }
 
-// handleUserCreate sends a Slack notification when a new user is created
-func handleUserCreate(ctx *soiree.ListenerContext[any, soiree.Event]) error {
+func handleUserCreate(ctx *soiree.EventContext, _ *MutationPayload) error {
 	if slackCfg.WebhookURL == "" {
 		return nil
 	}

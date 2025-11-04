@@ -11,8 +11,13 @@ import (
 	"github.com/alitto/pond/v2"
 )
 
-func mustSubscribe(pool *EventPool, topic string, listener Listener, opts ...ListenerOption) string {
-	return MustOn(pool, NewEventTopic(topic), TypedListener[Event](listener), opts...)
+func mustSubscribe(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
+	id, err := OnTopic(pool, NewEventTopic(topic), listener, opts...)
+	if err != nil {
+		panic(err)
+	}
+
+	return id
 }
 
 func emitPayload(pool *EventPool, topic string, payload any) <-chan error {
@@ -24,7 +29,7 @@ func TestEmitEventWithPool(t *testing.T) {
 
 	var processedEvents int32
 
-	listenerID := mustSubscribe(soiree, "testEvent", func(event Event) error {
+	listenerID := mustSubscribe(soiree, "testEvent", func(_ *EventContext, event Event) error {
 		atomic.AddInt32(&processedEvents, 1)
 		time.Sleep(10 * time.Millisecond) // Simulating work
 
@@ -79,7 +84,7 @@ func TestEmitMultipleEventsWithPool(t *testing.T) {
 	var processingError error
 
 	// Add an event listener to handle "testEvent" and increment the processedEvents count
-	mustSubscribe(soiree, "testEvent", func(event Event) error {
+	mustSubscribe(soiree, "testEvent", func(_ *EventContext, event Event) error {
 		// Simulate some processing
 		time.Sleep(100 * time.Millisecond)
 
@@ -120,11 +125,11 @@ func TestMultipleListenersOnSameTopic(t *testing.T) {
 
 	var count1, count2 int32
 
-	mustSubscribe(soiree, "topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count1, 1)
 		return nil
 	})
-	mustSubscribe(soiree, "topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count2, 1)
 		return nil
 	})
@@ -147,7 +152,7 @@ func TestRemoveListener(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(2))))
 
 	var count int32
-	listenerID := mustSubscribe(soiree, "topic", func(e Event) error {
+	listenerID := mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count, 1)
 		return nil
 	})
@@ -184,7 +189,7 @@ func TestListenerErrorReporting(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(2))))
 
 	someErr := errors.New("listener error")
-	mustSubscribe(soiree, "topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		return someErr
 	})
 

@@ -18,7 +18,7 @@ func main() {
 	userSignup := soiree.NewEventTopic("user.signup")
 
 	// Define a listener that simulates a time-consuming task - dealing with humans usually
-	userSignupListener := func(evt soiree.Event) error {
+	userSignupListener := func(_ *soiree.EventContext, evt soiree.Event) error {
 		fmt.Printf("Processing event: %s with payload: %v\n", evt.Topic(), evt.Payload())
 		// Simulate some work with a sleep
 		time.Sleep(2 * time.Second)
@@ -28,7 +28,9 @@ func main() {
 	}
 
 	// Subscribe a listener to a topic
-	soiree.MustOn(e, userSignup, soiree.TypedListener[soiree.Event](userSignupListener))
+	if _, err := soiree.OnTopic(e, userSignup, userSignupListener); err != nil {
+		panic(err)
+	}
 
 	// Emit several events concurrently
 	for i := 0; i < 100; i++ {

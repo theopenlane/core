@@ -12,8 +12,8 @@ func defaultTopic() TypedTopic[Event] {
 	return NewEventTopic("testTopic")
 }
 
-func subscribeDefaultTopic(pool *EventPool, listener Listener, opts ...ListenerOption) (string, error) {
-	return OnTopic(pool, defaultTopic(), TypedListener[Event](listener), opts...)
+func subscribeDefaultTopic(pool *EventPool, listener TypedListener[Event], opts ...ListenerOption) (string, error) {
+	return OnTopic(pool, defaultTopic(), listener, opts...)
 }
 
 func emitDefaultTopicSync(pool *EventPool, payload any) []error {
@@ -51,7 +51,7 @@ func TestWithErrorHandler(t *testing.T) {
 	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
 
 	// Define a listener that returns the custom error
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
 
@@ -94,7 +94,7 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
 
 	// Define a listener that returns the custom error
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
 
@@ -138,7 +138,7 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
 
 	// Define a listener that panics
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
@@ -184,7 +184,7 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
 
 	// Define a listener that panics
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
@@ -224,7 +224,7 @@ func TestWithIDGenerator(t *testing.T) {
 	soiree := NewEventPool(WithIDGenerator(customIDGenerator))
 
 	// Define a no-op listener
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return nil
 	}
 

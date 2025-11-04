@@ -21,10 +21,12 @@ func main() {
 	)
 	taskCreated := soiree.NewEventTopic("task.created")
 
-	soiree.MustOn(e, taskCreated, soiree.TypedListener[soiree.Event](func(evt soiree.Event) error {
+	if _, err := soiree.OnTopic(e, taskCreated, func(_ *soiree.EventContext, evt soiree.Event) error {
 		// Handle the event and return an error to trigger retries
 		return nil
-	}))
+	}); err != nil {
+		panic(err)
+	}
 
 	soiree.EmitTopic(e, taskCreated, soiree.Event(soiree.NewBaseEvent(taskCreated.Name(), "some payload")))
 }
