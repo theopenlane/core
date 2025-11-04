@@ -210,9 +210,9 @@ func generateYAMLConfig(yamlConfigPath string) error {
 	return nil
 }
 
-// populateExampleMapEntries recursively populates example entries for maps with an "example" tag
-// The "example" tag should contain comma-separated keys to create as examples
-// Example: `json:"keys" example:"v1,v2"` will create entries for keys "v1" and "v2"
+// populateExampleMapEntries recursively populates example entries for maps.
+// If an "example" tag is present, it is used to determine the example keys.
+// Otherwise, a default placeholder key (e.g., "default") is added to empty maps so YAML/examples aren't empty.
 func populateExampleMapEntries(v reflect.Value) {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return
@@ -230,38 +230,45 @@ func populateExampleMapEntries(v reflect.Value) {
 
 		switch fieldValue.Kind() {
 		case reflect.Map:
-			// Check for example tag
-			exampleTag := field.Tag.Get("example")
-			if exampleTag != "" && fieldValue.CanSet() {
-				// Parse comma-separated keys
-				exampleKeys := strings.Split(exampleTag, ",")
+			if !fieldValue.CanSet() {
+				continue
+			}
 
-				// Get the map value type
-				mapType := fieldValue.Type()
-				valueType := mapType.Elem()
+			mapType := fieldValue.Type()
+			if mapType.Key().Kind() != reflect.String {
+				continue
+			}
 
-				// Initialize the map if nil
-				if fieldValue.IsNil() {
-					fieldValue.Set(reflect.MakeMap(mapType))
+			if fieldValue.IsNil() {
+				fieldValue.Set(reflect.MakeMap(mapType))
+			}
+
+			exampleKeys := parseExampleKeys(field.Tag.Get("example"))
+
+			// If we already have entries and there is no explicit example tag, leave the map as-is.
+			if len(exampleKeys) == 0 && fieldValue.Len() > 0 {
+				continue
+			}
+
+			if len(exampleKeys) == 0 {
+				exampleKeys = []string{defaultExampleKey(0)}
+			}
+
+			valueType := mapType.Elem()
+
+			for idx, rawKey := range exampleKeys {
+				key := strings.TrimSpace(rawKey)
+				if key == "" {
+					key = defaultExampleKey(idx)
 				}
 
-				// Create example entries
-				for _, key := range exampleKeys {
-					key = strings.TrimSpace(key)
-					if key == "" {
-						continue
-					}
-
-					// Create a new instance of the value type
-					newValue := reflect.New(valueType)
-
-					// Set defaults on the new value
-					defaults.SetDefaults(newValue.Interface())
-
-					// Add to map
-					keyValue := reflect.ValueOf(key)
-					fieldValue.SetMapIndex(keyValue, newValue.Elem())
+				keyValue := reflect.ValueOf(key)
+				if fieldValue.MapIndex(keyValue).IsValid() {
+					continue
 				}
+
+				mapValue := createExampleMapValue(valueType)
+				fieldValue.SetMapIndex(keyValue, mapValue)
 			}
 
 		case reflect.Struct:
@@ -269,8 +276,18 @@ func populateExampleMapEntries(v reflect.Value) {
 			populateExampleMapEntries(fieldValue)
 
 		case reflect.Ptr:
-			// Dereference pointers and recurse
-			if !fieldValue.IsNil() && fieldValue.Elem().Kind() == reflect.Struct {
+			elemType := fieldValue.Type().Elem()
+			if elemType.Kind() != reflect.Struct {
+				continue
+			}
+
+			if fieldValue.IsNil() && fieldValue.CanSet() && shouldInitializePointer(elemType) {
+				newVal := reflect.New(elemType)
+				defaults.SetDefaults(newVal.Interface())
+				fieldValue.Set(newVal)
+			}
+
+			if !fieldValue.IsNil() {
 				populateExampleMapEntries(fieldValue.Elem())
 			}
 		}
@@ -306,7 +323,59 @@ func initializeStripeWebhookSecrets(cfg *config.Config) {
 
 type mapEntry struct {
 	Key   string
-	Value string
+	Value reflect.Value
+}
+
+func parseExampleKeys(exampleTag string) []string {
+	if exampleTag == "" {
+		return nil
+	}
+
+	parts := strings.Split(exampleTag, ",")
+	keys := make([]string, 0, len(parts))
+	for _, part := range parts {
+		key := strings.TrimSpace(part)
+		if key != "" {
+			keys = append(keys, key)
+		}
+	}
+	return keys
+}
+
+func defaultExampleKey(index int) string {
+	if index == 0 {
+		return "default"
+	}
+	return fmt.Sprintf("default%d", index+1)
+}
+
+func createExampleMapValue(valueType reflect.Type) reflect.Value {
+	switch valueType.Kind() {
+	case reflect.Struct:
+		ptr := reflect.New(valueType)
+		defaults.SetDefaults(ptr.Interface())
+		populateExampleMapEntries(ptr.Elem())
+		return ptr.Elem()
+	case reflect.Ptr:
+		elemType := valueType.Elem()
+		ptr := reflect.New(elemType)
+		if elemType.Kind() == reflect.Struct {
+			defaults.SetDefaults(ptr.Interface())
+			populateExampleMapEntries(ptr.Elem())
+		}
+		return ptr
+	case reflect.Slice:
+		return reflect.MakeSlice(valueType, 0, 0)
+	case reflect.Map:
+		return reflect.MakeMap(valueType)
+	default:
+		return reflect.Zero(valueType)
+	}
+}
+
+func shouldInitializePointer(t reflect.Type) bool {
+	pkgPath := t.PkgPath()
+	return strings.HasPrefix(pkgPath, "github.com/theopenlane/core/")
 }
 
 // getMapEntriesForPath returns sorted key/value pairs for the map identified by the provided config path
@@ -366,15 +435,10 @@ func getMapEntriesForPath(cfg *config.Config, fullPath string) ([]mapEntry, erro
 			continue
 		}
 
-		entry := mapEntry{Key: keyVal.String()}
-		switch valVal.Kind() {
-		case reflect.String:
-			entry.Value = valVal.String()
-		default:
-			entry.Value = fmt.Sprintf("%v", valVal.Interface())
-		}
-
-		entries = append(entries, entry)
+		entries = append(entries, mapEntry{
+			Key:   keyVal.String(),
+			Value: valVal,
+		})
 	}
 
 	sort.Slice(entries, func(i, j int) bool {
@@ -390,6 +454,106 @@ func sanitizeMapKeyForEnv(mapKey string) string {
 	sanitized = strings.ReplaceAll(sanitized, "-", "_")
 	sanitized = strings.ReplaceAll(sanitized, ".", "_")
 	return sanitized
+}
+
+func appendMapFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+	mapEntries, err := getMapEntriesForPath(cfg, field.FullPath)
+	if err != nil {
+		return fmt.Errorf("failed to derive map entries for %s: %w", field.FullPath, err)
+	}
+
+	for _, entry := range mapEntries {
+		if entry.Key == "" {
+			continue
+		}
+
+		baseKey := fmt.Sprintf("%s_%s", field.Key, sanitizeMapKeyForEnv(entry.Key))
+		basePath := fmt.Sprintf("%s.%s", field.FullPath, entry.Key)
+		appendMapValueEnvVars(envVars, baseKey, basePath, entry.Value, isSecret, sensitiveFields)
+	}
+
+	return nil
+}
+
+func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, value reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+	if !value.IsValid() {
+		return
+	}
+
+	for value.Kind() == reflect.Ptr {
+		if value.IsNil() {
+			return
+		}
+		value = value.Elem()
+	}
+
+	switch value.Kind() {
+	case reflect.Struct:
+		appendStructEnvVars(envVars, baseKey, basePath, value, parentSecret, sensitiveFields)
+	case reflect.Map:
+		iter := value.MapRange()
+		for iter.Next() {
+			keyVal := iter.Key()
+			if keyVal.Kind() != reflect.String {
+				continue
+			}
+
+			subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(keyVal.String()))
+			subPath := fmt.Sprintf("%s.%s", basePath, keyVal.String())
+			appendMapValueEnvVars(envVars, subKey, subPath, iter.Value(), parentSecret, sensitiveFields)
+		}
+	case reflect.Slice, reflect.Array:
+		envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", baseKey, sliceToEnvString(value)))
+		if parentSecret {
+			appendSensitiveField(sensitiveFields, baseKey, basePath)
+		}
+	default:
+		envVars.WriteString(fmt.Sprintf("%s=\"%v\"\n", baseKey, value.Interface()))
+		if parentSecret {
+			appendSensitiveField(sensitiveFields, baseKey, basePath)
+		}
+	}
+}
+
+func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+	typeInfo := val.Type()
+	for i := 0; i < val.NumField(); i++ {
+		field := typeInfo.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		tag := field.Tag.Get(tagName)
+		if tag == "" || tag == "-" {
+			continue
+		}
+
+		subValue := val.Field(i)
+		subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(tag))
+		subPath := fmt.Sprintf("%s.%s", basePath, tag)
+		fieldSecret := parentSecret || field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(subPath)
+
+		appendMapValueEnvVars(envVars, subKey, subPath, subValue, fieldSecret, sensitiveFields)
+	}
+}
+
+func appendSensitiveField(target *[]SensitiveField, key, path string) {
+	*target = append(*target, SensitiveField{
+		Key:        key,
+		Path:       path,
+		SecretName: generateSecretName(path),
+	})
+}
+
+func sliceToEnvString(v reflect.Value) string {
+	if v.Len() == 0 {
+		return ""
+	}
+	parts := make([]string, v.Len())
+	for i := 0; i < v.Len(); i++ {
+		parts[i] = fmt.Sprintf("%v", v.Index(i).Interface())
+	}
+	return strings.Join(parts, ",")
 }
 
 // EnvironmentFields represents the processed environment variable data
@@ -415,8 +579,9 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 		return nil, nil, fmt.Errorf("failed to gather environment info: %w", err)
 	}
 
-	envVars := ""
-	configMapData := "\n"
+	var envVars strings.Builder
+	var configMapData strings.Builder
+	configMapData.WriteString("\n")
 	var sensitiveFields []SensitiveField
 
 	for _, field := range out {
@@ -429,51 +594,26 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
 
 		// Always add to environment variables
-		envVars += fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal)
+		envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal))
 
 		if !isSecret {
 			// Add to ConfigMap
 			configMapEntry := generateConfigMapEntry(field, defaultVal)
-			configMapData += configMapEntry
+			configMapData.WriteString(configMapEntry)
 		} else {
-			// Track sensitive fields for secret generation
-			secretName := generateSecretName(field.FullPath)
-			sensitiveFields = append(sensitiveFields, SensitiveField{
-				Key:        field.Key,
-				Path:       field.FullPath,
-				SecretName: secretName,
-			})
+			appendSensitiveField(&sensitiveFields, field.Key, field.FullPath)
 		}
 
-		if field.Type.Kind() == reflect.Map && field.FullPath == "core.subscription.stripeWebhookSecrets" {
-			mapEntries, err := getMapEntriesForPath(defaultConfig, field.FullPath)
-			if err != nil {
-				return nil, nil, fmt.Errorf("failed to derive map entries for %s: %w", field.FullPath, err)
-			}
-			for _, entry := range mapEntries {
-				if entry.Key == "" {
-					continue
-				}
-
-				envKey := fmt.Sprintf("%s_%s", field.Key, sanitizeMapKeyForEnv(entry.Key))
-				envVars += fmt.Sprintf("%s=\"%s\"\n", envKey, entry.Value)
-
-				if isSecret {
-					mapPath := fmt.Sprintf("%s.%s", field.FullPath, entry.Key)
-					secretName := generateSecretName(mapPath)
-					sensitiveFields = append(sensitiveFields, SensitiveField{
-						Key:        envKey,
-						Path:       mapPath,
-						SecretName: secretName,
-					})
-				}
+		if field.Type.Kind() == reflect.Map {
+			if err := appendMapFieldEnvVars(&envVars, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
+				return nil, nil, err
 			}
 		}
 	}
 
 	return &EnvironmentFields{
-		EnvVars:   envVars,
-		ConfigMap: configMapData,
+		EnvVars:   envVars.String(),
+		ConfigMap: configMapData.String(),
 	}, sensitiveFields, nil
 }
 
