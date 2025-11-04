@@ -290,6 +290,7 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		Save(allowCtx)
 	if err != nil {
 		zerolog.Ctx(allowCtx).Error().Err(err).Msg("error creating user managed group")
+
 		return err
 	}
 
