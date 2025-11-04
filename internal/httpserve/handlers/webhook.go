@@ -121,10 +121,12 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
+	webhookSecret := h.Entitlements.Config.GetWebhookSecretForVersion(webhookReq.APIVersion)
+
+	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), webhookSecret)
 	if err != nil {
 		webhookResponseCounter.WithLabelValues("event_signature_failure", "400").Inc()
-		log.Error().Err(err).Msg("failed to construct event")
+		log.Error().Err(err).Str("api_version", webhookReq.APIVersion).Msg("failed to construct event")
 
 		return h.BadRequest(ctx, err, openapi)
 	}

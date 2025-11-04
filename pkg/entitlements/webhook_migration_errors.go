@@ -21,4 +21,8 @@ var (
 	ErrOldWebhookNotFound = errors.New("old webhook endpoint not found for migration")
 	// ErrNewWebhookAlreadyExists is returned when attempting to create a new webhook that already exists
 	ErrNewWebhookAlreadyExists = errors.New("new webhook endpoint already exists")
+	// ErrAPIVersionRequired is returned when an API version is required but not provided
+	ErrAPIVersionRequired = errors.New("api version is required")
+	// ErrEnabledWebhookNotFoundByVersion is returned when no enabled webhook matches the requested version
+	ErrEnabledWebhookNotFoundByVersion = errors.New("enabled webhook not found for version")
 )

@@ -10,10 +10,24 @@ import (
 )
 
 const (
-	versionQueryParam = "stripe_api_version"
+	versionQueryParam = "api_version"
 	migrationStateNew = "new"
 	migrationStateOld = "old"
 )
+
+type webhookMigrationOptions struct {
+	CurrentVersion string
+}
+
+// WebhookMigrationOption is a functional option for GetWebhookMigrationState
+type WebhookMigrationOption func(*webhookMigrationOptions)
+
+// WithCurrentVersion sets the current API version from config
+func WithCurrentVersion(version string) WebhookMigrationOption {
+	return func(o *webhookMigrationOptions) {
+		o.CurrentVersion = version
+	}
+}
 
 // WebhookMigrationState represents the current state of webhook migration
 type WebhookMigrationState struct {
@@ -36,14 +50,17 @@ const (
 	MigrationStageNewCreated MigrationStage = "new_created"
 	// MigrationStageDualProcessing indicates both webhooks are enabled
 	MigrationStageDualProcessing MigrationStage = "dual_processing"
-	// MigrationStageTransitioned indicates new webhook is active, old is disabled
-	MigrationStageTransitioned MigrationStage = "transitioned"
-	// MigrationStageComplete indicates old webhook can be safely deleted
+	// MigrationStageComplete indicates migration is complete, only new webhook is active
 	MigrationStageComplete MigrationStage = "complete"
 )
 
 // GetWebhookMigrationState analyzes the current webhook configuration and returns migration state
-func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL string) (*WebhookMigrationState, error) {
+func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL string, opts ...WebhookMigrationOption) (*WebhookMigrationState, error) {
+	options := &webhookMigrationOptions{}
+	for _, opt := range opts {
+		opt(options)
+	}
+
 	if baseURL == "" {
 		return nil, ErrWebhookURLRequired
 	}
@@ -61,16 +78,20 @@ func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL st
 
 	baseURLClean := cleanURL(baseURL)
 
+	configCurrentVersion := options.CurrentVersion
+
+	if configCurrentVersion == "" && sc.Config != nil {
+		configCurrentVersion = sc.Config.StripeWebhookAPIVersion
+	}
+
 	for _, endpoint := range endpoints {
 		endpointURLClean := cleanURL(endpoint.URL)
 
 		if endpointURLClean == baseURLClean {
-			versionParam := extractVersionParam(endpoint.URL)
-			switch versionParam {
-			case "", migrationStateOld:
-				state.OldWebhook = endpoint
-			case migrationStateNew:
+			if endpoint.APIVersion == configCurrentVersion {
 				state.NewWebhook = endpoint
+			} else if endpoint.Status == "enabled" {
+				state.OldWebhook = endpoint
 			}
 		}
 	}
@@ -81,49 +102,50 @@ func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL st
 	return state, nil
 }
 
-// CreateNewWebhookForMigration creates a new webhook endpoint with the current SDK API version
-func (sc *StripeClient) CreateNewWebhookForMigration(ctx context.Context, baseURL string, events []string) (*stripe.WebhookEndpoint, error) {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
+// CreateNewWebhookForMigration creates a new webhook endpoint with the provided API version
+func (sc *StripeClient) CreateNewWebhookForMigration(ctx context.Context, baseURL string, events []string, apiVersion string) (*stripe.WebhookEndpoint, error) {
+	if baseURL == "" {
+		return nil, ErrWebhookURLRequired
+	}
+
+	if apiVersion == "" {
+		return nil, ErrAPIVersionRequired
+	}
+
+	endpoints, err := sc.ListWebhookEndpoints(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	if state.NewWebhook != nil {
-		return nil, ErrNewWebhookAlreadyExists
-	}
+	baseURLClean := cleanURL(baseURL)
 
-	if state.OldWebhook == nil {
-		return nil, ErrOldWebhookNotFound
+	for _, endpoint := range endpoints {
+		endpointURLClean := cleanURL(endpoint.URL)
+		if endpointURLClean == baseURLClean && endpoint.APIVersion == apiVersion {
+			return nil, fmt.Errorf("webhook with version %s already exists: %w", apiVersion, ErrNewWebhookAlreadyExists)
+		}
 	}
 
 	if len(events) == 0 {
-		events = state.OldWebhook.EnabledEvents
+		for _, endpoint := range endpoints {
+			endpointURLClean := cleanURL(endpoint.URL)
+			if endpointURLClean == baseURLClean && endpoint.Status == "enabled" {
+				events = endpoint.EnabledEvents
+				break
+			}
+		}
 	}
 
-	newURL := addVersionParam(baseURL, migrationStateNew)
-
-	params := &stripe.WebhookEndpointCreateParams{
-		URL:           stripe.String(newURL),
-		EnabledEvents: stripe.StringSlice(events),
-		APIVersion:    stripe.String(stripe.APIVersion),
+	if len(events) == 0 {
+		events = SupportedEventTypeStrings()
 	}
 
-	endpoint, err := sc.Client.V1WebhookEndpoints.Create(ctx, params)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = sc.DisableWebhookEndpoint(ctx, endpoint.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return endpoint, nil
+	return sc.CreateWebhookEndpoint(ctx, baseURL, events, apiVersion, false)
 }
 
 // EnableNewWebhook enables the new webhook endpoint to begin dual processing
-func (sc *StripeClient) EnableNewWebhook(ctx context.Context, baseURL string) (*stripe.WebhookEndpoint, error) {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
+func (sc *StripeClient) EnableNewWebhook(ctx context.Context, baseURL string, opts ...WebhookMigrationOption) (*stripe.WebhookEndpoint, error) {
+	state, err := sc.GetWebhookMigrationState(ctx, baseURL, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -139,27 +161,36 @@ func (sc *StripeClient) EnableNewWebhook(ctx context.Context, baseURL string) (*
 	return sc.EnableWebhookEndpoint(ctx, state.NewWebhook.ID)
 }
 
-// DisableOldWebhook disables the old webhook endpoint to complete the migration
-func (sc *StripeClient) DisableOldWebhook(ctx context.Context, baseURL string) (*stripe.WebhookEndpoint, error) {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
+// DisableWebhookByVersion disables the webhook endpoint matching the specified API version
+func (sc *StripeClient) DisableWebhookByVersion(ctx context.Context, baseURL string, apiVersion string) (*stripe.WebhookEndpoint, error) {
+	if baseURL == "" {
+		return nil, ErrWebhookURLRequired
+	}
+
+	if apiVersion == "" {
+		return nil, ErrAPIVersionRequired
+	}
+
+	endpoints, err := sc.ListWebhookEndpoints(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	if state.OldWebhook == nil {
-		return nil, ErrOldWebhookNotFound
+	baseURLClean := cleanURL(baseURL)
+
+	for _, endpoint := range endpoints {
+		endpointURLClean := cleanURL(endpoint.URL)
+		if endpointURLClean == baseURLClean && endpoint.APIVersion == apiVersion && endpoint.Status == "enabled" {
+			return sc.DisableWebhookEndpoint(ctx, endpoint.ID)
+		}
 	}
 
-	if state.MigrationStage != string(MigrationStageDualProcessing) {
-		return nil, fmt.Errorf("%w: expected stage %s, got %s", ErrInvalidMigrationState, MigrationStageDualProcessing, state.MigrationStage)
-	}
-
-	return sc.DisableWebhookEndpoint(ctx, state.OldWebhook.ID)
+	return nil, fmt.Errorf("no enabled webhook found with version %s: %w", apiVersion, ErrEnabledWebhookNotFoundByVersion)
 }
 
 // RollbackMigration rolls back the migration by disabling the new webhook and re-enabling the old one
-func (sc *StripeClient) RollbackMigration(ctx context.Context, baseURL string) error {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
+func (sc *StripeClient) RollbackMigration(ctx context.Context, baseURL string, opts ...WebhookMigrationOption) error {
+	state, err := sc.GetWebhookMigrationState(ctx, baseURL, opts...)
 	if err != nil {
 		return err
 	}
@@ -181,48 +212,6 @@ func (sc *StripeClient) RollbackMigration(ctx context.Context, baseURL string) e
 	return nil
 }
 
-// CleanupOldWebhook deletes the old webhook endpoint after successful migration
-func (sc *StripeClient) CleanupOldWebhook(ctx context.Context, baseURL string) (*stripe.WebhookEndpoint, error) {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
-	if err != nil {
-		return nil, err
-	}
-
-	if state.OldWebhook == nil {
-		return nil, ErrOldWebhookNotFound
-	}
-
-	if state.MigrationStage != string(MigrationStageTransitioned) && state.MigrationStage != string(MigrationStageComplete) {
-		return nil, fmt.Errorf("%w: cannot cleanup in stage %s", ErrInvalidMigrationState, state.MigrationStage)
-	}
-
-	return sc.DeleteWebhookEndpoint(ctx, state.OldWebhook.ID)
-}
-
-// PromoteNewWebhook removes the version query parameter from the new webhook URL to make it the primary webhook
-func (sc *StripeClient) PromoteNewWebhook(ctx context.Context, baseURL string) (*stripe.WebhookEndpoint, error) {
-	state, err := sc.GetWebhookMigrationState(ctx, baseURL)
-	if err != nil {
-		return nil, err
-	}
-
-	if state.NewWebhook == nil {
-		return nil, ErrWebhookNotFound
-	}
-
-	if state.OldWebhook != nil {
-		return nil, fmt.Errorf("%w: old webhook must be deleted before promotion", ErrInvalidMigrationState)
-	}
-
-	oldURL := addVersionParam(baseURL, migrationStateOld)
-
-	params := &stripe.WebhookEndpointUpdateParams{
-		URL: stripe.String(oldURL),
-	}
-
-	return sc.UpdateWebhookEndpoint(ctx, state.NewWebhook.ID, params)
-}
-
 func cleanURL(rawURL string) string {
 	parsedURL, err := url.Parse(rawURL)
 	if err != nil {
@@ -231,15 +220,6 @@ func cleanURL(rawURL string) string {
 
 	parsedURL.RawQuery = ""
 	return parsedURL.String()
-}
-
-func extractVersionParam(rawURL string) string {
-	parsedURL, err := url.Parse(rawURL)
-	if err != nil {
-		return ""
-	}
-
-	return parsedURL.Query().Get(versionQueryParam)
 }
 
 func addVersionParam(baseURL, version string) string {
@@ -261,9 +241,6 @@ func determineMigrationStage(state *WebhookMigrationState) string {
 		return string(MigrationStageNone)
 
 	case state.OldWebhook != nil && state.NewWebhook == nil:
-		if state.OldWebhook.APIVersion == state.CurrentSDKVersion {
-			return string(MigrationStageNone)
-		}
 		return string(MigrationStageReady)
 
 	case state.OldWebhook != nil && state.NewWebhook != nil:
@@ -276,7 +253,7 @@ func determineMigrationStage(state *WebhookMigrationState) string {
 		case oldEnabled && newEnabled:
 			return string(MigrationStageDualProcessing)
 		case !oldEnabled && newEnabled:
-			return string(MigrationStageTransitioned)
+			return string(MigrationStageComplete)
 		}
 
 	case state.OldWebhook == nil && state.NewWebhook != nil:
@@ -290,7 +267,7 @@ func canProceedWithMigration(state *WebhookMigrationState) bool {
 	stage := MigrationStage(state.MigrationStage)
 
 	switch stage {
-	case MigrationStageReady, MigrationStageNewCreated, MigrationStageDualProcessing, MigrationStageTransitioned:
+	case MigrationStageReady, MigrationStageNewCreated, MigrationStageDualProcessing:
 		return true
 	default:
 		return false
@@ -303,15 +280,13 @@ func GetNextMigrationAction(stage string) string {
 	case MigrationStageNone:
 		return "No migration needed. Webhook is already at current SDK version."
 	case MigrationStageReady:
-		return "Create new webhook endpoint with current SDK API version."
+		return "Create new webhook endpoint and enable for dual processing."
 	case MigrationStageNewCreated:
-		return "Enable new webhook endpoint to begin dual processing."
+		return "New webhook created but not yet enabled. Run migrate create again or enable manually."
 	case MigrationStageDualProcessing:
-		return "Update code to process new version events. Then disable old webhook."
-	case MigrationStageTransitioned:
-		return "Monitor new webhook. When confident, cleanup old webhook."
+		return "Deploy code that accepts both API versions. Then disable old webhook."
 	case MigrationStageComplete:
-		return "Migration complete. Optionally promote new webhook to remove version query parameter."
+		return "Migration complete. Only the new webhook is active."
 	default:
 		return "Unknown migration stage."
 	}

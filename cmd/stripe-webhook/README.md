@@ -1,280 +1,150 @@
 # Stripe Webhook Migration Tool
 
-Automated tool for managing Stripe webhook API version upgrades.
+Automates zero-downtime Stripe webhook API version migrations using dual processing during deployment.
 
-## Problem
+## How It Works
 
-When upgrading the Stripe Go SDK to a new API version, webhooks must be manually recreated through the Stripe dashboard with the correct API version. This process is:
-- Error-prone and manual
-- Requires careful coordination to avoid missing events
-- Difficult to rollback if issues occur
-- Lacks automation and documentation
+This tool enables safe migrations between Stripe API versions by temporarily running two webhooks simultaneously:
 
-## Solution
+```mermaid
+sequenceDiagram
+    participant CLI as stripe-webhook CLI
+    participant Stripe as Stripe API
+    participant App as Application
+    participant Config as config.go
 
-This CLI tool automates the entire webhook migration process following Stripe's recommended approach for zero-downtime migrations.
+    Note over CLI,Config: Initial State: 1 webhook enabled at v1
 
-## Migration Workflow
+    CLI->>Stripe: Create webhook at v2 (disabled)
+    Stripe-->>CLI: Returns webhook + secret
+    CLI->>Config: Update current=v2, discard=v1
+    CLI->>Stripe: Enable webhook at v2
 
-### Stage 1: Ready
-Your existing webhook uses an older API version than your SDK.
+    Note over Stripe,App: Dual Processing: Both webhooks active
 
-```bash
-stripe-webhook status
+    App->>App: Deploy code with updated config
+    Note over App: Accepts v2, discards v1 using query param
+
+    Stripe->>App: Events from v1 webhook (discarded)
+    Stripe->>App: Events from v2 webhook (processed)
+
+    CLI->>Stripe: Disable webhook at v1
+
+    Note over Stripe,App: Migration Complete: Only v2 webhook active
 ```
 
-### Stage 2: Create New Webhook (Disabled)
-Creates a new webhook at the same URL with a query parameter (`?stripe_api_version=new`) in disabled state.
+The migration uses query string parameters (`?api_version=X`) to distinguish webhooks, allowing the application to process events from the new version while safely discarding events from the old version during the transition.
+
+## Prerequisites
 
 ```bash
-stripe-webhook migrate --step create
-```
-
-**Important**: Save the webhook secret from the output. Update your configuration:
-```bash
-# Add the new secret to your environment
-STRIPE_WEBHOOK_SECRET_NEW=whsec_...
-```
-
-### Stage 3: Enable Dual Processing
-Enable the new webhook to receive events alongside the old webhook.
-
-```bash
-stripe-webhook migrate --step enable
-```
-
-Both webhooks now send events to your endpoint. Your application receives duplicate events.
-
-### Stage 4: Update Application Code
-Update your webhook handler to:
-1. Check the `stripe_api_version` query parameter
-2. Process only events from the new webhook (version=new)
-3. Return 400 for events from the old webhook (version=old or no parameter)
-
-```go
-func (h *Handler) HandleWebhook(w http.ResponseWriter, r *http.Request) {
-    version := r.URL.Query().Get("stripe_api_version")
-
-    // Process only new version events
-    if version != "new" {
-        w.WriteHeader(http.StatusBadRequest)
-        return
-    }
-
-    // Continue processing with new Stripe SDK...
-}
-```
-
-Deploy this code to all environments.
-
-### Stage 5: Disable Old Webhook
-After confirming the new webhook processes events correctly, disable the old webhook.
-
-```bash
-stripe-webhook migrate --step disable
-```
-
-Only the new webhook is now active. Monitor for any issues.
-
-### Stage 6: Cleanup Old Webhook
-After a monitoring period (recommended: 24-48 hours), delete the old webhook.
-
-```bash
-stripe-webhook migrate --step cleanup
-```
-
-The old webhook is deleted but history is preserved in Stripe.
-
-### Stage 7: Promote (Optional)
-Remove the version query parameter from the new webhook URL for cleaner URLs.
-
-```bash
-stripe-webhook migrate --step promote
-```
-
-Updates the webhook URL from `https://api.openlane.com/v1/stripe/webhook?stripe_api_version=new` to `https://api.openlane.com/v1/stripe/webhook?stripe_api_version=old`
-
-## Commands
-
-### List Webhooks
-```bash
-stripe-webhook list
-```
-
-Shows all webhook endpoints in your Stripe account.
-
-### Check Migration Status
-```bash
-stripe-webhook status --webhook-url https://api.openlane.com/v1/stripe/webhook
-```
-
-Displays current migration state and next action.
-
-### Automated Migration
-```bash
-stripe-webhook migrate --auto
-```
-
-Automatically executes the next migration step (except code deployment).
-
-### Manual Step Execution
-```bash
-# Create new webhook
-stripe-webhook migrate --step create
-
-# Enable new webhook
-stripe-webhook migrate --step enable
-
-# Disable old webhook (after code deployment)
-stripe-webhook migrate --step disable
-
-# Cleanup old webhook
-stripe-webhook migrate --step cleanup
-
-# Rollback migration
-stripe-webhook migrate --step rollback
-
-# Promote new webhook
-stripe-webhook migrate --step promote
-```
-
-### Custom Events
-```bash
-stripe-webhook migrate --step create --events customer.subscription.updated --events invoice.paid
-```
-
-## Configuration
-
-### Environment Variables
-```bash
-# Stripe API key (required)
 export STRIPE_API_KEY=sk_test_...
-# or
-export STRIPE_SECRET_KEY=sk_test_...
-
-# Webhook URL (required)
 export STRIPE_WEBHOOK_URL=https://api.openlane.com/v1/stripe/webhook
 ```
 
-### CLI Flags
-```bash
-stripe-webhook status \
-  --stripe-key sk_test_... \
-  --webhook-url https://api.openlane.com/v1/stripe/webhook
-```
+You can also pass `--stripe-key` and `--webhook-url` flags.
 
-## Rollback Process
+## Typical Migration Flow
 
-If issues occur during migration, rollback to the old webhook:
+1. **Inspect the current state**
+   ```bash
+   stripe-webhook status
+   ```
 
-```bash
-stripe-webhook migrate --step rollback
-```
+2. **Create and enable the new webhook**
+   ```bash
+   stripe-webhook migrate --step create --webhook-url $STRIPE_WEBHOOK_URL
+   ```
 
-This will:
-1. Disable the new webhook
-2. Re-enable the old webhook
-3. Restore normal operation
+   Example session:
+   ```text
+   Preparing webhook migration for URL: https://api.openlane.com/v1/stripe/webhook
+   Current webhook API version: 2023-10-16
+   Latest Stripe SDK API version: 2024-06-20
+   Enter the new Stripe API version to migrate to: 2024-06-20
+   Proceed with migrating from 2023-10-16 to 2024-06-20 [y/N]: y
 
-Then:
-1. Revert your application code changes
-2. Investigate the issue
-3. Fix problems before retrying migration
+   Updated default API versions in /path/to/pkg/entitlements/config.go
 
-## Migration States
+   New webhook created (initially disabled)
+   ID: we_123
+   API Version: 2024-06-20
+   Status: disabled
+   Secret: whsec_xxx
 
-| State | Description | Can Rollback |
-|-------|-------------|--------------|
-| `none` | No migration needed (versions match) | N/A |
-| `ready` | Version mismatch detected | No |
-| `new_created` | New webhook created (disabled) | Yes |
-| `dual_processing` | Both webhooks active | Yes |
-| `transitioned` | Only new webhook active | Yes |
-| `complete` | Old webhook deleted | No |
+   Store the secret above in your secret manager using the environment key CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2024_06_20
 
-## Safety Features
+   New webhook enabled successfully
+   ID: we_123
+   Status: enabled
 
-- **State validation**: Each step validates the current state before executing
-- **Disabled creation**: New webhooks created in disabled state to prevent premature event processing
-- **Rollback capability**: Can revert to old webhook at any stage before cleanup
-- **Query parameters**: Uses URL query parameters to distinguish webhook versions without URL conflicts
-- **Event parity**: Automatically copies event subscriptions from old to new webhook
+   Next steps:
+     1. Run `task config:generate` to refresh configuration artifacts with the new defaults.
+     2. Commit the regenerated files (e.g., pkg/entitlements/config.go and config outputs).
+     3. Populate CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2024_06_20 in your secret manager before deploying the new code.
+     4. Deploy code that accepts both API versions.
+     5. After deployment, disable the legacy webhook:
+        stripe-webhook migrate --step disable --webhook-url https://api.openlane.com/v1/stripe/webhook
+   ```
 
-## Complete Example
+   What happens:
+   - The CLI updates `StripeWebhookAPIVersion` to the new version and `StripeWebhookDiscardAPIVersion` to the old version in `pkg/entitlements/config.go`
+   - Creates a new webhook with the new API version (initially disabled)
+   - Enables the new webhook for dual processing (both old and new webhooks are now active)
+   - `task config:generate` will emit versioned environment variables for webhook secrets
+   - Query parameters (`?api_version=X`) allow the handler to distinguish between webhook versions at runtime
 
-```bash
-# 1. Check if migration is needed
-stripe-webhook status
-# Output: Migration Stage: ready
+3. **Deploy the code** with the updated config and new webhook secret loaded
 
-# 2. Create new webhook
-stripe-webhook migrate --step create
-# Save the webhook secret: whsec_abc123...
+   During deployment, both webhooks are active:
+   - Old webhook sends events with `?api_version=2023-10-16` (discarded by handler based on config)
+   - New webhook sends events with `?api_version=2024-06-20` (processed by handler)
 
-# 3. Update environment variables
-export STRIPE_WEBHOOK_SECRET_NEW=whsec_abc123...
+4. **Disable the old webhook** after the new code is deployed and stable:
+   ```bash
+   stripe-webhook migrate --step disable --webhook-url $STRIPE_WEBHOOK_URL
+   ```
 
-# 4. Enable dual processing
-stripe-webhook migrate --step enable
+   Output:
+   ```text
+   Disabling old webhook endpoint
 
-# 5. Update application code to check query parameter
-# Deploy code to all environments
+   Old webhook disabled successfully
+   ID: we_456
+   Status: disabled
 
-# 6. Disable old webhook
-stripe-webhook migrate --step disable
+   Migration complete - only the new webhook is active
+   ```
 
-# 7. Monitor for 24-48 hours
-stripe-webhook status
+5. **Rollback (if needed before disabling old webhook)**
+   ```bash
+   stripe-webhook migrate --step rollback --webhook-url $STRIPE_WEBHOOK_URL
+   ```
+   - Disables the new webhook and re-enables the old one
+   - Use this if issues are discovered during the dual processing phase
 
-# 8. Cleanup old webhook
-stripe-webhook migrate --step cleanup
+## Other Commands
 
-# 9. (Optional) Promote new webhook
-stripe-webhook migrate --step promote
+- **List all webhooks**: `stripe-webhook list`
+- **Automated guidance**: `stripe-webhook migrate --auto` executes the next eligible step or prints what to do
+- **Non-interactive migration**: `stripe-webhook migrate --step create --new-version 2024-06-20`
+- **Check migration status**: `stripe-webhook status --webhook-url $STRIPE_WEBHOOK_URL`
 
-# 10. Update environment variables (remove old secret)
-unset STRIPE_WEBHOOK_SECRET_NEW
-export STRIPE_WEBHOOK_SECRET=whsec_abc123...
-```
+## Migration Stages
 
-## Troubleshooting
+The tool tracks migration progress through these stages:
 
-### Webhook Not Found
-```
-Error: webhook endpoint not found
-```
-Solution: Verify `STRIPE_WEBHOOK_URL` matches an existing webhook in Stripe dashboard.
+- `none`: No migration needed - webhook already matches current SDK version
+- `ready`: Single enabled webhook, ready to start migration
+- `new_created`: New webhook created but not yet enabled
+- `dual_processing`: Both old and new webhooks enabled (safe to deploy)
+- `complete`: Migration complete, only new webhook active (old webhook disabled)
 
-### Multiple Webhooks Found
-```
-Error: multiple webhook endpoints found for URL
-```
-Solution: Manually remove duplicate webhooks from Stripe dashboard before running migration.
+## Notes
 
-### Version Mismatch
-```
-Migration Stage: none
-```
-Solution: No migration needed. Your webhook already uses the current SDK API version.
-
-### Invalid State
-```
-Error: invalid migration state for requested operation
-```
-Solution: Run `stripe-webhook status` to check current state and follow the recommended next action.
-
-## Building
-
-```bash
-go build -o stripe-webhook ./cmd/stripe-webhook
-```
-
-## Testing
-
-The migration logic is in `pkg/entitlements/webhook_migration.go` with comprehensive functions for each step.
-
-## Resources
-
-- [Stripe Webhook Versioning Guide](https://docs.stripe.com/webhooks/versioning)
-- [Stripe API Versioning](https://docs.stripe.com/api/versioning)
-- [Webhook Best Practices](https://docs.stripe.com/webhooks/best-practices)
+- **Webhook Identification**: The tool identifies webhooks purely by API version and status, regardless of total webhook count. Disabled webhooks from previous migrations are ignored.
+- **Query Parameters**: All webhooks include the `?api_version=X` query parameter. The HTTP handler uses this to select the correct signing secret and to discard events from old versions during dual processing.
+- **Safety Checks**: The disable command verifies that a new webhook is enabled before disabling the old one, preventing accidental service disruption.
+- **Accumulated Webhooks**: Old webhooks remain disabled after migration rather than being deleted, accumulating over time.
+- **Config Validation**: The CLI prevents setting current and discard versions to the same value and blocks reuse of versions already configured in `pkg/entitlements/config.go`.
+- **Config Root**: Defaults to current directory; use `--config-root` when running from a subdirectory.

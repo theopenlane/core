@@ -5,8 +5,10 @@ type Config struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// PrivateStripeKey is the key for the stripe service
 	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:"" sensitive:"true"`
-	// StripeWebhookSecret is the secret for the stripe service
+	// StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)
 	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:"" sensitive:"true"`
+	// StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback
+	StripeWebhookSecrets map[string]string `json:"stripeWebhookSecrets" koanf:"stripeWebhookSecrets" sensitive:"true"`
 	// StripeWebhookURL is the URL for the stripe webhook
 	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
@@ -16,9 +18,9 @@ type Config struct {
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
 	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
 	// StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:""`
+	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:"2024-11-20.acacia"`
 	// StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:""`
+	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:"2024-10-28.acacia"`
 }
 
 type ConfigOpts func(*Config)
@@ -86,6 +88,13 @@ func WithStripeWebhookDiscardAPIVersion(version string) ConfigOpts {
 	}
 }
 
+// WithStripeWebhookSecrets sets the map of version-specific webhook secrets
+func WithStripeWebhookSecrets(secrets map[string]string) ConfigOpts {
+	return func(c *Config) {
+		c.StripeWebhookSecrets = secrets
+	}
+}
+
 // NewConfig creates a new entitlements config
 func NewConfig(opts ...ConfigOpts) *Config {
 	c := &Config{}
@@ -99,4 +108,16 @@ func NewConfig(opts ...ConfigOpts) *Config {
 // IsEnabled checks if the entitlements feature is enabled based on the status of the Stripe client settings
 func (c *Config) IsEnabled() bool {
 	return c.Enabled
+}
+
+// GetWebhookSecretForVersion returns the webhook secret for a specific API version
+// It first checks the version-specific secrets map, then falls back to the legacy StripeWebhookSecret
+func (c *Config) GetWebhookSecretForVersion(apiVersion string) string {
+	if c.StripeWebhookSecrets != nil && apiVersion != "" {
+		if secret, ok := c.StripeWebhookSecrets[apiVersion]; ok && secret != "" {
+			return secret
+		}
+	}
+
+	return c.StripeWebhookSecret
 }

@@ -544,6 +544,10 @@ coreConfiguration:
     stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripeWebhookEvents: []
+    # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
+    stripeWebhookAPIVersion: "2024-11-20.acacia"  # @schema type:string; default:2024-11-20.acacia
+    # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
+    stripeWebhookDiscardAPIVersion: "2024-10-28.acacia"  # @schema type:string; default:2024-10-28.acacia
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
     # -- Enabled indicates whether the key watcher is enabled
@@ -907,6 +911,30 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecret"  # @schema type:string
+    # -- core-subscription-stripewebhooksecrets secret configuration
+    core-subscription-stripewebhooksecrets:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripeWebhookSecrets
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
+    # -- core-subscription-stripewebhooksecrets-2024-10-28-acacia secret configuration
+    core-subscription-stripewebhooksecrets-2024-10-28-acacia:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripeWebhookSecrets.2024-10-28.acacia
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2024_10_28_ACACIA"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecrets-2024-10-28-acacia"  # @schema type:string
+    # -- core-subscription-stripewebhooksecrets-2024-11-20-acacia secret configuration
+    core-subscription-stripewebhooksecrets-2024-11-20-acacia:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripeWebhookSecrets.2024-11-20.acacia
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2024_11_20_ACACIA"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecrets-2024-11-20-acacia"  # @schema type:string
     # -- core-keywatcher-secretmanager secret configuration
     core-keywatcher-secretmanager:
       # -- Enable this external secret

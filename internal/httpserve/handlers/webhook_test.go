@@ -3,8 +3,11 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -19,23 +22,33 @@ import (
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
-type webhookTestResources struct {
-	apiTokenID string
-	patID      string
-}
-
 type webhookBinder struct {
 	echo.Binder
 }
 
+// Bind is the echo binder override that preserves the request body for repeated reads
 func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 	inner := b.Binder
 	if inner == nil {
 		inner = new(echo.DefaultBinder)
 	}
 
+	var bodyCopy []byte
+	if req := c.Request(); req != nil && req.Body != nil {
+		data, err := io.ReadAll(req.Body)
+		if err != nil {
+			return err
+		}
+		bodyCopy = data
+		req.Body = io.NopCloser(bytes.NewReader(bodyCopy))
+	}
+
 	if err := inner.Bind(c, i); err != nil {
 		return err
+	}
+
+	if bodyCopy != nil {
+		c.Request().Body = io.NopCloser(bytes.NewReader(bodyCopy))
 	}
 
 	if req, ok := i.(*models.StripeWebhookRequest); ok && req.APIVersion == "" {
@@ -45,43 +58,25 @@ func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 	return nil
 }
 
-func (suite *HandlerTestSuite) executeWebhookRequest(t *testing.T, payload *stripe.Event, queryParams, signatureOverride string) *httptest.ResponseRecorder {
-	suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]
-	suite.orgSubscriptionMocks()
-
-	payloadBytes, err := json.Marshal(payload)
-	require.NoError(t, err)
-
-	signedPayload := webhook.GenerateTestSignedPayload(&webhook.UnsignedPayload{
-		Payload: payloadBytes,
-		Secret:  webhookSecret,
-	})
-
-	reqURL := "/webhook"
-	if queryParams != "" {
-		reqURL += "?" + queryParams
-	}
-
-	req := httptest.NewRequest(http.MethodPost, reqURL, bytes.NewReader(signedPayload.Payload))
-	req.Header.Set("Content-Type", "application/json")
-
-	signature := signedPayload.Header
-	if signatureOverride != "" {
-		signature = signatureOverride
-	}
-
-	req.Header.Set("Stripe-Signature", signature)
-
-	recorder := httptest.NewRecorder()
-	suite.e.ServeHTTP(recorder, req)
-
-	return recorder
-}
-
 func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	t := suite.T()
 
-	// Pre-seed an active subscription so handler logic finds expected state
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	ensureSecret := func(version string) {
+		if version == "" {
+			return
+		}
+		if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
+			suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
+		}
+		suite.h.Entitlements.Config.StripeWebhookSecrets[version] = webhookSecret
+	}
+
+	suite.db.Organization.UpdateOneID(testUser1.OrganizationID).
+		SetStripeCustomerID("cus_test_customer").
+		ExecX(allowCtx)
+
 	suite.db.OrgSubscription.Create().
 		SetStripeSubscriptionStatus("active").
 		SetStripeSubscriptionID("PENDING_UPDATE").
@@ -109,16 +104,44 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	jsonPaymentUpdate, err := json.Marshal(paymentUpdate)
 	require.NoError(t, err)
 
+	strPtr := func(s string) *string { return &s }
+
+	currentAPIVersion := stripe.APIVersion
+	parts := strings.SplitN(currentAPIVersion, ".", 2)
+	releaseSuffix := ""
+	if len(parts) == 2 {
+		releaseSuffix = "." + parts[1]
+	}
+
+	parseDate := func(version string) time.Time {
+		datePart := strings.SplitN(version, ".", 2)[0]
+		parsed, perr := time.Parse("2006-01-02", datePart)
+		if perr != nil {
+			return time.Now()
+		}
+		return parsed
+	}
+
+	baseDate := parseDate(currentAPIVersion)
+	previousDate := baseDate.AddDate(0, 0, -14).Format("2006-01-02")
+	olderDate := baseDate.AddDate(0, 0, -21).Format("2006-01-02")
+
+	versionWithDate := func(date string) string {
+		return date + releaseSuffix
+	}
+
+	discardAPIVersion := versionWithDate(previousDate)
+	mismatchAPIVersion := versionWithDate(olderDate)
+
 	testCases := []struct {
 		name                    string
 		payload                 *stripe.Event
-		queryParams             string
-		configAPIVersion        string
-		configDiscardAPIVersion string
 		expectedStatus          int
+		queryParams             string
+		configAPIVersion        *string
+		configDiscardAPIVersion *string
 		signatureOverride       string
-		setup                   func(t *testing.T) *webhookTestResources
-		validate                func(t *testing.T, resources *webhookTestResources)
+		expectRevocation        bool
 	}{
 		{
 			name: "valid payload - paused subscription",
@@ -126,51 +149,29 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_paused",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionPaused,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
-			setup: func(t *testing.T) *webhookTestResources {
-				allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
-
-				apiToken := suite.db.APIToken.Create().
-					SetOwnerID(testUser1.OrganizationID).
-					SetName("test_token").
-					SaveX(allowCtx)
-
-				pat := suite.db.PersonalAccessToken.Create().
-					SetOwnerID(testUser1.ID).
-					AddOrganizationIDs(testUser1.OrganizationID).
-					SetName("test_token").
-					SaveX(allowCtx)
-
-				return &webhookTestResources{
-					apiTokenID: apiToken.ID,
-					patID:      pat.ID,
-				}
+			expectedStatus:          http.StatusOK,
+			expectRevocation:        true,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+		},
+		{
+			name: "invalid payload, missing api_version",
+			payload: &stripe.Event{
+				ID:     "evt_test_webhook_missing_api_version",
+				Object: "event",
+				Type:   stripe.EventTypeCustomerSubscriptionUpdated,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
 			},
-			validate: func(t *testing.T, resources *webhookTestResources) {
-				sub, err := suite.db.OrgSubscription.Query().
-					Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
-					Only(testUser1.UserCtx)
-
-				require.NoError(t, err)
-				assert.False(t, sub.Active)
-
-				apiToken, err := suite.db.APIToken.Get(testUser1.UserCtx, resources.apiTokenID)
-				require.NoError(t, err)
-				require.False(t, apiToken.IsActive)
-				require.NotEmpty(t, apiToken.RevokedBy)
-				require.NotEmpty(t, apiToken.RevokedAt)
-				require.NotEmpty(t, apiToken.RevokedReason)
-				assert.Less(t, *apiToken.ExpiresAt, time.Now())
-
-				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, resources.patID)
-				require.NoError(t, err)
-				require.Len(t, pat.Edges.Organizations, 0)
-			},
+			expectedStatus:          http.StatusBadRequest,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 		{
 			name: "valid payload - subscription updated",
@@ -178,12 +179,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_subscription_updated",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 		{
 			name: "valid payload - trial will end",
@@ -191,12 +194,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_trial",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionTrialWillEnd,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 		{
 			name: "valid payload - payment method attached",
@@ -204,12 +209,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_payment_method",
 				Object:     "event",
 				Type:       stripe.EventTypePaymentMethodAttached,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonPaymentUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 		{
 			name: "unsupported event type",
@@ -217,23 +224,25 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_unsupported",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(`{"id":"cus_test","object":"customer"}`),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 		{
 			name:                    "webhook with discard API version is ignored",
-			queryParams:             "api_version=2024-10-28.acacia",
-			configAPIVersion:        "2024-11-20.acacia",
-			configDiscardAPIVersion: "2024-10-28.acacia",
+			queryParams:             "api_version=" + discardAPIVersion,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook_discard",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: discardAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
@@ -241,14 +250,15 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:             "webhook with mismatched API version is ignored",
-			queryParams:      "api_version=2024-09-15.acacia",
-			configAPIVersion: "2024-11-20.acacia",
+			name:                    "webhook with mismatched API version is ignored",
+			queryParams:             "api_version=" + mismatchAPIVersion,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook_mismatch",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: mismatchAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
@@ -257,14 +267,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		},
 		{
 			name:                    "webhook with matching API version is processed",
-			queryParams:             "api_version=2024-11-20.acacia",
-			configAPIVersion:        "2024-11-20.acacia",
-			configDiscardAPIVersion: "2024-10-28.acacia",
+			queryParams:             "api_version=" + currentAPIVersion,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook_match",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
@@ -277,12 +287,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_no_param",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
-				APIVersion: stripe.APIVersion,
+				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(""),
+			configDiscardAPIVersion: strPtr(""),
 		},
 		{
 			name: "invalid signature returns bad request",
@@ -295,8 +307,10 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus:    http.StatusBadRequest,
-			signatureOverride: "invalid",
+			expectedStatus:          http.StatusBadRequest,
+			signatureOverride:       "invalid",
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
 		},
 	}
 
@@ -304,7 +318,39 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		tc := tc
 
 		t.Run(tc.name, func(t *testing.T) {
-			t.Helper()
+			suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]
+			suite.orgSubscriptionMocks()
+
+			suite.db.OrgSubscription.Update().
+				Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
+				SetActive(true).
+				SetStripeSubscriptionStatus("active").
+				ExecX(allowCtx)
+
+			var (
+				apiTokenID string
+				patID      string
+			)
+
+			if tc.expectRevocation {
+				apiToken := suite.db.APIToken.Create().
+					SetOwnerID(testUser1.OrganizationID).
+					SetName("test_token").
+					SaveX(allowCtx)
+				apiTokenID = apiToken.ID
+
+				pat := suite.db.PersonalAccessToken.Create().
+					SetOwnerID(testUser1.ID).
+					AddOrganizationIDs(testUser1.OrganizationID).
+					SetName("test_token").
+					SaveX(allowCtx)
+				patID = pat.ID
+
+				t.Cleanup(func() {
+					_ = suite.db.APIToken.DeleteOneID(apiTokenID).Exec(allowCtx)
+					_ = suite.db.PersonalAccessToken.DeleteOneID(patID).Exec(allowCtx)
+				})
+			}
 
 			origAPIVersion := suite.h.Entitlements.Config.StripeWebhookAPIVersion
 			origDiscardVersion := suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion
@@ -314,22 +360,85 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion = origDiscardVersion
 			})
 
-			suite.h.Entitlements.Config.StripeWebhookAPIVersion = tc.configAPIVersion
-			suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion = tc.configDiscardAPIVersion
-
-			var resources *webhookTestResources
-			if tc.setup != nil {
-				resources = tc.setup(t)
+			if tc.configAPIVersion != nil {
+				suite.h.Entitlements.Config.StripeWebhookAPIVersion = *tc.configAPIVersion
+			} else {
+				suite.h.Entitlements.Config.StripeWebhookAPIVersion = origAPIVersion
 			}
 
-			recorder := suite.executeWebhookRequest(t, tc.payload, tc.queryParams, tc.signatureOverride)
-			require.Equal(t, tc.expectedStatus, recorder.Code)
+			if tc.configDiscardAPIVersion != nil {
+				suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion = *tc.configDiscardAPIVersion
+			} else {
+				suite.h.Entitlements.Config.StripeWebhookDiscardAPIVersion = origDiscardVersion
+			}
+
+			if tc.configAPIVersion != nil {
+				ensureSecret(*tc.configAPIVersion)
+			}
+			if tc.configDiscardAPIVersion != nil {
+				ensureSecret(*tc.configDiscardAPIVersion)
+			}
+			ensureSecret(string(tc.payload.APIVersion))
+			if tc.queryParams != "" {
+				values, err := url.ParseQuery(tc.queryParams)
+				require.NoError(t, err)
+				ensureSecret(values.Get("api_version"))
+			}
+
+			payloadBytes, err := json.Marshal(tc.payload)
+			require.NoError(t, err)
+
+			signedPayload := webhook.GenerateTestSignedPayload(&webhook.UnsignedPayload{
+				Payload: payloadBytes,
+				Secret:  webhookSecret,
+			})
+
+			requestURL := "/webhook"
+			if tc.queryParams != "" {
+				requestURL += "?" + tc.queryParams
+			}
+
+			req := httptest.NewRequest(http.MethodPost, requestURL, bytes.NewReader(signedPayload.Payload))
+			req.ContentLength = int64(len(signedPayload.Payload))
+			req.Header.Set("Content-Type", "application/json")
+
+			signature := signedPayload.Header
+			if tc.signatureOverride != "" {
+				signature = tc.signatureOverride
+			}
+			req.Header.Set("Stripe-Signature", signature)
+
+			recorder := httptest.NewRecorder()
+			suite.e.ServeHTTP(recorder, req)
 
 			res := recorder.Result()
+			bodyBytes, readErr := io.ReadAll(res.Body)
+			require.NoError(t, readErr)
+
+			if recorder.Code != tc.expectedStatus {
+				t.Fatalf("expected status %d got %d, response: %s", tc.expectedStatus, recorder.Code, string(bodyBytes))
+			}
+
 			require.NoError(t, res.Body.Close())
 
-			if tc.validate != nil {
-				tc.validate(t, resources)
+			if tc.expectRevocation && tc.expectedStatus == http.StatusOK {
+				sub, err := suite.db.OrgSubscription.Query().
+					Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
+					Only(testUser1.UserCtx)
+				require.NoError(t, err)
+				assert.False(t, sub.Active)
+
+				apiToken, err := suite.db.APIToken.Get(testUser1.UserCtx, apiTokenID)
+				require.NoError(t, err)
+				require.False(t, apiToken.IsActive)
+				require.NotEmpty(t, apiToken.RevokedBy)
+				require.NotEmpty(t, apiToken.RevokedAt)
+				require.NotEmpty(t, apiToken.RevokedReason)
+				assert.Less(t, *apiToken.ExpiresAt, time.Now())
+
+				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, patID)
+				require.NoError(t, err)
+				require.Len(t, pat.Edges.Organizations, 0)
 			}
 		})
 	}

@@ -32,7 +32,7 @@ func SupportedEventTypeStrings() []string {
 }
 
 // CreateWebhookEndpoint creates a webhook endpoint in Stripe and returns the resulting webhook endpoint
-func (sc *StripeClient) CreateWebhookEndpoint(ctx context.Context, url string, events []string) (*stripe.WebhookEndpoint, error) {
+func (sc *StripeClient) CreateWebhookEndpoint(ctx context.Context, url string, events []string, apiVersion string, disabled bool) (*stripe.WebhookEndpoint, error) {
 	if len(events) == 0 {
 		switch {
 		case sc.Config != nil && len(sc.Config.StripeWebhookEvents) > 0:
@@ -42,9 +42,18 @@ func (sc *StripeClient) CreateWebhookEndpoint(ctx context.Context, url string, e
 		}
 	}
 
+	webhookURL := url
+	if apiVersion != "" {
+		webhookURL = addVersionParam(url, apiVersion)
+	}
+
 	params := &stripe.WebhookEndpointCreateParams{
-		URL:           stripe.String(url),
+		URL:           stripe.String(webhookURL),
 		EnabledEvents: stripe.StringSlice(events),
+	}
+
+	if apiVersion != "" {
+		params.APIVersion = stripe.String(apiVersion)
 	}
 
 	start := time.Now()
@@ -61,6 +70,13 @@ func (sc *StripeClient) CreateWebhookEndpoint(ctx context.Context, url string, e
 
 	if err != nil {
 		return nil, err
+	}
+
+	if disabled {
+		endpoint, err = sc.DisableWebhookEndpoint(ctx, endpoint.ID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return endpoint, nil
