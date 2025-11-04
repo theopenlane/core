@@ -249,7 +249,10 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := logx.New(b)
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
 		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 		})
