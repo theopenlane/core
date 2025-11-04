@@ -202,6 +202,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		return err
 	}
 
+	lastOrgID := ""
 	for _, org := range orgs {
 		// check if user is already a member
 		exists, err := dbClient.OrgMembership.Query().
@@ -228,15 +229,38 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			Role:           &defaultRole,
 		}
 
+		// add organization to the context for auto-join
+		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			SubjectID:       user.ID,
+			SubjectEmail:    user.Email,
+			OrganizationID:  org.ID,
+			OrganizationIDs: []string{org.ID},
+		})
+
 		if err := dbClient.OrgMembership.Create().
 			SetInput(input).
 			Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to auto-join user to organization")
 
-			continue
+			// swallowing this error means some transactions are not rolled back and you can end up in a partial membership state
+			return err
 		}
 
 		logx.FromContext(ctx).Debug().Str("user_id", user.ID).Str("org_id", org.ID).Str("domain", userDomain).Msg("user auto-joined organization based on email domain match")
+
+		lastOrgID = org.ID
+	}
+
+	if lastOrgID != "" {
+		// set the user's default organization to the last one they were added to
+		if _, err := dbClient.UserSetting.Update().
+			Where(usersetting.UserID(user.ID), usersetting.DeletedAtIsNil()).
+			SetDefaultOrgID(lastOrgID).
+			Save(ctx); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update user's default organization after auto-join")
+
+			return err
+		}
 	}
 
 	return nil
