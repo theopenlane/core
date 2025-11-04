@@ -145,9 +145,6 @@ var (
 	mw = []echo.MiddlewareFunc{}
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
-
-	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
-	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
@@ -156,8 +153,6 @@ var (
 	authenticatedEndpoint = &authMW
 	// publicEndpoint for standard public endpoints
 	publicEndpoint = &mw
-	// restrictedEndpoint for rate-limited endpoints
-	restrictedEndpoint = &restrictedEndpointsMW
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
 	unauthenticatedEndpoint = &baseMW
 )
