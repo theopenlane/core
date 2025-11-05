@@ -4922,6 +4922,8 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
 	Tags               []string
+	InternalNotes      *string
+	SystemInternalID   *string
 	ExternalID         *string
 	ExternalOwnerID    *string
 	Source             *string
@@ -4959,6 +4961,10 @@ type CreateFindingInput struct {
 	ExternalURI        *string
 	Metadata           map[string]interface{}
 	RawPayload         map[string]interface{}
+	OwnerID            *string
+	BlockedGroupIDs    []string
+	EditorIDs          []string
+	ViewerIDs          []string
 	IntegrationIDs     []string
 	VulnerabilityIDs   []string
 	ActionPlanIDs      []string
@@ -4980,6 +4986,12 @@ type CreateFindingInput struct {
 func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -5092,6 +5104,18 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -5150,6 +5174,10 @@ type UpdateFindingInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
 	ClearExternalID         bool
 	ExternalID              *string
 	ClearExternalOwnerID    bool
@@ -5228,6 +5256,15 @@ type UpdateFindingInput struct {
 	Metadata                map[string]interface{}
 	ClearRawPayload         bool
 	RawPayload              map[string]interface{}
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
 	ClearIntegrations       bool
 	AddIntegrationIDs       []string
 	RemoveIntegrationIDs    []string
@@ -5285,6 +5322,18 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -5519,6 +5568,33 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -8936,6 +9012,10 @@ type CreateOrganizationInput struct {
 	AssessmentResponseIDs           []string
 	CustomTypeEnumIDs               []string
 	TagDefinitionIDs                []string
+	RemediationIDs                  []string
+	FindingIDs                      []string
+	ReviewIDs                       []string
+	VulnerabilityIDs                []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -9163,6 +9243,18 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TagDefinitionIDs; len(v) > 0 {
 		m.AddTagDefinitionIDs(v...)
 	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -9380,6 +9472,18 @@ type UpdateOrganizationInput struct {
 	ClearTagDefinitions                   bool
 	AddTagDefinitionIDs                   []string
 	RemoveTagDefinitionIDs                []string
+	ClearRemediations                     bool
+	AddRemediationIDs                     []string
+	RemoveRemediationIDs                  []string
+	ClearFindings                         bool
+	AddFindingIDs                         []string
+	RemoveFindingIDs                      []string
+	ClearReviews                          bool
+	AddReviewIDs                          []string
+	RemoveReviewIDs                       []string
+	ClearVulnerabilities                  bool
+	AddVulnerabilityIDs                   []string
+	RemoveVulnerabilityIDs                []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -10004,6 +10108,42 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveTagDefinitionIDs; len(v) > 0 {
 		m.RemoveTagDefinitionIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
 	}
 }
 
@@ -11534,6 +11674,8 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 // CreateRemediationInput represents a mutation input for creating remediations.
 type CreateRemediationInput struct {
 	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
 	ExternalID       *string
 	ExternalOwnerID  *string
 	Title            *string
@@ -11553,6 +11695,10 @@ type CreateRemediationInput struct {
 	Source           *string
 	ExternalURI      *string
 	Metadata         map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
 	IntegrationIDs   []string
 	FindingIDs       []string
 	VulnerabilityIDs []string
@@ -11573,6 +11719,12 @@ type CreateRemediationInput struct {
 func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -11631,6 +11783,18 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -11686,6 +11850,10 @@ type UpdateRemediationInput struct {
 	ClearTags              bool
 	Tags                   []string
 	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
 	ClearExternalID        bool
 	ExternalID             *string
 	ClearExternalOwnerID   bool
@@ -11724,6 +11892,15 @@ type UpdateRemediationInput struct {
 	ExternalURI            *string
 	ClearMetadata          bool
 	Metadata               map[string]interface{}
+	ClearBlockedGroups     bool
+	AddBlockedGroupIDs     []string
+	RemoveBlockedGroupIDs  []string
+	ClearEditors           bool
+	AddEditorIDs           []string
+	RemoveEditorIDs        []string
+	ClearViewers           bool
+	AddViewerIDs           []string
+	RemoveViewerIDs        []string
 	ClearIntegrations      bool
 	AddIntegrationIDs      []string
 	RemoveIntegrationIDs   []string
@@ -11778,6 +11955,18 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -11892,6 +12081,33 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -12036,6 +12252,8 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
 	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
 	ExternalID       *string
 	ExternalOwnerID  *string
 	Title            string
@@ -12053,6 +12271,10 @@ type CreateReviewInput struct {
 	ExternalURI      *string
 	Metadata         map[string]interface{}
 	RawPayload       map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
 	IntegrationIDs   []string
 	FindingIDs       []string
 	VulnerabilityIDs []string
@@ -12074,6 +12296,12 @@ type CreateReviewInput struct {
 func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -12123,6 +12351,18 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
@@ -12182,6 +12422,10 @@ type UpdateReviewInput struct {
 	ClearTags              bool
 	Tags                   []string
 	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
 	ClearExternalID        bool
 	ExternalID             *string
 	ClearExternalOwnerID   bool
@@ -12215,6 +12459,15 @@ type UpdateReviewInput struct {
 	Metadata               map[string]interface{}
 	ClearRawPayload        bool
 	RawPayload             map[string]interface{}
+	ClearBlockedGroups     bool
+	AddBlockedGroupIDs     []string
+	RemoveBlockedGroupIDs  []string
+	ClearEditors           bool
+	AddEditorIDs           []string
+	RemoveEditorIDs        []string
+	ClearViewers           bool
+	AddViewerIDs           []string
+	RemoveViewerIDs        []string
 	ClearIntegrations      bool
 	AddIntegrationIDs      []string
 	RemoveIntegrationIDs   []string
@@ -12271,6 +12524,18 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -12370,6 +12635,33 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -16669,57 +16961,69 @@ func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUp
 
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
-	Tags            []string
-	ExternalOwnerID *string
-	ExternalID      string
-	CveID           *string
-	Source          *string
-	DisplayName     *string
-	Category        *string
-	Severity        *string
-	Score           *float64
-	Impact          *float64
-	Exploitability  *float64
-	Priority        *string
-	Status          *string
-	Summary         *string
-	Description     *string
-	Vector          *string
-	RemediationSLA  *int
-	Open            *bool
-	Blocking        *bool
-	Production      *bool
-	Public          *bool
-	Validated       *bool
-	References      []string
-	Impacts         []string
-	PublishedAt     *models.DateTime
-	DiscoveredAt    *models.DateTime
-	SourceUpdatedAt *models.DateTime
-	ExternalURI     *string
-	Metadata        map[string]interface{}
-	RawPayload      map[string]interface{}
-	IntegrationIDs  []string
-	FindingIDs      []string
-	ActionPlanIDs   []string
-	ControlIDs      []string
-	SubcontrolIDs   []string
-	RiskIDs         []string
-	ProgramIDs      []string
-	AssetIDs        []string
-	EntityIDs       []string
-	ScanIDs         []string
-	TaskIDs         []string
-	RemediationIDs  []string
-	ReviewIDs       []string
-	CommentIDs      []string
-	FileIDs         []string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	ExternalOwnerID  *string
+	ExternalID       string
+	CveID            *string
+	Source           *string
+	DisplayName      *string
+	Category         *string
+	Severity         *string
+	Score            *float64
+	Impact           *float64
+	Exploitability   *float64
+	Priority         *string
+	Status           *string
+	Summary          *string
+	Description      *string
+	Vector           *string
+	RemediationSLA   *int
+	Open             *bool
+	Blocking         *bool
+	Production       *bool
+	Public           *bool
+	Validated        *bool
+	References       []string
+	Impacts          []string
+	PublishedAt      *models.DateTime
+	DiscoveredAt     *models.DateTime
+	SourceUpdatedAt  *models.DateTime
+	ExternalURI      *string
+	Metadata         map[string]interface{}
+	RawPayload       map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	IntegrationIDs   []string
+	FindingIDs       []string
+	ActionPlanIDs    []string
+	ControlIDs       []string
+	SubcontrolIDs    []string
+	RiskIDs          []string
+	ProgramIDs       []string
+	AssetIDs         []string
+	EntityIDs        []string
+	ScanIDs          []string
+	TaskIDs          []string
+	RemediationIDs   []string
+	ReviewIDs        []string
+	CommentIDs       []string
+	FileIDs          []string
 }
 
 // Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
 func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -16806,6 +17110,18 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -16861,113 +17177,126 @@ func (c *VulnerabilityCreate) SetInput(i CreateVulnerabilityInput) *Vulnerabilit
 
 // UpdateVulnerabilityInput represents a mutation input for updating vulnerabilities.
 type UpdateVulnerabilityInput struct {
-	ClearTags            bool
-	Tags                 []string
-	AppendTags           []string
-	ClearExternalOwnerID bool
-	ExternalOwnerID      *string
-	ExternalID           *string
-	ClearCveID           bool
-	CveID                *string
-	ClearSource          bool
-	Source               *string
-	ClearDisplayName     bool
-	DisplayName          *string
-	ClearCategory        bool
-	Category             *string
-	ClearSeverity        bool
-	Severity             *string
-	ClearScore           bool
-	Score                *float64
-	ClearImpact          bool
-	Impact               *float64
-	ClearExploitability  bool
-	Exploitability       *float64
-	ClearPriority        bool
-	Priority             *string
-	ClearStatus          bool
-	Status               *string
-	ClearSummary         bool
-	Summary              *string
-	ClearDescription     bool
-	Description          *string
-	ClearVector          bool
-	Vector               *string
-	ClearRemediationSLA  bool
-	RemediationSLA       *int
-	ClearOpen            bool
-	Open                 *bool
-	ClearBlocking        bool
-	Blocking             *bool
-	ClearProduction      bool
-	Production           *bool
-	ClearPublic          bool
-	Public               *bool
-	ClearValidated       bool
-	Validated            *bool
-	ClearReferences      bool
-	References           []string
-	AppendReferences     []string
-	ClearImpacts         bool
-	Impacts              []string
-	AppendImpacts        []string
-	ClearPublishedAt     bool
-	PublishedAt          *models.DateTime
-	ClearDiscoveredAt    bool
-	DiscoveredAt         *models.DateTime
-	ClearSourceUpdatedAt bool
-	SourceUpdatedAt      *models.DateTime
-	ClearExternalURI     bool
-	ExternalURI          *string
-	ClearMetadata        bool
-	Metadata             map[string]interface{}
-	ClearRawPayload      bool
-	RawPayload           map[string]interface{}
-	ClearIntegrations    bool
-	AddIntegrationIDs    []string
-	RemoveIntegrationIDs []string
-	ClearFindings        bool
-	AddFindingIDs        []string
-	RemoveFindingIDs     []string
-	ClearActionPlans     bool
-	AddActionPlanIDs     []string
-	RemoveActionPlanIDs  []string
-	ClearControls        bool
-	AddControlIDs        []string
-	RemoveControlIDs     []string
-	ClearSubcontrols     bool
-	AddSubcontrolIDs     []string
-	RemoveSubcontrolIDs  []string
-	ClearRisks           bool
-	AddRiskIDs           []string
-	RemoveRiskIDs        []string
-	ClearPrograms        bool
-	AddProgramIDs        []string
-	RemoveProgramIDs     []string
-	ClearAssets          bool
-	AddAssetIDs          []string
-	RemoveAssetIDs       []string
-	ClearEntities        bool
-	AddEntityIDs         []string
-	RemoveEntityIDs      []string
-	ClearScans           bool
-	AddScanIDs           []string
-	RemoveScanIDs        []string
-	ClearTasks           bool
-	AddTaskIDs           []string
-	RemoveTaskIDs        []string
-	ClearRemediations    bool
-	AddRemediationIDs    []string
-	RemoveRemediationIDs []string
-	ClearReviews         bool
-	AddReviewIDs         []string
-	RemoveReviewIDs      []string
-	ClearComments        bool
-	AddCommentIDs        []string
-	RemoveCommentIDs     []string
-	ClearFiles           bool
-	AddFileIDs           []string
-	RemoveFileIDs        []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	ClearExternalOwnerID  bool
+	ExternalOwnerID       *string
+	ExternalID            *string
+	ClearCveID            bool
+	CveID                 *string
+	ClearSource           bool
+	Source                *string
+	ClearDisplayName      bool
+	DisplayName           *string
+	ClearCategory         bool
+	Category              *string
+	ClearSeverity         bool
+	Severity              *string
+	ClearScore            bool
+	Score                 *float64
+	ClearImpact           bool
+	Impact                *float64
+	ClearExploitability   bool
+	Exploitability        *float64
+	ClearPriority         bool
+	Priority              *string
+	ClearStatus           bool
+	Status                *string
+	ClearSummary          bool
+	Summary               *string
+	ClearDescription      bool
+	Description           *string
+	ClearVector           bool
+	Vector                *string
+	ClearRemediationSLA   bool
+	RemediationSLA        *int
+	ClearOpen             bool
+	Open                  *bool
+	ClearBlocking         bool
+	Blocking              *bool
+	ClearProduction       bool
+	Production            *bool
+	ClearPublic           bool
+	Public                *bool
+	ClearValidated        bool
+	Validated             *bool
+	ClearReferences       bool
+	References            []string
+	AppendReferences      []string
+	ClearImpacts          bool
+	Impacts               []string
+	AppendImpacts         []string
+	ClearPublishedAt      bool
+	PublishedAt           *models.DateTime
+	ClearDiscoveredAt     bool
+	DiscoveredAt          *models.DateTime
+	ClearSourceUpdatedAt  bool
+	SourceUpdatedAt       *models.DateTime
+	ClearExternalURI      bool
+	ExternalURI           *string
+	ClearMetadata         bool
+	Metadata              map[string]interface{}
+	ClearRawPayload       bool
+	RawPayload            map[string]interface{}
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearIntegrations     bool
+	AddIntegrationIDs     []string
+	RemoveIntegrationIDs  []string
+	ClearFindings         bool
+	AddFindingIDs         []string
+	RemoveFindingIDs      []string
+	ClearActionPlans      bool
+	AddActionPlanIDs      []string
+	RemoveActionPlanIDs   []string
+	ClearControls         bool
+	AddControlIDs         []string
+	RemoveControlIDs      []string
+	ClearSubcontrols      bool
+	AddSubcontrolIDs      []string
+	RemoveSubcontrolIDs   []string
+	ClearRisks            bool
+	AddRiskIDs            []string
+	RemoveRiskIDs         []string
+	ClearPrograms         bool
+	AddProgramIDs         []string
+	RemoveProgramIDs      []string
+	ClearAssets           bool
+	AddAssetIDs           []string
+	RemoveAssetIDs        []string
+	ClearEntities         bool
+	AddEntityIDs          []string
+	RemoveEntityIDs       []string
+	ClearScans            bool
+	AddScanIDs            []string
+	RemoveScanIDs         []string
+	ClearTasks            bool
+	AddTaskIDs            []string
+	RemoveTaskIDs         []string
+	ClearRemediations     bool
+	AddRemediationIDs     []string
+	RemoveRemediationIDs  []string
+	ClearReviews          bool
+	AddReviewIDs          []string
+	RemoveReviewIDs       []string
+	ClearComments         bool
+	AddCommentIDs         []string
+	RemoveCommentIDs      []string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
 }
 
 // Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -16980,6 +17309,18 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -17157,6 +17498,33 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()

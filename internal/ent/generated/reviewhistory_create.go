@@ -146,6 +146,62 @@ func (_c *ReviewHistoryCreate) SetTags(v []string) *ReviewHistoryCreate {
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *ReviewHistoryCreate) SetOwnerID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableOwnerID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ReviewHistoryCreate) SetSystemOwned(v bool) *ReviewHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableSystemOwned(v *bool) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ReviewHistoryCreate) SetInternalNotes(v string) *ReviewHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableInternalNotes(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ReviewHistoryCreate) SetSystemInternalID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableSystemInternalID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *ReviewHistoryCreate) SetExternalID(v string) *ReviewHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -450,6 +506,10 @@ func (_c *ReviewHistoryCreate) defaults() error {
 		v := reviewhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := reviewhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Approved(); !ok {
 		v := reviewhistory.DefaultApproved
 		_c.mutation.SetApproved(v)
@@ -555,6 +615,22 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(reviewhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(reviewhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(reviewhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(reviewhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)

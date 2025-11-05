@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -16,8 +17,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
@@ -120,9 +123,71 @@ func (_c *FindingCreate) SetNillableDeletedBy(v *string) *FindingCreate {
 	return _c
 }
 
+// SetDisplayID sets the "display_id" field.
+func (_c *FindingCreate) SetDisplayID(v string) *FindingCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
+}
+
 // SetTags sets the "tags" field.
 func (_c *FindingCreate) SetTags(v []string) *FindingCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *FindingCreate) SetOwnerID(v string) *FindingCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableOwnerID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (_c *FindingCreate) SetSystemOwned(v bool) *FindingCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSystemOwned(v *bool) *FindingCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *FindingCreate) SetInternalNotes(v string) *FindingCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableInternalNotes(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *FindingCreate) SetSystemInternalID(v string) *FindingCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSystemInternalID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
 	return _c
 }
 
@@ -602,6 +667,56 @@ func (_c *FindingCreate) SetNillableID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_c *FindingCreate) SetOwner(v *Organization) *FindingCreate {
+	return _c.SetOwnerID(v.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *FindingCreate) AddBlockedGroupIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *FindingCreate) AddBlockedGroups(v ...*Group) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *FindingCreate) AddEditorIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *FindingCreate) AddEditors(v ...*Group) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (_c *FindingCreate) AddViewerIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (_c *FindingCreate) AddViewers(v ...*Group) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddViewerIDs(ids...)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_c *FindingCreate) AddIntegrationIDs(ids ...string) *FindingCreate {
 	_c.mutation.AddIntegrationIDs(ids...)
@@ -897,6 +1012,10 @@ func (_c *FindingCreate) defaults() error {
 		v := finding.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := finding.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Categories(); !ok {
 		v := finding.DefaultCategories
 		_c.mutation.SetCategories(v)
@@ -929,6 +1048,19 @@ func (_c *FindingCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *FindingCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Finding.display_id"`)}
+	}
+	if v, ok := _c.mutation.DisplayID(); ok {
+		if err := finding.DisplayIDValidator(v); err != nil {
+			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Finding.display_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := finding.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Finding.owner_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -989,9 +1121,25 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.DisplayID(); ok {
+		_spec.SetField(finding.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
+	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(finding.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(finding.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(finding.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(finding.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
@@ -1140,6 +1288,75 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RawPayload(); ok {
 		_spec.SetField(finding.FieldRawPayload, field.TypeJSON, value)
 		_node.RawPayload = value
+	}
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   finding.OwnerTable,
+			Columns: []string{finding.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.BlockedGroupsTable,
+			Columns: []string{finding.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.EditorsTable,
+			Columns: []string{finding.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.ViewersTable,
+			Columns: []string{finding.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

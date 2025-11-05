@@ -40,6 +40,14 @@ type ReviewHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// external identifier from the integration source for the review
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the review
@@ -90,9 +98,9 @@ func (*ReviewHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case reviewhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case reviewhistory.FieldApproved:
+		case reviewhistory.FieldSystemOwned, reviewhistory.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldDeletedBy, reviewhistory.FieldExternalID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
+		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldDeletedBy, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldExternalID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case reviewhistory.FieldHistoryTime, reviewhistory.FieldCreatedAt, reviewhistory.FieldUpdatedAt, reviewhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -178,6 +186,32 @@ func (_m *ReviewHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case reviewhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
+		case reviewhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case reviewhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case reviewhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case reviewhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -359,6 +393,22 @@ func (_m *ReviewHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

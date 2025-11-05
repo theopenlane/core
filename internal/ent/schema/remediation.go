@@ -3,12 +3,17 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -161,25 +166,25 @@ func (r Remediation) Edges() []ent.Edge {
 // Mixin of the Remediation
 func (r Remediation) Mixin() []ent.Mixin {
 	return mixinConfig{
-		// prefix:           "RMD",
+		prefix: "RMD",
 		additionalMixins: []ent.Mixin{
-			// newObjectOwnedMixin[generated.Remediation](r,
-			// 	withParents(
-			// 		ActionPlan{},
-			// 		Program{},
-			// 		Control{},
-			// 		Subcontrol{},
-			// 		Risk{},
-			// 		Finding{},
-			// 		Vulnerability{},
-			// 		Asset{},
-			// 		Entity{},
-			// 		Task{},
-			// 	),
-			// 	withOrganizationOwner(true),
-			// ),
-			// newGroupPermissionsMixin(),
-			// mixin.NewSystemOwnedMixin(),
+			newObjectOwnedMixin[generated.Remediation](r,
+				withParents(
+					ActionPlan{},
+					Program{},
+					Control{},
+					Subcontrol{},
+					Risk{},
+					Finding{},
+					Vulnerability{},
+					Asset{},
+					Entity{},
+					Task{},
+				),
+				withOrganizationOwner(true),
+			),
+			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(r)
 }
@@ -187,18 +192,18 @@ func (r Remediation) Mixin() []ent.Mixin {
 // Indexes of the Remediation
 func (Remediation) Indexes() []ent.Index {
 	return []ent.Index{
-		// index.Fields("external_id", "external_owner_id", ownerFieldName).
-		// 	Unique().
-		// 	Annotations(
-		// 		entsql.IndexWhere("deleted_at is NULL"),
-		// 	),
+		index.Fields("external_id", "external_owner_id", ownerFieldName).
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL"),
+			),
 	}
 }
 
 // Annotations of the Remediation
 func (Remediation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
@@ -209,7 +214,7 @@ func (r Remediation) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.RemediationMutation](),
+			entfga.CheckEditAccess[*generated.RemediationMutation](),
 		),
 	)
 }

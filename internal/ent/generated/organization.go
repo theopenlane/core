@@ -206,13 +206,21 @@ type OrganizationEdges struct {
 	CustomTypeEnums []*CustomTypeEnum `json:"custom_type_enums,omitempty"`
 	// TagDefinitions holds the value of the tag_definitions edge.
 	TagDefinitions []*TagDefinition `json:"tag_definitions,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [73]bool
+	loadedTypes [77]bool
 	// totalCount holds the count of the edges above.
-	totalCount [69]map[string]int
+	totalCount [73]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -283,6 +291,10 @@ type OrganizationEdges struct {
 	namedAssessmentResponses           map[string][]*AssessmentResponse
 	namedCustomTypeEnums               map[string][]*CustomTypeEnum
 	namedTagDefinitions                map[string][]*TagDefinition
+	namedRemediations                  map[string][]*Remediation
+	namedFindings                      map[string][]*Finding
+	namedReviews                       map[string][]*Review
+	namedVulnerabilities               map[string][]*Vulnerability
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -940,10 +952,46 @@ func (e OrganizationEdges) TagDefinitionsOrErr() ([]*TagDefinition, error) {
 	return nil, &NotLoadedError{edge: "tag_definitions"}
 }
 
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[72] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[73] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[74] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[75] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[72] {
+	if e.loadedTypes[76] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1462,6 +1510,26 @@ func (_m *Organization) QueryCustomTypeEnums() *CustomTypeEnumQuery {
 // QueryTagDefinitions queries the "tag_definitions" edge of the Organization entity.
 func (_m *Organization) QueryTagDefinitions() *TagDefinitionQuery {
 	return NewOrganizationClient(_m.config).QueryTagDefinitions(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Organization entity.
+func (_m *Organization) QueryRemediations() *RemediationQuery {
+	return NewOrganizationClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryFindings queries the "findings" edge of the Organization entity.
+func (_m *Organization) QueryFindings() *FindingQuery {
+	return NewOrganizationClient(_m.config).QueryFindings(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the Organization entity.
+func (_m *Organization) QueryReviews() *ReviewQuery {
+	return NewOrganizationClient(_m.config).QueryReviews(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Organization entity.
+func (_m *Organization) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewOrganizationClient(_m.config).QueryVulnerabilities(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3207,6 +3275,102 @@ func (_m *Organization) appendNamedTagDefinitions(name string, edges ...*TagDefi
 		_m.Edges.namedTagDefinitions[name] = []*TagDefinition{}
 	} else {
 		_m.Edges.namedTagDefinitions[name] = append(_m.Edges.namedTagDefinitions[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
 	}
 }
 

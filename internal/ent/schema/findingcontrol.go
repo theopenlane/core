@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
@@ -136,7 +137,7 @@ func (FindingControl) Modules() []models.OrgModule {
 // Annotations of the FindingControl
 func (FindingControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 	}
 }
 

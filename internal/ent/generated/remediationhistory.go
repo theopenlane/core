@@ -38,8 +38,18 @@ type RemediationHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -92,7 +102,9 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case remediationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
+		case remediationhistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediationhistory.FieldHistoryTime, remediationhistory.FieldCreatedAt, remediationhistory.FieldUpdatedAt, remediationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -171,6 +183,12 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case remediationhistory.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				_m.DisplayID = value.String
+			}
 		case remediationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
@@ -178,6 +196,32 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case remediationhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
+		case remediationhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case remediationhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case remediationhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case remediationhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -361,8 +405,27 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(_m.DisplayID)
+	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

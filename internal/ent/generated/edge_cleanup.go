@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -54,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -74,6 +77,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/contextx"
@@ -940,6 +944,34 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).TagDefinition.Query().Where((tagdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if tagdefinitionCount, err := FromContext(ctx).TagDefinition.Delete().Where(tagdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", tagdefinitionCount).Msg("deleting tagdefinition")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Remediation.Query().Where((remediation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if remediationCount, err := FromContext(ctx).Remediation.Delete().Where(remediation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", remediationCount).Msg("deleting remediation")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Finding.Query().Where((finding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if findingCount, err := FromContext(ctx).Finding.Delete().Where(finding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", findingCount).Msg("deleting finding")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Review.Query().Where((review.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if reviewCount, err := FromContext(ctx).Review.Delete().Where(review.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", reviewCount).Msg("deleting review")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Vulnerability.Query().Where((vulnerability.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vulnerabilityCount, err := FromContext(ctx).Vulnerability.Delete().Where(vulnerability.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", vulnerabilityCount).Msg("deleting vulnerability")
 			return err
 		}
 	}

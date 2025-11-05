@@ -140,9 +140,71 @@ func (_c *RemediationHistoryCreate) SetNillableDeletedBy(v *string) *Remediation
 	return _c
 }
 
+// SetDisplayID sets the "display_id" field.
+func (_c *RemediationHistoryCreate) SetDisplayID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
+}
+
 // SetTags sets the "tags" field.
 func (_c *RemediationHistoryCreate) SetTags(v []string) *RemediationHistoryCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *RemediationHistoryCreate) SetOwnerID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableOwnerID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (_c *RemediationHistoryCreate) SetSystemOwned(v bool) *RemediationHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSystemOwned(v *bool) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *RemediationHistoryCreate) SetInternalNotes(v string) *RemediationHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableInternalNotes(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *RemediationHistoryCreate) SetSystemInternalID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSystemInternalID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
 	return _c
 }
 
@@ -480,6 +542,10 @@ func (_c *RemediationHistoryCreate) defaults() error {
 		v := remediationhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := remediationhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if remediationhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized remediationhistory.DefaultID (forgotten import generated/runtime?)")
@@ -502,6 +568,9 @@ func (_c *RemediationHistoryCreate) check() error {
 		if err := remediationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "RemediationHistory.operation": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "RemediationHistory.display_id"`)}
 	}
 	return nil
 }
@@ -575,9 +644,29 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 		_spec.SetField(remediationhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.DisplayID(); ok {
+		_spec.SetField(remediationhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
+	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(remediationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(remediationhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(remediationhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(remediationhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(remediationhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)

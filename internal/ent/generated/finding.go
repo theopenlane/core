@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -31,8 +32,18 @@ type Finding struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
 	// the owner of the finding
@@ -118,6 +129,14 @@ type Finding struct {
 
 // FindingEdges holds the relations/edges for other nodes in the graph.
 type FindingEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// integration that produced the finding
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
@@ -152,10 +171,13 @@ type FindingEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [20]map[string]int
 
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
+	namedViewers         map[string][]*Group
 	namedIntegrations    map[string][]*Integration
 	namedVulnerabilities map[string][]*Vulnerability
 	namedActionPlans     map[string][]*ActionPlan
@@ -174,10 +196,48 @@ type FindingEdges struct {
 	namedControlMappings map[string][]*FindingControl
 }
 
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FindingEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[4] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -186,7 +246,7 @@ func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[5] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -195,7 +255,7 @@ func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[6] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -204,7 +264,7 @@ func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[7] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -213,7 +273,7 @@ func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[8] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -222,7 +282,7 @@ func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[9] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -231,7 +291,7 @@ func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -240,7 +300,7 @@ func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[11] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -249,7 +309,7 @@ func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[12] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -258,7 +318,7 @@ func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[13] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -267,7 +327,7 @@ func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[14] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -276,7 +336,7 @@ func (e FindingEdges) TasksOrErr() ([]*Task, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[15] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -285,7 +345,7 @@ func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[16] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -294,7 +354,7 @@ func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[17] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -303,7 +363,7 @@ func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[18] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -312,7 +372,7 @@ func (e FindingEdges) FilesOrErr() ([]*File, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[19] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -327,13 +387,13 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case finding.FieldTags, finding.FieldCategories, finding.FieldReferences, finding.FieldStepsToReproduce, finding.FieldTargets, finding.FieldTargetDetails, finding.FieldMetadata, finding.FieldRawPayload:
 			values[i] = new([]byte)
-		case finding.FieldOpen, finding.FieldBlocksProduction, finding.FieldProduction, finding.FieldPublic, finding.FieldValidated:
+		case finding.FieldSystemOwned, finding.FieldOpen, finding.FieldBlocksProduction, finding.FieldProduction, finding.FieldPublic, finding.FieldValidated:
 			values[i] = new(sql.NullBool)
 		case finding.FieldNumericSeverity, finding.FieldScore, finding.FieldImpact, finding.FieldExploitability:
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldExternalID, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldStatus, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldOwnerID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldExternalID, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldStatus, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -400,6 +460,12 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case finding.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				_m.DisplayID = value.String
+			}
 		case finding.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
@@ -407,6 +473,32 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case finding.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
+		case finding.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case finding.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case finding.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case finding.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -681,6 +773,26 @@ func (_m *Finding) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the Finding entity.
+func (_m *Finding) QueryOwner() *OrganizationQuery {
+	return NewFindingClient(_m.config).QueryOwner(_m)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the Finding entity.
+func (_m *Finding) QueryBlockedGroups() *GroupQuery {
+	return NewFindingClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the Finding entity.
+func (_m *Finding) QueryEditors() *GroupQuery {
+	return NewFindingClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the Finding entity.
+func (_m *Finding) QueryViewers() *GroupQuery {
+	return NewFindingClient(_m.config).QueryViewers(_m)
+}
+
 // QueryIntegrations queries the "integrations" edge of the Finding entity.
 func (_m *Finding) QueryIntegrations() *IntegrationQuery {
 	return NewFindingClient(_m.config).QueryIntegrations(_m)
@@ -802,8 +914,27 @@ func (_m *Finding) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(_m.DisplayID)
+	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
@@ -923,6 +1054,78 @@ func (_m *Finding) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.RawPayload))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedIntegrations returns the Integrations named value or an error if the edge was not

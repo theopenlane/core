@@ -1545,8 +1545,23 @@ func (_m *FindingHistory) changes(new *FindingHistory) []Change {
 	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(findinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(findinghistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(findinghistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(findinghistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(findinghistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(findinghistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(findinghistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
 		changes = append(changes, NewChange(findinghistory.FieldExternalID, _m.ExternalID, new.ExternalID))
@@ -3177,8 +3192,23 @@ func (_m *RemediationHistory) changes(new *RemediationHistory) []Change {
 	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(remediationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(remediationhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(remediationhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(remediationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(remediationhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(remediationhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(remediationhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
 		changes = append(changes, NewChange(remediationhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
@@ -3284,6 +3314,18 @@ func (_m *ReviewHistory) changes(new *ReviewHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(reviewhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(reviewhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(reviewhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(reviewhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(reviewhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
 		changes = append(changes, NewChange(reviewhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
@@ -4689,8 +4731,23 @@ func (_m *VulnerabilityHistory) changes(new *VulnerabilityHistory) []Change {
 	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(vulnerabilityhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(vulnerabilityhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.ExternalOwnerID, new.ExternalOwnerID) {
 		changes = append(changes, NewChange(vulnerabilityhistory.FieldExternalOwnerID, _m.ExternalOwnerID, new.ExternalOwnerID))

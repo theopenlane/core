@@ -3,12 +3,17 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -169,25 +174,25 @@ func (r Review) Edges() []ent.Edge {
 // Mixin of the Review
 func (r Review) Mixin() []ent.Mixin {
 	return mixinConfig{
-		// prefix:           "RVW",
+		// prefix: "RVW",
 		additionalMixins: []ent.Mixin{
-			// 	newObjectOwnedMixin[generated.Review](r,
-			// 		withParents(
-			// 			Program{},
-			// 			Control{},
-			// 			Subcontrol{},
-			// 			Risk{},
-			// 			ActionPlan{},
-			// 			Finding{},
-			// 			Vulnerability{},
-			// 			Asset{},
-			// 			Entity{},
-			// 			Task{},
-			// 		),
-			// 		withOrganizationOwner(true),
-			// 	),
-			// 	newGroupPermissionsMixin(),
-			// 	mixin.NewSystemOwnedMixin(),
+			newObjectOwnedMixin[generated.Review](r,
+				withParents(
+					Program{},
+					Control{},
+					Subcontrol{},
+					Risk{},
+					ActionPlan{},
+					Finding{},
+					Vulnerability{},
+					Asset{},
+					Entity{},
+					Task{},
+				),
+				withOrganizationOwner(true),
+			),
+			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(r)
 }
@@ -195,18 +200,18 @@ func (r Review) Mixin() []ent.Mixin {
 // Indexes of the Review
 func (Review) Indexes() []ent.Index {
 	return []ent.Index{
-		// index.Fields("external_id", "external_owner_id", ownerFieldName).
-		// 	Unique().
-		// 	Annotations(
-		// 		entsql.IndexWhere("deleted_at is NULL"),
-		// 	),
+		index.Fields("external_id", "external_owner_id", ownerFieldName).
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL"),
+			),
 	}
 }
 
 // Annotations of the Review
 func (Review) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
@@ -217,7 +222,7 @@ func (r Review) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.ReviewMutation](),
+			entfga.CheckEditAccess[*generated.ReviewMutation](),
 		),
 	)
 }

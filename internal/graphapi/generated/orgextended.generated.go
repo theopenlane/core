@@ -218,6 +218,14 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_customTypeEnums(ctx, field)
 			case "tagDefinitions":
 				return ec.fieldContext_Organization_tagDefinitions(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Organization_remediations(ctx, field)
+			case "findings":
+				return ec.fieldContext_Organization_findings(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Organization_reviews(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Organization_vulnerabilities(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

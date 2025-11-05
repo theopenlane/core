@@ -648,7 +648,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 },
-}, "finding": {"integrations": {
+}, "finding": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -1581,6 +1597,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "tag_definition",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "remediations": {
+	ObjectType:      "remediation",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "reviews": {
+	ObjectType:      "review",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1768,7 +1800,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "remediation": {"integrations": {
+}, "remediation": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -1825,7 +1873,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "review": {"integrations": {
+}, "review": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2430,7 +2494,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "vulnerability": {"integrations": {
+}, "vulnerability": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,

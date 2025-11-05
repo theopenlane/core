@@ -62,8 +62,18 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Finding_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Finding_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Finding_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Finding_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Finding_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Finding_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Finding_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -138,6 +148,14 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Finding_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Finding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Finding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Finding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Finding_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -211,8 +229,18 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Finding_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Finding_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Finding_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Finding_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Finding_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Finding_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Finding_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -287,6 +315,14 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Finding_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Finding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Finding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Finding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Finding_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -389,8 +425,18 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Finding_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Finding_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Finding_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Finding_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Finding_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Finding_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Finding_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
 			case "externalOwnerID":
@@ -465,6 +511,14 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Finding_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Finding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Finding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Finding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Finding_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":

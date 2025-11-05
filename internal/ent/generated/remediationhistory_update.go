@@ -123,6 +123,46 @@ func (_u *RemediationHistoryUpdate) ClearTags() *RemediationHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *RemediationHistoryUpdate) SetInternalNotes(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableInternalNotes(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *RemediationHistoryUpdate) ClearInternalNotes() *RemediationHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *RemediationHistoryUpdate) SetSystemInternalID(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableSystemInternalID(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *RemediationHistoryUpdate) ClearSystemInternalID() *RemediationHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *RemediationHistoryUpdate) SetExternalID(v string) *RemediationHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -601,6 +641,24 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(remediationhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(remediationhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(remediationhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(remediationhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(remediationhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
 	}
@@ -826,6 +884,46 @@ func (_u *RemediationHistoryUpdateOne) AppendTags(v []string) *RemediationHistor
 // ClearTags clears the value of the "tags" field.
 func (_u *RemediationHistoryUpdateOne) ClearTags() *RemediationHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *RemediationHistoryUpdateOne) SetInternalNotes(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableInternalNotes(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *RemediationHistoryUpdateOne) ClearInternalNotes() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *RemediationHistoryUpdateOne) SetSystemInternalID(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *RemediationHistoryUpdateOne) ClearSystemInternalID() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1336,6 +1434,24 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(remediationhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(remediationhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(remediationhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(remediationhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(remediationhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)

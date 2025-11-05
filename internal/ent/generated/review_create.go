@@ -16,8 +16,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
@@ -123,6 +125,62 @@ func (_c *ReviewCreate) SetNillableDeletedBy(v *string) *ReviewCreate {
 // SetTags sets the "tags" field.
 func (_c *ReviewCreate) SetTags(v []string) *ReviewCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *ReviewCreate) SetOwnerID(v string) *ReviewCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableOwnerID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ReviewCreate) SetSystemOwned(v bool) *ReviewCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableSystemOwned(v *bool) *ReviewCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ReviewCreate) SetInternalNotes(v string) *ReviewCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableInternalNotes(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ReviewCreate) SetSystemInternalID(v string) *ReviewCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableSystemInternalID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
 	return _c
 }
 
@@ -366,6 +424,56 @@ func (_c *ReviewCreate) SetNillableID(v *string) *ReviewCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_c *ReviewCreate) SetOwner(v *Organization) *ReviewCreate {
+	return _c.SetOwnerID(v.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *ReviewCreate) AddBlockedGroupIDs(ids ...string) *ReviewCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *ReviewCreate) AddBlockedGroups(v ...*Group) *ReviewCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *ReviewCreate) AddEditorIDs(ids ...string) *ReviewCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *ReviewCreate) AddEditors(v ...*Group) *ReviewCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (_c *ReviewCreate) AddViewerIDs(ids ...string) *ReviewCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (_c *ReviewCreate) AddViewers(v ...*Group) *ReviewCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -638,6 +746,10 @@ func (_c *ReviewCreate) defaults() error {
 		v := review.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := review.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Approved(); !ok {
 		v := review.DefaultApproved
 		_c.mutation.SetApproved(v)
@@ -654,6 +766,11 @@ func (_c *ReviewCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *ReviewCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := review.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Review.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "Review.title"`)}
 	}
@@ -726,6 +843,18 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 		_spec.SetField(review.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(review.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(review.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(review.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(review.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
@@ -793,6 +922,75 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RawPayload(); ok {
 		_spec.SetField(review.FieldRawPayload, field.TypeJSON, value)
 		_node.RawPayload = value
+	}
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   review.OwnerTable,
+			Columns: []string{review.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.BlockedGroupsTable,
+			Columns: []string{review.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.EditorsTable,
+			Columns: []string{review.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.ViewersTable,
+			Columns: []string{review.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

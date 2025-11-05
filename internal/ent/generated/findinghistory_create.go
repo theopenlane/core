@@ -140,9 +140,71 @@ func (_c *FindingHistoryCreate) SetNillableDeletedBy(v *string) *FindingHistoryC
 	return _c
 }
 
+// SetDisplayID sets the "display_id" field.
+func (_c *FindingHistoryCreate) SetDisplayID(v string) *FindingHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
+}
+
 // SetTags sets the "tags" field.
 func (_c *FindingHistoryCreate) SetTags(v []string) *FindingHistoryCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableOwnerID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (_c *FindingHistoryCreate) SetSystemOwned(v bool) *FindingHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSystemOwned(v *bool) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *FindingHistoryCreate) SetInternalNotes(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalNotes(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *FindingHistoryCreate) SetSystemInternalID(v string) *FindingHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSystemInternalID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
 	return _c
 }
 
@@ -684,6 +746,10 @@ func (_c *FindingHistoryCreate) defaults() error {
 		v := findinghistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := findinghistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Categories(); !ok {
 		v := findinghistory.DefaultCategories
 		_c.mutation.SetCategories(v)
@@ -726,6 +792,9 @@ func (_c *FindingHistoryCreate) check() error {
 		if err := findinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "FindingHistory.operation": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.DisplayID(); !ok {
+		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "FindingHistory.display_id"`)}
 	}
 	return nil
 }
@@ -799,9 +868,29 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.DisplayID(); ok {
+		_spec.SetField(findinghistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
+	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(findinghistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(findinghistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(findinghistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(findinghistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

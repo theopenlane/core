@@ -3,13 +3,18 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -236,41 +241,41 @@ func (f Finding) Edges() []ent.Edge {
 // Mixin of the Finding
 func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
-		// prefix:           "FIND",
-		// additionalMixins: []ent.Mixin{
-		// 	// newObjectOwnedMixin[generated.Finding](f,
-		// 	// 	withParents(
-		// 	// 		Program{},
-		// 	// 		Control{},
-		// 	// 		Subcontrol{},
-		// 	// 		Risk{},
-		// 	// 		Asset{},
-		// 	// 		Entity{},
-		// 	// 		Scan{},
-		// 	// 	),
-		// 	// 	withOrganizationOwner(true),
-		// 	// ),
-		// 	// newGroupPermissionsMixin(),
-		// 	// mixin.NewSystemOwnedMixin(),
-		// },
+		prefix: "FIND",
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.Finding](f,
+				withParents(
+					Program{},
+					Control{},
+					Subcontrol{},
+					Risk{},
+					Asset{},
+					Entity{},
+					Scan{},
+				),
+				withOrganizationOwner(true),
+			),
+			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
+		},
 	}.getMixins(f)
 }
 
 // Indexes of the Finding
 func (Finding) Indexes() []ent.Index {
 	return []ent.Index{
-		// index.Fields("external_id", "external_owner_id", ownerFieldName).
-		// 	Unique().
-		// 	Annotations(
-		// 		entsql.IndexWhere("deleted_at is NULL"),
-		// 	),
+		index.Fields("external_id", "external_owner_id", ownerFieldName).
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL"),
+			),
 	}
 }
 
 // Annotations of the Finding
 func (Finding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
@@ -281,6 +286,7 @@ func (f Finding) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.FindingMutation](),
 		),
 	)
 }

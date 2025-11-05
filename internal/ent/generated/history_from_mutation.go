@@ -4678,8 +4678,28 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if externalID, exists := m.ExternalID(); exists {
@@ -4897,10 +4917,40 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(finding.DeletedBy)
 		}
 
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(finding.DisplayID)
+		}
+
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(finding.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(finding.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(finding.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(finding.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(finding.SystemInternalID)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -5166,7 +5216,12 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(finding.UpdatedBy).
 			SetDeletedAt(finding.DeletedAt).
 			SetDeletedBy(finding.DeletedBy).
+			SetDisplayID(finding.DisplayID).
 			SetTags(finding.Tags).
+			SetOwnerID(finding.OwnerID).
+			SetSystemOwned(finding.SystemOwned).
+			SetNillableInternalNotes(finding.InternalNotes).
+			SetNillableSystemInternalID(finding.SystemInternalID).
 			SetExternalID(finding.ExternalID).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
@@ -10502,8 +10557,28 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if externalID, exists := m.ExternalID(); exists {
@@ -10649,10 +10724,40 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetDeletedBy(remediation.DeletedBy)
 		}
 
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(remediation.DisplayID)
+		}
+
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(remediation.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(remediation.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(remediation.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(remediation.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(remediation.SystemInternalID)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -10810,7 +10915,12 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedBy(remediation.UpdatedBy).
 			SetDeletedAt(remediation.DeletedAt).
 			SetDeletedBy(remediation.DeletedBy).
+			SetDisplayID(remediation.DisplayID).
 			SetTags(remediation.Tags).
+			SetOwnerID(remediation.OwnerID).
+			SetSystemOwned(remediation.SystemOwned).
+			SetNillableInternalNotes(remediation.InternalNotes).
+			SetNillableSystemInternalID(remediation.SystemInternalID).
 			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
@@ -10881,6 +10991,22 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if externalID, exists := m.ExternalID(); exists {
@@ -11026,6 +11152,30 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(review.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(review.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(review.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(review.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(review.SystemInternalID)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -11178,6 +11328,10 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(review.DeletedAt).
 			SetDeletedBy(review.DeletedBy).
 			SetTags(review.Tags).
+			SetOwnerID(review.OwnerID).
+			SetSystemOwned(review.SystemOwned).
+			SetNillableInternalNotes(review.InternalNotes).
+			SetNillableSystemInternalID(review.SystemInternalID).
 			SetExternalID(review.ExternalID).
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
@@ -15902,8 +16056,28 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -16089,10 +16263,40 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDeletedBy(vulnerability.DeletedBy)
 		}
 
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(vulnerability.DisplayID)
+		}
+
 		if tags, exists := m.Tags(); exists {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(vulnerability.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vulnerability.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(vulnerability.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(vulnerability.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(vulnerability.SystemInternalID)
 		}
 
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -16310,7 +16514,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedBy(vulnerability.UpdatedBy).
 			SetDeletedAt(vulnerability.DeletedAt).
 			SetDeletedBy(vulnerability.DeletedBy).
+			SetDisplayID(vulnerability.DisplayID).
 			SetTags(vulnerability.Tags).
+			SetOwnerID(vulnerability.OwnerID).
+			SetSystemOwned(vulnerability.SystemOwned).
+			SetNillableInternalNotes(vulnerability.InternalNotes).
+			SetNillableSystemInternalID(vulnerability.SystemInternalID).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
 			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).

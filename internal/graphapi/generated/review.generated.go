@@ -64,6 +64,14 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Review_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Review_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Review_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Review_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Review_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -100,6 +108,14 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Review_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Review_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Review_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Review_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Review_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":
@@ -173,6 +189,14 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Review_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Review_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Review_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Review_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Review_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -209,6 +233,14 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Review_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Review_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Review_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Review_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Review_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":
@@ -311,6 +343,14 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Review_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Review_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Review_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Review_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Review_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -347,6 +387,14 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_metadata(ctx, field)
 			case "rawPayload":
 				return ec.fieldContext_Review_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Review_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Review_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Review_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Review_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":

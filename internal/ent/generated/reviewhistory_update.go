@@ -123,6 +123,46 @@ func (_u *ReviewHistoryUpdate) ClearTags() *ReviewHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ReviewHistoryUpdate) SetInternalNotes(v string) *ReviewHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ReviewHistoryUpdate) SetNillableInternalNotes(v *string) *ReviewHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ReviewHistoryUpdate) ClearInternalNotes() *ReviewHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ReviewHistoryUpdate) SetSystemInternalID(v string) *ReviewHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ReviewHistoryUpdate) SetNillableSystemInternalID(v *string) *ReviewHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ReviewHistoryUpdate) ClearSystemInternalID() *ReviewHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ReviewHistoryUpdate) SetExternalID(v string) *ReviewHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -567,6 +607,24 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(reviewhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)
 	}
@@ -783,6 +841,46 @@ func (_u *ReviewHistoryUpdateOne) AppendTags(v []string) *ReviewHistoryUpdateOne
 // ClearTags clears the value of the "tags" field.
 func (_u *ReviewHistoryUpdateOne) ClearTags() *ReviewHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ReviewHistoryUpdateOne) SetInternalNotes(v string) *ReviewHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ReviewHistoryUpdateOne) SetNillableInternalNotes(v *string) *ReviewHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ReviewHistoryUpdateOne) ClearInternalNotes() *ReviewHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ReviewHistoryUpdateOne) SetSystemInternalID(v string) *ReviewHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ReviewHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ReviewHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ReviewHistoryUpdateOne) ClearSystemInternalID() *ReviewHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1259,6 +1357,24 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(reviewhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)

@@ -903,13 +903,14 @@ func searchFindings(ctx context.Context, query string, after *entgql.Cursor[stri
 	request := withTransactionalMutation(ctx).Finding.Query().
 		Where(
 			finding.Or(
+				finding.DisplayID(query),                   // search equal to DisplayID
 				finding.ExternalIDContainsFold(query),      // search by ExternalID
 				finding.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				finding.ID(query),                          // search equal to ID
 				finding.SeverityContainsFold(query),        // search by Severity
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -922,21 +923,25 @@ func adminSearchFindings(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Finding.Query().
 		Where(
 			finding.Or(
-				finding.ID(query), // search equal to ID
+				finding.ID(query),        // search equal to ID
+				finding.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				finding.ExternalIDContainsFold(query),      // search by ExternalID
-				finding.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
-				finding.SourceContainsFold(query),          // search by Source
-				finding.ResourceNameContainsFold(query),    // search by ResourceName
-				finding.DisplayNameContainsFold(query),     // search by DisplayName
-				finding.StateContainsFold(query),           // search by State
-				finding.CategoryContainsFold(query),        // search by Category
+				finding.OwnerIDContainsFold(query),          // search by OwnerID
+				finding.InternalNotesContainsFold(query),    // search by InternalNotes
+				finding.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				finding.ExternalIDContainsFold(query),       // search by ExternalID
+				finding.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
+				finding.SourceContainsFold(query),           // search by Source
+				finding.ResourceNameContainsFold(query),     // search by ResourceName
+				finding.DisplayNameContainsFold(query),      // search by DisplayName
+				finding.StateContainsFold(query),            // search by State
+				finding.CategoryContainsFold(query),         // search by Category
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(categories)::text LIKE $10", likeQuery)) // search by Categories
+					s.Where(sql.ExprP("(categories)::text LIKE $14", likeQuery)) // search by Categories
 				},
 				finding.FindingClassContainsFold(query),       // search by FindingClass
 				finding.SeverityContainsFold(query),           // search by Severity
@@ -947,30 +952,30 @@ func adminSearchFindings(ctx context.Context, query string, after *entgql.Cursor
 				finding.RecommendedActionsContainsFold(query), // search by RecommendedActions
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $18", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $22", likeQuery)) // search by References
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(steps_to_reproduce)::text LIKE $19", likeQuery)) // search by StepsToReproduce
+					s.Where(sql.ExprP("(steps_to_reproduce)::text LIKE $23", likeQuery)) // search by StepsToReproduce
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(targets)::text LIKE $20", likeQuery)) // search by Targets
+					s.Where(sql.ExprP("(targets)::text LIKE $24", likeQuery)) // search by Targets
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(target_details)::text LIKE $21", likeQuery)) // search by TargetDetails
+					s.Where(sql.ExprP("(target_details)::text LIKE $25", likeQuery)) // search by TargetDetails
 				},
 				finding.VectorContainsFold(query),      // search by Vector
 				finding.StatusContainsFold(query),      // search by Status
 				finding.ExternalURIContainsFold(query), // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $25", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $29", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $26", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $30", likeQuery)) // search by RawPayload
 				},
 			),
 		)
@@ -1726,12 +1731,13 @@ func searchRemediations(ctx context.Context, query string, after *entgql.Cursor[
 	request := withTransactionalMutation(ctx).Remediation.Query().
 		Where(
 			remediation.Or(
+				remediation.DisplayID(query),                   // search equal to DisplayID
 				remediation.ExternalIDContainsFold(query),      // search by ExternalID
 				remediation.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				remediation.ID(query),                          // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 				remediation.TitleContainsFold(query), // search by Title
 			),
@@ -1745,29 +1751,33 @@ func adminSearchRemediations(ctx context.Context, query string, after *entgql.Cu
 	request := withTransactionalMutation(ctx).Remediation.Query().
 		Where(
 			remediation.Or(
-				remediation.ID(query), // search equal to ID
+				remediation.ID(query),        // search equal to ID
+				remediation.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				remediation.ExternalIDContainsFold(query),      // search by ExternalID
-				remediation.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
-				remediation.TitleContainsFold(query),           // search by Title
-				remediation.StateContainsFold(query),           // search by State
-				remediation.IntentContainsFold(query),          // search by Intent
-				remediation.SummaryContainsFold(query),         // search by Summary
-				remediation.ExplanationContainsFold(query),     // search by Explanation
-				remediation.InstructionsContainsFold(query),    // search by Instructions
-				remediation.OwnerReferenceContainsFold(query),  // search by OwnerReference
-				remediation.RepositoryURIContainsFold(query),   // search by RepositoryURI
-				remediation.PullRequestURIContainsFold(query),  // search by PullRequestURI
-				remediation.TicketReferenceContainsFold(query), // search by TicketReference
-				remediation.ErrorContainsFold(query),           // search by Error
-				remediation.SourceContainsFold(query),          // search by Source
-				remediation.ExternalURIContainsFold(query),     // search by ExternalURI
+				remediation.OwnerIDContainsFold(query),          // search by OwnerID
+				remediation.InternalNotesContainsFold(query),    // search by InternalNotes
+				remediation.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				remediation.ExternalIDContainsFold(query),       // search by ExternalID
+				remediation.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
+				remediation.TitleContainsFold(query),            // search by Title
+				remediation.StateContainsFold(query),            // search by State
+				remediation.IntentContainsFold(query),           // search by Intent
+				remediation.SummaryContainsFold(query),          // search by Summary
+				remediation.ExplanationContainsFold(query),      // search by Explanation
+				remediation.InstructionsContainsFold(query),     // search by Instructions
+				remediation.OwnerReferenceContainsFold(query),   // search by OwnerReference
+				remediation.RepositoryURIContainsFold(query),    // search by RepositoryURI
+				remediation.PullRequestURIContainsFold(query),   // search by PullRequestURI
+				remediation.TicketReferenceContainsFold(query),  // search by TicketReference
+				remediation.ErrorContainsFold(query),            // search by Error
+				remediation.SourceContainsFold(query),           // search by Source
+				remediation.ExternalURIContainsFold(query),      // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $18", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $22", likeQuery)) // search by Metadata
 				},
 			),
 		)
@@ -1804,25 +1814,28 @@ func adminSearchReviews(ctx context.Context, query string, after *entgql.Cursor[
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				review.ExternalIDContainsFold(query),      // search by ExternalID
-				review.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
-				review.TitleContainsFold(query),           // search by Title
-				review.StateContainsFold(query),           // search by State
-				review.CategoryContainsFold(query),        // search by Category
-				review.ClassificationContainsFold(query),  // search by Classification
-				review.SummaryContainsFold(query),         // search by Summary
-				review.DetailsContainsFold(query),         // search by Details
-				review.ReporterContainsFold(query),        // search by Reporter
-				review.ReviewerIDContainsFold(query),      // search by ReviewerID
-				review.SourceContainsFold(query),          // search by Source
-				review.ExternalURIContainsFold(query),     // search by ExternalURI
+				review.OwnerIDContainsFold(query),          // search by OwnerID
+				review.InternalNotesContainsFold(query),    // search by InternalNotes
+				review.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				review.ExternalIDContainsFold(query),       // search by ExternalID
+				review.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
+				review.TitleContainsFold(query),            // search by Title
+				review.StateContainsFold(query),            // search by State
+				review.CategoryContainsFold(query),         // search by Category
+				review.ClassificationContainsFold(query),   // search by Classification
+				review.SummaryContainsFold(query),          // search by Summary
+				review.DetailsContainsFold(query),          // search by Details
+				review.ReporterContainsFold(query),         // search by Reporter
+				review.ReviewerIDContainsFold(query),       // search by ReviewerID
+				review.SourceContainsFold(query),           // search by Source
+				review.ExternalURIContainsFold(query),      // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $15", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $18", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $16", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $19", likeQuery)) // search by RawPayload
 				},
 			),
 		)
@@ -2475,13 +2488,14 @@ func searchVulnerabilities(ctx context.Context, query string, after *entgql.Curs
 		Where(
 			vulnerability.Or(
 				vulnerability.CveIDContainsFold(query),           // search by CveID
+				vulnerability.DisplayID(query),                   // search equal to DisplayID
 				vulnerability.ExternalIDContainsFold(query),      // search by ExternalID
 				vulnerability.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				vulnerability.ID(query),                          // search equal to ID
 				vulnerability.SeverityContainsFold(query),        // search by Severity
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $7", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -2494,39 +2508,43 @@ func adminSearchVulnerabilities(ctx context.Context, query string, after *entgql
 	request := withTransactionalMutation(ctx).Vulnerability.Query().
 		Where(
 			vulnerability.Or(
-				vulnerability.ID(query), // search equal to ID
+				vulnerability.ID(query),        // search equal to ID
+				vulnerability.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				vulnerability.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
-				vulnerability.ExternalIDContainsFold(query),      // search by ExternalID
-				vulnerability.CveIDContainsFold(query),           // search by CveID
-				vulnerability.SourceContainsFold(query),          // search by Source
-				vulnerability.DisplayNameContainsFold(query),     // search by DisplayName
-				vulnerability.CategoryContainsFold(query),        // search by Category
-				vulnerability.SeverityContainsFold(query),        // search by Severity
-				vulnerability.PriorityContainsFold(query),        // search by Priority
-				vulnerability.StatusContainsFold(query),          // search by Status
-				vulnerability.SummaryContainsFold(query),         // search by Summary
-				vulnerability.DescriptionContainsFold(query),     // search by Description
-				vulnerability.VectorContainsFold(query),          // search by Vector
+				vulnerability.OwnerIDContainsFold(query),          // search by OwnerID
+				vulnerability.InternalNotesContainsFold(query),    // search by InternalNotes
+				vulnerability.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				vulnerability.ExternalOwnerIDContainsFold(query),  // search by ExternalOwnerID
+				vulnerability.ExternalIDContainsFold(query),       // search by ExternalID
+				vulnerability.CveIDContainsFold(query),            // search by CveID
+				vulnerability.SourceContainsFold(query),           // search by Source
+				vulnerability.DisplayNameContainsFold(query),      // search by DisplayName
+				vulnerability.CategoryContainsFold(query),         // search by Category
+				vulnerability.SeverityContainsFold(query),         // search by Severity
+				vulnerability.PriorityContainsFold(query),         // search by Priority
+				vulnerability.StatusContainsFold(query),           // search by Status
+				vulnerability.SummaryContainsFold(query),          // search by Summary
+				vulnerability.DescriptionContainsFold(query),      // search by Description
+				vulnerability.VectorContainsFold(query),           // search by Vector
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $15", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $19", likeQuery)) // search by References
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(impacts)::text LIKE $16", likeQuery)) // search by Impacts
+					s.Where(sql.ExprP("(impacts)::text LIKE $20", likeQuery)) // search by Impacts
 				},
 				vulnerability.ExternalURIContainsFold(query), // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $18", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $22", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $19", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $23", likeQuery)) // search by RawPayload
 				},
 			),
 		)

@@ -441,7 +441,11 @@ query AdminSearch($query: String!) {
       edges {
         node {
           id
+          displayID
           tags
+          ownerID
+          internalNotes
+          systemInternalID
           externalID
           externalOwnerID
           source
@@ -864,7 +868,11 @@ query AdminSearch($query: String!) {
       edges {
         node {
           id
+          displayID
           tags
+          ownerID
+          internalNotes
+          systemInternalID
           externalID
           externalOwnerID
           title
@@ -896,6 +904,9 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          ownerID
+          internalNotes
+          systemInternalID
           externalID
           externalOwnerID
           title
@@ -1252,7 +1263,11 @@ query AdminSearch($query: String!) {
       edges {
         node {
           id
+          displayID
           tags
+          ownerID
+          internalNotes
+          systemInternalID
           externalOwnerID
           externalID
           cveID

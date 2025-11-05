@@ -62,8 +62,18 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 				return ec.fieldContext_Remediation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Remediation_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Remediation_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Remediation_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Remediation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Remediation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Remediation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -102,6 +112,14 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 				return ec.fieldContext_Remediation_externalURI(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Remediation_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_Remediation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Remediation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Remediation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Remediation_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
 			case "findings":
@@ -171,8 +189,18 @@ func (ec *executionContext) fieldContext_RemediationCreatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Remediation_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Remediation_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Remediation_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Remediation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Remediation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Remediation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -211,6 +239,14 @@ func (ec *executionContext) fieldContext_RemediationCreatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_externalURI(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Remediation_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_Remediation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Remediation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Remediation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Remediation_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
 			case "findings":
@@ -309,8 +345,18 @@ func (ec *executionContext) fieldContext_RemediationUpdatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Remediation_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Remediation_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Remediation_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Remediation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Remediation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Remediation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Remediation_externalID(ctx, field)
 			case "externalOwnerID":
@@ -349,6 +395,14 @@ func (ec *executionContext) fieldContext_RemediationUpdatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_externalURI(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Remediation_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_Remediation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Remediation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Remediation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Remediation_viewers(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Remediation_integrations(ctx, field)
 			case "findings":

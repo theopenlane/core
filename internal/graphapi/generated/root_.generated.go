@@ -1767,6 +1767,7 @@ type ComplexityRoot struct {
 		ActionPlans        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentID       func(childComplexity int) int
 		Assets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BlocksProduction   func(childComplexity int) int
 		Categories         func(childComplexity int) int
 		Category           func(childComplexity int) int
@@ -1776,7 +1777,9 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Description        func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
+		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		EventTime          func(childComplexity int) int
 		Exploitability     func(childComplexity int) int
@@ -1788,9 +1791,12 @@ type ComplexityRoot struct {
 		ID                 func(childComplexity int) int
 		Impact             func(childComplexity int) int
 		Integrations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes      func(childComplexity int) int
 		Metadata           func(childComplexity int) int
 		NumericSeverity    func(childComplexity int) int
 		Open               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
 		Priority           func(childComplexity int) int
 		Production         func(childComplexity int) int
 		Programs           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
@@ -1814,6 +1820,8 @@ type ComplexityRoot struct {
 		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
 		Tags               func(childComplexity int) int
 		TargetDetails      func(childComplexity int) int
 		Targets            func(childComplexity int) int
@@ -1822,6 +1830,7 @@ type ComplexityRoot struct {
 		UpdatedBy          func(childComplexity int) int
 		Validated          func(childComplexity int) int
 		Vector             func(childComplexity int) int
+		Viewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Vulnerabilities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
@@ -1934,6 +1943,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Description        func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
 		EventTime          func(childComplexity int) int
 		Exploitability     func(childComplexity int) int
@@ -1944,10 +1954,12 @@ type ComplexityRoot struct {
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		Impact             func(childComplexity int) int
+		InternalNotes      func(childComplexity int) int
 		Metadata           func(childComplexity int) int
 		NumericSeverity    func(childComplexity int) int
 		Open               func(childComplexity int) int
 		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
 		Priority           func(childComplexity int) int
 		Production         func(childComplexity int) int
 		Public             func(childComplexity int) int
@@ -1966,6 +1978,8 @@ type ComplexityRoot struct {
 		State              func(childComplexity int) int
 		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
 		Tags               func(childComplexity int) int
 		TargetDetails      func(childComplexity int) int
 		Targets            func(childComplexity int) int
@@ -3727,6 +3741,7 @@ type ComplexityRoot struct {
 		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Exports                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                            func(childComplexity int) int
@@ -3754,6 +3769,8 @@ type ComplexityRoot struct {
 		Procedures                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
@@ -3778,6 +3795,7 @@ type ComplexityRoot struct {
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
 		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Vulnerabilities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -4653,45 +4671,54 @@ type ComplexityRoot struct {
 	}
 
 	Remediation struct {
-		ActionPlans     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		Comments        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		CompletedAt     func(childComplexity int) int
-		Controls        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DueAt           func(childComplexity int) int
-		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Error           func(childComplexity int) int
-		Explanation     func(childComplexity int) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID              func(childComplexity int) int
-		Instructions    func(childComplexity int) int
-		Integrations    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		Intent          func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		OwnerReference  func(childComplexity int) int
-		PrGeneratedAt   func(childComplexity int) int
-		Programs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		PullRequestURI  func(childComplexity int) int
-		RepositoryURI   func(childComplexity int) int
-		Reviews         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Source          func(childComplexity int) int
-		State           func(childComplexity int) int
-		Subcontrols     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		Tasks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		TicketReference func(childComplexity int) int
-		Title           func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Vulnerabilities func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		CompletedAt      func(childComplexity int) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DueAt            func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Error            func(childComplexity int) int
+		Explanation      func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Instructions     func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		Intent           func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		OwnerReference   func(childComplexity int) int
+		PrGeneratedAt    func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		PullRequestURI   func(childComplexity int) int
+		RepositoryURI    func(childComplexity int) int
+		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TicketReference  func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	RemediationBulkCreatePayload struct {
@@ -4718,34 +4745,39 @@ type ComplexityRoot struct {
 	}
 
 	RemediationHistory struct {
-		CompletedAt     func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DueAt           func(childComplexity int) int
-		Error           func(childComplexity int) int
-		Explanation     func(childComplexity int) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Instructions    func(childComplexity int) int
-		Intent          func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerReference  func(childComplexity int) int
-		PrGeneratedAt   func(childComplexity int) int
-		PullRequestURI  func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		RepositoryURI   func(childComplexity int) int
-		Source          func(childComplexity int) int
-		State           func(childComplexity int) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TicketReference func(childComplexity int) int
-		Title           func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CompletedAt      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DueAt            func(childComplexity int) int
+		Error            func(childComplexity int) int
+		Explanation      func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Instructions     func(childComplexity int) int
+		Intent           func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		OwnerReference   func(childComplexity int) int
+		PrGeneratedAt    func(childComplexity int) int
+		PullRequestURI   func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		RepositoryURI    func(childComplexity int) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TicketReference  func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	RemediationHistoryConnection struct {
@@ -4764,45 +4796,53 @@ type ComplexityRoot struct {
 	}
 
 	Review struct {
-		ActionPlans     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Approved        func(childComplexity int) int
-		ApprovedAt      func(childComplexity int) int
-		Assets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		Category        func(childComplexity int) int
-		Classification  func(childComplexity int) int
-		Comments        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Details         func(childComplexity int) int
-		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID              func(childComplexity int) int
-		Integrations    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		Metadata        func(childComplexity int) int
-		Programs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RawPayload      func(childComplexity int) int
-		Remediations    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		ReportedAt      func(childComplexity int) int
-		Reporter        func(childComplexity int) int
-		ReviewedAt      func(childComplexity int) int
-		Reviewer        func(childComplexity int) int
-		ReviewerID      func(childComplexity int) int
-		Risks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Source          func(childComplexity int) int
-		State           func(childComplexity int) int
-		Subcontrols     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		Tasks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Title           func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Vulnerabilities func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Approved         func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category         func(childComplexity int) int
+		Classification   func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RawPayload       func(childComplexity int) int
+		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt       func(childComplexity int) int
+		Reporter         func(childComplexity int) int
+		ReviewedAt       func(childComplexity int) int
+		Reviewer         func(childComplexity int) int
+		ReviewerID       func(childComplexity int) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	ReviewBulkCreatePayload struct {
@@ -4829,33 +4869,37 @@ type ComplexityRoot struct {
 	}
 
 	ReviewHistory struct {
-		Approved        func(childComplexity int) int
-		ApprovedAt      func(childComplexity int) int
-		Category        func(childComplexity int) int
-		Classification  func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Details         func(childComplexity int) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		RawPayload      func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		ReportedAt      func(childComplexity int) int
-		Reporter        func(childComplexity int) int
-		ReviewedAt      func(childComplexity int) int
-		ReviewerID      func(childComplexity int) int
-		Source          func(childComplexity int) int
-		State           func(childComplexity int) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		Title           func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		Approved         func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Classification   func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		ReportedAt       func(childComplexity int) int
+		Reporter         func(childComplexity int) int
+		ReviewedAt       func(childComplexity int) int
+		ReviewerID       func(childComplexity int) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	ReviewHistoryConnection struct {
@@ -6598,56 +6642,65 @@ type ComplexityRoot struct {
 	}
 
 	Vulnerability struct {
-		ActionPlans     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		Blocking        func(childComplexity int) int
-		Category        func(childComplexity int) int
-		Comments        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		CveID           func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DiscoveredAt    func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Exploitability  func(childComplexity int) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID              func(childComplexity int) int
-		Impact          func(childComplexity int) int
-		Impacts         func(childComplexity int) int
-		Integrations    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		Metadata        func(childComplexity int) int
-		Open            func(childComplexity int) int
-		Priority        func(childComplexity int) int
-		Production      func(childComplexity int) int
-		Programs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Public          func(childComplexity int) int
-		PublishedAt     func(childComplexity int) int
-		RawPayload      func(childComplexity int) int
-		References      func(childComplexity int) int
-		RemediationSLA  func(childComplexity int) int
-		Remediations    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Score           func(childComplexity int) int
-		Severity        func(childComplexity int) int
-		Source          func(childComplexity int) int
-		SourceUpdatedAt func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Subcontrols     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		Tasks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Validated       func(childComplexity int) int
-		Vector          func(childComplexity int) int
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Blocking         func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CveID            func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DiscoveredAt     func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Exploitability   func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Impact           func(childComplexity int) int
+		Impacts          func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Open             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Priority         func(childComplexity int) int
+		Production       func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public           func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		References       func(childComplexity int) int
+		RemediationSLA   func(childComplexity int) int
+		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Score            func(childComplexity int) int
+		Severity         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SourceUpdatedAt  func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Validated        func(childComplexity int) int
+		Vector           func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	VulnerabilityBulkCreatePayload struct {
@@ -6674,44 +6727,49 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityHistory struct {
-		Blocking        func(childComplexity int) int
-		Category        func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		CveID           func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DiscoveredAt    func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		Exploitability  func(childComplexity int) int
-		ExternalID      func(childComplexity int) int
-		ExternalOwnerID func(childComplexity int) int
-		ExternalURI     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Impact          func(childComplexity int) int
-		Impacts         func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		Open            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		Priority        func(childComplexity int) int
-		Production      func(childComplexity int) int
-		Public          func(childComplexity int) int
-		PublishedAt     func(childComplexity int) int
-		RawPayload      func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		References      func(childComplexity int) int
-		RemediationSLA  func(childComplexity int) int
-		Score           func(childComplexity int) int
-		Severity        func(childComplexity int) int
-		Source          func(childComplexity int) int
-		SourceUpdatedAt func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Summary         func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Validated       func(childComplexity int) int
-		Vector          func(childComplexity int) int
+		Blocking         func(childComplexity int) int
+		Category         func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CveID            func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DiscoveredAt     func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Exploitability   func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Impact           func(childComplexity int) int
+		Impacts          func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Open             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Priority         func(childComplexity int) int
+		Production       func(childComplexity int) int
+		Public           func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		References       func(childComplexity int) int
+		RemediationSLA   func(childComplexity int) int
+		Score            func(childComplexity int) int
+		Severity         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SourceUpdatedAt  func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Validated        func(childComplexity int) int
+		Vector           func(childComplexity int) int
 	}
 
 	VulnerabilityHistoryConnection struct {
@@ -14984,6 +15042,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Finding.blockedGroups":
+		if e.complexity.Finding.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Finding.blocksProduction":
 		if e.complexity.Finding.BlocksProduction == nil {
 			break
@@ -15062,12 +15132,31 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Description(childComplexity), true
 
+	case "Finding.displayID":
+		if e.complexity.Finding.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Finding.DisplayID(childComplexity), true
+
 	case "Finding.displayName":
 		if e.complexity.Finding.DisplayName == nil {
 			break
 		}
 
 		return e.complexity.Finding.DisplayName(childComplexity), true
+
+	case "Finding.editors":
+		if e.complexity.Finding.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Finding.entities":
 		if e.complexity.Finding.Entities == nil {
@@ -15161,6 +15250,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
+	case "Finding.internalNotes":
+		if e.complexity.Finding.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Finding.InternalNotes(childComplexity), true
+
 	case "Finding.metadata":
 		if e.complexity.Finding.Metadata == nil {
 			break
@@ -15181,6 +15277,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Finding.Open(childComplexity), true
+
+	case "Finding.owner":
+		if e.complexity.Finding.Owner == nil {
+			break
+		}
+
+		return e.complexity.Finding.Owner(childComplexity), true
+
+	case "Finding.ownerID":
+		if e.complexity.Finding.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Finding.OwnerID(childComplexity), true
 
 	case "Finding.priority":
 		if e.complexity.Finding.Priority == nil {
@@ -15373,6 +15483,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "Finding.systemInternalID":
+		if e.complexity.Finding.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Finding.SystemInternalID(childComplexity), true
+
+	case "Finding.systemOwned":
+		if e.complexity.Finding.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Finding.SystemOwned(childComplexity), true
+
 	case "Finding.tags":
 		if e.complexity.Finding.Tags == nil {
 			break
@@ -15433,6 +15557,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Finding.Vector(childComplexity), true
+
+	case "Finding.viewers":
+		if e.complexity.Finding.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Finding.vulnerabilities":
 		if e.complexity.Finding.Vulnerabilities == nil {
@@ -15887,6 +16023,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FindingHistory.Description(childComplexity), true
 
+	case "FindingHistory.displayID":
+		if e.complexity.FindingHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.DisplayID(childComplexity), true
+
 	case "FindingHistory.displayName":
 		if e.complexity.FindingHistory.DisplayName == nil {
 			break
@@ -15957,6 +16100,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FindingHistory.Impact(childComplexity), true
 
+	case "FindingHistory.internalNotes":
+		if e.complexity.FindingHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.InternalNotes(childComplexity), true
+
 	case "FindingHistory.metadata":
 		if e.complexity.FindingHistory.Metadata == nil {
 			break
@@ -15984,6 +16134,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FindingHistory.Operation(childComplexity), true
+
+	case "FindingHistory.ownerID":
+		if e.complexity.FindingHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.OwnerID(childComplexity), true
 
 	case "FindingHistory.priority":
 		if e.complexity.FindingHistory.Priority == nil {
@@ -16110,6 +16267,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FindingHistory.StepsToReproduce(childComplexity), true
+
+	case "FindingHistory.systemInternalID":
+		if e.complexity.FindingHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.SystemInternalID(childComplexity), true
+
+	case "FindingHistory.systemOwned":
+		if e.complexity.FindingHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.SystemOwned(childComplexity), true
 
 	case "FindingHistory.tags":
 		if e.complexity.FindingHistory.Tags == nil {
@@ -27109,6 +27280,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "Organization.findings":
+		if e.complexity.Organization.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "Organization.groupCreators":
 		if e.complexity.Organization.GroupCreators == nil {
 			break
@@ -27408,6 +27591,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Organization.remediations":
+		if e.complexity.Organization.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Organization.reviews":
+		if e.complexity.Organization.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Organization.riskCreators":
 		if e.complexity.Organization.RiskCreators == nil {
 			break
@@ -27670,6 +27877,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
+
+	case "Organization.vulnerabilities":
+		if e.complexity.Organization.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "OrganizationBulkCreatePayload.organizations":
 		if e.complexity.OrganizationBulkCreatePayload.Organizations == nil {
@@ -34140,6 +34359,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Remediation.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Remediation.blockedGroups":
+		if e.complexity.Remediation.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Remediation.comments":
 		if e.complexity.Remediation.Comments == nil {
 			break
@@ -34185,12 +34416,31 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Remediation.CreatedBy(childComplexity), true
 
+	case "Remediation.displayID":
+		if e.complexity.Remediation.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.DisplayID(childComplexity), true
+
 	case "Remediation.dueAt":
 		if e.complexity.Remediation.DueAt == nil {
 			break
 		}
 
 		return e.complexity.Remediation.DueAt(childComplexity), true
+
+	case "Remediation.editors":
+		if e.complexity.Remediation.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Remediation.entities":
 		if e.complexity.Remediation.Entities == nil {
@@ -34296,12 +34546,33 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Remediation.Intent(childComplexity), true
 
+	case "Remediation.internalNotes":
+		if e.complexity.Remediation.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Remediation.InternalNotes(childComplexity), true
+
 	case "Remediation.metadata":
 		if e.complexity.Remediation.Metadata == nil {
 			break
 		}
 
 		return e.complexity.Remediation.Metadata(childComplexity), true
+
+	case "Remediation.owner":
+		if e.complexity.Remediation.Owner == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Owner(childComplexity), true
+
+	case "Remediation.ownerID":
+		if e.complexity.Remediation.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.OwnerID(childComplexity), true
 
 	case "Remediation.ownerReference":
 		if e.complexity.Remediation.OwnerReference == nil {
@@ -34400,6 +34671,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Remediation.Summary(childComplexity), true
 
+	case "Remediation.systemInternalID":
+		if e.complexity.Remediation.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.SystemInternalID(childComplexity), true
+
+	case "Remediation.systemOwned":
+		if e.complexity.Remediation.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Remediation.SystemOwned(childComplexity), true
+
 	case "Remediation.tags":
 		if e.complexity.Remediation.Tags == nil {
 			break
@@ -34446,6 +34731,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Remediation.UpdatedBy(childComplexity), true
+
+	case "Remediation.viewers":
+		if e.complexity.Remediation.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Remediation.vulnerabilities":
 		if e.complexity.Remediation.Vulnerabilities == nil {
@@ -34536,6 +34833,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RemediationHistory.CreatedBy(childComplexity), true
 
+	case "RemediationHistory.displayID":
+		if e.complexity.RemediationHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.DisplayID(childComplexity), true
+
 	case "RemediationHistory.dueAt":
 		if e.complexity.RemediationHistory.DueAt == nil {
 			break
@@ -34606,6 +34910,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RemediationHistory.Intent(childComplexity), true
 
+	case "RemediationHistory.internalNotes":
+		if e.complexity.RemediationHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.InternalNotes(childComplexity), true
+
 	case "RemediationHistory.metadata":
 		if e.complexity.RemediationHistory.Metadata == nil {
 			break
@@ -34619,6 +34930,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RemediationHistory.Operation(childComplexity), true
+
+	case "RemediationHistory.ownerID":
+		if e.complexity.RemediationHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.OwnerID(childComplexity), true
 
 	case "RemediationHistory.ownerReference":
 		if e.complexity.RemediationHistory.OwnerReference == nil {
@@ -34675,6 +34993,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RemediationHistory.Summary(childComplexity), true
+
+	case "RemediationHistory.systemInternalID":
+		if e.complexity.RemediationHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.SystemInternalID(childComplexity), true
+
+	case "RemediationHistory.systemOwned":
+		if e.complexity.RemediationHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.SystemOwned(childComplexity), true
 
 	case "RemediationHistory.tags":
 		if e.complexity.RemediationHistory.Tags == nil {
@@ -34791,6 +35123,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Review.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Review.blockedGroups":
+		if e.complexity.Review.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Review_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Review.category":
 		if e.complexity.Review.Category == nil {
 			break
@@ -34849,6 +35193,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Review.Details(childComplexity), true
+
+	case "Review.editors":
+		if e.complexity.Review.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Review_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Review.entities":
 		if e.complexity.Review.Entities == nil {
@@ -34926,12 +35282,33 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Review.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
+	case "Review.internalNotes":
+		if e.complexity.Review.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Review.InternalNotes(childComplexity), true
+
 	case "Review.metadata":
 		if e.complexity.Review.Metadata == nil {
 			break
 		}
 
 		return e.complexity.Review.Metadata(childComplexity), true
+
+	case "Review.owner":
+		if e.complexity.Review.Owner == nil {
+			break
+		}
+
+		return e.complexity.Review.Owner(childComplexity), true
+
+	case "Review.ownerID":
+		if e.complexity.Review.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Review.OwnerID(childComplexity), true
 
 	case "Review.programs":
 		if e.complexity.Review.Programs == nil {
@@ -35044,6 +35421,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Review.Summary(childComplexity), true
 
+	case "Review.systemInternalID":
+		if e.complexity.Review.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Review.SystemInternalID(childComplexity), true
+
+	case "Review.systemOwned":
+		if e.complexity.Review.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Review.SystemOwned(childComplexity), true
+
 	case "Review.tags":
 		if e.complexity.Review.Tags == nil {
 			break
@@ -35083,6 +35474,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Review.UpdatedBy(childComplexity), true
+
+	case "Review.viewers":
+		if e.complexity.Review.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Review_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Review.vulnerabilities":
 		if e.complexity.Review.Vulnerabilities == nil {
@@ -35236,6 +35639,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ReviewHistory.ID(childComplexity), true
 
+	case "ReviewHistory.internalNotes":
+		if e.complexity.ReviewHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.InternalNotes(childComplexity), true
+
 	case "ReviewHistory.metadata":
 		if e.complexity.ReviewHistory.Metadata == nil {
 			break
@@ -35249,6 +35659,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ReviewHistory.Operation(childComplexity), true
+
+	case "ReviewHistory.ownerID":
+		if e.complexity.ReviewHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.OwnerID(childComplexity), true
 
 	case "ReviewHistory.rawPayload":
 		if e.complexity.ReviewHistory.RawPayload == nil {
@@ -35312,6 +35729,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ReviewHistory.Summary(childComplexity), true
+
+	case "ReviewHistory.systemInternalID":
+		if e.complexity.ReviewHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.SystemInternalID(childComplexity), true
+
+	case "ReviewHistory.systemOwned":
+		if e.complexity.ReviewHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.SystemOwned(childComplexity), true
 
 	case "ReviewHistory.tags":
 		if e.complexity.ReviewHistory.Tags == nil {
@@ -43530,6 +43961,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Vulnerability.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "Vulnerability.blockedGroups":
+		if e.complexity.Vulnerability.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Vulnerability.blocking":
 		if e.complexity.Vulnerability.Blocking == nil {
 			break
@@ -43603,12 +44046,31 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Vulnerability.DiscoveredAt(childComplexity), true
 
+	case "Vulnerability.displayID":
+		if e.complexity.Vulnerability.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.DisplayID(childComplexity), true
+
 	case "Vulnerability.displayName":
 		if e.complexity.Vulnerability.DisplayName == nil {
 			break
 		}
 
 		return e.complexity.Vulnerability.DisplayName(childComplexity), true
+
+	case "Vulnerability.editors":
+		if e.complexity.Vulnerability.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Vulnerability.entities":
 		if e.complexity.Vulnerability.Entities == nil {
@@ -43707,6 +44169,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Vulnerability.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
+	case "Vulnerability.internalNotes":
+		if e.complexity.Vulnerability.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.InternalNotes(childComplexity), true
+
 	case "Vulnerability.metadata":
 		if e.complexity.Vulnerability.Metadata == nil {
 			break
@@ -43720,6 +44189,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Vulnerability.Open(childComplexity), true
+
+	case "Vulnerability.owner":
+		if e.complexity.Vulnerability.Owner == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Owner(childComplexity), true
+
+	case "Vulnerability.ownerID":
+		if e.complexity.Vulnerability.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.OwnerID(childComplexity), true
 
 	case "Vulnerability.priority":
 		if e.complexity.Vulnerability.Priority == nil {
@@ -43884,6 +44367,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Vulnerability.Summary(childComplexity), true
 
+	case "Vulnerability.systemInternalID":
+		if e.complexity.Vulnerability.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.SystemInternalID(childComplexity), true
+
+	case "Vulnerability.systemOwned":
+		if e.complexity.Vulnerability.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.SystemOwned(childComplexity), true
+
 	case "Vulnerability.tags":
 		if e.complexity.Vulnerability.Tags == nil {
 			break
@@ -43930,6 +44427,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Vulnerability.Vector(childComplexity), true
+
+	case "Vulnerability.viewers":
+		if e.complexity.Vulnerability.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "VulnerabilityBulkCreatePayload.vulnerabilities":
 		if e.complexity.VulnerabilityBulkCreatePayload.Vulnerabilities == nil {
@@ -44036,6 +44545,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.VulnerabilityHistory.DiscoveredAt(childComplexity), true
 
+	case "VulnerabilityHistory.displayID":
+		if e.complexity.VulnerabilityHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.DisplayID(childComplexity), true
+
 	case "VulnerabilityHistory.displayName":
 		if e.complexity.VulnerabilityHistory.DisplayName == nil {
 			break
@@ -44099,6 +44615,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.VulnerabilityHistory.Impacts(childComplexity), true
 
+	case "VulnerabilityHistory.internalNotes":
+		if e.complexity.VulnerabilityHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.InternalNotes(childComplexity), true
+
 	case "VulnerabilityHistory.metadata":
 		if e.complexity.VulnerabilityHistory.Metadata == nil {
 			break
@@ -44119,6 +44642,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.VulnerabilityHistory.Operation(childComplexity), true
+
+	case "VulnerabilityHistory.ownerID":
+		if e.complexity.VulnerabilityHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.OwnerID(childComplexity), true
 
 	case "VulnerabilityHistory.priority":
 		if e.complexity.VulnerabilityHistory.Priority == nil {
@@ -44217,6 +44747,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.VulnerabilityHistory.Summary(childComplexity), true
+
+	case "VulnerabilityHistory.systemInternalID":
+		if e.complexity.VulnerabilityHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.SystemInternalID(childComplexity), true
+
+	case "VulnerabilityHistory.systemOwned":
+		if e.complexity.VulnerabilityHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.SystemOwned(childComplexity), true
 
 	case "VulnerabilityHistory.tags":
 		if e.complexity.VulnerabilityHistory.Tags == nil {
@@ -58950,6 +59494,14 @@ input CreateFindingInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -59097,6 +59649,10 @@ input CreateFindingInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   integrationIDs: [ID!]
   vulnerabilityIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -59822,6 +60378,10 @@ input CreateOrganizationInput {
   assessmentResponseIDs: [ID!]
   customTypeEnumIDs: [ID!]
   tagDefinitionIDs: [ID!]
+  remediationIDs: [ID!]
+  findingIDs: [ID!]
+  reviewIDs: [ID!]
+  vulnerabilityIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -60153,6 +60713,14 @@ input CreateRemediationInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -60228,6 +60796,10 @@ input CreateRemediationInput {
   raw metadata payload for the remediation from the source system
   """
   metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   integrationIDs: [ID!]
   findingIDs: [ID!]
   vulnerabilityIDs: [ID!]
@@ -60252,6 +60824,14 @@ input CreateReviewInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   external identifier from the integration source for the review
   """
@@ -60320,6 +60900,10 @@ input CreateReviewInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   integrationIDs: [ID!]
   findingIDs: [ID!]
   vulnerabilityIDs: [ID!]
@@ -61201,6 +61785,14 @@ input CreateVulnerabilityInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -61316,6 +61908,10 @@ input CreateVulnerabilityInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   integrationIDs: [ID!]
   findingIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -67425,11 +68021,15 @@ ExportExportType is enum for the field export_type
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
   EVIDENCE
+  FINDING
   INTERNAL_POLICY
   PROCEDURE
+  REMEDIATION
+  REVIEW
   RISK
   SUBSCRIBER
   TASK
+  VULNERABILITY
 }
 """
 Ordering options for Export connections
@@ -68977,9 +69577,29 @@ type Finding implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   external identifier from the integration source for the finding
   """
@@ -69128,6 +69748,100 @@ type Finding implements Node {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -70290,9 +71004,29 @@ type FindingHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   external identifier from the integration source for the finding
   """
@@ -70624,6 +71358,83 @@ input FindingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   external_id field predicates
   """
@@ -71178,6 +71989,83 @@ input FindingWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -71622,6 +72510,26 @@ input FindingWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   integrations edge predicates
   """
@@ -86408,6 +87316,130 @@ type Organization implements Node {
     """
     where: TagDefinitionWhereInput
   ): TagDefinitionConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88542,6 +89574,26 @@ input OrganizationWhereInput {
   """
   hasTagDefinitions: Boolean
   hasTagDefinitionsWith: [TagDefinitionWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
   """
   members edge predicates
   """
@@ -96402,9 +97454,29 @@ type Remediation implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   external identifier from the integration source for the remediation
   """
@@ -96481,6 +97553,100 @@ type Remediation implements Node {
   raw metadata payload for the remediation from the source system
   """
   metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -96956,9 +98122,29 @@ type RemediationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   external identifier from the integration source for the remediation
   """
@@ -97218,6 +98404,83 @@ input RemediationHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   external_id field predicates
   """
@@ -97636,6 +98899,83 @@ input RemediationWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -97945,6 +99285,26 @@ input RemediationWhereInput {
   externalURIEqualFold: String
   externalURIContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
@@ -98026,6 +99386,22 @@ type Review implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   external identifier from the integration source for the review
   """
   externalID: String
@@ -98097,6 +99473,100 @@ type Review implements Node {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98580,6 +100050,22 @@ type ReviewHistory implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   external identifier from the integration source for the review
   """
   externalID: String
@@ -98834,6 +100320,67 @@ input ReviewHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   external_id field predicates
   """
@@ -99203,6 +100750,67 @@ input ReviewWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -99462,6 +101070,26 @@ input ReviewWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   integrations edge predicates
   """
@@ -114935,6 +116563,16 @@ input UpdateFindingInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -115123,6 +116761,15 @@ input UpdateFindingInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -116178,6 +117825,18 @@ input UpdateOrganizationInput {
   addTagDefinitionIDs: [ID!]
   removeTagDefinitionIDs: [ID!]
   clearTagDefinitions: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -116641,6 +118300,16 @@ input UpdateRemediationInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -116735,6 +118404,15 @@ input UpdateRemediationInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -116789,6 +118467,16 @@ input UpdateReviewInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   external identifier from the integration source for the review
   """
@@ -116873,6 +118561,15 @@ input UpdateReviewInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -118106,6 +119803,16 @@ input UpdateVulnerabilityInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -118251,6 +119958,15 @@ input UpdateVulnerabilityInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -120507,9 +122223,29 @@ type Vulnerability implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   owner of the vulnerability
   """
@@ -120626,6 +122362,100 @@ type Vulnerability implements Node {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -121132,9 +122962,29 @@ type VulnerabilityHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   owner of the vulnerability
   """
@@ -121435,6 +123285,83 @@ input VulnerabilityHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   external_owner_id field predicates
   """
@@ -121903,6 +123830,83 @@ input VulnerabilityWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -122260,6 +124264,26 @@ input VulnerabilityWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   integrations edge predicates
   """

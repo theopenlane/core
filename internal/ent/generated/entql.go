@@ -1346,7 +1346,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldUpdatedBy:          {Type: field.TypeString, Column: finding.FieldUpdatedBy},
 			finding.FieldDeletedAt:          {Type: field.TypeTime, Column: finding.FieldDeletedAt},
 			finding.FieldDeletedBy:          {Type: field.TypeString, Column: finding.FieldDeletedBy},
+			finding.FieldDisplayID:          {Type: field.TypeString, Column: finding.FieldDisplayID},
 			finding.FieldTags:               {Type: field.TypeJSON, Column: finding.FieldTags},
+			finding.FieldOwnerID:            {Type: field.TypeString, Column: finding.FieldOwnerID},
+			finding.FieldSystemOwned:        {Type: field.TypeBool, Column: finding.FieldSystemOwned},
+			finding.FieldInternalNotes:      {Type: field.TypeString, Column: finding.FieldInternalNotes},
+			finding.FieldSystemInternalID:   {Type: field.TypeString, Column: finding.FieldSystemInternalID},
 			finding.FieldExternalID:         {Type: field.TypeString, Column: finding.FieldExternalID},
 			finding.FieldExternalOwnerID:    {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
 			finding.FieldSource:             {Type: field.TypeString, Column: finding.FieldSource},
@@ -1461,7 +1466,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
 			findinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
 			findinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
+			findinghistory.FieldDisplayID:          {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
 			findinghistory.FieldTags:               {Type: field.TypeJSON, Column: findinghistory.FieldTags},
+			findinghistory.FieldOwnerID:            {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
+			findinghistory.FieldSystemOwned:        {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
+			findinghistory.FieldInternalNotes:      {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
+			findinghistory.FieldSystemInternalID:   {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
 			findinghistory.FieldExternalID:         {Type: field.TypeString, Column: findinghistory.FieldExternalID},
 			findinghistory.FieldExternalOwnerID:    {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
 			findinghistory.FieldSource:             {Type: field.TypeString, Column: findinghistory.FieldSource},
@@ -2978,32 +2988,37 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Remediation",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			remediation.FieldCreatedAt:       {Type: field.TypeTime, Column: remediation.FieldCreatedAt},
-			remediation.FieldUpdatedAt:       {Type: field.TypeTime, Column: remediation.FieldUpdatedAt},
-			remediation.FieldCreatedBy:       {Type: field.TypeString, Column: remediation.FieldCreatedBy},
-			remediation.FieldUpdatedBy:       {Type: field.TypeString, Column: remediation.FieldUpdatedBy},
-			remediation.FieldDeletedAt:       {Type: field.TypeTime, Column: remediation.FieldDeletedAt},
-			remediation.FieldDeletedBy:       {Type: field.TypeString, Column: remediation.FieldDeletedBy},
-			remediation.FieldTags:            {Type: field.TypeJSON, Column: remediation.FieldTags},
-			remediation.FieldExternalID:      {Type: field.TypeString, Column: remediation.FieldExternalID},
-			remediation.FieldExternalOwnerID: {Type: field.TypeString, Column: remediation.FieldExternalOwnerID},
-			remediation.FieldTitle:           {Type: field.TypeString, Column: remediation.FieldTitle},
-			remediation.FieldState:           {Type: field.TypeString, Column: remediation.FieldState},
-			remediation.FieldIntent:          {Type: field.TypeString, Column: remediation.FieldIntent},
-			remediation.FieldSummary:         {Type: field.TypeString, Column: remediation.FieldSummary},
-			remediation.FieldExplanation:     {Type: field.TypeString, Column: remediation.FieldExplanation},
-			remediation.FieldInstructions:    {Type: field.TypeString, Column: remediation.FieldInstructions},
-			remediation.FieldOwnerReference:  {Type: field.TypeString, Column: remediation.FieldOwnerReference},
-			remediation.FieldRepositoryURI:   {Type: field.TypeString, Column: remediation.FieldRepositoryURI},
-			remediation.FieldPullRequestURI:  {Type: field.TypeString, Column: remediation.FieldPullRequestURI},
-			remediation.FieldTicketReference: {Type: field.TypeString, Column: remediation.FieldTicketReference},
-			remediation.FieldDueAt:           {Type: field.TypeTime, Column: remediation.FieldDueAt},
-			remediation.FieldCompletedAt:     {Type: field.TypeTime, Column: remediation.FieldCompletedAt},
-			remediation.FieldPrGeneratedAt:   {Type: field.TypeTime, Column: remediation.FieldPrGeneratedAt},
-			remediation.FieldError:           {Type: field.TypeString, Column: remediation.FieldError},
-			remediation.FieldSource:          {Type: field.TypeString, Column: remediation.FieldSource},
-			remediation.FieldExternalURI:     {Type: field.TypeString, Column: remediation.FieldExternalURI},
-			remediation.FieldMetadata:        {Type: field.TypeJSON, Column: remediation.FieldMetadata},
+			remediation.FieldCreatedAt:        {Type: field.TypeTime, Column: remediation.FieldCreatedAt},
+			remediation.FieldUpdatedAt:        {Type: field.TypeTime, Column: remediation.FieldUpdatedAt},
+			remediation.FieldCreatedBy:        {Type: field.TypeString, Column: remediation.FieldCreatedBy},
+			remediation.FieldUpdatedBy:        {Type: field.TypeString, Column: remediation.FieldUpdatedBy},
+			remediation.FieldDeletedAt:        {Type: field.TypeTime, Column: remediation.FieldDeletedAt},
+			remediation.FieldDeletedBy:        {Type: field.TypeString, Column: remediation.FieldDeletedBy},
+			remediation.FieldDisplayID:        {Type: field.TypeString, Column: remediation.FieldDisplayID},
+			remediation.FieldTags:             {Type: field.TypeJSON, Column: remediation.FieldTags},
+			remediation.FieldOwnerID:          {Type: field.TypeString, Column: remediation.FieldOwnerID},
+			remediation.FieldSystemOwned:      {Type: field.TypeBool, Column: remediation.FieldSystemOwned},
+			remediation.FieldInternalNotes:    {Type: field.TypeString, Column: remediation.FieldInternalNotes},
+			remediation.FieldSystemInternalID: {Type: field.TypeString, Column: remediation.FieldSystemInternalID},
+			remediation.FieldExternalID:       {Type: field.TypeString, Column: remediation.FieldExternalID},
+			remediation.FieldExternalOwnerID:  {Type: field.TypeString, Column: remediation.FieldExternalOwnerID},
+			remediation.FieldTitle:            {Type: field.TypeString, Column: remediation.FieldTitle},
+			remediation.FieldState:            {Type: field.TypeString, Column: remediation.FieldState},
+			remediation.FieldIntent:           {Type: field.TypeString, Column: remediation.FieldIntent},
+			remediation.FieldSummary:          {Type: field.TypeString, Column: remediation.FieldSummary},
+			remediation.FieldExplanation:      {Type: field.TypeString, Column: remediation.FieldExplanation},
+			remediation.FieldInstructions:     {Type: field.TypeString, Column: remediation.FieldInstructions},
+			remediation.FieldOwnerReference:   {Type: field.TypeString, Column: remediation.FieldOwnerReference},
+			remediation.FieldRepositoryURI:    {Type: field.TypeString, Column: remediation.FieldRepositoryURI},
+			remediation.FieldPullRequestURI:   {Type: field.TypeString, Column: remediation.FieldPullRequestURI},
+			remediation.FieldTicketReference:  {Type: field.TypeString, Column: remediation.FieldTicketReference},
+			remediation.FieldDueAt:            {Type: field.TypeTime, Column: remediation.FieldDueAt},
+			remediation.FieldCompletedAt:      {Type: field.TypeTime, Column: remediation.FieldCompletedAt},
+			remediation.FieldPrGeneratedAt:    {Type: field.TypeTime, Column: remediation.FieldPrGeneratedAt},
+			remediation.FieldError:            {Type: field.TypeString, Column: remediation.FieldError},
+			remediation.FieldSource:           {Type: field.TypeString, Column: remediation.FieldSource},
+			remediation.FieldExternalURI:      {Type: field.TypeString, Column: remediation.FieldExternalURI},
+			remediation.FieldMetadata:         {Type: field.TypeJSON, Column: remediation.FieldMetadata},
 		},
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
@@ -3017,35 +3032,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "RemediationHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			remediationhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: remediationhistory.FieldHistoryTime},
-			remediationhistory.FieldRef:             {Type: field.TypeString, Column: remediationhistory.FieldRef},
-			remediationhistory.FieldOperation:       {Type: field.TypeEnum, Column: remediationhistory.FieldOperation},
-			remediationhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldCreatedAt},
-			remediationhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldUpdatedAt},
-			remediationhistory.FieldCreatedBy:       {Type: field.TypeString, Column: remediationhistory.FieldCreatedBy},
-			remediationhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: remediationhistory.FieldUpdatedBy},
-			remediationhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldDeletedAt},
-			remediationhistory.FieldDeletedBy:       {Type: field.TypeString, Column: remediationhistory.FieldDeletedBy},
-			remediationhistory.FieldTags:            {Type: field.TypeJSON, Column: remediationhistory.FieldTags},
-			remediationhistory.FieldExternalID:      {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
-			remediationhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
-			remediationhistory.FieldTitle:           {Type: field.TypeString, Column: remediationhistory.FieldTitle},
-			remediationhistory.FieldState:           {Type: field.TypeString, Column: remediationhistory.FieldState},
-			remediationhistory.FieldIntent:          {Type: field.TypeString, Column: remediationhistory.FieldIntent},
-			remediationhistory.FieldSummary:         {Type: field.TypeString, Column: remediationhistory.FieldSummary},
-			remediationhistory.FieldExplanation:     {Type: field.TypeString, Column: remediationhistory.FieldExplanation},
-			remediationhistory.FieldInstructions:    {Type: field.TypeString, Column: remediationhistory.FieldInstructions},
-			remediationhistory.FieldOwnerReference:  {Type: field.TypeString, Column: remediationhistory.FieldOwnerReference},
-			remediationhistory.FieldRepositoryURI:   {Type: field.TypeString, Column: remediationhistory.FieldRepositoryURI},
-			remediationhistory.FieldPullRequestURI:  {Type: field.TypeString, Column: remediationhistory.FieldPullRequestURI},
-			remediationhistory.FieldTicketReference: {Type: field.TypeString, Column: remediationhistory.FieldTicketReference},
-			remediationhistory.FieldDueAt:           {Type: field.TypeTime, Column: remediationhistory.FieldDueAt},
-			remediationhistory.FieldCompletedAt:     {Type: field.TypeTime, Column: remediationhistory.FieldCompletedAt},
-			remediationhistory.FieldPrGeneratedAt:   {Type: field.TypeTime, Column: remediationhistory.FieldPrGeneratedAt},
-			remediationhistory.FieldError:           {Type: field.TypeString, Column: remediationhistory.FieldError},
-			remediationhistory.FieldSource:          {Type: field.TypeString, Column: remediationhistory.FieldSource},
-			remediationhistory.FieldExternalURI:     {Type: field.TypeString, Column: remediationhistory.FieldExternalURI},
-			remediationhistory.FieldMetadata:        {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
+			remediationhistory.FieldHistoryTime:      {Type: field.TypeTime, Column: remediationhistory.FieldHistoryTime},
+			remediationhistory.FieldRef:              {Type: field.TypeString, Column: remediationhistory.FieldRef},
+			remediationhistory.FieldOperation:        {Type: field.TypeEnum, Column: remediationhistory.FieldOperation},
+			remediationhistory.FieldCreatedAt:        {Type: field.TypeTime, Column: remediationhistory.FieldCreatedAt},
+			remediationhistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: remediationhistory.FieldUpdatedAt},
+			remediationhistory.FieldCreatedBy:        {Type: field.TypeString, Column: remediationhistory.FieldCreatedBy},
+			remediationhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: remediationhistory.FieldUpdatedBy},
+			remediationhistory.FieldDeletedAt:        {Type: field.TypeTime, Column: remediationhistory.FieldDeletedAt},
+			remediationhistory.FieldDeletedBy:        {Type: field.TypeString, Column: remediationhistory.FieldDeletedBy},
+			remediationhistory.FieldDisplayID:        {Type: field.TypeString, Column: remediationhistory.FieldDisplayID},
+			remediationhistory.FieldTags:             {Type: field.TypeJSON, Column: remediationhistory.FieldTags},
+			remediationhistory.FieldOwnerID:          {Type: field.TypeString, Column: remediationhistory.FieldOwnerID},
+			remediationhistory.FieldSystemOwned:      {Type: field.TypeBool, Column: remediationhistory.FieldSystemOwned},
+			remediationhistory.FieldInternalNotes:    {Type: field.TypeString, Column: remediationhistory.FieldInternalNotes},
+			remediationhistory.FieldSystemInternalID: {Type: field.TypeString, Column: remediationhistory.FieldSystemInternalID},
+			remediationhistory.FieldExternalID:       {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
+			remediationhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
+			remediationhistory.FieldTitle:            {Type: field.TypeString, Column: remediationhistory.FieldTitle},
+			remediationhistory.FieldState:            {Type: field.TypeString, Column: remediationhistory.FieldState},
+			remediationhistory.FieldIntent:           {Type: field.TypeString, Column: remediationhistory.FieldIntent},
+			remediationhistory.FieldSummary:          {Type: field.TypeString, Column: remediationhistory.FieldSummary},
+			remediationhistory.FieldExplanation:      {Type: field.TypeString, Column: remediationhistory.FieldExplanation},
+			remediationhistory.FieldInstructions:     {Type: field.TypeString, Column: remediationhistory.FieldInstructions},
+			remediationhistory.FieldOwnerReference:   {Type: field.TypeString, Column: remediationhistory.FieldOwnerReference},
+			remediationhistory.FieldRepositoryURI:    {Type: field.TypeString, Column: remediationhistory.FieldRepositoryURI},
+			remediationhistory.FieldPullRequestURI:   {Type: field.TypeString, Column: remediationhistory.FieldPullRequestURI},
+			remediationhistory.FieldTicketReference:  {Type: field.TypeString, Column: remediationhistory.FieldTicketReference},
+			remediationhistory.FieldDueAt:            {Type: field.TypeTime, Column: remediationhistory.FieldDueAt},
+			remediationhistory.FieldCompletedAt:      {Type: field.TypeTime, Column: remediationhistory.FieldCompletedAt},
+			remediationhistory.FieldPrGeneratedAt:    {Type: field.TypeTime, Column: remediationhistory.FieldPrGeneratedAt},
+			remediationhistory.FieldError:            {Type: field.TypeString, Column: remediationhistory.FieldError},
+			remediationhistory.FieldSource:           {Type: field.TypeString, Column: remediationhistory.FieldSource},
+			remediationhistory.FieldExternalURI:      {Type: field.TypeString, Column: remediationhistory.FieldExternalURI},
+			remediationhistory.FieldMetadata:         {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[90] = &sqlgraph.Node{
@@ -3059,31 +3079,35 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Review",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			review.FieldCreatedAt:       {Type: field.TypeTime, Column: review.FieldCreatedAt},
-			review.FieldUpdatedAt:       {Type: field.TypeTime, Column: review.FieldUpdatedAt},
-			review.FieldCreatedBy:       {Type: field.TypeString, Column: review.FieldCreatedBy},
-			review.FieldUpdatedBy:       {Type: field.TypeString, Column: review.FieldUpdatedBy},
-			review.FieldDeletedAt:       {Type: field.TypeTime, Column: review.FieldDeletedAt},
-			review.FieldDeletedBy:       {Type: field.TypeString, Column: review.FieldDeletedBy},
-			review.FieldTags:            {Type: field.TypeJSON, Column: review.FieldTags},
-			review.FieldExternalID:      {Type: field.TypeString, Column: review.FieldExternalID},
-			review.FieldExternalOwnerID: {Type: field.TypeString, Column: review.FieldExternalOwnerID},
-			review.FieldTitle:           {Type: field.TypeString, Column: review.FieldTitle},
-			review.FieldState:           {Type: field.TypeString, Column: review.FieldState},
-			review.FieldCategory:        {Type: field.TypeString, Column: review.FieldCategory},
-			review.FieldClassification:  {Type: field.TypeString, Column: review.FieldClassification},
-			review.FieldSummary:         {Type: field.TypeString, Column: review.FieldSummary},
-			review.FieldDetails:         {Type: field.TypeString, Column: review.FieldDetails},
-			review.FieldReporter:        {Type: field.TypeString, Column: review.FieldReporter},
-			review.FieldApproved:        {Type: field.TypeBool, Column: review.FieldApproved},
-			review.FieldReviewedAt:      {Type: field.TypeTime, Column: review.FieldReviewedAt},
-			review.FieldReportedAt:      {Type: field.TypeTime, Column: review.FieldReportedAt},
-			review.FieldApprovedAt:      {Type: field.TypeTime, Column: review.FieldApprovedAt},
-			review.FieldReviewerID:      {Type: field.TypeString, Column: review.FieldReviewerID},
-			review.FieldSource:          {Type: field.TypeString, Column: review.FieldSource},
-			review.FieldExternalURI:     {Type: field.TypeString, Column: review.FieldExternalURI},
-			review.FieldMetadata:        {Type: field.TypeJSON, Column: review.FieldMetadata},
-			review.FieldRawPayload:      {Type: field.TypeJSON, Column: review.FieldRawPayload},
+			review.FieldCreatedAt:        {Type: field.TypeTime, Column: review.FieldCreatedAt},
+			review.FieldUpdatedAt:        {Type: field.TypeTime, Column: review.FieldUpdatedAt},
+			review.FieldCreatedBy:        {Type: field.TypeString, Column: review.FieldCreatedBy},
+			review.FieldUpdatedBy:        {Type: field.TypeString, Column: review.FieldUpdatedBy},
+			review.FieldDeletedAt:        {Type: field.TypeTime, Column: review.FieldDeletedAt},
+			review.FieldDeletedBy:        {Type: field.TypeString, Column: review.FieldDeletedBy},
+			review.FieldTags:             {Type: field.TypeJSON, Column: review.FieldTags},
+			review.FieldOwnerID:          {Type: field.TypeString, Column: review.FieldOwnerID},
+			review.FieldSystemOwned:      {Type: field.TypeBool, Column: review.FieldSystemOwned},
+			review.FieldInternalNotes:    {Type: field.TypeString, Column: review.FieldInternalNotes},
+			review.FieldSystemInternalID: {Type: field.TypeString, Column: review.FieldSystemInternalID},
+			review.FieldExternalID:       {Type: field.TypeString, Column: review.FieldExternalID},
+			review.FieldExternalOwnerID:  {Type: field.TypeString, Column: review.FieldExternalOwnerID},
+			review.FieldTitle:            {Type: field.TypeString, Column: review.FieldTitle},
+			review.FieldState:            {Type: field.TypeString, Column: review.FieldState},
+			review.FieldCategory:         {Type: field.TypeString, Column: review.FieldCategory},
+			review.FieldClassification:   {Type: field.TypeString, Column: review.FieldClassification},
+			review.FieldSummary:          {Type: field.TypeString, Column: review.FieldSummary},
+			review.FieldDetails:          {Type: field.TypeString, Column: review.FieldDetails},
+			review.FieldReporter:         {Type: field.TypeString, Column: review.FieldReporter},
+			review.FieldApproved:         {Type: field.TypeBool, Column: review.FieldApproved},
+			review.FieldReviewedAt:       {Type: field.TypeTime, Column: review.FieldReviewedAt},
+			review.FieldReportedAt:       {Type: field.TypeTime, Column: review.FieldReportedAt},
+			review.FieldApprovedAt:       {Type: field.TypeTime, Column: review.FieldApprovedAt},
+			review.FieldReviewerID:       {Type: field.TypeString, Column: review.FieldReviewerID},
+			review.FieldSource:           {Type: field.TypeString, Column: review.FieldSource},
+			review.FieldExternalURI:      {Type: field.TypeString, Column: review.FieldExternalURI},
+			review.FieldMetadata:         {Type: field.TypeJSON, Column: review.FieldMetadata},
+			review.FieldRawPayload:       {Type: field.TypeJSON, Column: review.FieldRawPayload},
 		},
 	}
 	graph.Nodes[91] = &sqlgraph.Node{
@@ -3097,34 +3121,38 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ReviewHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			reviewhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: reviewhistory.FieldHistoryTime},
-			reviewhistory.FieldRef:             {Type: field.TypeString, Column: reviewhistory.FieldRef},
-			reviewhistory.FieldOperation:       {Type: field.TypeEnum, Column: reviewhistory.FieldOperation},
-			reviewhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldCreatedAt},
-			reviewhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldUpdatedAt},
-			reviewhistory.FieldCreatedBy:       {Type: field.TypeString, Column: reviewhistory.FieldCreatedBy},
-			reviewhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: reviewhistory.FieldUpdatedBy},
-			reviewhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldDeletedAt},
-			reviewhistory.FieldDeletedBy:       {Type: field.TypeString, Column: reviewhistory.FieldDeletedBy},
-			reviewhistory.FieldTags:            {Type: field.TypeJSON, Column: reviewhistory.FieldTags},
-			reviewhistory.FieldExternalID:      {Type: field.TypeString, Column: reviewhistory.FieldExternalID},
-			reviewhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: reviewhistory.FieldExternalOwnerID},
-			reviewhistory.FieldTitle:           {Type: field.TypeString, Column: reviewhistory.FieldTitle},
-			reviewhistory.FieldState:           {Type: field.TypeString, Column: reviewhistory.FieldState},
-			reviewhistory.FieldCategory:        {Type: field.TypeString, Column: reviewhistory.FieldCategory},
-			reviewhistory.FieldClassification:  {Type: field.TypeString, Column: reviewhistory.FieldClassification},
-			reviewhistory.FieldSummary:         {Type: field.TypeString, Column: reviewhistory.FieldSummary},
-			reviewhistory.FieldDetails:         {Type: field.TypeString, Column: reviewhistory.FieldDetails},
-			reviewhistory.FieldReporter:        {Type: field.TypeString, Column: reviewhistory.FieldReporter},
-			reviewhistory.FieldApproved:        {Type: field.TypeBool, Column: reviewhistory.FieldApproved},
-			reviewhistory.FieldReviewedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldReviewedAt},
-			reviewhistory.FieldReportedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldReportedAt},
-			reviewhistory.FieldApprovedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldApprovedAt},
-			reviewhistory.FieldReviewerID:      {Type: field.TypeString, Column: reviewhistory.FieldReviewerID},
-			reviewhistory.FieldSource:          {Type: field.TypeString, Column: reviewhistory.FieldSource},
-			reviewhistory.FieldExternalURI:     {Type: field.TypeString, Column: reviewhistory.FieldExternalURI},
-			reviewhistory.FieldMetadata:        {Type: field.TypeJSON, Column: reviewhistory.FieldMetadata},
-			reviewhistory.FieldRawPayload:      {Type: field.TypeJSON, Column: reviewhistory.FieldRawPayload},
+			reviewhistory.FieldHistoryTime:      {Type: field.TypeTime, Column: reviewhistory.FieldHistoryTime},
+			reviewhistory.FieldRef:              {Type: field.TypeString, Column: reviewhistory.FieldRef},
+			reviewhistory.FieldOperation:        {Type: field.TypeEnum, Column: reviewhistory.FieldOperation},
+			reviewhistory.FieldCreatedAt:        {Type: field.TypeTime, Column: reviewhistory.FieldCreatedAt},
+			reviewhistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: reviewhistory.FieldUpdatedAt},
+			reviewhistory.FieldCreatedBy:        {Type: field.TypeString, Column: reviewhistory.FieldCreatedBy},
+			reviewhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: reviewhistory.FieldUpdatedBy},
+			reviewhistory.FieldDeletedAt:        {Type: field.TypeTime, Column: reviewhistory.FieldDeletedAt},
+			reviewhistory.FieldDeletedBy:        {Type: field.TypeString, Column: reviewhistory.FieldDeletedBy},
+			reviewhistory.FieldTags:             {Type: field.TypeJSON, Column: reviewhistory.FieldTags},
+			reviewhistory.FieldOwnerID:          {Type: field.TypeString, Column: reviewhistory.FieldOwnerID},
+			reviewhistory.FieldSystemOwned:      {Type: field.TypeBool, Column: reviewhistory.FieldSystemOwned},
+			reviewhistory.FieldInternalNotes:    {Type: field.TypeString, Column: reviewhistory.FieldInternalNotes},
+			reviewhistory.FieldSystemInternalID: {Type: field.TypeString, Column: reviewhistory.FieldSystemInternalID},
+			reviewhistory.FieldExternalID:       {Type: field.TypeString, Column: reviewhistory.FieldExternalID},
+			reviewhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: reviewhistory.FieldExternalOwnerID},
+			reviewhistory.FieldTitle:            {Type: field.TypeString, Column: reviewhistory.FieldTitle},
+			reviewhistory.FieldState:            {Type: field.TypeString, Column: reviewhistory.FieldState},
+			reviewhistory.FieldCategory:         {Type: field.TypeString, Column: reviewhistory.FieldCategory},
+			reviewhistory.FieldClassification:   {Type: field.TypeString, Column: reviewhistory.FieldClassification},
+			reviewhistory.FieldSummary:          {Type: field.TypeString, Column: reviewhistory.FieldSummary},
+			reviewhistory.FieldDetails:          {Type: field.TypeString, Column: reviewhistory.FieldDetails},
+			reviewhistory.FieldReporter:         {Type: field.TypeString, Column: reviewhistory.FieldReporter},
+			reviewhistory.FieldApproved:         {Type: field.TypeBool, Column: reviewhistory.FieldApproved},
+			reviewhistory.FieldReviewedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldReviewedAt},
+			reviewhistory.FieldReportedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldReportedAt},
+			reviewhistory.FieldApprovedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldApprovedAt},
+			reviewhistory.FieldReviewerID:       {Type: field.TypeString, Column: reviewhistory.FieldReviewerID},
+			reviewhistory.FieldSource:           {Type: field.TypeString, Column: reviewhistory.FieldSource},
+			reviewhistory.FieldExternalURI:      {Type: field.TypeString, Column: reviewhistory.FieldExternalURI},
+			reviewhistory.FieldMetadata:         {Type: field.TypeJSON, Column: reviewhistory.FieldMetadata},
+			reviewhistory.FieldRawPayload:       {Type: field.TypeJSON, Column: reviewhistory.FieldRawPayload},
 		},
 	}
 	graph.Nodes[92] = &sqlgraph.Node{
@@ -4294,42 +4322,47 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Vulnerability",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vulnerability.FieldCreatedAt:       {Type: field.TypeTime, Column: vulnerability.FieldCreatedAt},
-			vulnerability.FieldUpdatedAt:       {Type: field.TypeTime, Column: vulnerability.FieldUpdatedAt},
-			vulnerability.FieldCreatedBy:       {Type: field.TypeString, Column: vulnerability.FieldCreatedBy},
-			vulnerability.FieldUpdatedBy:       {Type: field.TypeString, Column: vulnerability.FieldUpdatedBy},
-			vulnerability.FieldDeletedAt:       {Type: field.TypeTime, Column: vulnerability.FieldDeletedAt},
-			vulnerability.FieldDeletedBy:       {Type: field.TypeString, Column: vulnerability.FieldDeletedBy},
-			vulnerability.FieldTags:            {Type: field.TypeJSON, Column: vulnerability.FieldTags},
-			vulnerability.FieldExternalOwnerID: {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
-			vulnerability.FieldExternalID:      {Type: field.TypeString, Column: vulnerability.FieldExternalID},
-			vulnerability.FieldCveID:           {Type: field.TypeString, Column: vulnerability.FieldCveID},
-			vulnerability.FieldSource:          {Type: field.TypeString, Column: vulnerability.FieldSource},
-			vulnerability.FieldDisplayName:     {Type: field.TypeString, Column: vulnerability.FieldDisplayName},
-			vulnerability.FieldCategory:        {Type: field.TypeString, Column: vulnerability.FieldCategory},
-			vulnerability.FieldSeverity:        {Type: field.TypeString, Column: vulnerability.FieldSeverity},
-			vulnerability.FieldScore:           {Type: field.TypeFloat64, Column: vulnerability.FieldScore},
-			vulnerability.FieldImpact:          {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
-			vulnerability.FieldExploitability:  {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
-			vulnerability.FieldPriority:        {Type: field.TypeString, Column: vulnerability.FieldPriority},
-			vulnerability.FieldStatus:          {Type: field.TypeString, Column: vulnerability.FieldStatus},
-			vulnerability.FieldSummary:         {Type: field.TypeString, Column: vulnerability.FieldSummary},
-			vulnerability.FieldDescription:     {Type: field.TypeString, Column: vulnerability.FieldDescription},
-			vulnerability.FieldVector:          {Type: field.TypeString, Column: vulnerability.FieldVector},
-			vulnerability.FieldRemediationSLA:  {Type: field.TypeInt, Column: vulnerability.FieldRemediationSLA},
-			vulnerability.FieldOpen:            {Type: field.TypeBool, Column: vulnerability.FieldOpen},
-			vulnerability.FieldBlocking:        {Type: field.TypeBool, Column: vulnerability.FieldBlocking},
-			vulnerability.FieldProduction:      {Type: field.TypeBool, Column: vulnerability.FieldProduction},
-			vulnerability.FieldPublic:          {Type: field.TypeBool, Column: vulnerability.FieldPublic},
-			vulnerability.FieldValidated:       {Type: field.TypeBool, Column: vulnerability.FieldValidated},
-			vulnerability.FieldReferences:      {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
-			vulnerability.FieldImpacts:         {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
-			vulnerability.FieldPublishedAt:     {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
-			vulnerability.FieldDiscoveredAt:    {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
-			vulnerability.FieldSourceUpdatedAt: {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
-			vulnerability.FieldExternalURI:     {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
-			vulnerability.FieldMetadata:        {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
-			vulnerability.FieldRawPayload:      {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
+			vulnerability.FieldCreatedAt:        {Type: field.TypeTime, Column: vulnerability.FieldCreatedAt},
+			vulnerability.FieldUpdatedAt:        {Type: field.TypeTime, Column: vulnerability.FieldUpdatedAt},
+			vulnerability.FieldCreatedBy:        {Type: field.TypeString, Column: vulnerability.FieldCreatedBy},
+			vulnerability.FieldUpdatedBy:        {Type: field.TypeString, Column: vulnerability.FieldUpdatedBy},
+			vulnerability.FieldDeletedAt:        {Type: field.TypeTime, Column: vulnerability.FieldDeletedAt},
+			vulnerability.FieldDeletedBy:        {Type: field.TypeString, Column: vulnerability.FieldDeletedBy},
+			vulnerability.FieldDisplayID:        {Type: field.TypeString, Column: vulnerability.FieldDisplayID},
+			vulnerability.FieldTags:             {Type: field.TypeJSON, Column: vulnerability.FieldTags},
+			vulnerability.FieldOwnerID:          {Type: field.TypeString, Column: vulnerability.FieldOwnerID},
+			vulnerability.FieldSystemOwned:      {Type: field.TypeBool, Column: vulnerability.FieldSystemOwned},
+			vulnerability.FieldInternalNotes:    {Type: field.TypeString, Column: vulnerability.FieldInternalNotes},
+			vulnerability.FieldSystemInternalID: {Type: field.TypeString, Column: vulnerability.FieldSystemInternalID},
+			vulnerability.FieldExternalOwnerID:  {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
+			vulnerability.FieldExternalID:       {Type: field.TypeString, Column: vulnerability.FieldExternalID},
+			vulnerability.FieldCveID:            {Type: field.TypeString, Column: vulnerability.FieldCveID},
+			vulnerability.FieldSource:           {Type: field.TypeString, Column: vulnerability.FieldSource},
+			vulnerability.FieldDisplayName:      {Type: field.TypeString, Column: vulnerability.FieldDisplayName},
+			vulnerability.FieldCategory:         {Type: field.TypeString, Column: vulnerability.FieldCategory},
+			vulnerability.FieldSeverity:         {Type: field.TypeString, Column: vulnerability.FieldSeverity},
+			vulnerability.FieldScore:            {Type: field.TypeFloat64, Column: vulnerability.FieldScore},
+			vulnerability.FieldImpact:           {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
+			vulnerability.FieldExploitability:   {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
+			vulnerability.FieldPriority:         {Type: field.TypeString, Column: vulnerability.FieldPriority},
+			vulnerability.FieldStatus:           {Type: field.TypeString, Column: vulnerability.FieldStatus},
+			vulnerability.FieldSummary:          {Type: field.TypeString, Column: vulnerability.FieldSummary},
+			vulnerability.FieldDescription:      {Type: field.TypeString, Column: vulnerability.FieldDescription},
+			vulnerability.FieldVector:           {Type: field.TypeString, Column: vulnerability.FieldVector},
+			vulnerability.FieldRemediationSLA:   {Type: field.TypeInt, Column: vulnerability.FieldRemediationSLA},
+			vulnerability.FieldOpen:             {Type: field.TypeBool, Column: vulnerability.FieldOpen},
+			vulnerability.FieldBlocking:         {Type: field.TypeBool, Column: vulnerability.FieldBlocking},
+			vulnerability.FieldProduction:       {Type: field.TypeBool, Column: vulnerability.FieldProduction},
+			vulnerability.FieldPublic:           {Type: field.TypeBool, Column: vulnerability.FieldPublic},
+			vulnerability.FieldValidated:        {Type: field.TypeBool, Column: vulnerability.FieldValidated},
+			vulnerability.FieldReferences:       {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
+			vulnerability.FieldImpacts:          {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
+			vulnerability.FieldPublishedAt:      {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
+			vulnerability.FieldDiscoveredAt:     {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
+			vulnerability.FieldSourceUpdatedAt:  {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
+			vulnerability.FieldExternalURI:      {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
+			vulnerability.FieldMetadata:         {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
+			vulnerability.FieldRawPayload:       {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
 	graph.Nodes[129] = &sqlgraph.Node{
@@ -4343,45 +4376,50 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VulnerabilityHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vulnerabilityhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: vulnerabilityhistory.FieldHistoryTime},
-			vulnerabilityhistory.FieldRef:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldRef},
-			vulnerabilityhistory.FieldOperation:       {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldOperation},
-			vulnerabilityhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldCreatedAt},
-			vulnerabilityhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldUpdatedAt},
-			vulnerabilityhistory.FieldCreatedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldCreatedBy},
-			vulnerabilityhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldUpdatedBy},
-			vulnerabilityhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDeletedAt},
-			vulnerabilityhistory.FieldDeletedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldDeletedBy},
-			vulnerabilityhistory.FieldTags:            {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
-			vulnerabilityhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
-			vulnerabilityhistory.FieldExternalID:      {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
-			vulnerabilityhistory.FieldCveID:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
-			vulnerabilityhistory.FieldSource:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldSource},
-			vulnerabilityhistory.FieldDisplayName:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayName},
-			vulnerabilityhistory.FieldCategory:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldCategory},
-			vulnerabilityhistory.FieldSeverity:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldSeverity},
-			vulnerabilityhistory.FieldScore:           {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldScore},
-			vulnerabilityhistory.FieldImpact:          {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
-			vulnerabilityhistory.FieldExploitability:  {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
-			vulnerabilityhistory.FieldPriority:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
-			vulnerabilityhistory.FieldStatus:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
-			vulnerabilityhistory.FieldSummary:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
-			vulnerabilityhistory.FieldDescription:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
-			vulnerabilityhistory.FieldVector:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
-			vulnerabilityhistory.FieldRemediationSLA:  {Type: field.TypeInt, Column: vulnerabilityhistory.FieldRemediationSLA},
-			vulnerabilityhistory.FieldOpen:            {Type: field.TypeBool, Column: vulnerabilityhistory.FieldOpen},
-			vulnerabilityhistory.FieldBlocking:        {Type: field.TypeBool, Column: vulnerabilityhistory.FieldBlocking},
-			vulnerabilityhistory.FieldProduction:      {Type: field.TypeBool, Column: vulnerabilityhistory.FieldProduction},
-			vulnerabilityhistory.FieldPublic:          {Type: field.TypeBool, Column: vulnerabilityhistory.FieldPublic},
-			vulnerabilityhistory.FieldValidated:       {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
-			vulnerabilityhistory.FieldReferences:      {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
-			vulnerabilityhistory.FieldImpacts:         {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
-			vulnerabilityhistory.FieldPublishedAt:     {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
-			vulnerabilityhistory.FieldDiscoveredAt:    {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
-			vulnerabilityhistory.FieldSourceUpdatedAt: {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
-			vulnerabilityhistory.FieldExternalURI:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
-			vulnerabilityhistory.FieldMetadata:        {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
-			vulnerabilityhistory.FieldRawPayload:      {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
+			vulnerabilityhistory.FieldHistoryTime:      {Type: field.TypeTime, Column: vulnerabilityhistory.FieldHistoryTime},
+			vulnerabilityhistory.FieldRef:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldRef},
+			vulnerabilityhistory.FieldOperation:        {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldOperation},
+			vulnerabilityhistory.FieldCreatedAt:        {Type: field.TypeTime, Column: vulnerabilityhistory.FieldCreatedAt},
+			vulnerabilityhistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: vulnerabilityhistory.FieldUpdatedAt},
+			vulnerabilityhistory.FieldCreatedBy:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldCreatedBy},
+			vulnerabilityhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldUpdatedBy},
+			vulnerabilityhistory.FieldDeletedAt:        {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDeletedAt},
+			vulnerabilityhistory.FieldDeletedBy:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldDeletedBy},
+			vulnerabilityhistory.FieldDisplayID:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayID},
+			vulnerabilityhistory.FieldTags:             {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
+			vulnerabilityhistory.FieldOwnerID:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldOwnerID},
+			vulnerabilityhistory.FieldSystemOwned:      {Type: field.TypeBool, Column: vulnerabilityhistory.FieldSystemOwned},
+			vulnerabilityhistory.FieldInternalNotes:    {Type: field.TypeString, Column: vulnerabilityhistory.FieldInternalNotes},
+			vulnerabilityhistory.FieldSystemInternalID: {Type: field.TypeString, Column: vulnerabilityhistory.FieldSystemInternalID},
+			vulnerabilityhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
+			vulnerabilityhistory.FieldExternalID:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
+			vulnerabilityhistory.FieldCveID:            {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
+			vulnerabilityhistory.FieldSource:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldSource},
+			vulnerabilityhistory.FieldDisplayName:      {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayName},
+			vulnerabilityhistory.FieldCategory:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldCategory},
+			vulnerabilityhistory.FieldSeverity:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldSeverity},
+			vulnerabilityhistory.FieldScore:            {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldScore},
+			vulnerabilityhistory.FieldImpact:           {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
+			vulnerabilityhistory.FieldExploitability:   {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
+			vulnerabilityhistory.FieldPriority:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
+			vulnerabilityhistory.FieldStatus:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
+			vulnerabilityhistory.FieldSummary:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
+			vulnerabilityhistory.FieldDescription:      {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
+			vulnerabilityhistory.FieldVector:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
+			vulnerabilityhistory.FieldRemediationSLA:   {Type: field.TypeInt, Column: vulnerabilityhistory.FieldRemediationSLA},
+			vulnerabilityhistory.FieldOpen:             {Type: field.TypeBool, Column: vulnerabilityhistory.FieldOpen},
+			vulnerabilityhistory.FieldBlocking:         {Type: field.TypeBool, Column: vulnerabilityhistory.FieldBlocking},
+			vulnerabilityhistory.FieldProduction:       {Type: field.TypeBool, Column: vulnerabilityhistory.FieldProduction},
+			vulnerabilityhistory.FieldPublic:           {Type: field.TypeBool, Column: vulnerabilityhistory.FieldPublic},
+			vulnerabilityhistory.FieldValidated:        {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
+			vulnerabilityhistory.FieldReferences:       {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
+			vulnerabilityhistory.FieldImpacts:          {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
+			vulnerabilityhistory.FieldPublishedAt:      {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
+			vulnerabilityhistory.FieldDiscoveredAt:     {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
+			vulnerabilityhistory.FieldSourceUpdatedAt:  {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
+			vulnerabilityhistory.FieldExternalURI:      {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
+			vulnerabilityhistory.FieldMetadata:         {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
+			vulnerabilityhistory.FieldRawPayload:       {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
 		},
 	}
 	graph.Nodes[130] = &sqlgraph.Node{
@@ -6260,6 +6298,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"FileDownloadToken",
 		"User",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   finding.OwnerTable,
+			Columns: []string{finding.OwnerColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Organization",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.BlockedGroupsTable,
+			Columns: []string{finding.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.EditorsTable,
+			Columns: []string{finding.EditorsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.ViewersTable,
+			Columns: []string{finding.ViewersColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Group",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -8986,6 +9072,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TagDefinition",
 	)
 	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Finding",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Review",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Vulnerability",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -9526,6 +9660,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"OrgMembership",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   remediation.OwnerTable,
+			Columns: []string{remediation.OwnerColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Organization",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.BlockedGroupsTable,
+			Columns: []string{remediation.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.EditorsTable,
+			Columns: []string{remediation.EditorsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.ViewersTable,
+			Columns: []string{remediation.ViewersColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Group",
+	)
+	graph.MustAddE(
 		"integrations",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -9692,6 +9874,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Remediation",
 		"File",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   review.OwnerTable,
+			Columns: []string{review.OwnerColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Organization",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.BlockedGroupsTable,
+			Columns: []string{review.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.EditorsTable,
+			Columns: []string{review.EditorsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.ViewersTable,
+			Columns: []string{review.ViewersColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -11444,6 +11674,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"UserSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   vulnerability.OwnerTable,
+			Columns: []string{vulnerability.OwnerColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Organization",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.BlockedGroupsTable,
+			Columns: []string{vulnerability.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.EditorsTable,
+			Columns: []string{vulnerability.EditorsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.ViewersTable,
+			Columns: []string{vulnerability.ViewersColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Group",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -18892,9 +19170,34 @@ func (f *FindingFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(finding.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *FindingFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *FindingFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(finding.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *FindingFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *FindingFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(finding.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *FindingFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldSystemInternalID))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -19080,6 +19383,62 @@ func (f *FindingFilter) WhereMetadata(p entql.BytesP) {
 // WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
 func (f *FindingFilter) WhereRawPayload(p entql.BytesP) {
 	f.Where(p.Field(finding.FieldRawPayload))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *FindingFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *FindingFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *FindingFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *FindingFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
@@ -19658,9 +20017,34 @@ func (f *FindingHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *FindingHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *FindingHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(findinghistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *FindingHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *FindingHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *FindingHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldSystemInternalID))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -27170,6 +27554,62 @@ func (f *OrganizationFilter) WhereHasTagDefinitionsWith(preds ...predicate.TagDe
 	})))
 }
 
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *OrganizationFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *OrganizationFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *OrganizationFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *OrganizationFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -29590,9 +30030,34 @@ func (f *RemediationFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(remediation.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *RemediationFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *RemediationFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(remediation.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RemediationFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *RemediationFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(remediation.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *RemediationFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *RemediationFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldSystemInternalID))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -29688,6 +30153,62 @@ func (f *RemediationFilter) WhereExternalURI(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *RemediationFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(remediation.FieldMetadata))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *RemediationFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *RemediationFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *RemediationFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *RemediationFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
@@ -29971,9 +30492,34 @@ func (f *RemediationHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *RemediationHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *RemediationHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(remediationhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RemediationHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *RemediationHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(remediationhistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *RemediationHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *RemediationHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldSystemInternalID))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -30146,6 +30692,26 @@ func (f *ReviewFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(review.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ReviewFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(review.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ReviewFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(review.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *ReviewFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(review.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *ReviewFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(review.FieldSystemInternalID))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ReviewFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(review.FieldExternalID))
@@ -30234,6 +30800,62 @@ func (f *ReviewFilter) WhereMetadata(p entql.BytesP) {
 // WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
 func (f *ReviewFilter) WhereRawPayload(p entql.BytesP) {
 	f.Where(p.Field(review.FieldRawPayload))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ReviewFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *ReviewFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *ReviewFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *ReviewFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
@@ -30534,6 +31156,26 @@ func (f *ReviewHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *ReviewHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(reviewhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ReviewHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ReviewHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(reviewhistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *ReviewHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *ReviewHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldSystemInternalID))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -37410,9 +38052,34 @@ func (f *VulnerabilityFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *VulnerabilityFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *VulnerabilityFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(vulnerability.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *VulnerabilityFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *VulnerabilityFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *VulnerabilityFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *VulnerabilityFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSystemInternalID))
 }
 
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
@@ -37558,6 +38225,62 @@ func (f *VulnerabilityFilter) WhereMetadata(p entql.BytesP) {
 // WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
 func (f *VulnerabilityFilter) WhereRawPayload(p entql.BytesP) {
 	f.Where(p.Field(vulnerability.FieldRawPayload))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *VulnerabilityFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *VulnerabilityFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *VulnerabilityFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *VulnerabilityFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
@@ -37855,9 +38578,34 @@ func (f *VulnerabilityHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldDeletedBy))
 }
 
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *VulnerabilityHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDisplayID))
+}
+
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *VulnerabilityHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *VulnerabilityHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *VulnerabilityHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *VulnerabilityHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *VulnerabilityHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSystemInternalID))
 }
 
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
