@@ -314,7 +314,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
-	github.com/opencontainers/runc v1.3.2 // indirect
+	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20250909173124-0ac19aac54f2 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251003203216-7c0d09a1cc5a // indirect
 	github.com/openfga/openfga v1.10.3 // indirect
