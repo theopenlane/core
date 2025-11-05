@@ -1077,11 +1077,11 @@ var ExampleAccountAccessReply = AccountAccessReply{
 // ACCOUNT/ROLES
 // =========
 
-// AccountRolesRequest contains organization ID for retrieving user roles
+// AccountRolesRequest contains object IDs for retrieving roles associated with them
 type AccountRolesRequest struct {
 	// @deprecated use ObjectIDs instead, may be removed in a future release
-	ObjectID    string   `json:"object_id,omitempty" description:"The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	ObjectIDs   []string `json:"object_ids,omitempty" description:"The IDs of the object to check roles for, can be used to check multiple ids in one request" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectID    string   `json:"object_id,omitempty" description:" @deprecated use ObjectIDs instead. The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectIDs   []string `json:"object_ids,omitempty" description:"The IDs of the object to check roles for, can be used to check multiple ids in one request"` // example:"["01J4EXD5MM60CX4YNYN0DEE3Y1", "01J4EXD5MM60CX4YNYN0DEE3Y2"]"
 	ObjectType  string   `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
 	SubjectType string   `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
 	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
@@ -1092,9 +1092,9 @@ type AccountRolesReply struct {
 	rout.Reply
 	// Roles is a list of roles the user has for the specified object(s)
 	// @deprecated use ObjectRoles instead, may be removed in a future release
-	Roles []string `json:"roles"`
+	Roles []string `json:"roles" description:" @deprecated use ObjectRoles instead. A list of roles the subject has for the specified object"`
 	// ObjectRoles is a map of object IDs to the roles the user has for each object ID
-	ObjectRoles map[string][]string `json:"object_roles,omitempty" description:"A map of object IDs to the roles the user has for each object ID"`
+	ObjectRoles map[string][]string `json:"object_roles,omitempty" description:"A map of object IDs to the roles the subject has for each object ID"`
 }
 
 // ExampleResponse returns an example AccountRolesReply for OpenAPI documentation
