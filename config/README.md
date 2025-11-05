@@ -335,7 +335,7 @@ CORE_SUBSCRIPTION_STRIPEWEBHOOKURL:
 {{- else if .Values.domain }}
   "https://api.{{ .Values.domain }}/v1/stripe/webhook"
 {{- else }}
-  "https://api.openlane.com/v1/stripe/webhook"
+  "https://api.theopenlane.io/v1/stripe/webhook"
 {{- end }}
 ```
 

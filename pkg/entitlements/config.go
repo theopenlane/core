@@ -10,17 +10,17 @@ type Config struct {
 	// StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback
 	StripeWebhookSecrets map[string]string `json:"stripeWebhookSecrets" koanf:"stripeWebhookSecrets" sensitive:"true"`
 	// StripeWebhookURL is the URL for the stripe webhook
-	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
+	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.theopenlane.io/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
-	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.openlane.com/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
+	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
 	// StripeCancellationReturnURL is the URL for the stripe cancellation return
 	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
 	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
 	// StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:"2024-11-20.acacia"`
+	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:"2025-10-29.clover"`
 	// StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:"2024-10-28.acacia"`
+	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:""`
 }
 
 type ConfigOpts func(*Config)

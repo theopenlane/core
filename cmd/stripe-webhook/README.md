@@ -39,7 +39,7 @@ The migration uses query string parameters (`?api_version=X`) to distinguish web
 
 ```bash
 export STRIPE_API_KEY=sk_test_...
-export STRIPE_WEBHOOK_URL=https://api.openlane.com/v1/stripe/webhook
+export STRIPE_WEBHOOK_URL=https://api.theopenlane.io/v1/stripe/webhook
 ```
 
 You can also pass `--stripe-key` and `--webhook-url` flags.
@@ -58,7 +58,7 @@ You can also pass `--stripe-key` and `--webhook-url` flags.
 
    Example session:
    ```text
-   Preparing webhook migration for URL: https://api.openlane.com/v1/stripe/webhook
+   Preparing webhook migration for URL: https://api.theopenlane.io/v1/stripe/webhook
    Current webhook API version: 2023-10-16
    Latest Stripe SDK API version: 2024-06-20
    Enter the new Stripe API version to migrate to: 2024-06-20
@@ -84,7 +84,7 @@ You can also pass `--stripe-key` and `--webhook-url` flags.
      3. Populate CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2024_06_20 in your secret manager before deploying the new code.
      4. Deploy code that accepts both API versions.
      5. After deployment, disable the legacy webhook:
-        stripe-webhook migrate --step disable --webhook-url https://api.openlane.com/v1/stripe/webhook
+        stripe-webhook migrate --step disable --webhook-url https://api.theopenlane.io/v1/stripe/webhook
    ```
 
    What happens:

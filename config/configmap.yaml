@@ -389,14 +389,14 @@ data:
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
 {{- else }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.openlane.com/v1/stripe/webhook"
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.theopenlane.io/stripe/webhook"
 {{- end }}
 {{- if .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/organization-settings/billing"
 {{- else }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.openlane.com/organization-settings/billing"
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.theopenlane.io/organization-settings/billing"
 {{- end }}
 {{- if .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
@@ -406,8 +406,8 @@ data:
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.theopenlane.io/organization-settings/billing"
 {{- end }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ join "," .Values.openlane.coreConfiguration.subscription.stripeWebhookEvents | quote }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKAPIVERSION: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote | default "2024-11-20.acacia" }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKDISCARDAPIVERSION: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookDiscardAPIVersion | quote | default "2024-10-28.acacia" }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKAPIVERSION: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote | default "2025-10-29.clover" }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKDISCARDAPIVERSION: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookDiscardAPIVersion | quote }}
   CORE_KEYWATCHER_ENABLED: {{ .Values.openlane.coreConfiguration.keywatcher.enabled | quote | default "false" }}
   CORE_KEYWATCHER_KEYDIR: {{ .Values.openlane.coreConfiguration.keywatcher.keyDir | quote | default "./keys" }}
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration | quote | default "false" }}

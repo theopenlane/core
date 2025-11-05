@@ -401,17 +401,16 @@ slack:
 subscription:
     enabled: false
     privateStripeKey: ""
-    stripeBillingPortalSuccessURL: https://console.openlane.com/organization-settings/billing
+    stripeBillingPortalSuccessURL: https://console.theopenlane.io/organization-settings/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
-    stripeWebhookAPIVersion: 2024-11-20.acacia
-    stripeWebhookDiscardAPIVersion: 2024-10-28.acacia
+    stripeWebhookAPIVersion: 2025-10-29.clover
+    stripeWebhookDiscardAPIVersion: ""
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
     stripeWebhookSecrets:
-        2024-10-28.acacia: ""
-        2024-11-20.acacia: ""
+        2025-10-29.clover: ""
         default: ""
-    stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook
+    stripeWebhookURL: https://api.theopenlane.io/stripe/webhook
 totp:
     codeLength: 6
     enabled: true
