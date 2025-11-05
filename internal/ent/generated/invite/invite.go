@@ -48,6 +48,8 @@ const (
 	FieldRequestorID = "requestor_id"
 	// FieldSecret holds the string denoting the secret field in the database.
 	FieldSecret = "secret"
+	// FieldOwnershipTransfer holds the string denoting the ownership_transfer field in the database.
+	FieldOwnershipTransfer = "ownership_transfer"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -93,6 +95,7 @@ var Columns = []string{
 	FieldSendAttempts,
 	FieldRequestorID,
 	FieldSecret,
+	FieldOwnershipTransfer,
 }
 
 var (
@@ -143,6 +146,8 @@ var (
 	RequestorIDValidator func(string) error
 	// SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	SecretValidator func([]byte) error
+	// DefaultOwnershipTransfer holds the default value on creation for the "ownership_transfer" field.
+	DefaultOwnershipTransfer bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -164,7 +169,7 @@ const DefaultRole enums.Role = "MEMBER"
 // RoleValidator is a validator for the "role" field enum values. It is called by the builders before save.
 func RoleValidator(r enums.Role) error {
 	switch r.String() {
-	case "ADMIN", "MEMBER":
+	case "ADMIN", "MEMBER", "OWNER":
 		return nil
 	default:
 		return fmt.Errorf("invite: invalid enum value for role field: %q", r)
@@ -247,6 +252,11 @@ func BySendAttempts(opts ...sql.OrderTermOption) OrderOption {
 // ByRequestorID orders the results by the requestor_id field.
 func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
+}
+
+// ByOwnershipTransfer orders the results by the ownership_transfer field.
+func ByOwnershipTransfer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnershipTransfer, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

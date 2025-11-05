@@ -13,10 +13,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -395,6 +397,34 @@ func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCrea
 	return _c
 }
 
+// SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
+func (_c *InternalPolicyCreate) SetInternalPolicyKindName(v string) *InternalPolicyCreate {
+	_c.mutation.SetInternalPolicyKindName(v)
+	return _c
+}
+
+// SetNillableInternalPolicyKindName sets the "internal_policy_kind_name" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableInternalPolicyKindName(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetInternalPolicyKindName(*v)
+	}
+	return _c
+}
+
+// SetInternalPolicyKindID sets the "internal_policy_kind_id" field.
+func (_c *InternalPolicyCreate) SetInternalPolicyKindID(v string) *InternalPolicyCreate {
+	_c.mutation.SetInternalPolicyKindID(v)
+	return _c
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableInternalPolicyKindID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetInternalPolicyKindID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
 	_c.mutation.SetID(v)
@@ -452,6 +482,11 @@ func (_c *InternalPolicyCreate) SetApprover(v *Group) *InternalPolicyCreate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_c *InternalPolicyCreate) SetDelegate(v *Group) *InternalPolicyCreate {
 	return _c.SetDelegateID(v.ID)
+}
+
+// SetInternalPolicyKind sets the "internal_policy_kind" edge to the CustomTypeEnum entity.
+func (_c *InternalPolicyCreate) SetInternalPolicyKind(v *CustomTypeEnum) *InternalPolicyCreate {
+	return _c.SetInternalPolicyKindID(v.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -592,6 +627,21 @@ func (_c *InternalPolicyCreate) AddPrograms(v ...*Program) *InternalPolicyCreate
 // SetFile sets the "file" edge to the File entity.
 func (_c *InternalPolicyCreate) SetFile(v *File) *InternalPolicyCreate {
 	return _c.SetFileID(v.ID)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_c *InternalPolicyCreate) AddCommentIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_c *InternalPolicyCreate) AddComments(v ...*Note) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCommentIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -884,6 +934,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
 		_node.URL = &value
 	}
+	if value, ok := _c.mutation.InternalPolicyKindName(); ok {
+		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
+		_node.InternalPolicyKindName = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -970,6 +1024,24 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPolicyKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.InternalPolicyKindTable,
+			Columns: []string{internalpolicy.InternalPolicyKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalPolicyKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
@@ -1141,6 +1213,23 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.FileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.CommentsTable,
+			Columns: []string{internalpolicy.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

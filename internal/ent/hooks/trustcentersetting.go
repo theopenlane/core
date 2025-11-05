@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -17,7 +17,7 @@ var ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only o
 func HookTrustCenterSetting() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
-			zerolog.Ctx(ctx).Debug().Msg("trust center setting hook")
+			logx.FromContext(ctx).Debug().Msg("trust center setting hook")
 
 			// check for uploaded files (e.g. logo image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)

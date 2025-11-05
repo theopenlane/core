@@ -108,6 +108,26 @@ func OwnerID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// RiskKindName applies equality check predicate on the "risk_kind_name" field. It's identical to RiskKindNameEQ.
+func RiskKindName(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskKindName, v))
+}
+
+// RiskKindID applies equality check predicate on the "risk_kind_id" field. It's identical to RiskKindIDEQ.
+func RiskKindID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskKindID, v))
+}
+
+// RiskCategoryName applies equality check predicate on the "risk_category_name" field. It's identical to RiskCategoryNameEQ.
+func RiskCategoryName(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryID applies equality check predicate on the "risk_category_id" field. It's identical to RiskCategoryIDEQ.
+func RiskCategoryID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskCategoryID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldName, v))
@@ -676,6 +696,306 @@ func OwnerIDEqualFold(v string) predicate.Risk {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// RiskKindNameEQ applies the EQ predicate on the "risk_kind_name" field.
+func RiskKindNameEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskKindName, v))
+}
+
+// RiskKindNameNEQ applies the NEQ predicate on the "risk_kind_name" field.
+func RiskKindNameNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldRiskKindName, v))
+}
+
+// RiskKindNameIn applies the In predicate on the "risk_kind_name" field.
+func RiskKindNameIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldRiskKindName, vs...))
+}
+
+// RiskKindNameNotIn applies the NotIn predicate on the "risk_kind_name" field.
+func RiskKindNameNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldRiskKindName, vs...))
+}
+
+// RiskKindNameGT applies the GT predicate on the "risk_kind_name" field.
+func RiskKindNameGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldRiskKindName, v))
+}
+
+// RiskKindNameGTE applies the GTE predicate on the "risk_kind_name" field.
+func RiskKindNameGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldRiskKindName, v))
+}
+
+// RiskKindNameLT applies the LT predicate on the "risk_kind_name" field.
+func RiskKindNameLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldRiskKindName, v))
+}
+
+// RiskKindNameLTE applies the LTE predicate on the "risk_kind_name" field.
+func RiskKindNameLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldRiskKindName, v))
+}
+
+// RiskKindNameContains applies the Contains predicate on the "risk_kind_name" field.
+func RiskKindNameContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldRiskKindName, v))
+}
+
+// RiskKindNameHasPrefix applies the HasPrefix predicate on the "risk_kind_name" field.
+func RiskKindNameHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldRiskKindName, v))
+}
+
+// RiskKindNameHasSuffix applies the HasSuffix predicate on the "risk_kind_name" field.
+func RiskKindNameHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldRiskKindName, v))
+}
+
+// RiskKindNameIsNil applies the IsNil predicate on the "risk_kind_name" field.
+func RiskKindNameIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldRiskKindName))
+}
+
+// RiskKindNameNotNil applies the NotNil predicate on the "risk_kind_name" field.
+func RiskKindNameNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldRiskKindName))
+}
+
+// RiskKindNameEqualFold applies the EqualFold predicate on the "risk_kind_name" field.
+func RiskKindNameEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldRiskKindName, v))
+}
+
+// RiskKindNameContainsFold applies the ContainsFold predicate on the "risk_kind_name" field.
+func RiskKindNameContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldRiskKindName, v))
+}
+
+// RiskKindIDEQ applies the EQ predicate on the "risk_kind_id" field.
+func RiskKindIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskKindID, v))
+}
+
+// RiskKindIDNEQ applies the NEQ predicate on the "risk_kind_id" field.
+func RiskKindIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldRiskKindID, v))
+}
+
+// RiskKindIDIn applies the In predicate on the "risk_kind_id" field.
+func RiskKindIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldRiskKindID, vs...))
+}
+
+// RiskKindIDNotIn applies the NotIn predicate on the "risk_kind_id" field.
+func RiskKindIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldRiskKindID, vs...))
+}
+
+// RiskKindIDGT applies the GT predicate on the "risk_kind_id" field.
+func RiskKindIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldRiskKindID, v))
+}
+
+// RiskKindIDGTE applies the GTE predicate on the "risk_kind_id" field.
+func RiskKindIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldRiskKindID, v))
+}
+
+// RiskKindIDLT applies the LT predicate on the "risk_kind_id" field.
+func RiskKindIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldRiskKindID, v))
+}
+
+// RiskKindIDLTE applies the LTE predicate on the "risk_kind_id" field.
+func RiskKindIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldRiskKindID, v))
+}
+
+// RiskKindIDContains applies the Contains predicate on the "risk_kind_id" field.
+func RiskKindIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldRiskKindID, v))
+}
+
+// RiskKindIDHasPrefix applies the HasPrefix predicate on the "risk_kind_id" field.
+func RiskKindIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldRiskKindID, v))
+}
+
+// RiskKindIDHasSuffix applies the HasSuffix predicate on the "risk_kind_id" field.
+func RiskKindIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldRiskKindID, v))
+}
+
+// RiskKindIDIsNil applies the IsNil predicate on the "risk_kind_id" field.
+func RiskKindIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldRiskKindID))
+}
+
+// RiskKindIDNotNil applies the NotNil predicate on the "risk_kind_id" field.
+func RiskKindIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldRiskKindID))
+}
+
+// RiskKindIDEqualFold applies the EqualFold predicate on the "risk_kind_id" field.
+func RiskKindIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldRiskKindID, v))
+}
+
+// RiskKindIDContainsFold applies the ContainsFold predicate on the "risk_kind_id" field.
+func RiskKindIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldRiskKindID, v))
+}
+
+// RiskCategoryNameEQ applies the EQ predicate on the "risk_category_name" field.
+func RiskCategoryNameEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameNEQ applies the NEQ predicate on the "risk_category_name" field.
+func RiskCategoryNameNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameIn applies the In predicate on the "risk_category_name" field.
+func RiskCategoryNameIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldRiskCategoryName, vs...))
+}
+
+// RiskCategoryNameNotIn applies the NotIn predicate on the "risk_category_name" field.
+func RiskCategoryNameNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldRiskCategoryName, vs...))
+}
+
+// RiskCategoryNameGT applies the GT predicate on the "risk_category_name" field.
+func RiskCategoryNameGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameGTE applies the GTE predicate on the "risk_category_name" field.
+func RiskCategoryNameGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameLT applies the LT predicate on the "risk_category_name" field.
+func RiskCategoryNameLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameLTE applies the LTE predicate on the "risk_category_name" field.
+func RiskCategoryNameLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameContains applies the Contains predicate on the "risk_category_name" field.
+func RiskCategoryNameContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameHasPrefix applies the HasPrefix predicate on the "risk_category_name" field.
+func RiskCategoryNameHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameHasSuffix applies the HasSuffix predicate on the "risk_category_name" field.
+func RiskCategoryNameHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameIsNil applies the IsNil predicate on the "risk_category_name" field.
+func RiskCategoryNameIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldRiskCategoryName))
+}
+
+// RiskCategoryNameNotNil applies the NotNil predicate on the "risk_category_name" field.
+func RiskCategoryNameNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldRiskCategoryName))
+}
+
+// RiskCategoryNameEqualFold applies the EqualFold predicate on the "risk_category_name" field.
+func RiskCategoryNameEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryNameContainsFold applies the ContainsFold predicate on the "risk_category_name" field.
+func RiskCategoryNameContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldRiskCategoryName, v))
+}
+
+// RiskCategoryIDEQ applies the EQ predicate on the "risk_category_id" field.
+func RiskCategoryIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDNEQ applies the NEQ predicate on the "risk_category_id" field.
+func RiskCategoryIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDIn applies the In predicate on the "risk_category_id" field.
+func RiskCategoryIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldRiskCategoryID, vs...))
+}
+
+// RiskCategoryIDNotIn applies the NotIn predicate on the "risk_category_id" field.
+func RiskCategoryIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldRiskCategoryID, vs...))
+}
+
+// RiskCategoryIDGT applies the GT predicate on the "risk_category_id" field.
+func RiskCategoryIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDGTE applies the GTE predicate on the "risk_category_id" field.
+func RiskCategoryIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDLT applies the LT predicate on the "risk_category_id" field.
+func RiskCategoryIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDLTE applies the LTE predicate on the "risk_category_id" field.
+func RiskCategoryIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDContains applies the Contains predicate on the "risk_category_id" field.
+func RiskCategoryIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDHasPrefix applies the HasPrefix predicate on the "risk_category_id" field.
+func RiskCategoryIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDHasSuffix applies the HasSuffix predicate on the "risk_category_id" field.
+func RiskCategoryIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDIsNil applies the IsNil predicate on the "risk_category_id" field.
+func RiskCategoryIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldRiskCategoryID))
+}
+
+// RiskCategoryIDNotNil applies the NotNil predicate on the "risk_category_id" field.
+func RiskCategoryIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldRiskCategoryID))
+}
+
+// RiskCategoryIDEqualFold applies the EqualFold predicate on the "risk_category_id" field.
+func RiskCategoryIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldRiskCategoryID, v))
+}
+
+// RiskCategoryIDContainsFold applies the ContainsFold predicate on the "risk_category_id" field.
+func RiskCategoryIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldRiskCategoryID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -1554,6 +1874,64 @@ func HasViewersWith(preds ...predicate.Group) predicate.Risk {
 	})
 }
 
+// HasRiskKind applies the HasEdge predicate on the "risk_kind" edge.
+func HasRiskKind() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, RiskKindTable, RiskKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskKindWith applies the HasEdge predicate on the "risk_kind" edge with a given conditions (other predicates).
+func HasRiskKindWith(preds ...predicate.CustomTypeEnum) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newRiskKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRiskCategory applies the HasEdge predicate on the "risk_category" edge.
+func HasRiskCategory() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, RiskCategoryTable, RiskCategoryColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskCategoryWith applies the HasEdge predicate on the "risk_category" edge with a given conditions (other predicates).
+func HasRiskCategoryWith(preds ...predicate.CustomTypeEnum) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newRiskCategoryStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControls applies the HasEdge predicate on the "controls" edge.
 func HasControls() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
@@ -1894,6 +2272,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.Risk {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasComments applies the HasEdge predicate on the "comments" edge.
+func HasComments() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCommentsWith applies the HasEdge predicate on the "comments" edge with a given conditions (other predicates).
+func HasCommentsWith(preds ...predicate.Note) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newCommentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -16,10 +16,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -43,6 +45,7 @@ type InternalPolicyQuery struct {
 	withEditors                     *GroupQuery
 	withApprover                    *GroupQuery
 	withDelegate                    *GroupQuery
+	withInternalPolicyKind          *CustomTypeEnumQuery
 	withControlObjectives           *ControlObjectiveQuery
 	withControlImplementations      *ControlImplementationQuery
 	withControls                    *ControlQuery
@@ -53,6 +56,8 @@ type InternalPolicyQuery struct {
 	withRisks                       *RiskQuery
 	withPrograms                    *ProgramQuery
 	withFile                        *FileQuery
+	withComments                    *NoteQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
 	withNamedBlockedGroups          map[string]*GroupQuery
@@ -66,6 +71,7 @@ type InternalPolicyQuery struct {
 	withNamedTasks                  map[string]*TaskQuery
 	withNamedRisks                  map[string]*RiskQuery
 	withNamedPrograms               map[string]*ProgramQuery
+	withNamedComments               map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -220,6 +226,31 @@ func (_q *InternalPolicyQuery) QueryDelegate() *GroupQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicyKind chains the current query on the "internal_policy_kind" edge.
+func (_q *InternalPolicyQuery) QueryInternalPolicyKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.InternalPolicyKindTable, internalpolicy.InternalPolicyKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -477,6 +508,31 @@ func (_q *InternalPolicyQuery) QueryFile() *FileQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *InternalPolicyQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.CommentsTable, internalpolicy.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first InternalPolicy entity from the query.
 // Returns a *NotFoundError when no InternalPolicy was found.
 func (_q *InternalPolicyQuery) First(ctx context.Context) (*InternalPolicy, error) {
@@ -674,6 +730,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withEditors:                _q.withEditors.Clone(),
 		withApprover:               _q.withApprover.Clone(),
 		withDelegate:               _q.withDelegate.Clone(),
+		withInternalPolicyKind:     _q.withInternalPolicyKind.Clone(),
 		withControlObjectives:      _q.withControlObjectives.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
 		withControls:               _q.withControls.Clone(),
@@ -684,6 +741,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withRisks:                  _q.withRisks.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withFile:                   _q.withFile.Clone(),
+		withComments:               _q.withComments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -743,6 +801,17 @@ func (_q *InternalPolicyQuery) WithDelegate(opts ...func(*GroupQuery)) *Internal
 		opt(query)
 	}
 	_q.withDelegate = query
+	return _q
+}
+
+// WithInternalPolicyKind tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithInternalPolicyKind(opts ...func(*CustomTypeEnumQuery)) *InternalPolicyQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicyKind = query
 	return _q
 }
 
@@ -856,6 +925,17 @@ func (_q *InternalPolicyQuery) WithFile(opts ...func(*FileQuery)) *InternalPolic
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithComments(opts ...func(*NoteQuery)) *InternalPolicyQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -939,13 +1019,15 @@ func (_q *InternalPolicyQuery) prepareQuery(ctx context.Context) error {
 func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*InternalPolicy, error) {
 	var (
 		nodes       = []*InternalPolicy{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [17]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
+			_q.withInternalPolicyKind != nil,
 			_q.withControlObjectives != nil,
 			_q.withControlImplementations != nil,
 			_q.withControls != nil,
@@ -956,8 +1038,12 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withRisks != nil,
 			_q.withPrograms != nil,
 			_q.withFile != nil,
+			_q.withComments != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicy.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*InternalPolicy).scanValues(nil, columns)
 	}
@@ -1010,6 +1096,12 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withDelegate; query != nil {
 		if err := _q.loadDelegate(ctx, query, nodes, nil,
 			func(n *InternalPolicy, e *Group) { n.Edges.Delegate = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicyKind; query != nil {
+		if err := _q.loadInternalPolicyKind(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *CustomTypeEnum) { n.Edges.InternalPolicyKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1083,6 +1175,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *InternalPolicy, e *File) { n.Edges.File = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Comments = []*Note{} },
+			func(n *InternalPolicy, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1160,6 +1259,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedPrograms(name) },
 			func(n *InternalPolicy, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedComments(name) },
+			func(n *InternalPolicy, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1375,6 +1481,35 @@ func (_q *InternalPolicyQuery) loadDelegate(ctx context.Context, query *GroupQue
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *InternalPolicyQuery) loadInternalPolicyKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		fk := nodes[i].InternalPolicyKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_policy_kind_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1941,6 +2076,37 @@ func (_q *InternalPolicyQuery) loadFile(ctx context.Context, query *FileQuery, n
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*InternalPolicy)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(internalpolicy.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.internal_policy_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "internal_policy_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1980,6 +2146,9 @@ func (_q *InternalPolicyQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldDelegateID)
+		}
+		if _q.withInternalPolicyKind != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldInternalPolicyKindID)
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldFileID)
@@ -2203,6 +2372,20 @@ func (_q *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*Prog
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *InternalPolicyQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 

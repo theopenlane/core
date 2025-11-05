@@ -45,6 +45,14 @@ const (
 	FieldLogoURL = "logo_url"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
+	// FieldScimExternalID holds the string denoting the scim_external_id field in the database.
+	FieldScimExternalID = "scim_external_id"
+	// FieldScimDisplayName holds the string denoting the scim_display_name field in the database.
+	FieldScimDisplayName = "scim_display_name"
+	// FieldScimActive holds the string denoting the scim_active field in the database.
+	FieldScimActive = "scim_active"
+	// FieldScimGroupMailing holds the string denoting the scim_group_mailing field in the database.
+	FieldScimGroupMailing = "scim_group_mailing"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeProgramEditors holds the string denoting the program_editors edge name in mutations.
@@ -341,11 +349,18 @@ var Columns = []string{
 	FieldGravatarLogoURL,
 	FieldLogoURL,
 	FieldDisplayName,
+	FieldScimExternalID,
+	FieldScimDisplayName,
+	FieldScimActive,
+	FieldScimGroupMailing,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "groups"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"assessment_blocked_groups",
+	"assessment_editors",
+	"assessment_viewers",
 	"asset_blocked_groups",
 	"asset_editors",
 	"asset_viewers",
@@ -491,7 +506,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -518,6 +533,8 @@ var (
 	DefaultDisplayName string
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	DisplayNameValidator func(string) error
+	// DefaultScimActive holds the default value on creation for the "scim_active" field.
+	DefaultScimActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -598,6 +615,26 @@ func ByLogoURL(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByScimExternalID orders the results by the scim_external_id field.
+func ByScimExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimExternalID, opts...).ToFunc()
+}
+
+// ByScimDisplayName orders the results by the scim_display_name field.
+func ByScimDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimDisplayName, opts...).ToFunc()
+}
+
+// ByScimActive orders the results by the scim_active field.
+func ByScimActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimActive, opts...).ToFunc()
+}
+
+// ByScimGroupMailing orders the results by the scim_group_mailing field.
+func ByScimGroupMailing(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScimGroupMailing, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

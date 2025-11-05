@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -26,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
 	api "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/permissioncache"
@@ -96,13 +97,23 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				id string
 			)
 
-			reqCtx := c.Request().Context()
+			reqCtx := logx.SeedContext(c.Request().Context())
+			c.SetRequest(c.Request().WithContext(reqCtx))
+			requestLogger := logx.FromContext(reqCtx)
 
 			switch getTokenType(bearerToken) {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
 				au, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
+				}
+
+				// Record authentication metric based on token type
+				switch au.AuthenticationType {
+				case auth.PATAuthentication:
+					metrics.RecordAuthentication(metrics.AuthTypePAT)
+				case auth.APITokenAuthentication:
+					metrics.RecordAuthentication(metrics.AuthTypeAPIToken)
 				}
 
 			default:
@@ -123,6 +134,9 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 					auth.SetAnonymousTrustCenterUserContext(c, an)
 
+					// Record anonymous JWT authentication
+					metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
+
 					return next(c)
 				}
 
@@ -133,6 +147,9 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
+
+				// Record regular JWT authentication
+				metrics.RecordAuthentication(metrics.AuthTypeJWT)
 			}
 
 			auth.SetAuthenticatedUserContext(c, au)
@@ -142,7 +159,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			}
 
 			// add the user and org ID to the logger context
-			zerolog.Ctx(reqCtx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+			requestLogger.UpdateContext(func(c zerolog.Context) zerolog.Context {
 				return c.Str("user_id", au.SubjectID).
 					Strs("org_id", au.OrganizationIDs)
 			})
@@ -172,12 +189,13 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
+	logger := logx.FromContext(ctx)
 	switch au.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
-			log.Error().Err(err).Msg("unable to update last used time for personal access token")
+			logger.Error().Err(err).Msg("unable to update last used time for personal access token")
 
 			return err
 		}
@@ -185,7 +203,7 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.Authenti
 		// allow the request, we know the user has access to the token, no need to check
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
-			log.Err(err).Msg("unable to update last used time for API token")
+			logger.Error().Err(err).Msg("unable to update last used time for API token")
 
 			return err
 		}
@@ -429,6 +447,7 @@ func getSubjectName(user *ent.User) string {
 // unauthorized returns a 401 Unauthorized response with the error message
 func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
 	reqCtx := c.Request().Context()
+	logger := logx.FromContext(reqCtx)
 
 	if v != nil && conf != nil && conf.DBClient != nil {
 		orgID := orgIDFromToken(c, v)
@@ -453,7 +472,7 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 	}
 
 	if jsonErr := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); jsonErr != nil {
-		log.Error().Err(jsonErr).Msg("failed to write unauthorized JSON response")
+		logger.Error().Err(jsonErr).Msg("failed to write unauthorized JSON response")
 		return jsonErr
 	}
 
@@ -463,11 +482,12 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 // orgIDFromToken extracts the organization ID from the token in the request context
 func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 	authHeader := c.Request().Header.Get("Authorization")
+	logger := logx.FromContext(c.Request().Context())
 
 	if authHeader != "" {
 		token, err := auth.GetBearerToken(c)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to get bearer token from context")
+			logger.Error().Err(err).Msg("failed to get bearer token from context")
 			return ""
 		}
 

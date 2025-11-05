@@ -80,6 +80,10 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldProcedureKindName holds the string denoting the procedure_kind_name field in the database.
+	FieldProcedureKindName = "procedure_kind_name"
+	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
+	FieldProcedureKindID = "procedure_kind_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -90,6 +94,8 @@ const (
 	EdgeApprover = "approver"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
 	EdgeDelegate = "delegate"
+	// EdgeProcedureKind holds the string denoting the procedure_kind edge name in mutations.
+	EdgeProcedureKind = "procedure_kind"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -104,6 +110,8 @@ const (
 	EdgeRisks = "risks"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
 	// Table holds the table name of the procedure in the database.
@@ -139,6 +147,13 @@ const (
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "delegate_id"
+	// ProcedureKindTable is the table that holds the procedure_kind relation/edge.
+	ProcedureKindTable = "procedures"
+	// ProcedureKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ProcedureKindInverseTable = "custom_type_enums"
+	// ProcedureKindColumn is the table column denoting the procedure_kind relation/edge.
+	ProcedureKindColumn = "procedure_kind_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_procedures"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -174,6 +189,13 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "procedure_comments"
 	// FileTable is the table that holds the file relation/edge.
 	FileTable = "procedures"
 	// FileInverseTable is the table name for the File entity.
@@ -217,12 +239,15 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldProcedureKindName,
+	FieldProcedureKindID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_procedures",
+	"custom_type_enum_procedures",
 }
 
 var (
@@ -276,7 +301,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [18]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -469,6 +494,16 @@ func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
+// ByProcedureKindName orders the results by the procedure_kind_name field.
+func ByProcedureKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindName, opts...).ToFunc()
+}
+
+// ByProcedureKindID orders the results by the procedure_kind_id field.
+func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -515,6 +550,13 @@ func ByApproverField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProcedureKindField orders the results by procedure_kind field.
+func ByProcedureKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -616,6 +658,20 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFileField orders the results by file field.
 func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -655,6 +711,13 @@ func newDelegateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DelegateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newProcedureKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ProcedureKindTable, ProcedureKindColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -704,6 +767,13 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
 	)
 }
 func newFileStep() *sqlgraph.Step {

@@ -64,6 +64,16 @@ type User struct {
 	AuthProvider enums.AuthProvider `json:"auth_provider,omitempty"`
 	// the user's role
 	Role enums.Role `json:"role,omitempty"`
+	// the SCIM external ID for the user
+	ScimExternalID *string `json:"scim_external_id,omitempty"`
+	// the SCIM username for the user
+	ScimUsername *string `json:"scim_username,omitempty"`
+	// whether the SCIM user is active
+	ScimActive bool `json:"scim_active,omitempty"`
+	// the SCIM preferred language for the user
+	ScimPreferredLanguage *string `json:"scim_preferred_language,omitempty"`
+	// the SCIM locale for the user
+	ScimLocale *string `json:"scim_locale,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges        UserEdges `json:"edges"`
@@ -366,7 +376,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldTags:
 			values[i] = new([]byte)
-		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldDisplayID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldLastLoginProvider, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
+		case user.FieldScimActive:
+			values[i] = new(sql.NullBool)
+		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldDisplayID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldLastLoginProvider, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole, user.FieldScimExternalID, user.FieldScimUsername, user.FieldScimPreferredLanguage, user.FieldScimLocale:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldAvatarUpdatedAt, user.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -523,6 +535,40 @@ func (_m *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
 				_m.Role = enums.Role(value.String)
+			}
+		case user.FieldScimExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_external_id", values[i])
+			} else if value.Valid {
+				_m.ScimExternalID = new(string)
+				*_m.ScimExternalID = value.String
+			}
+		case user.FieldScimUsername:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_username", values[i])
+			} else if value.Valid {
+				_m.ScimUsername = new(string)
+				*_m.ScimUsername = value.String
+			}
+		case user.FieldScimActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_active", values[i])
+			} else if value.Valid {
+				_m.ScimActive = value.Bool
+			}
+		case user.FieldScimPreferredLanguage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_preferred_language", values[i])
+			} else if value.Valid {
+				_m.ScimPreferredLanguage = new(string)
+				*_m.ScimPreferredLanguage = value.String
+			}
+		case user.FieldScimLocale:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scim_locale", values[i])
+			} else if value.Valid {
+				_m.ScimLocale = new(string)
+				*_m.ScimLocale = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -744,6 +790,29 @@ func (_m *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))
+	builder.WriteString(", ")
+	if v := _m.ScimExternalID; v != nil {
+		builder.WriteString("scim_external_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimUsername; v != nil {
+		builder.WriteString("scim_username=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("scim_active=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScimActive))
+	builder.WriteString(", ")
+	if v := _m.ScimPreferredLanguage; v != nil {
+		builder.WriteString("scim_preferred_language=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ScimLocale; v != nil {
+		builder.WriteString("scim_locale=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -16,7 +16,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -31,6 +31,7 @@ import (
 	catalog "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
@@ -159,7 +160,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			// Delete operations return an int of the number of rows deleted
 			// so we do not want to skip emitting events for those operations
 			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
-				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
+				logx.FromContext(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
 				// TODO: determine if we need to emit events for mutations that return an int
 				return retVal, err
 			}
@@ -198,7 +199,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					}
 				}
 
-				zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+				logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 					return c.Str("mutation_id", eventID.ID)
 				})
 
@@ -307,11 +308,6 @@ var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
 
-// RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
-func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
-	client.Use(EmitEventHook(e))
-}
-
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
 	if e.Emitter == nil {
@@ -383,21 +379,21 @@ func handleSubscriberCreate(event soiree.Event) error {
 	if slackCfg.NewSubscriberMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewSubscriberMessageFile)
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to read slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to read slack template")
 
 			return err
 		}
 
 		t, err = template.New("slack").Parse(string(b))
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to parse slack template")
 
 			return err
 		}
 	} else {
 		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.SubscriberTemplateName)
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to parse embedded slack template")
 
 			return err
 		}
@@ -406,7 +402,7 @@ func handleSubscriberCreate(event soiree.Event) error {
 	var buf bytes.Buffer
 
 	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+		logx.FromContext(event.Context()).Debug().Msg("failed to execute slack template")
 
 		return err
 	}
@@ -438,21 +434,21 @@ func handleUserCreate(event soiree.Event) error {
 	if slackCfg.NewUserMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewUserMessageFile)
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to read slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to read slack template")
 
 			return err
 		}
 
 		t, err = template.New("slack").Parse(string(b))
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to parse slack template")
 
 			return err
 		}
 	} else {
 		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.UserTemplateName)
 		if err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
+			logx.FromContext(event.Context()).Debug().Msg("failed to parse embedded slack template")
 
 			return err
 		}
@@ -461,7 +457,7 @@ func handleUserCreate(event soiree.Event) error {
 	var buf bytes.Buffer
 
 	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+		logx.FromContext(event.Context()).Debug().Msg("failed to execute slack template")
 
 		return err
 	}
@@ -481,7 +477,7 @@ func handleOrganizationDelete(event soiree.Event) error {
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
-		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer deletion")
+		logx.FromContext(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer deletion")
 
 		return nil
 	}
@@ -498,7 +494,7 @@ func handleOrganizationDelete(event soiree.Event) error {
 		)).
 		Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("failed to fetch organization")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization")
 
 		return err
 	}
@@ -508,7 +504,7 @@ func handleOrganizationDelete(event soiree.Event) error {
 	}
 
 	if err := entMgr.FindAndDeactivateCustomerSubscription(event.Context(), *org.StripeCustomerID); err != nil {
-		zerolog.Ctx(event.Context()).Error().Err(err).Msg("failed to deactivate customer subscription")
+		logx.FromContext(event.Context()).Error().Err(err).Msg("failed to deactivate customer subscription")
 
 		return err
 	}
@@ -520,7 +516,7 @@ func handleOrganizationDelete(event soiree.Event) error {
 func handleOrganizationCreated(event soiree.Event) error {
 	client, ok := event.Client().(*entgen.Client)
 	if !ok {
-		zerolog.Ctx(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
+		logx.FromContext(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
 
 		return nil
 	}
@@ -528,7 +524,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
-		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+		logx.FromContext(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
@@ -542,7 +538,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 		WithSetting().
 		Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization")
+		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization")
 
 		return err
 	}
@@ -561,23 +557,23 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, orgCustomer, org)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
 
 		return nil
 	}
 
 	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer, client.EntConfig.Modules.UseSandbox)
 
-	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
+	logx.FromContext(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 
 	if err = entMgr.CreateCustomerAndSubscription(allowCtx, orgCustomer); err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to create customer")
+		logx.FromContext(event.Context()).Err(err).Msg("Failed to create customer")
 
 		return err
 	}
 
 	if err := updateCustomerOrgSub(allowCtx, orgCustomer, client); err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to map customer to org subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("Failed to map customer to org subscription")
 
 		return err
 	}
@@ -588,7 +584,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 // updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
 	if customer == nil || customer.OrganizationSubscriptionID == "" {
-		zerolog.Ctx(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
+		logx.FromContext(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
 
 		return ErrNoSubscriptions
 	}
@@ -645,7 +641,7 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 	if org.Edges.Setting != nil {
 		o.OrganizationSettingsID = org.Edges.Setting.ID
 	} else {
-		zerolog.Ctx(ctx).Debug().Msgf("Organization setting is nil for organization ID %s", orgSubs.OwnerID)
+		logx.FromContext(ctx).Debug().Msgf("Organization setting is nil for organization ID %s", orgSubs.OwnerID)
 	}
 
 	o.OrganizationID = org.ID
@@ -662,21 +658,21 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	client, ok := event.Client().(*entgen.Client)
 	if !ok {
-		zerolog.Ctx(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
+		logx.FromContext(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
 
 		return nil
 	}
 
 	entMgr := client.EntitlementManager
 	if entMgr == nil {
-		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+		logx.FromContext(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
 
 	orgCust, err := fetchOrganizationCustomerByOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization ID by organization setting ID")
+		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
 		return err
 	}
@@ -685,7 +681,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 		params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
 		if params != nil {
 			if _, err := entMgr.UpdateCustomer(event.Context(), orgCust.StripeCustomerID, params); err != nil {
-				zerolog.Ctx(event.Context()).Err(err).Msg("Failed to update customer")
+				logx.FromContext(event.Context()).Err(err).Msg("Failed to update customer")
 
 				return err
 			}
@@ -699,7 +695,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID string, client any) (*entitlements.OrganizationCustomer, error) {
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgSettingID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization setting ID %s", orgSettingID)
+		logx.FromContext(ctx).Err(err).Msgf("Failed to fetch organization setting ID %s", orgSettingID)
 
 		return nil, err
 	}
@@ -709,7 +705,7 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 		Where(organization.ID(orgSetting.OrganizationID)).
 		Only(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgSettingID)
+		logx.FromContext(ctx).Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgSettingID)
 
 		return nil, err
 	}

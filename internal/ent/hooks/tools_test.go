@@ -79,7 +79,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
 	require.NoError(t, err)
 
-	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
 

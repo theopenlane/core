@@ -32,6 +32,22 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, first *int64, last *int64, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
+	CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error)
+	DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error)
+	GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error)
+	GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error)
+	GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error)
+	UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error)
+	GetAllAssessmentHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentHistories, error)
+	GetAssessmentHistories(ctx context.Context, first *int64, last *int64, where *AssessmentHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentHistories, error)
+	CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error)
+	DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error)
+	GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error)
+	GetAssessmentResponseByID(ctx context.Context, assessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseByID, error)
+	GetAssessmentResponses(ctx context.Context, first *int64, last *int64, where *AssessmentResponseWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponses, error)
+	UpdateAssessmentResponse(ctx context.Context, updateAssessmentResponseID string, input UpdateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentResponse, error)
+	GetAllAssessmentResponseHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponseHistories, error)
+	GetAssessmentResponseHistories(ctx context.Context, first *int64, last *int64, where *AssessmentResponseHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseHistories, error)
 	CreateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAsset, error)
 	CreateBulkAsset(ctx context.Context, input []*CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAsset, error)
 	CreateAsset(ctx context.Context, input CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateAsset, error)
@@ -100,6 +116,14 @@ type OpenlaneGraphClient interface {
 	UpdateCustomDomain(ctx context.Context, updateCustomDomainID string, input UpdateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomDomain, error)
 	GetAllCustomDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomainHistories, error)
 	GetCustomDomainHistories(ctx context.Context, first *int64, last *int64, where *CustomDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainHistories, error)
+	CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCustomTypeEnum, error)
+	CreateBulkCustomTypeEnum(ctx context.Context, input []*CreateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCustomTypeEnum, error)
+	CreateCustomTypeEnum(ctx context.Context, input CreateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*CreateCustomTypeEnum, error)
+	DeleteCustomTypeEnum(ctx context.Context, deleteCustomTypeEnumID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCustomTypeEnum, error)
+	GetAllCustomTypeEnums(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomTypeEnums, error)
+	GetCustomTypeEnumByID(ctx context.Context, customTypeEnumID string, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnumByID, error)
+	GetCustomTypeEnums(ctx context.Context, first *int64, last *int64, where *CustomTypeEnumWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnums, error)
+	UpdateCustomTypeEnum(ctx context.Context, updateCustomTypeEnumID string, input UpdateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomTypeEnum, error)
 	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDNSVerification, error)
 	CreateBulkDNSVerification(ctx context.Context, input []*CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDNSVerification, error)
 	CreateDNSVerification(ctx context.Context, input CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateDNSVerification, error)
@@ -294,6 +318,7 @@ type OpenlaneGraphClient interface {
 	UpdateNarrative(ctx context.Context, updateNarrativeID string, input UpdateNarrativeInput, interceptors ...clientv2.RequestInterceptor) (*UpdateNarrative, error)
 	GetAllNarrativeHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNarrativeHistories, error)
 	GetNarrativeHistories(ctx context.Context, first *int64, last *int64, where *NarrativeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNarrativeHistories, error)
+	DeleteNote(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*DeleteNote, error)
 	GetAllNoteHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllNoteHistories, error)
 	GetNoteHistories(ctx context.Context, first *int64, last *int64, where *NoteHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetNoteHistories, error)
 	CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error)
@@ -438,6 +463,14 @@ type OpenlaneGraphClient interface {
 	GetSubscriberByEmail(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*GetSubscriberByEmail, error)
 	GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *SubscriberWhereInput, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
+	CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTagDefinition, error)
+	CreateBulkTagDefinition(ctx context.Context, input []*CreateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTagDefinition, error)
+	CreateTagDefinition(ctx context.Context, input CreateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateTagDefinition, error)
+	DeleteTagDefinition(ctx context.Context, deleteTagDefinitionID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTagDefinition, error)
+	GetAllTagDefinitions(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTagDefinitions, error)
+	GetTagDefinitionByID(ctx context.Context, tagDefinitionID string, interceptors ...clientv2.RequestInterceptor) (*GetTagDefinitionByID, error)
+	GetTagDefinitions(ctx context.Context, first *int64, last *int64, where *TagDefinitionWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTagDefinitions, error)
+	UpdateTagDefinition(ctx context.Context, updateTagDefinitionID string, input UpdateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTagDefinition, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
 	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
 	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
@@ -3755,6 +3788,2030 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 	return &t.APIToken
 }
 
+type CreateAssessment_CreateAssessment_Assessment struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetID() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.ID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetName() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.Name
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetTags() []string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.Tags
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateAssessment_CreateAssessment struct {
+	Assessment CreateAssessment_CreateAssessment_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *CreateAssessment_CreateAssessment) GetAssessment() *CreateAssessment_CreateAssessment_Assessment {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment{}
+	}
+	return &t.Assessment
+}
+
+type DeleteAssessment_DeleteAssessment struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAssessment_DeleteAssessment) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAssessment_DeleteAssessment{}
+	}
+	return t.DeletedID
+}
+
+type GetAllAssessments_Assessments_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessments_Assessments_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessments_Assessments_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessments_Assessments_Edges_Node struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessments_Assessments_Edges struct {
+	Node *GetAllAssessments_Assessments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessments_Assessments_Edges) GetNode() *GetAllAssessments_Assessments_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessments_Assessments struct {
+	Edges      []*GetAllAssessments_Assessments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessments_Assessments_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessments_Assessments) GetEdges() []*GetAllAssessments_Assessments_Edges {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessments_Assessments) GetPageInfo() *GetAllAssessments_Assessments_PageInfo {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessments_Assessments) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessments_Assessments{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentByID_Assessment struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentByID_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessmentByID_Assessment) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessmentByID_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentByID_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentByID_Assessment) GetID() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentByID_Assessment) GetName() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.Name
+}
+func (t *GetAssessmentByID_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentByID_Assessment) GetTags() []string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.Tags
+}
+func (t *GetAssessmentByID_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessmentByID_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentByID_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessments_Assessments_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessments_Assessments_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessments_Assessments_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessments_Assessments_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessments_Assessments_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessments_Assessments_Edges_Node struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessments_Assessments_Edges struct {
+	Node *GetAssessments_Assessments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessments_Assessments_Edges) GetNode() *GetAssessments_Assessments_Edges_Node {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessments_Assessments struct {
+	Edges      []*GetAssessments_Assessments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessments_Assessments_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessments_Assessments) GetEdges() []*GetAssessments_Assessments_Edges {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return t.Edges
+}
+func (t *GetAssessments_Assessments) GetPageInfo() *GetAssessments_Assessments_PageInfo {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessments_Assessments) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessments_Assessments{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAssessment_UpdateAssessment_Assessment struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return &t.AssessmentType
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetID() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.ID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetName() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.Name
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTags() []string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.Tags
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.TemplateID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateAssessment_UpdateAssessment struct {
+	Assessment UpdateAssessment_UpdateAssessment_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *UpdateAssessment_UpdateAssessment) GetAssessment() *UpdateAssessment_UpdateAssessment_Assessment {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment{}
+	}
+	return &t.Assessment
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_Edges_Node struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	Operation         history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentHistories_AssessmentHistories_Edges struct {
+	Node *GetAllAssessmentHistories_AssessmentHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges) GetNode() *GetAllAssessmentHistories_AssessmentHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentHistories_AssessmentHistories struct {
+	Edges      []*GetAllAssessmentHistories_AssessmentHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentHistories_AssessmentHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetEdges() []*GetAllAssessmentHistories_AssessmentHistories_Edges {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetPageInfo() *GetAllAssessmentHistories_AssessmentHistories_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentHistories_AssessmentHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentHistories_AssessmentHistories_Edges_Node struct {
+	AssessmentOwnerID *string              "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	AssessmentType    enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt         *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string               "json:\"id\" graphql:\"id\""
+	Name              string               "json:\"name\" graphql:\"name\""
+	Operation         history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt         *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssessmentType {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.AssessmentType
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentHistories_AssessmentHistories_Edges struct {
+	Node *GetAssessmentHistories_AssessmentHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories_Edges) GetNode() *GetAssessmentHistories_AssessmentHistories_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentHistories_AssessmentHistories struct {
+	Edges      []*GetAssessmentHistories_AssessmentHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentHistories_AssessmentHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentHistories_AssessmentHistories) GetEdges() []*GetAssessmentHistories_AssessmentHistories_Edges {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentHistories_AssessmentHistories) GetPageInfo() *GetAssessmentHistories_AssessmentHistories_PageInfo {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateAssessmentResponse_CreateAssessmentResponse struct {
+	AssessmentResponse CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *CreateAssessmentResponse_CreateAssessmentResponse) GetAssessmentResponse() *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse {
+	if t == nil {
+		t = &CreateAssessmentResponse_CreateAssessmentResponse{}
+	}
+	return &t.AssessmentResponse
+}
+
+type DeleteAssessmentResponse_DeleteAssessmentResponse struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAssessmentResponse_DeleteAssessmentResponse) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAssessmentResponse_DeleteAssessmentResponse{}
+	}
+	return t.DeletedID
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_Edges_Node struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentResponses_AssessmentResponses_Edges struct {
+	Node *GetAllAssessmentResponses_AssessmentResponses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses_Edges) GetNode() *GetAllAssessmentResponses_AssessmentResponses_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentResponses_AssessmentResponses struct {
+	Edges      []*GetAllAssessmentResponses_AssessmentResponses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentResponses_AssessmentResponses_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetEdges() []*GetAllAssessmentResponses_AssessmentResponses_Edges {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetPageInfo() *GetAllAssessmentResponses_AssessmentResponses_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponses_AssessmentResponses{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentResponseByID_AssessmentResponse struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponseByID_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseByID_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponses_AssessmentResponses_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentResponses_AssessmentResponses_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentResponses_AssessmentResponses_Edges_Node struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponses_AssessmentResponses_Edges struct {
+	Node *GetAssessmentResponses_AssessmentResponses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses_Edges) GetNode() *GetAssessmentResponses_AssessmentResponses_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentResponses_AssessmentResponses struct {
+	Edges      []*GetAssessmentResponses_AssessmentResponses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentResponses_AssessmentResponses_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentResponses_AssessmentResponses) GetEdges() []*GetAssessmentResponses_AssessmentResponses_Edges {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentResponses_AssessmentResponses) GetPageInfo() *GetAssessmentResponses_AssessmentResponses_PageInfo {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentResponses_AssessmentResponses) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentResponses_AssessmentResponses{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.AssignedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CompletedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetDocumentDataID() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DocumentDataID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetDueDate() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.DueDate
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetEmail() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.Email
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetID() string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.ID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetSendAttempts() int64 {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.SendAttempts
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.StartedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return &t.Status
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateAssessmentResponse_UpdateAssessmentResponse struct {
+	AssessmentResponse UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *UpdateAssessmentResponse_UpdateAssessmentResponse) GetAssessmentResponse() *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse {
+	if t == nil {
+		t = &UpdateAssessmentResponse_UpdateAssessmentResponse{}
+	}
+	return &t.AssessmentResponse
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                 "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                        "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges struct {
+	Node *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges) GetNode() *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentResponseHistories_AssessmentResponseHistories struct {
+	Edges      []*GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetEdges() []*GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetPageInfo() *GetAllAssessmentResponseHistories_AssessmentResponseHistories_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struct {
+	AssessmentID   string                         "json:\"assessmentID\" graphql:\"assessmentID\""
+	AssignedAt     time.Time                      "json:\"assignedAt\" graphql:\"assignedAt\""
+	CompletedAt    *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt      *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                        "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	DueDate        *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Email          string                         "json:\"email\" graphql:\"email\""
+	HistoryTime    time.Time                      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string                         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType                 "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string                        "json:\"ref,omitempty\" graphql:\"ref\""
+	SendAttempts   int64                          "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	StartedAt      time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetAssignedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.AssignedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCompletedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CompletedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetDueDate() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.DueDate
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges struct {
+	Node *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges) GetNode() *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentResponseHistories_AssessmentResponseHistories struct {
+	Edges      []*GetAssessmentResponseHistories_AssessmentResponseHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetEdges() []*GetAssessmentResponseHistories_AssessmentResponseHistories_Edges {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetPageInfo() *GetAssessmentResponseHistories_AssessmentResponseHistories_PageInfo {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentResponseHistories_AssessmentResponseHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentResponseHistories_AssessmentResponseHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVAsset_CreateBulkCSVAsset_Assets struct {
 	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
 	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
@@ -6336,6 +8393,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -6398,6 +8456,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetCategoryID() *string {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.CategoryID
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlKindName() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.ControlKindName
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlOwnerID() *string {
 	if t == nil {
@@ -6568,6 +8632,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -6630,6 +8695,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCategoryID() *st
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.CategoryID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlKindName
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOwnerID() *string {
 	if t == nil {
@@ -6800,6 +8871,7 @@ type CreateControl_CreateControl_Control struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -6862,6 +8934,12 @@ func (t *CreateControl_CreateControl_Control) GetCategoryID() *string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.CategoryID
+}
+func (t *CreateControl_CreateControl_Control) GetControlKindName() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.ControlKindName
 }
 func (t *CreateControl_CreateControl_Control) GetControlOwnerID() *string {
 	if t == nil {
@@ -7075,6 +9153,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -7137,6 +9216,12 @@ func (t *GetAllControls_Controls_Edges_Node) GetCategoryID() *string {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.CategoryID
+}
+func (t *GetAllControls_Controls_Edges_Node) GetControlKindName() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.ControlKindName
 }
 func (t *GetAllControls_Controls_Edges_Node) GetControlOwnerID() *string {
 	if t == nil {
@@ -7332,6 +9417,7 @@ type GetControlByID_Control struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -7394,6 +9480,12 @@ func (t *GetControlByID_Control) GetCategoryID() *string {
 		t = &GetControlByID_Control{}
 	}
 	return t.CategoryID
+}
+func (t *GetControlByID_Control) GetControlKindName() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.ControlKindName
 }
 func (t *GetControlByID_Control) GetControlOwnerID() *string {
 	if t == nil {
@@ -7585,6 +9677,7 @@ type GetControls_Controls_Edges_Node struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -7647,6 +9740,12 @@ func (t *GetControls_Controls_Edges_Node) GetCategoryID() *string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.CategoryID
+}
+func (t *GetControls_Controls_Edges_Node) GetControlKindName() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.ControlKindName
 }
 func (t *GetControls_Controls_Edges_Node) GetControlOwnerID() *string {
 	if t == nil {
@@ -7842,6 +9941,7 @@ type UpdateControl_UpdateControl_Control struct {
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	Category               *string                          "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID             *string                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindName        *string                          "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	ControlType            *enums.ControlType               "json:\"controlType,omitempty\" graphql:\"controlType\""
@@ -7904,6 +10004,12 @@ func (t *UpdateControl_UpdateControl_Control) GetCategoryID() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.CategoryID
+}
+func (t *UpdateControl_UpdateControl_Control) GetControlKindName() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.ControlKindName
 }
 func (t *UpdateControl_UpdateControl_Control) GetControlOwnerID() *string {
 	if t == nil {
@@ -14385,6 +16491,911 @@ func (t *GetCustomDomainHistories_CustomDomainHistories) GetTotalCount() int64 {
 		t = &GetCustomDomainHistories_CustomDomainHistories{}
 	}
 	return t.TotalCount
+}
+
+type CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetColor() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Color
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetField() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Field
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetObjectType() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.ObjectType
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum struct {
+	CustomTypeEnums []*CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums "json:\"customTypeEnums,omitempty\" graphql:\"customTypeEnums\""
+}
+
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum) GetCustomTypeEnums() []*CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum{}
+	}
+	return t.CustomTypeEnums
+}
+
+type CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetColor() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Color
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetField() string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Field
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetID() string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetName() string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetObjectType() string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.ObjectType
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum struct {
+	CustomTypeEnums []*CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums "json:\"customTypeEnums,omitempty\" graphql:\"customTypeEnums\""
+}
+
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum) GetCustomTypeEnums() []*CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum{}
+	}
+	return t.CustomTypeEnums
+}
+
+type CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetColor() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Color
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetDescription() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Description
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetField() string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Field
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetID() string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.ID
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetName() string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Name
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetObjectType() string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.ObjectType
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.OwnerID
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateCustomTypeEnum_CreateCustomTypeEnum struct {
+	CustomTypeEnum CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum "json:\"customTypeEnum\" graphql:\"customTypeEnum\""
+}
+
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum) GetCustomTypeEnum() *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum{}
+	}
+	return &t.CustomTypeEnum
+}
+
+type DeleteCustomTypeEnum_DeleteCustomTypeEnum struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteCustomTypeEnum_DeleteCustomTypeEnum) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteCustomTypeEnum_DeleteCustomTypeEnum{}
+	}
+	return t.DeletedID
+}
+
+type GetAllCustomTypeEnums_CustomTypeEnums_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetField() string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Field
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.InternalNotes
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetObjectType() string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.ObjectType
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllCustomTypeEnums_CustomTypeEnums_Edges struct {
+	Node *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllCustomTypeEnums_CustomTypeEnums_Edges) GetNode() *GetAllCustomTypeEnums_CustomTypeEnums_Edges_Node {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllCustomTypeEnums_CustomTypeEnums struct {
+	Edges      []*GetAllCustomTypeEnums_CustomTypeEnums_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllCustomTypeEnums_CustomTypeEnums_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllCustomTypeEnums_CustomTypeEnums) GetEdges() []*GetAllCustomTypeEnums_CustomTypeEnums_Edges {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums{}
+	}
+	return t.Edges
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums) GetPageInfo() *GetAllCustomTypeEnums_CustomTypeEnums_PageInfo {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllCustomTypeEnums_CustomTypeEnums) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllCustomTypeEnums_CustomTypeEnums{}
+	}
+	return t.TotalCount
+}
+
+type GetCustomTypeEnumByID_CustomTypeEnum struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetColor() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.Color
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.CreatedAt
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.CreatedBy
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetDescription() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.Description
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetField() string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.Field
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetID() string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.ID
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.InternalNotes
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetName() string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.Name
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetObjectType() string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.ObjectType
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.OwnerID
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.SystemOwned
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.UpdatedBy
+}
+
+type GetCustomTypeEnums_CustomTypeEnums_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetCustomTypeEnums_CustomTypeEnums_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetCustomTypeEnums_CustomTypeEnums_Edges_Node struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetField() string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Field
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.InternalNotes
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetObjectType() string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.ObjectType
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetCustomTypeEnums_CustomTypeEnums_Edges struct {
+	Node *GetCustomTypeEnums_CustomTypeEnums_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetCustomTypeEnums_CustomTypeEnums_Edges) GetNode() *GetCustomTypeEnums_CustomTypeEnums_Edges_Node {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums_Edges{}
+	}
+	return t.Node
+}
+
+type GetCustomTypeEnums_CustomTypeEnums struct {
+	Edges      []*GetCustomTypeEnums_CustomTypeEnums_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetCustomTypeEnums_CustomTypeEnums_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetCustomTypeEnums_CustomTypeEnums) GetEdges() []*GetCustomTypeEnums_CustomTypeEnums_Edges {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums{}
+	}
+	return t.Edges
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums) GetPageInfo() *GetCustomTypeEnums_CustomTypeEnums_PageInfo {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums{}
+	}
+	return &t.PageInfo
+}
+func (t *GetCustomTypeEnums_CustomTypeEnums) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetCustomTypeEnums_CustomTypeEnums{}
+	}
+	return t.TotalCount
+}
+
+type UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum struct {
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	Field            string     "json:\"field\" graphql:\"field\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	ObjectType       string     "json:\"objectType\" graphql:\"objectType\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetColor() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Color
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetDescription() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Description
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetField() string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Field
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetID() string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.ID
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetInternalNotes() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.InternalNotes
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetName() string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.Name
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetObjectType() string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.ObjectType
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetSystemInternalID() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SystemInternalID
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetSystemOwned() *bool {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SystemOwned
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateCustomTypeEnum_UpdateCustomTypeEnum struct {
+	CustomTypeEnum UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum "json:\"customTypeEnum\" graphql:\"customTypeEnum\""
+}
+
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum) GetCustomTypeEnum() *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum{}
+	}
+	return &t.CustomTypeEnum
 }
 
 type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications struct {
@@ -38973,6 +41984,17 @@ func (t *GetNarrativeHistories_NarrativeHistories) GetTotalCount() int64 {
 		t = &GetNarrativeHistories_NarrativeHistories{}
 	}
 	return t.TotalCount
+}
+
+type DeleteNote_DeleteNote struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteNote_DeleteNote) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteNote_DeleteNote{}
+	}
+	return t.DeletedID
 }
 
 type GetAllNoteHistories_NoteHistories_PageInfo struct {
@@ -64792,6 +67814,911 @@ func (t *UpdateSubscriber_UpdateSubscriber) GetSubscriber() *UpdateSubscriber_Up
 	return &t.Subscriber
 }
 
+type CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.Aliases
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetColor() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.Color
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetSlug() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.Slug
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition struct {
+	TagDefinitions []*CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions "json:\"tagDefinitions,omitempty\" graphql:\"tagDefinitions\""
+}
+
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition) GetTagDefinitions() []*CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition{}
+	}
+	return t.TagDefinitions
+}
+
+type CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.Aliases
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetColor() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.Color
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.Description
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetID() string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetName() string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.Name
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSlug() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.Slug
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTagDefinition_CreateBulkTagDefinition struct {
+	TagDefinitions []*CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions "json:\"tagDefinitions,omitempty\" graphql:\"tagDefinitions\""
+}
+
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition) GetTagDefinitions() []*CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition{}
+	}
+	return t.TagDefinitions
+}
+
+type CreateTagDefinition_CreateTagDefinition_TagDefinition struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetAliases() []string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.Aliases
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetColor() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.Color
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetDescription() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.Description
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetID() string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.ID
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetName() string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.Name
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSlug() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.Slug
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTagDefinition_CreateTagDefinition struct {
+	TagDefinition CreateTagDefinition_CreateTagDefinition_TagDefinition "json:\"tagDefinition\" graphql:\"tagDefinition\""
+}
+
+func (t *CreateTagDefinition_CreateTagDefinition) GetTagDefinition() *CreateTagDefinition_CreateTagDefinition_TagDefinition {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition{}
+	}
+	return &t.TagDefinition
+}
+
+type DeleteTagDefinition_DeleteTagDefinition struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTagDefinition_DeleteTagDefinition) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTagDefinition_DeleteTagDefinition{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTagDefinitions_TagDefinitions_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTagDefinitions_TagDefinitions_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTagDefinitions_TagDefinitions_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTagDefinitions_TagDefinitions_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTagDefinitions_TagDefinitions_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTagDefinitions_TagDefinitions_Edges_Node struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Aliases
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.InternalNotes
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetSlug() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTagDefinitions_TagDefinitions_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTagDefinitions_TagDefinitions_Edges struct {
+	Node *GetAllTagDefinitions_TagDefinitions_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTagDefinitions_TagDefinitions_Edges) GetNode() *GetAllTagDefinitions_TagDefinitions_Edges_Node {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTagDefinitions_TagDefinitions struct {
+	Edges      []*GetAllTagDefinitions_TagDefinitions_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTagDefinitions_TagDefinitions_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTagDefinitions_TagDefinitions) GetEdges() []*GetAllTagDefinitions_TagDefinitions_Edges {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions{}
+	}
+	return t.Edges
+}
+func (t *GetAllTagDefinitions_TagDefinitions) GetPageInfo() *GetAllTagDefinitions_TagDefinitions_PageInfo {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTagDefinitions_TagDefinitions) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTagDefinitions_TagDefinitions{}
+	}
+	return t.TotalCount
+}
+
+type GetTagDefinitionByID_TagDefinition struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTagDefinitionByID_TagDefinition) GetAliases() []string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.Aliases
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetColor() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.Color
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetDescription() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.Description
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetID() string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.ID
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.InternalNotes
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetName() string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.Name
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.OwnerID
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetSlug() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.Slug
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.SystemOwned
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTagDefinitions_TagDefinitions_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTagDefinitions_TagDefinitions_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTagDefinitions_TagDefinitions_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTagDefinitions_TagDefinitions_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTagDefinitions_TagDefinitions_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTagDefinitions_TagDefinitions_Edges_Node struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetAliases() []string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Aliases
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetColor() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Color
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.InternalNotes
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetSlug() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTagDefinitions_TagDefinitions_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTagDefinitions_TagDefinitions_Edges struct {
+	Node *GetTagDefinitions_TagDefinitions_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTagDefinitions_TagDefinitions_Edges) GetNode() *GetTagDefinitions_TagDefinitions_Edges_Node {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions_Edges{}
+	}
+	return t.Node
+}
+
+type GetTagDefinitions_TagDefinitions struct {
+	Edges      []*GetTagDefinitions_TagDefinitions_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTagDefinitions_TagDefinitions_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTagDefinitions_TagDefinitions) GetEdges() []*GetTagDefinitions_TagDefinitions_Edges {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions{}
+	}
+	return t.Edges
+}
+func (t *GetTagDefinitions_TagDefinitions) GetPageInfo() *GetTagDefinitions_TagDefinitions_PageInfo {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTagDefinitions_TagDefinitions) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTagDefinitions_TagDefinitions{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTagDefinition_UpdateTagDefinition_TagDefinition struct {
+	Aliases          []string   "json:\"aliases,omitempty\" graphql:\"aliases\""
+	Color            *string    "json:\"color,omitempty\" graphql:\"color\""
+	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID               string     "json:\"id\" graphql:\"id\""
+	InternalNotes    *string    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Name             string     "json:\"name\" graphql:\"name\""
+	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug             *string    "json:\"slug,omitempty\" graphql:\"slug\""
+	SystemInternalID *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned      *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetAliases() []string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.Aliases
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetColor() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.Color
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetDescription() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.Description
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetID() string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.ID
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetInternalNotes() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.InternalNotes
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetName() string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.Name
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSlug() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.Slug
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSystemInternalID() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.SystemInternalID
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSystemOwned() *bool {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.SystemOwned
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTagDefinition_UpdateTagDefinition struct {
+	TagDefinition UpdateTagDefinition_UpdateTagDefinition_TagDefinition "json:\"tagDefinition\" graphql:\"tagDefinition\""
+}
+
+func (t *UpdateTagDefinition_UpdateTagDefinition) GetTagDefinition() *UpdateTagDefinition_UpdateTagDefinition_TagDefinition {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition{}
+	}
+	return &t.TagDefinition
+}
+
 type CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee struct {
 	DisplayName string "json:\"displayName\" graphql:\"displayName\""
 	ID          string "json:\"id\" graphql:\"id\""
@@ -79230,6 +83157,182 @@ func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
 	return &t.UpdateAPIToken
 }
 
+type CreateAssessment struct {
+	CreateAssessment CreateAssessment_CreateAssessment "json:\"createAssessment\" graphql:\"createAssessment\""
+}
+
+func (t *CreateAssessment) GetCreateAssessment() *CreateAssessment_CreateAssessment {
+	if t == nil {
+		t = &CreateAssessment{}
+	}
+	return &t.CreateAssessment
+}
+
+type DeleteAssessment struct {
+	DeleteAssessment DeleteAssessment_DeleteAssessment "json:\"deleteAssessment\" graphql:\"deleteAssessment\""
+}
+
+func (t *DeleteAssessment) GetDeleteAssessment() *DeleteAssessment_DeleteAssessment {
+	if t == nil {
+		t = &DeleteAssessment{}
+	}
+	return &t.DeleteAssessment
+}
+
+type GetAllAssessments struct {
+	Assessments GetAllAssessments_Assessments "json:\"assessments\" graphql:\"assessments\""
+}
+
+func (t *GetAllAssessments) GetAssessments() *GetAllAssessments_Assessments {
+	if t == nil {
+		t = &GetAllAssessments{}
+	}
+	return &t.Assessments
+}
+
+type GetAssessmentByID struct {
+	Assessment GetAssessmentByID_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *GetAssessmentByID) GetAssessment() *GetAssessmentByID_Assessment {
+	if t == nil {
+		t = &GetAssessmentByID{}
+	}
+	return &t.Assessment
+}
+
+type GetAssessments struct {
+	Assessments GetAssessments_Assessments "json:\"assessments\" graphql:\"assessments\""
+}
+
+func (t *GetAssessments) GetAssessments() *GetAssessments_Assessments {
+	if t == nil {
+		t = &GetAssessments{}
+	}
+	return &t.Assessments
+}
+
+type UpdateAssessment struct {
+	UpdateAssessment UpdateAssessment_UpdateAssessment "json:\"updateAssessment\" graphql:\"updateAssessment\""
+}
+
+func (t *UpdateAssessment) GetUpdateAssessment() *UpdateAssessment_UpdateAssessment {
+	if t == nil {
+		t = &UpdateAssessment{}
+	}
+	return &t.UpdateAssessment
+}
+
+type GetAllAssessmentHistories struct {
+	AssessmentHistories GetAllAssessmentHistories_AssessmentHistories "json:\"assessmentHistories\" graphql:\"assessmentHistories\""
+}
+
+func (t *GetAllAssessmentHistories) GetAssessmentHistories() *GetAllAssessmentHistories_AssessmentHistories {
+	if t == nil {
+		t = &GetAllAssessmentHistories{}
+	}
+	return &t.AssessmentHistories
+}
+
+type GetAssessmentHistories struct {
+	AssessmentHistories GetAssessmentHistories_AssessmentHistories "json:\"assessmentHistories\" graphql:\"assessmentHistories\""
+}
+
+func (t *GetAssessmentHistories) GetAssessmentHistories() *GetAssessmentHistories_AssessmentHistories {
+	if t == nil {
+		t = &GetAssessmentHistories{}
+	}
+	return &t.AssessmentHistories
+}
+
+type CreateAssessmentResponse struct {
+	CreateAssessmentResponse CreateAssessmentResponse_CreateAssessmentResponse "json:\"createAssessmentResponse\" graphql:\"createAssessmentResponse\""
+}
+
+func (t *CreateAssessmentResponse) GetCreateAssessmentResponse() *CreateAssessmentResponse_CreateAssessmentResponse {
+	if t == nil {
+		t = &CreateAssessmentResponse{}
+	}
+	return &t.CreateAssessmentResponse
+}
+
+type DeleteAssessmentResponse struct {
+	DeleteAssessmentResponse DeleteAssessmentResponse_DeleteAssessmentResponse "json:\"deleteAssessmentResponse\" graphql:\"deleteAssessmentResponse\""
+}
+
+func (t *DeleteAssessmentResponse) GetDeleteAssessmentResponse() *DeleteAssessmentResponse_DeleteAssessmentResponse {
+	if t == nil {
+		t = &DeleteAssessmentResponse{}
+	}
+	return &t.DeleteAssessmentResponse
+}
+
+type GetAllAssessmentResponses struct {
+	AssessmentResponses GetAllAssessmentResponses_AssessmentResponses "json:\"assessmentResponses\" graphql:\"assessmentResponses\""
+}
+
+func (t *GetAllAssessmentResponses) GetAssessmentResponses() *GetAllAssessmentResponses_AssessmentResponses {
+	if t == nil {
+		t = &GetAllAssessmentResponses{}
+	}
+	return &t.AssessmentResponses
+}
+
+type GetAssessmentResponseByID struct {
+	AssessmentResponse GetAssessmentResponseByID_AssessmentResponse "json:\"assessmentResponse\" graphql:\"assessmentResponse\""
+}
+
+func (t *GetAssessmentResponseByID) GetAssessmentResponse() *GetAssessmentResponseByID_AssessmentResponse {
+	if t == nil {
+		t = &GetAssessmentResponseByID{}
+	}
+	return &t.AssessmentResponse
+}
+
+type GetAssessmentResponses struct {
+	AssessmentResponses GetAssessmentResponses_AssessmentResponses "json:\"assessmentResponses\" graphql:\"assessmentResponses\""
+}
+
+func (t *GetAssessmentResponses) GetAssessmentResponses() *GetAssessmentResponses_AssessmentResponses {
+	if t == nil {
+		t = &GetAssessmentResponses{}
+	}
+	return &t.AssessmentResponses
+}
+
+type UpdateAssessmentResponse struct {
+	UpdateAssessmentResponse UpdateAssessmentResponse_UpdateAssessmentResponse "json:\"updateAssessmentResponse\" graphql:\"updateAssessmentResponse\""
+}
+
+func (t *UpdateAssessmentResponse) GetUpdateAssessmentResponse() *UpdateAssessmentResponse_UpdateAssessmentResponse {
+	if t == nil {
+		t = &UpdateAssessmentResponse{}
+	}
+	return &t.UpdateAssessmentResponse
+}
+
+type GetAllAssessmentResponseHistories struct {
+	AssessmentResponseHistories GetAllAssessmentResponseHistories_AssessmentResponseHistories "json:\"assessmentResponseHistories\" graphql:\"assessmentResponseHistories\""
+}
+
+func (t *GetAllAssessmentResponseHistories) GetAssessmentResponseHistories() *GetAllAssessmentResponseHistories_AssessmentResponseHistories {
+	if t == nil {
+		t = &GetAllAssessmentResponseHistories{}
+	}
+	return &t.AssessmentResponseHistories
+}
+
+type GetAssessmentResponseHistories struct {
+	AssessmentResponseHistories GetAssessmentResponseHistories_AssessmentResponseHistories "json:\"assessmentResponseHistories\" graphql:\"assessmentResponseHistories\""
+}
+
+func (t *GetAssessmentResponseHistories) GetAssessmentResponseHistories() *GetAssessmentResponseHistories_AssessmentResponseHistories {
+	if t == nil {
+		t = &GetAssessmentResponseHistories{}
+	}
+	return &t.AssessmentResponseHistories
+}
+
 type CreateBulkCSVAsset struct {
 	CreateBulkCSVAsset CreateBulkCSVAsset_CreateBulkCSVAsset "json:\"createBulkCSVAsset\" graphql:\"createBulkCSVAsset\""
 }
@@ -79976,6 +84079,94 @@ func (t *GetCustomDomainHistories) GetCustomDomainHistories() *GetCustomDomainHi
 		t = &GetCustomDomainHistories{}
 	}
 	return &t.CustomDomainHistories
+}
+
+type CreateBulkCSVCustomTypeEnum struct {
+	CreateBulkCSVCustomTypeEnum CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum "json:\"createBulkCSVCustomTypeEnum\" graphql:\"createBulkCSVCustomTypeEnum\""
+}
+
+func (t *CreateBulkCSVCustomTypeEnum) GetCreateBulkCSVCustomTypeEnum() *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum{}
+	}
+	return &t.CreateBulkCSVCustomTypeEnum
+}
+
+type CreateBulkCustomTypeEnum struct {
+	CreateBulkCustomTypeEnum CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum "json:\"createBulkCustomTypeEnum\" graphql:\"createBulkCustomTypeEnum\""
+}
+
+func (t *CreateBulkCustomTypeEnum) GetCreateBulkCustomTypeEnum() *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum{}
+	}
+	return &t.CreateBulkCustomTypeEnum
+}
+
+type CreateCustomTypeEnum struct {
+	CreateCustomTypeEnum CreateCustomTypeEnum_CreateCustomTypeEnum "json:\"createCustomTypeEnum\" graphql:\"createCustomTypeEnum\""
+}
+
+func (t *CreateCustomTypeEnum) GetCreateCustomTypeEnum() *CreateCustomTypeEnum_CreateCustomTypeEnum {
+	if t == nil {
+		t = &CreateCustomTypeEnum{}
+	}
+	return &t.CreateCustomTypeEnum
+}
+
+type DeleteCustomTypeEnum struct {
+	DeleteCustomTypeEnum DeleteCustomTypeEnum_DeleteCustomTypeEnum "json:\"deleteCustomTypeEnum\" graphql:\"deleteCustomTypeEnum\""
+}
+
+func (t *DeleteCustomTypeEnum) GetDeleteCustomTypeEnum() *DeleteCustomTypeEnum_DeleteCustomTypeEnum {
+	if t == nil {
+		t = &DeleteCustomTypeEnum{}
+	}
+	return &t.DeleteCustomTypeEnum
+}
+
+type GetAllCustomTypeEnums struct {
+	CustomTypeEnums GetAllCustomTypeEnums_CustomTypeEnums "json:\"customTypeEnums\" graphql:\"customTypeEnums\""
+}
+
+func (t *GetAllCustomTypeEnums) GetCustomTypeEnums() *GetAllCustomTypeEnums_CustomTypeEnums {
+	if t == nil {
+		t = &GetAllCustomTypeEnums{}
+	}
+	return &t.CustomTypeEnums
+}
+
+type GetCustomTypeEnumByID struct {
+	CustomTypeEnum GetCustomTypeEnumByID_CustomTypeEnum "json:\"customTypeEnum\" graphql:\"customTypeEnum\""
+}
+
+func (t *GetCustomTypeEnumByID) GetCustomTypeEnum() *GetCustomTypeEnumByID_CustomTypeEnum {
+	if t == nil {
+		t = &GetCustomTypeEnumByID{}
+	}
+	return &t.CustomTypeEnum
+}
+
+type GetCustomTypeEnums struct {
+	CustomTypeEnums GetCustomTypeEnums_CustomTypeEnums "json:\"customTypeEnums\" graphql:\"customTypeEnums\""
+}
+
+func (t *GetCustomTypeEnums) GetCustomTypeEnums() *GetCustomTypeEnums_CustomTypeEnums {
+	if t == nil {
+		t = &GetCustomTypeEnums{}
+	}
+	return &t.CustomTypeEnums
+}
+
+type UpdateCustomTypeEnum struct {
+	UpdateCustomTypeEnum UpdateCustomTypeEnum_UpdateCustomTypeEnum "json:\"updateCustomTypeEnum\" graphql:\"updateCustomTypeEnum\""
+}
+
+func (t *UpdateCustomTypeEnum) GetUpdateCustomTypeEnum() *UpdateCustomTypeEnum_UpdateCustomTypeEnum {
+	if t == nil {
+		t = &UpdateCustomTypeEnum{}
+	}
+	return &t.UpdateCustomTypeEnum
 }
 
 type CreateBulkCSVDNSVerification struct {
@@ -82112,6 +86303,17 @@ func (t *GetNarrativeHistories) GetNarrativeHistories() *GetNarrativeHistories_N
 	return &t.NarrativeHistories
 }
 
+type DeleteNote struct {
+	DeleteNote DeleteNote_DeleteNote "json:\"deleteNote\" graphql:\"deleteNote\""
+}
+
+func (t *DeleteNote) GetDeleteNote() *DeleteNote_DeleteNote {
+	if t == nil {
+		t = &DeleteNote{}
+	}
+	return &t.DeleteNote
+}
+
 type GetAllNoteHistories struct {
 	NoteHistories GetAllNoteHistories_NoteHistories "json:\"noteHistories\" graphql:\"noteHistories\""
 }
@@ -83694,6 +87896,94 @@ func (t *UpdateSubscriber) GetUpdateSubscriber() *UpdateSubscriber_UpdateSubscri
 		t = &UpdateSubscriber{}
 	}
 	return &t.UpdateSubscriber
+}
+
+type CreateBulkCSVTagDefinition struct {
+	CreateBulkCSVTagDefinition CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition "json:\"createBulkCSVTagDefinition\" graphql:\"createBulkCSVTagDefinition\""
+}
+
+func (t *CreateBulkCSVTagDefinition) GetCreateBulkCSVTagDefinition() *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition{}
+	}
+	return &t.CreateBulkCSVTagDefinition
+}
+
+type CreateBulkTagDefinition struct {
+	CreateBulkTagDefinition CreateBulkTagDefinition_CreateBulkTagDefinition "json:\"createBulkTagDefinition\" graphql:\"createBulkTagDefinition\""
+}
+
+func (t *CreateBulkTagDefinition) GetCreateBulkTagDefinition() *CreateBulkTagDefinition_CreateBulkTagDefinition {
+	if t == nil {
+		t = &CreateBulkTagDefinition{}
+	}
+	return &t.CreateBulkTagDefinition
+}
+
+type CreateTagDefinition struct {
+	CreateTagDefinition CreateTagDefinition_CreateTagDefinition "json:\"createTagDefinition\" graphql:\"createTagDefinition\""
+}
+
+func (t *CreateTagDefinition) GetCreateTagDefinition() *CreateTagDefinition_CreateTagDefinition {
+	if t == nil {
+		t = &CreateTagDefinition{}
+	}
+	return &t.CreateTagDefinition
+}
+
+type DeleteTagDefinition struct {
+	DeleteTagDefinition DeleteTagDefinition_DeleteTagDefinition "json:\"deleteTagDefinition\" graphql:\"deleteTagDefinition\""
+}
+
+func (t *DeleteTagDefinition) GetDeleteTagDefinition() *DeleteTagDefinition_DeleteTagDefinition {
+	if t == nil {
+		t = &DeleteTagDefinition{}
+	}
+	return &t.DeleteTagDefinition
+}
+
+type GetAllTagDefinitions struct {
+	TagDefinitions GetAllTagDefinitions_TagDefinitions "json:\"tagDefinitions\" graphql:\"tagDefinitions\""
+}
+
+func (t *GetAllTagDefinitions) GetTagDefinitions() *GetAllTagDefinitions_TagDefinitions {
+	if t == nil {
+		t = &GetAllTagDefinitions{}
+	}
+	return &t.TagDefinitions
+}
+
+type GetTagDefinitionByID struct {
+	TagDefinition GetTagDefinitionByID_TagDefinition "json:\"tagDefinition\" graphql:\"tagDefinition\""
+}
+
+func (t *GetTagDefinitionByID) GetTagDefinition() *GetTagDefinitionByID_TagDefinition {
+	if t == nil {
+		t = &GetTagDefinitionByID{}
+	}
+	return &t.TagDefinition
+}
+
+type GetTagDefinitions struct {
+	TagDefinitions GetTagDefinitions_TagDefinitions "json:\"tagDefinitions\" graphql:\"tagDefinitions\""
+}
+
+func (t *GetTagDefinitions) GetTagDefinitions() *GetTagDefinitions_TagDefinitions {
+	if t == nil {
+		t = &GetTagDefinitions{}
+	}
+	return &t.TagDefinitions
+}
+
+type UpdateTagDefinition struct {
+	UpdateTagDefinition UpdateTagDefinition_UpdateTagDefinition "json:\"updateTagDefinition\" graphql:\"updateTagDefinition\""
+}
+
+func (t *UpdateTagDefinition) GetUpdateTagDefinition() *UpdateTagDefinition_UpdateTagDefinition {
+	if t == nil {
+		t = &UpdateTagDefinition{}
+	}
+	return &t.UpdateTagDefinition
 }
 
 type CreateBulkCSVTask struct {
@@ -85671,6 +89961,668 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 	return &res, nil
 }
 
+const CreateAssessmentDocument = `mutation CreateAssessment ($input: CreateAssessmentInput!) {
+	createAssessment(input: $input) {
+		assessment {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessment
+	if err := c.Client.Post(ctx, "CreateAssessment", CreateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssessmentDocument = `mutation DeleteAssessment ($deleteAssessmentId: ID!) {
+	deleteAssessment(id: $deleteAssessmentId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error) {
+	vars := map[string]any{
+		"deleteAssessmentId": deleteAssessmentID,
+	}
+
+	var res DeleteAssessment
+	if err := c.Client.Post(ctx, "DeleteAssessment", DeleteAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentsDocument = `query GetAllAssessments {
+	assessments {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessments
+	if err := c.Client.Post(ctx, "GetAllAssessments", GetAllAssessmentsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentByIDDocument = `query GetAssessmentByID ($assessmentId: ID!) {
+	assessment(id: $assessmentId) {
+		assessmentOwnerID
+		assessmentType
+		createdAt
+		createdBy
+		id
+		name
+		ownerID
+		tags
+		templateID
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error) {
+	vars := map[string]any{
+		"assessmentId": assessmentID,
+	}
+
+	var res GetAssessmentByID
+	if err := c.Client.Post(ctx, "GetAssessmentByID", GetAssessmentByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentsDocument = `query GetAssessments ($first: Int, $last: Int, $where: AssessmentWhereInput) {
+	assessments(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessments
+	if err := c.Client.Post(ctx, "GetAssessments", GetAssessmentsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssessmentDocument = `mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInput!) {
+	updateAssessment(id: $updateAssessmentId, input: $input) {
+		assessment {
+			assessmentOwnerID
+			assessmentType
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error) {
+	vars := map[string]any{
+		"updateAssessmentId": updateAssessmentID,
+		"input":              input,
+	}
+
+	var res UpdateAssessment
+	if err := c.Client.Post(ctx, "UpdateAssessment", UpdateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentHistoriesDocument = `query GetAllAssessmentHistories {
+	assessmentHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentHistories
+	if err := c.Client.Post(ctx, "GetAllAssessmentHistories", GetAllAssessmentHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentHistoriesDocument = `query GetAssessmentHistories ($first: Int, $last: Int, $where: AssessmentHistoryWhereInput) {
+	assessmentHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentOwnerID
+				assessmentType
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				templateID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentHistories(ctx context.Context, first *int64, last *int64, where *AssessmentHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentHistories
+	if err := c.Client.Post(ctx, "GetAssessmentHistories", GetAssessmentHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentResponseDocument = `mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
+	createAssessmentResponse(input: $input) {
+		assessmentResponse {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessmentResponse
+	if err := c.Client.Post(ctx, "CreateAssessmentResponse", CreateAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssessmentResponseDocument = `mutation DeleteAssessmentResponse ($deleteAssessmentResponseId: ID!) {
+	deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error) {
+	vars := map[string]any{
+		"deleteAssessmentResponseId": deleteAssessmentResponseID,
+	}
+
+	var res DeleteAssessmentResponse
+	if err := c.Client.Post(ctx, "DeleteAssessmentResponse", DeleteAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentResponsesDocument = `query GetAllAssessmentResponses {
+	assessmentResponses {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentResponses
+	if err := c.Client.Post(ctx, "GetAllAssessmentResponses", GetAllAssessmentResponsesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponseByIDDocument = `query GetAssessmentResponseByID ($assessmentResponseId: ID!) {
+	assessmentResponse(id: $assessmentResponseId) {
+		assessmentID
+		assignedAt
+		completedAt
+		createdAt
+		createdBy
+		documentDataID
+		dueDate
+		email
+		id
+		ownerID
+		sendAttempts
+		startedAt
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponseByID(ctx context.Context, assessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseByID, error) {
+	vars := map[string]any{
+		"assessmentResponseId": assessmentResponseID,
+	}
+
+	var res GetAssessmentResponseByID
+	if err := c.Client.Post(ctx, "GetAssessmentResponseByID", GetAssessmentResponseByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponsesDocument = `query GetAssessmentResponses ($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {
+	assessmentResponses(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponses(ctx context.Context, first *int64, last *int64, where *AssessmentResponseWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponses, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentResponses
+	if err := c.Client.Post(ctx, "GetAssessmentResponses", GetAssessmentResponsesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssessmentResponseDocument = `mutation UpdateAssessmentResponse ($updateAssessmentResponseId: ID!, $input: UpdateAssessmentResponseInput!) {
+	updateAssessmentResponse(id: $updateAssessmentResponseId, input: $input) {
+		assessmentResponse {
+			assessmentID
+			assignedAt
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			id
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAssessmentResponse(ctx context.Context, updateAssessmentResponseID string, input UpdateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentResponse, error) {
+	vars := map[string]any{
+		"updateAssessmentResponseId": updateAssessmentResponseID,
+		"input":                      input,
+	}
+
+	var res UpdateAssessmentResponse
+	if err := c.Client.Post(ctx, "UpdateAssessmentResponse", UpdateAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentResponseHistoriesDocument = `query GetAllAssessmentResponseHistories {
+	assessmentResponseHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentResponseHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponseHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssessmentResponseHistories
+	if err := c.Client.Post(ctx, "GetAllAssessmentResponseHistories", GetAllAssessmentResponseHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentResponseHistoriesDocument = `query GetAssessmentResponseHistories ($first: Int, $last: Int, $where: AssessmentResponseHistoryWhereInput) {
+	assessmentResponseHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentResponseHistories(ctx context.Context, first *int64, last *int64, where *AssessmentResponseHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssessmentResponseHistories
+	if err := c.Client.Post(ctx, "GetAssessmentResponseHistories", GetAssessmentResponseHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVAssetDocument = `mutation CreateBulkCSVAsset ($input: Upload!) {
 	createBulkCSVAsset(input: $input) {
 		assets {
@@ -86515,6 +91467,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			controlOwnerID
 			controlQuestions
 			controlType
+			controlKindName
 			createdAt
 			createdBy
 			delegateID
@@ -86571,6 +91524,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			controlOwnerID
 			controlQuestions
 			controlType
+			controlKindName
 			createdAt
 			createdBy
 			delegateID
@@ -86627,6 +91581,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			controlOwnerID
 			controlQuestions
 			controlType
+			controlKindName
 			createdAt
 			createdBy
 			delegateID
@@ -86715,6 +91670,7 @@ const GetAllControlsDocument = `query GetAllControls {
 				controlOwnerID
 				controlQuestions
 				controlType
+				controlKindName
 				createdAt
 				createdBy
 				delegateID
@@ -86769,6 +91725,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		controlOwnerID
 		controlQuestions
 		controlType
+		controlKindName
 		createdAt
 		createdBy
 		delegateID
@@ -86832,6 +91789,7 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 				controlOwnerID
 				controlQuestions
 				controlType
+				controlKindName
 				createdAt
 				createdBy
 				delegateID
@@ -86891,6 +91849,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			controlOwnerID
 			controlQuestions
 			controlType
+			controlKindName
 			createdAt
 			createdBy
 			delegateID
@@ -88797,6 +93756,320 @@ func (c *Client) GetCustomDomainHistories(ctx context.Context, first *int64, las
 
 	var res GetCustomDomainHistories
 	if err := c.Client.Post(ctx, "GetCustomDomainHistories", GetCustomDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVCustomTypeEnumDocument = `mutation CreateBulkCSVCustomTypeEnum ($input: Upload!) {
+	createBulkCSVCustomTypeEnum(input: $input) {
+		customTypeEnums {
+			color
+			createdAt
+			createdBy
+			description
+			field
+			id
+			internalNotes
+			name
+			objectType
+			ownerID
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCustomTypeEnum, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVCustomTypeEnum
+	if err := c.Client.Post(ctx, "CreateBulkCSVCustomTypeEnum", CreateBulkCSVCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCustomTypeEnumDocument = `mutation CreateBulkCustomTypeEnum ($input: [CreateCustomTypeEnumInput!]) {
+	createBulkCustomTypeEnum(input: $input) {
+		customTypeEnums {
+			color
+			createdAt
+			createdBy
+			description
+			field
+			id
+			internalNotes
+			name
+			objectType
+			ownerID
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCustomTypeEnum(ctx context.Context, input []*CreateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCustomTypeEnum, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCustomTypeEnum
+	if err := c.Client.Post(ctx, "CreateBulkCustomTypeEnum", CreateBulkCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateCustomTypeEnumDocument = `mutation CreateCustomTypeEnum ($input: CreateCustomTypeEnumInput!) {
+	createCustomTypeEnum(input: $input) {
+		customTypeEnum {
+			color
+			createdAt
+			createdBy
+			description
+			field
+			id
+			internalNotes
+			name
+			objectType
+			ownerID
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateCustomTypeEnum(ctx context.Context, input CreateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*CreateCustomTypeEnum, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateCustomTypeEnum
+	if err := c.Client.Post(ctx, "CreateCustomTypeEnum", CreateCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteCustomTypeEnumDocument = `mutation DeleteCustomTypeEnum ($deleteCustomTypeEnumId: ID!) {
+	deleteCustomTypeEnum(id: $deleteCustomTypeEnumId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteCustomTypeEnum(ctx context.Context, deleteCustomTypeEnumID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCustomTypeEnum, error) {
+	vars := map[string]any{
+		"deleteCustomTypeEnumId": deleteCustomTypeEnumID,
+	}
+
+	var res DeleteCustomTypeEnum
+	if err := c.Client.Post(ctx, "DeleteCustomTypeEnum", DeleteCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllCustomTypeEnumsDocument = `query GetAllCustomTypeEnums {
+	customTypeEnums {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				color
+				createdAt
+				createdBy
+				description
+				field
+				id
+				internalNotes
+				name
+				objectType
+				ownerID
+				systemInternalID
+				systemOwned
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllCustomTypeEnums(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomTypeEnums, error) {
+	vars := map[string]any{}
+
+	var res GetAllCustomTypeEnums
+	if err := c.Client.Post(ctx, "GetAllCustomTypeEnums", GetAllCustomTypeEnumsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetCustomTypeEnumByIDDocument = `query GetCustomTypeEnumByID ($customTypeEnumId: ID!) {
+	customTypeEnum(id: $customTypeEnumId) {
+		color
+		createdAt
+		createdBy
+		description
+		field
+		id
+		internalNotes
+		name
+		objectType
+		ownerID
+		systemInternalID
+		systemOwned
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetCustomTypeEnumByID(ctx context.Context, customTypeEnumID string, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnumByID, error) {
+	vars := map[string]any{
+		"customTypeEnumId": customTypeEnumID,
+	}
+
+	var res GetCustomTypeEnumByID
+	if err := c.Client.Post(ctx, "GetCustomTypeEnumByID", GetCustomTypeEnumByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetCustomTypeEnumsDocument = `query GetCustomTypeEnums ($first: Int, $last: Int, $where: CustomTypeEnumWhereInput) {
+	customTypeEnums(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				color
+				createdAt
+				createdBy
+				description
+				field
+				id
+				internalNotes
+				name
+				objectType
+				ownerID
+				systemInternalID
+				systemOwned
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetCustomTypeEnums(ctx context.Context, first *int64, last *int64, where *CustomTypeEnumWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnums, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetCustomTypeEnums
+	if err := c.Client.Post(ctx, "GetCustomTypeEnums", GetCustomTypeEnumsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateCustomTypeEnumDocument = `mutation UpdateCustomTypeEnum ($updateCustomTypeEnumId: ID!, $input: UpdateCustomTypeEnumInput!) {
+	updateCustomTypeEnum(id: $updateCustomTypeEnumId, input: $input) {
+		customTypeEnum {
+			color
+			createdAt
+			createdBy
+			description
+			field
+			id
+			internalNotes
+			name
+			objectType
+			ownerID
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateCustomTypeEnum(ctx context.Context, updateCustomTypeEnumID string, input UpdateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomTypeEnum, error) {
+	vars := map[string]any{
+		"updateCustomTypeEnumId": updateCustomTypeEnumID,
+		"input":                  input,
+	}
+
+	var res UpdateCustomTypeEnum
+	if err := c.Client.Post(ctx, "UpdateCustomTypeEnum", UpdateCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -96874,6 +102147,30 @@ func (c *Client) GetNarrativeHistories(ctx context.Context, first *int64, last *
 	return &res, nil
 }
 
+const DeleteNoteDocument = `mutation DeleteNote ($noteID: ID!) {
+	deleteNote(id: $noteID) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteNote(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor) (*DeleteNote, error) {
+	vars := map[string]any{
+		"noteID": noteID,
+	}
+
+	var res DeleteNote
+	if err := c.Client.Post(ctx, "DeleteNote", DeleteNoteDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllNoteHistoriesDocument = `query GetAllNoteHistories {
 	noteHistories {
 		totalCount
@@ -104010,6 +109307,320 @@ func (c *Client) UpdateSubscriber(ctx context.Context, email string, input Updat
 	return &res, nil
 }
 
+const CreateBulkCSVTagDefinitionDocument = `mutation CreateBulkCSVTagDefinition ($input: Upload!) {
+	createBulkCSVTagDefinition(input: $input) {
+		tagDefinitions {
+			aliases
+			color
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			name
+			ownerID
+			slug
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTagDefinition, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTagDefinition
+	if err := c.Client.Post(ctx, "CreateBulkCSVTagDefinition", CreateBulkCSVTagDefinitionDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTagDefinitionDocument = `mutation CreateBulkTagDefinition ($input: [CreateTagDefinitionInput!]) {
+	createBulkTagDefinition(input: $input) {
+		tagDefinitions {
+			aliases
+			color
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			name
+			ownerID
+			slug
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTagDefinition(ctx context.Context, input []*CreateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTagDefinition, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTagDefinition
+	if err := c.Client.Post(ctx, "CreateBulkTagDefinition", CreateBulkTagDefinitionDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTagDefinitionDocument = `mutation CreateTagDefinition ($input: CreateTagDefinitionInput!) {
+	createTagDefinition(input: $input) {
+		tagDefinition {
+			aliases
+			color
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			name
+			ownerID
+			slug
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTagDefinition(ctx context.Context, input CreateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateTagDefinition, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTagDefinition
+	if err := c.Client.Post(ctx, "CreateTagDefinition", CreateTagDefinitionDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTagDefinitionDocument = `mutation DeleteTagDefinition ($deleteTagDefinitionId: ID!) {
+	deleteTagDefinition(id: $deleteTagDefinitionId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTagDefinition(ctx context.Context, deleteTagDefinitionID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTagDefinition, error) {
+	vars := map[string]any{
+		"deleteTagDefinitionId": deleteTagDefinitionID,
+	}
+
+	var res DeleteTagDefinition
+	if err := c.Client.Post(ctx, "DeleteTagDefinition", DeleteTagDefinitionDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTagDefinitionsDocument = `query GetAllTagDefinitions {
+	tagDefinitions {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				aliases
+				color
+				createdAt
+				createdBy
+				description
+				id
+				internalNotes
+				name
+				ownerID
+				slug
+				systemInternalID
+				systemOwned
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTagDefinitions(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTagDefinitions, error) {
+	vars := map[string]any{}
+
+	var res GetAllTagDefinitions
+	if err := c.Client.Post(ctx, "GetAllTagDefinitions", GetAllTagDefinitionsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTagDefinitionByIDDocument = `query GetTagDefinitionByID ($tagDefinitionId: ID!) {
+	tagDefinition(id: $tagDefinitionId) {
+		aliases
+		color
+		createdAt
+		createdBy
+		description
+		id
+		internalNotes
+		name
+		ownerID
+		slug
+		systemInternalID
+		systemOwned
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTagDefinitionByID(ctx context.Context, tagDefinitionID string, interceptors ...clientv2.RequestInterceptor) (*GetTagDefinitionByID, error) {
+	vars := map[string]any{
+		"tagDefinitionId": tagDefinitionID,
+	}
+
+	var res GetTagDefinitionByID
+	if err := c.Client.Post(ctx, "GetTagDefinitionByID", GetTagDefinitionByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTagDefinitionsDocument = `query GetTagDefinitions ($first: Int, $last: Int, $where: TagDefinitionWhereInput) {
+	tagDefinitions(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				aliases
+				color
+				createdAt
+				createdBy
+				description
+				id
+				internalNotes
+				name
+				ownerID
+				slug
+				systemInternalID
+				systemOwned
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTagDefinitions(ctx context.Context, first *int64, last *int64, where *TagDefinitionWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTagDefinitions, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTagDefinitions
+	if err := c.Client.Post(ctx, "GetTagDefinitions", GetTagDefinitionsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTagDefinitionDocument = `mutation UpdateTagDefinition ($updateTagDefinitionId: ID!, $input: UpdateTagDefinitionInput!) {
+	updateTagDefinition(id: $updateTagDefinitionId, input: $input) {
+		tagDefinition {
+			aliases
+			color
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			name
+			ownerID
+			slug
+			systemInternalID
+			systemOwned
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTagDefinition(ctx context.Context, updateTagDefinitionID string, input UpdateTagDefinitionInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTagDefinition, error) {
+	vars := map[string]any{
+		"updateTagDefinitionId": updateTagDefinitionID,
+		"input":                 input,
+	}
+
+	var res UpdateTagDefinition
+	if err := c.Client.Post(ctx, "UpdateTagDefinition", UpdateTagDefinitionDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) {
 	createBulkCSVTask(input: $input) {
 		tasks {
@@ -108436,6 +114047,22 @@ var DocumentOperationNames = map[string]string{
 	GetAPITokenByIDDocument:                           "GetAPITokenByID",
 	GetAPITokensDocument:                              "GetAPITokens",
 	UpdateAPITokenDocument:                            "UpdateAPIToken",
+	CreateAssessmentDocument:                          "CreateAssessment",
+	DeleteAssessmentDocument:                          "DeleteAssessment",
+	GetAllAssessmentsDocument:                         "GetAllAssessments",
+	GetAssessmentByIDDocument:                         "GetAssessmentByID",
+	GetAssessmentsDocument:                            "GetAssessments",
+	UpdateAssessmentDocument:                          "UpdateAssessment",
+	GetAllAssessmentHistoriesDocument:                 "GetAllAssessmentHistories",
+	GetAssessmentHistoriesDocument:                    "GetAssessmentHistories",
+	CreateAssessmentResponseDocument:                  "CreateAssessmentResponse",
+	DeleteAssessmentResponseDocument:                  "DeleteAssessmentResponse",
+	GetAllAssessmentResponsesDocument:                 "GetAllAssessmentResponses",
+	GetAssessmentResponseByIDDocument:                 "GetAssessmentResponseByID",
+	GetAssessmentResponsesDocument:                    "GetAssessmentResponses",
+	UpdateAssessmentResponseDocument:                  "UpdateAssessmentResponse",
+	GetAllAssessmentResponseHistoriesDocument:         "GetAllAssessmentResponseHistories",
+	GetAssessmentResponseHistoriesDocument:            "GetAssessmentResponseHistories",
 	CreateBulkCSVAssetDocument:                        "CreateBulkCSVAsset",
 	CreateBulkAssetDocument:                           "CreateBulkAsset",
 	CreateAssetDocument:                               "CreateAsset",
@@ -108504,6 +114131,14 @@ var DocumentOperationNames = map[string]string{
 	UpdateCustomDomainDocument:                        "UpdateCustomDomain",
 	GetAllCustomDomainHistoriesDocument:               "GetAllCustomDomainHistories",
 	GetCustomDomainHistoriesDocument:                  "GetCustomDomainHistories",
+	CreateBulkCSVCustomTypeEnumDocument:               "CreateBulkCSVCustomTypeEnum",
+	CreateBulkCustomTypeEnumDocument:                  "CreateBulkCustomTypeEnum",
+	CreateCustomTypeEnumDocument:                      "CreateCustomTypeEnum",
+	DeleteCustomTypeEnumDocument:                      "DeleteCustomTypeEnum",
+	GetAllCustomTypeEnumsDocument:                     "GetAllCustomTypeEnums",
+	GetCustomTypeEnumByIDDocument:                     "GetCustomTypeEnumByID",
+	GetCustomTypeEnumsDocument:                        "GetCustomTypeEnums",
+	UpdateCustomTypeEnumDocument:                      "UpdateCustomTypeEnum",
 	CreateBulkCSVDNSVerificationDocument:              "CreateBulkCSVDNSVerification",
 	CreateBulkDNSVerificationDocument:                 "CreateBulkDNSVerification",
 	CreateDNSVerificationDocument:                     "CreateDNSVerification",
@@ -108698,6 +114333,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateNarrativeDocument:                           "UpdateNarrative",
 	GetAllNarrativeHistoriesDocument:                  "GetAllNarrativeHistories",
 	GetNarrativeHistoriesDocument:                     "GetNarrativeHistories",
+	DeleteNoteDocument:                                "DeleteNote",
 	GetAllNoteHistoriesDocument:                       "GetAllNoteHistories",
 	GetNoteHistoriesDocument:                          "GetNoteHistories",
 	CreateOnboardingDocument:                          "CreateOnboarding",
@@ -108842,6 +114478,14 @@ var DocumentOperationNames = map[string]string{
 	GetSubscriberByEmailDocument:                      "GetSubscriberByEmail",
 	GetSubscribersDocument:                            "GetSubscribers",
 	UpdateSubscriberDocument:                          "UpdateSubscriber",
+	CreateBulkCSVTagDefinitionDocument:                "CreateBulkCSVTagDefinition",
+	CreateBulkTagDefinitionDocument:                   "CreateBulkTagDefinition",
+	CreateTagDefinitionDocument:                       "CreateTagDefinition",
+	DeleteTagDefinitionDocument:                       "DeleteTagDefinition",
+	GetAllTagDefinitionsDocument:                      "GetAllTagDefinitions",
+	GetTagDefinitionByIDDocument:                      "GetTagDefinitionByID",
+	GetTagDefinitionsDocument:                         "GetTagDefinitions",
+	UpdateTagDefinitionDocument:                       "UpdateTagDefinition",
 	CreateBulkCSVTaskDocument:                         "CreateBulkCSVTask",
 	CreateBulkTaskDocument:                            "CreateBulkTask",
 	CreateTaskDocument:                                "CreateTask",

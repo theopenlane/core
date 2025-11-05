@@ -17,10 +17,14 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/iam/auth"
 )
 
 type detailsMutation interface {
@@ -76,7 +80,7 @@ func HookImportDocument() ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			mut, ok := m.(importSchemaMutation)
 			if !ok {
-				log.Info().Msg("import document hook used on unsupported mutation type")
+				logx.FromContext(ctx).Info().Msg("import document hook used on unsupported mutation type")
 
 				return next.Mutate(ctx, m)
 			}
@@ -154,7 +158,7 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	p := bluemonday.UGCPolicy()
 
-	m.SetName(file[0].OriginalName)
+	m.SetName(filenameToTitle(file[0].OriginalName))
 	m.SetFileID(file[0].ID)
 
 	var detailsStr string
@@ -167,7 +171,22 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 		detailsStr = fmt.Sprintf("%v", v)
 	}
 
-	m.SetDetails(p.Sanitize(detailsStr))
+	details := p.Sanitize(detailsStr)
+
+	orgName := ""
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
+		org, err := m.Client().Organization.Get(ctx, orgID)
+		if err != nil {
+			return err
+		}
+
+		orgName = org.Name
+	}
+
+	details = updatePlaceholderText(details, orgName)
+
+	m.SetDetails(p.Sanitize(details))
 
 	return nil
 }
@@ -246,4 +265,161 @@ func importURLToSchema(m importSchemaMutation) error {
 	m.SetDetails(p.Sanitize(detailsStr))
 
 	return nil
+}
+
+// statusMutation is an interface for mutations that have status and approver/delegate fields
+type statusMutation interface {
+	utils.GenericMutation
+
+	Status() (r enums.DocumentStatus, exists bool)
+	OldApproverID(ctx context.Context) (v string, err error)
+	OldDelegateID(ctx context.Context) (v string, err error)
+	ApproverID() (id string, exists bool)
+	DelegateID() (id string, exists bool)
+	ApprovalRequired() (v bool, exists bool)
+	OldApprovalRequired(ctx context.Context) (v bool, err error)
+}
+
+// getApproverDelegateIDs retrieves the approver and delegate group IDs based on the operation type
+func getApproverDelegateIDs(ctx context.Context, mut statusMutation) (approverID, delegateID string) {
+	switch mut.Op() {
+	case ent.OpCreate:
+		// For create operations, get the IDs from the mutation
+		approverID, _ = mut.ApproverID()
+		delegateID, _ = mut.DelegateID()
+	case ent.OpUpdate, ent.OpUpdateOne:
+		// For update operations, get the old values from the database
+		approverID, _ = mut.OldApproverID(ctx)
+		delegateID, _ = mut.OldDelegateID(ctx)
+	}
+	return approverID, delegateID
+}
+
+// getRequireApproval determines if approval is required based on the operation type
+func getRequireApproval(ctx context.Context, mut statusMutation) (bool, error) {
+	switch mut.Op() {
+	case ent.OpCreate:
+		if requireApproval, exists := mut.ApprovalRequired(); exists {
+			return requireApproval, nil
+		}
+
+		// this field will default to true if not set on create
+		return true, nil
+	case ent.OpUpdate, ent.OpUpdateOne:
+		// check if the field is being updated to not require approval anymore first
+		requireApproval, exists := mut.ApprovalRequired()
+		if exists {
+			return requireApproval, nil
+		}
+
+		// otherwise fall back to the old value from the database
+		return mut.OldApprovalRequired(ctx)
+	default:
+		return true, nil
+	}
+}
+
+// checkUserInApproverGroups verifies if a user is a member of the approver or delegate group
+func checkUserInApproverGroups(ctx context.Context, client *generated.Client, userID, approverID, delegateID string) (bool, error) {
+	query := client.GroupMembership.Query().Where(groupmembership.UserID(userID))
+
+	// Build the query to check membership in either group
+	switch {
+	case approverID != "" && delegateID != "":
+		query = query.Where(
+			groupmembership.Or(
+				groupmembership.GroupID(approverID),
+				groupmembership.GroupID(delegateID),
+			),
+		)
+	case approverID != "":
+		query = query.Where(groupmembership.GroupID(approverID))
+	default:
+		query = query.Where(groupmembership.GroupID(delegateID))
+	}
+
+	return query.Exist(ctx)
+}
+
+// HookStatusApproval is an ent hook that ensures only users in the approver or delegate group can set status to APPROVED
+func HookStatusApproval() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			mut, ok := m.(statusMutation)
+			if !ok {
+				log.Info().Msg("status approval hook used on unsupported mutation type")
+				return next.Mutate(ctx, m)
+			}
+
+			// Check if status is being set to APPROVED
+			status, exists := mut.Status()
+			if !exists || status != enums.DocumentApproved {
+				// Not setting to APPROVED, allow the mutation
+				return next.Mutate(ctx, m)
+			}
+
+			// check if the document requires approval
+			requireApproval, err := getRequireApproval(ctx, mut)
+			if err == nil && !requireApproval {
+				// no approval required, allow the mutation
+				return next.Mutate(ctx, m)
+			}
+
+			// Get the authenticated user
+			actor, err := auth.GetAuthenticatedUserFromContext(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			// Determine the approver and delegate group IDs based on operation type
+			approverID, delegateID := getApproverDelegateIDs(ctx, mut)
+
+			// If neither approver nor delegate group is set, reject the approval
+			if approverID == "" && delegateID == "" {
+				return nil, ErrStatusApprovedNotAllowed
+			}
+
+			// Check if the user is a member of either the approver or delegate group
+			isMember, err := checkUserInApproverGroups(ctx, mut.Client(), actor.SubjectID, approverID, delegateID)
+			if err != nil {
+				return nil, err
+			}
+
+			if !isMember {
+				return nil, ErrStatusApprovedNotAllowed
+			}
+
+			// User is authorized, proceed with the mutation
+			return next.Mutate(ctx, m)
+		})
+	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
+}
+
+func filenameToTitle(filename string) string {
+	// remove file extension if present
+	filename = strings.TrimSpace(filename)
+	if dotIdx := strings.LastIndex(filename, "."); dotIdx != -1 {
+		filename = filename[:dotIdx]
+	}
+
+	// replace underscores and hyphens with spaces
+	filename = strings.ReplaceAll(filename, "_", " ")
+	filename = strings.ReplaceAll(filename, "-", " ")
+
+	// capitalize first letter of each word
+	return caser.String(filename)
+}
+
+const (
+	companyPlaceholder = "{{company_name}}"
+)
+
+// updatePlaceholderText replaces the company placeholder in details with the provided organization name
+func updatePlaceholderText(details string, orgName string) string {
+	if orgName == "" {
+		log.Warn().Msg("organization name is empty, using default placeholder value")
+		orgName = "[Company Name]"
+	}
+
+	return strings.ReplaceAll(details, companyPlaceholder, orgName)
 }

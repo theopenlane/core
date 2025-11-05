@@ -178,6 +178,16 @@ func SystemInternalID(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// ProcedureKindName applies equality check predicate on the "procedure_kind_name" field. It's identical to ProcedureKindNameEQ.
+func ProcedureKindName(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindID applies equality check predicate on the "procedure_kind_id" field. It's identical to ProcedureKindIDEQ.
+func ProcedureKindID(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldProcedureKindID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldCreatedAt, v))
@@ -1748,6 +1758,156 @@ func SystemInternalIDContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
+// ProcedureKindNameEQ applies the EQ predicate on the "procedure_kind_name" field.
+func ProcedureKindNameEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameNEQ applies the NEQ predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameIn applies the In predicate on the "procedure_kind_name" field.
+func ProcedureKindNameIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldProcedureKindName, vs...))
+}
+
+// ProcedureKindNameNotIn applies the NotIn predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldProcedureKindName, vs...))
+}
+
+// ProcedureKindNameGT applies the GT predicate on the "procedure_kind_name" field.
+func ProcedureKindNameGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameGTE applies the GTE predicate on the "procedure_kind_name" field.
+func ProcedureKindNameGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameLT applies the LT predicate on the "procedure_kind_name" field.
+func ProcedureKindNameLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameLTE applies the LTE predicate on the "procedure_kind_name" field.
+func ProcedureKindNameLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameContains applies the Contains predicate on the "procedure_kind_name" field.
+func ProcedureKindNameContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameHasPrefix applies the HasPrefix predicate on the "procedure_kind_name" field.
+func ProcedureKindNameHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameHasSuffix applies the HasSuffix predicate on the "procedure_kind_name" field.
+func ProcedureKindNameHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameIsNil applies the IsNil predicate on the "procedure_kind_name" field.
+func ProcedureKindNameIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldProcedureKindName))
+}
+
+// ProcedureKindNameNotNil applies the NotNil predicate on the "procedure_kind_name" field.
+func ProcedureKindNameNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldProcedureKindName))
+}
+
+// ProcedureKindNameEqualFold applies the EqualFold predicate on the "procedure_kind_name" field.
+func ProcedureKindNameEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldProcedureKindName, v))
+}
+
+// ProcedureKindNameContainsFold applies the ContainsFold predicate on the "procedure_kind_name" field.
+func ProcedureKindNameContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldProcedureKindName, v))
+}
+
+// ProcedureKindIDEQ applies the EQ predicate on the "procedure_kind_id" field.
+func ProcedureKindIDEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDNEQ applies the NEQ predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDIn applies the In predicate on the "procedure_kind_id" field.
+func ProcedureKindIDIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldProcedureKindID, vs...))
+}
+
+// ProcedureKindIDNotIn applies the NotIn predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldProcedureKindID, vs...))
+}
+
+// ProcedureKindIDGT applies the GT predicate on the "procedure_kind_id" field.
+func ProcedureKindIDGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDGTE applies the GTE predicate on the "procedure_kind_id" field.
+func ProcedureKindIDGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDLT applies the LT predicate on the "procedure_kind_id" field.
+func ProcedureKindIDLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDLTE applies the LTE predicate on the "procedure_kind_id" field.
+func ProcedureKindIDLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDContains applies the Contains predicate on the "procedure_kind_id" field.
+func ProcedureKindIDContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDHasPrefix applies the HasPrefix predicate on the "procedure_kind_id" field.
+func ProcedureKindIDHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDHasSuffix applies the HasSuffix predicate on the "procedure_kind_id" field.
+func ProcedureKindIDHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDIsNil applies the IsNil predicate on the "procedure_kind_id" field.
+func ProcedureKindIDIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldProcedureKindID))
+}
+
+// ProcedureKindIDNotNil applies the NotNil predicate on the "procedure_kind_id" field.
+func ProcedureKindIDNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldProcedureKindID))
+}
+
+// ProcedureKindIDEqualFold applies the EqualFold predicate on the "procedure_kind_id" field.
+func ProcedureKindIDEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldProcedureKindID, v))
+}
+
+// ProcedureKindIDContainsFold applies the ContainsFold predicate on the "procedure_kind_id" field.
+func ProcedureKindIDContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldProcedureKindID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
@@ -1884,6 +2044,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.Procedure {
 		step := newDelegateStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProcedureKind applies the HasEdge predicate on the "procedure_kind" edge.
+func HasProcedureKind() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ProcedureKindTable, ProcedureKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProcedureKindWith applies the HasEdge predicate on the "procedure_kind" edge with a given conditions (other predicates).
+func HasProcedureKindWith(preds ...predicate.CustomTypeEnum) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newProcedureKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Procedure
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -2088,6 +2277,35 @@ func HasTasksWith(preds ...predicate.Task) predicate.Procedure {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasComments applies the HasEdge predicate on the "comments" edge.
+func HasComments() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCommentsWith applies the HasEdge predicate on the "comments" edge with a given conditions (other predicates).
+func HasCommentsWith(preds ...predicate.Note) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newCommentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

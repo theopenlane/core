@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -11,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -25,7 +25,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -50,7 +50,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 
 	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
+		logx.FromContext(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

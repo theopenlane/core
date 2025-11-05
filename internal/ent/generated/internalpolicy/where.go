@@ -178,6 +178,16 @@ func FileID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
 }
 
+// InternalPolicyKindName applies equality check predicate on the "internal_policy_kind_name" field. It's identical to InternalPolicyKindNameEQ.
+func InternalPolicyKindName(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindID applies equality check predicate on the "internal_policy_kind_id" field. It's identical to InternalPolicyKindIDEQ.
+func InternalPolicyKindID(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldCreatedAt, v))
@@ -1748,6 +1758,156 @@ func FileIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldFileID, v))
 }
 
+// InternalPolicyKindNameEQ applies the EQ predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameNEQ applies the NEQ predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameIn applies the In predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldInternalPolicyKindName, vs...))
+}
+
+// InternalPolicyKindNameNotIn applies the NotIn predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldInternalPolicyKindName, vs...))
+}
+
+// InternalPolicyKindNameGT applies the GT predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameGTE applies the GTE predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameLT applies the LT predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameLTE applies the LTE predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameContains applies the Contains predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameHasPrefix applies the HasPrefix predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameHasSuffix applies the HasSuffix predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameIsNil applies the IsNil predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldInternalPolicyKindName))
+}
+
+// InternalPolicyKindNameNotNil applies the NotNil predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldInternalPolicyKindName))
+}
+
+// InternalPolicyKindNameEqualFold applies the EqualFold predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindNameContainsFold applies the ContainsFold predicate on the "internal_policy_kind_name" field.
+func InternalPolicyKindNameContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldInternalPolicyKindName, v))
+}
+
+// InternalPolicyKindIDEQ applies the EQ predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDNEQ applies the NEQ predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDIn applies the In predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldInternalPolicyKindID, vs...))
+}
+
+// InternalPolicyKindIDNotIn applies the NotIn predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldInternalPolicyKindID, vs...))
+}
+
+// InternalPolicyKindIDGT applies the GT predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDGTE applies the GTE predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDLT applies the LT predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDLTE applies the LTE predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDContains applies the Contains predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDHasPrefix applies the HasPrefix predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDHasSuffix applies the HasSuffix predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDIsNil applies the IsNil predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldInternalPolicyKindID))
+}
+
+// InternalPolicyKindIDNotNil applies the NotNil predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldInternalPolicyKindID))
+}
+
+// InternalPolicyKindIDEqualFold applies the EqualFold predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldInternalPolicyKindID, v))
+}
+
+// InternalPolicyKindIDContainsFold applies the ContainsFold predicate on the "internal_policy_kind_id" field.
+func InternalPolicyKindIDContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldInternalPolicyKindID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {
@@ -1884,6 +2044,35 @@ func HasDelegateWith(preds ...predicate.Group) predicate.InternalPolicy {
 		step := newDelegateStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalPolicyKind applies the HasEdge predicate on the "internal_policy_kind" edge.
+func HasInternalPolicyKind() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalPolicyKindTable, InternalPolicyKindColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPolicyKindWith applies the HasEdge predicate on the "internal_policy_kind" edge with a given conditions (other predicates).
+func HasInternalPolicyKindWith(preds ...predicate.CustomTypeEnum) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newInternalPolicyKindStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -2175,6 +2364,35 @@ func HasFileWith(preds ...predicate.File) predicate.InternalPolicy {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasComments applies the HasEdge predicate on the "comments" edge.
+func HasComments() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCommentsWith applies the HasEdge predicate on the "comments" edge with a given conditions (other predicates).
+func HasCommentsWith(preds ...predicate.Note) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newCommentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

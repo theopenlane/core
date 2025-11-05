@@ -250,6 +250,86 @@ func (_u *GroupUpdate) SetNillableDisplayName(v *string) *GroupUpdate {
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *GroupUpdate) SetScimExternalID(v string) *GroupUpdate {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableScimExternalID(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *GroupUpdate) ClearScimExternalID() *GroupUpdate {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_u *GroupUpdate) SetScimDisplayName(v string) *GroupUpdate {
+	_u.mutation.SetScimDisplayName(v)
+	return _u
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableScimDisplayName(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetScimDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearScimDisplayName clears the value of the "scim_display_name" field.
+func (_u *GroupUpdate) ClearScimDisplayName() *GroupUpdate {
+	_u.mutation.ClearScimDisplayName()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *GroupUpdate) SetScimActive(v bool) *GroupUpdate {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableScimActive(v *bool) *GroupUpdate {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *GroupUpdate) ClearScimActive() *GroupUpdate {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_u *GroupUpdate) SetScimGroupMailing(v string) *GroupUpdate {
+	_u.mutation.SetScimGroupMailing(v)
+	return _u
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableScimGroupMailing(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetScimGroupMailing(*v)
+	}
+	return _u
+}
+
+// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
+func (_u *GroupUpdate) ClearScimGroupMailing() *GroupUpdate {
+	_u.mutation.ClearScimGroupMailing()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *GroupUpdate) SetOwner(v *Organization) *GroupUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1744,6 +1824,30 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(group.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimDisplayName(); ok {
+		_spec.SetField(group.FieldScimDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.ScimDisplayNameCleared() {
+		_spec.ClearField(group.FieldScimDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(group.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(group.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(group.FieldScimGroupMailing, field.TypeString, value)
+	}
+	if _u.mutation.ScimGroupMailingCleared() {
+		_spec.ClearField(group.FieldScimGroupMailing, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3778,6 +3882,86 @@ func (_u *GroupUpdateOne) SetNillableDisplayName(v *string) *GroupUpdateOne {
 	return _u
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_u *GroupUpdateOne) SetScimExternalID(v string) *GroupUpdateOne {
+	_u.mutation.SetScimExternalID(v)
+	return _u
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableScimExternalID(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetScimExternalID(*v)
+	}
+	return _u
+}
+
+// ClearScimExternalID clears the value of the "scim_external_id" field.
+func (_u *GroupUpdateOne) ClearScimExternalID() *GroupUpdateOne {
+	_u.mutation.ClearScimExternalID()
+	return _u
+}
+
+// SetScimDisplayName sets the "scim_display_name" field.
+func (_u *GroupUpdateOne) SetScimDisplayName(v string) *GroupUpdateOne {
+	_u.mutation.SetScimDisplayName(v)
+	return _u
+}
+
+// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableScimDisplayName(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetScimDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearScimDisplayName clears the value of the "scim_display_name" field.
+func (_u *GroupUpdateOne) ClearScimDisplayName() *GroupUpdateOne {
+	_u.mutation.ClearScimDisplayName()
+	return _u
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_u *GroupUpdateOne) SetScimActive(v bool) *GroupUpdateOne {
+	_u.mutation.SetScimActive(v)
+	return _u
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableScimActive(v *bool) *GroupUpdateOne {
+	if v != nil {
+		_u.SetScimActive(*v)
+	}
+	return _u
+}
+
+// ClearScimActive clears the value of the "scim_active" field.
+func (_u *GroupUpdateOne) ClearScimActive() *GroupUpdateOne {
+	_u.mutation.ClearScimActive()
+	return _u
+}
+
+// SetScimGroupMailing sets the "scim_group_mailing" field.
+func (_u *GroupUpdateOne) SetScimGroupMailing(v string) *GroupUpdateOne {
+	_u.mutation.SetScimGroupMailing(v)
+	return _u
+}
+
+// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableScimGroupMailing(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetScimGroupMailing(*v)
+	}
+	return _u
+}
+
+// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
+func (_u *GroupUpdateOne) ClearScimGroupMailing() *GroupUpdateOne {
+	_u.mutation.ClearScimGroupMailing()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *GroupUpdateOne) SetOwner(v *Organization) *GroupUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -5302,6 +5486,30 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ScimExternalID(); ok {
+		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ScimExternalIDCleared() {
+		_spec.ClearField(group.FieldScimExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimDisplayName(); ok {
+		_spec.SetField(group.FieldScimDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.ScimDisplayNameCleared() {
+		_spec.ClearField(group.FieldScimDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScimActive(); ok {
+		_spec.SetField(group.FieldScimActive, field.TypeBool, value)
+	}
+	if _u.mutation.ScimActiveCleared() {
+		_spec.ClearField(group.FieldScimActive, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ScimGroupMailing(); ok {
+		_spec.SetField(group.FieldScimGroupMailing, field.TypeString, value)
+	}
+	if _u.mutation.ScimGroupMailingCleared() {
+		_spec.ClearField(group.FieldScimGroupMailing, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

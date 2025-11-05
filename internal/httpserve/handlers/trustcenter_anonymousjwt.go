@@ -16,6 +16,11 @@ import (
 )
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenAPIContext) error {
+	if isRegistrationContext(ctx) {
+		response := models.CreateTrustCenterAnonymousJWTResponse{}
+		return h.Success(ctx, response, openapi)
+	}
+
 	referer := ctx.Request().URL.Query().Get("referer")
 
 	// 1. create the auth allowContext with the TrustCenterContext

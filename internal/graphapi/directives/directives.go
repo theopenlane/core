@@ -8,12 +8,12 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -216,14 +216,14 @@ func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSour
 
 	id := graphutils.GetStringInputVariableByName(ctx, "id")
 	if id == nil {
-		zerolog.Ctx(ctx).Error().Msg("no id found in context for externalReadOnly directive")
+		logx.FromContext(ctx).Error().Msg("no id found in context for externalReadOnly directive")
 		return true
 	}
 
 	// now get the object from the database
 	client := ent.FromContext(ctx)
 	if client == nil {
-		zerolog.Ctx(ctx).Error().Msg("no ent client found in context for externalReadOnly directive")
+		logx.FromContext(ctx).Error().Msg("no ent client found in context for externalReadOnly directive")
 		return true
 	}
 
@@ -234,7 +234,7 @@ func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSour
 	} else {
 		obj, err := client.Subcontrol.Get(ctx, *id)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Msg("failed to check for object source in externalReadOnly directive")
+			logx.FromContext(ctx).Error().Msg("failed to check for object source in externalReadOnly directive")
 
 			return true
 		}

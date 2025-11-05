@@ -29,9 +29,27 @@ auth:
         audience: ""
         generateKeys: true
         issuer: ""
+        jwksCacheTTL: 300000000000
         jwksEndpoint: ""
         keys: null
         kid: ""
+        redis:
+            blacklistPrefix: 'token:blacklist:'
+            config:
+                address: localhost:6379
+                db: 0
+                dialTimeout: 5000000000
+                enabled: true
+                maxActiveConns: 0
+                maxIdleConns: 0
+                maxRetries: 3
+                minIdleConns: 0
+                name: ""
+                password: ""
+                readTimeout: 0
+                username: ""
+                writeTimeout: 0
+            enabled: false
         refreshAudience: ""
         refreshDuration: 7200000000000
         refreshOverlap: -900000000000
@@ -46,7 +64,6 @@ authz:
         scopes: ""
     enabled: true
     hostUrl: https://authz.theopenlane.io
-    ignoreDuplicateKeyError: true
     modelFile: fga/model/model.fga
     modelId: ""
     storeId: ""
@@ -84,6 +101,9 @@ email:
         verifySubscriber: ""
     year: 0
 entConfig:
+    billing:
+        bypassEmailDomains: null
+        requirePaymentMethod: false
     emailValidation:
         allowedEmailTypes:
             disposable: false
@@ -265,10 +285,18 @@ objectStorage:
             proxyPresignEnabled: false
             region: ""
 ratelimit:
-    burst: 30
+    denyMessage: Too many requests
+    denyStatus: 429
+    dryRun: true
     enabled: false
-    expires: 600000000000
-    limit: 10
+    forwardedIndexFromBehind: 0
+    headers:
+        - True-Client-IP
+    includeMethod: false
+    includePath: false
+    keyPrefix: ""
+    options: null
+    sendRetryAfterHeader: true
 redis:
     address: localhost:6379
     db: 0

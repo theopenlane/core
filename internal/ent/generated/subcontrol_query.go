@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -55,6 +56,7 @@ type SubcontrolQuery struct {
 	withDelegate                    *GroupQuery
 	withResponsibleParty            *EntityQuery
 	withOwner                       *OrganizationQuery
+	withSubcontrolKind              *CustomTypeEnumQuery
 	withControl                     *ControlQuery
 	withControlImplementations      *ControlImplementationQuery
 	withScheduledJobs               *ScheduledJobQuery
@@ -437,6 +439,31 @@ func (_q *SubcontrolQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
+// QuerySubcontrolKind chains the current query on the "subcontrol_kind" edge.
+func (_q *SubcontrolQuery) QuerySubcontrolKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.SubcontrolKindTable, subcontrol.SubcontrolKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControl chains the current query on the "control" edge.
 func (_q *SubcontrolQuery) QueryControl() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -767,6 +794,7 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withDelegate:               _q.withDelegate.Clone(),
 		withResponsibleParty:       _q.withResponsibleParty.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
+		withSubcontrolKind:         _q.withSubcontrolKind.Clone(),
 		withControl:                _q.withControl.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
 		withScheduledJobs:          _q.withScheduledJobs.Clone(),
@@ -922,6 +950,17 @@ func (_q *SubcontrolQuery) WithOwner(opts ...func(*OrganizationQuery)) *Subcontr
 	return _q
 }
 
+// WithSubcontrolKind tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrol_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithSubcontrolKind(opts ...func(*CustomTypeEnumQuery)) *SubcontrolQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrolKind = query
+	return _q
+}
+
 // WithControl tells the query-builder to eager-load the nodes that are connected to
 // the "control" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *SubcontrolQuery) WithControl(opts ...func(*ControlQuery)) *SubcontrolQuery {
@@ -1062,7 +1101,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1076,6 +1115,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withDelegate != nil,
 			_q.withResponsibleParty != nil,
 			_q.withOwner != nil,
+			_q.withSubcontrolKind != nil,
 			_q.withControl != nil,
 			_q.withControlImplementations != nil,
 			_q.withScheduledJobs != nil,
@@ -1195,6 +1235,12 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubcontrolKind; query != nil {
+		if err := _q.loadSubcontrolKind(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *CustomTypeEnum) { n.Edges.SubcontrolKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1921,6 +1967,35 @@ func (_q *SubcontrolQuery) loadOwner(ctx context.Context, query *OrganizationQue
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadSubcontrolKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].SubcontrolKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subcontrol_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *SubcontrolQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Control)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subcontrol)
@@ -2240,6 +2315,9 @@ func (_q *SubcontrolQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldOwnerID)
+		}
+		if _q.withSubcontrolKind != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldSubcontrolKindID)
 		}
 		if _q.withControl != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldControlID)

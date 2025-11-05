@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"os"
 
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
@@ -43,16 +44,23 @@ func ConfigureEcho(c LogConfig) *echo.Echo {
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
 	e.Use(middleware.Recover())
 
-	logger := logx.CreateLogger(c.LogLevel, c.PrettyLog)
+	zLvl, _ := logx.MatchEchoLevel(c.LogLevel)
+	loggers := logx.Configure(logx.LoggerConfig{
+		Level:         zLvl,
+		Pretty:        c.PrettyLog,
+		Writer:        os.Stdout,
+		IncludeCaller: true,
+		WithEcho:      true,
+	})
 
-	e.Logger = logger
+	e.Logger = loggers.Echo
 
 	e.Use(middleware.RequestIDWithConfig(middleware.RequestIDConfig{
 		TargetHeader: "X-Request-ID",
 	}))
 
 	e.Use(logx.LoggingMiddleware(logx.Config{
-		Logger:          logger,
+		Logger:          loggers.Echo,
 		RequestIDHeader: "X-Request-ID",
 		RequestIDKey:    "request_id",
 		HandleError:     true,
@@ -142,6 +150,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		handler.Routes(s.Router.Echo.Group("", s.config.GraphMiddleware...))
 	}
 
+	// Generate tag definitions from registered operations
+	GenerateTagsFromOperations(s.Router.OAS)
+
 	// Print routes on startup
 	routes := s.Router.Echo.Router().Routes()
 	for _, r := range routes {
@@ -167,8 +178,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	}
 
 	go func() {
-		if err := newMetrics.Start(ctx); err != nil {
-			log.Error().Err(err).Msg("metrics server failed to start")
+		metricsCtx := logx.SeedContext(ctx)
+		if err := newMetrics.Start(metricsCtx); err != nil {
+			logx.FromContext(metricsCtx).Error().Err(err).Msg("metrics server failed to start")
 		}
 	}()
 	// otherwise, start without TLS

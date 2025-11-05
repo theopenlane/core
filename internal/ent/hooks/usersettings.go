@@ -8,8 +8,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
-	"github.com/rs/zerolog"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookUserSetting runs on user settings mutations and validates input on update
@@ -71,7 +73,7 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get authenticated user context")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get authenticated user context")
 
 		return false
 	}
@@ -92,6 +94,7 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 }
 
 // HookUserSettingEmailConfirmation runs on user settings mutations and handles auto-join when email is confirmed
+// and sends welcome email after verification
 func HookUserSettingEmailConfirmation() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.UserSettingFunc(func(ctx context.Context, m *generated.UserSettingMutation) (generated.Value, error) {
@@ -99,6 +102,12 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			emailConfirmed, ok := m.EmailConfirmed()
 			if !ok || !emailConfirmed {
 				// not setting email confirmed to true, continue with normal flow
+				return next.Mutate(ctx, m)
+			}
+
+			oldEmailConfirmed, _ := m.OldEmailConfirmed(ctx)
+			if oldEmailConfirmed {
+				// email was already confirmed, continue with normal flow
 				return next.Mutate(ctx, m)
 			}
 
@@ -116,21 +125,57 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 				Where(user.HasSettingWith(usersetting.ID(userSettingID))).
 				Only(allowCtx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user for auto-join")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user for auto-join")
 
 				return nil, err
 			}
 
 			// perform auto-join logic
 			if err := autoJoinOrganizationsForUser(allowCtx, m.Client(), user); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("auto-join failed")
+				logx.FromContext(ctx).Error().Err(err).Msg("auto-join failed")
 
 				return nil, err
+			}
+
+			// send a welcome email to the user
+			if err := sendRegisterWelcomeEmail(ctx, user, m); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
 			}
 
 			return v, nil
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
+}
+
+// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
+func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserSettingMutation) error {
+	// if there is not job client, we can't send the email
+	if m.Job == nil {
+		logx.FromContext(ctx).Info().Msg("no job client, skipping welcome email")
+
+		return nil
+	}
+
+	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating welcome email")
+
+		return err
+	}
+
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
 // autoJoinOrganizationsForUser automatically adds a user to organizations with matching email domains
@@ -152,11 +197,12 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		)).
 		WithSetting().All(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
 
 		return err
 	}
 
+	lastOrgID := ""
 	for _, org := range orgs {
 		// check if user is already a member
 		exists, err := dbClient.OrgMembership.Query().
@@ -166,7 +212,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			).
 			Exist(ctx)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error checking organization membership")
+			logx.FromContext(ctx).Error().Err(err).Msg("error checking organization membership")
 
 			continue
 		}
@@ -183,15 +229,38 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			Role:           &defaultRole,
 		}
 
+		// add organization to the context for auto-join
+		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			SubjectID:       user.ID,
+			SubjectEmail:    user.Email,
+			OrganizationID:  org.ID,
+			OrganizationIDs: []string{org.ID},
+		})
+
 		if err := dbClient.OrgMembership.Create().
 			SetInput(input).
 			Exec(ctx); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to auto-join user to organization")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to auto-join user to organization")
 
-			continue
+			// swallowing this error means some transactions are not rolled back and you can end up in a partial membership state
+			return err
 		}
 
-		zerolog.Ctx(ctx).Debug().Str("user_id", user.ID).Str("org_id", org.ID).Str("domain", userDomain).Msg("user auto-joined organization based on email domain match")
+		logx.FromContext(ctx).Debug().Str("user_id", user.ID).Str("org_id", org.ID).Str("domain", userDomain).Msg("user auto-joined organization based on email domain match")
+
+		lastOrgID = org.ID
+	}
+
+	if lastOrgID != "" {
+		// set the user's default organization to the last one they were added to
+		if _, err := dbClient.UserSetting.Update().
+			Where(usersetting.UserID(user.ID), usersetting.DeletedAtIsNil()).
+			SetDefaultOrgID(lastOrgID).
+			Save(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to update user's default organization after auto-join")
+
+			return err
+		}
 	}
 
 	return nil

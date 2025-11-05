@@ -117,6 +117,15 @@ func (r *mutationResolver) DeleteGroup(ctx context.Context, id string) (*model.G
 	}, nil
 }
 
+// DeleteBulkGroup is the resolver for the deleteBulkGroup field.
+func (r *mutationResolver) DeleteBulkGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteGroup(ctx, ids)
+}
+
 // Group is the resolver for the group field.
 func (r *queryResolver) Group(ctx context.Context, id string) (*generated.Group, error) {
 	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx)

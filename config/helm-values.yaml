@@ -211,6 +211,14 @@ coreConfiguration:
         free: false  # @schema type:boolean; default:false
         # -- Role indicates whether role-based email addresses are allowed
         role: false  # @schema type:boolean; default:false
+    # -- Billing contains configuration for billing related features
+    billing:
+      # -- RequirePaymentMethod indicates whether to check if a payment method
+      # exists for orgs before they can access some resource
+      requirePaymentMethod: false  # @schema type:boolean
+      # -- BypassEmailDomains is a list of domains that should be allowed to bypass
+      # the checks if RequirePaymentMethod above is enabled
+      bypassEmailDomains: []
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable
@@ -227,6 +235,24 @@ coreConfiguration:
       jwksEndpoint: ""  # @schema type:string
       keys: {}
       generateKeys: true  # @schema type:boolean; default:true
+      jwksCacheTTL: 5m0s  # @schema type:integer; default:5m
+      redis:
+        enabled: false  # @schema type:boolean; default:false
+        config:
+          enabled: true  # @schema type:boolean; default:true
+          address: "localhost:6379"  # @schema type:string; default:localhost:6379
+          name: ""  # @schema type:string
+          username: ""  # @schema type:string
+          password: ""  # @schema type:string
+          db: 0  # @schema type:integer; default:0
+          dialTimeout: 5s  # @schema type:integer; default:5s
+          readTimeout: 0s  # @schema type:integer; default:0
+          writeTimeout: 0s  # @schema type:integer; default:0
+          maxRetries: 3  # @schema type:integer; default:3
+          minIdleConns: 0  # @schema type:integer; default:0
+          maxIdleConns: 0  # @schema type:integer; default:0
+          maxActiveConns: 0  # @schema type:integer; default:0
+        blacklistPrefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedProviders: []
     # -- Providers contains supported oauth2 providers configuration
@@ -281,8 +307,6 @@ coreConfiguration:
       issuer: ""  # @schema type:string
       # -- scopes for the openFGA client
       scopes: ""  # @schema type:string
-    # -- ignore duplicate key error
-    ignoreDuplicateKeyError: true  # @schema type:boolean; default:true
   # -- DB contains the database configuration for the ent client
   db:
     # -- debug enables printing the debug database logs
@@ -380,9 +404,29 @@ coreConfiguration:
   # -- Ratelimit contains the configuration for the rate limiter
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
-    limit: 10  # @schema type:number; default:10
-    burst: 30  # @schema type:integer; default:30
-    expires: 10m0s  # @schema type:integer; default:10m
+    # -- Options enables configuring multiple concurrent rate windows that must all pass.
+    options: []
+    # -- Headers determines which headers are inspected to determine the origin IP.
+    # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
+    headers:
+        - True-Client-IP
+    # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
+    # 0 means the closest client, 1 the proxy behind it, etc.
+    forwardedIndexFromBehind: 0  # @schema type:integer; default:0
+    # -- IncludePath appends the request path to the limiter key when true.
+    includePath: false  # @schema type:boolean; default:false
+    # -- IncludeMethod appends the request method to the limiter key when true.
+    includeMethod: false  # @schema type:boolean; default:false
+    # -- KeyPrefix allows scoping the limiter key space with a static prefix.
+    keyPrefix: ""  # @schema type:string
+    # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
+    denyStatus: 429  # @schema type:integer; default:429
+    # -- DenyMessage customises the error payload when a rate limit is exceeded.
+    denyMessage: "Too many requests"  # @schema type:string; default:Too many requests
+    # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
+    sendRetryAfterHeader: true  # @schema type:boolean; default:true
+    # -- DryRun enables logging rate limit decisions without blocking requests.
+    dryRun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
   objectStorage:
     # -- Enabled indicates if object storage is enabled

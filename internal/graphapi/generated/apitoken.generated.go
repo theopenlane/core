@@ -97,6 +97,35 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 	return fc, nil
 }
 
+func (ec *executionContext) _APITokenBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_APITokenBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_APITokenBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "APITokenBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -312,6 +341,45 @@ func (ec *executionContext) _APITokenBulkCreatePayload(ctx context.Context, sel 
 	return out
 }
 
+var aPITokenBulkDeletePayloadImplementors = []string{"APITokenBulkDeletePayload"}
+
+func (ec *executionContext) _APITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.APITokenBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, aPITokenBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("APITokenBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._APITokenBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var aPITokenCreatePayloadImplementors = []string{"APITokenCreatePayload"}
 
 func (ec *executionContext) _APITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.APITokenCreatePayload) graphql.Marshaler {
@@ -445,6 +513,20 @@ func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._APITokenBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAPITokenBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkDeletePayload) graphql.Marshaler {
+	return ec._APITokenBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._APITokenBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNAPITokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenCreatePayload) graphql.Marshaler {

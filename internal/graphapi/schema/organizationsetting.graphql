@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): OrganizationSettingDeletePayload!
+    """
+    Delete multiple organizationSettings
+    """
+    deleteBulkOrganizationSetting(
+        """
+        IDs of the organizationSettings to delete
+        """
+        ids: [ID!]!
+    ): OrganizationSettingBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,14 @@ type OrganizationSettingBulkCreatePayload {
     Created organizationSettings
     """
     organizationSettings: [OrganizationSetting!]
+}
+
+"""
+Return response for deleteBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkDeletePayload {
+    """
+    Deleted organizationSetting IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -120,6 +120,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -150,6 +154,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -158,6 +164,35 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_SubcontrolBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -255,6 +290,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -285,6 +324,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -419,6 +460,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
+			case "subcontrolKindName":
+				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
+			case "subcontrolKindID":
+				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -449,6 +494,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "subcontrolKind":
+				return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
 			case "control":
 				return ec.fieldContext_Subcontrol_control(ctx, field)
 			case "controlImplementations":
@@ -487,6 +534,45 @@ func (ec *executionContext) _SubcontrolBulkCreatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("SubcontrolBulkCreatePayload")
 		case "subcontrols":
 			out.Values[i] = ec._SubcontrolBulkCreatePayload_subcontrols(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var subcontrolBulkDeletePayloadImplementors = []string{"SubcontrolBulkDeletePayload"}
+
+func (ec *executionContext) _SubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._SubcontrolBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -643,6 +729,20 @@ func (ec *executionContext) marshalNSubcontrolBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._SubcontrolBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	return ec._SubcontrolBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSubcontrolBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubcontrolBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SubcontrolBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSubcontrolCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolCreatePayload) graphql.Marshaler {

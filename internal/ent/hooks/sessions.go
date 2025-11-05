@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -11,13 +10,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // updateUserAuthSession updates the user session with the new org ID
 // and sets updated auth cookies
 func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID string) error {
 	if am == nil {
-		zerolog.Ctx(ctx).Error().Msg("auth manager is nil, unable to update user auth session")
+		logx.FromContext(ctx).Error().Msg("auth manager is nil, unable to update user auth session")
 
 		return ErrInternalServerError
 	}

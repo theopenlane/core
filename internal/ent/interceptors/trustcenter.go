@@ -7,9 +7,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -17,7 +17,7 @@ import (
 // InterceptorTrustCenter is middleware to change the TrustCenter query
 func InterceptorTrustCenter() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		zerolog.Ctx(ctx).Debug().Msg("InterceptorTrustCenter")
+		logx.FromContext(ctx).Debug().Msg("InterceptorTrustCenter")
 
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))

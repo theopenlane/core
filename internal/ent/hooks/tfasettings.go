@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed
@@ -49,7 +49,7 @@ func HookEnableTFA() ent.Hook {
 
 			u.TFASecret, err = m.TOTP.Manager.TOTPSecret(u)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to generate TOTP secret")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to generate TOTP secret")
 
 				return nil, err
 			}

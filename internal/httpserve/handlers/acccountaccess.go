@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 
-	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -30,7 +30,7 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context, openapi *OpenAPIContext
 
 			allow, err := h.DBClient.Authz.CheckAccess(reqCtx, req)
 			if err != nil {
-				zerolog.Ctx(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
+				logx.FromContext(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 				return nil, ErrInvalidInput
 			}
 

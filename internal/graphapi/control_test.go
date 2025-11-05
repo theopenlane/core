@@ -11,6 +11,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -18,8 +21,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryControl(t *testing.T) {
@@ -1394,6 +1395,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
 	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
 
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1416,9 +1419,14 @@ func TestMutationUpdateControl(t *testing.T) {
 	})
 	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
+	// create system owned control kind
+	kind := (&CustomTypeEnumBuilder{client: suite.client, Name: "Detective", ObjectType: "control"}).MustNew(systemAdminUser.UserCtx, t)
+	kindCustom := (&CustomTypeEnumBuilder{client: suite.client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateControlInput
+		controlID   string
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
@@ -1426,25 +1434,28 @@ func TestMutationUpdateControl(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateControlInput{
-				Description:   lo.ToPtr("Updated description"),
-				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
-				AddEditorIDs:  []string{groupMember.GroupID},
+				Description:     lo.ToPtr("Updated description"),
+				ControlKindName: &kindCustom.Name,
+				AddProgramIDs:   []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
+				AddEditorIDs:    []string{groupMember.GroupID},
 				AddControlImplementationIDs: []string{
 					controlImplementation.ID,
 				},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			controlID: control.ID,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateControlInput{
-				Status:      &enums.ControlStatusPreparing,
-				Tags:        []string{"tag1", "tag2"},
-				ControlType: &enums.ControlTypeDetective,
-				Category:    lo.ToPtr("Availability"),
-				CategoryID:  lo.ToPtr("A"),
-				Subcategory: lo.ToPtr("Additional Criteria for Availability"),
+				Status:          &enums.ControlStatusPreparing,
+				Tags:            []string{"tag1", "tag2"},
+				ControlType:     &enums.ControlTypeDetective,
+				ControlKindName: &kind.Name,
+				Category:        lo.ToPtr("Availability"),
+				CategoryID:      lo.ToPtr("A"),
+				Subcategory:     lo.ToPtr("Additional Criteria for Availability"),
 				AppendReferences: []*models.Reference{
 					{
 						Name: "name of ref",
@@ -1485,8 +1496,9 @@ func TestMutationUpdateControl(t *testing.T) {
 				ControlOwnerID: &ownerGroup.ID,
 				DelegateID:     &delegateGroup.ID,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			controlID: control.ID,
+			client:    suite.client.apiWithPAT,
+			ctx:       context.Background(),
 		},
 		{
 			name: "happy path, remove some things",
@@ -1494,14 +1506,26 @@ func TestMutationUpdateControl(t *testing.T) {
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			controlID: control.ID,
+			client:    suite.client.apiWithPAT,
+			ctx:       context.Background(),
+		},
+		{
+			name: "invalid custom control enum for control kind",
+			request: testclient.UpdateControlInput{
+				ControlKindName: lo.ToPtr("InvalidKind"),
+			},
+			controlID:   control.ID,
+			client:      suite.client.apiWithPAT,
+			ctx:         context.Background(),
+			expectedErr: "value does not exist:",
 		},
 		{
 			name: "update ref code to empty",
 			request: testclient.UpdateControlInput{
 				RefCode: lo.ToPtr(""),
 			},
+			controlID:   control.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
@@ -1511,23 +1535,36 @@ func TestMutationUpdateControl(t *testing.T) {
 			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
+			controlID:   control.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update not allowed, cannot access another org's custom control kind",
+			request: testclient.UpdateControlInput{
+				ControlKindName: &kindCustom.Name,
+			},
+			controlID:   controlAnotherOrg.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "value does not exist:",
 		},
 		{
 			name: "update allowed, user added to one of the programs",
 			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			controlID: control.ID,
+			client:    suite.client.api,
+			ctx:       adminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
+			controlID:   control.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
@@ -1536,7 +1573,7 @@ func TestMutationUpdateControl(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateControl(tc.ctx, control.ID, tc.request)
+			resp, err := tc.client.UpdateControl(tc.ctx, tc.controlID, tc.request)
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -1564,6 +1601,11 @@ func TestMutationUpdateControl(t *testing.T) {
 
 			if tc.request.ControlType != nil {
 				assert.Check(t, is.Equal(*tc.request.ControlType, *resp.UpdateControl.Control.ControlType))
+			}
+
+			if tc.request.ControlKindName != nil {
+				assert.Check(t, resp.UpdateControl.Control.ControlKindName != nil)
+				assert.Check(t, is.Equal(*tc.request.ControlKindName, *resp.UpdateControl.Control.ControlKindName))
 			}
 
 			if tc.request.Category != nil {
@@ -1666,6 +1708,10 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(testUser1.UserCtx, t)
+
 }
 
 func TestMutationDeleteControl(t *testing.T) {
@@ -1742,6 +1788,74 @@ func TestMutationDeleteControl(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteControl.DeletedID))
+		})
+	}
+}
+
+func TestMutationDeleteBulkControl(t *testing.T) {
+	testUser := suite.userBuilder(context.Background(), t)
+	anotherUser := suite.userBuilder(context.Background(), t)
+
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
+
+	testCases := []struct {
+		name                 string
+		idsToDelete          []string
+		client               *testclient.TestClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedDeletedCount int
+	}{
+		{
+			name:                 "happy path, delete multiple controls",
+			idsToDelete:          []string{control1.ID, control2.ID, control3.ID},
+			client:               suite.client.api,
+			ctx:                  testUser.UserCtx,
+			expectedDeletedCount: 3,
+		},
+		{
+			name:                 "not authorized, delete controls from another user",
+			idsToDelete:          []string{control1.ID, controlAnotherUser.ID},
+			client:               suite.client.api,
+			ctx:                  anotherUser.UserCtx,
+			expectedDeletedCount: 1,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteBulkControl(tc.ctx, tc.idsToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.DeleteBulkControl.DeletedIDs, tc.expectedDeletedCount))
+
+			// verify that the returned IDs match the ones that were actually deleted
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				found := false
+				for _, expectedID := range tc.idsToDelete {
+					if expectedID == deletedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Deleted ID %s should be in the original request", deletedID)
+			}
+
+			// verify that the controls are actually deleted by trying to query them
+			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
+				_, err := tc.client.GetControlByID(tc.ctx, deletedID)
+				assert.ErrorContains(t, err, notFoundErrorMsg)
+			}
 		})
 	}
 }

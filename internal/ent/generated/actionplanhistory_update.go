@@ -545,6 +545,46 @@ func (_u *ActionPlanHistoryUpdate) ClearSystemInternalID() *ActionPlanHistoryUpd
 	return _u
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_u *ActionPlanHistoryUpdate) SetActionPlanKindName(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetActionPlanKindName(v)
+	return _u
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableActionPlanKindName(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetActionPlanKindName(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindName clears the value of the "action_plan_kind_name" field.
+func (_u *ActionPlanHistoryUpdate) ClearActionPlanKindName() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearActionPlanKindName()
+	return _u
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_u *ActionPlanHistoryUpdate) SetActionPlanKindID(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetActionPlanKindID(v)
+	return _u
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableActionPlanKindID(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetActionPlanKindID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindID clears the value of the "action_plan_kind_id" field.
+func (_u *ActionPlanHistoryUpdate) ClearActionPlanKindID() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearActionPlanKindID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdate) SetDueDate(v time.Time) *ActionPlanHistoryUpdate {
 	_u.mutation.SetDueDate(v)
@@ -895,6 +935,18 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindName, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindNameCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ActionPlanKindID(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindID, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
@@ -1450,6 +1502,46 @@ func (_u *ActionPlanHistoryUpdateOne) ClearSystemInternalID() *ActionPlanHistory
 	return _u
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_u *ActionPlanHistoryUpdateOne) SetActionPlanKindName(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetActionPlanKindName(v)
+	return _u
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableActionPlanKindName(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetActionPlanKindName(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindName clears the value of the "action_plan_kind_name" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearActionPlanKindName() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearActionPlanKindName()
+	return _u
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_u *ActionPlanHistoryUpdateOne) SetActionPlanKindID(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetActionPlanKindID(v)
+	return _u
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableActionPlanKindID(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetActionPlanKindID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanKindID clears the value of the "action_plan_kind_id" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearActionPlanKindID() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearActionPlanKindID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdateOne) SetDueDate(v time.Time) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -1830,6 +1922,18 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindName, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindNameCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ActionPlanKindID(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanKindID, field.TypeString, value)
+	}
+	if _u.mutation.ActionPlanKindIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)

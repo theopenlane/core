@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -84,10 +85,15 @@ type Procedure struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the kind of the procedure
+	ProcedureKindName string `json:"procedure_kind_name,omitempty"`
+	// the kind of the procedure
+	ProcedureKindID string `json:"procedure_kind_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
+	custom_type_enum_procedures  *string
 	selectValues                 sql.SelectValues
 }
 
@@ -103,6 +109,8 @@ type ProcedureEdges struct {
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
 	Delegate *Group `json:"delegate,omitempty"`
+	// ProcedureKind holds the value of the procedure_kind edge.
+	ProcedureKind *CustomTypeEnum `json:"procedure_kind,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -117,13 +125,15 @@ type ProcedureEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// conversations related to the procedure
+	Comments []*Note `json:"comments,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [15]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -134,6 +144,7 @@ type ProcedureEdges struct {
 	namedNarratives       map[string][]*Narrative
 	namedRisks            map[string][]*Risk
 	namedTasks            map[string][]*Task
+	namedComments         map[string][]*Note
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -187,10 +198,21 @@ func (e ProcedureEdges) DelegateOrErr() (*Group, error) {
 	return nil, &NotLoadedError{edge: "delegate"}
 }
 
+// ProcedureKindOrErr returns the ProcedureKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) ProcedureKindOrErr() (*CustomTypeEnum, error) {
+	if e.ProcedureKind != nil {
+		return e.ProcedureKind, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "procedure_kind"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -199,7 +221,7 @@ func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -208,7 +230,7 @@ func (e ProcedureEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -217,7 +239,7 @@ func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -226,7 +248,7 @@ func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -235,7 +257,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -244,10 +266,19 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[13] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
 }
 
 // FileOrErr returns the File value or an error if the edge
@@ -255,7 +286,7 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 func (e ProcedureEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -270,11 +301,13 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
+			values[i] = new(sql.NullString)
+		case procedure.ForeignKeys[1]: // custom_type_enum_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -501,12 +534,31 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case procedure.FieldProcedureKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_kind_name", values[i])
+			} else if value.Valid {
+				_m.ProcedureKindName = value.String
+			}
+		case procedure.FieldProcedureKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_kind_id", values[i])
+			} else if value.Valid {
+				_m.ProcedureKindID = value.String
+			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_procedures", values[i])
 			} else if value.Valid {
 				_m.control_objective_procedures = new(string)
 				*_m.control_objective_procedures = value.String
+			}
+		case procedure.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_procedures", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_procedures = new(string)
+				*_m.custom_type_enum_procedures = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -546,6 +598,11 @@ func (_m *Procedure) QueryDelegate() *GroupQuery {
 	return NewProcedureClient(_m.config).QueryDelegate(_m)
 }
 
+// QueryProcedureKind queries the "procedure_kind" edge of the Procedure entity.
+func (_m *Procedure) QueryProcedureKind() *CustomTypeEnumQuery {
+	return NewProcedureClient(_m.config).QueryProcedureKind(_m)
+}
+
 // QueryControls queries the "controls" edge of the Procedure entity.
 func (_m *Procedure) QueryControls() *ControlQuery {
 	return NewProcedureClient(_m.config).QueryControls(_m)
@@ -579,6 +636,11 @@ func (_m *Procedure) QueryRisks() *RiskQuery {
 // QueryTasks queries the "tasks" edge of the Procedure entity.
 func (_m *Procedure) QueryTasks() *TaskQuery {
 	return NewProcedureClient(_m.config).QueryTasks(_m)
+}
+
+// QueryComments queries the "comments" edge of the Procedure entity.
+func (_m *Procedure) QueryComments() *NoteQuery {
+	return NewProcedureClient(_m.config).QueryComments(_m)
 }
 
 // QueryFile queries the "file" edge of the Procedure entity.
@@ -709,6 +771,12 @@ func (_m *Procedure) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("procedure_kind_name=")
+	builder.WriteString(_m.ProcedureKindName)
+	builder.WriteString(", ")
+	builder.WriteString("procedure_kind_id=")
+	builder.WriteString(_m.ProcedureKindID)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -926,6 +994,30 @@ func (_m *Procedure) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Procedure) NamedComments(name string) ([]*Note, error) {
+	if _m.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Procedure) appendNamedComments(name string, edges ...*Note) {
+	if _m.Edges.namedComments == nil {
+		_m.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedComments[name] = []*Note{}
+	} else {
+		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
 	}
 }
 

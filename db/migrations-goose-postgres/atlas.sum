@@ -1,4 +1,4 @@
-h1:EfAkQQY+nOo4tA3ycTq59YVj7BLa6TdSRcuHOJcV1YY=
+h1:ZVgvwX58xzNoftk/qlguNZ8lQDeGlLhg1EGGpQUK3jU=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -68,3 +68,8 @@ h1:EfAkQQY+nOo4tA3ycTq59YVj7BLa6TdSRcuHOJcV1YY=
 20251014172517_secondary_colors_trustcenter.sql h1:naV6nhWdmPDopwygVekVx/+BI+35bOeuw+HiPZWcEgg=
 20251019041849_controls_ref_ids_deleted.sql h1:mHX/v51T8yGtgwobKpr4iAcO9MwsjaTy3jVmBGqwR6Q=
 20251020115022_filedownloadtoken.sql h1:sEPteEpXmgyyJsWWisdHwTIYQCIgaTXf7U8sM+KDGDU=
+20251021165311_notes_procedure_policy_risk.sql h1:SsBKBIA79STMa6mzhOxMmtMW+9R7dCAfS0CtSY6H2LA=
+20251026212520_scim.sql h1:stCkk59HR5VLuCABAtLzVstmVmRQQBYMVEjlPZvF7lA=
+20251030194753_ownership.sql h1:FZyFZHxwTJwGnf/INOfTXPUHziJF4hUQKaCyhXsiPKA=
+20251103201121_assessments.sql h1:IIbdGQdkkxq4/yUeVTNBkntPsajEyl24xI3fG8v3PxE=
+20251104071836_custom_tags_enums.sql h1:nDOCP3m/ggLbcndhz4GWki4KlWY2ADflnfBYfYWVgtA=

@@ -8,9 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -420,7 +420,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
 		}
 
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgModule for %s with ID %s", moduleName, orgMod.ID)
+		logx.FromContext(ctx).Debug().Msgf("created OrgModule for %s with ID %s", moduleName, orgMod.ID)
 
 		// the product and price entries are somewhat redundant but creating them for reference and future extensibility
 		orgProduct, err := db.OrgProduct.Create().
@@ -434,7 +434,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
 		}
 
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgProduct for %s with ID %s", moduleName, orgProduct.ID)
+		logx.FromContext(ctx).Debug().Msgf("created OrgProduct for %s with ID %s", moduleName, orgProduct.ID)
 
 		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
 		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
@@ -450,7 +450,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
 		}
 
-		zerolog.Ctx(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
+		logx.FromContext(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
 
 		// update the org modules with the price ID
 		if _, err := db.OrgModule.UpdateOne(orgMod).SetPriceID(orgPrice.ID).Save(newCtx); err != nil {

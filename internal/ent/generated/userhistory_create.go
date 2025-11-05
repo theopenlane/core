@@ -318,6 +318,76 @@ func (_c *UserHistoryCreate) SetNillableRole(v *enums.Role) *UserHistoryCreate {
 	return _c
 }
 
+// SetScimExternalID sets the "scim_external_id" field.
+func (_c *UserHistoryCreate) SetScimExternalID(v string) *UserHistoryCreate {
+	_c.mutation.SetScimExternalID(v)
+	return _c
+}
+
+// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
+func (_c *UserHistoryCreate) SetNillableScimExternalID(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetScimExternalID(*v)
+	}
+	return _c
+}
+
+// SetScimUsername sets the "scim_username" field.
+func (_c *UserHistoryCreate) SetScimUsername(v string) *UserHistoryCreate {
+	_c.mutation.SetScimUsername(v)
+	return _c
+}
+
+// SetNillableScimUsername sets the "scim_username" field if the given value is not nil.
+func (_c *UserHistoryCreate) SetNillableScimUsername(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetScimUsername(*v)
+	}
+	return _c
+}
+
+// SetScimActive sets the "scim_active" field.
+func (_c *UserHistoryCreate) SetScimActive(v bool) *UserHistoryCreate {
+	_c.mutation.SetScimActive(v)
+	return _c
+}
+
+// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
+func (_c *UserHistoryCreate) SetNillableScimActive(v *bool) *UserHistoryCreate {
+	if v != nil {
+		_c.SetScimActive(*v)
+	}
+	return _c
+}
+
+// SetScimPreferredLanguage sets the "scim_preferred_language" field.
+func (_c *UserHistoryCreate) SetScimPreferredLanguage(v string) *UserHistoryCreate {
+	_c.mutation.SetScimPreferredLanguage(v)
+	return _c
+}
+
+// SetNillableScimPreferredLanguage sets the "scim_preferred_language" field if the given value is not nil.
+func (_c *UserHistoryCreate) SetNillableScimPreferredLanguage(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetScimPreferredLanguage(*v)
+	}
+	return _c
+}
+
+// SetScimLocale sets the "scim_locale" field.
+func (_c *UserHistoryCreate) SetScimLocale(v string) *UserHistoryCreate {
+	_c.mutation.SetScimLocale(v)
+	return _c
+}
+
+// SetNillableScimLocale sets the "scim_locale" field if the given value is not nil.
+func (_c *UserHistoryCreate) SetNillableScimLocale(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetScimLocale(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *UserHistoryCreate) SetID(v string) *UserHistoryCreate {
 	_c.mutation.SetID(v)
@@ -408,6 +478,10 @@ func (_c *UserHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Role(); !ok {
 		v := userhistory.DefaultRole
 		_c.mutation.SetRole(v)
+	}
+	if _, ok := _c.mutation.ScimActive(); !ok {
+		v := userhistory.DefaultScimActive
+		_c.mutation.SetScimActive(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if userhistory.DefaultID == nil {
@@ -590,6 +664,26 @@ func (_c *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(userhistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
+	}
+	if value, ok := _c.mutation.ScimExternalID(); ok {
+		_spec.SetField(userhistory.FieldScimExternalID, field.TypeString, value)
+		_node.ScimExternalID = &value
+	}
+	if value, ok := _c.mutation.ScimUsername(); ok {
+		_spec.SetField(userhistory.FieldScimUsername, field.TypeString, value)
+		_node.ScimUsername = &value
+	}
+	if value, ok := _c.mutation.ScimActive(); ok {
+		_spec.SetField(userhistory.FieldScimActive, field.TypeBool, value)
+		_node.ScimActive = value
+	}
+	if value, ok := _c.mutation.ScimPreferredLanguage(); ok {
+		_spec.SetField(userhistory.FieldScimPreferredLanguage, field.TypeString, value)
+		_node.ScimPreferredLanguage = &value
+	}
+	if value, ok := _c.mutation.ScimLocale(); ok {
+		_spec.SetField(userhistory.FieldScimLocale, field.TypeString, value)
+		_node.ScimLocale = &value
 	}
 	return _node, _spec
 }

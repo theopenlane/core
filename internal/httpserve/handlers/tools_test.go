@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v83"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -134,7 +134,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	var err error
 
 	// shared token manager to avoid RSA key generation
-	suite.sharedTokenManager, err = coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	require.NoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup

@@ -11,8 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v82"
-	"github.com/stripe/stripe-go/v82/webhook"
+	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v83/webhook"
 
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -20,6 +20,14 @@ import (
 
 func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	t := suite.T()
+
+	// add the customer ID on the organization so isOrgValid can find it
+	// and it does not just keep failing
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	suite.db.Organization.UpdateOneID(testUser1.OrganizationID).
+		SetStripeCustomerID("cus_test_customer").
+		ExecX(allowCtx)
 
 	// manually create an org subscription for the org and set it as active since this does not happen automatically
 	// in tests
@@ -53,7 +61,6 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	require.NoError(t, err)
 
 	// create api token and personal access token to ensure they are revoked when subscription is paused
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	apiToken := suite.db.APIToken.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName(
@@ -75,6 +82,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - paused subscription",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionPaused,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -86,8 +94,9 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		{
 			name: "invalid payload, missing api_version",
 			payload: &stripe.Event{
-				ID:   "evt_test_webhook",
-				Type: stripe.EventTypeCustomerSubscriptionUpdated,
+				ID:     "evt_test_webhook",
+				Object: "event",
+				Type:   stripe.EventTypeCustomerSubscriptionUpdated,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
@@ -98,6 +107,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - subscription updated",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -110,6 +120,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - trial will end",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionTrialWillEnd,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -122,6 +133,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "valid payload - payment method attached",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypePaymentMethodAttached,
 				APIVersion: stripe.APIVersion,
 				Data: &stripe.EventData{
@@ -134,8 +146,12 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			name: "unsupported event type",
 			payload: &stripe.Event{
 				ID:         "evt_test_webhook",
+				Object:     "event",
 				Type:       stripe.EventTypeCustomerUpdated,
 				APIVersion: stripe.APIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(`{"id":"cus_test","object":"customer"}`),
+				},
 			},
 			expectedStatus: http.StatusOK,
 		},

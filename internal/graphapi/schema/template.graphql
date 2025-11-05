@@ -62,6 +62,15 @@ extend type Mutation{
         """
         id: ID!
     ): TemplateDeletePayload!
+    """
+    Delete multiple templates
+    """
+    deleteBulkTemplate(
+        """
+        IDs of the templates to delete
+        """
+        ids: [ID!]!
+    ): TemplateBulkDeletePayload!
 }
 
 """
@@ -102,4 +111,14 @@ type TemplateBulkCreatePayload {
     Created templates
     """
     templates: [Template!]
+}
+
+"""
+Return response for deleteBulkTemplate mutation
+"""
+type TemplateBulkDeletePayload {
+    """
+    Deleted template IDs
+    """
+    deletedIDs: [ID!]!
 }

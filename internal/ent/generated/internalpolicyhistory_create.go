@@ -418,6 +418,34 @@ func (_c *InternalPolicyHistoryCreate) SetNillableFileID(v *string) *InternalPol
 	return _c
 }
 
+// SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
+func (_c *InternalPolicyHistoryCreate) SetInternalPolicyKindName(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetInternalPolicyKindName(v)
+	return _c
+}
+
+// SetNillableInternalPolicyKindName sets the "internal_policy_kind_name" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableInternalPolicyKindName(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetInternalPolicyKindName(*v)
+	}
+	return _c
+}
+
+// SetInternalPolicyKindID sets the "internal_policy_kind_id" field.
+func (_c *InternalPolicyHistoryCreate) SetInternalPolicyKindID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetInternalPolicyKindID(v)
+	return _c
+}
+
+// SetNillableInternalPolicyKindID sets the "internal_policy_kind_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableInternalPolicyKindID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetInternalPolicyKindID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyHistoryCreate) SetID(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetID(v)
@@ -752,6 +780,14 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
 		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.InternalPolicyKindName(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)
+		_node.InternalPolicyKindName = value
+	}
+	if value, ok := _c.mutation.InternalPolicyKindID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString, value)
+		_node.InternalPolicyKindID = value
 	}
 	return _node, _spec
 }

@@ -215,9 +215,10 @@ type InternalPolicyBuilder struct {
 	client *client
 
 	// Fields
-	Name            string
-	BlockedGroupIDs []string
-	EditorGroupIDs  []string
+	Name                    string
+	BlockedGroupIDs         []string
+	EditorGroupIDs          []string
+	SkipApprovalRequirement bool
 }
 
 type RiskBuilder struct {
@@ -360,6 +361,24 @@ type TemplateBuilder struct {
 	TemplateType enums.DocumentType
 	JSONConfig   map[string]any
 	UISchema     map[string]any
+}
+
+type TagDefinitionBuilder struct {
+	client *client
+
+	// Fields
+	Name  string
+	Color string
+}
+
+type CustomTypeEnumBuilder struct {
+	client *client
+
+	// Fields
+	Name        string
+	Description string
+	Color       string
+	ObjectType  string
 }
 
 // Faker structs with random injected data
@@ -1056,6 +1075,10 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	if len(p.EditorGroupIDs) > 0 {
 		mut.AddEditorIDs(p.EditorGroupIDs...)
+	}
+
+	if p.SkipApprovalRequirement {
+		mut.SetApprovalRequired(false)
 	}
 
 	policy, err := mut.Save(ctx)
@@ -2226,4 +2249,53 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 	requireNoError(err)
 
 	return watermarkConfig
+}
+
+func (td *TagDefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TagDefinition {
+	ctx = setContext(ctx, td.client.db)
+
+	if td.Name == "" {
+		td.Name = gofakeit.HipsterWord()
+	}
+
+	mutation := td.client.db.TagDefinition.Create().
+		SetName(td.Name)
+
+	if td.Color != "" {
+		mutation.SetColor(td.Color)
+	}
+
+	tagDefinition, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return tagDefinition
+}
+
+func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent.CustomTypeEnum {
+	ctx = setContext(ctx, td.client.db)
+
+	if td.Name == "" {
+		td.Name = gofakeit.HipsterWord()
+	}
+
+	if td.ObjectType == "" {
+		td.ObjectType = "task"
+	}
+
+	mutation := td.client.db.CustomTypeEnum.Create().
+		SetName(td.Name).
+		SetObjectType(td.ObjectType)
+
+	if td.Description != "" {
+		mutation.SetDescription(td.Description)
+	}
+
+	if td.Color != "" {
+		mutation.SetColor(td.Color)
+	}
+
+	customTypeEnum, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return customTypeEnum
 }

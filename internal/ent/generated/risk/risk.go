@@ -36,6 +36,14 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldRiskKindName holds the string denoting the risk_kind_name field in the database.
+	FieldRiskKindName = "risk_kind_name"
+	// FieldRiskKindID holds the string denoting the risk_kind_id field in the database.
+	FieldRiskKindID = "risk_kind_id"
+	// FieldRiskCategoryName holds the string denoting the risk_category_name field in the database.
+	FieldRiskCategoryName = "risk_category_name"
+	// FieldRiskCategoryID holds the string denoting the risk_category_id field in the database.
+	FieldRiskCategoryID = "risk_category_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -68,6 +76,10 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeRiskKind holds the string denoting the risk_kind edge name in mutations.
+	EdgeRiskKind = "risk_kind"
+	// EdgeRiskCategory holds the string denoting the risk_category edge name in mutations.
+	EdgeRiskCategory = "risk_category"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -92,6 +104,8 @@ const (
 	EdgeStakeholder = "stakeholder"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
 	EdgeDelegate = "delegate"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// Table holds the table name of the risk in the database.
 	Table = "risks"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -116,6 +130,20 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// RiskKindTable is the table that holds the risk_kind relation/edge.
+	RiskKindTable = "risks"
+	// RiskKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	RiskKindInverseTable = "custom_type_enums"
+	// RiskKindColumn is the table column denoting the risk_kind relation/edge.
+	RiskKindColumn = "risk_kind_id"
+	// RiskCategoryTable is the table that holds the risk_category relation/edge.
+	RiskCategoryTable = "risks"
+	// RiskCategoryInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	RiskCategoryInverseTable = "custom_type_enums"
+	// RiskCategoryColumn is the table column denoting the risk_category relation/edge.
+	RiskCategoryColumn = "risk_category_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_risks"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -186,6 +214,13 @@ const (
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "delegate_id"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "risk_comments"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -200,6 +235,10 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldRiskKindName,
+	FieldRiskKindID,
+	FieldRiskCategoryName,
+	FieldRiskCategoryID,
 	FieldName,
 	FieldStatus,
 	FieldRiskType,
@@ -218,6 +257,8 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
+	"custom_type_enum_risks",
+	"custom_type_enum_risk_categories",
 }
 
 var (
@@ -274,7 +315,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [15]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -377,6 +418,26 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByRiskKindName orders the results by the risk_kind_name field.
+func ByRiskKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskKindName, opts...).ToFunc()
+}
+
+// ByRiskKindID orders the results by the risk_kind_id field.
+func ByRiskKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskKindID, opts...).ToFunc()
+}
+
+// ByRiskCategoryName orders the results by the risk_category_name field.
+func ByRiskCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskCategoryName, opts...).ToFunc()
+}
+
+// ByRiskCategoryID orders the results by the risk_category_id field.
+func ByRiskCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskCategoryID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -485,6 +546,20 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRiskKindField orders the results by risk_kind field.
+func ByRiskKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRiskCategoryField orders the results by risk_category field.
+func ByRiskCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskCategoryStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -641,6 +716,20 @@ func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -667,6 +756,20 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newRiskKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RiskKindTable, RiskKindColumn),
+	)
+}
+func newRiskCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskCategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RiskCategoryTable, RiskCategoryColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -751,6 +854,13 @@ func newDelegateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DelegateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
 	)
 }
 

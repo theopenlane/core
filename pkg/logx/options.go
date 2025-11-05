@@ -36,22 +36,7 @@ func WithLevel(level log.Lvl) ConfigSetter {
 	return func(opts *Options) {
 		zlvl, elvl := MatchEchoLevel(level)
 
-		opts.zcontext = opts.zcontext.Logger().Level(zlvl).With()
-		opts.level = elvl
-	}
-}
-
-// WithField sets a field on a Logger
-func WithField(name string, value any) ConfigSetter {
-	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.Interface(name, value)
-	}
-}
-
-// WithFields sets fields on a Logger
-func WithFields(fields map[string]any) ConfigSetter {
-	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.Fields(fields)
+		applyZeroLevel(opts, zlvl, elvl)
 	}
 }
 
@@ -69,30 +54,23 @@ func WithCaller() ConfigSetter {
 	}
 }
 
-// WithCallerWithSkipFrameCount sets the caller with a skip frame count on a Logger
-func WithCallerWithSkipFrameCount(skipFrameCount int) ConfigSetter {
+// WithZeroLevel sets the zerolog level on a Logger while keeping the echo level in sync
+func WithZeroLevel(level zerolog.Level) ConfigSetter {
 	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.CallerWithSkipFrameCount(skipFrameCount)
+		elvl, _ := MatchZeroLevel(level)
+
+		applyZeroLevel(opts, level, elvl)
 	}
 }
 
-// WithPrefix sets the prefix on a Logger
-func WithPrefix(prefix string) ConfigSetter {
+func applyZeroLevel(opts *Options, zlvl zerolog.Level, elvl log.Lvl) {
+	opts.zcontext = opts.zcontext.Logger().Level(zlvl).With()
+	opts.level = elvl
+}
+
+func withPrefix(prefix string) ConfigSetter {
 	return func(opts *Options) {
 		opts.zcontext = opts.zcontext.Str("prefix", prefix)
-	}
-}
-
-// WithHook sets the hook on a Logger
-func WithHook(hook zerolog.Hook) ConfigSetter {
-	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.Logger().Hook(hook).With()
-	}
-}
-
-// WithHookFunc sets the hook function on a Logger
-func WithHookFunc(hook zerolog.HookFunc) ConfigSetter {
-	return func(opts *Options) {
-		opts.zcontext = opts.zcontext.Logger().Hook(hook).With()
+		opts.prefix = prefix
 	}
 }

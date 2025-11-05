@@ -6,16 +6,18 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/pkg/models"
+
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // Risk defines the risk schema.
@@ -64,6 +66,9 @@ func (Risk) Fields() []ent.Field {
 		field.String("risk_type").
 			Annotations(
 				entgql.OrderField("risk_type"),
+				entgql.Directives(
+					entgql.Deprecated("Use `risk_kind_name` instead."),
+				),
 			).
 			Optional().
 			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
@@ -71,6 +76,9 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("category"),
+				entgql.Directives(
+					entgql.Deprecated("Use `risk_category_name` instead."),
+				),
 			).
 			Comment("category of the risk, e.g. human resources, operations, IT, etc."),
 		field.Enum("impact").
@@ -152,6 +160,16 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the risk",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 	}
 }
 
@@ -188,6 +206,8 @@ func (r Risk) Mixin() []ent.Mixin {
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
+			newCustomEnumMixin(r),
+			newCustomEnumMixin(r, withEnumFieldName("category")),
 		},
 	}.getMixins(r)
 }

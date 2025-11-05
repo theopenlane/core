@@ -7,13 +7,13 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
@@ -32,7 +32,7 @@ type genericMutation interface {
 // This rule assumes that the organization id and user id are set in the context
 // and only checks for access to the single organization
 func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
-	zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("checking access for organization")
+	logx.FromContext(ctx).Debug().Str("relation", relation).Msg("checking access for organization")
 	// skip if permission is already set to allow or if it's an internal request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
 		return privacy.Allow
@@ -107,7 +107,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if slices.Contains(au.OrganizationIDs, organizationID) && relation == fgax.CanView {
-		zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
+		logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
 
 		return privacy.Allow
 	}
@@ -115,7 +115,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	// check the cache first
 	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 		if hasRole, err := cache.HasRole(ctx, au.SubjectID, organizationID, relation); err == nil && hasRole {
-			zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+			logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
 
 			return privacy.Allow
 		}
@@ -136,11 +136,11 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if access {
-		zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
+		logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
 
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if err := cache.SetRole(ctx, au.SubjectID, organizationID, relation); err != nil {
-				zerolog.Ctx(ctx).Err(err).Msg("failed to set role cache")
+				logx.FromContext(ctx).Err(err).Msg("failed to set role cache")
 			}
 		}
 
@@ -148,13 +148,15 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	// deny if it was a mutation is not allowed
+	logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID).Msg("request denied by access for user in organization")
+
 	return generated.ErrPermissionDenied
 }
 
 // HasOrgMutationAccess is a rule that returns allow decision if user has edit or delete access
 func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 	return privacy.OrganizationMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationMutation) error {
-		zerolog.Ctx(ctx).Debug().Msg("checking mutation access")
+		logx.FromContext(ctx).Debug().Msg("checking mutation access")
 
 		relation := fgax.CanEdit
 		if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
@@ -169,7 +171,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		// check the cache first
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if hasRole, err := cache.HasRole(ctx, user.SubjectID, user.OrganizationID, relation); err == nil && hasRole {
-				zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+				logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
 
 				return privacy.Allow
 			}
@@ -196,7 +198,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					zerolog.Ctx(ctx).Debug().Str("relation", relation).Str("organization_id", parentOrgID).
+					logx.FromContext(ctx).Error().Str("relation", relation).Str("organization_id", parentOrgID).
 						Msg("access denied to parent org")
 
 					return generated.ErrPermissionDenied
@@ -211,12 +213,12 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 
 		// if it's not set return an error
 		if oID == "" {
-			zerolog.Ctx(ctx).Debug().Msg("missing expected organization id")
+			logx.FromContext(ctx).Debug().Msg("missing expected organization id")
 
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		zerolog.Ctx(ctx).Debug().Str("relation", relation).
+		logx.FromContext(ctx).Debug().Str("relation", relation).
 			Str("organization_id", oID).
 			Msg("checking relationship tuples")
 
@@ -229,13 +231,13 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		if access {
-			zerolog.Ctx(ctx).Debug().Str("relation", relation).
+			logx.FromContext(ctx).Debug().Str("relation", relation).
 				Str("organization_id", oID).
 				Msg("access allowed")
 
 			if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 				if err := cache.SetRole(ctx, user.SubjectID, oID, relation); err != nil {
-					zerolog.Ctx(ctx).Err(err).Msg("failed to set role cache")
+					logx.FromContext(ctx).Err(err).Msg("failed to set role cache")
 				}
 			}
 
@@ -243,6 +245,8 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
+		logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", user.OrganizationID).Msg("request denied by access for user in organization")
+
 		return generated.ErrPermissionDenied
 	})
 }

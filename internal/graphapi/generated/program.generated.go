@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Program_ownerID(ctx, field)
+			case "programKindName":
+				return ec.fieldContext_Program_programKindName(ctx, field)
+			case "programKindID":
+				return ec.fieldContext_Program_programKindID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -104,6 +108,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Program_viewers(ctx, field)
+			case "programKind":
+				return ec.fieldContext_Program_programKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Program_controls(ctx, field)
 			case "subcontrols":
@@ -136,6 +142,35 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_members(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProgramBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProgramBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProgramBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -181,6 +216,10 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Program_ownerID(ctx, field)
+			case "programKindName":
+				return ec.fieldContext_Program_programKindName(ctx, field)
+			case "programKindID":
+				return ec.fieldContext_Program_programKindID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -217,6 +256,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Program_viewers(ctx, field)
+			case "programKind":
+				return ec.fieldContext_Program_programKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Program_controls(ctx, field)
 			case "subcontrols":
@@ -323,6 +364,10 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Program_ownerID(ctx, field)
+			case "programKindName":
+				return ec.fieldContext_Program_programKindName(ctx, field)
+			case "programKindID":
+				return ec.fieldContext_Program_programKindID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -359,6 +404,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Program_viewers(ctx, field)
+			case "programKind":
+				return ec.fieldContext_Program_programKind(ctx, field)
 			case "controls":
 				return ec.fieldContext_Program_controls(ctx, field)
 			case "subcontrols":
@@ -421,6 +468,45 @@ func (ec *executionContext) _ProgramBulkCreatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ProgramBulkCreatePayload")
 		case "programs":
 			out.Values[i] = ec._ProgramBulkCreatePayload_programs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var programBulkDeletePayloadImplementors = []string{"ProgramBulkDeletePayload"}
+
+func (ec *executionContext) _ProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ProgramBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, programBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProgramBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ProgramBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -577,6 +663,20 @@ func (ec *executionContext) marshalNProgramBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ProgramBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProgramBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramBulkDeletePayload) graphql.Marshaler {
+	return ec._ProgramBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProgramBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProgramBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProgramCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramCreatePayload) graphql.Marshaler {

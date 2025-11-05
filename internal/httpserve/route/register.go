@@ -16,7 +16,7 @@ func registerRegisterHandler(router *Router) error {
 		Tags:        []string{"accountRegistration"},
 		OperationID: "Register",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *restrictedEndpoint,
+		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.RegisterHandler,
 	}
 

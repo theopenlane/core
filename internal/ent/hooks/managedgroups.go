@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ManagedContextKey is the context key name for managed group updates
@@ -40,7 +40,7 @@ var defaultGroups = map[string]string{
 func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMutation, orgID string) error {
 	// skip group creation for personal orgs
 	if isPersonal, _ := m.PersonalOrg(); isPersonal {
-		zerolog.Ctx(ctx).Debug().Msg("skipping group creation for personal org")
+		logx.FromContext(ctx).Debug().Msg("skipping group creation for personal org")
 
 		return nil
 	}
@@ -72,7 +72,7 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 
 	groups, err := m.Client().Group.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating system managed groups")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating system managed groups")
 
 		return err
 	}
@@ -85,7 +85,7 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 
 		userID, err := auth.GetSubjectIDFromContext(ctx)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user ID from context")
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting user ID from context")
 			return err
 		}
 
@@ -96,12 +96,12 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 		}
 
 		if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error adding user to managed group")
+			logx.FromContext(ctx).Error().Err(err).Msg("error adding user to managed group")
 			return err
 		}
 	}
 
-	zerolog.Ctx(ctx).Debug().Str("organization", orgID).Msg("created system managed groups")
+	logx.FromContext(ctx).Debug().Str("organization", orgID).Msg("created system managed groups")
 
 	return nil
 }
@@ -144,7 +144,7 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 
 		om, err := m.Client().OrgMembership.Get(ctx, mID)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org membership")
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting org membership")
 			return err
 		}
 
@@ -249,8 +249,26 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 		pred...,
 	).Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
+		logx.FromContext(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
 		return err
+	}
+
+	// Check if user is already a member of this group
+	existingMembership, err := m.Client().GroupMembership.Query().
+		Where(
+			groupmembership.UserID(om.UserID),
+			groupmembership.GroupID(group.ID),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking existing group membership")
+		return err
+	}
+
+	// If user is already in the group, skip creation
+	if existingMembership {
+		logx.FromContext(ctx).Debug().Str("user_id", om.UserID).Str("group", groupName).Msg("user already in managed group, skipping")
+		return nil
 	}
 
 	input := generated.CreateGroupMembershipInput{
@@ -260,11 +278,11 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 	}
 
 	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error adding user to managed group")
+		logx.FromContext(ctx).Error().Err(err).Msg("error adding user to managed group")
 		return err
 	}
 
-	zerolog.Ctx(ctx).Debug().Str("user_id", om.UserID).Str("group", groupName).Msg("user added to managed group")
+	logx.FromContext(ctx).Debug().Str("user_id", om.UserID).Str("group", groupName).Msg("user added to managed group")
 
 	return nil
 }
@@ -286,7 +304,7 @@ func removeMemberFromManagedGroup(ctx context.Context, m *generated.OrgMembershi
 		pred...,
 	).OnlyID(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
+		logx.FromContext(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
 
 		return err
 	}
@@ -297,18 +315,18 @@ func removeMemberFromManagedGroup(ctx context.Context, m *generated.OrgMembershi
 			groupmembership.RoleEQ(enums.RoleMember)).OnlyID(allowCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			zerolog.Ctx(ctx).Warn().Str("user_id", om.UserID).Str("group", groupName).Msg("user not found in managed group, nothing to delete")
+			logx.FromContext(ctx).Warn().Str("user_id", om.UserID).Str("group", groupName).Msg("user not found in managed group, nothing to delete")
 
 			return nil
 		}
 
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting group membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting group membership")
 
 		return err
 	}
 
 	if err = m.Client().GroupMembership.DeleteOneID(groupMembershipID).Exec(allowCtx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error removing user from managed group")
+		logx.FromContext(ctx).Error().Err(err).Msg("error removing user from managed group")
 
 		return err
 	}

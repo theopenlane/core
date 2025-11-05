@@ -13,10 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -555,6 +557,46 @@ func (_u *ProcedureUpdate) ClearSystemInternalID() *ProcedureUpdate {
 	return _u
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_u *ProcedureUpdate) SetProcedureKindName(v string) *ProcedureUpdate {
+	_u.mutation.SetProcedureKindName(v)
+	return _u
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableProcedureKindName(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetProcedureKindName(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
+func (_u *ProcedureUpdate) ClearProcedureKindName() *ProcedureUpdate {
+	_u.mutation.ClearProcedureKindName()
+	return _u
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_u *ProcedureUpdate) SetProcedureKindID(v string) *ProcedureUpdate {
+	_u.mutation.SetProcedureKindID(v)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableProcedureKindID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetProcedureKindID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
+func (_u *ProcedureUpdate) ClearProcedureKindID() *ProcedureUpdate {
+	_u.mutation.ClearProcedureKindID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdate) SetOwner(v *Organization) *ProcedureUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -598,6 +640,11 @@ func (_u *ProcedureUpdate) SetApprover(v *Group) *ProcedureUpdate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdate) SetDelegate(v *Group) *ProcedureUpdate {
 	return _u.SetDelegateID(v.ID)
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdate {
+	return _u.SetProcedureKindID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -705,6 +752,21 @@ func (_u *ProcedureUpdate) AddTasks(v ...*Task) *ProcedureUpdate {
 	return _u.AddTaskIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *ProcedureUpdate) AddCommentIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *ProcedureUpdate) AddComments(v ...*Note) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdate) SetFile(v *File) *ProcedureUpdate {
 	return _u.SetFileID(v.ID)
@@ -772,6 +834,12 @@ func (_u *ProcedureUpdate) ClearApprover() *ProcedureUpdate {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdate) ClearDelegate() *ProcedureUpdate {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdate) ClearProcedureKind() *ProcedureUpdate {
+	_u.mutation.ClearProcedureKind()
 	return _u
 }
 
@@ -920,6 +988,27 @@ func (_u *ProcedureUpdate) RemoveTasks(v ...*Task) *ProcedureUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *ProcedureUpdate) ClearComments() *ProcedureUpdate {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *ProcedureUpdate) RemoveCommentIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *ProcedureUpdate) RemoveComments(v ...*Note) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -1192,6 +1281,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedure.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedure.FieldProcedureKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindNameCleared() {
+		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1373,6 +1468,37 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Procedure
@@ -1712,6 +1838,54 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2284,6 +2458,46 @@ func (_u *ProcedureUpdateOne) ClearSystemInternalID() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_u *ProcedureUpdateOne) SetProcedureKindName(v string) *ProcedureUpdateOne {
+	_u.mutation.SetProcedureKindName(v)
+	return _u
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableProcedureKindName(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetProcedureKindName(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
+func (_u *ProcedureUpdateOne) ClearProcedureKindName() *ProcedureUpdateOne {
+	_u.mutation.ClearProcedureKindName()
+	return _u
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_u *ProcedureUpdateOne) SetProcedureKindID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetProcedureKindID(v)
+	return _u
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableProcedureKindID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetProcedureKindID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
+func (_u *ProcedureUpdateOne) ClearProcedureKindID() *ProcedureUpdateOne {
+	_u.mutation.ClearProcedureKindID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdateOne) SetOwner(v *Organization) *ProcedureUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2327,6 +2541,11 @@ func (_u *ProcedureUpdateOne) SetApprover(v *Group) *ProcedureUpdateOne {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdateOne) SetDelegate(v *Group) *ProcedureUpdateOne {
 	return _u.SetDelegateID(v.ID)
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) SetProcedureKind(v *CustomTypeEnum) *ProcedureUpdateOne {
+	return _u.SetProcedureKindID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -2434,6 +2653,21 @@ func (_u *ProcedureUpdateOne) AddTasks(v ...*Task) *ProcedureUpdateOne {
 	return _u.AddTaskIDs(ids...)
 }
 
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_u *ProcedureUpdateOne) AddCommentIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.AddCommentIDs(ids...)
+	return _u
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_u *ProcedureUpdateOne) AddComments(v ...*Note) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCommentIDs(ids...)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdateOne) SetFile(v *File) *ProcedureUpdateOne {
 	return _u.SetFileID(v.ID)
@@ -2501,6 +2735,12 @@ func (_u *ProcedureUpdateOne) ClearApprover() *ProcedureUpdateOne {
 // ClearDelegate clears the "delegate" edge to the Group entity.
 func (_u *ProcedureUpdateOne) ClearDelegate() *ProcedureUpdateOne {
 	_u.mutation.ClearDelegate()
+	return _u
+}
+
+// ClearProcedureKind clears the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_u *ProcedureUpdateOne) ClearProcedureKind() *ProcedureUpdateOne {
+	_u.mutation.ClearProcedureKind()
 	return _u
 }
 
@@ -2649,6 +2889,27 @@ func (_u *ProcedureUpdateOne) RemoveTasks(v ...*Task) *ProcedureUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearComments clears all "comments" edges to the Note entity.
+func (_u *ProcedureUpdateOne) ClearComments() *ProcedureUpdateOne {
+	_u.mutation.ClearComments()
+	return _u
+}
+
+// RemoveCommentIDs removes the "comments" edge to Note entities by IDs.
+func (_u *ProcedureUpdateOne) RemoveCommentIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.RemoveCommentIDs(ids...)
+	return _u
+}
+
+// RemoveComments removes "comments" edges to Note entities.
+func (_u *ProcedureUpdateOne) RemoveComments(v ...*Note) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCommentIDs(ids...)
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -2951,6 +3212,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedure.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedure.FieldProcedureKindName, field.TypeString, value)
+	}
+	if _u.mutation.ProcedureKindNameCleared() {
+		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3132,6 +3399,37 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Procedure
@@ -3471,6 +3769,54 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

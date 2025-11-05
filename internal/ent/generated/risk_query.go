@@ -16,9 +16,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -42,6 +44,8 @@ type RiskQuery struct {
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
 	withViewers               *GroupQuery
+	withRiskKind              *CustomTypeEnumQuery
+	withRiskCategory          *CustomTypeEnumQuery
 	withControls              *ControlQuery
 	withSubcontrols           *SubcontrolQuery
 	withProcedures            *ProcedureQuery
@@ -54,6 +58,7 @@ type RiskQuery struct {
 	withScans                 *ScanQuery
 	withStakeholder           *GroupQuery
 	withDelegate              *GroupQuery
+	withComments              *NoteQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Risk) error
 	modifiers                 []func(*sql.Selector)
@@ -70,6 +75,7 @@ type RiskQuery struct {
 	withNamedAssets           map[string]*AssetQuery
 	withNamedEntities         map[string]*EntityQuery
 	withNamedScans            map[string]*ScanQuery
+	withNamedComments         map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -200,6 +206,56 @@ func (_q *RiskQuery) QueryViewers() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.RiskViewers
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRiskKind chains the current query on the "risk_kind" edge.
+func (_q *RiskQuery) QueryRiskKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.RiskKindTable, risk.RiskKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRiskCategory chains the current query on the "risk_category" edge.
+func (_q *RiskQuery) QueryRiskCategory() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.RiskCategoryTable, risk.RiskCategoryColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -506,6 +562,31 @@ func (_q *RiskQuery) QueryDelegate() *GroupQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *RiskQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.CommentsTable, risk.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Risk entity from the query.
 // Returns a *NotFoundError when no Risk was found.
 func (_q *RiskQuery) First(ctx context.Context) (*Risk, error) {
@@ -702,6 +783,8 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		withBlockedGroups:    _q.withBlockedGroups.Clone(),
 		withEditors:          _q.withEditors.Clone(),
 		withViewers:          _q.withViewers.Clone(),
+		withRiskKind:         _q.withRiskKind.Clone(),
+		withRiskCategory:     _q.withRiskCategory.Clone(),
 		withControls:         _q.withControls.Clone(),
 		withSubcontrols:      _q.withSubcontrols.Clone(),
 		withProcedures:       _q.withProcedures.Clone(),
@@ -714,6 +797,7 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		withScans:            _q.withScans.Clone(),
 		withStakeholder:      _q.withStakeholder.Clone(),
 		withDelegate:         _q.withDelegate.Clone(),
+		withComments:         _q.withComments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -762,6 +846,28 @@ func (_q *RiskQuery) WithViewers(opts ...func(*GroupQuery)) *RiskQuery {
 		opt(query)
 	}
 	_q.withViewers = query
+	return _q
+}
+
+// WithRiskKind tells the query-builder to eager-load the nodes that are connected to
+// the "risk_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithRiskKind(opts ...func(*CustomTypeEnumQuery)) *RiskQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRiskKind = query
+	return _q
+}
+
+// WithRiskCategory tells the query-builder to eager-load the nodes that are connected to
+// the "risk_category" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithRiskCategory(opts ...func(*CustomTypeEnumQuery)) *RiskQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRiskCategory = query
 	return _q
 }
 
@@ -897,6 +1003,17 @@ func (_q *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithComments(opts ...func(*NoteQuery)) *RiskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -982,11 +1099,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [19]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withRiskKind != nil,
+			_q.withRiskCategory != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withProcedures != nil,
@@ -999,6 +1118,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			_q.withScans != nil,
 			_q.withStakeholder != nil,
 			_q.withDelegate != nil,
+			_q.withComments != nil,
 		}
 	)
 	if withFKs {
@@ -1051,6 +1171,18 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Viewers = []*Group{} },
 			func(n *Risk, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRiskKind; query != nil {
+		if err := _q.loadRiskKind(ctx, query, nodes, nil,
+			func(n *Risk, e *CustomTypeEnum) { n.Edges.RiskKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRiskCategory; query != nil {
+		if err := _q.loadRiskCategory(ctx, query, nodes, nil,
+			func(n *Risk, e *CustomTypeEnum) { n.Edges.RiskCategory = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1133,6 +1265,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	if query := _q.withDelegate; query != nil {
 		if err := _q.loadDelegate(ctx, query, nodes, nil,
 			func(n *Risk, e *Group) { n.Edges.Delegate = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Comments = []*Note{} },
+			func(n *Risk, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1224,6 +1363,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedScans(name) },
 			func(n *Risk, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedComments(name) },
+			func(n *Risk, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1446,6 +1592,64 @@ func (_q *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadRiskKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].RiskKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "risk_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadRiskCategory(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].RiskCategoryID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "risk_category_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -2035,6 +2239,37 @@ func (_q *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes 
 	}
 	return nil
 }
+func (_q *RiskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.risk_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "risk_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *RiskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2068,6 +2303,12 @@ func (_q *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(risk.FieldOwnerID)
+		}
+		if _q.withRiskKind != nil {
+			_spec.Node.AddColumnOnce(risk.FieldRiskKindID)
+		}
+		if _q.withRiskCategory != nil {
+			_spec.Node.AddColumnOnce(risk.FieldRiskCategoryID)
 		}
 		if _q.withStakeholder != nil {
 			_spec.Node.AddColumnOnce(risk.FieldStakeholderID)
@@ -2322,6 +2563,20 @@ func (_q *RiskQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *Risk
 		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedScans[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *RiskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 

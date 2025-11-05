@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
@@ -16,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -100,8 +98,6 @@ func (r *Router) handleSpecialResponses(operationID string, openAPIContext *hand
 		r.addRedirectResponse(openAPIContext, "OAuth redirect")
 	case "UserInfo":
 		r.addJSONResponse(openAPIContext, "User information", "application/json")
-	case "RefreshIntegrationToken":
-		r.addJSONResponse(openAPIContext, "Integration token data", "application/json")
 	case "Livez", "Ready":
 		r.addJSONResponse(openAPIContext, "Health check status", "application/json")
 	case "StripeWebhook":
@@ -149,10 +145,6 @@ var (
 	mw = []echo.MiddlewareFunc{}
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
-
-	restrictedRateLimit = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
-	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
-	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
@@ -161,8 +153,6 @@ var (
 	authenticatedEndpoint = &authMW
 	// publicEndpoint for standard public endpoints
 	publicEndpoint = &mw
-	// restrictedEndpoint for rate-limited endpoints
-	restrictedEndpoint = &restrictedEndpointsMW
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
 	unauthenticatedEndpoint = &baseMW
 )
@@ -330,23 +320,25 @@ type Config struct {
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
 type registrationContext struct {
 	echo.Context
-	ctx context.Context
+	ctx    context.Context
+	method string
 }
 
-// newRegistrationContext creates a new registration context
-func newRegistrationContext() *registrationContext {
+// newRegistrationContext creates a new registration context with the HTTP method
+func newRegistrationContext(method string) *registrationContext {
 	// Create a base context with registration marker
 	baseCtx := contextx.With(context.Background(), common.RegistrationMarker{})
 
 	return &registrationContext{
 		Context: echo.New().NewContext(nil, nil),
 		ctx:     baseCtx,
+		method:  method,
 	}
 }
 
 // Request returns a minimal request that won't panic when accessed
 func (rc *registrationContext) Request() *http.Request {
-	req, _ := http.NewRequestWithContext(rc.ctx, "POST", "/", nil)
+	req, _ := http.NewRequestWithContext(rc.ctx, rc.method, "/", nil)
 
 	return req
 }
@@ -371,7 +363,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 
 	// Call the handler with a registration context to trigger OpenAPI registration
 	// This allows handlers to register their request/response schemas at startup
-	regCtx := newRegistrationContext()
+	regCtx := newRegistrationContext(config.Method)
 
 	// Try to call the handler - if it returns an error or panics, that's OK
 	// during registration. The important thing is that the handler had a chance
@@ -454,7 +446,7 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 	}
 
 	// Call the handler with a registration context to trigger OpenAPI registration
-	regCtx := newRegistrationContext()
+	regCtx := newRegistrationContext(config.Method)
 
 	func() {
 		defer func() {
@@ -547,12 +539,15 @@ func (r *Router) AddGraphQLToOpenAPI() {
 
 	// Create the GraphQL operation
 	operation := openapi3.NewOperation()
+	operation.OperationID = "GraphQLQuery"
 	operation.Summary = "GraphQL Endpoint"
 	operation.Description = "Handles all GraphQL queries, mutations, and subscriptions"
+	operation.Tags = []string{"graphql"}
 
 	// Add request body
 	requestBody := openapi3.NewRequestBody()
 	requestBody.Required = true
+	requestBody.Description = "GraphQL query request"
 	requestBody.WithJSONSchema(requestSchema)
 	operation.RequestBody = &openapi3.RequestBodyRef{Value: requestBody}
 
@@ -570,8 +565,6 @@ func (r *Router) AddGraphQLToOpenAPI() {
 func RegisterRoutes(router *Router) error {
 	// base middleware for all routes that does not included additional middleware
 	baseMW = baseMiddleware(router)
-	// Middleware for restricted endpoints
-	restrictedEndpointsMW = restrictedMiddleware(router)
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
@@ -628,6 +621,7 @@ func RegisterRoutes(router *Router) error {
 		registerEndImpersonationHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
+		registerSCIMRoutes,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
@@ -671,16 +665,6 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
 
 	return append(mw, middleware.Recover(), mimeMiddleware, transactionConfig.Middleware)
-}
-
-// restrictedMiddleware returns the middleware for the router that is used on restricted routes
-// it includes the base middleware, the rate limiter, and any additional middleware
-func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
-	mw := baseMW
-	// add the restricted endpoints middleware (includes csrf)
-	mw = append(mw, router.Handler.AdditionalMiddleware...)
-	// add the rate limiter middleware
-	return append(mw, ratelimit.RateLimiterWithConfig(restrictedRateLimit))
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes

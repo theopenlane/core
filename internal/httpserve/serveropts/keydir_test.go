@@ -1,8 +1,8 @@
 package serveropts
 
 import (
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"os"
@@ -19,10 +19,19 @@ import (
 
 func writeKey(t *testing.T, dir, kid string) string {
 	t.Helper()
-	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
 	require.NoError(t, err)
 	path := filepath.Join(dir, kid+".pem")
-	data := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)})
+
+	privateDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
+	require.NoError(t, err)
+	publicDER, err := x509.MarshalPKIXPublicKey(publicKey)
+	require.NoError(t, err)
+
+	privatePEM := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privateDER})
+	publicPEM := pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: publicDER})
+	data := append(privatePEM, publicPEM...)
+
 	require.NoError(t, os.WriteFile(path, data, 0o600))
 	return path
 }
@@ -33,9 +42,12 @@ func newServerOptions() *ServerOptions {
 			Settings: config.Config{
 				Auth: config.Auth{
 					Token: tokens.Config{
-						Audience: "http://example.com",
-						Issuer:   "http://example.com",
-						Keys:     map[string]string{},
+						Audience:        "http://example.com",
+						Issuer:          "http://example.com",
+						AccessDuration:  time.Hour,
+						RefreshDuration: 2 * time.Hour,
+						RefreshOverlap:  -15 * time.Minute,
+						Keys:            map[string]string{},
 					},
 				},
 			},

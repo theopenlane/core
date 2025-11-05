@@ -62,6 +62,10 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 		),
 		hooks.HookImportDocument(),
 		hooks.HookSummarizeDetails(),
+		hook.On(
+			hooks.HookStatusApproval(),
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 
@@ -85,6 +89,11 @@ func getDocumentFields(documentType string) []ent.Field {
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
 		field.String(fmt.Sprintf("%s_type", documentType)).
 			Optional().
+			Annotations(
+				entgql.Directives(
+					entgql.Deprecated(fmt.Sprintf("Use `%s_kind_name` instead.", documentType)),
+				),
+			).
 			Comment(fmt.Sprintf("type of the %s, e.g. compliance, operational, health and safety, etc.", documentType)),
 		field.Text("details").
 			Optional().

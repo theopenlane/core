@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -28,6 +27,7 @@ import (
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integrationschema "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -290,7 +290,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		// Create new integration
 		integration, err = h.DBClient.Integration.Create().SetOwnerID(orgID).SetName(integrationName).SetDescription(helperWithUser.Description()).SetKind(provider).Save(systemCtx)
 		if err != nil {
-			zerolog.Ctx(systemCtx).Error().Msgf("failed to create integration for org %s and provider %s: %v", orgID, provider, err)
+			logx.FromContext(systemCtx).Error().Msgf("failed to create integration for org %s and provider %s: %v", orgID, provider, err)
 
 			return nil, wrapIntegrationError("create", err)
 		}
@@ -298,7 +298,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		// Update existing integration
 		integration, err = integration.Update().SetName(integrationName).SetDescription(helperWithUser.Description()).Save(systemCtx)
 		if err != nil {
-			zerolog.Ctx(systemCtx).Error().Msgf("failed to update integration for org %s and provider %s: %v", orgID, provider, err)
+			logx.FromContext(systemCtx).Error().Msgf("failed to update integration for org %s and provider %s: %v", orgID, provider, err)
 
 			return nil, wrapIntegrationError("update", err)
 		}
@@ -637,7 +637,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, &models.IntegrationTokenResponse{}, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, models.IntegrationTokenResponse{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

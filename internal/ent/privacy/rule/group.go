@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CheckGroupBasedObjectCreationAccess is a rule that returns allow decision if user has
@@ -47,13 +48,15 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 
 		access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
 		if err != nil {
-			log.Err(err).Interface("req", ac).Msg("failed to check access")
+			logx.FromContext(ctx).Err(err).Interface("req", ac).Msg("failed to check access")
 
 			return generated.ErrPermissionDenied
 		}
 
 		if !access {
 			// deny if the user does not have access to create the object
+			logx.FromContext(ctx).Error().Str("relation", relation).Str("organization_id", au.OrganizationID).Str("user_id", au.SubjectID).Str("email", au.SubjectEmail).Msg("access denied to create object in organization")
+
 			return generated.ErrPermissionDenied
 		}
 

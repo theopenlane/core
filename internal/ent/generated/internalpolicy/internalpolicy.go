@@ -80,6 +80,10 @@ const (
 	FieldURL = "url"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldInternalPolicyKindName holds the string denoting the internal_policy_kind_name field in the database.
+	FieldInternalPolicyKindName = "internal_policy_kind_name"
+	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
+	FieldInternalPolicyKindID = "internal_policy_kind_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -90,6 +94,8 @@ const (
 	EdgeApprover = "approver"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
 	EdgeDelegate = "delegate"
+	// EdgeInternalPolicyKind holds the string denoting the internal_policy_kind edge name in mutations.
+	EdgeInternalPolicyKind = "internal_policy_kind"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
 	EdgeControlObjectives = "control_objectives"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
@@ -110,6 +116,8 @@ const (
 	EdgePrograms = "programs"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -143,6 +151,13 @@ const (
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
 	DelegateColumn = "delegate_id"
+	// InternalPolicyKindTable is the table that holds the internal_policy_kind relation/edge.
+	InternalPolicyKindTable = "internal_policies"
+	// InternalPolicyKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	InternalPolicyKindInverseTable = "custom_type_enums"
+	// InternalPolicyKindColumn is the table column denoting the internal_policy_kind relation/edge.
+	InternalPolicyKindColumn = "internal_policy_kind_id"
 	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
 	ControlObjectivesTable = "internal_policy_control_objectives"
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
@@ -197,6 +212,13 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "internal_policy_comments"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -233,6 +255,14 @@ var Columns = []string{
 	FieldDismissedImprovementSuggestions,
 	FieldURL,
 	FieldFileID,
+	FieldInternalPolicyKindName,
+	FieldInternalPolicyKindID,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"custom_type_enum_internal_policies",
 }
 
 var (
@@ -275,6 +305,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -284,7 +319,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [18]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -477,6 +512,16 @@ func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
+// ByInternalPolicyKindName orders the results by the internal_policy_kind_name field.
+func ByInternalPolicyKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyKindName, opts...).ToFunc()
+}
+
+// ByInternalPolicyKindID orders the results by the internal_policy_kind_id field.
+func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -523,6 +568,13 @@ func ByApproverField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalPolicyKindField orders the results by internal_policy_kind field.
+func ByInternalPolicyKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -658,6 +710,20 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -691,6 +757,13 @@ func newDelegateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DelegateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newInternalPolicyKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalPolicyKindTable, InternalPolicyKindColumn),
 	)
 }
 func newControlObjectivesStep() *sqlgraph.Step {
@@ -761,6 +834,13 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+	)
+}
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
 	)
 }
 

@@ -9,11 +9,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -65,7 +67,7 @@ func HookMembershipSelf(table string) ent.Hook {
 				}
 
 				if err := createMembershipCheck(mutationMember, au.SubjectID); err != nil {
-					zerolog.Ctx(ctx).Error().Msg("cannot create membership")
+					logx.FromContext(ctx).Error().Msg("cannot create membership")
 
 					return nil, err
 				}
@@ -93,6 +95,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 	}
 
 	if slices.Contains(userIDs, actorID) {
+		log.Warn().Str("user_id", actorID).Msg("user attempting to create membership for themselves")
+
 		return generated.ErrPermissionDenied
 	}
 
@@ -101,7 +105,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 // updateMembershipCheck is a helper function to check if a user is trying to update themselves in a membership
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
-	memberIDs := getMutationMemberIDs(ctx, m)
+	mut := m.(utils.GenericMutation)
+	memberIDs := getMutationIDs(ctx, mut)
 	if len(memberIDs) == 0 {
 		return nil
 	}
@@ -110,7 +115,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 
 	var rows sql.Rows
 	if err := generated.FromContext(ctx).Driver().Query(ctx, query, []any{strings.Join(memberIDs, ",")}, &rows); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get user ID from membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get user ID from membership")
 
 		return err
 	}
@@ -121,36 +126,19 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		var userID string
 
 		if err := rows.Scan(&userID); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to scan user ID from membership")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to scan user ID from membership")
 
 			return err
 		}
 
 		if userID == actorID {
-			zerolog.Ctx(ctx).Error().Msg("user cannot update their own membership")
+			logx.FromContext(ctx).Error().Msg("user cannot update their own membership")
 
 			return generated.ErrPermissionDenied
 		}
 	}
 
 	return nil
-}
-
-// getMutationMemberIDs is a helper function to get the member IDs from a mutation
-// this can be used for group, program, and org membership mutations because
-// they all implement the MutationMember interface
-func getMutationMemberIDs(ctx context.Context, m MutationMember) []string {
-	id, ok := m.ID()
-	if ok {
-		return []string{id}
-	}
-
-	ids, err := m.IDs(ctx)
-	if err == nil && len(ids) > 0 {
-		return ids
-	}
-
-	return ids
 }
 
 func checkMutation(ctx context.Context) bool {

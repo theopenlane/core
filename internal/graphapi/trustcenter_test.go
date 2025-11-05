@@ -538,6 +538,13 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 			// Check updated fields
 			if tc.request.Tags != nil {
 				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.UpdateTrustCenter.TrustCenter.Tags))
+
+				tagDefs, err := tc.client.GetTagDefinitions(tc.ctx, nil, nil, &testclient.TagDefinitionWhereInput{
+					NameIn: tc.request.Tags,
+				})
+
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(tagDefs.TagDefinitions.Edges, len(tc.request.Tags)))
 			}
 
 			if tc.request.CustomDomainID != nil {

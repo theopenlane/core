@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -15,11 +14,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/gravatar"
 	"github.com/theopenlane/utils/passwd"
 	"github.com/theopenlane/utils/ulids"
@@ -125,7 +123,7 @@ func HookUser() ent.Hook {
 			// handle display name updates for managed groups
 			if m.Op().Is(ent.OpUpdateOne) {
 				if err := updateSystemManagedGroupForUser(ctx, m, userCreated); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("error updating system managed group name for the user")
+					logx.FromContext(ctx).Error().Err(err).Msg("error updating system managed group name for the user")
 					return nil, err
 				}
 			}
@@ -152,11 +150,6 @@ func HookUser() ent.Hook {
 				// update the personal org setting with the user's email
 				if err := updatePersonalOrgSetting(ctx, m.Client(), userCreated, org); err != nil {
 					return nil, err
-				}
-
-				// send a welcome email to the user
-				if err := sendRegisterWelcomeEmail(ctx, userCreated, m); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
 				}
 			}
 
@@ -284,7 +277,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 			return createPersonalOrg(ctx, dbClient, user)
 		}
 
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to create personal org")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to create personal org")
 
 		return nil, nil, err
 	}
@@ -299,7 +292,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	if err := dbClient.OrgMembership.Create().
 		SetInput(input).
 		Exec(ctx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user as owner to organization")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to add user as owner to organization")
 
 		return nil, nil, err
 	}
@@ -312,49 +305,18 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	return setting, org, nil
 }
 
-// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
-func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
-	// if there is not job client, we can't send the email
-	if m.Job == nil {
-		zerolog.Ctx(ctx).Info().Msg("no job client, skipping welcome email")
-
-		return nil
-	}
-
-	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-	})
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating welcome email")
-
-		return err
-	}
-
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
-}
-
 func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) error {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	setting, err := org.Setting(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get org settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get org settings")
 
 		return err
 	}
 
 	if err := dbClient.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail(user.Email).Exec(ctx); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update org settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to update org settings")
 
 		return err
 	}
@@ -366,14 +328,14 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
 	setting, err := user.Setting(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get user settings")
 
 		return nil, err
 	}
 
 	setting, err = dbClient.UserSetting.UpdateOneID(setting.ID).SetDefaultOrg(org).Save(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to set default org")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to set default org")
 
 		return nil, err
 	}
@@ -404,7 +366,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 
 	oldDisplayName, err := m.OldDisplayName(ctx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting old display name")
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting old display name")
 		return err
 	}
 
@@ -419,7 +381,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		Where(orgmembership.UserID(user.ID)).
 		All(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's org memberships")
+		logx.FromContext(ctx).Error().Err(err).Msg("error querying user's org memberships")
 		return err
 	}
 
@@ -439,7 +401,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 			).
 			All(privacy.DecisionContext(newCtx, privacy.Allow))
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
 			return err
 		}
 
@@ -459,7 +421,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 			SetDescription(getUserGroupName(displayName, user.ID)).
 			Exec(privacy.DecisionContext(newCtx, privacy.Allow))
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).
+			logx.FromContext(ctx).Error().Err(err).
 				Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
 				Msg("error updating system managed group names in bulk")
 

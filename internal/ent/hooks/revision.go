@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -76,7 +76,7 @@ func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 
 	var newVersion string
 
-	zerolog.Ctx(ctx).Error().Str("currentRevision", currentRevision).
+	logx.FromContext(ctx).Error().Str("currentRevision", currentRevision).
 		Str("revisionBump", revisionBump.String()).
 		Msg("bumping revision")
 

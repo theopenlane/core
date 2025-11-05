@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -383,6 +384,34 @@ func (_c *ActionPlanCreate) SetNillableSystemInternalID(v *string) *ActionPlanCr
 	return _c
 }
 
+// SetActionPlanKindName sets the "action_plan_kind_name" field.
+func (_c *ActionPlanCreate) SetActionPlanKindName(v string) *ActionPlanCreate {
+	_c.mutation.SetActionPlanKindName(v)
+	return _c
+}
+
+// SetNillableActionPlanKindName sets the "action_plan_kind_name" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableActionPlanKindName(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetActionPlanKindName(*v)
+	}
+	return _c
+}
+
+// SetActionPlanKindID sets the "action_plan_kind_id" field.
+func (_c *ActionPlanCreate) SetActionPlanKindID(v string) *ActionPlanCreate {
+	_c.mutation.SetActionPlanKindID(v)
+	return _c
+}
+
+// SetNillableActionPlanKindID sets the "action_plan_kind_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableActionPlanKindID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetActionPlanKindID(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanCreate) SetDueDate(v time.Time) *ActionPlanCreate {
 	_c.mutation.SetDueDate(v)
@@ -452,6 +481,11 @@ func (_c *ActionPlanCreate) SetDelegate(v *Group) *ActionPlanCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *ActionPlanCreate) SetOwner(v *Organization) *ActionPlanCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
+func (_c *ActionPlanCreate) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanCreate {
+	return _c.SetActionPlanKindID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
@@ -787,6 +821,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.ActionPlanKindName(); ok {
+		_spec.SetField(actionplan.FieldActionPlanKindName, field.TypeString, value)
+		_node.ActionPlanKindName = value
+	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
@@ -851,6 +889,24 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ActionPlanKindTable,
+			Columns: []string{actionplan.ActionPlanKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ActionPlanKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {

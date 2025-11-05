@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
@@ -48,6 +48,7 @@ func hasStandardFilter[T createProgramRequest](value T) bool {
 // cloneControlsFromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
 func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters cloneFilterOptions, programID *string) ([]*generated.Control, error) {
+	logger := logx.FromContext(ctx)
 	// first check if the standard exists
 	stdWhereFilter := standardFilter(filters)
 	stds, err := withTransactionalMutation(ctx).Standard.Query().
@@ -56,7 +57,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
 		All(ctx)
 	if err != nil || stds == nil || len(stds) == 0 {
-		log.Error().Err(err).Msgf("error getting standard with ID")
+		logger.Error().Err(err).Msgf("error getting standard with ID")
 
 		return nil, err
 	}
@@ -67,7 +68,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 	// if we have more than one standard, and the version was provided, return an error
 	// because we are unable to determine which standard to use
 	if len(stds) > 1 && (filters.standardShortName != nil && filters.standardVersion != nil) {
-		log.Error().Err(err).Msgf("error getting standard with ID")
+		logger.Error().Err(err).Msgf("error getting standard with ID")
 
 		return nil, fmt.Errorf("%w: error getting standard, too many results", ErrInvalidInput)
 	}
@@ -76,7 +77,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	where, err := controlFilterByStandard(ctx, filters, std)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting control filter")
+		logger.Error().Err(err).Msg("error getting control filter")
 
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		WithSubcontrols().
 		All(allowCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting controls to clone")
+		logger.Error().Err(err).Msg("error getting controls to clone")
 		return nil, err
 	}
 
@@ -107,6 +108,7 @@ type subcontrolToCreate struct {
 // if the controls already exist in the organization, they will not be cloned again
 // but will be updated to link to the program if needed
 func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string) ([]*generated.Control, error) {
+	logger := logx.FromContext(ctx)
 	// keep track of the created control IDs, this includes the ids of controls that already exist in the org
 	createdControlIDs := []string{}
 	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
@@ -130,6 +132,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !hasModules {
+			logger.Error().Str("organization_id", ac.OrganizationID).Msg("organization does not have required modules enabled for control operations")
+
 			return nil, generated.ErrPermissionDenied
 		}
 	}
@@ -172,7 +176,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID).
 		All(allowCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking for existing controls")
+		logger.Error().Err(err).Msg("error checking for existing controls")
 		return nil, err
 	}
 
@@ -211,6 +215,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !allow {
+			logger.Error().Str("organization_id", ac.OrganizationID).Str("user_id", ac.SubjectID).Msg("no access to edit specified program")
+
 			return nil, generated.ErrPermissionDenied
 		}
 	}
@@ -262,7 +268,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// check if there were any errors during the cloning process
 	if len(errors) > 0 {
 		// return the first error encountered
-		log.Error().Errs("errors", errors).
+		logger.Error().Errs("errors", errors).
 			Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(createdControlIDs))
 
 		// delete any controls that were created before the error occurred
@@ -272,7 +278,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			if _, err := withTransactionalMutation(ctx).Control.Delete().
 				Where(control.IDIn(createdControlIDs...)).
 				Exec(allowCtx); err != nil {
-				log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
+				logger.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 			}
 		}
 
@@ -283,12 +289,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// allow the subcontrols to be cloned without a parent check, this is because the same user already created the control
 	// and the subcontrols are part of the control
 	if err := r.cloneSubcontrols(allowCtx, subcontrolsToCreate); err != nil {
-		log.Error().Err(err).Msg("error cloning subcontrols, rolling back controls that were created before the error occurred")
+		logger.Error().Err(err).Msg("error cloning subcontrols, rolling back controls that were created before the error occurred")
 
 		if _, err := withTransactionalMutation(ctx).Control.Delete().
 			Where(control.IDIn(createdControlIDs...)).
 			Exec(allowCtx); err != nil {
-			log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
+			logger.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 
 			return nil, err
 		}
@@ -406,6 +412,8 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 	}
 
 	// check if we can find the subcontrol based on refCode and controlID
+	logger := logx.FromContext(ctx)
+
 	existingSubcontrols, err := r.db.Subcontrol.Query().
 		Where(
 			subcontrol.And(
@@ -421,7 +429,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 		Select(subcontrol.FieldRefCode, subcontrol.FieldControlID).
 		All(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking for existing subcontrols")
+		logger.Error().Err(err).Msg("error checking for existing subcontrols")
 
 		return err
 	}
@@ -492,6 +500,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 // bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel
 func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) error {
 	errors := []error{}
+	logger := logx.FromContext(ctx)
 
 	var mu sync.Mutex
 
@@ -520,7 +529,7 @@ func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context
 		return nil
 	}
 
-	log.Error().Errs("errors", errors).Msg("errors cloning subcontrols")
+	logger.Error().Errs("errors", errors).Msg("errors cloning subcontrols")
 
 	// return the first error but log all
 	return errors[0]
@@ -567,17 +576,17 @@ func (r *mutationResolver) markSubcontrolsAsNotApplicable(ctx context.Context, i
 // by converting the input to a map and checking for non-empty values
 // and then converting back to the appropriate type
 // it will return a boolean indicating if there are any fields to update
-func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontrolInput](c *model.CloneControlUploadInput) (*T, bool) {
+func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontrolInput](c *model.CloneControlUploadInput) (*T, bool, error) {
 	hasUpdate := false
 	updates := map[string]any{}
 
 	input, err := convertToObject[map[string]any](c.ControlInput)
 	if err != nil {
-		return nil, false
+		return nil, false, err
 	}
 
 	if input == nil {
-		return nil, false
+		return nil, false, nil
 	}
 
 	for k, v := range *input {
@@ -589,10 +598,8 @@ func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontr
 
 	out, err := convertToObject[T](updates)
 	if err != nil {
-		log.Error().Err(err).Msg("error converting updates to object")
-
-		return nil, false
+		return nil, false, err
 	}
 
-	return out, hasUpdate
+	return out, hasUpdate, nil
 }

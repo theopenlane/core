@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations
@@ -26,6 +26,7 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, gqlerrors.NewCustomError(
 					gqlerrors.BadRequestErrorCode,
 					"subscriber email is required, please provide a valid email",
+
 					ErrEmailRequired)
 			}
 
@@ -50,7 +51,7 @@ func HookSubscriberCreate() ent.Hook {
 
 				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update email subscription")
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to update email subscription")
 
 					return retValue, err
 				}
@@ -109,7 +110,7 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 		Email: e,
 	}, org.DisplayName, tok)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error rendering email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
 
 		return err
 	}
@@ -118,7 +119,7 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}

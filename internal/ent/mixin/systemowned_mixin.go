@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/graphapi/directives"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -123,7 +123,7 @@ func HookSystemOwnedCreate() ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			admin, err := rule.CheckIsSystemAdminWithContext(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check if user is system admin, skipping setting system owned")
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to check if user is system admin, skipping setting system owned")
 
 				return next.Mutate(ctx, m)
 			}
@@ -168,6 +168,8 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 
 		systemOwned, _ := mut.SystemOwned()
 		if systemOwned {
+			logx.FromContext(ctx).Warn().Msg("attempt to modify system owned object by non system admin")
+
 			return generated.ErrPermissionDenied
 		}
 
@@ -185,6 +187,8 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 		}
 
 		if systemOwned {
+			logx.FromContext(ctx).Warn().Msg("attempt to modify system owned object by non system admin")
+
 			return generated.ErrPermissionDenied
 		}
 
@@ -205,7 +209,7 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 
 	var rows sql.Rows
 	if err := m.Client().Driver().Query(ctx, query, lo.ToAnySlice(ids), &rows); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to check for object system owned status")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for object system owned status")
 
 		return false, err
 	}
@@ -215,7 +219,7 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 	if rows.Next() {
 		var systemOwned bool
 		if err := rows.Scan(&systemOwned); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to scan system owned field")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to scan system owned field")
 
 			return false, err
 		}

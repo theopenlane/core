@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
@@ -320,6 +322,12 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.ActionPlanKindName, new.ActionPlanKindName) {
+		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanKindName, _m.ActionPlanKindName, new.ActionPlanKindName))
+	}
+	if !reflect.DeepEqual(_m.ActionPlanKindID, new.ActionPlanKindID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanKindID, _m.ActionPlanKindID, new.ActionPlanKindID))
+	}
 	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, _m.DueDate, new.DueDate))
 	}
@@ -349,6 +357,144 @@ func (_m *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[Acti
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ActionPlanHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *AssessmentHistory) changes(new *AssessmentHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(assessmenthistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(assessmenthistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(assessmenthistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(assessmenthistory.FieldName, _m.Name, new.Name))
+	}
+	if !reflect.DeepEqual(_m.AssessmentType, new.AssessmentType) {
+		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentType, _m.AssessmentType, new.AssessmentType))
+	}
+	if !reflect.DeepEqual(_m.TemplateID, new.TemplateID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldTemplateID, _m.TemplateID, new.TemplateID))
+	}
+	if !reflect.DeepEqual(_m.AssessmentOwnerID, new.AssessmentOwnerID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentOwnerID, _m.AssessmentOwnerID, new.AssessmentOwnerID))
+	}
+	return changes
+}
+
+func (_m *AssessmentHistory) Diff(history *AssessmentHistory) (*HistoryDiff[AssessmentHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[AssessmentHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[AssessmentHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *AssessmentResponseHistory) changes(new *AssessmentResponseHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.AssessmentID, new.AssessmentID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldAssessmentID, _m.AssessmentID, new.AssessmentID))
+	}
+	if !reflect.DeepEqual(_m.Email, new.Email) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldEmail, _m.Email, new.Email))
+	}
+	if !reflect.DeepEqual(_m.SendAttempts, new.SendAttempts) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldSendAttempts, _m.SendAttempts, new.SendAttempts))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.AssignedAt, new.AssignedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldAssignedAt, _m.AssignedAt, new.AssignedAt))
+	}
+	if !reflect.DeepEqual(_m.StartedAt, new.StartedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldStartedAt, _m.StartedAt, new.StartedAt))
+	}
+	if !reflect.DeepEqual(_m.CompletedAt, new.CompletedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCompletedAt, _m.CompletedAt, new.CompletedAt))
+	}
+	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDueDate, _m.DueDate, new.DueDate))
+	}
+	if !reflect.DeepEqual(_m.DocumentDataID, new.DocumentDataID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDocumentDataID, _m.DocumentDataID, new.DocumentDataID))
+	}
+	return changes
+}
+
+func (_m *AssessmentResponseHistory) Diff(history *AssessmentResponseHistory) (*HistoryDiff[AssessmentResponseHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[AssessmentResponseHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[AssessmentResponseHistory]{
 			Old:     history,
 			New:     _m,
 			Changes: history.changes(_m),
@@ -613,6 +759,12 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(controlhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
+	if !reflect.DeepEqual(_m.ControlKindName, new.ControlKindName) {
+		changes = append(changes, NewChange(controlhistory.FieldControlKindName, _m.ControlKindName, new.ControlKindName))
+	}
+	if !reflect.DeepEqual(_m.ControlKindID, new.ControlKindID) {
+		changes = append(changes, NewChange(controlhistory.FieldControlKindID, _m.ControlKindID, new.ControlKindID))
 	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(controlhistory.FieldRefCode, _m.RefCode, new.RefCode))
@@ -1391,6 +1543,18 @@ func (_m *GroupHistory) changes(new *GroupHistory) []Change {
 	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
 		changes = append(changes, NewChange(grouphistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
+	if !reflect.DeepEqual(_m.ScimExternalID, new.ScimExternalID) {
+		changes = append(changes, NewChange(grouphistory.FieldScimExternalID, _m.ScimExternalID, new.ScimExternalID))
+	}
+	if !reflect.DeepEqual(_m.ScimDisplayName, new.ScimDisplayName) {
+		changes = append(changes, NewChange(grouphistory.FieldScimDisplayName, _m.ScimDisplayName, new.ScimDisplayName))
+	}
+	if !reflect.DeepEqual(_m.ScimActive, new.ScimActive) {
+		changes = append(changes, NewChange(grouphistory.FieldScimActive, _m.ScimActive, new.ScimActive))
+	}
+	if !reflect.DeepEqual(_m.ScimGroupMailing, new.ScimGroupMailing) {
+		changes = append(changes, NewChange(grouphistory.FieldScimGroupMailing, _m.ScimGroupMailing, new.ScimGroupMailing))
+	}
 	return changes
 }
 
@@ -1777,6 +1941,12 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.FileID, new.FileID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldFileID, _m.FileID, new.FileID))
+	}
+	if !reflect.DeepEqual(_m.InternalPolicyKindName, new.InternalPolicyKindName) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalPolicyKindName, _m.InternalPolicyKindName, new.InternalPolicyKindName))
+	}
+	if !reflect.DeepEqual(_m.InternalPolicyKindID, new.InternalPolicyKindID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalPolicyKindID, _m.InternalPolicyKindID, new.InternalPolicyKindID))
 	}
 	return changes
 }
@@ -2552,6 +2722,12 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(procedurehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.ProcedureKindName, new.ProcedureKindName) {
+		changes = append(changes, NewChange(procedurehistory.FieldProcedureKindName, _m.ProcedureKindName, new.ProcedureKindName))
+	}
+	if !reflect.DeepEqual(_m.ProcedureKindID, new.ProcedureKindID) {
+		changes = append(changes, NewChange(procedurehistory.FieldProcedureKindID, _m.ProcedureKindID, new.ProcedureKindID))
+	}
 	return changes
 }
 
@@ -2605,6 +2781,12 @@ func (_m *ProgramHistory) changes(new *ProgramHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(programhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.ProgramKindName, new.ProgramKindName) {
+		changes = append(changes, NewChange(programhistory.FieldProgramKindName, _m.ProgramKindName, new.ProgramKindName))
+	}
+	if !reflect.DeepEqual(_m.ProgramKindID, new.ProgramKindID) {
+		changes = append(changes, NewChange(programhistory.FieldProgramKindID, _m.ProgramKindID, new.ProgramKindID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(programhistory.FieldName, _m.Name, new.Name))
@@ -2749,6 +2931,18 @@ func (_m *RiskHistory) changes(new *RiskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(riskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.RiskKindName, new.RiskKindName) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskKindName, _m.RiskKindName, new.RiskKindName))
+	}
+	if !reflect.DeepEqual(_m.RiskKindID, new.RiskKindID) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskKindID, _m.RiskKindID, new.RiskKindID))
+	}
+	if !reflect.DeepEqual(_m.RiskCategoryName, new.RiskCategoryName) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskCategoryName, _m.RiskCategoryName, new.RiskCategoryName))
+	}
+	if !reflect.DeepEqual(_m.RiskCategoryID, new.RiskCategoryID) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskCategoryID, _m.RiskCategoryID, new.RiskCategoryID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(riskhistory.FieldName, _m.Name, new.Name))
@@ -3149,6 +3343,12 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
+	if !reflect.DeepEqual(_m.SubcontrolKindName, new.SubcontrolKindName) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolKindName, _m.SubcontrolKindName, new.SubcontrolKindName))
+	}
+	if !reflect.DeepEqual(_m.SubcontrolKindID, new.SubcontrolKindID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolKindID, _m.SubcontrolKindID, new.SubcontrolKindID))
+	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
@@ -3281,6 +3481,12 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(taskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.TaskKindName, new.TaskKindName) {
+		changes = append(changes, NewChange(taskhistory.FieldTaskKindName, _m.TaskKindName, new.TaskKindName))
+	}
+	if !reflect.DeepEqual(_m.TaskKindID, new.TaskKindID) {
+		changes = append(changes, NewChange(taskhistory.FieldTaskKindID, _m.TaskKindID, new.TaskKindID))
+	}
 	if !reflect.DeepEqual(_m.Title, new.Title) {
 		changes = append(changes, NewChange(taskhistory.FieldTitle, _m.Title, new.Title))
 	}
@@ -3304,6 +3510,15 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.AssignerID, new.AssignerID) {
 		changes = append(changes, NewChange(taskhistory.FieldAssignerID, _m.AssignerID, new.AssignerID))
+	}
+	if !reflect.DeepEqual(_m.SystemGenerated, new.SystemGenerated) {
+		changes = append(changes, NewChange(taskhistory.FieldSystemGenerated, _m.SystemGenerated, new.SystemGenerated))
+	}
+	if !reflect.DeepEqual(_m.IdempotencyKey, new.IdempotencyKey) {
+		changes = append(changes, NewChange(taskhistory.FieldIdempotencyKey, _m.IdempotencyKey, new.IdempotencyKey))
+	}
+	if !reflect.DeepEqual(_m.ExternalReferenceURL, new.ExternalReferenceURL) {
+		changes = append(changes, NewChange(taskhistory.FieldExternalReferenceURL, _m.ExternalReferenceURL, new.ExternalReferenceURL))
 	}
 	return changes
 }
@@ -3878,6 +4093,21 @@ func (_m *UserHistory) changes(new *UserHistory) []Change {
 	if !reflect.DeepEqual(_m.Role, new.Role) {
 		changes = append(changes, NewChange(userhistory.FieldRole, _m.Role, new.Role))
 	}
+	if !reflect.DeepEqual(_m.ScimExternalID, new.ScimExternalID) {
+		changes = append(changes, NewChange(userhistory.FieldScimExternalID, _m.ScimExternalID, new.ScimExternalID))
+	}
+	if !reflect.DeepEqual(_m.ScimUsername, new.ScimUsername) {
+		changes = append(changes, NewChange(userhistory.FieldScimUsername, _m.ScimUsername, new.ScimUsername))
+	}
+	if !reflect.DeepEqual(_m.ScimActive, new.ScimActive) {
+		changes = append(changes, NewChange(userhistory.FieldScimActive, _m.ScimActive, new.ScimActive))
+	}
+	if !reflect.DeepEqual(_m.ScimPreferredLanguage, new.ScimPreferredLanguage) {
+		changes = append(changes, NewChange(userhistory.FieldScimPreferredLanguage, _m.ScimPreferredLanguage, new.ScimPreferredLanguage))
+	}
+	if !reflect.DeepEqual(_m.ScimLocale, new.ScimLocale) {
+		changes = append(changes, NewChange(userhistory.FieldScimLocale, _m.ScimLocale, new.ScimLocale))
+	}
 	return changes
 }
 
@@ -4014,6 +4244,18 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 
 	var record *AuditLogConnection
 	record, err = auditActionPlanHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditAssessmentHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditAssessmentResponseHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -4334,6 +4576,88 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditActionPlanHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("AssessmentHistory", "History") {
+		// map AuditLogWhereInput to AssessmentHistoryWhereInput
+		whereInput := &AssessmentHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to AssessmentHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &AssessmentHistoryOrder{
+			Field:     AssessmentHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditAssessmentHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("AssessmentResponseHistory", "History") {
+		// map AuditLogWhereInput to AssessmentResponseHistoryWhereInput
+		whereInput := &AssessmentResponseHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to AssessmentResponseHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &AssessmentResponseHistoryOrder{
+			Field:     AssessmentResponseHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditAssessmentResponseHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -6303,6 +6627,152 @@ func auditActionPlanHistory(ctx context.Context, config config, after *Cursor, f
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &ActionPlanHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type assessmenthistoryref struct {
+	Ref string
+}
+
+func auditAssessmentHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *AssessmentHistoryOrder, where *AssessmentHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []AssessmentHistoryPaginateOption{
+		WithAssessmentHistoryOrder(orderBy),
+		WithAssessmentHistoryFilter(where.Filter),
+	}
+
+	client := NewAssessmentHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "AssessmentHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&AssessmentHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&AssessmentHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					assessmenthistory.Ref(curr.Node.Ref),
+					assessmenthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(assessmenthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &AssessmentHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type assessmentresponsehistoryref struct {
+	Ref string
+}
+
+func auditAssessmentResponseHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *AssessmentResponseHistoryOrder, where *AssessmentResponseHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []AssessmentResponseHistoryPaginateOption{
+		WithAssessmentResponseHistoryOrder(orderBy),
+		WithAssessmentResponseHistoryFilter(where.Filter),
+	}
+
+	client := NewAssessmentResponseHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "AssessmentResponseHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&AssessmentResponseHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&AssessmentResponseHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					assessmentresponsehistory.Ref(curr.Node.Ref),
+					assessmentresponsehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(assessmentresponsehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &AssessmentResponseHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

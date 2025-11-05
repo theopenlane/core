@@ -52,6 +52,26 @@ func ValidateURL() func(u string) error {
 	}
 }
 
+// ValidateURL validates a url and returns an error if it is invalid
+// urls can be up to 2048 characters long and follow the same domain regex
+func ValidateURLs() func(urls []string) error {
+	return func(urls []string) error {
+		for _, u := range urls {
+			// ensure the domain is not too long
+			if len(u) > urlMaxLen || len(u) == 0 {
+				return rout.InvalidField("url")
+			}
+
+			// parse the url
+			if err := validateURL(u); err != nil {
+				return rout.InvalidField("url")
+			}
+		}
+
+		return nil
+	}
+}
+
 // validateURL validates a url or domain and returns an error if it is invalid
 func validateURL(inputURL string) error {
 	// parse the url

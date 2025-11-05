@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	openfga "github.com/openfga/go-sdk"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -179,8 +179,8 @@ func updateTaskTuples(ctx context.Context, m *generated.TaskMutation, newUser, r
 		return err
 	}
 
-	zerolog.Ctx(ctx).Debug().Str("task_id", taskID).Str(relation, newUser).Msg("added tuple")
-	zerolog.Ctx(ctx).Debug().Str("task_id", taskID).Interface(relation, oldUsers).Str("relation", relation).Msg("removed task tuples")
+	logx.FromContext(ctx).Debug().Str("task_id", taskID).Str(relation, newUser).Msg("added tuple")
+	logx.FromContext(ctx).Debug().Str("task_id", taskID).Interface(relation, oldUsers).Str("relation", relation).Msg("removed task tuples")
 
 	return nil
 }

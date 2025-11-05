@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -84,6 +86,35 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_groups(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _InviteBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InviteBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_InviteBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InviteBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -137,6 +168,8 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -227,6 +260,8 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "ownershipTransfer":
+				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -265,6 +300,45 @@ func (ec *executionContext) _InviteBulkCreatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("InviteBulkCreatePayload")
 		case "invites":
 			out.Values[i] = ec._InviteBulkCreatePayload_invites(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var inviteBulkDeletePayloadImplementors = []string{"InviteBulkDeletePayload"}
+
+func (ec *executionContext) _InviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.InviteBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, inviteBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InviteBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._InviteBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -421,6 +495,20 @@ func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._InviteBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNInviteBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkDeletePayload) graphql.Marshaler {
+	return ec._InviteBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._InviteBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNInviteCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteCreatePayload) graphql.Marshaler {

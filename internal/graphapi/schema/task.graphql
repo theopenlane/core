@@ -75,6 +75,15 @@ extend type Mutation{
         """
         id: ID!
     ): TaskDeletePayload!
+    """
+    Delete multiple tasks
+    """
+    deleteBulkTask(
+        """
+        IDs of the tasks to delete
+        """
+        ids: [ID!]!
+    ): TaskBulkDeletePayload!
 }
 
 """
@@ -129,4 +138,14 @@ type TaskBulkUpdatePayload {
     IDs of the updated tasks
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkTask mutation
+"""
+type TaskBulkDeletePayload {
+    """
+    Deleted task IDs
+    """
+    deletedIDs: [ID!]!
 }

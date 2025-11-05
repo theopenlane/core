@@ -91,6 +91,8 @@ data:
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_DISPOSABLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.disposable | quote | default "false" }}
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_FREE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.free | quote | default "false" }}
   CORE_ENTCONFIG_EMAILVALIDATION_ALLOWEDEMAILTYPES_ROLE: {{ .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.role | quote | default "false" }}
+  CORE_ENTCONFIG_BILLING_REQUIREPAYMENTMETHOD: {{ .Values.openlane.coreConfiguration.entConfig.billing.requirePaymentMethod | quote }}
+  CORE_ENTCONFIG_BILLING_BYPASSEMAILDOMAINS: {{ join "," .Values.openlane.coreConfiguration.entConfig.billing.bypassEmailDomains | quote }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | quote | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid | quote }}
 {{- if .Values.openlane.coreConfiguration.auth.token.audience }}
@@ -125,6 +127,22 @@ data:
   CORE_AUTH_TOKEN_JWKSENDPOINT: ""
 {{- end }}
   CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys | quote | default "true" }}
+  CORE_AUTH_TOKEN_JWKSCACHETTL: {{ .Values.openlane.coreConfiguration.auth.token.jwksCacheTTL | quote | default "5m" }}
+  CORE_AUTH_TOKEN_REDIS_ENABLED: {{ .Values.openlane.coreConfiguration.auth.token.redis.enabled | quote | default "false" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_ENABLED: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.enabled | quote | default "true" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_ADDRESS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.address | quote | default "localhost:6379" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_NAME: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.name | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_USERNAME: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.username | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_PASSWORD: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.password | quote }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_DB: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.db | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_DIALTIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.dialTimeout | quote | default "5s" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_READTIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.readTimeout | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_WRITETIMEOUT: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.writeTimeout | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXRETRIES: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxRetries | quote | default "3" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MINIDLECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.minIdleConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXIDLECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxIdleConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_CONFIG_MAXACTIVECONNS: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.maxActiveConns | quote | default "0" }}
+  CORE_AUTH_TOKEN_REDIS_BLACKLISTPREFIX: {{ .Values.openlane.coreConfiguration.auth.token.redis.blacklistPrefix | quote | default "token:blacklist:" }}
   CORE_AUTH_SUPPORTEDPROVIDERS: {{ join "," .Values.openlane.coreConfiguration.auth.supportedProviders | quote }}
   CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.redirectUrl | quote | default "http://localhost:3001/api/auth/callback/theopenlane" }}
   CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientId | quote }}
@@ -178,7 +196,6 @@ data:
   CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.openlane.coreConfiguration.authz.credentials.audience | quote }}
   CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.openlane.coreConfiguration.authz.credentials.issuer | quote }}
   CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
-  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.openlane.coreConfiguration.authz.ignoreDuplicateKeyError | quote | default "true" }}
   CORE_DB_DEBUG: {{ .Values.openlane.coreConfiguration.db.debug | quote | default "false" }}
   CORE_DB_DATABASENAME: {{ .Values.openlane.coreConfiguration.db.databaseName | quote | default "openlane" }}
   CORE_DB_DRIVERNAME: {{ .Values.openlane.coreConfiguration.db.driverName | quote | default "pgx" }}
@@ -310,9 +327,16 @@ data:
   CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeCount | quote | default "16" }}
   CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeLength | quote | default "8" }}
   CORE_RATELIMIT_ENABLED: {{ .Values.openlane.coreConfiguration.ratelimit.enabled | quote | default "false" }}
-  CORE_RATELIMIT_LIMIT: {{ .Values.openlane.coreConfiguration.ratelimit.limit | quote | default "10" }}
-  CORE_RATELIMIT_BURST: {{ .Values.openlane.coreConfiguration.ratelimit.burst | quote | default "30" }}
-  CORE_RATELIMIT_EXPIRES: {{ .Values.openlane.coreConfiguration.ratelimit.expires | quote | default "10m" }}
+  CORE_RATELIMIT_OPTIONS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.options | quote }}
+  CORE_RATELIMIT_HEADERS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.headers | quote | default "True-Client-IP" }}
+  CORE_RATELIMIT_FORWARDEDINDEXFROMBEHIND: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind | quote | default "0" }}
+  CORE_RATELIMIT_INCLUDEPATH: {{ .Values.openlane.coreConfiguration.ratelimit.includePath | quote | default "false" }}
+  CORE_RATELIMIT_INCLUDEMETHOD: {{ .Values.openlane.coreConfiguration.ratelimit.includeMethod | quote | default "false" }}
+  CORE_RATELIMIT_KEYPREFIX: {{ .Values.openlane.coreConfiguration.ratelimit.keyPrefix | quote }}
+  CORE_RATELIMIT_DENYSTATUS: {{ .Values.openlane.coreConfiguration.ratelimit.denyStatus | quote | default "429" }}
+  CORE_RATELIMIT_DENYMESSAGE: {{ .Values.openlane.coreConfiguration.ratelimit.denyMessage | quote | default "Too many requests" }}
+  CORE_RATELIMIT_SENDRETRYAFTERHEADER: {{ .Values.openlane.coreConfiguration.ratelimit.sendRetryAfterHeader | quote | default "true" }}
+  CORE_RATELIMIT_DRYRUN: {{ .Values.openlane.coreConfiguration.ratelimit.dryRun | quote | default "true" }}
   CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.enabled | quote | default "true" }}
   CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}

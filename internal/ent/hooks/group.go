@@ -2,12 +2,10 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -17,7 +15,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided
@@ -53,6 +53,14 @@ func HookGroup() ent.Hook {
 
 				url := gravatar.New(name, nil)
 				m.SetGravatarLogoURL(url)
+
+				// if managed, the user's name ( and thus group name )
+				// may include special characters. this makes sure to clean them
+				// up as they will fail otherwise
+				isManaged, _ := m.IsManaged()
+				if isManaged {
+					m.SetName(StripInvalidChars(name))
+				}
 			}
 
 			return next.Mutate(ctx, m)
@@ -74,7 +82,7 @@ func HookManagedGroups() ent.Hook {
 				Select(group.FieldIsManaged).
 				Only(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get group")
 
 				return nil, err
 			}
@@ -172,9 +180,6 @@ func HookGroupAuthz() ent.Hook {
 			if m.Op().Is(ent.OpCreate) {
 				// create the group member admin and relationship tuple for parent org
 				err = groupCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
-				// delete all relationship tuples on delete, or soft delete (Update Op)
-				err = groupDeleteHook(ctx, m)
 			}
 
 			return retValue, err
@@ -204,7 +209,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 
 		groupSetting, err := m.Client().GroupSetting.Get(allowCtx, setting)
 		if err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group setting")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to get group setting")
 
 			return err
 		}
@@ -219,14 +224,14 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 
 	groupTuples, err := createGroupParentTuple(org, objID, publicGroup)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get tuple key")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get tuple key")
 
 		return err
 	}
 
 	if len(groupTuples) > 0 {
 		if _, err := m.Authz.WriteTupleKeys(ctx, groupTuples, nil); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 			return ErrInternalServerError
 		}
@@ -274,34 +279,6 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) ([]fgax.TupleK
 	return tuples, nil
 }
 
-// groupDeleteHook deletes all relationship tuples for a group on delete
-// with the exception of the user, those are handled by the cascade delete of the group membership
-func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
-	// Add relationship tuples if authz is enabled
-	objID, ok := m.ID()
-	if !ok {
-		// TODO (sfunk): ensure tuples get cascade deleted
-		// continue for now
-		return nil
-	}
-
-	objType := GetObjectTypeFromEntMutation(m)
-	object := fmt.Sprintf("%s:%s", objType, objID)
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
-
-	// delete all relationship tuples except for the user, those are handled by the cascade delete of the group membership
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("object", object).Msg("failed to delete relationship tuples")
-
-		return ErrInternalServerError
-	}
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
-
-	return nil
-}
-
 // defaultGroupSettings creates the default group settings for a new group
 func defaultGroupSettings(ctx context.Context, m *generated.GroupMutation) (string, error) {
 	input := generated.CreateGroupSettingInput{}
@@ -312,4 +289,16 @@ func defaultGroupSettings(ctx context.Context, m *generated.GroupMutation) (stri
 	}
 
 	return groupSetting.ID, nil
+}
+
+// StripInvalidChars removes invalid characters from a string
+func StripInvalidChars(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		if !strings.ContainsRune(validator.InvalidChars, r) {
+			b.WriteRune(r)
+		}
+	}
+
+	return b.String()
 }

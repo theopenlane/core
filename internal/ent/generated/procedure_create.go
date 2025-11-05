@@ -11,10 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -393,6 +395,34 @@ func (_c *ProcedureCreate) SetNillableSystemInternalID(v *string) *ProcedureCrea
 	return _c
 }
 
+// SetProcedureKindName sets the "procedure_kind_name" field.
+func (_c *ProcedureCreate) SetProcedureKindName(v string) *ProcedureCreate {
+	_c.mutation.SetProcedureKindName(v)
+	return _c
+}
+
+// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableProcedureKindName(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetProcedureKindName(*v)
+	}
+	return _c
+}
+
+// SetProcedureKindID sets the "procedure_kind_id" field.
+func (_c *ProcedureCreate) SetProcedureKindID(v string) *ProcedureCreate {
+	_c.mutation.SetProcedureKindID(v)
+	return _c
+}
+
+// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableProcedureKindID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetProcedureKindID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProcedureCreate) SetID(v string) *ProcedureCreate {
 	_c.mutation.SetID(v)
@@ -450,6 +480,11 @@ func (_c *ProcedureCreate) SetApprover(v *Group) *ProcedureCreate {
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (_c *ProcedureCreate) SetDelegate(v *Group) *ProcedureCreate {
 	return _c.SetDelegateID(v.ID)
+}
+
+// SetProcedureKind sets the "procedure_kind" edge to the CustomTypeEnum entity.
+func (_c *ProcedureCreate) SetProcedureKind(v *CustomTypeEnum) *ProcedureCreate {
+	return _c.SetProcedureKindID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -555,6 +590,21 @@ func (_c *ProcedureCreate) AddTasks(v ...*Task) *ProcedureCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddTaskIDs(ids...)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_c *ProcedureCreate) AddCommentIDs(ids ...string) *ProcedureCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_c *ProcedureCreate) AddComments(v ...*Note) *ProcedureCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCommentIDs(ids...)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -852,6 +902,10 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
 	}
+	if value, ok := _c.mutation.ProcedureKindName(); ok {
+		_spec.SetField(procedure.FieldProcedureKindName, field.TypeString, value)
+		_node.ProcedureKindName = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -938,6 +992,24 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProcedureKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ProcedureKindTable,
+			Columns: []string{procedure.ProcedureKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ProcedureKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
@@ -1054,6 +1126,23 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.CommentsTable,
+			Columns: []string{procedure.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -76,6 +76,9 @@ func (Program) Fields() []ent.Field {
 			GoType(enums.ProgramType("")).
 			Annotations(
 				entgql.OrderField("PROGRAM_TYPE"),
+				entgql.Directives(
+					entgql.Deprecated("Use `program_kind` instead."),
+				),
 			).
 			Default(enums.ProgramTypeFramework.String()),
 		field.String("framework_name").
@@ -133,6 +136,7 @@ func (p Program) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(p),
 			// add group permissions to the program
 			newGroupPermissionsMixin(),
+			newCustomEnumMixin(p),
 		},
 	}.getMixins(p)
 }

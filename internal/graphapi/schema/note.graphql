@@ -25,6 +25,21 @@ extend input UpdateSubcontrolInput {
     deleteComment: ID
 }
 
+extend input UpdateRiskInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateInternalPolicyInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateProcedureInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -77,5 +92,74 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): SubcontrolUpdatePayload!
+    """
+    Update an existing procedure comment
+    """
+    updateProcedureComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): ProcedureUpdatePayload!
+    """
+    Update an existing risk comment
+    """
+    updateRiskComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): RiskUpdatePayload!
+    """
+    Update an existing internal policy comment
+    """
+    updateInternalPolicyComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): InternalPolicyUpdatePayload!
+    """
+    Delete an existing note
+    """
+    deleteNote(
+        """
+        ID of the note/comment
+        """
+        id: ID!
+    ): NoteDeletePayload!
 }
 
+"""
+Return response for deleteComment mutation
+"""
+type NoteDeletePayload {
+    """
+    Deleted comment ID
+    """
+    deletedID: ID!
+}

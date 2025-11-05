@@ -42,6 +42,14 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldRiskKindName holds the string denoting the risk_kind_name field in the database.
+	FieldRiskKindName = "risk_kind_name"
+	// FieldRiskKindID holds the string denoting the risk_kind_id field in the database.
+	FieldRiskKindID = "risk_kind_id"
+	// FieldRiskCategoryName holds the string denoting the risk_category_name field in the database.
+	FieldRiskCategoryName = "risk_category_name"
+	// FieldRiskCategoryID holds the string denoting the risk_category_id field in the database.
+	FieldRiskCategoryID = "risk_category_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -85,6 +93,10 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldRiskKindName,
+	FieldRiskKindID,
+	FieldRiskCategoryName,
+	FieldRiskCategoryID,
 	FieldName,
 	FieldStatus,
 	FieldRiskType,
@@ -239,6 +251,26 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByRiskKindName orders the results by the risk_kind_name field.
+func ByRiskKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskKindName, opts...).ToFunc()
+}
+
+// ByRiskKindID orders the results by the risk_kind_id field.
+func ByRiskKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskKindID, opts...).ToFunc()
+}
+
+// ByRiskCategoryName orders the results by the risk_category_name field.
+func ByRiskCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskCategoryName, opts...).ToFunc()
+}
+
+// ByRiskCategoryID orders the results by the risk_category_id field.
+func ByRiskCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskCategoryID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

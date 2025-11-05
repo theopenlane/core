@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -82,6 +83,10 @@ type ActionPlan struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the kind of the action_plan
+	ActionPlanKindName string `json:"action_plan_kind_name,omitempty"`
+	// the kind of the action_plan
+	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
 	// due date of the action plan
 	DueDate time.Time `json:"due_date,omitempty"`
 	// priority of the action plan
@@ -90,10 +95,11 @@ type ActionPlan struct {
 	Source string `json:"source,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
-	Edges                   ActionPlanEdges `json:"edges"`
-	subcontrol_action_plans *string
-	user_action_plans       *string
-	selectValues            sql.SelectValues
+	Edges                         ActionPlanEdges `json:"edges"`
+	custom_type_enum_action_plans *string
+	subcontrol_action_plans       *string
+	user_action_plans             *string
+	selectValues                  sql.SelectValues
 }
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
@@ -104,6 +110,8 @@ type ActionPlanEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// ActionPlanKind holds the value of the action_plan_kind edge.
+	ActionPlanKind *CustomTypeEnum `json:"action_plan_kind,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -114,9 +122,9 @@ type ActionPlanEdges struct {
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedRisks    map[string][]*Risk
 	namedControls map[string][]*Control
@@ -156,10 +164,21 @@ func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// ActionPlanKindOrErr returns the ActionPlanKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
+	if e.ActionPlanKind != nil {
+		return e.ActionPlanKind, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "action_plan_kind"}
+}
+
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -168,7 +187,7 @@ func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -177,7 +196,7 @@ func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -188,7 +207,7 @@ func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -203,13 +222,15 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
-		case actionplan.ForeignKeys[0]: // subcontrol_action_plans
+		case actionplan.ForeignKeys[0]: // custom_type_enum_action_plans
 			values[i] = new(sql.NullString)
-		case actionplan.ForeignKeys[1]: // user_action_plans
+		case actionplan.ForeignKeys[1]: // subcontrol_action_plans
+			values[i] = new(sql.NullString)
+		case actionplan.ForeignKeys[2]: // user_action_plans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -430,6 +451,18 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case actionplan.FieldActionPlanKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_kind_name", values[i])
+			} else if value.Valid {
+				_m.ActionPlanKindName = value.String
+			}
+		case actionplan.FieldActionPlanKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_kind_id", values[i])
+			} else if value.Valid {
+				_m.ActionPlanKindID = value.String
+			}
 		case actionplan.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
@@ -450,12 +483,19 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 			}
 		case actionplan.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_action_plans", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_action_plans = new(string)
+				*_m.custom_type_enum_action_plans = value.String
+			}
+		case actionplan.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_action_plans", values[i])
 			} else if value.Valid {
 				_m.subcontrol_action_plans = new(string)
 				*_m.subcontrol_action_plans = value.String
 			}
-		case actionplan.ForeignKeys[1]:
+		case actionplan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_action_plans", values[i])
 			} else if value.Valid {
@@ -488,6 +528,11 @@ func (_m *ActionPlan) QueryDelegate() *GroupQuery {
 // QueryOwner queries the "owner" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryOwner() *OrganizationQuery {
 	return NewActionPlanClient(_m.config).QueryOwner(_m)
+}
+
+// QueryActionPlanKind queries the "action_plan_kind" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryActionPlanKind() *CustomTypeEnumQuery {
+	return NewActionPlanClient(_m.config).QueryActionPlanKind(_m)
 }
 
 // QueryRisks queries the "risks" edge of the ActionPlan entity.
@@ -630,6 +675,12 @@ func (_m *ActionPlan) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_kind_name=")
+	builder.WriteString(_m.ActionPlanKindName)
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_kind_id=")
+	builder.WriteString(_m.ActionPlanKindID)
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(_m.DueDate.Format(time.ANSIC))
