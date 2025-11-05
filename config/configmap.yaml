@@ -41,8 +41,10 @@ data:
   CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.openlane.coreConfiguration.server.secure.referrerpolicy | quote | default "same-origin" }}
   CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.openlane.coreConfiguration.server.secure.cspreportonly | quote | default "false" }}
   CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.openlane.coreConfiguration.server.redirects.enabled | quote | default "true" }}
+  CORE_SERVER_REDIRECTS_REDIRECTS_DEFAULT: {{ default "" .Values.openlane.coreConfiguration.server.redirects.redirects.default | quote }}
   CORE_SERVER_REDIRECTS_CODE: {{ .Values.openlane.coreConfiguration.server.redirects.code | quote }}
   CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.openlane.coreConfiguration.server.cacheControl.enabled | quote | default "true" }}
+  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS_DEFAULT: {{ default "" .Values.openlane.coreConfiguration.server.cacheControl.noCacheHeaders.default | quote }}
   CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ join "," .Values.openlane.coreConfiguration.server.cacheControl.etagHeaders | quote }}
   CORE_SERVER_MIME_ENABLED: {{ .Values.openlane.coreConfiguration.server.mime.enabled | quote | default "true" }}
   CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.openlane.coreConfiguration.server.mime.mimeTypesFile | quote }}
@@ -126,6 +128,7 @@ data:
 {{- else }}
   CORE_AUTH_TOKEN_JWKSENDPOINT: ""
 {{- end }}
+  CORE_AUTH_TOKEN_KEYS_DEFAULT: {{ default "" .Values.openlane.coreConfiguration.auth.token.keys.default | quote }}
   CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys | quote | default "true" }}
   CORE_AUTH_TOKEN_JWKSCACHETTL: {{ .Values.openlane.coreConfiguration.auth.token.jwksCacheTTL | quote | default "5m" }}
   CORE_AUTH_TOKEN_REDIS_ENABLED: {{ .Values.openlane.coreConfiguration.auth.token.redis.enabled | quote | default "false" }}
@@ -327,7 +330,10 @@ data:
   CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeCount | quote | default "16" }}
   CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeLength | quote | default "8" }}
   CORE_RATELIMIT_ENABLED: {{ .Values.openlane.coreConfiguration.ratelimit.enabled | quote | default "false" }}
-  CORE_RATELIMIT_OPTIONS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.options | quote }}
+  CORE_RATELIMIT_OPTIONS_0_REQUESTS: {{ default 500 (index .Values.openlane.coreConfiguration.ratelimit.options 0).requests | quote }}
+  CORE_RATELIMIT_OPTIONS_0_WINDOW: {{ default 1m0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).window | quote }}
+  CORE_RATELIMIT_OPTIONS_0_EXPIRATION: {{ default 0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).expiration | quote }}
+  CORE_RATELIMIT_OPTIONS_0_FLUSHINTERVAL: {{ default 0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).flushInterval | quote }}
   CORE_RATELIMIT_HEADERS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.headers | quote | default "True-Client-IP" }}
   CORE_RATELIMIT_FORWARDEDINDEXFROMBEHIND: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind | quote | default "0" }}
   CORE_RATELIMIT_INCLUDEPATH: {{ .Values.openlane.coreConfiguration.ratelimit.includePath | quote | default "false" }}

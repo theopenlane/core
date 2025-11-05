@@ -405,7 +405,11 @@ coreConfiguration:
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
     # -- Options enables configuring multiple concurrent rate windows that must all pass.
-    options: []
+    options:
+      - expiration: 0s
+        flushInterval: 0s
+        requests: 500
+        window: 1m0s
     # -- Headers determines which headers are inspected to determine the origin IP.
     # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
     headers:

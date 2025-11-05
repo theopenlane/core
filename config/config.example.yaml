@@ -300,7 +300,11 @@ ratelimit:
     includeMethod: false
     includePath: false
     keyPrefix: ""
-    options: null
+    options:
+        - expiration: 0
+          flushInterval: 0
+          requests: 500
+          window: 60000000000
     sendRetryAfterHeader: true
 redis:
     address: localhost:6379

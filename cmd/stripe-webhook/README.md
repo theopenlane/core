@@ -4,33 +4,33 @@ Automates zero-downtime Stripe webhook API version migrations using dual process
 
 ## How It Works
 
-This tool enables safe migrations between Stripe API versions by temporarily running two webhooks simultaneously:
+This tool enables safe migrations between Stripe API versions by temporarily running two webhooks simultaneously. In practice, the operator only needs to run three CLI commands—`stripe-webhook status`, `stripe-webhook migrate --step create`, and `stripe-webhook migrate --step disable`—alongside the standard `task config:generate` and deployment steps to complete the migration:
 
 ```mermaid
 sequenceDiagram
+    participant Ops as Operator
     participant CLI as stripe-webhook CLI
     participant Stripe as Stripe API
-    participant App as Application
     participant Config as config.go
+    participant App as Application
 
-    Note over CLI,Config: Initial State: 1 webhook enabled at v1
+    Note over Stripe,App: Initial state — single webhook delivering existing API version
 
-    CLI->>Stripe: Create webhook at v2 (disabled)
-    Stripe-->>CLI: Returns webhook + secret
-    CLI->>Config: Update current=v2, discard=v1
-    CLI->>Stripe: Enable webhook at v2
+    Ops->>CLI: migrate --step create (input new API version)
+    CLI->>Stripe: Create webhook for new API version (enabled)
+    Stripe-->>CLI: Return endpoint details and secret
+    CLI->>Config: Update defaults (current=new version, discard=previous version)
+    Note over Stripe,App: Dual delivery — new version events arrive but are discarded by existing app code
 
-    Note over Stripe,App: Dual Processing: Both webhooks active
+    Ops->>Config: task config:generate
+    Config-->>Ops: Regenerated config artifacts
 
-    App->>App: Deploy code with updated config
-    Note over App: Accepts v2, discards v1 using query param
+    Ops->>App: Deploy release with updated config and secrets
+    Note over App: Application now processes new version events and discards previous version
 
-    Stripe->>App: Events from v1 webhook (discarded)
-    Stripe->>App: Events from v2 webhook (processed)
-
-    CLI->>Stripe: Disable webhook at v1
-
-    Note over Stripe,App: Migration Complete: Only v2 webhook active
+    Ops->>CLI: migrate --step disable
+    CLI->>Stripe: Disable previous webhook
+    Note over Stripe,App: Migration complete — only new API version active
 ```
 
 The migration uses query string parameters (`?api_version=X`) to distinguish webhooks, allowing the application to process events from the new version while safely discarding events from the old version during the transition.
