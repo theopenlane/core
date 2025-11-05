@@ -1,0 +1,49 @@
+{
+  "name": "{{ .Name | ToLower }}",
+  "use": "{{ .Name | ToLower }}",
+  "short": "the subcommands for working with {{ .Name | ToLower }}{{ if not .ListOnly }}s{{ end }}",
+  "list": {
+    "method": "GetAll{{ .Name | ToUpperCamel | ToPlural }}",
+    "root": "{{ .Name | ToLowerCamel | ToPlural }}"
+  }{{ if not .ListOnly }},
+  "get": {
+    "method": "Get{{ .Name | ToUpperCamel }}ByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "{{ .Name | ToLower }} id to query"},
+    "resultPath": ["{{ .Name | ToLowerCamel }}"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "Create{{ .Name | ToUpperCamel }}",
+    "inputType": "openlaneclient.Create{{ .Name | ToUpperCamel }}Input",
+    "resultPath": ["create{{ .Name | ToUpperCamel }}", "{{ .Name | ToLowerCamel }}"],
+    "fields": [
+    {{- if .SpecCreateFields }}
+    {{- range $i, $field := .SpecCreateFields }}{{ if $i }},
+    {{ end }}
+      {"flag": {"name": "{{ $field.FlagName }}"{{ if $field.FlagShorthand }}, "shorthand": "{{ $field.FlagShorthand }}"{{ end }}, "usage": "{{ $field.FlagUsage }}"{{ if $field.FlagRequired }}, "required": true{{ end }}{{ if $field.FlagDefault }}, "default": "{{ $field.FlagDefault }}"{{ end }}}, "field": "{{ $field.Field }}", "kind": "{{ $field.Kind }}"{{ if $field.Parser }}, "parser": "{{ $field.Parser }}"{{ end }}}
+    {{- end }}
+    {{- end }}
+    ]
+  },
+  "update": {
+    "method": "Update{{ .Name | ToUpperCamel }}",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "{{ .Name | ToLower }} id to update"},
+    "inputType": "openlaneclient.Update{{ .Name | ToUpperCamel }}Input",
+    "resultPath": ["update{{ .Name | ToUpperCamel }}", "{{ .Name | ToLowerCamel }}"],
+    "fields": [
+    {{- if .SpecUpdateFields }}
+    {{- range $i, $field := .SpecUpdateFields }}{{ if $i }},
+    {{ end }}
+      {"flag": {"name": "{{ $field.FlagName }}"{{ if $field.FlagShorthand }}, "shorthand": "{{ $field.FlagShorthand }}"{{ end }}, "usage": "{{ $field.FlagUsage }}"{{ if $field.FlagRequired }}, "required": true{{ end }}{{ if $field.FlagDefault }}, "default": "{{ $field.FlagDefault }}"{{ end }}}, "field": "{{ $field.Field }}", "kind": "{{ $field.Kind }}"{{ if $field.Parser }}, "parser": "{{ $field.Parser }}"{{ end }}}
+    {{- end }}
+    {{- end }}
+    ]
+  },
+  "delete": {
+    "method": "Delete{{ .Name | ToUpperCamel }}",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "{{ .Name | ToLower }} id to delete"},
+    "resultPath": ["delete{{ .Name | ToUpperCamel }}", "deletedID"],
+    "resultField": "deletedID"
+  }{{ end }},
+{{ template "spec_columns" . }}
+}

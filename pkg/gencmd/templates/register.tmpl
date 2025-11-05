@@ -1,0 +1,33 @@
+//go:build cli
+
+package {{ .Name | ToLower }}
+
+import (
+	"embed"
+	"fmt"
+	"reflect"
+
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
+	"github.com/theopenlane/core/pkg/openlaneclient"
+)
+
+//go:embed spec.json
+var specFS embed.FS
+
+func init() {
+    typeMap := map[string]reflect.Type{
+        {{- if not .ListOnly }}
+        "openlaneclient.Create{{ .Name | ToUpperCamel }}Input": reflect.TypeOf(openlaneclient.Create{{ .Name | ToUpperCamel }}Input{}),
+        "openlaneclient.Update{{ .Name | ToUpperCamel }}Input": reflect.TypeOf(openlaneclient.Update{{ .Name | ToUpperCamel }}Input{}),
+        {{- else }}
+        // read-only command; no create/update inputs required
+        {{- end }}
+    }
+
+if err := speccli.RegisterFromFS(specFS, speccli.LoaderOptions{
+	TypeResolver: speccli.StaticTypeResolver(typeMap),
+	Parsers:      speccli.DefaultParsers(),
+}); err != nil {
+		panic(fmt.Sprintf("failed to register {{ .Name | ToLower }} command: %v", err))
+	}
+}

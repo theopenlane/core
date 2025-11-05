@@ -3,19 +3,26 @@ package gencmd
 import (
 	"bytes"
 	"embed"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"go/types"
 	"html/template"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
+	"sort"
 	"strings"
+	"sync"
+	"unicode"
 
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/fatih/camelcase"
 	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
+	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/imports"
 )
 
@@ -29,6 +36,10 @@ var (
 
 	// ErrMainGoNotFound is returned when main.go file cannot be found
 	ErrMainGoNotFound = errors.New("could not find main.go file")
+
+	packageOnce sync.Once
+	loadedPkgs  []*packages.Package
+	loadErr     error
 )
 
 const (
@@ -43,14 +54,503 @@ type cmd struct {
 	ListOnly bool
 	// HistoryCmd is a flag to indicate if the command is for history
 	HistoryCmd bool
+	// SpecDriven indicates we are generating spec files
+	SpecDriven       bool
+	SpecColumns      []specColumn
+	SpecDeleteColumn []specColumn
+	SpecCreateFields []specField
+	SpecUpdateFields []specField
 }
 
 var (
 	mutationTemplates = []string{"create.tmpl", "update.tmpl", "delete.tmpl"}
 )
 
+type specColumn struct {
+	Header    string
+	Path      []string
+	Formatter string
+}
+
+func (c specColumn) PathJSON() string {
+	data, err := json.Marshal(c.Path)
+	if err != nil {
+		return "[]"
+	}
+
+	return string(data)
+}
+
+type specField struct {
+	FlagName      string
+	FlagShorthand string
+	FlagUsage     string
+	FlagRequired  bool
+	FlagDefault   string
+	Kind          string
+	Field         string
+	Parser        string
+}
+
+var supportedEnumParsers = map[string]bool{
+	"programStatus":  true,
+	"taskStatus":     true,
+	"standardStatus": true,
+}
+
+func templateList(spec bool) ([]string, error) {
+	entries, err := _templates.ReadDir("templates")
+	if err != nil {
+		return nil, err
+	}
+
+	if spec {
+		return []string{"doc.tmpl", "register.tmpl", "spec.json.tmpl"}, nil
+	}
+
+	names := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		name := entry.Name()
+		if specOnlyTemplate(name) {
+			continue
+		}
+
+		names = append(names, name)
+	}
+
+	sort.Strings(names)
+
+	return names, nil
+}
+
+func specOnlyTemplate(name string) bool {
+	switch name {
+	case "register.tmpl", "spec.json.tmpl":
+		return true
+	default:
+		return false
+	}
+}
+
+func buildSpecColumns(cmdName string) []specColumn {
+	candidates := candidateQueryFiles(cmdName)
+	var content []byte
+	for _, candidate := range candidates {
+		data, err := os.ReadFile(candidate)
+		if err == nil {
+			content = data
+			break
+		}
+	}
+
+	columns := []specColumn{{Header: "ID", Path: []string{"id"}}}
+
+	plural := strings.ToLower(toProperPlural(cmdName))
+	fields := extractNodeFields(string(content), toProperPlural(cmdName))
+	if len(fields) == 0 {
+		fields = extractNodeFields(string(content), plural)
+	}
+
+	if len(fields) == 0 {
+		return columns
+	}
+
+	preferred := []string{"displayID", "name", "title", "status", "shortName", "framework", "refCode"}
+	formatterMap := map[string]string{
+		"lastUsedAt": "timeOrNever",
+		"expiresAt":  "timeOrNever",
+		"due":        "timeOrNever",
+		"scopes":     "joinedStrings",
+		"tags":       "joinedStrings",
+	}
+	ignore := map[string]struct{}{
+		"id":        {},
+		"ownerID":   {},
+		"createdAt": {},
+		"createdBy": {},
+		"updatedAt": {},
+		"updatedBy": {},
+		"owner":     {},
+		"edges":     {},
+	}
+
+	set := make(map[string]struct{})
+	set["id"] = struct{}{}
+
+	addField := func(field string) {
+		if field == "" {
+			return
+		}
+		if _, ok := set[field]; ok {
+			return
+		}
+		if _, skip := ignore[field]; skip {
+			return
+		}
+
+		header := humanizeHeader(field)
+		formatter := formatterMap[field]
+		columns = append(columns, specColumn{Header: header, Path: []string{field}, Formatter: formatter})
+		set[field] = struct{}{}
+	}
+
+	for _, pref := range preferred {
+		if contains(fields, pref) {
+			addField(pref)
+		}
+	}
+
+	for _, field := range fields {
+		if len(columns) >= 6 {
+			break
+		}
+		addField(field)
+	}
+
+	return columns
+}
+
+func candidateQueryFiles(cmdName string) []string {
+	base := strings.ToLower(cmdName)
+	candidates := []string{
+		fmt.Sprintf("internal/graphapi/query/%s.graphql", base),
+		fmt.Sprintf("internal/graphapi/query/%s.graphql", strcase.KebabCase(cmdName)),
+		fmt.Sprintf("internal/graphapi/query/%s.graphql", strcase.SnakeCase(cmdName)),
+	}
+
+	plural := strings.ToLower(toProperPlural(cmdName))
+	candidates = append(candidates,
+		fmt.Sprintf("internal/graphapi/query/%s.graphql", plural),
+	)
+
+	var withDirs []string
+	for _, path := range candidates {
+		withDirs = append(withDirs, path)
+		withDirs = append(withDirs, filepath.Join(filepath.Dir(path), "simple", filepath.Base(path)))
+	}
+
+	return withDirs
+}
+
+func extractNodeFields(content string, plural string) []string {
+	lines := strings.Split(content, "\n")
+	var fields []string
+	inNode := false
+	depth := 0
+
+	for _, rawLine := range lines {
+		line := strings.TrimSpace(rawLine)
+
+		if !inNode {
+			if strings.HasPrefix(strings.ToLower(line), fmt.Sprintf("%s {", strings.ToLower(plural))) {
+				continue
+			}
+
+			if strings.HasPrefix(strings.ToLower(line), "node {") {
+				inNode = true
+				depth = 1
+				continue
+			}
+
+			continue
+		}
+
+		if strings.Contains(line, "{") {
+			depth++
+			continue
+		}
+
+		if strings.Contains(line, "}") {
+			depth--
+			if depth == 0 {
+				break
+			}
+			continue
+		}
+
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		tokens := strings.Fields(line)
+		if len(tokens) == 0 {
+			continue
+		}
+
+		field := strings.TrimSuffix(tokens[0], ",")
+		fields = append(fields, field)
+	}
+
+	return fields
+}
+
+func humanizeHeader(field string) string {
+	parts := camelcase.Split(field)
+	if len(parts) == 0 {
+		return strings.Title(field)
+	}
+	for i, part := range parts {
+		parts[i] = strings.Title(strings.ToLower(part))
+	}
+	return strings.Join(parts, "")
+}
+
+func contains(list []string, value string) bool {
+	for _, item := range list {
+		if strings.EqualFold(item, value) {
+			return true
+		}
+	}
+	return false
+}
+
+func buildSpecFields(resource string, typeName string, update bool) []specField {
+	strct, tags, err := loadStructInfo(typeName)
+	if err != nil || strct == nil {
+		return nil
+	}
+
+	fields := make([]specField, 0)
+	usedNames := map[string]struct{}{}
+	usedNames["id"] = struct{}{}
+	shorthands := map[string]struct{}{}
+
+	for i := 0; i < strct.NumFields(); i++ {
+		field := strct.Field(i)
+		if !field.Exported() {
+			continue
+		}
+
+		tag := tags[i]
+		jsonName, omitempty := parseJSONTag(tag)
+		if jsonName == "" {
+			jsonName = strcase.SnakeCase(field.Name())
+		}
+		if jsonName == "-" || jsonName == "" {
+			continue
+		}
+
+		kind, parser, optional, ok := classifyFieldType(field.Type())
+		if !ok {
+			continue
+		}
+
+		if shouldSkipField(jsonName, kind, update) {
+			continue
+		}
+
+		if _, exists := usedNames[jsonName]; exists {
+			continue
+		}
+
+		required := !update && !optional && !omitempty
+		usage := defaultUsage(jsonName, resource)
+		shorthand := pickShorthand(jsonName, shorthands)
+
+		fields = append(fields, specField{
+			FlagName:      jsonName,
+			FlagShorthand: shorthand,
+			FlagUsage:     usage,
+			FlagRequired:  required,
+			Kind:          kind,
+			Field:         field.Name(),
+			Parser:        parser,
+		})
+
+		usedNames[jsonName] = struct{}{}
+
+		if len(fields) >= 8 {
+			break
+		}
+	}
+
+	return fields
+}
+
+func loadStructInfo(typeName string) (*types.Struct, []string, error) {
+	pkgs, err := loadPackages()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for _, pkg := range pkgs {
+		if pkg.Types == nil {
+			continue
+		}
+
+		obj := pkg.Types.Scope().Lookup(typeName)
+		if obj == nil {
+			continue
+		}
+
+		named, ok := obj.Type().(*types.Named)
+		if !ok {
+			continue
+		}
+
+		strct, ok := named.Underlying().(*types.Struct)
+		if !ok {
+			continue
+		}
+
+		tags := make([]string, strct.NumFields())
+		for i := 0; i < strct.NumFields(); i++ {
+			tags[i] = strct.Tag(i)
+		}
+
+		return strct, tags, nil
+	}
+
+	return nil, nil, fmt.Errorf("type %s not found in openlaneclient", typeName)
+}
+
+func loadPackages() ([]*packages.Package, error) {
+	packageOnce.Do(func() {
+		cfg := &packages.Config{
+			Mode:  packages.NeedTypes | packages.NeedTypesInfo | packages.NeedSyntax | packages.NeedDeps,
+			Tests: false,
+			Env:   os.Environ(),
+		}
+		loadedPkgs, loadErr = packages.Load(cfg, "github.com/theopenlane/core/pkg/openlaneclient")
+	})
+
+	return loadedPkgs, loadErr
+}
+
+func classifyFieldType(t types.Type) (kind string, parser string, optional bool, ok bool) {
+	switch tt := t.(type) {
+	case *types.Pointer:
+		kind, parser, _, ok = classifyFieldType(tt.Elem())
+		return kind, parser, true, ok
+	case *types.Slice:
+		elemKind, _, _, ok := classifyFieldType(tt.Elem())
+		if !ok {
+			return "", "", true, false
+		}
+		if elemKind != "string" {
+			return "", "", true, false
+		}
+		return "stringSlice", "", true, true
+	case *types.Basic:
+		switch tt.Kind() {
+		case types.String:
+			return "string", "", false, true
+		case types.Bool:
+			return "bool", "", false, true
+		}
+	case *types.Named:
+		pkgPath := ""
+		if tt.Obj() != nil && tt.Obj().Pkg() != nil {
+			pkgPath = tt.Obj().Pkg().Path()
+		}
+		name := tt.Obj().Name()
+
+		switch pkgPath {
+		case "github.com/theopenlane/core/pkg/enums":
+			enumParser := strcase.LowerCamelCase(name)
+			if supportedEnumParsers[enumParser] {
+				return "string", enumParser, false, true
+			}
+			return "string", "", false, true
+		case "github.com/theopenlane/core/pkg/models":
+			if name == "DateTime" {
+				return "string", "dateTime", false, true
+			}
+		case "time":
+			if name == "Time" {
+				return "string", "dateTime", false, true
+			}
+		}
+
+		if basic, ok := tt.Underlying().(*types.Basic); ok {
+			return classifyFieldType(basic)
+		}
+	}
+
+	return "", "", false, false
+}
+
+func parseJSONTag(tag string) (name string, omitempty bool) {
+	if tag == "" {
+		return "", false
+	}
+
+	parts := strings.Split(reflect.StructTag(tag).Get("json"), ",")
+	if len(parts) == 0 {
+		return "", false
+	}
+
+	name = parts[0]
+	for _, part := range parts[1:] {
+		if part == "omitempty" {
+			omitempty = true
+		}
+	}
+	return name, omitempty
+}
+
+func defaultUsage(field, resource string) string {
+	human := strings.ToLower(strings.TrimSpace(humanizePhrase(field)))
+	if human == "" {
+		human = field
+	}
+	return fmt.Sprintf("%s of the %s", human, strings.ToLower(resource))
+}
+
+func humanizePhrase(value string) string {
+	value = strings.ReplaceAll(value, "_", " ")
+	parts := camelcase.Split(value)
+	if len(parts) == 0 {
+		return value
+	}
+	for i, part := range parts {
+		parts[i] = strings.ToLower(part)
+	}
+	return strings.Join(parts, " ")
+}
+
+func pickShorthand(name string, used map[string]struct{}) string {
+	for _, r := range name {
+		if !unicode.IsLetter(r) {
+			continue
+		}
+		c := strings.ToLower(string(r))
+		if _, exists := used[c]; !exists {
+			used[c] = struct{}{}
+			return c
+		}
+	}
+	return ""
+}
+
+func shouldSkipField(name string, kind string, update bool) bool {
+	lower := strings.ToLower(name)
+
+	if lower == "id" || lower == "ownerid" || lower == "createdat" || lower == "createdby" || lower == "updatedat" || lower == "updatedby" {
+		return true
+	}
+
+	if strings.HasPrefix(lower, "add") || strings.HasPrefix(lower, "remove") || strings.HasPrefix(lower, "clear") || strings.HasPrefix(lower, "append") {
+		return true
+	}
+
+	if strings.Contains(lower, "internal") || strings.Contains(lower, "system") {
+		return true
+	}
+
+	if strings.HasSuffix(lower, "ids") && kind != "stringSlice" {
+		return true
+	}
+
+	if update && lower == "refcode" {
+		return true
+	}
+
+	return false
+}
+
 // Generate generates the cli command files for the given command name
-func Generate(cmdName string, cmdDirName string, readOnly bool, force bool) error {
+func Generate(cmdName string, cmdDirName string, readOnly bool, spec bool, force bool) error {
 	// trim any leading/trailing spaces
 	cmdName = strings.Trim(cmdName, " ")
 
@@ -61,19 +561,34 @@ func Generate(cmdName string, cmdDirName string, readOnly bool, force bool) erro
 
 	fmt.Println("----> creating cli cmd for:", cmdName)
 
-	templates, err := _templates.ReadDir("templates")
+	templateNames, err := templateList(spec)
 	if err != nil {
 		return err
 	}
 
-	// generate all the cmd files
-	for _, t := range templates {
-		// if read only, skip the mutation templates
-		if readOnly && slices.Contains(mutationTemplates, t.Name()) {
+	var specColumns []specColumn
+	var specDelete []specColumn
+	var specCreate []specField
+	var specUpdate []specField
+
+	if spec {
+		specColumns = buildSpecColumns(cmdName)
+		typeName := toProperCamelCase(cmdName)
+		specCreate = buildSpecFields(cmdName, fmt.Sprintf("Create%sInput", typeName), false)
+		if !readOnly {
+			specDelete = []specColumn{
+				{Header: "DeletedID", Path: []string{"deletedID"}},
+			}
+			specUpdate = buildSpecFields(cmdName, fmt.Sprintf("Update%sInput", typeName), true)
+		}
+	}
+
+	for _, templateName := range templateNames {
+		if readOnly && slices.Contains(mutationTemplates, templateName) {
 			continue
 		}
 
-		if err := generateCmdFile(cmdName, cmdDirName, t.Name(), readOnly, force); err != nil {
+		if err := generateCmdFile(cmdName, cmdDirName, templateName, readOnly, spec, specColumns, specDelete, specCreate, specUpdate, force); err != nil {
 			return err
 		}
 	}
@@ -179,8 +694,12 @@ func createCmd(name string) (*template.Template, error) {
 		"ToKebabCase":  strcase.KebabCase,
 	}
 
-	// create schema template
-	tmpl, err := template.New(name).Funcs(fm).ParseFS(_templates, fmt.Sprintf("templates/%s", name))
+	files := []string{fmt.Sprintf("templates/%s", name)}
+	if name == "spec.json.tmpl" {
+		files = append([]string{"templates/spec_columns.tmpl"}, files...)
+	}
+
+	tmpl, err := template.New(name).Funcs(fm).ParseFS(_templates, files...)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +708,7 @@ func createCmd(name string) (*template.Template, error) {
 }
 
 // generateCmdFile generates the cmd file for the given command name and template name
-func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, force bool) error {
+func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, spec bool, columns []specColumn, deleteColumns []specColumn, createFields []specField, updateFields []specField, force bool) error {
 	// create the template
 	tmpl, err := createCmd(templateName)
 	if err != nil {
@@ -211,6 +730,35 @@ func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, fo
 		Name:       cmdName,
 		ListOnly:   readOnly, // if read only, set the list only flag
 		HistoryCmd: isHistory,
+		SpecDriven: spec,
+		SpecColumns: func() []specColumn {
+			if spec && len(columns) > 0 {
+				return columns
+			}
+
+			return nil
+		}(),
+		SpecDeleteColumn: func() []specColumn {
+			if spec && len(deleteColumns) > 0 {
+				return deleteColumns
+			}
+
+			return nil
+		}(),
+		SpecCreateFields: func() []specField {
+			if spec && len(createFields) > 0 {
+				return createFields
+			}
+
+			return nil
+		}(),
+		SpecUpdateFields: func() []specField {
+			if spec && len(updateFields) > 0 {
+				return updateFields
+			}
+
+			return nil
+		}(),
 	}
 
 	fmt.Println("----> executing template:", templateName)
@@ -221,22 +769,28 @@ func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, fo
 		return err
 	}
 
-	out, err := imports.Process(filePath, buf.Bytes(), nil)
-	if err != nil {
-		return err
-	}
-
-	// create the file
-	file, err := os.Create(filePath)
-	if err != nil {
-		return err
-	}
-
-	if _, err := file.Write(out); err != nil {
+	if err := writeOutput(filePath, buf.Bytes()); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func writeOutput(path string, contents []byte) error {
+	if err := os.MkdirAll(filepath.Dir(path), os.ModePerm); err != nil {
+		return err
+	}
+
+	if strings.EqualFold(filepath.Ext(path), ".json") {
+		return os.WriteFile(path, contents, 0o644)
+	}
+
+	out, err := imports.Process(path, contents, nil)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, out, 0o644)
 }
 
 // getFileName returns the file name for the cmd file to be generated
@@ -246,8 +800,13 @@ func getFileName(dir, cmdName, templateName string) string {
 
 	// trim the suffix to get the file name
 	fileName := strings.TrimSuffix(templateName, templateSuffix)
+	extension := ".go"
 
-	fullPath := fmt.Sprintf("%s/%s/%s.go", dir, strings.ToLower(cmdName), strings.ToLower(fileName))
+	if strings.HasSuffix(fileName, ".json") {
+		extension = ""
+	}
+
+	fullPath := fmt.Sprintf("%s/%s/%s%s", dir, strings.ToLower(cmdName), strings.ToLower(fileName), extension)
 
 	return filepath.Clean(fullPath)
 }

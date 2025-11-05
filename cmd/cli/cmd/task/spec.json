@@ -1,0 +1,190 @@
+{
+  "name": "task",
+  "use": "task",
+  "short": "the subcommands for working with tasks",
+  "list": {
+    "method": "GetAllTasks",
+    "root": "tasks",
+    "filterMethod": "GetTasks",
+    "where": {
+      "type": "openlaneclient.TaskWhereInput",
+      "fields": [
+        {
+          "flag": {
+            "name": "assignee",
+            "usage": "filter by assignee id"
+          },
+          "field": "AssigneeID",
+          "kind": "string"
+        },
+        {
+          "flag": {
+            "name": "status",
+            "usage": "filter by status"
+          },
+          "field": "Status",
+          "kind": "string",
+          "parser": "taskStatus"
+        }
+      ]
+    }
+  },
+  "get": {
+    "method": "GetTaskByID",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "task id to query"
+    },
+    "resultPath": ["task"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTask",
+    "inputType": "openlaneclient.CreateTaskInput",
+    "resultPath": ["createTask", "task"],
+    "preHook": "taskCSV",
+    "fields": [
+      {
+        "flag": {
+          "name": "title",
+          "shorthand": "t",
+          "usage": "title of the task",
+          "required": true
+        },
+        "field": "Title",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "details",
+          "shorthand": "d",
+          "usage": "details of the task"
+        },
+        "field": "Details",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "status",
+          "shorthand": "s",
+          "usage": "status of the task"
+        },
+        "field": "Status",
+        "kind": "string",
+        "parser": "taskStatus"
+      },
+      {
+        "flag": {
+          "name": "assignee",
+          "shorthand": "a",
+          "usage": "assignee (user ID)"
+        },
+        "field": "AssigneeID",
+        "kind": "string"
+      },
+        {
+          "flag": {
+            "name": "due",
+            "usage": "ISO8601 due date"
+          },
+          "field": "Due",
+          "kind": "string",
+          "parser": "dateTime"
+        },
+      {
+        "flag": {
+          "name": "group",
+          "shorthand": "g",
+          "usage": "group ID to own the task"
+        },
+        "field": "GroupIDs",
+        "kind": "stringSlice"
+      }
+    ]
+  },
+  "update": {
+    "method": "UpdateTask",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "task id to update",
+      "required": true
+    },
+    "inputType": "openlaneclient.UpdateTaskInput",
+    "resultPath": ["updateTask", "task"],
+    "fields": [
+      {
+        "flag": {
+          "name": "title",
+          "shorthand": "t",
+          "usage": "title of the task"
+        },
+        "field": "Title",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "details",
+          "shorthand": "d",
+          "usage": "details of the task"
+        },
+        "field": "Details",
+        "kind": "string"
+      },
+        {
+          "flag": {
+            "name": "status",
+            "shorthand": "s",
+            "usage": "status of the task"
+          },
+        "field": "Status",
+        "kind": "string",
+        "parser": "taskStatus"
+      },
+        {
+          "flag": {
+            "name": "assignee",
+            "shorthand": "a",
+            "usage": "assignee (user ID)"
+          },
+        "field": "AssigneeID",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "due",
+          "usage": "ISO8601 due date"
+        },
+        "field": "Due",
+        "kind": "string",
+        "parser": "dateTime"
+      }
+    ]
+  },
+  "delete": {
+    "method": "DeleteTask",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "task id to delete",
+      "required": true
+    },
+    "resultPath": ["deleteTask", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "DisplayID", "path": ["displayID"]},
+    {"header": "Title", "path": ["title"]},
+    {"header": "Details", "path": ["details"]},
+    {"header": "Category", "path": ["category"]},
+    {"header": "Assignee", "path": ["assignee", "displayName"]},
+    {"header": "Assigner", "path": ["assigner", "displayName"]},
+    {"header": "Status", "path": ["status"]},
+    {"header": "Due", "path": ["due"], "formatter": "timeOrNever"}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

@@ -25,8 +25,9 @@ Flags:
   -h, --help          help for generate
   -i, --interactive   interactive prompt, set to false to disable (default true)
   -n, --name string   name of the command to generate
+      --spec          generate spec-driven command files instead of legacy cobra stubs
   -r, --read-only     only generate the read only commands, no create, update or delete commands
- ```
+```
 
 ### Generate All CRUD Operations
 

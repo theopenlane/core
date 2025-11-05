@@ -1,0 +1,20 @@
+{{- if .SpecColumns }}
+  "columns": [
+  {{- range $i, $col := .SpecColumns }}{{ if $i }},
+  {{ end }}
+    {"header": "{{ $col.Header }}", "path": {{ $col.PathJSON }}{{ if $col.Formatter }}, "formatter": "{{ $col.Formatter }}"{{ end }}}
+  {{- end }}
+  ]
+{{- else }}
+  "columns": [
+    {"header": "ID", "path": ["id"]}
+  ]
+{{- end }}
+{{- if and (not .ListOnly) .SpecDeleteColumn }}
+  ,"deleteColumns": [
+  {{- range $i, $col := .SpecDeleteColumn }}{{ if $i }},
+  {{ end }}
+    {"header": "{{ $col.Header }}", "path": {{ $col.PathJSON }}{{ if $col.Formatter }}, "formatter": "{{ $col.Formatter }}"{{ end }}}
+  {{- end }}
+  ]
+{{- end }}

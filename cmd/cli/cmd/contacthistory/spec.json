@@ -1,0 +1,55 @@
+{
+  "name": "contacthistory",
+  "use": "contact-history",
+  "short": "the subcommands for working with contact histories",
+  "list": {
+    "method": "GetAllContactHistories",
+    "root": "contactHistories",
+    "filterMethod": "GetContactHistories",
+    "where": {
+      "type": "openlaneclient.ContactHistoryWhereInput",
+      "fields": [
+        {
+          "flag": {
+            "name": "id",
+            "shorthand": "i",
+            "usage": "id to query"
+          },
+          "field": "Ref",
+          "kind": "string"
+        }
+      ]
+    }
+  },
+  "get": {
+    "method": "GetContactHistories",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "id to query"
+    },
+    "fallbackList": true,
+    "where": {
+      "type": "openlaneclient.ContactHistoryWhereInput",
+      "fields": [
+        {
+          "flag": {
+            "name": "id",
+            "shorthand": "i",
+            "usage": "id to query"
+          },
+          "field": "Ref",
+          "kind": "string"
+        }
+      ]
+    },
+    "listRoot": "contactHistories"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Ref", "path": ["ref"]},
+    {"header": "Operation", "path": ["operation"]},
+    {"header": "UpdatedAt", "path": ["updatedAt"]},
+    {"header": "UpdatedBy", "path": ["updatedBy"]}
+  ]
+}

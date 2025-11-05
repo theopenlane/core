@@ -1,0 +1,160 @@
+{
+  "name": "contact",
+  "use": "contact",
+  "short": "the subcommands for working with contacts",
+  "list": {
+    "method": "GetAllContacts",
+    "root": "contacts"
+  },
+  "get": {
+    "method": "GetContactByID",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "contact id to query"
+    },
+    "resultPath": ["contact"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateContact",
+    "inputType": "openlaneclient.CreateContactInput",
+    "resultPath": ["createContact", "contact"],
+    "fields": [
+      {
+        "flag": {
+          "name": "name",
+          "shorthand": "n",
+          "usage": "full name of the contact",
+          "required": true
+        },
+        "field": "FullName",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "email",
+          "shorthand": "e",
+          "usage": "email address of the contact"
+        },
+        "field": "Email",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "phone",
+          "shorthand": "p",
+          "usage": "phone number of the contact"
+        },
+        "field": "PhoneNumber",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "title",
+          "shorthand": "t",
+          "usage": "title of the contact"
+        },
+        "field": "Title",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "company",
+          "shorthand": "c",
+          "usage": "company of the contact"
+        },
+        "field": "Company",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "tags",
+          "usage": "tags associated with the contact"
+        },
+        "field": "Tags",
+        "kind": "stringSlice"
+      }
+    ]
+  },
+  "update": {
+    "method": "UpdateContact",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "contact id to update"
+    },
+    "inputType": "openlaneclient.UpdateContactInput",
+    "resultPath": ["updateContact", "contact"],
+    "fields": [
+      {
+        "flag": {
+          "name": "name",
+          "shorthand": "n",
+          "usage": "full name of the contact"
+        },
+        "field": "FullName",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "email",
+          "shorthand": "e",
+          "usage": "email address of the contact"
+        },
+        "field": "Email",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "phone",
+          "shorthand": "p",
+          "usage": "phone number of the contact"
+        },
+        "field": "PhoneNumber",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "title",
+          "shorthand": "t",
+          "usage": "title of the contact"
+        },
+        "field": "Title",
+        "kind": "string"
+      },
+      {
+        "flag": {
+          "name": "company",
+          "shorthand": "c",
+          "usage": "company of the contact"
+        },
+        "field": "Company",
+        "kind": "string"
+      }
+    ]
+  },
+  "delete": {
+    "method": "DeleteContact",
+    "idFlag": {
+      "name": "id",
+      "shorthand": "i",
+      "usage": "contact id to delete"
+    },
+    "resultPath": ["deleteContact", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Name", "path": ["fullName"]},
+    {"header": "Status", "path": ["status"]},
+    {"header": "Company", "path": ["company"]},
+    {"header": "Title", "path": ["title"]},
+    {"header": "Email", "path": ["email"]},
+    {"header": "PhoneNumber", "path": ["phoneNumber"]},
+    {"header": "Address", "path": ["address"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

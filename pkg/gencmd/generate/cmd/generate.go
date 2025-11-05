@@ -31,6 +31,7 @@ func init() {
 	generateCmd.Flags().StringP("dir", "d", "cmd", "root directory location to generate the files")
 	generateCmd.Flags().BoolP("read-only", "r", false, "only generate the read only commands, no create, update or delete commands")
 	generateCmd.Flags().BoolP("interactive", "i", true, "interactive prompt, set to false to disable")
+	generateCmd.Flags().Bool("spec", false, "generate spec-driven command files instead of legacy cobra stubs")
 	generateCmd.Flags().BoolP("force", "f", false, "force overwrite of existing files")
 }
 
@@ -51,16 +52,17 @@ func generateStubFiles() (err error) {
 
 	dirName := Config.String("dir")
 	readOnly := Config.Bool("read-only")
+	spec := Config.Bool("spec")
 	force := Config.Bool("force")
 
-	err = gencmd.Generate(cmdName, dirName, readOnly, force)
+	err = gencmd.Generate(cmdName, dirName, readOnly, spec, force)
 	cobra.CheckErr(err)
 
 	if !hasHistory {
 		return nil
 	}
 
-	return gencmd.Generate(cmdName+"History", dirName, true, force)
+	return gencmd.Generate(cmdName+"History", dirName, true, spec, force)
 }
 
 // hasHistorySchemas loads the schema and checks if the history schema exists
