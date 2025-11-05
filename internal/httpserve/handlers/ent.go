@@ -210,7 +210,7 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 // getUserByEmail returns the ent user with the user settings based on the email in the request
 func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
-		Where(user.Email(email)).
+		Where(user.EmailEqualFold(email)).
 		Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining user from email")
