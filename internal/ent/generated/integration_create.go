@@ -10,11 +10,17 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.
@@ -288,6 +294,96 @@ func (_c *IntegrationCreate) AddEvents(v ...*Event) *IntegrationCreate {
 	return _c.AddEventIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *IntegrationCreate) AddFindingIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *IntegrationCreate) AddFindings(v ...*Finding) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *IntegrationCreate) AddVulnerabilityIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *IntegrationCreate) AddVulnerabilities(v ...*Vulnerability) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *IntegrationCreate) AddReviewIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *IntegrationCreate) AddReviews(v ...*Review) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *IntegrationCreate) AddRemediationIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *IntegrationCreate) AddRemediations(v ...*Remediation) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *IntegrationCreate) AddTaskIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *IntegrationCreate) AddTasks(v ...*Task) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
+}
+
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_c *IntegrationCreate) AddActionPlanIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_c *IntegrationCreate) AddActionPlans(v ...*ActionPlan) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanIDs(ids...)
+}
+
 // Mutation returns the IntegrationMutation object of the builder.
 func (_c *IntegrationCreate) Mutation() *IntegrationMutation {
 	return _c.mutation
@@ -527,6 +623,108 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.IntegrationEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.FindingsTable,
+			Columns: integration.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationFindings
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.VulnerabilitiesTable,
+			Columns: integration.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationVulnerabilities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.ReviewsTable,
+			Columns: integration.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationReviews
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.RemediationsTable,
+			Columns: integration.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationRemediations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.TasksTable,
+			Columns: []string{integration.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.ActionPlansTable,
+			Columns: integration.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -114,6 +114,18 @@ type FileDownloadToken func(*sql.Selector)
 // FileHistory is the predicate function for filehistory builders.
 type FileHistory func(*sql.Selector)
 
+// Finding is the predicate function for finding builders.
+type Finding func(*sql.Selector)
+
+// FindingControl is the predicate function for findingcontrol builders.
+type FindingControl func(*sql.Selector)
+
+// FindingControlHistory is the predicate function for findingcontrolhistory builders.
+type FindingControlHistory func(*sql.Selector)
+
+// FindingHistory is the predicate function for findinghistory builders.
+type FindingHistory func(*sql.Selector)
+
 // Group is the predicate function for group builders.
 type Group func(*sql.Selector)
 
@@ -258,6 +270,18 @@ type ProgramMembership func(*sql.Selector)
 // ProgramMembershipHistory is the predicate function for programmembershiphistory builders.
 type ProgramMembershipHistory func(*sql.Selector)
 
+// Remediation is the predicate function for remediation builders.
+type Remediation func(*sql.Selector)
+
+// RemediationHistory is the predicate function for remediationhistory builders.
+type RemediationHistory func(*sql.Selector)
+
+// Review is the predicate function for review builders.
+type Review func(*sql.Selector)
+
+// ReviewHistory is the predicate function for reviewhistory builders.
+type ReviewHistory func(*sql.Selector)
+
 // Risk is the predicate function for risk builders.
 type Risk func(*sql.Selector)
 
@@ -365,6 +389,12 @@ type UserSetting func(*sql.Selector)
 
 // UserSettingHistory is the predicate function for usersettinghistory builders.
 type UserSettingHistory func(*sql.Selector)
+
+// Vulnerability is the predicate function for vulnerability builders.
+type Vulnerability func(*sql.Selector)
+
+// VulnerabilityHistory is the predicate function for vulnerabilityhistory builders.
+type VulnerabilityHistory func(*sql.Selector)
 
 // Webauthn is the predicate function for webauthn builders.
 type Webauthn func(*sql.Selector)

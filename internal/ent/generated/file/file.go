@@ -226,8 +226,12 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"export_files",
+	"finding_files",
 	"integration_files",
 	"note_files",
+	"remediation_files",
+	"review_files",
+	"vulnerability_files",
 }
 
 var (

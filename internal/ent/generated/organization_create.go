@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
@@ -53,6 +54,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -67,6 +70,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // OrganizationCreate is the builder for creating a Organization entity.
@@ -1402,6 +1406,66 @@ func (_c *OrganizationCreate) AddTagDefinitions(v ...*TagDefinition) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _c.AddTagDefinitionIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *OrganizationCreate) AddRemediationIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *OrganizationCreate) AddRemediations(v ...*Remediation) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *OrganizationCreate) AddFindingIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *OrganizationCreate) AddFindings(v ...*Finding) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *OrganizationCreate) AddReviewIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *OrganizationCreate) AddReviews(v ...*Review) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *OrganizationCreate) AddVulnerabilityIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *OrganizationCreate) AddVulnerabilities(v ...*Vulnerability) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2853,6 +2917,74 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.TagDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -54,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -74,6 +77,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/contextx"
@@ -298,6 +302,30 @@ func FileDownloadTokenEdgeCleanup(ctx context.Context, id string) error {
 
 func FileHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func FindingEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup finding edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func FindingControlEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrol edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func FindingControlHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func FindingHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -920,6 +948,34 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).Remediation.Query().Where((remediation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if remediationCount, err := FromContext(ctx).Remediation.Delete().Where(remediation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", remediationCount).Msg("deleting remediation")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Finding.Query().Where((finding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if findingCount, err := FromContext(ctx).Finding.Delete().Where(finding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", findingCount).Msg("deleting finding")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Review.Query().Where((review.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if reviewCount, err := FromContext(ctx).Review.Delete().Where(review.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", reviewCount).Msg("deleting review")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Vulnerability.Query().Where((vulnerability.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vulnerabilityCount, err := FromContext(ctx).Vulnerability.Delete().Where(vulnerability.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", vulnerabilityCount).Msg("deleting vulnerability")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -999,6 +1055,30 @@ func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
 
 func ProgramMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func RemediationEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediation edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func RemediationHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediationhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ReviewEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup review edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ReviewHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup reviewhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1327,6 +1407,18 @@ func UserSettingEdgeCleanup(ctx context.Context, id string) error {
 
 func UserSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func VulnerabilityEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerability edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func VulnerabilityHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerabilityhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

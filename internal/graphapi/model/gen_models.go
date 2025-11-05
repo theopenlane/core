@@ -702,6 +702,54 @@ type FileDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkFinding mutation
+type FindingBulkCreatePayload struct {
+	// Created findings
+	Findings []*generated.Finding `json:"findings,omitempty"`
+}
+
+// Return response for createBulkFindingControl mutation
+type FindingControlBulkCreatePayload struct {
+	// Created findingControls
+	FindingControls []*generated.FindingControl `json:"findingControls,omitempty"`
+}
+
+// Return response for createFindingControl mutation
+type FindingControlCreatePayload struct {
+	// Created findingControl
+	FindingControl *generated.FindingControl `json:"findingControl"`
+}
+
+// Return response for deleteFindingControl mutation
+type FindingControlDeletePayload struct {
+	// Deleted findingControl ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateFindingControl mutation
+type FindingControlUpdatePayload struct {
+	// Updated findingControl
+	FindingControl *generated.FindingControl `json:"findingControl"`
+}
+
+// Return response for createFinding mutation
+type FindingCreatePayload struct {
+	// Created finding
+	Finding *generated.Finding `json:"finding"`
+}
+
+// Return response for deleteFinding mutation
+type FindingDeletePayload struct {
+	// Deleted finding ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateFinding mutation
+type FindingUpdatePayload struct {
+	// Updated finding
+	Finding *generated.Finding `json:"finding"`
+}
+
 // Return response for createBulkGroup mutation
 type GroupBulkCreatePayload struct {
 	// Created groups
@@ -1433,6 +1481,54 @@ type ProgramUpdatePayload struct {
 	Program *generated.Program `json:"program"`
 }
 
+// Return response for createBulkRemediation mutation
+type RemediationBulkCreatePayload struct {
+	// Created remediations
+	Remediations []*generated.Remediation `json:"remediations,omitempty"`
+}
+
+// Return response for createRemediation mutation
+type RemediationCreatePayload struct {
+	// Created remediation
+	Remediation *generated.Remediation `json:"remediation"`
+}
+
+// Return response for deleteRemediation mutation
+type RemediationDeletePayload struct {
+	// Deleted remediation ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateRemediation mutation
+type RemediationUpdatePayload struct {
+	// Updated remediation
+	Remediation *generated.Remediation `json:"remediation"`
+}
+
+// Return response for createBulkReview mutation
+type ReviewBulkCreatePayload struct {
+	// Created reviews
+	Reviews []*generated.Review `json:"reviews,omitempty"`
+}
+
+// Return response for createReview mutation
+type ReviewCreatePayload struct {
+	// Created review
+	Review *generated.Review `json:"review"`
+}
+
+// Return response for deleteReview mutation
+type ReviewDeletePayload struct {
+	// Deleted review ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateReview mutation
+type ReviewUpdatePayload struct {
+	// Updated review
+	Review *generated.Review `json:"review"`
+}
+
 // Return response for createBulkRisk mutation
 type RiskBulkCreatePayload struct {
 	// Created risks
@@ -1580,6 +1676,7 @@ type SearchResults struct {
 	Events                      *generated.EventConnection                      `json:"events,omitempty"`
 	Evidences                   *generated.EvidenceConnection                   `json:"evidences,omitempty"`
 	Files                       *generated.FileConnection                       `json:"files,omitempty"`
+	Findings                    *generated.FindingConnection                    `json:"findings,omitempty"`
 	Groups                      *generated.GroupConnection                      `json:"groups,omitempty"`
 	Integrations                *generated.IntegrationConnection                `json:"integrations,omitempty"`
 	InternalPolicies            *generated.InternalPolicyConnection             `json:"internalPolicies,omitempty"`
@@ -1597,6 +1694,8 @@ type SearchResults struct {
 	PersonalAccessTokens        *generated.PersonalAccessTokenConnection        `json:"personalAccessTokens,omitempty"`
 	Procedures                  *generated.ProcedureConnection                  `json:"procedures,omitempty"`
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
+	Remediations                *generated.RemediationConnection                `json:"remediations,omitempty"`
+	Reviews                     *generated.ReviewConnection                     `json:"reviews,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
@@ -1611,6 +1710,7 @@ type SearchResults struct {
 	TrustCenterDocs             *generated.TrustCenterDocConnection             `json:"trustCenterDocs,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
+	Vulnerabilities             *generated.VulnerabilityConnection              `json:"vulnerabilities,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
 	SearchContext               []*models.SearchContext                         `json:"searchContext,omitempty"`
 }
@@ -2069,6 +2169,30 @@ type UserSettingUpdatePayload struct {
 type UserUpdatePayload struct {
 	// Updated user
 	User *generated.User `json:"user"`
+}
+
+// Return response for createBulkVulnerability mutation
+type VulnerabilityBulkCreatePayload struct {
+	// Created vulnerabilitys
+	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
+}
+
+// Return response for createVulnerability mutation
+type VulnerabilityCreatePayload struct {
+	// Created vulnerability
+	Vulnerability *generated.Vulnerability `json:"vulnerability"`
+}
+
+// Return response for deleteVulnerability mutation
+type VulnerabilityDeletePayload struct {
+	// Deleted vulnerability ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVulnerability mutation
+type VulnerabilityUpdatePayload struct {
+	// Updated vulnerability
+	Vulnerability *generated.Vulnerability `json:"vulnerability"`
 }
 
 // Return response for deleteWebauthn mutation

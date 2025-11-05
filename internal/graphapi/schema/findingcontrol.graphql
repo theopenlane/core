@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up findingControl by ID
+    """
+     findingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+    ):  FindingControl!
+}
+
+extend type Mutation{
+    """
+    Create a new findingControl
+    """
+    createFindingControl(
+        """
+        values of the findingControl
+        """
+        input: CreateFindingControlInput!
+    ): FindingControlCreatePayload!
+    """
+    Create multiple new findingControls
+    """
+    createBulkFindingControl(
+        """
+        values of the findingControl
+        """
+        input: [CreateFindingControlInput!]
+    ): FindingControlBulkCreatePayload!
+    """
+    Create multiple new findingControls via file upload
+    """
+    createBulkCSVFindingControl(
+        """
+        csv file containing values of the findingControl
+        """
+        input: Upload!
+    ): FindingControlBulkCreatePayload!
+    """
+    Update an existing findingControl
+    """
+    updateFindingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+        """
+        New values for the findingControl
+        """
+        input: UpdateFindingControlInput!
+    ): FindingControlUpdatePayload!
+    """
+    Delete an existing findingControl
+    """
+    deleteFindingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+    ): FindingControlDeletePayload!
+}
+
+"""
+Return response for createFindingControl mutation
+"""
+type FindingControlCreatePayload {
+    """
+    Created findingControl
+    """
+    findingControl: FindingControl!
+}
+
+"""
+Return response for updateFindingControl mutation
+"""
+type FindingControlUpdatePayload {
+    """
+    Updated findingControl
+    """
+    findingControl: FindingControl!
+}
+
+"""
+Return response for deleteFindingControl mutation
+"""
+type FindingControlDeletePayload {
+    """
+    Deleted findingControl ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkFindingControl mutation
+"""
+type FindingControlBulkCreatePayload {
+    """
+    Created findingControls
+    """
+    findingControls: [FindingControl!]
+}

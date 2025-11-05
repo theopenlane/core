@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
@@ -56,6 +57,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -70,6 +73,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1383,6 +1387,66 @@ func (_u *OrganizationUpdate) AddTagDefinitions(v ...*TagDefinition) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _u.AddTagDefinitionIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *OrganizationUpdate) AddRemediationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *OrganizationUpdate) AddRemediations(v ...*Remediation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *OrganizationUpdate) AddFindingIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *OrganizationUpdate) AddFindings(v ...*Finding) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *OrganizationUpdate) AddReviewIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *OrganizationUpdate) AddReviews(v ...*Review) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *OrganizationUpdate) AddVulnerabilityIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *OrganizationUpdate) AddVulnerabilities(v ...*Vulnerability) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2864,6 +2928,90 @@ func (_u *OrganizationUpdate) RemoveTagDefinitions(v ...*TagDefinition) *Organiz
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTagDefinitionIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *OrganizationUpdate) ClearRemediations() *OrganizationUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *OrganizationUpdate) RemoveRemediationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *OrganizationUpdate) RemoveRemediations(v ...*Remediation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *OrganizationUpdate) ClearFindings() *OrganizationUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *OrganizationUpdate) RemoveFindingIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *OrganizationUpdate) RemoveFindings(v ...*Finding) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *OrganizationUpdate) ClearReviews() *OrganizationUpdate {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *OrganizationUpdate) RemoveReviewIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *OrganizationUpdate) RemoveReviews(v ...*Review) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *OrganizationUpdate) ClearVulnerabilities() *OrganizationUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *OrganizationUpdate) RemoveVulnerabilityIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *OrganizationUpdate) RemoveVulnerabilities(v ...*Vulnerability) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -6446,6 +6594,198 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7813,6 +8153,66 @@ func (_u *OrganizationUpdateOne) AddTagDefinitions(v ...*TagDefinition) *Organiz
 		ids[i] = v[i].ID
 	}
 	return _u.AddTagDefinitionIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *OrganizationUpdateOne) AddRemediationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *OrganizationUpdateOne) AddRemediations(v ...*Remediation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *OrganizationUpdateOne) AddFindingIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *OrganizationUpdateOne) AddFindings(v ...*Finding) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *OrganizationUpdateOne) AddReviewIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *OrganizationUpdateOne) AddReviews(v ...*Review) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *OrganizationUpdateOne) AddVulnerabilityIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *OrganizationUpdateOne) AddVulnerabilities(v ...*Vulnerability) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -9294,6 +9694,90 @@ func (_u *OrganizationUpdateOne) RemoveTagDefinitions(v ...*TagDefinition) *Orga
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTagDefinitionIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *OrganizationUpdateOne) ClearRemediations() *OrganizationUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveRemediationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *OrganizationUpdateOne) RemoveRemediations(v ...*Remediation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *OrganizationUpdateOne) ClearFindings() *OrganizationUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveFindingIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *OrganizationUpdateOne) RemoveFindings(v ...*Finding) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *OrganizationUpdateOne) ClearReviews() *OrganizationUpdateOne {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveReviewIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *OrganizationUpdateOne) RemoveReviews(v ...*Review) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *OrganizationUpdateOne) ClearVulnerabilities() *OrganizationUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveVulnerabilityIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *OrganizationUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -12901,6 +13385,198 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.TagDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationsTable,
+			Columns: []string{organization.RemediationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Remediation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingsTable,
+			Columns: []string{organization.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewsTable,
+			Columns: []string{organization.ReviewsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Review
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilitiesTable,
+			Columns: []string{organization.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

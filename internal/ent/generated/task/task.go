@@ -90,6 +90,8 @@ const (
 	EdgeRisks = "risks"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// Table holds the table name of the task in the database.
@@ -174,6 +176,11 @@ const (
 	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
 	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
 	ControlImplementationsInverseTable = "control_implementations"
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "action_plan_tasks"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "task_evidence"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -212,6 +219,11 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_tasks",
+	"finding_tasks",
+	"integration_tasks",
+	"remediation_tasks",
+	"review_tasks",
+	"vulnerability_tasks",
 }
 
 var (
@@ -242,6 +254,9 @@ var (
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"control_implementation_id", "task_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"action_plan_id", "task_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"task_id", "evidence_id"}
@@ -581,6 +596,20 @@ func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
+	}
+}
+
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEvidenceCount orders the results by evidence count.
 func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -690,6 +719,13 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
+	)
+}
+func newActionPlansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

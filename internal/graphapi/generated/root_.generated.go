@@ -131,12 +131,16 @@ type ComplexityRoot struct {
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
+		Blocked                         func(childComplexity int) int
+		BlockerReason                   func(childComplexity int) int
+		CompletedAt                     func(childComplexity int) int
 		ControlSuggestions              func(childComplexity int) int
 		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                       func(childComplexity int) int
 		CreatedBy                       func(childComplexity int) int
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
+		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -144,16 +148,23 @@ type ComplexityRoot struct {
 		DueDate                         func(childComplexity int) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
+		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                   func(childComplexity int) int
+		Metadata                        func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Owner                           func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
 		Priority                        func(childComplexity int) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RawPayload                      func(childComplexity int) int
+		Remediations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		RequiresApproval                func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
+		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Revision                        func(childComplexity int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source                          func(childComplexity int) int
@@ -163,9 +174,12 @@ type ComplexityRoot struct {
 		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                           func(childComplexity int) int
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -206,10 +220,14 @@ type ComplexityRoot struct {
 		ActionPlanType                  func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
+		Blocked                         func(childComplexity int) int
+		BlockerReason                   func(childComplexity int) int
+		CompletedAt                     func(childComplexity int) int
 		ControlSuggestions              func(childComplexity int) int
 		CreatedAt                       func(childComplexity int) int
 		CreatedBy                       func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
+		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -220,11 +238,14 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		Metadata                        func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
 		Priority                        func(childComplexity int) int
+		RawPayload                      func(childComplexity int) int
 		Ref                             func(childComplexity int) int
+		RequiresApproval                func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
@@ -235,6 +256,7 @@ type ComplexityRoot struct {
 		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		Title                           func(childComplexity int) int
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
@@ -620,6 +642,7 @@ type ComplexityRoot struct {
 		ControlKind                func(childComplexity int) int
 		ControlKindID              func(childComplexity int) int
 		ControlKindName            func(childComplexity int) int
+		ControlMappings            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
@@ -634,6 +657,7 @@ type ComplexityRoot struct {
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExampleEvidence            func(childComplexity int) int
+		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -1739,6 +1763,247 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	Finding struct {
+		ActionPlans        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssessmentID       func(childComplexity int) int
+		Assets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BlocksProduction   func(childComplexity int) int
+		Categories         func(childComplexity int) int
+		Category           func(childComplexity int) int
+		Comments           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ControlMappings    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
+		Controls           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EventTime          func(childComplexity int) int
+		Exploitability     func(childComplexity int) int
+		ExternalID         func(childComplexity int) int
+		ExternalOwnerID    func(childComplexity int) int
+		ExternalURI        func(childComplexity int) int
+		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		FindingClass       func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Impact             func(childComplexity int) int
+		Integrations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes      func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		NumericSeverity    func(childComplexity int) int
+		Open               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Priority           func(childComplexity int) int
+		Production         func(childComplexity int) int
+		Programs           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public             func(childComplexity int) int
+		RawPayload         func(childComplexity int) int
+		Recommendation     func(childComplexity int) int
+		RecommendedActions func(childComplexity int) int
+		References         func(childComplexity int) int
+		RemediationSLA     func(childComplexity int) int
+		Remediations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt         func(childComplexity int) int
+		ResourceName       func(childComplexity int) int
+		Reviews            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Score              func(childComplexity int) int
+		Severity           func(childComplexity int) int
+		Source             func(childComplexity int) int
+		SourceUpdatedAt    func(childComplexity int) int
+		State              func(childComplexity int) int
+		Status             func(childComplexity int) int
+		StepsToReproduce   func(childComplexity int) int
+		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TargetDetails      func(childComplexity int) int
+		Targets            func(childComplexity int) int
+		Tasks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		Validated          func(childComplexity int) int
+		Vector             func(childComplexity int) int
+		Viewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+	}
+
+	FindingBulkCreatePayload struct {
+		Findings func(childComplexity int) int
+	}
+
+	FindingConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	FindingControl struct {
+		Control                 func(childComplexity int) int
+		ControlID               func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		DiscoveredAt            func(childComplexity int) int
+		ExternalControlID       func(childComplexity int) int
+		ExternalStandard        func(childComplexity int) int
+		ExternalStandardVersion func(childComplexity int) int
+		Finding                 func(childComplexity int) int
+		FindingID               func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		Standard                func(childComplexity int) int
+		StandardID              func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+	}
+
+	FindingControlBulkCreatePayload struct {
+		FindingControls func(childComplexity int) int
+	}
+
+	FindingControlConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	FindingControlCreatePayload struct {
+		FindingControl func(childComplexity int) int
+	}
+
+	FindingControlDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	FindingControlEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	FindingControlHistory struct {
+		ControlID               func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		DiscoveredAt            func(childComplexity int) int
+		ExternalControlID       func(childComplexity int) int
+		ExternalStandard        func(childComplexity int) int
+		ExternalStandardVersion func(childComplexity int) int
+		FindingID               func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		StandardID              func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+	}
+
+	FindingControlHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	FindingControlHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	FindingControlUpdatePayload struct {
+		FindingControl func(childComplexity int) int
+	}
+
+	FindingCreatePayload struct {
+		Finding func(childComplexity int) int
+	}
+
+	FindingDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	FindingEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	FindingHistory struct {
+		AssessmentID       func(childComplexity int) int
+		BlocksProduction   func(childComplexity int) int
+		Categories         func(childComplexity int) int
+		Category           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		EventTime          func(childComplexity int) int
+		Exploitability     func(childComplexity int) int
+		ExternalID         func(childComplexity int) int
+		ExternalOwnerID    func(childComplexity int) int
+		ExternalURI        func(childComplexity int) int
+		FindingClass       func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Impact             func(childComplexity int) int
+		InternalNotes      func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		NumericSeverity    func(childComplexity int) int
+		Open               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Priority           func(childComplexity int) int
+		Production         func(childComplexity int) int
+		Public             func(childComplexity int) int
+		RawPayload         func(childComplexity int) int
+		Recommendation     func(childComplexity int) int
+		RecommendedActions func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		References         func(childComplexity int) int
+		RemediationSLA     func(childComplexity int) int
+		ReportedAt         func(childComplexity int) int
+		ResourceName       func(childComplexity int) int
+		Score              func(childComplexity int) int
+		Severity           func(childComplexity int) int
+		Source             func(childComplexity int) int
+		SourceUpdatedAt    func(childComplexity int) int
+		State              func(childComplexity int) int
+		Status             func(childComplexity int) int
+		StepsToReproduce   func(childComplexity int) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TargetDetails      func(childComplexity int) int
+		Targets            func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		Validated          func(childComplexity int) int
+		Vector             func(childComplexity int) int
+	}
+
+	FindingHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	FindingHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	FindingUpdatePayload struct {
+		Finding func(childComplexity int) int
+	}
+
 	Group struct {
 		ControlBlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		ControlEditors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -2120,11 +2385,13 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Events           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		ID               func(childComplexity int) int
 		IntegrationType  func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
@@ -2133,12 +2400,16 @@ type ComplexityRoot struct {
 		Name             func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
+		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Secrets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	IntegrationConnection struct {
@@ -2808,6 +3079,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFinding                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFindingControl          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
@@ -2823,6 +3096,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
@@ -2836,6 +3111,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
 		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
 		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
 		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
@@ -2847,6 +3123,8 @@ type ComplexityRoot struct {
 		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
 		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkFinding                    func(childComplexity int, input []*generated.CreateFindingInput) int
+		CreateBulkFindingControl             func(childComplexity int, input []*generated.CreateFindingControlInput) int
 		CreateBulkGroup                      func(childComplexity int, input []*generated.CreateGroupInput) int
 		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
 		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
@@ -2862,6 +3140,8 @@ type ComplexityRoot struct {
 		CreateBulkProcedure                  func(childComplexity int, input []*generated.CreateProcedureInput) int
 		CreateBulkProgram                    func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership          func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
+		CreateBulkRemediation                func(childComplexity int, input []*generated.CreateRemediationInput) int
+		CreateBulkReview                     func(childComplexity int, input []*generated.CreateReviewInput) int
 		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
 		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
 		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
@@ -2875,6 +3155,7 @@ type ComplexityRoot struct {
 		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
 		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
 		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
+		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
 		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
@@ -2890,6 +3171,8 @@ type ComplexityRoot struct {
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
 		CreateExport                         func(childComplexity int, input generated.CreateExportInput) int
+		CreateFinding                        func(childComplexity int, input generated.CreateFindingInput) int
+		CreateFindingControl                 func(childComplexity int, input generated.CreateFindingControlInput) int
 		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
 		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput) int
 		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
@@ -2917,6 +3200,8 @@ type ComplexityRoot struct {
 		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
 		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
+		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
+		CreateReview                         func(childComplexity int, input generated.CreateReviewInput) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
@@ -2941,6 +3226,7 @@ type ComplexityRoot struct {
 		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
+		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAssessment                     func(childComplexity int, id string) int
@@ -3000,6 +3286,8 @@ type ComplexityRoot struct {
 		DeleteEvidence                       func(childComplexity int, id string) int
 		DeleteExport                         func(childComplexity int, id string) int
 		DeleteFile                           func(childComplexity int, id string) int
+		DeleteFinding                        func(childComplexity int, id string) int
+		DeleteFindingControl                 func(childComplexity int, id string) int
 		DeleteGroup                          func(childComplexity int, id string) int
 		DeleteGroupMembership                func(childComplexity int, id string) int
 		DeleteGroupSetting                   func(childComplexity int, id string) int
@@ -3023,6 +3311,8 @@ type ComplexityRoot struct {
 		DeleteProcedure                      func(childComplexity int, id string) int
 		DeleteProgram                        func(childComplexity int, id string) int
 		DeleteProgramMembership              func(childComplexity int, id string) int
+		DeleteRemediation                    func(childComplexity int, id string) int
+		DeleteReview                         func(childComplexity int, id string) int
 		DeleteRisk                           func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
 		DeleteScheduledJob                   func(childComplexity int, id string) int
@@ -3041,6 +3331,7 @@ type ComplexityRoot struct {
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
 		DeleteTrustCenterWatermarkConfig     func(childComplexity int, id string) int
 		DeleteUser                           func(childComplexity int, id string) int
+		DeleteVulnerability                  func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
@@ -3073,6 +3364,8 @@ type ComplexityRoot struct {
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
 		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
+		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
+		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
 		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput) int
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
@@ -3094,6 +3387,8 @@ type ComplexityRoot struct {
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
+		UpdateRemediation                    func(childComplexity int, id string, input generated.UpdateRemediationInput) int
+		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
@@ -3118,6 +3413,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
+		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
 	}
 
 	Narrative struct {
@@ -3445,6 +3741,7 @@ type ComplexityRoot struct {
 		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Exports                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                            func(childComplexity int) int
@@ -3472,6 +3769,8 @@ type ComplexityRoot struct {
 		Procedures                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
@@ -3496,6 +3795,7 @@ type ComplexityRoot struct {
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
 		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Vulnerabilities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -4083,6 +4383,7 @@ type ComplexityRoot struct {
 		AdminEventSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEvidenceSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminFileSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminFindingSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminGroupSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminIntegrationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminInternalPolicySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4100,6 +4401,8 @@ type ComplexityRoot struct {
 		AdminPersonalAccessTokenSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminProcedureSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminRemediationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminReviewSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminScanSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4115,6 +4418,7 @@ type ComplexityRoot struct {
 		AdminTrustCenterSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminVulnerabilitySearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Assessment                            func(childComplexity int, id string) int
 		AssessmentHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) int
@@ -4186,6 +4490,13 @@ type ComplexityRoot struct {
 		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
 		FileSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Finding                               func(childComplexity int, id string) int
+		FindingControl                        func(childComplexity int, id string) int
+		FindingControlHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingControlHistoryOrder, where *generated.FindingControlHistoryWhereInput) int
+		FindingControls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
+		FindingHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingHistoryOrder, where *generated.FindingHistoryWhereInput) int
+		FindingSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Findings                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		Group                                 func(childComplexity int, id string) int
 		GroupHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
 		GroupMembership                       func(childComplexity int, id string) int
@@ -4271,6 +4582,14 @@ type ComplexityRoot struct {
 		ProgramMemberships                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		ProgramSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Programs                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediation                           func(childComplexity int, id string) int
+		RemediationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RemediationHistoryOrder, where *generated.RemediationHistoryWhereInput) int
+		RemediationSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Remediations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Review                                func(childComplexity int, id string) int
+		ReviewHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ReviewHistoryOrder, where *generated.ReviewHistoryWhereInput) int
+		ReviewSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Reviews                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risk                                  func(childComplexity int, id string) int
 		RiskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
 		RiskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4343,8 +4662,259 @@ type ComplexityRoot struct {
 		UserSettingSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		UserSettings                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
 		Users                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Vulnerabilities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		Vulnerability                         func(childComplexity int, id string) int
+		VulnerabilityHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VulnerabilityHistoryOrder, where *generated.VulnerabilityHistoryWhereInput) int
+		VulnerabilitySearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		WebauthnSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Webauthns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+	}
+
+	Remediation struct {
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		CompletedAt      func(childComplexity int) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DueAt            func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Error            func(childComplexity int) int
+		Explanation      func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Instructions     func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		Intent           func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		OwnerReference   func(childComplexity int) int
+		PrGeneratedAt    func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		PullRequestURI   func(childComplexity int) int
+		RepositoryURI    func(childComplexity int) int
+		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TicketReference  func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+	}
+
+	RemediationBulkCreatePayload struct {
+		Remediations func(childComplexity int) int
+	}
+
+	RemediationConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	RemediationCreatePayload struct {
+		Remediation func(childComplexity int) int
+	}
+
+	RemediationDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	RemediationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	RemediationHistory struct {
+		CompletedAt      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DueAt            func(childComplexity int) int
+		Error            func(childComplexity int) int
+		Explanation      func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Instructions     func(childComplexity int) int
+		Intent           func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		OwnerReference   func(childComplexity int) int
+		PrGeneratedAt    func(childComplexity int) int
+		PullRequestURI   func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		RepositoryURI    func(childComplexity int) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TicketReference  func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	RemediationHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	RemediationHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	RemediationUpdatePayload struct {
+		Remediation func(childComplexity int) int
+	}
+
+	Review struct {
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Approved         func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category         func(childComplexity int) int
+		Classification   func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RawPayload       func(childComplexity int) int
+		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt       func(childComplexity int) int
+		Reporter         func(childComplexity int) int
+		ReviewedAt       func(childComplexity int) int
+		Reviewer         func(childComplexity int) int
+		ReviewerID       func(childComplexity int) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+	}
+
+	ReviewBulkCreatePayload struct {
+		Reviews func(childComplexity int) int
+	}
+
+	ReviewConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReviewCreatePayload struct {
+		Review func(childComplexity int) int
+	}
+
+	ReviewDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ReviewEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReviewHistory struct {
+		Approved         func(childComplexity int) int
+		ApprovedAt       func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Classification   func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		ReportedAt       func(childComplexity int) int
+		Reporter         func(childComplexity int) int
+		ReviewedAt       func(childComplexity int) int
+		ReviewerID       func(childComplexity int) int
+		Source           func(childComplexity int) int
+		State            func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	ReviewHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReviewHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReviewUpdatePayload struct {
+		Review func(childComplexity int) int
 	}
 
 	Risk struct {
@@ -4700,6 +5270,7 @@ type ComplexityRoot struct {
 		Events                      func(childComplexity int) int
 		Evidences                   func(childComplexity int) int
 		Files                       func(childComplexity int) int
+		Findings                    func(childComplexity int) int
 		Groups                      func(childComplexity int) int
 		Integrations                func(childComplexity int) int
 		InternalPolicies            func(childComplexity int) int
@@ -4718,6 +5289,8 @@ type ComplexityRoot struct {
 		PersonalAccessTokens        func(childComplexity int) int
 		Procedures                  func(childComplexity int) int
 		Programs                    func(childComplexity int) int
+		Remediations                func(childComplexity int) int
+		Reviews                     func(childComplexity int) int
 		Risks                       func(childComplexity int) int
 		Scans                       func(childComplexity int) int
 		SearchContext               func(childComplexity int) int
@@ -4734,6 +5307,7 @@ type ComplexityRoot struct {
 		TrustCenters                func(childComplexity int) int
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
+		Vulnerabilities             func(childComplexity int) int
 		Webauthns                   func(childComplexity int) int
 	}
 
@@ -5202,6 +5776,7 @@ type ComplexityRoot struct {
 	}
 
 	Task struct {
+		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assignee               func(childComplexity int) int
 		AssigneeID             func(childComplexity int) int
 		Assigner               func(childComplexity int) int
@@ -6066,6 +6641,152 @@ type ComplexityRoot struct {
 		User func(childComplexity int) int
 	}
 
+	Vulnerability struct {
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Blocking         func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CveID            func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DiscoveredAt     func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Exploitability   func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID               func(childComplexity int) int
+		Impact           func(childComplexity int) int
+		Impacts          func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Open             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Priority         func(childComplexity int) int
+		Production       func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public           func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		References       func(childComplexity int) int
+		RemediationSLA   func(childComplexity int) int
+		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Score            func(childComplexity int) int
+		Severity         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SourceUpdatedAt  func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Validated        func(childComplexity int) int
+		Vector           func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	VulnerabilityBulkCreatePayload struct {
+		Vulnerabilities func(childComplexity int) int
+	}
+
+	VulnerabilityConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	VulnerabilityCreatePayload struct {
+		Vulnerability func(childComplexity int) int
+	}
+
+	VulnerabilityDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	VulnerabilityEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	VulnerabilityHistory struct {
+		Blocking         func(childComplexity int) int
+		Category         func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CveID            func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DiscoveredAt     func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Exploitability   func(childComplexity int) int
+		ExternalID       func(childComplexity int) int
+		ExternalOwnerID  func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Impact           func(childComplexity int) int
+		Impacts          func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Open             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Priority         func(childComplexity int) int
+		Production       func(childComplexity int) int
+		Public           func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		RawPayload       func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		References       func(childComplexity int) int
+		RemediationSLA   func(childComplexity int) int
+		Score            func(childComplexity int) int
+		Severity         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SourceUpdatedAt  func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Validated        func(childComplexity int) int
+		Vector           func(childComplexity int) int
+	}
+
+	VulnerabilityHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	VulnerabilityHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	VulnerabilityUpdatePayload struct {
+		Vulnerability func(childComplexity int) int
+	}
+
 	Webauthn struct {
 		Aaguid         func(childComplexity int) int
 		BackupEligible func(childComplexity int) int
@@ -6366,6 +7087,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ApproverID(childComplexity), true
 
+	case "ActionPlan.blocked":
+		if e.complexity.ActionPlan.Blocked == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Blocked(childComplexity), true
+
+	case "ActionPlan.blockerReason":
+		if e.complexity.ActionPlan.BlockerReason == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.BlockerReason(childComplexity), true
+
+	case "ActionPlan.completedAt":
+		if e.complexity.ActionPlan.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.CompletedAt(childComplexity), true
+
 	case "ActionPlan.controlSuggestions":
 		if e.complexity.ActionPlan.ControlSuggestions == nil {
 			break
@@ -6412,6 +7154,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.DelegateID(childComplexity), true
+
+	case "ActionPlan.description":
+		if e.complexity.ActionPlan.Description == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Description(childComplexity), true
 
 	case "ActionPlan.details":
 		if e.complexity.ActionPlan.Details == nil {
@@ -6462,6 +7211,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.FileID(childComplexity), true
 
+	case "ActionPlan.findings":
+		if e.complexity.ActionPlan.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
 			break
@@ -6476,12 +7237,31 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ImprovementSuggestions(childComplexity), true
 
+	case "ActionPlan.integrations":
+		if e.complexity.ActionPlan.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
 	case "ActionPlan.internalNotes":
 		if e.complexity.ActionPlan.InternalNotes == nil {
 			break
 		}
 
 		return e.complexity.ActionPlan.InternalNotes(childComplexity), true
+
+	case "ActionPlan.metadata":
+		if e.complexity.ActionPlan.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Metadata(childComplexity), true
 
 	case "ActionPlan.name":
 		if e.complexity.ActionPlan.Name == nil {
@@ -6523,6 +7303,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "ActionPlan.rawPayload":
+		if e.complexity.ActionPlan.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.RawPayload(childComplexity), true
+
+	case "ActionPlan.remediations":
+		if e.complexity.ActionPlan.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "ActionPlan.requiresApproval":
+		if e.complexity.ActionPlan.RequiresApproval == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.RequiresApproval(childComplexity), true
+
 	case "ActionPlan.reviewDue":
 		if e.complexity.ActionPlan.ReviewDue == nil {
 			break
@@ -6536,6 +7342,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.ReviewFrequency(childComplexity), true
+
+	case "ActionPlan.reviews":
+		if e.complexity.ActionPlan.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 
 	case "ActionPlan.revision":
 		if e.complexity.ActionPlan.Revision == nil {
@@ -6605,6 +7423,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Tags(childComplexity), true
 
+	case "ActionPlan.tasks":
+		if e.complexity.ActionPlan.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "ActionPlan.title":
+		if e.complexity.ActionPlan.Title == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Title(childComplexity), true
+
 	case "ActionPlan.url":
 		if e.complexity.ActionPlan.URL == nil {
 			break
@@ -6625,6 +7462,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.UpdatedBy(childComplexity), true
+
+	case "ActionPlan.vulnerabilities":
+		if e.complexity.ActionPlan.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -6738,6 +7587,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.ApproverID(childComplexity), true
 
+	case "ActionPlanHistory.blocked":
+		if e.complexity.ActionPlanHistory.Blocked == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Blocked(childComplexity), true
+
+	case "ActionPlanHistory.blockerReason":
+		if e.complexity.ActionPlanHistory.BlockerReason == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.BlockerReason(childComplexity), true
+
+	case "ActionPlanHistory.completedAt":
+		if e.complexity.ActionPlanHistory.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.CompletedAt(childComplexity), true
+
 	case "ActionPlanHistory.controlSuggestions":
 		if e.complexity.ActionPlanHistory.ControlSuggestions == nil {
 			break
@@ -6765,6 +7635,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.DelegateID(childComplexity), true
+
+	case "ActionPlanHistory.description":
+		if e.complexity.ActionPlanHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Description(childComplexity), true
 
 	case "ActionPlanHistory.details":
 		if e.complexity.ActionPlanHistory.Details == nil {
@@ -6836,6 +7713,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.InternalNotes(childComplexity), true
 
+	case "ActionPlanHistory.metadata":
+		if e.complexity.ActionPlanHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Metadata(childComplexity), true
+
 	case "ActionPlanHistory.name":
 		if e.complexity.ActionPlanHistory.Name == nil {
 			break
@@ -6864,12 +7748,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.Priority(childComplexity), true
 
+	case "ActionPlanHistory.rawPayload":
+		if e.complexity.ActionPlanHistory.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.RawPayload(childComplexity), true
+
 	case "ActionPlanHistory.ref":
 		if e.complexity.ActionPlanHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.ActionPlanHistory.Ref(childComplexity), true
+
+	case "ActionPlanHistory.requiresApproval":
+		if e.complexity.ActionPlanHistory.RequiresApproval == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.RequiresApproval(childComplexity), true
 
 	case "ActionPlanHistory.reviewDue":
 		if e.complexity.ActionPlanHistory.ReviewDue == nil {
@@ -6940,6 +7838,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Tags(childComplexity), true
+
+	case "ActionPlanHistory.title":
+		if e.complexity.ActionPlanHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Title(childComplexity), true
 
 	case "ActionPlanHistory.url":
 		if e.complexity.ActionPlanHistory.URL == nil {
@@ -8692,6 +9597,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ControlKindName(childComplexity), true
 
+	case "Control.controlMappings":
+		if e.complexity.Control.ControlMappings == nil {
+			break
+		}
+
+		args, err := ec.field_Control_controlMappings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.ControlMappings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingControlOrder), args["where"].(*generated.FindingControlWhereInput)), true
+
 	case "Control.controlObjectives":
 		if e.complexity.Control.ControlObjectives == nil {
 			break
@@ -8804,6 +9721,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.ExampleEvidence(childComplexity), true
+
+	case "Control.findings":
+		if e.complexity.Control.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Control_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
 
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
@@ -14082,6 +15011,1368 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FileHistoryEdge.Node(childComplexity), true
 
+	case "Finding.actionPlans":
+		if e.complexity.Finding.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Finding.assessmentID":
+		if e.complexity.Finding.AssessmentID == nil {
+			break
+		}
+
+		return e.complexity.Finding.AssessmentID(childComplexity), true
+
+	case "Finding.assets":
+		if e.complexity.Finding.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Finding.blockedGroups":
+		if e.complexity.Finding.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Finding.blocksProduction":
+		if e.complexity.Finding.BlocksProduction == nil {
+			break
+		}
+
+		return e.complexity.Finding.BlocksProduction(childComplexity), true
+
+	case "Finding.categories":
+		if e.complexity.Finding.Categories == nil {
+			break
+		}
+
+		return e.complexity.Finding.Categories(childComplexity), true
+
+	case "Finding.category":
+		if e.complexity.Finding.Category == nil {
+			break
+		}
+
+		return e.complexity.Finding.Category(childComplexity), true
+
+	case "Finding.comments":
+		if e.complexity.Finding.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Finding.controlMappings":
+		if e.complexity.Finding.ControlMappings == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_controlMappings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.ControlMappings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingControlOrder), args["where"].(*generated.FindingControlWhereInput)), true
+
+	case "Finding.controls":
+		if e.complexity.Finding.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Finding.createdAt":
+		if e.complexity.Finding.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Finding.CreatedAt(childComplexity), true
+
+	case "Finding.createdBy":
+		if e.complexity.Finding.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Finding.CreatedBy(childComplexity), true
+
+	case "Finding.description":
+		if e.complexity.Finding.Description == nil {
+			break
+		}
+
+		return e.complexity.Finding.Description(childComplexity), true
+
+	case "Finding.displayID":
+		if e.complexity.Finding.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Finding.DisplayID(childComplexity), true
+
+	case "Finding.displayName":
+		if e.complexity.Finding.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Finding.DisplayName(childComplexity), true
+
+	case "Finding.editors":
+		if e.complexity.Finding.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Finding.entities":
+		if e.complexity.Finding.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Finding.eventTime":
+		if e.complexity.Finding.EventTime == nil {
+			break
+		}
+
+		return e.complexity.Finding.EventTime(childComplexity), true
+
+	case "Finding.exploitability":
+		if e.complexity.Finding.Exploitability == nil {
+			break
+		}
+
+		return e.complexity.Finding.Exploitability(childComplexity), true
+
+	case "Finding.externalID":
+		if e.complexity.Finding.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.Finding.ExternalID(childComplexity), true
+
+	case "Finding.externalOwnerID":
+		if e.complexity.Finding.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Finding.ExternalOwnerID(childComplexity), true
+
+	case "Finding.externalURI":
+		if e.complexity.Finding.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.Finding.ExternalURI(childComplexity), true
+
+	case "Finding.files":
+		if e.complexity.Finding.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Finding.findingClass":
+		if e.complexity.Finding.FindingClass == nil {
+			break
+		}
+
+		return e.complexity.Finding.FindingClass(childComplexity), true
+
+	case "Finding.id":
+		if e.complexity.Finding.ID == nil {
+			break
+		}
+
+		return e.complexity.Finding.ID(childComplexity), true
+
+	case "Finding.impact":
+		if e.complexity.Finding.Impact == nil {
+			break
+		}
+
+		return e.complexity.Finding.Impact(childComplexity), true
+
+	case "Finding.integrations":
+		if e.complexity.Finding.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
+	case "Finding.internalNotes":
+		if e.complexity.Finding.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Finding.InternalNotes(childComplexity), true
+
+	case "Finding.metadata":
+		if e.complexity.Finding.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Finding.Metadata(childComplexity), true
+
+	case "Finding.numericSeverity":
+		if e.complexity.Finding.NumericSeverity == nil {
+			break
+		}
+
+		return e.complexity.Finding.NumericSeverity(childComplexity), true
+
+	case "Finding.open":
+		if e.complexity.Finding.Open == nil {
+			break
+		}
+
+		return e.complexity.Finding.Open(childComplexity), true
+
+	case "Finding.owner":
+		if e.complexity.Finding.Owner == nil {
+			break
+		}
+
+		return e.complexity.Finding.Owner(childComplexity), true
+
+	case "Finding.ownerID":
+		if e.complexity.Finding.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Finding.OwnerID(childComplexity), true
+
+	case "Finding.priority":
+		if e.complexity.Finding.Priority == nil {
+			break
+		}
+
+		return e.complexity.Finding.Priority(childComplexity), true
+
+	case "Finding.production":
+		if e.complexity.Finding.Production == nil {
+			break
+		}
+
+		return e.complexity.Finding.Production(childComplexity), true
+
+	case "Finding.programs":
+		if e.complexity.Finding.Programs == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Finding.public":
+		if e.complexity.Finding.Public == nil {
+			break
+		}
+
+		return e.complexity.Finding.Public(childComplexity), true
+
+	case "Finding.rawPayload":
+		if e.complexity.Finding.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.Finding.RawPayload(childComplexity), true
+
+	case "Finding.recommendation":
+		if e.complexity.Finding.Recommendation == nil {
+			break
+		}
+
+		return e.complexity.Finding.Recommendation(childComplexity), true
+
+	case "Finding.recommendedActions":
+		if e.complexity.Finding.RecommendedActions == nil {
+			break
+		}
+
+		return e.complexity.Finding.RecommendedActions(childComplexity), true
+
+	case "Finding.references":
+		if e.complexity.Finding.References == nil {
+			break
+		}
+
+		return e.complexity.Finding.References(childComplexity), true
+
+	case "Finding.remediationSLA":
+		if e.complexity.Finding.RemediationSLA == nil {
+			break
+		}
+
+		return e.complexity.Finding.RemediationSLA(childComplexity), true
+
+	case "Finding.remediations":
+		if e.complexity.Finding.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Finding.reportedAt":
+		if e.complexity.Finding.ReportedAt == nil {
+			break
+		}
+
+		return e.complexity.Finding.ReportedAt(childComplexity), true
+
+	case "Finding.resourceName":
+		if e.complexity.Finding.ResourceName == nil {
+			break
+		}
+
+		return e.complexity.Finding.ResourceName(childComplexity), true
+
+	case "Finding.reviews":
+		if e.complexity.Finding.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
+	case "Finding.risks":
+		if e.complexity.Finding.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Finding.scans":
+		if e.complexity.Finding.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Finding.score":
+		if e.complexity.Finding.Score == nil {
+			break
+		}
+
+		return e.complexity.Finding.Score(childComplexity), true
+
+	case "Finding.severity":
+		if e.complexity.Finding.Severity == nil {
+			break
+		}
+
+		return e.complexity.Finding.Severity(childComplexity), true
+
+	case "Finding.source":
+		if e.complexity.Finding.Source == nil {
+			break
+		}
+
+		return e.complexity.Finding.Source(childComplexity), true
+
+	case "Finding.sourceUpdatedAt":
+		if e.complexity.Finding.SourceUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Finding.SourceUpdatedAt(childComplexity), true
+
+	case "Finding.state":
+		if e.complexity.Finding.State == nil {
+			break
+		}
+
+		return e.complexity.Finding.State(childComplexity), true
+
+	case "Finding.status":
+		if e.complexity.Finding.Status == nil {
+			break
+		}
+
+		return e.complexity.Finding.Status(childComplexity), true
+
+	case "Finding.stepsToReproduce":
+		if e.complexity.Finding.StepsToReproduce == nil {
+			break
+		}
+
+		return e.complexity.Finding.StepsToReproduce(childComplexity), true
+
+	case "Finding.subcontrols":
+		if e.complexity.Finding.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Finding.systemInternalID":
+		if e.complexity.Finding.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Finding.SystemInternalID(childComplexity), true
+
+	case "Finding.systemOwned":
+		if e.complexity.Finding.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Finding.SystemOwned(childComplexity), true
+
+	case "Finding.tags":
+		if e.complexity.Finding.Tags == nil {
+			break
+		}
+
+		return e.complexity.Finding.Tags(childComplexity), true
+
+	case "Finding.targetDetails":
+		if e.complexity.Finding.TargetDetails == nil {
+			break
+		}
+
+		return e.complexity.Finding.TargetDetails(childComplexity), true
+
+	case "Finding.targets":
+		if e.complexity.Finding.Targets == nil {
+			break
+		}
+
+		return e.complexity.Finding.Targets(childComplexity), true
+
+	case "Finding.tasks":
+		if e.complexity.Finding.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "Finding.updatedAt":
+		if e.complexity.Finding.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Finding.UpdatedAt(childComplexity), true
+
+	case "Finding.updatedBy":
+		if e.complexity.Finding.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Finding.UpdatedBy(childComplexity), true
+
+	case "Finding.validated":
+		if e.complexity.Finding.Validated == nil {
+			break
+		}
+
+		return e.complexity.Finding.Validated(childComplexity), true
+
+	case "Finding.vector":
+		if e.complexity.Finding.Vector == nil {
+			break
+		}
+
+		return e.complexity.Finding.Vector(childComplexity), true
+
+	case "Finding.viewers":
+		if e.complexity.Finding.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Finding.vulnerabilities":
+		if e.complexity.Finding.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "FindingBulkCreatePayload.findings":
+		if e.complexity.FindingBulkCreatePayload.Findings == nil {
+			break
+		}
+
+		return e.complexity.FindingBulkCreatePayload.Findings(childComplexity), true
+
+	case "FindingConnection.edges":
+		if e.complexity.FindingConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.FindingConnection.Edges(childComplexity), true
+
+	case "FindingConnection.pageInfo":
+		if e.complexity.FindingConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.FindingConnection.PageInfo(childComplexity), true
+
+	case "FindingConnection.totalCount":
+		if e.complexity.FindingConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.FindingConnection.TotalCount(childComplexity), true
+
+	case "FindingControl.control":
+		if e.complexity.FindingControl.Control == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.Control(childComplexity), true
+
+	case "FindingControl.controlID":
+		if e.complexity.FindingControl.ControlID == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.ControlID(childComplexity), true
+
+	case "FindingControl.createdAt":
+		if e.complexity.FindingControl.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.CreatedAt(childComplexity), true
+
+	case "FindingControl.createdBy":
+		if e.complexity.FindingControl.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.CreatedBy(childComplexity), true
+
+	case "FindingControl.discoveredAt":
+		if e.complexity.FindingControl.DiscoveredAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.DiscoveredAt(childComplexity), true
+
+	case "FindingControl.externalControlID":
+		if e.complexity.FindingControl.ExternalControlID == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.ExternalControlID(childComplexity), true
+
+	case "FindingControl.externalStandard":
+		if e.complexity.FindingControl.ExternalStandard == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.ExternalStandard(childComplexity), true
+
+	case "FindingControl.externalStandardVersion":
+		if e.complexity.FindingControl.ExternalStandardVersion == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.ExternalStandardVersion(childComplexity), true
+
+	case "FindingControl.finding":
+		if e.complexity.FindingControl.Finding == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.Finding(childComplexity), true
+
+	case "FindingControl.findingID":
+		if e.complexity.FindingControl.FindingID == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.FindingID(childComplexity), true
+
+	case "FindingControl.id":
+		if e.complexity.FindingControl.ID == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.ID(childComplexity), true
+
+	case "FindingControl.metadata":
+		if e.complexity.FindingControl.Metadata == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.Metadata(childComplexity), true
+
+	case "FindingControl.source":
+		if e.complexity.FindingControl.Source == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.Source(childComplexity), true
+
+	case "FindingControl.standard":
+		if e.complexity.FindingControl.Standard == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.Standard(childComplexity), true
+
+	case "FindingControl.standardID":
+		if e.complexity.FindingControl.StandardID == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.StandardID(childComplexity), true
+
+	case "FindingControl.updatedAt":
+		if e.complexity.FindingControl.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.UpdatedAt(childComplexity), true
+
+	case "FindingControl.updatedBy":
+		if e.complexity.FindingControl.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingControl.UpdatedBy(childComplexity), true
+
+	case "FindingControlBulkCreatePayload.findingControls":
+		if e.complexity.FindingControlBulkCreatePayload.FindingControls == nil {
+			break
+		}
+
+		return e.complexity.FindingControlBulkCreatePayload.FindingControls(childComplexity), true
+
+	case "FindingControlConnection.edges":
+		if e.complexity.FindingControlConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.FindingControlConnection.Edges(childComplexity), true
+
+	case "FindingControlConnection.pageInfo":
+		if e.complexity.FindingControlConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.FindingControlConnection.PageInfo(childComplexity), true
+
+	case "FindingControlConnection.totalCount":
+		if e.complexity.FindingControlConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.FindingControlConnection.TotalCount(childComplexity), true
+
+	case "FindingControlCreatePayload.findingControl":
+		if e.complexity.FindingControlCreatePayload.FindingControl == nil {
+			break
+		}
+
+		return e.complexity.FindingControlCreatePayload.FindingControl(childComplexity), true
+
+	case "FindingControlDeletePayload.deletedID":
+		if e.complexity.FindingControlDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlDeletePayload.DeletedID(childComplexity), true
+
+	case "FindingControlEdge.cursor":
+		if e.complexity.FindingControlEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.FindingControlEdge.Cursor(childComplexity), true
+
+	case "FindingControlEdge.node":
+		if e.complexity.FindingControlEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.FindingControlEdge.Node(childComplexity), true
+
+	case "FindingControlHistory.controlID":
+		if e.complexity.FindingControlHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.ControlID(childComplexity), true
+
+	case "FindingControlHistory.createdAt":
+		if e.complexity.FindingControlHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.CreatedAt(childComplexity), true
+
+	case "FindingControlHistory.createdBy":
+		if e.complexity.FindingControlHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.CreatedBy(childComplexity), true
+
+	case "FindingControlHistory.discoveredAt":
+		if e.complexity.FindingControlHistory.DiscoveredAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.DiscoveredAt(childComplexity), true
+
+	case "FindingControlHistory.externalControlID":
+		if e.complexity.FindingControlHistory.ExternalControlID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.ExternalControlID(childComplexity), true
+
+	case "FindingControlHistory.externalStandard":
+		if e.complexity.FindingControlHistory.ExternalStandard == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.ExternalStandard(childComplexity), true
+
+	case "FindingControlHistory.externalStandardVersion":
+		if e.complexity.FindingControlHistory.ExternalStandardVersion == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.ExternalStandardVersion(childComplexity), true
+
+	case "FindingControlHistory.findingID":
+		if e.complexity.FindingControlHistory.FindingID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.FindingID(childComplexity), true
+
+	case "FindingControlHistory.historyTime":
+		if e.complexity.FindingControlHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.HistoryTime(childComplexity), true
+
+	case "FindingControlHistory.id":
+		if e.complexity.FindingControlHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.ID(childComplexity), true
+
+	case "FindingControlHistory.metadata":
+		if e.complexity.FindingControlHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.Metadata(childComplexity), true
+
+	case "FindingControlHistory.operation":
+		if e.complexity.FindingControlHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.Operation(childComplexity), true
+
+	case "FindingControlHistory.ref":
+		if e.complexity.FindingControlHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.Ref(childComplexity), true
+
+	case "FindingControlHistory.source":
+		if e.complexity.FindingControlHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.Source(childComplexity), true
+
+	case "FindingControlHistory.standardID":
+		if e.complexity.FindingControlHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.StandardID(childComplexity), true
+
+	case "FindingControlHistory.updatedAt":
+		if e.complexity.FindingControlHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.UpdatedAt(childComplexity), true
+
+	case "FindingControlHistory.updatedBy":
+		if e.complexity.FindingControlHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistory.UpdatedBy(childComplexity), true
+
+	case "FindingControlHistoryConnection.edges":
+		if e.complexity.FindingControlHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistoryConnection.Edges(childComplexity), true
+
+	case "FindingControlHistoryConnection.pageInfo":
+		if e.complexity.FindingControlHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistoryConnection.PageInfo(childComplexity), true
+
+	case "FindingControlHistoryConnection.totalCount":
+		if e.complexity.FindingControlHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistoryConnection.TotalCount(childComplexity), true
+
+	case "FindingControlHistoryEdge.cursor":
+		if e.complexity.FindingControlHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistoryEdge.Cursor(childComplexity), true
+
+	case "FindingControlHistoryEdge.node":
+		if e.complexity.FindingControlHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.FindingControlHistoryEdge.Node(childComplexity), true
+
+	case "FindingControlUpdatePayload.findingControl":
+		if e.complexity.FindingControlUpdatePayload.FindingControl == nil {
+			break
+		}
+
+		return e.complexity.FindingControlUpdatePayload.FindingControl(childComplexity), true
+
+	case "FindingCreatePayload.finding":
+		if e.complexity.FindingCreatePayload.Finding == nil {
+			break
+		}
+
+		return e.complexity.FindingCreatePayload.Finding(childComplexity), true
+
+	case "FindingDeletePayload.deletedID":
+		if e.complexity.FindingDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.FindingDeletePayload.DeletedID(childComplexity), true
+
+	case "FindingEdge.cursor":
+		if e.complexity.FindingEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.FindingEdge.Cursor(childComplexity), true
+
+	case "FindingEdge.node":
+		if e.complexity.FindingEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.FindingEdge.Node(childComplexity), true
+
+	case "FindingHistory.assessmentID":
+		if e.complexity.FindingHistory.AssessmentID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.AssessmentID(childComplexity), true
+
+	case "FindingHistory.blocksProduction":
+		if e.complexity.FindingHistory.BlocksProduction == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.BlocksProduction(childComplexity), true
+
+	case "FindingHistory.categories":
+		if e.complexity.FindingHistory.Categories == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Categories(childComplexity), true
+
+	case "FindingHistory.category":
+		if e.complexity.FindingHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Category(childComplexity), true
+
+	case "FindingHistory.createdAt":
+		if e.complexity.FindingHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.CreatedAt(childComplexity), true
+
+	case "FindingHistory.createdBy":
+		if e.complexity.FindingHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.CreatedBy(childComplexity), true
+
+	case "FindingHistory.description":
+		if e.complexity.FindingHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Description(childComplexity), true
+
+	case "FindingHistory.displayID":
+		if e.complexity.FindingHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.DisplayID(childComplexity), true
+
+	case "FindingHistory.displayName":
+		if e.complexity.FindingHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.DisplayName(childComplexity), true
+
+	case "FindingHistory.eventTime":
+		if e.complexity.FindingHistory.EventTime == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.EventTime(childComplexity), true
+
+	case "FindingHistory.exploitability":
+		if e.complexity.FindingHistory.Exploitability == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Exploitability(childComplexity), true
+
+	case "FindingHistory.externalID":
+		if e.complexity.FindingHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ExternalID(childComplexity), true
+
+	case "FindingHistory.externalOwnerID":
+		if e.complexity.FindingHistory.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ExternalOwnerID(childComplexity), true
+
+	case "FindingHistory.externalURI":
+		if e.complexity.FindingHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ExternalURI(childComplexity), true
+
+	case "FindingHistory.findingClass":
+		if e.complexity.FindingHistory.FindingClass == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.FindingClass(childComplexity), true
+
+	case "FindingHistory.historyTime":
+		if e.complexity.FindingHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.HistoryTime(childComplexity), true
+
+	case "FindingHistory.id":
+		if e.complexity.FindingHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ID(childComplexity), true
+
+	case "FindingHistory.impact":
+		if e.complexity.FindingHistory.Impact == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Impact(childComplexity), true
+
+	case "FindingHistory.internalNotes":
+		if e.complexity.FindingHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.InternalNotes(childComplexity), true
+
+	case "FindingHistory.metadata":
+		if e.complexity.FindingHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Metadata(childComplexity), true
+
+	case "FindingHistory.numericSeverity":
+		if e.complexity.FindingHistory.NumericSeverity == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.NumericSeverity(childComplexity), true
+
+	case "FindingHistory.open":
+		if e.complexity.FindingHistory.Open == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Open(childComplexity), true
+
+	case "FindingHistory.operation":
+		if e.complexity.FindingHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Operation(childComplexity), true
+
+	case "FindingHistory.ownerID":
+		if e.complexity.FindingHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.OwnerID(childComplexity), true
+
+	case "FindingHistory.priority":
+		if e.complexity.FindingHistory.Priority == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Priority(childComplexity), true
+
+	case "FindingHistory.production":
+		if e.complexity.FindingHistory.Production == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Production(childComplexity), true
+
+	case "FindingHistory.public":
+		if e.complexity.FindingHistory.Public == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Public(childComplexity), true
+
+	case "FindingHistory.rawPayload":
+		if e.complexity.FindingHistory.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.RawPayload(childComplexity), true
+
+	case "FindingHistory.recommendation":
+		if e.complexity.FindingHistory.Recommendation == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Recommendation(childComplexity), true
+
+	case "FindingHistory.recommendedActions":
+		if e.complexity.FindingHistory.RecommendedActions == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.RecommendedActions(childComplexity), true
+
+	case "FindingHistory.ref":
+		if e.complexity.FindingHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Ref(childComplexity), true
+
+	case "FindingHistory.references":
+		if e.complexity.FindingHistory.References == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.References(childComplexity), true
+
+	case "FindingHistory.remediationSLA":
+		if e.complexity.FindingHistory.RemediationSLA == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.RemediationSLA(childComplexity), true
+
+	case "FindingHistory.reportedAt":
+		if e.complexity.FindingHistory.ReportedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ReportedAt(childComplexity), true
+
+	case "FindingHistory.resourceName":
+		if e.complexity.FindingHistory.ResourceName == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.ResourceName(childComplexity), true
+
+	case "FindingHistory.score":
+		if e.complexity.FindingHistory.Score == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Score(childComplexity), true
+
+	case "FindingHistory.severity":
+		if e.complexity.FindingHistory.Severity == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Severity(childComplexity), true
+
+	case "FindingHistory.source":
+		if e.complexity.FindingHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Source(childComplexity), true
+
+	case "FindingHistory.sourceUpdatedAt":
+		if e.complexity.FindingHistory.SourceUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.SourceUpdatedAt(childComplexity), true
+
+	case "FindingHistory.state":
+		if e.complexity.FindingHistory.State == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.State(childComplexity), true
+
+	case "FindingHistory.status":
+		if e.complexity.FindingHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Status(childComplexity), true
+
+	case "FindingHistory.stepsToReproduce":
+		if e.complexity.FindingHistory.StepsToReproduce == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.StepsToReproduce(childComplexity), true
+
+	case "FindingHistory.systemInternalID":
+		if e.complexity.FindingHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.SystemInternalID(childComplexity), true
+
+	case "FindingHistory.systemOwned":
+		if e.complexity.FindingHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.SystemOwned(childComplexity), true
+
+	case "FindingHistory.tags":
+		if e.complexity.FindingHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Tags(childComplexity), true
+
+	case "FindingHistory.targetDetails":
+		if e.complexity.FindingHistory.TargetDetails == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.TargetDetails(childComplexity), true
+
+	case "FindingHistory.targets":
+		if e.complexity.FindingHistory.Targets == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Targets(childComplexity), true
+
+	case "FindingHistory.updatedAt":
+		if e.complexity.FindingHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.UpdatedAt(childComplexity), true
+
+	case "FindingHistory.updatedBy":
+		if e.complexity.FindingHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.UpdatedBy(childComplexity), true
+
+	case "FindingHistory.validated":
+		if e.complexity.FindingHistory.Validated == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Validated(childComplexity), true
+
+	case "FindingHistory.vector":
+		if e.complexity.FindingHistory.Vector == nil {
+			break
+		}
+
+		return e.complexity.FindingHistory.Vector(childComplexity), true
+
+	case "FindingHistoryConnection.edges":
+		if e.complexity.FindingHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.FindingHistoryConnection.Edges(childComplexity), true
+
+	case "FindingHistoryConnection.pageInfo":
+		if e.complexity.FindingHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.FindingHistoryConnection.PageInfo(childComplexity), true
+
+	case "FindingHistoryConnection.totalCount":
+		if e.complexity.FindingHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.FindingHistoryConnection.TotalCount(childComplexity), true
+
+	case "FindingHistoryEdge.cursor":
+		if e.complexity.FindingHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.FindingHistoryEdge.Cursor(childComplexity), true
+
+	case "FindingHistoryEdge.node":
+		if e.complexity.FindingHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.FindingHistoryEdge.Node(childComplexity), true
+
+	case "FindingUpdatePayload.finding":
+		if e.complexity.FindingUpdatePayload.Finding == nil {
+			break
+		}
+
+		return e.complexity.FindingUpdatePayload.Finding(childComplexity), true
+
 	case "Group.controlBlockedGroups":
 		if e.complexity.Group.ControlBlockedGroups == nil {
 			break
@@ -15934,6 +18225,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushUpdatePayload.Hush(childComplexity), true
 
+	case "Integration.actionPlans":
+		if e.complexity.Integration.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
 	case "Integration.createdAt":
 		if e.complexity.Integration.CreatedAt == nil {
 			break
@@ -15978,6 +18281,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Integration.findings":
+		if e.complexity.Integration.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
 
 	case "Integration.id":
 		if e.complexity.Integration.ID == nil {
@@ -16035,6 +18350,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.OwnerID(childComplexity), true
 
+	case "Integration.remediations":
+		if e.complexity.Integration.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Integration.reviews":
+		if e.complexity.Integration.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Integration.secrets":
 		if e.complexity.Integration.Secrets == nil {
 			break
@@ -16068,6 +18407,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.Tags(childComplexity), true
 
+	case "Integration.tasks":
+		if e.complexity.Integration.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
 	case "Integration.updatedAt":
 		if e.complexity.Integration.UpdatedAt == nil {
 			break
@@ -16081,6 +18432,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.UpdatedBy(childComplexity), true
+
+	case "Integration.vulnerabilities":
+		if e.complexity.Integration.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "IntegrationConnection.edges":
 		if e.complexity.IntegrationConnection.Edges == nil {
@@ -19236,6 +21599,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVEvent(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVFinding":
+		if e.complexity.Mutation.CreateBulkCSVFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVFinding(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVFindingControl":
+		if e.complexity.Mutation.CreateBulkCSVFindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVFindingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVFindingControl(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVGroup":
 		if e.complexity.Mutation.CreateBulkCSVGroup == nil {
 			break
@@ -19416,6 +21803,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVProgramMembership(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVRemediation":
+		if e.complexity.Mutation.CreateBulkCSVRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVRemediation(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVReview":
+		if e.complexity.Mutation.CreateBulkCSVReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVReview(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVRisk":
 		if e.complexity.Mutation.CreateBulkCSVRisk == nil {
 			break
@@ -19572,6 +21983,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVVulnerability":
+		if e.complexity.Mutation.CreateBulkCSVVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVVulnerability(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkContact":
 		if e.complexity.Mutation.CreateBulkContact == nil {
 			break
@@ -19703,6 +22126,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkEvent(childComplexity, args["input"].([]*generated.CreateEventInput)), true
+
+	case "Mutation.createBulkFinding":
+		if e.complexity.Mutation.CreateBulkFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkFinding(childComplexity, args["input"].([]*generated.CreateFindingInput)), true
+
+	case "Mutation.createBulkFindingControl":
+		if e.complexity.Mutation.CreateBulkFindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkFindingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkFindingControl(childComplexity, args["input"].([]*generated.CreateFindingControlInput)), true
 
 	case "Mutation.createBulkGroup":
 		if e.complexity.Mutation.CreateBulkGroup == nil {
@@ -19884,6 +22331,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkProgramMembership(childComplexity, args["input"].([]*generated.CreateProgramMembershipInput)), true
 
+	case "Mutation.createBulkRemediation":
+		if e.complexity.Mutation.CreateBulkRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkRemediation(childComplexity, args["input"].([]*generated.CreateRemediationInput)), true
+
+	case "Mutation.createBulkReview":
+		if e.complexity.Mutation.CreateBulkReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkReview(childComplexity, args["input"].([]*generated.CreateReviewInput)), true
+
 	case "Mutation.createBulkRisk":
 		if e.complexity.Mutation.CreateBulkRisk == nil {
 			break
@@ -20039,6 +22510,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkUserSetting(childComplexity, args["input"].([]*generated.CreateUserSettingInput)), true
+
+	case "Mutation.createBulkVulnerability":
+		if e.complexity.Mutation.CreateBulkVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkVulnerability(childComplexity, args["input"].([]*generated.CreateVulnerabilityInput)), true
 
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
@@ -20219,6 +22702,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateExport(childComplexity, args["input"].(generated.CreateExportInput)), true
+
+	case "Mutation.createFinding":
+		if e.complexity.Mutation.CreateFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateFinding(childComplexity, args["input"].(generated.CreateFindingInput)), true
+
+	case "Mutation.createFindingControl":
+		if e.complexity.Mutation.CreateFindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createFindingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateFindingControl(childComplexity, args["input"].(generated.CreateFindingControlInput)), true
 
 	case "Mutation.createFullProgram":
 		if e.complexity.Mutation.CreateFullProgram == nil {
@@ -20544,6 +23051,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateProgramWithMembers(childComplexity, args["input"].(model.CreateProgramWithMembersInput)), true
 
+	case "Mutation.createRemediation":
+		if e.complexity.Mutation.CreateRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput)), true
+
+	case "Mutation.createReview":
+		if e.complexity.Mutation.CreateReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateReview(childComplexity, args["input"].(generated.CreateReviewInput)), true
+
 	case "Mutation.createRisk":
 		if e.complexity.Mutation.CreateRisk == nil {
 			break
@@ -20831,6 +23362,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateUserSetting(childComplexity, args["input"].(generated.CreateUserSettingInput)), true
+
+	case "Mutation.createVulnerability":
+		if e.complexity.Mutation.CreateVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput)), true
 
 	case "Mutation.deleteAPIToken":
 		if e.complexity.Mutation.DeleteAPIToken == nil {
@@ -21540,6 +24083,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteFile(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteFinding":
+		if e.complexity.Mutation.DeleteFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteFinding(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteFindingControl":
+		if e.complexity.Mutation.DeleteFindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteFindingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteFindingControl(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteGroup":
 		if e.complexity.Mutation.DeleteGroup == nil {
 			break
@@ -21816,6 +24383,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteProgramMembership(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteRemediation":
+		if e.complexity.Mutation.DeleteRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteRemediation(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteReview":
+		if e.complexity.Mutation.DeleteReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteReview(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteRisk":
 		if e.complexity.Mutation.DeleteRisk == nil {
 			break
@@ -22031,6 +24622,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteUser(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteVulnerability":
+		if e.complexity.Mutation.DeleteVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteVulnerability(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteWebauthn":
 		if e.complexity.Mutation.DeleteWebauthn == nil {
@@ -22416,6 +25019,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateExport(childComplexity, args["id"].(string), args["input"].(generated.UpdateExportInput), args["exportFiles"].([]*graphql.Upload)), true
 
+	case "Mutation.updateFinding":
+		if e.complexity.Mutation.UpdateFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput)), true
+
+	case "Mutation.updateFindingControl":
+		if e.complexity.Mutation.UpdateFindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateFindingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateFindingControl(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingControlInput)), true
+
 	case "Mutation.updateGroup":
 		if e.complexity.Mutation.UpdateGroup == nil {
 			break
@@ -22667,6 +25294,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateProgramMembership(childComplexity, args["id"].(string), args["input"].(generated.UpdateProgramMembershipInput)), true
+
+	case "Mutation.updateRemediation":
+		if e.complexity.Mutation.UpdateRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput)), true
+
+	case "Mutation.updateReview":
+		if e.complexity.Mutation.UpdateReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateReview(childComplexity, args["id"].(string), args["input"].(generated.UpdateReviewInput)), true
 
 	case "Mutation.updateRisk":
 		if e.complexity.Mutation.UpdateRisk == nil {
@@ -22955,6 +25606,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateUserSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateUserSettingInput)), true
+
+	case "Mutation.updateVulnerability":
+		if e.complexity.Mutation.UpdateVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput)), true
 
 	case "Narrative.blockedGroups":
 		if e.complexity.Narrative.BlockedGroups == nil {
@@ -24617,6 +27280,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "Organization.findings":
+		if e.complexity.Organization.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "Organization.groupCreators":
 		if e.complexity.Organization.GroupCreators == nil {
 			break
@@ -24916,6 +27591,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Organization.remediations":
+		if e.complexity.Organization.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Organization.reviews":
+		if e.complexity.Organization.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Organization.riskCreators":
 		if e.complexity.Organization.RiskCreators == nil {
 			break
@@ -25178,6 +27877,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
+
+	case "Organization.vulnerabilities":
+		if e.complexity.Organization.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "OrganizationBulkCreatePayload.organizations":
 		if e.complexity.OrganizationBulkCreatePayload.Organizations == nil {
@@ -28219,6 +30930,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminFileSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminFindingSearch":
+		if e.complexity.Query.AdminFindingSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminFindingSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminFindingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminGroupSearch":
 		if e.complexity.Query.AdminGroupSearch == nil {
 			break
@@ -28423,6 +31146,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminProgramSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminRemediationSearch":
+		if e.complexity.Query.AdminRemediationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminRemediationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminRemediationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminReviewSearch":
+		if e.complexity.Query.AdminReviewSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminReviewSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminReviewSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminRiskSearch":
 		if e.complexity.Query.AdminRiskSearch == nil {
 			break
@@ -28602,6 +31349,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminUserSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminVulnerabilitySearch":
+		if e.complexity.Query.AdminVulnerabilitySearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminVulnerabilitySearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminVulnerabilitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.adminWebauthnSearch":
 		if e.complexity.Query.AdminWebauthnSearch == nil {
@@ -29444,6 +32203,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Query.finding":
+		if e.complexity.Query.Finding == nil {
+			break
+		}
+
+		args, err := ec.field_Query_finding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Finding(childComplexity, args["id"].(string)), true
+
+	case "Query.findingControl":
+		if e.complexity.Query.FindingControl == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findingControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FindingControl(childComplexity, args["id"].(string)), true
+
+	case "Query.findingControlHistories":
+		if e.complexity.Query.FindingControlHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findingControlHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FindingControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.FindingControlHistoryOrder), args["where"].(*generated.FindingControlHistoryWhereInput)), true
+
+	case "Query.findingControls":
+		if e.complexity.Query.FindingControls == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findingControls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FindingControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingControlOrder), args["where"].(*generated.FindingControlWhereInput)), true
+
+	case "Query.findingHistories":
+		if e.complexity.Query.FindingHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findingHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FindingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.FindingHistoryOrder), args["where"].(*generated.FindingHistoryWhereInput)), true
+
+	case "Query.findingSearch":
+		if e.complexity.Query.FindingSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findingSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FindingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.findings":
+		if e.complexity.Query.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Query_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
 
 	case "Query.group":
 		if e.complexity.Query.Group == nil {
@@ -30465,6 +33308,102 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Query.remediation":
+		if e.complexity.Query.Remediation == nil {
+			break
+		}
+
+		args, err := ec.field_Query_remediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Remediation(childComplexity, args["id"].(string)), true
+
+	case "Query.remediationHistories":
+		if e.complexity.Query.RemediationHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_remediationHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.RemediationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.RemediationHistoryOrder), args["where"].(*generated.RemediationHistoryWhereInput)), true
+
+	case "Query.remediationSearch":
+		if e.complexity.Query.RemediationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_remediationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.RemediationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.remediations":
+		if e.complexity.Query.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Query_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Query.review":
+		if e.complexity.Query.Review == nil {
+			break
+		}
+
+		args, err := ec.field_Query_review_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Review(childComplexity, args["id"].(string)), true
+
+	case "Query.reviewHistories":
+		if e.complexity.Query.ReviewHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reviewHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ReviewHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ReviewHistoryOrder), args["where"].(*generated.ReviewHistoryWhereInput)), true
+
+	case "Query.reviewSearch":
+		if e.complexity.Query.ReviewSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reviewSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ReviewSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.reviews":
+		if e.complexity.Query.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Query.risk":
 		if e.complexity.Query.Risk == nil {
 			break
@@ -31324,6 +34263,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
+	case "Query.vulnerabilities":
+		if e.complexity.Query.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "Query.vulnerability":
+		if e.complexity.Query.Vulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Vulnerability(childComplexity, args["id"].(string)), true
+
+	case "Query.vulnerabilityHistories":
+		if e.complexity.Query.VulnerabilityHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerabilityHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.VulnerabilityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.VulnerabilityHistoryOrder), args["where"].(*generated.VulnerabilityHistoryWhereInput)), true
+
+	case "Query.vulnerabilitySearch":
+		if e.complexity.Query.VulnerabilitySearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerabilitySearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.VulnerabilitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.webauthnSearch":
 		if e.complexity.Query.WebauthnSearch == nil {
 			break
@@ -31347,6 +34334,1485 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Webauthns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WebauthnOrder), args["where"].(*generated.WebauthnWhereInput)), true
+
+	case "Remediation.actionPlans":
+		if e.complexity.Remediation.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Remediation.assets":
+		if e.complexity.Remediation.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Remediation.blockedGroups":
+		if e.complexity.Remediation.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Remediation.comments":
+		if e.complexity.Remediation.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Remediation.completedAt":
+		if e.complexity.Remediation.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.Remediation.CompletedAt(childComplexity), true
+
+	case "Remediation.controls":
+		if e.complexity.Remediation.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Remediation.createdAt":
+		if e.complexity.Remediation.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Remediation.CreatedAt(childComplexity), true
+
+	case "Remediation.createdBy":
+		if e.complexity.Remediation.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Remediation.CreatedBy(childComplexity), true
+
+	case "Remediation.displayID":
+		if e.complexity.Remediation.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.DisplayID(childComplexity), true
+
+	case "Remediation.dueAt":
+		if e.complexity.Remediation.DueAt == nil {
+			break
+		}
+
+		return e.complexity.Remediation.DueAt(childComplexity), true
+
+	case "Remediation.editors":
+		if e.complexity.Remediation.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Remediation.entities":
+		if e.complexity.Remediation.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Remediation.error":
+		if e.complexity.Remediation.Error == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Error(childComplexity), true
+
+	case "Remediation.explanation":
+		if e.complexity.Remediation.Explanation == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Explanation(childComplexity), true
+
+	case "Remediation.externalID":
+		if e.complexity.Remediation.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ExternalID(childComplexity), true
+
+	case "Remediation.externalOwnerID":
+		if e.complexity.Remediation.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ExternalOwnerID(childComplexity), true
+
+	case "Remediation.externalURI":
+		if e.complexity.Remediation.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ExternalURI(childComplexity), true
+
+	case "Remediation.files":
+		if e.complexity.Remediation.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Remediation.findings":
+		if e.complexity.Remediation.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Remediation.id":
+		if e.complexity.Remediation.ID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.ID(childComplexity), true
+
+	case "Remediation.instructions":
+		if e.complexity.Remediation.Instructions == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Instructions(childComplexity), true
+
+	case "Remediation.integrations":
+		if e.complexity.Remediation.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
+	case "Remediation.intent":
+		if e.complexity.Remediation.Intent == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Intent(childComplexity), true
+
+	case "Remediation.internalNotes":
+		if e.complexity.Remediation.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Remediation.InternalNotes(childComplexity), true
+
+	case "Remediation.metadata":
+		if e.complexity.Remediation.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Metadata(childComplexity), true
+
+	case "Remediation.owner":
+		if e.complexity.Remediation.Owner == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Owner(childComplexity), true
+
+	case "Remediation.ownerID":
+		if e.complexity.Remediation.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.OwnerID(childComplexity), true
+
+	case "Remediation.ownerReference":
+		if e.complexity.Remediation.OwnerReference == nil {
+			break
+		}
+
+		return e.complexity.Remediation.OwnerReference(childComplexity), true
+
+	case "Remediation.prGeneratedAt":
+		if e.complexity.Remediation.PrGeneratedAt == nil {
+			break
+		}
+
+		return e.complexity.Remediation.PrGeneratedAt(childComplexity), true
+
+	case "Remediation.programs":
+		if e.complexity.Remediation.Programs == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Remediation.pullRequestURI":
+		if e.complexity.Remediation.PullRequestURI == nil {
+			break
+		}
+
+		return e.complexity.Remediation.PullRequestURI(childComplexity), true
+
+	case "Remediation.repositoryURI":
+		if e.complexity.Remediation.RepositoryURI == nil {
+			break
+		}
+
+		return e.complexity.Remediation.RepositoryURI(childComplexity), true
+
+	case "Remediation.reviews":
+		if e.complexity.Remediation.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
+	case "Remediation.risks":
+		if e.complexity.Remediation.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Remediation.source":
+		if e.complexity.Remediation.Source == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Source(childComplexity), true
+
+	case "Remediation.state":
+		if e.complexity.Remediation.State == nil {
+			break
+		}
+
+		return e.complexity.Remediation.State(childComplexity), true
+
+	case "Remediation.subcontrols":
+		if e.complexity.Remediation.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Remediation.summary":
+		if e.complexity.Remediation.Summary == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Summary(childComplexity), true
+
+	case "Remediation.systemInternalID":
+		if e.complexity.Remediation.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Remediation.SystemInternalID(childComplexity), true
+
+	case "Remediation.systemOwned":
+		if e.complexity.Remediation.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Remediation.SystemOwned(childComplexity), true
+
+	case "Remediation.tags":
+		if e.complexity.Remediation.Tags == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Tags(childComplexity), true
+
+	case "Remediation.tasks":
+		if e.complexity.Remediation.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "Remediation.ticketReference":
+		if e.complexity.Remediation.TicketReference == nil {
+			break
+		}
+
+		return e.complexity.Remediation.TicketReference(childComplexity), true
+
+	case "Remediation.title":
+		if e.complexity.Remediation.Title == nil {
+			break
+		}
+
+		return e.complexity.Remediation.Title(childComplexity), true
+
+	case "Remediation.updatedAt":
+		if e.complexity.Remediation.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Remediation.UpdatedAt(childComplexity), true
+
+	case "Remediation.updatedBy":
+		if e.complexity.Remediation.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Remediation.UpdatedBy(childComplexity), true
+
+	case "Remediation.viewers":
+		if e.complexity.Remediation.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Remediation.vulnerabilities":
+		if e.complexity.Remediation.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Remediation_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Remediation.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "RemediationBulkCreatePayload.remediations":
+		if e.complexity.RemediationBulkCreatePayload.Remediations == nil {
+			break
+		}
+
+		return e.complexity.RemediationBulkCreatePayload.Remediations(childComplexity), true
+
+	case "RemediationConnection.edges":
+		if e.complexity.RemediationConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.RemediationConnection.Edges(childComplexity), true
+
+	case "RemediationConnection.pageInfo":
+		if e.complexity.RemediationConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.RemediationConnection.PageInfo(childComplexity), true
+
+	case "RemediationConnection.totalCount":
+		if e.complexity.RemediationConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.RemediationConnection.TotalCount(childComplexity), true
+
+	case "RemediationCreatePayload.remediation":
+		if e.complexity.RemediationCreatePayload.Remediation == nil {
+			break
+		}
+
+		return e.complexity.RemediationCreatePayload.Remediation(childComplexity), true
+
+	case "RemediationDeletePayload.deletedID":
+		if e.complexity.RemediationDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.RemediationDeletePayload.DeletedID(childComplexity), true
+
+	case "RemediationEdge.cursor":
+		if e.complexity.RemediationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.RemediationEdge.Cursor(childComplexity), true
+
+	case "RemediationEdge.node":
+		if e.complexity.RemediationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.RemediationEdge.Node(childComplexity), true
+
+	case "RemediationHistory.completedAt":
+		if e.complexity.RemediationHistory.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.CompletedAt(childComplexity), true
+
+	case "RemediationHistory.createdAt":
+		if e.complexity.RemediationHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.CreatedAt(childComplexity), true
+
+	case "RemediationHistory.createdBy":
+		if e.complexity.RemediationHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.CreatedBy(childComplexity), true
+
+	case "RemediationHistory.displayID":
+		if e.complexity.RemediationHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.DisplayID(childComplexity), true
+
+	case "RemediationHistory.dueAt":
+		if e.complexity.RemediationHistory.DueAt == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.DueAt(childComplexity), true
+
+	case "RemediationHistory.error":
+		if e.complexity.RemediationHistory.Error == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Error(childComplexity), true
+
+	case "RemediationHistory.explanation":
+		if e.complexity.RemediationHistory.Explanation == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Explanation(childComplexity), true
+
+	case "RemediationHistory.externalID":
+		if e.complexity.RemediationHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ExternalID(childComplexity), true
+
+	case "RemediationHistory.externalOwnerID":
+		if e.complexity.RemediationHistory.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ExternalOwnerID(childComplexity), true
+
+	case "RemediationHistory.externalURI":
+		if e.complexity.RemediationHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ExternalURI(childComplexity), true
+
+	case "RemediationHistory.historyTime":
+		if e.complexity.RemediationHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.HistoryTime(childComplexity), true
+
+	case "RemediationHistory.id":
+		if e.complexity.RemediationHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.ID(childComplexity), true
+
+	case "RemediationHistory.instructions":
+		if e.complexity.RemediationHistory.Instructions == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Instructions(childComplexity), true
+
+	case "RemediationHistory.intent":
+		if e.complexity.RemediationHistory.Intent == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Intent(childComplexity), true
+
+	case "RemediationHistory.internalNotes":
+		if e.complexity.RemediationHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.InternalNotes(childComplexity), true
+
+	case "RemediationHistory.metadata":
+		if e.complexity.RemediationHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Metadata(childComplexity), true
+
+	case "RemediationHistory.operation":
+		if e.complexity.RemediationHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Operation(childComplexity), true
+
+	case "RemediationHistory.ownerID":
+		if e.complexity.RemediationHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.OwnerID(childComplexity), true
+
+	case "RemediationHistory.ownerReference":
+		if e.complexity.RemediationHistory.OwnerReference == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.OwnerReference(childComplexity), true
+
+	case "RemediationHistory.prGeneratedAt":
+		if e.complexity.RemediationHistory.PrGeneratedAt == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.PrGeneratedAt(childComplexity), true
+
+	case "RemediationHistory.pullRequestURI":
+		if e.complexity.RemediationHistory.PullRequestURI == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.PullRequestURI(childComplexity), true
+
+	case "RemediationHistory.ref":
+		if e.complexity.RemediationHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Ref(childComplexity), true
+
+	case "RemediationHistory.repositoryURI":
+		if e.complexity.RemediationHistory.RepositoryURI == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.RepositoryURI(childComplexity), true
+
+	case "RemediationHistory.source":
+		if e.complexity.RemediationHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Source(childComplexity), true
+
+	case "RemediationHistory.state":
+		if e.complexity.RemediationHistory.State == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.State(childComplexity), true
+
+	case "RemediationHistory.summary":
+		if e.complexity.RemediationHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Summary(childComplexity), true
+
+	case "RemediationHistory.systemInternalID":
+		if e.complexity.RemediationHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.SystemInternalID(childComplexity), true
+
+	case "RemediationHistory.systemOwned":
+		if e.complexity.RemediationHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.SystemOwned(childComplexity), true
+
+	case "RemediationHistory.tags":
+		if e.complexity.RemediationHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Tags(childComplexity), true
+
+	case "RemediationHistory.ticketReference":
+		if e.complexity.RemediationHistory.TicketReference == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.TicketReference(childComplexity), true
+
+	case "RemediationHistory.title":
+		if e.complexity.RemediationHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.Title(childComplexity), true
+
+	case "RemediationHistory.updatedAt":
+		if e.complexity.RemediationHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.UpdatedAt(childComplexity), true
+
+	case "RemediationHistory.updatedBy":
+		if e.complexity.RemediationHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistory.UpdatedBy(childComplexity), true
+
+	case "RemediationHistoryConnection.edges":
+		if e.complexity.RemediationHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistoryConnection.Edges(childComplexity), true
+
+	case "RemediationHistoryConnection.pageInfo":
+		if e.complexity.RemediationHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistoryConnection.PageInfo(childComplexity), true
+
+	case "RemediationHistoryConnection.totalCount":
+		if e.complexity.RemediationHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistoryConnection.TotalCount(childComplexity), true
+
+	case "RemediationHistoryEdge.cursor":
+		if e.complexity.RemediationHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistoryEdge.Cursor(childComplexity), true
+
+	case "RemediationHistoryEdge.node":
+		if e.complexity.RemediationHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.RemediationHistoryEdge.Node(childComplexity), true
+
+	case "RemediationUpdatePayload.remediation":
+		if e.complexity.RemediationUpdatePayload.Remediation == nil {
+			break
+		}
+
+		return e.complexity.RemediationUpdatePayload.Remediation(childComplexity), true
+
+	case "Review.actionPlans":
+		if e.complexity.Review.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Review_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Review.approved":
+		if e.complexity.Review.Approved == nil {
+			break
+		}
+
+		return e.complexity.Review.Approved(childComplexity), true
+
+	case "Review.approvedAt":
+		if e.complexity.Review.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.Review.ApprovedAt(childComplexity), true
+
+	case "Review.assets":
+		if e.complexity.Review.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Review_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Review.blockedGroups":
+		if e.complexity.Review.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Review_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Review.category":
+		if e.complexity.Review.Category == nil {
+			break
+		}
+
+		return e.complexity.Review.Category(childComplexity), true
+
+	case "Review.classification":
+		if e.complexity.Review.Classification == nil {
+			break
+		}
+
+		return e.complexity.Review.Classification(childComplexity), true
+
+	case "Review.comments":
+		if e.complexity.Review.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Review_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Review.controls":
+		if e.complexity.Review.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Review_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Review.createdAt":
+		if e.complexity.Review.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Review.CreatedAt(childComplexity), true
+
+	case "Review.createdBy":
+		if e.complexity.Review.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Review.CreatedBy(childComplexity), true
+
+	case "Review.details":
+		if e.complexity.Review.Details == nil {
+			break
+		}
+
+		return e.complexity.Review.Details(childComplexity), true
+
+	case "Review.editors":
+		if e.complexity.Review.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Review_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Review.entities":
+		if e.complexity.Review.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Review_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Review.externalID":
+		if e.complexity.Review.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.Review.ExternalID(childComplexity), true
+
+	case "Review.externalOwnerID":
+		if e.complexity.Review.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Review.ExternalOwnerID(childComplexity), true
+
+	case "Review.externalURI":
+		if e.complexity.Review.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.Review.ExternalURI(childComplexity), true
+
+	case "Review.files":
+		if e.complexity.Review.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Review_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Review.findings":
+		if e.complexity.Review.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Review_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Review.id":
+		if e.complexity.Review.ID == nil {
+			break
+		}
+
+		return e.complexity.Review.ID(childComplexity), true
+
+	case "Review.integrations":
+		if e.complexity.Review.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Review_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
+	case "Review.internalNotes":
+		if e.complexity.Review.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Review.InternalNotes(childComplexity), true
+
+	case "Review.metadata":
+		if e.complexity.Review.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Review.Metadata(childComplexity), true
+
+	case "Review.owner":
+		if e.complexity.Review.Owner == nil {
+			break
+		}
+
+		return e.complexity.Review.Owner(childComplexity), true
+
+	case "Review.ownerID":
+		if e.complexity.Review.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Review.OwnerID(childComplexity), true
+
+	case "Review.programs":
+		if e.complexity.Review.Programs == nil {
+			break
+		}
+
+		args, err := ec.field_Review_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Review.rawPayload":
+		if e.complexity.Review.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.Review.RawPayload(childComplexity), true
+
+	case "Review.remediations":
+		if e.complexity.Review.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Review_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Review.reportedAt":
+		if e.complexity.Review.ReportedAt == nil {
+			break
+		}
+
+		return e.complexity.Review.ReportedAt(childComplexity), true
+
+	case "Review.reporter":
+		if e.complexity.Review.Reporter == nil {
+			break
+		}
+
+		return e.complexity.Review.Reporter(childComplexity), true
+
+	case "Review.reviewedAt":
+		if e.complexity.Review.ReviewedAt == nil {
+			break
+		}
+
+		return e.complexity.Review.ReviewedAt(childComplexity), true
+
+	case "Review.reviewer":
+		if e.complexity.Review.Reviewer == nil {
+			break
+		}
+
+		return e.complexity.Review.Reviewer(childComplexity), true
+
+	case "Review.reviewerID":
+		if e.complexity.Review.ReviewerID == nil {
+			break
+		}
+
+		return e.complexity.Review.ReviewerID(childComplexity), true
+
+	case "Review.risks":
+		if e.complexity.Review.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Review_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Review.source":
+		if e.complexity.Review.Source == nil {
+			break
+		}
+
+		return e.complexity.Review.Source(childComplexity), true
+
+	case "Review.state":
+		if e.complexity.Review.State == nil {
+			break
+		}
+
+		return e.complexity.Review.State(childComplexity), true
+
+	case "Review.subcontrols":
+		if e.complexity.Review.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Review_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Review.summary":
+		if e.complexity.Review.Summary == nil {
+			break
+		}
+
+		return e.complexity.Review.Summary(childComplexity), true
+
+	case "Review.systemInternalID":
+		if e.complexity.Review.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Review.SystemInternalID(childComplexity), true
+
+	case "Review.systemOwned":
+		if e.complexity.Review.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Review.SystemOwned(childComplexity), true
+
+	case "Review.tags":
+		if e.complexity.Review.Tags == nil {
+			break
+		}
+
+		return e.complexity.Review.Tags(childComplexity), true
+
+	case "Review.tasks":
+		if e.complexity.Review.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Review_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "Review.title":
+		if e.complexity.Review.Title == nil {
+			break
+		}
+
+		return e.complexity.Review.Title(childComplexity), true
+
+	case "Review.updatedAt":
+		if e.complexity.Review.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Review.UpdatedAt(childComplexity), true
+
+	case "Review.updatedBy":
+		if e.complexity.Review.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Review.UpdatedBy(childComplexity), true
+
+	case "Review.viewers":
+		if e.complexity.Review.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Review_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Review.vulnerabilities":
+		if e.complexity.Review.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_Review_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Review.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "ReviewBulkCreatePayload.reviews":
+		if e.complexity.ReviewBulkCreatePayload.Reviews == nil {
+			break
+		}
+
+		return e.complexity.ReviewBulkCreatePayload.Reviews(childComplexity), true
+
+	case "ReviewConnection.edges":
+		if e.complexity.ReviewConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ReviewConnection.Edges(childComplexity), true
+
+	case "ReviewConnection.pageInfo":
+		if e.complexity.ReviewConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ReviewConnection.PageInfo(childComplexity), true
+
+	case "ReviewConnection.totalCount":
+		if e.complexity.ReviewConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ReviewConnection.TotalCount(childComplexity), true
+
+	case "ReviewCreatePayload.review":
+		if e.complexity.ReviewCreatePayload.Review == nil {
+			break
+		}
+
+		return e.complexity.ReviewCreatePayload.Review(childComplexity), true
+
+	case "ReviewDeletePayload.deletedID":
+		if e.complexity.ReviewDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ReviewDeletePayload.DeletedID(childComplexity), true
+
+	case "ReviewEdge.cursor":
+		if e.complexity.ReviewEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ReviewEdge.Cursor(childComplexity), true
+
+	case "ReviewEdge.node":
+		if e.complexity.ReviewEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ReviewEdge.Node(childComplexity), true
+
+	case "ReviewHistory.approved":
+		if e.complexity.ReviewHistory.Approved == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Approved(childComplexity), true
+
+	case "ReviewHistory.approvedAt":
+		if e.complexity.ReviewHistory.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ApprovedAt(childComplexity), true
+
+	case "ReviewHistory.category":
+		if e.complexity.ReviewHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Category(childComplexity), true
+
+	case "ReviewHistory.classification":
+		if e.complexity.ReviewHistory.Classification == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Classification(childComplexity), true
+
+	case "ReviewHistory.createdAt":
+		if e.complexity.ReviewHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.CreatedAt(childComplexity), true
+
+	case "ReviewHistory.createdBy":
+		if e.complexity.ReviewHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.CreatedBy(childComplexity), true
+
+	case "ReviewHistory.details":
+		if e.complexity.ReviewHistory.Details == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Details(childComplexity), true
+
+	case "ReviewHistory.externalID":
+		if e.complexity.ReviewHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ExternalID(childComplexity), true
+
+	case "ReviewHistory.externalOwnerID":
+		if e.complexity.ReviewHistory.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ExternalOwnerID(childComplexity), true
+
+	case "ReviewHistory.externalURI":
+		if e.complexity.ReviewHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ExternalURI(childComplexity), true
+
+	case "ReviewHistory.historyTime":
+		if e.complexity.ReviewHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.HistoryTime(childComplexity), true
+
+	case "ReviewHistory.id":
+		if e.complexity.ReviewHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ID(childComplexity), true
+
+	case "ReviewHistory.internalNotes":
+		if e.complexity.ReviewHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.InternalNotes(childComplexity), true
+
+	case "ReviewHistory.metadata":
+		if e.complexity.ReviewHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Metadata(childComplexity), true
+
+	case "ReviewHistory.operation":
+		if e.complexity.ReviewHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Operation(childComplexity), true
+
+	case "ReviewHistory.ownerID":
+		if e.complexity.ReviewHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.OwnerID(childComplexity), true
+
+	case "ReviewHistory.rawPayload":
+		if e.complexity.ReviewHistory.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.RawPayload(childComplexity), true
+
+	case "ReviewHistory.ref":
+		if e.complexity.ReviewHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Ref(childComplexity), true
+
+	case "ReviewHistory.reportedAt":
+		if e.complexity.ReviewHistory.ReportedAt == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ReportedAt(childComplexity), true
+
+	case "ReviewHistory.reporter":
+		if e.complexity.ReviewHistory.Reporter == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Reporter(childComplexity), true
+
+	case "ReviewHistory.reviewedAt":
+		if e.complexity.ReviewHistory.ReviewedAt == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ReviewedAt(childComplexity), true
+
+	case "ReviewHistory.reviewerID":
+		if e.complexity.ReviewHistory.ReviewerID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.ReviewerID(childComplexity), true
+
+	case "ReviewHistory.source":
+		if e.complexity.ReviewHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Source(childComplexity), true
+
+	case "ReviewHistory.state":
+		if e.complexity.ReviewHistory.State == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.State(childComplexity), true
+
+	case "ReviewHistory.summary":
+		if e.complexity.ReviewHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Summary(childComplexity), true
+
+	case "ReviewHistory.systemInternalID":
+		if e.complexity.ReviewHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.SystemInternalID(childComplexity), true
+
+	case "ReviewHistory.systemOwned":
+		if e.complexity.ReviewHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.SystemOwned(childComplexity), true
+
+	case "ReviewHistory.tags":
+		if e.complexity.ReviewHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Tags(childComplexity), true
+
+	case "ReviewHistory.title":
+		if e.complexity.ReviewHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.Title(childComplexity), true
+
+	case "ReviewHistory.updatedAt":
+		if e.complexity.ReviewHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.UpdatedAt(childComplexity), true
+
+	case "ReviewHistory.updatedBy":
+		if e.complexity.ReviewHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistory.UpdatedBy(childComplexity), true
+
+	case "ReviewHistoryConnection.edges":
+		if e.complexity.ReviewHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistoryConnection.Edges(childComplexity), true
+
+	case "ReviewHistoryConnection.pageInfo":
+		if e.complexity.ReviewHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistoryConnection.PageInfo(childComplexity), true
+
+	case "ReviewHistoryConnection.totalCount":
+		if e.complexity.ReviewHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistoryConnection.TotalCount(childComplexity), true
+
+	case "ReviewHistoryEdge.cursor":
+		if e.complexity.ReviewHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistoryEdge.Cursor(childComplexity), true
+
+	case "ReviewHistoryEdge.node":
+		if e.complexity.ReviewHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ReviewHistoryEdge.Node(childComplexity), true
+
+	case "ReviewUpdatePayload.review":
+		if e.complexity.ReviewUpdatePayload.Review == nil {
+			break
+		}
+
+		return e.complexity.ReviewUpdatePayload.Review(childComplexity), true
 
 	case "Risk.actionPlans":
 		if e.complexity.Risk.ActionPlans == nil {
@@ -33035,6 +37501,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Files(childComplexity), true
 
+	case "SearchResults.findings":
+		if e.complexity.SearchResults.Findings == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Findings(childComplexity), true
+
 	case "SearchResults.groups":
 		if e.complexity.SearchResults.Groups == nil {
 			break
@@ -33161,6 +37634,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Programs(childComplexity), true
 
+	case "SearchResults.remediations":
+		if e.complexity.SearchResults.Remediations == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Remediations(childComplexity), true
+
+	case "SearchResults.reviews":
+		if e.complexity.SearchResults.Reviews == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Reviews(childComplexity), true
+
 	case "SearchResults.risks":
 		if e.complexity.SearchResults.Risks == nil {
 			break
@@ -33272,6 +37759,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Users(childComplexity), true
+
+	case "SearchResults.vulnerabilities":
+		if e.complexity.SearchResults.Vulnerabilities == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Vulnerabilities(childComplexity), true
 
 	case "SearchResults.webauthns":
 		if e.complexity.SearchResults.Webauthns == nil {
@@ -35473,6 +39967,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TagDefinitionUpdatePayload.TagDefinition(childComplexity), true
+
+	case "Task.actionPlans":
+		if e.complexity.Task.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Task_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Task.assignee":
 		if e.complexity.Task.Assignee == nil {
@@ -39431,6 +43937,908 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserUpdatePayload.User(childComplexity), true
 
+	case "Vulnerability.actionPlans":
+		if e.complexity.Vulnerability.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Vulnerability.assets":
+		if e.complexity.Vulnerability.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Vulnerability.blockedGroups":
+		if e.complexity.Vulnerability.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Vulnerability.blocking":
+		if e.complexity.Vulnerability.Blocking == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Blocking(childComplexity), true
+
+	case "Vulnerability.category":
+		if e.complexity.Vulnerability.Category == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Category(childComplexity), true
+
+	case "Vulnerability.comments":
+		if e.complexity.Vulnerability.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Vulnerability.controls":
+		if e.complexity.Vulnerability.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Vulnerability.createdAt":
+		if e.complexity.Vulnerability.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.CreatedAt(childComplexity), true
+
+	case "Vulnerability.createdBy":
+		if e.complexity.Vulnerability.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.CreatedBy(childComplexity), true
+
+	case "Vulnerability.cveID":
+		if e.complexity.Vulnerability.CveID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.CveID(childComplexity), true
+
+	case "Vulnerability.description":
+		if e.complexity.Vulnerability.Description == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Description(childComplexity), true
+
+	case "Vulnerability.discoveredAt":
+		if e.complexity.Vulnerability.DiscoveredAt == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.DiscoveredAt(childComplexity), true
+
+	case "Vulnerability.displayID":
+		if e.complexity.Vulnerability.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.DisplayID(childComplexity), true
+
+	case "Vulnerability.displayName":
+		if e.complexity.Vulnerability.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.DisplayName(childComplexity), true
+
+	case "Vulnerability.editors":
+		if e.complexity.Vulnerability.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Vulnerability.entities":
+		if e.complexity.Vulnerability.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Vulnerability.exploitability":
+		if e.complexity.Vulnerability.Exploitability == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Exploitability(childComplexity), true
+
+	case "Vulnerability.externalID":
+		if e.complexity.Vulnerability.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ExternalID(childComplexity), true
+
+	case "Vulnerability.externalOwnerID":
+		if e.complexity.Vulnerability.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ExternalOwnerID(childComplexity), true
+
+	case "Vulnerability.externalURI":
+		if e.complexity.Vulnerability.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ExternalURI(childComplexity), true
+
+	case "Vulnerability.files":
+		if e.complexity.Vulnerability.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Vulnerability.findings":
+		if e.complexity.Vulnerability.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Vulnerability.id":
+		if e.complexity.Vulnerability.ID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.ID(childComplexity), true
+
+	case "Vulnerability.impact":
+		if e.complexity.Vulnerability.Impact == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Impact(childComplexity), true
+
+	case "Vulnerability.impacts":
+		if e.complexity.Vulnerability.Impacts == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Impacts(childComplexity), true
+
+	case "Vulnerability.integrations":
+		if e.complexity.Vulnerability.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
+	case "Vulnerability.internalNotes":
+		if e.complexity.Vulnerability.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.InternalNotes(childComplexity), true
+
+	case "Vulnerability.metadata":
+		if e.complexity.Vulnerability.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Metadata(childComplexity), true
+
+	case "Vulnerability.open":
+		if e.complexity.Vulnerability.Open == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Open(childComplexity), true
+
+	case "Vulnerability.owner":
+		if e.complexity.Vulnerability.Owner == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Owner(childComplexity), true
+
+	case "Vulnerability.ownerID":
+		if e.complexity.Vulnerability.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.OwnerID(childComplexity), true
+
+	case "Vulnerability.priority":
+		if e.complexity.Vulnerability.Priority == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Priority(childComplexity), true
+
+	case "Vulnerability.production":
+		if e.complexity.Vulnerability.Production == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Production(childComplexity), true
+
+	case "Vulnerability.programs":
+		if e.complexity.Vulnerability.Programs == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Vulnerability.public":
+		if e.complexity.Vulnerability.Public == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Public(childComplexity), true
+
+	case "Vulnerability.publishedAt":
+		if e.complexity.Vulnerability.PublishedAt == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.PublishedAt(childComplexity), true
+
+	case "Vulnerability.rawPayload":
+		if e.complexity.Vulnerability.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.RawPayload(childComplexity), true
+
+	case "Vulnerability.references":
+		if e.complexity.Vulnerability.References == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.References(childComplexity), true
+
+	case "Vulnerability.remediationSLA":
+		if e.complexity.Vulnerability.RemediationSLA == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.RemediationSLA(childComplexity), true
+
+	case "Vulnerability.remediations":
+		if e.complexity.Vulnerability.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Vulnerability.reviews":
+		if e.complexity.Vulnerability.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
+	case "Vulnerability.risks":
+		if e.complexity.Vulnerability.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Vulnerability.scans":
+		if e.complexity.Vulnerability.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Vulnerability.score":
+		if e.complexity.Vulnerability.Score == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Score(childComplexity), true
+
+	case "Vulnerability.severity":
+		if e.complexity.Vulnerability.Severity == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Severity(childComplexity), true
+
+	case "Vulnerability.source":
+		if e.complexity.Vulnerability.Source == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Source(childComplexity), true
+
+	case "Vulnerability.sourceUpdatedAt":
+		if e.complexity.Vulnerability.SourceUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.SourceUpdatedAt(childComplexity), true
+
+	case "Vulnerability.status":
+		if e.complexity.Vulnerability.Status == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Status(childComplexity), true
+
+	case "Vulnerability.subcontrols":
+		if e.complexity.Vulnerability.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Vulnerability.summary":
+		if e.complexity.Vulnerability.Summary == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Summary(childComplexity), true
+
+	case "Vulnerability.systemInternalID":
+		if e.complexity.Vulnerability.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.SystemInternalID(childComplexity), true
+
+	case "Vulnerability.systemOwned":
+		if e.complexity.Vulnerability.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.SystemOwned(childComplexity), true
+
+	case "Vulnerability.tags":
+		if e.complexity.Vulnerability.Tags == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Tags(childComplexity), true
+
+	case "Vulnerability.tasks":
+		if e.complexity.Vulnerability.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
+	case "Vulnerability.updatedAt":
+		if e.complexity.Vulnerability.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.UpdatedAt(childComplexity), true
+
+	case "Vulnerability.updatedBy":
+		if e.complexity.Vulnerability.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.UpdatedBy(childComplexity), true
+
+	case "Vulnerability.validated":
+		if e.complexity.Vulnerability.Validated == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Validated(childComplexity), true
+
+	case "Vulnerability.vector":
+		if e.complexity.Vulnerability.Vector == nil {
+			break
+		}
+
+		return e.complexity.Vulnerability.Vector(childComplexity), true
+
+	case "Vulnerability.viewers":
+		if e.complexity.Vulnerability.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Vulnerability.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "VulnerabilityBulkCreatePayload.vulnerabilities":
+		if e.complexity.VulnerabilityBulkCreatePayload.Vulnerabilities == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityBulkCreatePayload.Vulnerabilities(childComplexity), true
+
+	case "VulnerabilityConnection.edges":
+		if e.complexity.VulnerabilityConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityConnection.Edges(childComplexity), true
+
+	case "VulnerabilityConnection.pageInfo":
+		if e.complexity.VulnerabilityConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityConnection.PageInfo(childComplexity), true
+
+	case "VulnerabilityConnection.totalCount":
+		if e.complexity.VulnerabilityConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityConnection.TotalCount(childComplexity), true
+
+	case "VulnerabilityCreatePayload.vulnerability":
+		if e.complexity.VulnerabilityCreatePayload.Vulnerability == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityCreatePayload.Vulnerability(childComplexity), true
+
+	case "VulnerabilityDeletePayload.deletedID":
+		if e.complexity.VulnerabilityDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityDeletePayload.DeletedID(childComplexity), true
+
+	case "VulnerabilityEdge.cursor":
+		if e.complexity.VulnerabilityEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityEdge.Cursor(childComplexity), true
+
+	case "VulnerabilityEdge.node":
+		if e.complexity.VulnerabilityEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityEdge.Node(childComplexity), true
+
+	case "VulnerabilityHistory.blocking":
+		if e.complexity.VulnerabilityHistory.Blocking == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Blocking(childComplexity), true
+
+	case "VulnerabilityHistory.category":
+		if e.complexity.VulnerabilityHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Category(childComplexity), true
+
+	case "VulnerabilityHistory.createdAt":
+		if e.complexity.VulnerabilityHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.CreatedAt(childComplexity), true
+
+	case "VulnerabilityHistory.createdBy":
+		if e.complexity.VulnerabilityHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.CreatedBy(childComplexity), true
+
+	case "VulnerabilityHistory.cveID":
+		if e.complexity.VulnerabilityHistory.CveID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.CveID(childComplexity), true
+
+	case "VulnerabilityHistory.description":
+		if e.complexity.VulnerabilityHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Description(childComplexity), true
+
+	case "VulnerabilityHistory.discoveredAt":
+		if e.complexity.VulnerabilityHistory.DiscoveredAt == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.DiscoveredAt(childComplexity), true
+
+	case "VulnerabilityHistory.displayID":
+		if e.complexity.VulnerabilityHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.DisplayID(childComplexity), true
+
+	case "VulnerabilityHistory.displayName":
+		if e.complexity.VulnerabilityHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.DisplayName(childComplexity), true
+
+	case "VulnerabilityHistory.exploitability":
+		if e.complexity.VulnerabilityHistory.Exploitability == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Exploitability(childComplexity), true
+
+	case "VulnerabilityHistory.externalID":
+		if e.complexity.VulnerabilityHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ExternalID(childComplexity), true
+
+	case "VulnerabilityHistory.externalOwnerID":
+		if e.complexity.VulnerabilityHistory.ExternalOwnerID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ExternalOwnerID(childComplexity), true
+
+	case "VulnerabilityHistory.externalURI":
+		if e.complexity.VulnerabilityHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ExternalURI(childComplexity), true
+
+	case "VulnerabilityHistory.historyTime":
+		if e.complexity.VulnerabilityHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.HistoryTime(childComplexity), true
+
+	case "VulnerabilityHistory.id":
+		if e.complexity.VulnerabilityHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.ID(childComplexity), true
+
+	case "VulnerabilityHistory.impact":
+		if e.complexity.VulnerabilityHistory.Impact == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Impact(childComplexity), true
+
+	case "VulnerabilityHistory.impacts":
+		if e.complexity.VulnerabilityHistory.Impacts == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Impacts(childComplexity), true
+
+	case "VulnerabilityHistory.internalNotes":
+		if e.complexity.VulnerabilityHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.InternalNotes(childComplexity), true
+
+	case "VulnerabilityHistory.metadata":
+		if e.complexity.VulnerabilityHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Metadata(childComplexity), true
+
+	case "VulnerabilityHistory.open":
+		if e.complexity.VulnerabilityHistory.Open == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Open(childComplexity), true
+
+	case "VulnerabilityHistory.operation":
+		if e.complexity.VulnerabilityHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Operation(childComplexity), true
+
+	case "VulnerabilityHistory.ownerID":
+		if e.complexity.VulnerabilityHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.OwnerID(childComplexity), true
+
+	case "VulnerabilityHistory.priority":
+		if e.complexity.VulnerabilityHistory.Priority == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Priority(childComplexity), true
+
+	case "VulnerabilityHistory.production":
+		if e.complexity.VulnerabilityHistory.Production == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Production(childComplexity), true
+
+	case "VulnerabilityHistory.public":
+		if e.complexity.VulnerabilityHistory.Public == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Public(childComplexity), true
+
+	case "VulnerabilityHistory.publishedAt":
+		if e.complexity.VulnerabilityHistory.PublishedAt == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.PublishedAt(childComplexity), true
+
+	case "VulnerabilityHistory.rawPayload":
+		if e.complexity.VulnerabilityHistory.RawPayload == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.RawPayload(childComplexity), true
+
+	case "VulnerabilityHistory.ref":
+		if e.complexity.VulnerabilityHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Ref(childComplexity), true
+
+	case "VulnerabilityHistory.references":
+		if e.complexity.VulnerabilityHistory.References == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.References(childComplexity), true
+
+	case "VulnerabilityHistory.remediationSLA":
+		if e.complexity.VulnerabilityHistory.RemediationSLA == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.RemediationSLA(childComplexity), true
+
+	case "VulnerabilityHistory.score":
+		if e.complexity.VulnerabilityHistory.Score == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Score(childComplexity), true
+
+	case "VulnerabilityHistory.severity":
+		if e.complexity.VulnerabilityHistory.Severity == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Severity(childComplexity), true
+
+	case "VulnerabilityHistory.source":
+		if e.complexity.VulnerabilityHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Source(childComplexity), true
+
+	case "VulnerabilityHistory.sourceUpdatedAt":
+		if e.complexity.VulnerabilityHistory.SourceUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
+
+	case "VulnerabilityHistory.status":
+		if e.complexity.VulnerabilityHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Status(childComplexity), true
+
+	case "VulnerabilityHistory.summary":
+		if e.complexity.VulnerabilityHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Summary(childComplexity), true
+
+	case "VulnerabilityHistory.systemInternalID":
+		if e.complexity.VulnerabilityHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.SystemInternalID(childComplexity), true
+
+	case "VulnerabilityHistory.systemOwned":
+		if e.complexity.VulnerabilityHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.SystemOwned(childComplexity), true
+
+	case "VulnerabilityHistory.tags":
+		if e.complexity.VulnerabilityHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Tags(childComplexity), true
+
+	case "VulnerabilityHistory.updatedAt":
+		if e.complexity.VulnerabilityHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.UpdatedAt(childComplexity), true
+
+	case "VulnerabilityHistory.updatedBy":
+		if e.complexity.VulnerabilityHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.UpdatedBy(childComplexity), true
+
+	case "VulnerabilityHistory.validated":
+		if e.complexity.VulnerabilityHistory.Validated == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Validated(childComplexity), true
+
+	case "VulnerabilityHistory.vector":
+		if e.complexity.VulnerabilityHistory.Vector == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistory.Vector(childComplexity), true
+
+	case "VulnerabilityHistoryConnection.edges":
+		if e.complexity.VulnerabilityHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistoryConnection.Edges(childComplexity), true
+
+	case "VulnerabilityHistoryConnection.pageInfo":
+		if e.complexity.VulnerabilityHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistoryConnection.PageInfo(childComplexity), true
+
+	case "VulnerabilityHistoryConnection.totalCount":
+		if e.complexity.VulnerabilityHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistoryConnection.TotalCount(childComplexity), true
+
+	case "VulnerabilityHistoryEdge.cursor":
+		if e.complexity.VulnerabilityHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistoryEdge.Cursor(childComplexity), true
+
+	case "VulnerabilityHistoryEdge.node":
+		if e.complexity.VulnerabilityHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityHistoryEdge.Node(childComplexity), true
+
+	case "VulnerabilityUpdatePayload.vulnerability":
+		if e.complexity.VulnerabilityUpdatePayload.Vulnerability == nil {
+			break
+		}
+
+		return e.complexity.VulnerabilityUpdatePayload.Vulnerability(childComplexity), true
+
 	case "Webauthn.aaguid":
 		if e.complexity.Webauthn.Aaguid == nil {
 			break
@@ -39611,6 +45019,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateEvidenceInput,
 		ec.unmarshalInputCreateExportInput,
 		ec.unmarshalInputCreateFileInput,
+		ec.unmarshalInputCreateFindingControlInput,
+		ec.unmarshalInputCreateFindingInput,
 		ec.unmarshalInputCreateFullProgramInput,
 		ec.unmarshalInputCreateGroupInput,
 		ec.unmarshalInputCreateGroupMembershipInput,
@@ -39637,6 +45047,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateProgramInput,
 		ec.unmarshalInputCreateProgramMembershipInput,
 		ec.unmarshalInputCreateProgramWithMembersInput,
+		ec.unmarshalInputCreateRemediationInput,
+		ec.unmarshalInputCreateReviewInput,
 		ec.unmarshalInputCreateRiskInput,
 		ec.unmarshalInputCreateScanInput,
 		ec.unmarshalInputCreateScheduledJobInput,
@@ -39659,6 +45071,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterWatermarkConfigInput,
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
+		ec.unmarshalInputCreateVulnerabilityInput,
 		ec.unmarshalInputCustomDomainHistoryOrder,
 		ec.unmarshalInputCustomDomainHistoryWhereInput,
 		ec.unmarshalInputCustomDomainOrder,
@@ -39693,6 +45106,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputFileHistoryWhereInput,
 		ec.unmarshalInputFileOrder,
 		ec.unmarshalInputFileWhereInput,
+		ec.unmarshalInputFindingControlHistoryOrder,
+		ec.unmarshalInputFindingControlHistoryWhereInput,
+		ec.unmarshalInputFindingControlOrder,
+		ec.unmarshalInputFindingControlWhereInput,
+		ec.unmarshalInputFindingHistoryOrder,
+		ec.unmarshalInputFindingHistoryWhereInput,
+		ec.unmarshalInputFindingOrder,
+		ec.unmarshalInputFindingWhereInput,
 		ec.unmarshalInputGroupHistoryOrder,
 		ec.unmarshalInputGroupHistoryWhereInput,
 		ec.unmarshalInputGroupMembersInput,
@@ -39782,6 +45203,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputProgramMembershipWhereInput,
 		ec.unmarshalInputProgramOrder,
 		ec.unmarshalInputProgramWhereInput,
+		ec.unmarshalInputRemediationHistoryOrder,
+		ec.unmarshalInputRemediationHistoryWhereInput,
+		ec.unmarshalInputRemediationOrder,
+		ec.unmarshalInputRemediationWhereInput,
+		ec.unmarshalInputReviewHistoryOrder,
+		ec.unmarshalInputReviewHistoryWhereInput,
+		ec.unmarshalInputReviewOrder,
+		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskHistoryOrder,
 		ec.unmarshalInputRiskHistoryWhereInput,
 		ec.unmarshalInputRiskOrder,
@@ -39867,6 +45296,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateEvidenceInput,
 		ec.unmarshalInputUpdateExportInput,
 		ec.unmarshalInputUpdateFileInput,
+		ec.unmarshalInputUpdateFindingControlInput,
+		ec.unmarshalInputUpdateFindingInput,
 		ec.unmarshalInputUpdateGroupInput,
 		ec.unmarshalInputUpdateGroupMembershipInput,
 		ec.unmarshalInputUpdateGroupSettingInput,
@@ -39889,6 +45320,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateProcedureInput,
 		ec.unmarshalInputUpdateProgramInput,
 		ec.unmarshalInputUpdateProgramMembershipInput,
+		ec.unmarshalInputUpdateRemediationInput,
+		ec.unmarshalInputUpdateReviewInput,
 		ec.unmarshalInputUpdateRiskInput,
 		ec.unmarshalInputUpdateScanInput,
 		ec.unmarshalInputUpdateScheduledJobInput,
@@ -39909,6 +45342,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTrustCenterWatermarkConfigInput,
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
+		ec.unmarshalInputUpdateVulnerabilityInput,
 		ec.unmarshalInputUserHistoryOrder,
 		ec.unmarshalInputUserHistoryWhereInput,
 		ec.unmarshalInputUserOrder,
@@ -39917,6 +45351,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUserSettingOrder,
 		ec.unmarshalInputUserSettingWhereInput,
 		ec.unmarshalInputUserWhereInput,
+		ec.unmarshalInputVulnerabilityHistoryOrder,
+		ec.unmarshalInputVulnerabilityHistoryWhereInput,
+		ec.unmarshalInputVulnerabilityOrder,
+		ec.unmarshalInputVulnerabilityWhereInput,
 		ec.unmarshalInputWebauthnOrder,
 		ec.unmarshalInputWebauthnWhereInput,
 	)
@@ -40619,6 +46057,31 @@ type ActionPlanBulkDeletePayload {
         last: Int
     ): FileConnection
     """
+    Search across Finding objects
+    """
+    adminFindingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): FindingConnection
+    """
     Search across Group objects
     """
     adminGroupSearch(
@@ -41044,6 +46507,56 @@ type ActionPlanBulkDeletePayload {
         last: Int
     ): ProgramConnection
     """
+    Search across Remediation objects
+    """
+    adminRemediationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): RemediationConnection
+    """
+    Search across Review objects
+    """
+    adminReviewSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ReviewConnection
+    """
     Search across Risk objects
     """
     adminRiskSearch(
@@ -41393,6 +46906,31 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): UserSettingConnection
+    """
+    Search across Vulnerability objects
+    """
+    adminVulnerabilitySearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): VulnerabilityConnection
     """
     Search across Webauthn objects
     """
@@ -43663,13 +49201,45 @@ type ActionPlan implements Node {
   """
   actionPlanKindID: ID
   """
+  short title describing the action plan
+  """
+  title: String!
+  """
+  detailed description of remediation steps and objectives
+  """
+  description: String
+  """
   due date of the action plan
   """
   dueDate: Time
   """
+  timestamp when the action plan was completed
+  """
+  completedAt: Time
+  """
   priority of the action plan
   """
   priority: ActionPlanPriority
+  """
+  indicates if the action plan requires explicit approval before closure
+  """
+  requiresApproval: Boolean!
+  """
+  true when the action plan is currently blocked
+  """
+  blocked: Boolean!
+  """
+  context on why the action plan is blocked
+  """
+  blockerReason: String
+  """
+  additional structured metadata for the action plan
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
   """
   source of the action plan
   """
@@ -43777,6 +49347,192 @@ type ActionPlan implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
   file: File
 }
 """
@@ -43939,13 +49695,45 @@ type ActionPlanHistory implements Node {
   """
   actionPlanKindID: String
   """
+  short title describing the action plan
+  """
+  title: String!
+  """
+  detailed description of remediation steps and objectives
+  """
+  description: String
+  """
   due date of the action plan
   """
   dueDate: Time
   """
+  timestamp when the action plan was completed
+  """
+  completedAt: Time
+  """
   priority of the action plan
   """
   priority: ActionPlanHistoryPriority
+  """
+  indicates if the action plan requires explicit approval before closure
+  """
+  requiresApproval: Boolean!
+  """
+  true when the action plan is currently blocked
+  """
+  blocked: Boolean!
+  """
+  context on why the action plan is blocked
+  """
+  blockerReason: String
+  """
+  additional structured metadata for the action plan
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
   """
   source of the action plan
   """
@@ -44033,6 +49821,7 @@ enum ActionPlanHistoryOrderField {
   STATUS
   review_due
   REVIEW_FREQUENCY
+  title
   due_date
   PRIORITY
   source
@@ -44443,6 +50232,40 @@ input ActionPlanHistoryWhereInput {
   actionPlanKindIDEqualFold: String
   actionPlanKindIDContainsFold: String
   """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
   due_date field predicates
   """
   dueDate: Time
@@ -44456,6 +50279,19 @@ input ActionPlanHistoryWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
+  completed_at field predicates
+  """
+  completedAt: Time
+  completedAtNEQ: Time
+  completedAtIn: [Time!]
+  completedAtNotIn: [Time!]
+  completedAtGT: Time
+  completedAtGTE: Time
+  completedAtLT: Time
+  completedAtLTE: Time
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
   priority field predicates
   """
   priority: ActionPlanHistoryPriority
@@ -44464,6 +50300,34 @@ input ActionPlanHistoryWhereInput {
   priorityNotIn: [ActionPlanHistoryPriority!]
   priorityIsNil: Boolean
   priorityNotNil: Boolean
+  """
+  requires_approval field predicates
+  """
+  requiresApproval: Boolean
+  requiresApprovalNEQ: Boolean
+  """
+  blocked field predicates
+  """
+  blocked: Boolean
+  blockedNEQ: Boolean
+  """
+  blocker_reason field predicates
+  """
+  blockerReason: String
+  blockerReasonNEQ: String
+  blockerReasonIn: [String!]
+  blockerReasonNotIn: [String!]
+  blockerReasonGT: String
+  blockerReasonGTE: String
+  blockerReasonLT: String
+  blockerReasonLTE: String
+  blockerReasonContains: String
+  blockerReasonHasPrefix: String
+  blockerReasonHasSuffix: String
+  blockerReasonIsNil: Boolean
+  blockerReasonNotNil: Boolean
+  blockerReasonEqualFold: String
+  blockerReasonContainsFold: String
   """
   source field predicates
   """
@@ -44507,6 +50371,7 @@ enum ActionPlanOrderField {
   STATUS
   review_due
   REVIEW_FREQUENCY
+  title
   due_date
   PRIORITY
   source
@@ -44881,6 +50746,40 @@ input ActionPlanWhereInput {
   actionPlanKindIDEqualFold: ID
   actionPlanKindIDContainsFold: ID
   """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
   due_date field predicates
   """
   dueDate: Time
@@ -44894,6 +50793,19 @@ input ActionPlanWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
+  completed_at field predicates
+  """
+  completedAt: Time
+  completedAtNEQ: Time
+  completedAtIn: [Time!]
+  completedAtNotIn: [Time!]
+  completedAtGT: Time
+  completedAtGTE: Time
+  completedAtLT: Time
+  completedAtLTE: Time
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
   priority field predicates
   """
   priority: ActionPlanPriority
@@ -44902,6 +50814,34 @@ input ActionPlanWhereInput {
   priorityNotIn: [ActionPlanPriority!]
   priorityIsNil: Boolean
   priorityNotNil: Boolean
+  """
+  requires_approval field predicates
+  """
+  requiresApproval: Boolean
+  requiresApprovalNEQ: Boolean
+  """
+  blocked field predicates
+  """
+  blocked: Boolean
+  blockedNEQ: Boolean
+  """
+  blocker_reason field predicates
+  """
+  blockerReason: String
+  blockerReasonNEQ: String
+  blockerReasonIn: [String!]
+  blockerReasonNotIn: [String!]
+  blockerReasonGT: String
+  blockerReasonGTE: String
+  blockerReasonLT: String
+  blockerReasonLTE: String
+  blockerReasonContains: String
+  blockerReasonHasPrefix: String
+  blockerReasonHasSuffix: String
+  blockerReasonIsNil: Boolean
+  blockerReasonNotNil: Boolean
+  blockerReasonEqualFold: String
+  blockerReasonContainsFold: String
   """
   source field predicates
   """
@@ -44955,6 +50895,36 @@ input ActionPlanWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
   """
   file edge predicates
   """
@@ -48683,6 +54653,37 @@ type Control implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
   controlImplementations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48776,6 +54777,37 @@ type Control implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  controlMappings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControls returned from the connection.
+    """
+    orderBy: [FindingControlOrder!]
+
+    """
+    Filtering options for FindingControls returned from the connection.
+    """
+    where: FindingControlWhereInput
+  ): FindingControlConnection!
 }
 """
 A connection to a list of items.
@@ -52423,6 +58455,11 @@ input ControlWhereInput {
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
   """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
   control_implementations edge predicates
   """
   hasControlImplementations: Boolean
@@ -52437,6 +58474,11 @@ input ControlWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  control_mappings edge predicates
+  """
+  hasControlMappings: Boolean
+  hasControlMappingsWith: [FindingControlWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -52561,13 +58603,45 @@ input CreateActionPlanInput {
   """
   actionPlanKindName: String
   """
+  short title describing the action plan
+  """
+  title: String!
+  """
+  detailed description of remediation steps and objectives
+  """
+  description: String
+  """
   due date of the action plan
   """
   dueDate: Time
   """
+  timestamp when the action plan was completed
+  """
+  completedAt: Time
+  """
   priority of the action plan
   """
   priority: ActionPlanPriority
+  """
+  indicates if the action plan requires explicit approval before closure
+  """
+  requiresApproval: Boolean
+  """
+  true when the action plan is currently blocked
+  """
+  blocked: Boolean
+  """
+  context on why the action plan is blocked
+  """
+  blockerReason: String
+  """
+  additional structured metadata for the action plan
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
   """
   source of the action plan
   """
@@ -52579,6 +58653,12 @@ input CreateActionPlanInput {
   riskIDs: [ID!]
   controlIDs: [ID!]
   programIDs: [ID!]
+  findingIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
+  taskIDs: [ID!]
+  integrationIDs: [ID!]
   fileID: ID
 }
 """
@@ -52900,6 +58980,7 @@ input CreateControlInput {
   programIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  findingIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
   scheduledJobIDs: [ID!]
@@ -53369,6 +59450,224 @@ input CreateFileInput {
   subprocessorIDs: [ID!]
   integrationIDs: [ID!]
   secretIDs: [ID!]
+}
+"""
+CreateFindingControlInput is used for create FindingControl object.
+Input was generated by ent.
+"""
+input CreateFindingControlInput {
+  """
+  external identifier for the standard provided by the source system such as iso or hipaa
+  """
+  externalStandard: String
+  """
+  version for the external standard provided by the source system
+  """
+  externalStandardVersion: String
+  """
+  control identifier provided by the source system such as A.5.10
+  """
+  externalControlID: String
+  """
+  the integration source that provided the mapping
+  """
+  source: String
+  """
+  additional metadata about the control mapping from the source system
+  """
+  metadata: Map
+  """
+  timestamp when the mapping was first observed
+  """
+  discoveredAt: DateTime
+  findingID: ID!
+  controlID: ID!
+  standardID: ID
+}
+"""
+CreateFindingInput is used for create Finding object.
+Input was generated by ent.
+"""
+input CreateFindingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  external identifier from the integration source for the finding
+  """
+  externalID: String
+  """
+  the owner of the finding
+  """
+  externalOwnerID: String
+  """
+  system that produced the finding, e.g. gcp_scc
+  """
+  source: String
+  """
+  resource identifier provided by the source system
+  """
+  resourceName: String
+  """
+  display name for the finding when provided by the source
+  """
+  displayName: String
+  """
+  state reported by the source system, such as ACTIVE or INACTIVE
+  """
+  state: String
+  """
+  primary category of the finding
+  """
+  category: String
+  """
+  normalized categories for the finding
+  """
+  categories: [String!]
+  """
+  classification provided by the source, e.g. MISCONFIGURATION
+  """
+  findingClass: String
+  """
+  severity label for the finding
+  """
+  severity: String
+  """
+  numeric severity score for the finding if provided
+  """
+  numericSeverity: Float
+  """
+  aggregated score such as CVSS for the finding
+  """
+  score: Float
+  """
+  impact score or rating for the finding
+  """
+  impact: Float
+  """
+  exploitability score or rating for the finding
+  """
+  exploitability: Float
+  """
+  priority assigned to the finding
+  """
+  priority: String
+  """
+  indicates if the finding is still open
+  """
+  open: Boolean
+  """
+  true when the finding blocks production changes
+  """
+  blocksProduction: Boolean
+  """
+  true when the finding affects production systems
+  """
+  production: Boolean
+  """
+  true when the finding is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the finding has been validated by the security team
+  """
+  validated: Boolean
+  """
+  identifier for the assessment that generated the finding
+  """
+  assessmentID: String
+  """
+  long form description of the finding
+  """
+  description: String
+  """
+  short recommendation text from the source system (deprecated upstream)
+  """
+  recommendation: String
+  """
+  markdown formatted remediation guidance for the finding
+  """
+  recommendedActions: String
+  """
+  reference links for the finding
+  """
+  references: [String!]
+  """
+  steps required to reproduce the finding
+  """
+  stepsToReproduce: [String!]
+  """
+  targets impacted by the finding such as projects or applications
+  """
+  targets: [String!]
+  """
+  structured details about the impacted targets
+  """
+  targetDetails: Map
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  lifecycle status of the finding
+  """
+  status: String
+  """
+  timestamp when the finding was last observed by the source
+  """
+  eventTime: DateTime
+  """
+  timestamp when the finding was first reported by the source
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the source last updated the finding
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the finding in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the finding from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  integrationIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  actionPlanIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  riskIDs: [ID!]
+  programIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  scanIDs: [ID!]
+  taskIDs: [ID!]
+  remediationIDs: [ID!]
+  reviewIDs: [ID!]
+  commentIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -54079,6 +60378,10 @@ input CreateOrganizationInput {
   assessmentResponseIDs: [ID!]
   customTypeEnumIDs: [ID!]
   tagDefinitionIDs: [ID!]
+  remediationIDs: [ID!]
+  findingIDs: [ID!]
+  reviewIDs: [ID!]
+  vulnerabilityIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -54399,6 +60702,223 @@ input CreateProgramMembershipInput {
   role: ProgramMembershipRole
   programID: ID!
   userID: ID!
+}
+"""
+CreateRemediationInput is used for create Remediation object.
+Input was generated by ent.
+"""
+input CreateRemediationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalOwnerID: String
+  """
+  title or short description of the remediation effort
+  """
+  title: String
+  """
+  state of the remediation, such as pending or completed
+  """
+  state: String
+  """
+  intent or goal of the remediation effort
+  """
+  intent: String
+  """
+  summary of the remediation approach
+  """
+  summary: String
+  """
+  detailed explanation of the remediation steps
+  """
+  explanation: String
+  """
+  specific instructions or steps to implement the remediation
+  """
+  instructions: String
+  """
+  reference to the owner responsible for remediation
+  """
+  ownerReference: String
+  """
+  source code repository URI associated with the remediation
+  """
+  repositoryURI: String
+  """
+  pull request URI associated with the remediation
+  """
+  pullRequestURI: String
+  """
+  reference to a tracking ticket for the remediation
+  """
+  ticketReference: String
+  """
+  timestamp when the remediation is due
+  """
+  dueAt: DateTime
+  """
+  timestamp when the remediation was completed
+  """
+  completedAt: DateTime
+  """
+  timestamp when an automated pull request was generated
+  """
+  prGeneratedAt: DateTime
+  """
+  details about any errors encountered during remediation automation
+  """
+  error: String
+  """
+  system that produced the remediation record
+  """
+  source: String
+  """
+  link to the remediation in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  integrationIDs: [ID!]
+  findingIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  actionPlanIDs: [ID!]
+  taskIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  riskIDs: [ID!]
+  programIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  reviewIDs: [ID!]
+  commentIDs: [ID!]
+  fileIDs: [ID!]
+}
+"""
+CreateReviewInput is used for create Review object.
+Input was generated by ent.
+"""
+input CreateReviewInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  external identifier from the integration source for the review
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the review
+  """
+  externalOwnerID: String
+  """
+  title of the review
+  """
+  title: String!
+  """
+  state of the review
+  """
+  state: String
+  """
+  category for the review record
+  """
+  category: String
+  """
+  classification or sensitivity of the review record
+  """
+  classification: String
+  """
+  summary text for the review
+  """
+  summary: String
+  """
+  detailed notes captured during the review
+  """
+  details: String
+  """
+  person or system that created the review
+  """
+  reporter: String
+  """
+  true when the review has been approved
+  """
+  approved: Boolean
+  """
+  timestamp when the review was completed
+  """
+  reviewedAt: DateTime
+  """
+  timestamp when the review was reported or opened
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the review was approved
+  """
+  approvedAt: DateTime
+  """
+  system that produced the review record
+  """
+  source: String
+  """
+  link to the review in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the review from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  integrationIDs: [ID!]
+  findingIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  actionPlanIDs: [ID!]
+  remediationIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  riskIDs: [ID!]
+  programIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  taskIDs: [ID!]
+  reviewerID: ID
+  commentIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateRiskInput is used for create Risk object.
@@ -54909,6 +61429,7 @@ input CreateTaskInput {
   programIDs: [ID!]
   riskIDs: [ID!]
   controlImplementationIDs: [ID!]
+  actionPlanIDs: [ID!]
   evidenceIDs: [ID!]
 }
 """
@@ -55252,6 +61773,159 @@ input CreateUserSettingInput {
   isTfaEnabled: Boolean
   userID: ID
   defaultOrgID: ID
+  fileIDs: [ID!]
+}
+"""
+CreateVulnerabilityInput is used for create Vulnerability object.
+Input was generated by ent.
+"""
+input CreateVulnerabilityInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  owner of the vulnerability
+  """
+  externalOwnerID: String
+  """
+  external identifier from the integration source for the vulnerability
+  """
+  externalID: String!
+  """
+  CVE identifier for the vulnerability when applicable
+  """
+  cveID: String
+  """
+  system that produced the vulnerability record
+  """
+  source: String
+  """
+  display name for the vulnerability when provided
+  """
+  displayName: String
+  """
+  category of the vulnerability such as application or infrastructure
+  """
+  category: String
+  """
+  severity label for the vulnerability
+  """
+  severity: String
+  """
+  overall score such as CVSS for the vulnerability
+  """
+  score: Float
+  """
+  impact score or rating for the vulnerability
+  """
+  impact: Float
+  """
+  exploitability score or rating for the vulnerability
+  """
+  exploitability: Float
+  """
+  priority assigned to the vulnerability
+  """
+  priority: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  """
+  short summary of the vulnerability details
+  """
+  summary: String
+  """
+  long form description of the vulnerability
+  """
+  description: String
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  indicates if the vulnerability is still open
+  """
+  open: Boolean
+  """
+  true when the vulnerability blocks production changes
+  """
+  blocking: Boolean
+  """
+  true when the vulnerability affects production systems
+  """
+  production: Boolean
+  """
+  true when the vulnerability is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the vulnerability has been validated by the security team
+  """
+  validated: Boolean
+  """
+  reference links for the vulnerability
+  """
+  references: [String!]
+  """
+  targets or assets impacted by the vulnerability
+  """
+  impacts: [String!]
+  """
+  timestamp when the vulnerability was published
+  """
+  publishedAt: DateTime
+  """
+  timestamp when the vulnerability was discovered in the environment
+  """
+  discoveredAt: DateTime
+  """
+  timestamp when the source last updated the vulnerability
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the vulnerability in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the vulnerability from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  integrationIDs: [ID!]
+  findingIDs: [ID!]
+  actionPlanIDs: [ID!]
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  riskIDs: [ID!]
+  programIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  scanIDs: [ID!]
+  taskIDs: [ID!]
+  remediationIDs: [ID!]
+  reviewIDs: [ID!]
+  commentIDs: [ID!]
   fileIDs: [ID!]
 }
 """
@@ -61347,11 +68021,15 @@ ExportExportType is enum for the field export_type
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
   EVIDENCE
+  FINDING
   INTERNAL_POLICY
   PROCEDURE
+  REMEDIATION
+  REVIEW
   RISK
   SUBSCRIBER
   TASK
+  VULNERABILITY
 }
 """
 Ordering options for Export connections
@@ -62891,6 +69569,3047 @@ input FileWhereInput {
   """
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
+}
+type Finding implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the finding
+  """
+  externalID: String
+  """
+  the owner of the finding
+  """
+  externalOwnerID: String
+  """
+  system that produced the finding, e.g. gcp_scc
+  """
+  source: String
+  """
+  resource identifier provided by the source system
+  """
+  resourceName: String
+  """
+  display name for the finding when provided by the source
+  """
+  displayName: String
+  """
+  state reported by the source system, such as ACTIVE or INACTIVE
+  """
+  state: String
+  """
+  primary category of the finding
+  """
+  category: String
+  """
+  normalized categories for the finding
+  """
+  categories: [String!]
+  """
+  classification provided by the source, e.g. MISCONFIGURATION
+  """
+  findingClass: String
+  """
+  severity label for the finding
+  """
+  severity: String
+  """
+  numeric severity score for the finding if provided
+  """
+  numericSeverity: Float
+  """
+  aggregated score such as CVSS for the finding
+  """
+  score: Float
+  """
+  impact score or rating for the finding
+  """
+  impact: Float
+  """
+  exploitability score or rating for the finding
+  """
+  exploitability: Float
+  """
+  priority assigned to the finding
+  """
+  priority: String
+  """
+  indicates if the finding is still open
+  """
+  open: Boolean
+  """
+  true when the finding blocks production changes
+  """
+  blocksProduction: Boolean
+  """
+  true when the finding affects production systems
+  """
+  production: Boolean
+  """
+  true when the finding is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the finding has been validated by the security team
+  """
+  validated: Boolean
+  """
+  identifier for the assessment that generated the finding
+  """
+  assessmentID: String
+  """
+  long form description of the finding
+  """
+  description: String
+  """
+  short recommendation text from the source system (deprecated upstream)
+  """
+  recommendation: String
+  """
+  markdown formatted remediation guidance for the finding
+  """
+  recommendedActions: String
+  """
+  reference links for the finding
+  """
+  references: [String!]
+  """
+  steps required to reproduce the finding
+  """
+  stepsToReproduce: [String!]
+  """
+  targets impacted by the finding such as projects or applications
+  """
+  targets: [String!]
+  """
+  structured details about the impacted targets
+  """
+  targetDetails: Map
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  lifecycle status of the finding
+  """
+  status: String
+  """
+  timestamp when the finding was last observed by the source
+  """
+  eventTime: DateTime
+  """
+  timestamp when the finding was first reported by the source
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the source last updated the finding
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the finding in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the finding from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  controlMappings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControls returned from the connection.
+    """
+    orderBy: [FindingControlOrder!]
+
+    """
+    Filtering options for FindingControls returned from the connection.
+    """
+    where: FindingControlWhereInput
+  ): FindingControlConnection!
+}
+"""
+A connection to a list of items.
+"""
+type FindingConnection {
+  """
+  A list of edges.
+  """
+  edges: [FindingEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+type FindingControl implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the id of the finding associated with the control
+  """
+  findingID: ID!
+  """
+  the id of the control mapped to the finding when it exists in the catalog
+  """
+  controlID: ID!
+  """
+  the id of the standard that the control belongs to when it exists in the catalog
+  """
+  standardID: ID
+  """
+  external identifier for the standard provided by the source system such as iso or hipaa
+  """
+  externalStandard: String
+  """
+  version for the external standard provided by the source system
+  """
+  externalStandardVersion: String
+  """
+  control identifier provided by the source system such as A.5.10
+  """
+  externalControlID: String
+  """
+  the integration source that provided the mapping
+  """
+  source: String
+  """
+  additional metadata about the control mapping from the source system
+  """
+  metadata: Map
+  """
+  timestamp when the mapping was first observed
+  """
+  discoveredAt: DateTime
+  finding: Finding!
+  control: Control!
+  standard: Standard
+}
+"""
+A connection to a list of items.
+"""
+type FindingControlConnection {
+  """
+  A list of edges.
+  """
+  edges: [FindingControlEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type FindingControlEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: FindingControl
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type FindingControlHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: FindingControlHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the id of the finding associated with the control
+  """
+  findingID: String!
+  """
+  the id of the control mapped to the finding when it exists in the catalog
+  """
+  controlID: String!
+  """
+  the id of the standard that the control belongs to when it exists in the catalog
+  """
+  standardID: String
+  """
+  external identifier for the standard provided by the source system such as iso or hipaa
+  """
+  externalStandard: String
+  """
+  version for the external standard provided by the source system
+  """
+  externalStandardVersion: String
+  """
+  control identifier provided by the source system such as A.5.10
+  """
+  externalControlID: String
+  """
+  the integration source that provided the mapping
+  """
+  source: String
+  """
+  additional metadata about the control mapping from the source system
+  """
+  metadata: Map
+  """
+  timestamp when the mapping was first observed
+  """
+  discoveredAt: DateTime
+}
+"""
+A connection to a list of items.
+"""
+type FindingControlHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [FindingControlHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type FindingControlHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: FindingControlHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+FindingControlHistoryOpType is enum for the field operation
+"""
+enum FindingControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for FindingControlHistory connections
+"""
+input FindingControlHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order FindingControlHistories.
+  """
+  field: FindingControlHistoryOrderField!
+}
+"""
+Properties by which FindingControlHistory connections can be ordered.
+"""
+enum FindingControlHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+FindingControlHistoryWhereInput is used for filtering FindingControlHistory objects.
+Input was generated by ent.
+"""
+input FindingControlHistoryWhereInput {
+  not: FindingControlHistoryWhereInput
+  and: [FindingControlHistoryWhereInput!]
+  or: [FindingControlHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: FindingControlHistoryOpType
+  operationNEQ: FindingControlHistoryOpType
+  operationIn: [FindingControlHistoryOpType!]
+  operationNotIn: [FindingControlHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  finding_id field predicates
+  """
+  findingID: String
+  findingIDNEQ: String
+  findingIDIn: [String!]
+  findingIDNotIn: [String!]
+  findingIDGT: String
+  findingIDGTE: String
+  findingIDLT: String
+  findingIDLTE: String
+  findingIDContains: String
+  findingIDHasPrefix: String
+  findingIDHasSuffix: String
+  findingIDEqualFold: String
+  findingIDContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: String
+  standardIDContainsFold: String
+  """
+  external_standard field predicates
+  """
+  externalStandard: String
+  externalStandardNEQ: String
+  externalStandardIn: [String!]
+  externalStandardNotIn: [String!]
+  externalStandardGT: String
+  externalStandardGTE: String
+  externalStandardLT: String
+  externalStandardLTE: String
+  externalStandardContains: String
+  externalStandardHasPrefix: String
+  externalStandardHasSuffix: String
+  externalStandardIsNil: Boolean
+  externalStandardNotNil: Boolean
+  externalStandardEqualFold: String
+  externalStandardContainsFold: String
+  """
+  external_standard_version field predicates
+  """
+  externalStandardVersion: String
+  externalStandardVersionNEQ: String
+  externalStandardVersionIn: [String!]
+  externalStandardVersionNotIn: [String!]
+  externalStandardVersionGT: String
+  externalStandardVersionGTE: String
+  externalStandardVersionLT: String
+  externalStandardVersionLTE: String
+  externalStandardVersionContains: String
+  externalStandardVersionHasPrefix: String
+  externalStandardVersionHasSuffix: String
+  externalStandardVersionIsNil: Boolean
+  externalStandardVersionNotNil: Boolean
+  externalStandardVersionEqualFold: String
+  externalStandardVersionContainsFold: String
+  """
+  external_control_id field predicates
+  """
+  externalControlID: String
+  externalControlIDNEQ: String
+  externalControlIDIn: [String!]
+  externalControlIDNotIn: [String!]
+  externalControlIDGT: String
+  externalControlIDGTE: String
+  externalControlIDLT: String
+  externalControlIDLTE: String
+  externalControlIDContains: String
+  externalControlIDHasPrefix: String
+  externalControlIDHasSuffix: String
+  externalControlIDIsNil: Boolean
+  externalControlIDNotNil: Boolean
+  externalControlIDEqualFold: String
+  externalControlIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  discovered_at field predicates
+  """
+  discoveredAt: DateTime
+  discoveredAtNEQ: DateTime
+  discoveredAtIn: [DateTime!]
+  discoveredAtNotIn: [DateTime!]
+  discoveredAtGT: DateTime
+  discoveredAtGTE: DateTime
+  discoveredAtLT: DateTime
+  discoveredAtLTE: DateTime
+  discoveredAtIsNil: Boolean
+  discoveredAtNotNil: Boolean
+}
+"""
+Ordering options for FindingControl connections
+"""
+input FindingControlOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order FindingControls.
+  """
+  field: FindingControlOrderField!
+}
+"""
+Properties by which FindingControl connections can be ordered.
+"""
+enum FindingControlOrderField {
+  created_at
+  updated_at
+}
+"""
+FindingControlWhereInput is used for filtering FindingControl objects.
+Input was generated by ent.
+"""
+input FindingControlWhereInput {
+  not: FindingControlWhereInput
+  and: [FindingControlWhereInput!]
+  or: [FindingControlWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  external_standard field predicates
+  """
+  externalStandard: String
+  externalStandardNEQ: String
+  externalStandardIn: [String!]
+  externalStandardNotIn: [String!]
+  externalStandardGT: String
+  externalStandardGTE: String
+  externalStandardLT: String
+  externalStandardLTE: String
+  externalStandardContains: String
+  externalStandardHasPrefix: String
+  externalStandardHasSuffix: String
+  externalStandardIsNil: Boolean
+  externalStandardNotNil: Boolean
+  externalStandardEqualFold: String
+  externalStandardContainsFold: String
+  """
+  external_standard_version field predicates
+  """
+  externalStandardVersion: String
+  externalStandardVersionNEQ: String
+  externalStandardVersionIn: [String!]
+  externalStandardVersionNotIn: [String!]
+  externalStandardVersionGT: String
+  externalStandardVersionGTE: String
+  externalStandardVersionLT: String
+  externalStandardVersionLTE: String
+  externalStandardVersionContains: String
+  externalStandardVersionHasPrefix: String
+  externalStandardVersionHasSuffix: String
+  externalStandardVersionIsNil: Boolean
+  externalStandardVersionNotNil: Boolean
+  externalStandardVersionEqualFold: String
+  externalStandardVersionContainsFold: String
+  """
+  external_control_id field predicates
+  """
+  externalControlID: String
+  externalControlIDNEQ: String
+  externalControlIDIn: [String!]
+  externalControlIDNotIn: [String!]
+  externalControlIDGT: String
+  externalControlIDGTE: String
+  externalControlIDLT: String
+  externalControlIDLTE: String
+  externalControlIDContains: String
+  externalControlIDHasPrefix: String
+  externalControlIDHasSuffix: String
+  externalControlIDIsNil: Boolean
+  externalControlIDNotNil: Boolean
+  externalControlIDEqualFold: String
+  externalControlIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  discovered_at field predicates
+  """
+  discoveredAt: DateTime
+  discoveredAtNEQ: DateTime
+  discoveredAtIn: [DateTime!]
+  discoveredAtNotIn: [DateTime!]
+  discoveredAtGT: DateTime
+  discoveredAtGTE: DateTime
+  discoveredAtLT: DateTime
+  discoveredAtLTE: DateTime
+  discoveredAtIsNil: Boolean
+  discoveredAtNotNil: Boolean
+}
+"""
+An edge in a connection.
+"""
+type FindingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Finding
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type FindingHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: FindingHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the finding
+  """
+  externalID: String
+  """
+  the owner of the finding
+  """
+  externalOwnerID: String
+  """
+  system that produced the finding, e.g. gcp_scc
+  """
+  source: String
+  """
+  resource identifier provided by the source system
+  """
+  resourceName: String
+  """
+  display name for the finding when provided by the source
+  """
+  displayName: String
+  """
+  state reported by the source system, such as ACTIVE or INACTIVE
+  """
+  state: String
+  """
+  primary category of the finding
+  """
+  category: String
+  """
+  normalized categories for the finding
+  """
+  categories: [String!]
+  """
+  classification provided by the source, e.g. MISCONFIGURATION
+  """
+  findingClass: String
+  """
+  severity label for the finding
+  """
+  severity: String
+  """
+  numeric severity score for the finding if provided
+  """
+  numericSeverity: Float
+  """
+  aggregated score such as CVSS for the finding
+  """
+  score: Float
+  """
+  impact score or rating for the finding
+  """
+  impact: Float
+  """
+  exploitability score or rating for the finding
+  """
+  exploitability: Float
+  """
+  priority assigned to the finding
+  """
+  priority: String
+  """
+  indicates if the finding is still open
+  """
+  open: Boolean
+  """
+  true when the finding blocks production changes
+  """
+  blocksProduction: Boolean
+  """
+  true when the finding affects production systems
+  """
+  production: Boolean
+  """
+  true when the finding is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the finding has been validated by the security team
+  """
+  validated: Boolean
+  """
+  identifier for the assessment that generated the finding
+  """
+  assessmentID: String
+  """
+  long form description of the finding
+  """
+  description: String
+  """
+  short recommendation text from the source system (deprecated upstream)
+  """
+  recommendation: String
+  """
+  markdown formatted remediation guidance for the finding
+  """
+  recommendedActions: String
+  """
+  reference links for the finding
+  """
+  references: [String!]
+  """
+  steps required to reproduce the finding
+  """
+  stepsToReproduce: [String!]
+  """
+  targets impacted by the finding such as projects or applications
+  """
+  targets: [String!]
+  """
+  structured details about the impacted targets
+  """
+  targetDetails: Map
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  lifecycle status of the finding
+  """
+  status: String
+  """
+  timestamp when the finding was last observed by the source
+  """
+  eventTime: DateTime
+  """
+  timestamp when the finding was first reported by the source
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the source last updated the finding
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the finding in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the finding from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+}
+"""
+A connection to a list of items.
+"""
+type FindingHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [FindingHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type FindingHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: FindingHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+FindingHistoryOpType is enum for the field operation
+"""
+enum FindingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for FindingHistory connections
+"""
+input FindingHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order FindingHistories.
+  """
+  field: FindingHistoryOrderField!
+}
+"""
+Properties by which FindingHistory connections can be ordered.
+"""
+enum FindingHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  category
+  severity
+}
+"""
+FindingHistoryWhereInput is used for filtering FindingHistory objects.
+Input was generated by ent.
+"""
+input FindingHistoryWhereInput {
+  not: FindingHistoryWhereInput
+  and: [FindingHistoryWhereInput!]
+  or: [FindingHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: FindingHistoryOpType
+  operationNEQ: FindingHistoryOpType
+  operationIn: [FindingHistoryOpType!]
+  operationNotIn: [FindingHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  resource_name field predicates
+  """
+  resourceName: String
+  resourceNameNEQ: String
+  resourceNameIn: [String!]
+  resourceNameNotIn: [String!]
+  resourceNameGT: String
+  resourceNameGTE: String
+  resourceNameLT: String
+  resourceNameLTE: String
+  resourceNameContains: String
+  resourceNameHasPrefix: String
+  resourceNameHasSuffix: String
+  resourceNameIsNil: Boolean
+  resourceNameNotNil: Boolean
+  resourceNameEqualFold: String
+  resourceNameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  finding_class field predicates
+  """
+  findingClass: String
+  findingClassNEQ: String
+  findingClassIn: [String!]
+  findingClassNotIn: [String!]
+  findingClassGT: String
+  findingClassGTE: String
+  findingClassLT: String
+  findingClassLTE: String
+  findingClassContains: String
+  findingClassHasPrefix: String
+  findingClassHasSuffix: String
+  findingClassIsNil: Boolean
+  findingClassNotNil: Boolean
+  findingClassEqualFold: String
+  findingClassContainsFold: String
+  """
+  severity field predicates
+  """
+  severity: String
+  severityNEQ: String
+  severityIn: [String!]
+  severityNotIn: [String!]
+  severityGT: String
+  severityGTE: String
+  severityLT: String
+  severityLTE: String
+  severityContains: String
+  severityHasPrefix: String
+  severityHasSuffix: String
+  severityIsNil: Boolean
+  severityNotNil: Boolean
+  severityEqualFold: String
+  severityContainsFold: String
+  """
+  numeric_severity field predicates
+  """
+  numericSeverity: Float
+  numericSeverityNEQ: Float
+  numericSeverityIn: [Float!]
+  numericSeverityNotIn: [Float!]
+  numericSeverityGT: Float
+  numericSeverityGTE: Float
+  numericSeverityLT: Float
+  numericSeverityLTE: Float
+  numericSeverityIsNil: Boolean
+  numericSeverityNotNil: Boolean
+  """
+  score field predicates
+  """
+  score: Float
+  scoreNEQ: Float
+  scoreIn: [Float!]
+  scoreNotIn: [Float!]
+  scoreGT: Float
+  scoreGTE: Float
+  scoreLT: Float
+  scoreLTE: Float
+  scoreIsNil: Boolean
+  scoreNotNil: Boolean
+  """
+  impact field predicates
+  """
+  impact: Float
+  impactNEQ: Float
+  impactIn: [Float!]
+  impactNotIn: [Float!]
+  impactGT: Float
+  impactGTE: Float
+  impactLT: Float
+  impactLTE: Float
+  impactIsNil: Boolean
+  impactNotNil: Boolean
+  """
+  exploitability field predicates
+  """
+  exploitability: Float
+  exploitabilityNEQ: Float
+  exploitabilityIn: [Float!]
+  exploitabilityNotIn: [Float!]
+  exploitabilityGT: Float
+  exploitabilityGTE: Float
+  exploitabilityLT: Float
+  exploitabilityLTE: Float
+  exploitabilityIsNil: Boolean
+  exploitabilityNotNil: Boolean
+  """
+  priority field predicates
+  """
+  priority: String
+  priorityNEQ: String
+  priorityIn: [String!]
+  priorityNotIn: [String!]
+  priorityGT: String
+  priorityGTE: String
+  priorityLT: String
+  priorityLTE: String
+  priorityContains: String
+  priorityHasPrefix: String
+  priorityHasSuffix: String
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  priorityEqualFold: String
+  priorityContainsFold: String
+  """
+  open field predicates
+  """
+  open: Boolean
+  openNEQ: Boolean
+  openIsNil: Boolean
+  openNotNil: Boolean
+  """
+  blocks_production field predicates
+  """
+  blocksProduction: Boolean
+  blocksProductionNEQ: Boolean
+  blocksProductionIsNil: Boolean
+  blocksProductionNotNil: Boolean
+  """
+  production field predicates
+  """
+  production: Boolean
+  productionNEQ: Boolean
+  productionIsNil: Boolean
+  productionNotNil: Boolean
+  """
+  public field predicates
+  """
+  public: Boolean
+  publicNEQ: Boolean
+  publicIsNil: Boolean
+  publicNotNil: Boolean
+  """
+  validated field predicates
+  """
+  validated: Boolean
+  validatedNEQ: Boolean
+  validatedIsNil: Boolean
+  validatedNotNil: Boolean
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  recommendation field predicates
+  """
+  recommendation: String
+  recommendationNEQ: String
+  recommendationIn: [String!]
+  recommendationNotIn: [String!]
+  recommendationGT: String
+  recommendationGTE: String
+  recommendationLT: String
+  recommendationLTE: String
+  recommendationContains: String
+  recommendationHasPrefix: String
+  recommendationHasSuffix: String
+  recommendationIsNil: Boolean
+  recommendationNotNil: Boolean
+  recommendationEqualFold: String
+  recommendationContainsFold: String
+  """
+  recommended_actions field predicates
+  """
+  recommendedActions: String
+  recommendedActionsNEQ: String
+  recommendedActionsIn: [String!]
+  recommendedActionsNotIn: [String!]
+  recommendedActionsGT: String
+  recommendedActionsGTE: String
+  recommendedActionsLT: String
+  recommendedActionsLTE: String
+  recommendedActionsContains: String
+  recommendedActionsHasPrefix: String
+  recommendedActionsHasSuffix: String
+  recommendedActionsIsNil: Boolean
+  recommendedActionsNotNil: Boolean
+  recommendedActionsEqualFold: String
+  recommendedActionsContainsFold: String
+  """
+  vector field predicates
+  """
+  vector: String
+  vectorNEQ: String
+  vectorIn: [String!]
+  vectorNotIn: [String!]
+  vectorGT: String
+  vectorGTE: String
+  vectorLT: String
+  vectorLTE: String
+  vectorContains: String
+  vectorHasPrefix: String
+  vectorHasSuffix: String
+  vectorIsNil: Boolean
+  vectorNotNil: Boolean
+  vectorEqualFold: String
+  vectorContainsFold: String
+  """
+  remediation_sla field predicates
+  """
+  remediationSLA: Int
+  remediationSLANEQ: Int
+  remediationSLAIn: [Int!]
+  remediationSLANotIn: [Int!]
+  remediationSLAGT: Int
+  remediationSLAGTE: Int
+  remediationSLALT: Int
+  remediationSLALTE: Int
+  remediationSLAIsNil: Boolean
+  remediationSLANotNil: Boolean
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  event_time field predicates
+  """
+  eventTime: DateTime
+  eventTimeNEQ: DateTime
+  eventTimeIn: [DateTime!]
+  eventTimeNotIn: [DateTime!]
+  eventTimeGT: DateTime
+  eventTimeGTE: DateTime
+  eventTimeLT: DateTime
+  eventTimeLTE: DateTime
+  eventTimeIsNil: Boolean
+  eventTimeNotNil: Boolean
+  """
+  reported_at field predicates
+  """
+  reportedAt: DateTime
+  reportedAtNEQ: DateTime
+  reportedAtIn: [DateTime!]
+  reportedAtNotIn: [DateTime!]
+  reportedAtGT: DateTime
+  reportedAtGTE: DateTime
+  reportedAtLT: DateTime
+  reportedAtLTE: DateTime
+  reportedAtIsNil: Boolean
+  reportedAtNotNil: Boolean
+  """
+  source_updated_at field predicates
+  """
+  sourceUpdatedAt: DateTime
+  sourceUpdatedAtNEQ: DateTime
+  sourceUpdatedAtIn: [DateTime!]
+  sourceUpdatedAtNotIn: [DateTime!]
+  sourceUpdatedAtGT: DateTime
+  sourceUpdatedAtGTE: DateTime
+  sourceUpdatedAtLT: DateTime
+  sourceUpdatedAtLTE: DateTime
+  sourceUpdatedAtIsNil: Boolean
+  sourceUpdatedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+}
+"""
+Ordering options for Finding connections
+"""
+input FindingOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Findings.
+  """
+  field: FindingOrderField!
+}
+"""
+Properties by which Finding connections can be ordered.
+"""
+enum FindingOrderField {
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  category
+  severity
+}
+"""
+FindingWhereInput is used for filtering Finding objects.
+Input was generated by ent.
+"""
+input FindingWhereInput {
+  not: FindingWhereInput
+  and: [FindingWhereInput!]
+  or: [FindingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  resource_name field predicates
+  """
+  resourceName: String
+  resourceNameNEQ: String
+  resourceNameIn: [String!]
+  resourceNameNotIn: [String!]
+  resourceNameGT: String
+  resourceNameGTE: String
+  resourceNameLT: String
+  resourceNameLTE: String
+  resourceNameContains: String
+  resourceNameHasPrefix: String
+  resourceNameHasSuffix: String
+  resourceNameIsNil: Boolean
+  resourceNameNotNil: Boolean
+  resourceNameEqualFold: String
+  resourceNameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  finding_class field predicates
+  """
+  findingClass: String
+  findingClassNEQ: String
+  findingClassIn: [String!]
+  findingClassNotIn: [String!]
+  findingClassGT: String
+  findingClassGTE: String
+  findingClassLT: String
+  findingClassLTE: String
+  findingClassContains: String
+  findingClassHasPrefix: String
+  findingClassHasSuffix: String
+  findingClassIsNil: Boolean
+  findingClassNotNil: Boolean
+  findingClassEqualFold: String
+  findingClassContainsFold: String
+  """
+  severity field predicates
+  """
+  severity: String
+  severityNEQ: String
+  severityIn: [String!]
+  severityNotIn: [String!]
+  severityGT: String
+  severityGTE: String
+  severityLT: String
+  severityLTE: String
+  severityContains: String
+  severityHasPrefix: String
+  severityHasSuffix: String
+  severityIsNil: Boolean
+  severityNotNil: Boolean
+  severityEqualFold: String
+  severityContainsFold: String
+  """
+  numeric_severity field predicates
+  """
+  numericSeverity: Float
+  numericSeverityNEQ: Float
+  numericSeverityIn: [Float!]
+  numericSeverityNotIn: [Float!]
+  numericSeverityGT: Float
+  numericSeverityGTE: Float
+  numericSeverityLT: Float
+  numericSeverityLTE: Float
+  numericSeverityIsNil: Boolean
+  numericSeverityNotNil: Boolean
+  """
+  score field predicates
+  """
+  score: Float
+  scoreNEQ: Float
+  scoreIn: [Float!]
+  scoreNotIn: [Float!]
+  scoreGT: Float
+  scoreGTE: Float
+  scoreLT: Float
+  scoreLTE: Float
+  scoreIsNil: Boolean
+  scoreNotNil: Boolean
+  """
+  impact field predicates
+  """
+  impact: Float
+  impactNEQ: Float
+  impactIn: [Float!]
+  impactNotIn: [Float!]
+  impactGT: Float
+  impactGTE: Float
+  impactLT: Float
+  impactLTE: Float
+  impactIsNil: Boolean
+  impactNotNil: Boolean
+  """
+  exploitability field predicates
+  """
+  exploitability: Float
+  exploitabilityNEQ: Float
+  exploitabilityIn: [Float!]
+  exploitabilityNotIn: [Float!]
+  exploitabilityGT: Float
+  exploitabilityGTE: Float
+  exploitabilityLT: Float
+  exploitabilityLTE: Float
+  exploitabilityIsNil: Boolean
+  exploitabilityNotNil: Boolean
+  """
+  priority field predicates
+  """
+  priority: String
+  priorityNEQ: String
+  priorityIn: [String!]
+  priorityNotIn: [String!]
+  priorityGT: String
+  priorityGTE: String
+  priorityLT: String
+  priorityLTE: String
+  priorityContains: String
+  priorityHasPrefix: String
+  priorityHasSuffix: String
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  priorityEqualFold: String
+  priorityContainsFold: String
+  """
+  open field predicates
+  """
+  open: Boolean
+  openNEQ: Boolean
+  openIsNil: Boolean
+  openNotNil: Boolean
+  """
+  blocks_production field predicates
+  """
+  blocksProduction: Boolean
+  blocksProductionNEQ: Boolean
+  blocksProductionIsNil: Boolean
+  blocksProductionNotNil: Boolean
+  """
+  production field predicates
+  """
+  production: Boolean
+  productionNEQ: Boolean
+  productionIsNil: Boolean
+  productionNotNil: Boolean
+  """
+  public field predicates
+  """
+  public: Boolean
+  publicNEQ: Boolean
+  publicIsNil: Boolean
+  publicNotNil: Boolean
+  """
+  validated field predicates
+  """
+  validated: Boolean
+  validatedNEQ: Boolean
+  validatedIsNil: Boolean
+  validatedNotNil: Boolean
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  recommendation field predicates
+  """
+  recommendation: String
+  recommendationNEQ: String
+  recommendationIn: [String!]
+  recommendationNotIn: [String!]
+  recommendationGT: String
+  recommendationGTE: String
+  recommendationLT: String
+  recommendationLTE: String
+  recommendationContains: String
+  recommendationHasPrefix: String
+  recommendationHasSuffix: String
+  recommendationIsNil: Boolean
+  recommendationNotNil: Boolean
+  recommendationEqualFold: String
+  recommendationContainsFold: String
+  """
+  recommended_actions field predicates
+  """
+  recommendedActions: String
+  recommendedActionsNEQ: String
+  recommendedActionsIn: [String!]
+  recommendedActionsNotIn: [String!]
+  recommendedActionsGT: String
+  recommendedActionsGTE: String
+  recommendedActionsLT: String
+  recommendedActionsLTE: String
+  recommendedActionsContains: String
+  recommendedActionsHasPrefix: String
+  recommendedActionsHasSuffix: String
+  recommendedActionsIsNil: Boolean
+  recommendedActionsNotNil: Boolean
+  recommendedActionsEqualFold: String
+  recommendedActionsContainsFold: String
+  """
+  vector field predicates
+  """
+  vector: String
+  vectorNEQ: String
+  vectorIn: [String!]
+  vectorNotIn: [String!]
+  vectorGT: String
+  vectorGTE: String
+  vectorLT: String
+  vectorLTE: String
+  vectorContains: String
+  vectorHasPrefix: String
+  vectorHasSuffix: String
+  vectorIsNil: Boolean
+  vectorNotNil: Boolean
+  vectorEqualFold: String
+  vectorContainsFold: String
+  """
+  remediation_sla field predicates
+  """
+  remediationSLA: Int
+  remediationSLANEQ: Int
+  remediationSLAIn: [Int!]
+  remediationSLANotIn: [Int!]
+  remediationSLAGT: Int
+  remediationSLAGTE: Int
+  remediationSLALT: Int
+  remediationSLALTE: Int
+  remediationSLAIsNil: Boolean
+  remediationSLANotNil: Boolean
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  event_time field predicates
+  """
+  eventTime: DateTime
+  eventTimeNEQ: DateTime
+  eventTimeIn: [DateTime!]
+  eventTimeNotIn: [DateTime!]
+  eventTimeGT: DateTime
+  eventTimeGTE: DateTime
+  eventTimeLT: DateTime
+  eventTimeLTE: DateTime
+  eventTimeIsNil: Boolean
+  eventTimeNotNil: Boolean
+  """
+  reported_at field predicates
+  """
+  reportedAt: DateTime
+  reportedAtNEQ: DateTime
+  reportedAtIn: [DateTime!]
+  reportedAtNotIn: [DateTime!]
+  reportedAtGT: DateTime
+  reportedAtGTE: DateTime
+  reportedAtLT: DateTime
+  reportedAtLTE: DateTime
+  reportedAtIsNil: Boolean
+  reportedAtNotNil: Boolean
+  """
+  source_updated_at field predicates
+  """
+  sourceUpdatedAt: DateTime
+  sourceUpdatedAtNEQ: DateTime
+  sourceUpdatedAtIn: [DateTime!]
+  sourceUpdatedAtNotIn: [DateTime!]
+  sourceUpdatedAtGT: DateTime
+  sourceUpdatedAtGTE: DateTime
+  sourceUpdatedAtLT: DateTime
+  sourceUpdatedAtLTE: DateTime
+  sourceUpdatedAtIsNil: Boolean
+  sourceUpdatedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  control_mappings edge predicates
+  """
+  hasControlMappings: Boolean
+  hasControlMappingsWith: [FindingControlWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -66761,6 +76480,192 @@ type Integration implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
 }
 """
 A connection to a list of items.
@@ -67376,6 +77281,36 @@ input IntegrationWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
 }
 type InternalPolicy implements Node {
   id: ID!
@@ -77381,6 +87316,130 @@ type Organization implements Node {
     """
     where: TagDefinitionWhereInput
   ): TagDefinitionConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -79515,6 +89574,26 @@ input OrganizationWhereInput {
   """
   hasTagDefinitions: Boolean
   hasTagDefinitionsWith: [TagDefinitionWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
   """
   members edge predicates
   """
@@ -84608,6 +94687,130 @@ type Query {
     """
     where: FileHistoryWhereInput
   ): FileHistoryConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  findingControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControls returned from the connection.
+    """
+    orderBy: [FindingControlOrder!]
+
+    """
+    Filtering options for FindingControls returned from the connection.
+    """
+    where: FindingControlWhereInput
+  ): FindingControlConnection!
+  findingControlHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControlHistories returned from the connection.
+    """
+    orderBy: FindingControlHistoryOrder
+
+    """
+    Filtering options for FindingControlHistories returned from the connection.
+    """
+    where: FindingControlHistoryWhereInput
+  ): FindingControlHistoryConnection!
+  findingHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingHistories returned from the connection.
+    """
+    orderBy: FindingHistoryOrder
+
+    """
+    Filtering options for FindingHistories returned from the connection.
+    """
+    where: FindingHistoryWhereInput
+  ): FindingHistoryConnection!
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85910,6 +96113,130 @@ type Query {
     """
     where: ProgramMembershipHistoryWhereInput
   ): ProgramMembershipHistoryConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  remediationHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for RemediationHistories returned from the connection.
+    """
+    orderBy: RemediationHistoryOrder
+
+    """
+    Filtering options for RemediationHistories returned from the connection.
+    """
+    where: RemediationHistoryWhereInput
+  ): RemediationHistoryConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  reviewHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ReviewHistories returned from the connection.
+    """
+    orderBy: ReviewHistoryOrder
+
+    """
+    Filtering options for ReviewHistories returned from the connection.
+    """
+    where: ReviewHistoryWhereInput
+  ): ReviewHistoryConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -87026,6 +97353,68 @@ type Query {
     """
     where: UserSettingHistoryWhereInput
   ): UserSettingHistoryConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  vulnerabilityHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for VulnerabilityHistories returned from the connection.
+    """
+    orderBy: VulnerabilityHistoryOrder
+
+    """
+    Filtering options for VulnerabilityHistories returned from the connection.
+    """
+    where: VulnerabilityHistoryWhereInput
+  ): VulnerabilityHistoryConnection!
   webauthns(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -87057,6 +97446,3725 @@ type Query {
     """
     where: WebauthnWhereInput
   ): WebauthnConnection!
+}
+type Remediation implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalOwnerID: String
+  """
+  title or short description of the remediation effort
+  """
+  title: String
+  """
+  state of the remediation, such as pending or completed
+  """
+  state: String
+  """
+  intent or goal of the remediation effort
+  """
+  intent: String
+  """
+  summary of the remediation approach
+  """
+  summary: String
+  """
+  detailed explanation of the remediation steps
+  """
+  explanation: String
+  """
+  specific instructions or steps to implement the remediation
+  """
+  instructions: String
+  """
+  reference to the owner responsible for remediation
+  """
+  ownerReference: String
+  """
+  source code repository URI associated with the remediation
+  """
+  repositoryURI: String
+  """
+  pull request URI associated with the remediation
+  """
+  pullRequestURI: String
+  """
+  reference to a tracking ticket for the remediation
+  """
+  ticketReference: String
+  """
+  timestamp when the remediation is due
+  """
+  dueAt: DateTime
+  """
+  timestamp when the remediation was completed
+  """
+  completedAt: DateTime
+  """
+  timestamp when an automated pull request was generated
+  """
+  prGeneratedAt: DateTime
+  """
+  details about any errors encountered during remediation automation
+  """
+  error: String
+  """
+  system that produced the remediation record
+  """
+  source: String
+  """
+  link to the remediation in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+}
+"""
+A connection to a list of items.
+"""
+type RemediationConnection {
+  """
+  A list of edges.
+  """
+  edges: [RemediationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RemediationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Remediation
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type RemediationHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: RemediationHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalOwnerID: String
+  """
+  title or short description of the remediation effort
+  """
+  title: String
+  """
+  state of the remediation, such as pending or completed
+  """
+  state: String
+  """
+  intent or goal of the remediation effort
+  """
+  intent: String
+  """
+  summary of the remediation approach
+  """
+  summary: String
+  """
+  detailed explanation of the remediation steps
+  """
+  explanation: String
+  """
+  specific instructions or steps to implement the remediation
+  """
+  instructions: String
+  """
+  reference to the owner responsible for remediation
+  """
+  ownerReference: String
+  """
+  source code repository URI associated with the remediation
+  """
+  repositoryURI: String
+  """
+  pull request URI associated with the remediation
+  """
+  pullRequestURI: String
+  """
+  reference to a tracking ticket for the remediation
+  """
+  ticketReference: String
+  """
+  timestamp when the remediation is due
+  """
+  dueAt: DateTime
+  """
+  timestamp when the remediation was completed
+  """
+  completedAt: DateTime
+  """
+  timestamp when an automated pull request was generated
+  """
+  prGeneratedAt: DateTime
+  """
+  details about any errors encountered during remediation automation
+  """
+  error: String
+  """
+  system that produced the remediation record
+  """
+  source: String
+  """
+  link to the remediation in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+}
+"""
+A connection to a list of items.
+"""
+type RemediationHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [RemediationHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RemediationHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: RemediationHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+RemediationHistoryOpType is enum for the field operation
+"""
+enum RemediationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for RemediationHistory connections
+"""
+input RemediationHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order RemediationHistories.
+  """
+  field: RemediationHistoryOrderField!
+}
+"""
+Properties by which RemediationHistory connections can be ordered.
+"""
+enum RemediationHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  title
+  state
+}
+"""
+RemediationHistoryWhereInput is used for filtering RemediationHistory objects.
+Input was generated by ent.
+"""
+input RemediationHistoryWhereInput {
+  not: RemediationHistoryWhereInput
+  and: [RemediationHistoryWhereInput!]
+  or: [RemediationHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: RemediationHistoryOpType
+  operationNEQ: RemediationHistoryOpType
+  operationIn: [RemediationHistoryOpType!]
+  operationNotIn: [RemediationHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  intent field predicates
+  """
+  intent: String
+  intentNEQ: String
+  intentIn: [String!]
+  intentNotIn: [String!]
+  intentGT: String
+  intentGTE: String
+  intentLT: String
+  intentLTE: String
+  intentContains: String
+  intentHasPrefix: String
+  intentHasSuffix: String
+  intentIsNil: Boolean
+  intentNotNil: Boolean
+  intentEqualFold: String
+  intentContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  explanation field predicates
+  """
+  explanation: String
+  explanationNEQ: String
+  explanationIn: [String!]
+  explanationNotIn: [String!]
+  explanationGT: String
+  explanationGTE: String
+  explanationLT: String
+  explanationLTE: String
+  explanationContains: String
+  explanationHasPrefix: String
+  explanationHasSuffix: String
+  explanationIsNil: Boolean
+  explanationNotNil: Boolean
+  explanationEqualFold: String
+  explanationContainsFold: String
+  """
+  instructions field predicates
+  """
+  instructions: String
+  instructionsNEQ: String
+  instructionsIn: [String!]
+  instructionsNotIn: [String!]
+  instructionsGT: String
+  instructionsGTE: String
+  instructionsLT: String
+  instructionsLTE: String
+  instructionsContains: String
+  instructionsHasPrefix: String
+  instructionsHasSuffix: String
+  instructionsIsNil: Boolean
+  instructionsNotNil: Boolean
+  instructionsEqualFold: String
+  instructionsContainsFold: String
+  """
+  owner_reference field predicates
+  """
+  ownerReference: String
+  ownerReferenceNEQ: String
+  ownerReferenceIn: [String!]
+  ownerReferenceNotIn: [String!]
+  ownerReferenceGT: String
+  ownerReferenceGTE: String
+  ownerReferenceLT: String
+  ownerReferenceLTE: String
+  ownerReferenceContains: String
+  ownerReferenceHasPrefix: String
+  ownerReferenceHasSuffix: String
+  ownerReferenceIsNil: Boolean
+  ownerReferenceNotNil: Boolean
+  ownerReferenceEqualFold: String
+  ownerReferenceContainsFold: String
+  """
+  repository_uri field predicates
+  """
+  repositoryURI: String
+  repositoryURINEQ: String
+  repositoryURIIn: [String!]
+  repositoryURINotIn: [String!]
+  repositoryURIGT: String
+  repositoryURIGTE: String
+  repositoryURILT: String
+  repositoryURILTE: String
+  repositoryURIContains: String
+  repositoryURIHasPrefix: String
+  repositoryURIHasSuffix: String
+  repositoryURIIsNil: Boolean
+  repositoryURINotNil: Boolean
+  repositoryURIEqualFold: String
+  repositoryURIContainsFold: String
+  """
+  pull_request_uri field predicates
+  """
+  pullRequestURI: String
+  pullRequestURINEQ: String
+  pullRequestURIIn: [String!]
+  pullRequestURINotIn: [String!]
+  pullRequestURIGT: String
+  pullRequestURIGTE: String
+  pullRequestURILT: String
+  pullRequestURILTE: String
+  pullRequestURIContains: String
+  pullRequestURIHasPrefix: String
+  pullRequestURIHasSuffix: String
+  pullRequestURIIsNil: Boolean
+  pullRequestURINotNil: Boolean
+  pullRequestURIEqualFold: String
+  pullRequestURIContainsFold: String
+  """
+  ticket_reference field predicates
+  """
+  ticketReference: String
+  ticketReferenceNEQ: String
+  ticketReferenceIn: [String!]
+  ticketReferenceNotIn: [String!]
+  ticketReferenceGT: String
+  ticketReferenceGTE: String
+  ticketReferenceLT: String
+  ticketReferenceLTE: String
+  ticketReferenceContains: String
+  ticketReferenceHasPrefix: String
+  ticketReferenceHasSuffix: String
+  ticketReferenceIsNil: Boolean
+  ticketReferenceNotNil: Boolean
+  ticketReferenceEqualFold: String
+  ticketReferenceContainsFold: String
+  """
+  due_at field predicates
+  """
+  dueAt: DateTime
+  dueAtNEQ: DateTime
+  dueAtIn: [DateTime!]
+  dueAtNotIn: [DateTime!]
+  dueAtGT: DateTime
+  dueAtGTE: DateTime
+  dueAtLT: DateTime
+  dueAtLTE: DateTime
+  dueAtIsNil: Boolean
+  dueAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  pr_generated_at field predicates
+  """
+  prGeneratedAt: DateTime
+  prGeneratedAtNEQ: DateTime
+  prGeneratedAtIn: [DateTime!]
+  prGeneratedAtNotIn: [DateTime!]
+  prGeneratedAtGT: DateTime
+  prGeneratedAtGTE: DateTime
+  prGeneratedAtLT: DateTime
+  prGeneratedAtLTE: DateTime
+  prGeneratedAtIsNil: Boolean
+  prGeneratedAtNotNil: Boolean
+  """
+  error field predicates
+  """
+  error: String
+  errorNEQ: String
+  errorIn: [String!]
+  errorNotIn: [String!]
+  errorGT: String
+  errorGTE: String
+  errorLT: String
+  errorLTE: String
+  errorContains: String
+  errorHasPrefix: String
+  errorHasSuffix: String
+  errorIsNil: Boolean
+  errorNotNil: Boolean
+  errorEqualFold: String
+  errorContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+}
+"""
+Ordering options for Remediation connections
+"""
+input RemediationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Remediations.
+  """
+  field: RemediationOrderField!
+}
+"""
+Properties by which Remediation connections can be ordered.
+"""
+enum RemediationOrderField {
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  title
+  state
+}
+"""
+RemediationWhereInput is used for filtering Remediation objects.
+Input was generated by ent.
+"""
+input RemediationWhereInput {
+  not: RemediationWhereInput
+  and: [RemediationWhereInput!]
+  or: [RemediationWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  intent field predicates
+  """
+  intent: String
+  intentNEQ: String
+  intentIn: [String!]
+  intentNotIn: [String!]
+  intentGT: String
+  intentGTE: String
+  intentLT: String
+  intentLTE: String
+  intentContains: String
+  intentHasPrefix: String
+  intentHasSuffix: String
+  intentIsNil: Boolean
+  intentNotNil: Boolean
+  intentEqualFold: String
+  intentContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  explanation field predicates
+  """
+  explanation: String
+  explanationNEQ: String
+  explanationIn: [String!]
+  explanationNotIn: [String!]
+  explanationGT: String
+  explanationGTE: String
+  explanationLT: String
+  explanationLTE: String
+  explanationContains: String
+  explanationHasPrefix: String
+  explanationHasSuffix: String
+  explanationIsNil: Boolean
+  explanationNotNil: Boolean
+  explanationEqualFold: String
+  explanationContainsFold: String
+  """
+  instructions field predicates
+  """
+  instructions: String
+  instructionsNEQ: String
+  instructionsIn: [String!]
+  instructionsNotIn: [String!]
+  instructionsGT: String
+  instructionsGTE: String
+  instructionsLT: String
+  instructionsLTE: String
+  instructionsContains: String
+  instructionsHasPrefix: String
+  instructionsHasSuffix: String
+  instructionsIsNil: Boolean
+  instructionsNotNil: Boolean
+  instructionsEqualFold: String
+  instructionsContainsFold: String
+  """
+  owner_reference field predicates
+  """
+  ownerReference: String
+  ownerReferenceNEQ: String
+  ownerReferenceIn: [String!]
+  ownerReferenceNotIn: [String!]
+  ownerReferenceGT: String
+  ownerReferenceGTE: String
+  ownerReferenceLT: String
+  ownerReferenceLTE: String
+  ownerReferenceContains: String
+  ownerReferenceHasPrefix: String
+  ownerReferenceHasSuffix: String
+  ownerReferenceIsNil: Boolean
+  ownerReferenceNotNil: Boolean
+  ownerReferenceEqualFold: String
+  ownerReferenceContainsFold: String
+  """
+  repository_uri field predicates
+  """
+  repositoryURI: String
+  repositoryURINEQ: String
+  repositoryURIIn: [String!]
+  repositoryURINotIn: [String!]
+  repositoryURIGT: String
+  repositoryURIGTE: String
+  repositoryURILT: String
+  repositoryURILTE: String
+  repositoryURIContains: String
+  repositoryURIHasPrefix: String
+  repositoryURIHasSuffix: String
+  repositoryURIIsNil: Boolean
+  repositoryURINotNil: Boolean
+  repositoryURIEqualFold: String
+  repositoryURIContainsFold: String
+  """
+  pull_request_uri field predicates
+  """
+  pullRequestURI: String
+  pullRequestURINEQ: String
+  pullRequestURIIn: [String!]
+  pullRequestURINotIn: [String!]
+  pullRequestURIGT: String
+  pullRequestURIGTE: String
+  pullRequestURILT: String
+  pullRequestURILTE: String
+  pullRequestURIContains: String
+  pullRequestURIHasPrefix: String
+  pullRequestURIHasSuffix: String
+  pullRequestURIIsNil: Boolean
+  pullRequestURINotNil: Boolean
+  pullRequestURIEqualFold: String
+  pullRequestURIContainsFold: String
+  """
+  ticket_reference field predicates
+  """
+  ticketReference: String
+  ticketReferenceNEQ: String
+  ticketReferenceIn: [String!]
+  ticketReferenceNotIn: [String!]
+  ticketReferenceGT: String
+  ticketReferenceGTE: String
+  ticketReferenceLT: String
+  ticketReferenceLTE: String
+  ticketReferenceContains: String
+  ticketReferenceHasPrefix: String
+  ticketReferenceHasSuffix: String
+  ticketReferenceIsNil: Boolean
+  ticketReferenceNotNil: Boolean
+  ticketReferenceEqualFold: String
+  ticketReferenceContainsFold: String
+  """
+  due_at field predicates
+  """
+  dueAt: DateTime
+  dueAtNEQ: DateTime
+  dueAtIn: [DateTime!]
+  dueAtNotIn: [DateTime!]
+  dueAtGT: DateTime
+  dueAtGTE: DateTime
+  dueAtLT: DateTime
+  dueAtLTE: DateTime
+  dueAtIsNil: Boolean
+  dueAtNotNil: Boolean
+  """
+  completed_at field predicates
+  """
+  completedAt: DateTime
+  completedAtNEQ: DateTime
+  completedAtIn: [DateTime!]
+  completedAtNotIn: [DateTime!]
+  completedAtGT: DateTime
+  completedAtGTE: DateTime
+  completedAtLT: DateTime
+  completedAtLTE: DateTime
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  pr_generated_at field predicates
+  """
+  prGeneratedAt: DateTime
+  prGeneratedAtNEQ: DateTime
+  prGeneratedAtIn: [DateTime!]
+  prGeneratedAtNotIn: [DateTime!]
+  prGeneratedAtGT: DateTime
+  prGeneratedAtGTE: DateTime
+  prGeneratedAtLT: DateTime
+  prGeneratedAtLTE: DateTime
+  prGeneratedAtIsNil: Boolean
+  prGeneratedAtNotNil: Boolean
+  """
+  error field predicates
+  """
+  error: String
+  errorNEQ: String
+  errorIn: [String!]
+  errorNotIn: [String!]
+  errorGT: String
+  errorGTE: String
+  errorLT: String
+  errorLTE: String
+  errorContains: String
+  errorHasPrefix: String
+  errorHasSuffix: String
+  errorIsNil: Boolean
+  errorNotNil: Boolean
+  errorEqualFold: String
+  errorContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+}
+type Review implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the review
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the review
+  """
+  externalOwnerID: String
+  """
+  title of the review
+  """
+  title: String!
+  """
+  state of the review
+  """
+  state: String
+  """
+  category for the review record
+  """
+  category: String
+  """
+  classification or sensitivity of the review record
+  """
+  classification: String
+  """
+  summary text for the review
+  """
+  summary: String
+  """
+  detailed notes captured during the review
+  """
+  details: String
+  """
+  person or system that created the review
+  """
+  reporter: String
+  """
+  true when the review has been approved
+  """
+  approved: Boolean
+  """
+  timestamp when the review was completed
+  """
+  reviewedAt: DateTime
+  """
+  timestamp when the review was reported or opened
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the review was approved
+  """
+  approvedAt: DateTime
+  """
+  identifier for the user primarily responsible for the review
+  """
+  reviewerID: ID
+  """
+  system that produced the review record
+  """
+  source: String
+  """
+  link to the review in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the review from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  """
+  primary reviewer responsible for the record
+  """
+  reviewer: User
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+}
+"""
+A connection to a list of items.
+"""
+type ReviewConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReviewEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReviewEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Review
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type ReviewHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ReviewHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  external identifier from the integration source for the review
+  """
+  externalID: String
+  """
+  external identifier from the integration source for the review
+  """
+  externalOwnerID: String
+  """
+  title of the review
+  """
+  title: String!
+  """
+  state of the review
+  """
+  state: String
+  """
+  category for the review record
+  """
+  category: String
+  """
+  classification or sensitivity of the review record
+  """
+  classification: String
+  """
+  summary text for the review
+  """
+  summary: String
+  """
+  detailed notes captured during the review
+  """
+  details: String
+  """
+  person or system that created the review
+  """
+  reporter: String
+  """
+  true when the review has been approved
+  """
+  approved: Boolean
+  """
+  timestamp when the review was completed
+  """
+  reviewedAt: DateTime
+  """
+  timestamp when the review was reported or opened
+  """
+  reportedAt: DateTime
+  """
+  timestamp when the review was approved
+  """
+  approvedAt: DateTime
+  """
+  identifier for the user primarily responsible for the review
+  """
+  reviewerID: String
+  """
+  system that produced the review record
+  """
+  source: String
+  """
+  link to the review in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the review from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+}
+"""
+A connection to a list of items.
+"""
+type ReviewHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReviewHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReviewHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ReviewHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ReviewHistoryOpType is enum for the field operation
+"""
+enum ReviewHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ReviewHistory connections
+"""
+input ReviewHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ReviewHistories.
+  """
+  field: ReviewHistoryOrderField!
+}
+"""
+Properties by which ReviewHistory connections can be ordered.
+"""
+enum ReviewHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  title
+  state
+}
+"""
+ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
+Input was generated by ent.
+"""
+input ReviewHistoryWhereInput {
+  not: ReviewHistoryWhereInput
+  and: [ReviewHistoryWhereInput!]
+  or: [ReviewHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ReviewHistoryOpType
+  operationNEQ: ReviewHistoryOpType
+  operationIn: [ReviewHistoryOpType!]
+  operationNotIn: [ReviewHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  classification field predicates
+  """
+  classification: String
+  classificationNEQ: String
+  classificationIn: [String!]
+  classificationNotIn: [String!]
+  classificationGT: String
+  classificationGTE: String
+  classificationLT: String
+  classificationLTE: String
+  classificationContains: String
+  classificationHasPrefix: String
+  classificationHasSuffix: String
+  classificationIsNil: Boolean
+  classificationNotNil: Boolean
+  classificationEqualFold: String
+  classificationContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
+  reporter field predicates
+  """
+  reporter: String
+  reporterNEQ: String
+  reporterIn: [String!]
+  reporterNotIn: [String!]
+  reporterGT: String
+  reporterGTE: String
+  reporterLT: String
+  reporterLTE: String
+  reporterContains: String
+  reporterHasPrefix: String
+  reporterHasSuffix: String
+  reporterIsNil: Boolean
+  reporterNotNil: Boolean
+  reporterEqualFold: String
+  reporterContainsFold: String
+  """
+  approved field predicates
+  """
+  approved: Boolean
+  approvedNEQ: Boolean
+  approvedIsNil: Boolean
+  approvedNotNil: Boolean
+  """
+  reviewed_at field predicates
+  """
+  reviewedAt: DateTime
+  reviewedAtNEQ: DateTime
+  reviewedAtIn: [DateTime!]
+  reviewedAtNotIn: [DateTime!]
+  reviewedAtGT: DateTime
+  reviewedAtGTE: DateTime
+  reviewedAtLT: DateTime
+  reviewedAtLTE: DateTime
+  reviewedAtIsNil: Boolean
+  reviewedAtNotNil: Boolean
+  """
+  reported_at field predicates
+  """
+  reportedAt: DateTime
+  reportedAtNEQ: DateTime
+  reportedAtIn: [DateTime!]
+  reportedAtNotIn: [DateTime!]
+  reportedAtGT: DateTime
+  reportedAtGTE: DateTime
+  reportedAtLT: DateTime
+  reportedAtLTE: DateTime
+  reportedAtIsNil: Boolean
+  reportedAtNotNil: Boolean
+  """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  reviewer_id field predicates
+  """
+  reviewerID: String
+  reviewerIDNEQ: String
+  reviewerIDIn: [String!]
+  reviewerIDNotIn: [String!]
+  reviewerIDGT: String
+  reviewerIDGTE: String
+  reviewerIDLT: String
+  reviewerIDLTE: String
+  reviewerIDContains: String
+  reviewerIDHasPrefix: String
+  reviewerIDHasSuffix: String
+  reviewerIDIsNil: Boolean
+  reviewerIDNotNil: Boolean
+  reviewerIDEqualFold: String
+  reviewerIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+}
+"""
+Ordering options for Review connections
+"""
+input ReviewOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Reviews.
+  """
+  field: ReviewOrderField!
+}
+"""
+Properties by which Review connections can be ordered.
+"""
+enum ReviewOrderField {
+  created_at
+  updated_at
+  external_id
+  external_owner_id
+  title
+  state
+}
+"""
+ReviewWhereInput is used for filtering Review objects.
+Input was generated by ent.
+"""
+input ReviewWhereInput {
+  not: ReviewWhereInput
+  and: [ReviewWhereInput!]
+  or: [ReviewWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  state field predicates
+  """
+  state: String
+  stateNEQ: String
+  stateIn: [String!]
+  stateNotIn: [String!]
+  stateGT: String
+  stateGTE: String
+  stateLT: String
+  stateLTE: String
+  stateContains: String
+  stateHasPrefix: String
+  stateHasSuffix: String
+  stateIsNil: Boolean
+  stateNotNil: Boolean
+  stateEqualFold: String
+  stateContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  classification field predicates
+  """
+  classification: String
+  classificationNEQ: String
+  classificationIn: [String!]
+  classificationNotIn: [String!]
+  classificationGT: String
+  classificationGTE: String
+  classificationLT: String
+  classificationLTE: String
+  classificationContains: String
+  classificationHasPrefix: String
+  classificationHasSuffix: String
+  classificationIsNil: Boolean
+  classificationNotNil: Boolean
+  classificationEqualFold: String
+  classificationContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
+  reporter field predicates
+  """
+  reporter: String
+  reporterNEQ: String
+  reporterIn: [String!]
+  reporterNotIn: [String!]
+  reporterGT: String
+  reporterGTE: String
+  reporterLT: String
+  reporterLTE: String
+  reporterContains: String
+  reporterHasPrefix: String
+  reporterHasSuffix: String
+  reporterIsNil: Boolean
+  reporterNotNil: Boolean
+  reporterEqualFold: String
+  reporterContainsFold: String
+  """
+  approved field predicates
+  """
+  approved: Boolean
+  approvedNEQ: Boolean
+  approvedIsNil: Boolean
+  approvedNotNil: Boolean
+  """
+  reviewed_at field predicates
+  """
+  reviewedAt: DateTime
+  reviewedAtNEQ: DateTime
+  reviewedAtIn: [DateTime!]
+  reviewedAtNotIn: [DateTime!]
+  reviewedAtGT: DateTime
+  reviewedAtGTE: DateTime
+  reviewedAtLT: DateTime
+  reviewedAtLTE: DateTime
+  reviewedAtIsNil: Boolean
+  reviewedAtNotNil: Boolean
+  """
+  reported_at field predicates
+  """
+  reportedAt: DateTime
+  reportedAtNEQ: DateTime
+  reportedAtIn: [DateTime!]
+  reportedAtNotIn: [DateTime!]
+  reportedAtGT: DateTime
+  reportedAtGTE: DateTime
+  reportedAtLT: DateTime
+  reportedAtLTE: DateTime
+  reportedAtIsNil: Boolean
+  reportedAtNotNil: Boolean
+  """
+  approved_at field predicates
+  """
+  approvedAt: DateTime
+  approvedAtNEQ: DateTime
+  approvedAtIn: [DateTime!]
+  approvedAtNotIn: [DateTime!]
+  approvedAtGT: DateTime
+  approvedAtGTE: DateTime
+  approvedAtLT: DateTime
+  approvedAtLTE: DateTime
+  approvedAtIsNil: Boolean
+  approvedAtNotNil: Boolean
+  """
+  reviewer_id field predicates
+  """
+  reviewerID: ID
+  reviewerIDNEQ: ID
+  reviewerIDIn: [ID!]
+  reviewerIDNotIn: [ID!]
+  reviewerIDGT: ID
+  reviewerIDGTE: ID
+  reviewerIDLT: ID
+  reviewerIDLTE: ID
+  reviewerIDContains: ID
+  reviewerIDHasPrefix: ID
+  reviewerIDHasSuffix: ID
+  reviewerIDIsNil: Boolean
+  reviewerIDNotNil: Boolean
+  reviewerIDEqualFold: ID
+  reviewerIDContainsFold: ID
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  reviewer edge predicates
+  """
+  hasReviewer: Boolean
+  hasReviewerWith: [UserWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 type Risk implements Node {
   id: ID!
@@ -95249,6 +109357,37 @@ type Task implements Node {
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -96195,6 +110334,11 @@ input TaskWhereInput {
   """
   hasControlImplementations: Boolean
   hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
   """
   evidence edge predicates
   """
@@ -101168,15 +115312,52 @@ input UpdateActionPlanInput {
   actionPlanKindName: String
   clearActionPlanKindName: Boolean
   """
+  short title describing the action plan
+  """
+  title: String
+  """
+  detailed description of remediation steps and objectives
+  """
+  description: String
+  clearDescription: Boolean
+  """
   due date of the action plan
   """
   dueDate: Time
   clearDueDate: Boolean
   """
+  timestamp when the action plan was completed
+  """
+  completedAt: Time
+  clearCompletedAt: Boolean
+  """
   priority of the action plan
   """
   priority: ActionPlanPriority
   clearPriority: Boolean
+  """
+  indicates if the action plan requires explicit approval before closure
+  """
+  requiresApproval: Boolean
+  """
+  true when the action plan is currently blocked
+  """
+  blocked: Boolean
+  """
+  context on why the action plan is blocked
+  """
+  blockerReason: String
+  clearBlockerReason: Boolean
+  """
+  additional structured metadata for the action plan
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  clearRawPayload: Boolean
   """
   source of the action plan
   """
@@ -101199,6 +115380,24 @@ input UpdateActionPlanInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
   fileID: ID
   clearFile: Boolean
 }
@@ -101641,6 +115840,9 @@ input UpdateControlInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
@@ -102312,6 +116514,307 @@ input UpdateFileInput {
   addSecretIDs: [ID!]
   removeSecretIDs: [ID!]
   clearSecrets: Boolean
+}
+"""
+UpdateFindingControlInput is used for update FindingControl object.
+Input was generated by ent.
+"""
+input UpdateFindingControlInput {
+  """
+  external identifier for the standard provided by the source system such as iso or hipaa
+  """
+  externalStandard: String
+  clearExternalStandard: Boolean
+  """
+  version for the external standard provided by the source system
+  """
+  externalStandardVersion: String
+  clearExternalStandardVersion: Boolean
+  """
+  control identifier provided by the source system such as A.5.10
+  """
+  externalControlID: String
+  clearExternalControlID: Boolean
+  """
+  the integration source that provided the mapping
+  """
+  source: String
+  clearSource: Boolean
+  """
+  additional metadata about the control mapping from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  timestamp when the mapping was first observed
+  """
+  discoveredAt: DateTime
+  clearDiscoveredAt: Boolean
+}
+"""
+UpdateFindingInput is used for update Finding object.
+Input was generated by ent.
+"""
+input UpdateFindingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  external identifier from the integration source for the finding
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  the owner of the finding
+  """
+  externalOwnerID: String
+  clearExternalOwnerID: Boolean
+  """
+  system that produced the finding, e.g. gcp_scc
+  """
+  source: String
+  clearSource: Boolean
+  """
+  resource identifier provided by the source system
+  """
+  resourceName: String
+  clearResourceName: Boolean
+  """
+  display name for the finding when provided by the source
+  """
+  displayName: String
+  clearDisplayName: Boolean
+  """
+  state reported by the source system, such as ACTIVE or INACTIVE
+  """
+  state: String
+  clearState: Boolean
+  """
+  primary category of the finding
+  """
+  category: String
+  clearCategory: Boolean
+  """
+  normalized categories for the finding
+  """
+  categories: [String!]
+  appendCategories: [String!]
+  clearCategories: Boolean
+  """
+  classification provided by the source, e.g. MISCONFIGURATION
+  """
+  findingClass: String
+  clearFindingClass: Boolean
+  """
+  severity label for the finding
+  """
+  severity: String
+  clearSeverity: Boolean
+  """
+  numeric severity score for the finding if provided
+  """
+  numericSeverity: Float
+  clearNumericSeverity: Boolean
+  """
+  aggregated score such as CVSS for the finding
+  """
+  score: Float
+  clearScore: Boolean
+  """
+  impact score or rating for the finding
+  """
+  impact: Float
+  clearImpact: Boolean
+  """
+  exploitability score or rating for the finding
+  """
+  exploitability: Float
+  clearExploitability: Boolean
+  """
+  priority assigned to the finding
+  """
+  priority: String
+  clearPriority: Boolean
+  """
+  indicates if the finding is still open
+  """
+  open: Boolean
+  clearOpen: Boolean
+  """
+  true when the finding blocks production changes
+  """
+  blocksProduction: Boolean
+  clearBlocksProduction: Boolean
+  """
+  true when the finding affects production systems
+  """
+  production: Boolean
+  clearProduction: Boolean
+  """
+  true when the finding is publicly disclosed
+  """
+  public: Boolean
+  clearPublic: Boolean
+  """
+  true when the finding has been validated by the security team
+  """
+  validated: Boolean
+  clearValidated: Boolean
+  """
+  identifier for the assessment that generated the finding
+  """
+  assessmentID: String
+  clearAssessmentID: Boolean
+  """
+  long form description of the finding
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  short recommendation text from the source system (deprecated upstream)
+  """
+  recommendation: String
+  clearRecommendation: Boolean
+  """
+  markdown formatted remediation guidance for the finding
+  """
+  recommendedActions: String
+  clearRecommendedActions: Boolean
+  """
+  reference links for the finding
+  """
+  references: [String!]
+  appendReferences: [String!]
+  clearReferences: Boolean
+  """
+  steps required to reproduce the finding
+  """
+  stepsToReproduce: [String!]
+  appendStepsToReproduce: [String!]
+  clearStepsToReproduce: Boolean
+  """
+  targets impacted by the finding such as projects or applications
+  """
+  targets: [String!]
+  appendTargets: [String!]
+  clearTargets: Boolean
+  """
+  structured details about the impacted targets
+  """
+  targetDetails: Map
+  clearTargetDetails: Boolean
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  clearVector: Boolean
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  clearRemediationSLA: Boolean
+  """
+  lifecycle status of the finding
+  """
+  status: String
+  clearStatus: Boolean
+  """
+  timestamp when the finding was last observed by the source
+  """
+  eventTime: DateTime
+  clearEventTime: Boolean
+  """
+  timestamp when the finding was first reported by the source
+  """
+  reportedAt: DateTime
+  clearReportedAt: Boolean
+  """
+  timestamp when the source last updated the finding
+  """
+  sourceUpdatedAt: DateTime
+  clearSourceUpdatedAt: Boolean
+  """
+  link to the finding in the source system
+  """
+  externalURI: String
+  clearExternalURI: Boolean
+  """
+  raw metadata payload for the finding from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -103322,6 +117825,18 @@ input UpdateOrganizationInput {
   addTagDefinitionIDs: [ID!]
   removeTagDefinitionIDs: [ID!]
   clearTagDefinitions: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -103772,6 +118287,333 @@ Input was generated by ent.
 """
 input UpdateProgramMembershipInput {
   role: ProgramMembershipRole
+}
+"""
+UpdateRemediationInput is used for update Remediation object.
+Input was generated by ent.
+"""
+input UpdateRemediationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  external identifier from the integration source for the remediation
+  """
+  externalOwnerID: String
+  clearExternalOwnerID: Boolean
+  """
+  title or short description of the remediation effort
+  """
+  title: String
+  clearTitle: Boolean
+  """
+  state of the remediation, such as pending or completed
+  """
+  state: String
+  clearState: Boolean
+  """
+  intent or goal of the remediation effort
+  """
+  intent: String
+  clearIntent: Boolean
+  """
+  summary of the remediation approach
+  """
+  summary: String
+  clearSummary: Boolean
+  """
+  detailed explanation of the remediation steps
+  """
+  explanation: String
+  clearExplanation: Boolean
+  """
+  specific instructions or steps to implement the remediation
+  """
+  instructions: String
+  clearInstructions: Boolean
+  """
+  reference to the owner responsible for remediation
+  """
+  ownerReference: String
+  clearOwnerReference: Boolean
+  """
+  source code repository URI associated with the remediation
+  """
+  repositoryURI: String
+  clearRepositoryURI: Boolean
+  """
+  pull request URI associated with the remediation
+  """
+  pullRequestURI: String
+  clearPullRequestURI: Boolean
+  """
+  reference to a tracking ticket for the remediation
+  """
+  ticketReference: String
+  clearTicketReference: Boolean
+  """
+  timestamp when the remediation is due
+  """
+  dueAt: DateTime
+  clearDueAt: Boolean
+  """
+  timestamp when the remediation was completed
+  """
+  completedAt: DateTime
+  clearCompletedAt: Boolean
+  """
+  timestamp when an automated pull request was generated
+  """
+  prGeneratedAt: DateTime
+  clearPrGeneratedAt: Boolean
+  """
+  details about any errors encountered during remediation automation
+  """
+  error: String
+  clearError: Boolean
+  """
+  system that produced the remediation record
+  """
+  source: String
+  clearSource: Boolean
+  """
+  link to the remediation in the source system
+  """
+  externalURI: String
+  clearExternalURI: Boolean
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+}
+"""
+UpdateReviewInput is used for update Review object.
+Input was generated by ent.
+"""
+input UpdateReviewInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  external identifier from the integration source for the review
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  external identifier from the integration source for the review
+  """
+  externalOwnerID: String
+  clearExternalOwnerID: Boolean
+  """
+  title of the review
+  """
+  title: String
+  """
+  state of the review
+  """
+  state: String
+  clearState: Boolean
+  """
+  category for the review record
+  """
+  category: String
+  clearCategory: Boolean
+  """
+  classification or sensitivity of the review record
+  """
+  classification: String
+  clearClassification: Boolean
+  """
+  summary text for the review
+  """
+  summary: String
+  clearSummary: Boolean
+  """
+  detailed notes captured during the review
+  """
+  details: String
+  clearDetails: Boolean
+  """
+  person or system that created the review
+  """
+  reporter: String
+  clearReporter: Boolean
+  """
+  true when the review has been approved
+  """
+  approved: Boolean
+  clearApproved: Boolean
+  """
+  timestamp when the review was completed
+  """
+  reviewedAt: DateTime
+  clearReviewedAt: Boolean
+  """
+  timestamp when the review was reported or opened
+  """
+  reportedAt: DateTime
+  clearReportedAt: Boolean
+  """
+  timestamp when the review was approved
+  """
+  approvedAt: DateTime
+  clearApprovedAt: Boolean
+  """
+  system that produced the review record
+  """
+  source: String
+  clearSource: Boolean
+  """
+  link to the review in the source system
+  """
+  externalURI: String
+  clearExternalURI: Boolean
+  """
+  raw metadata payload for the review from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  reviewerID: ID
+  clearReviewer: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateRiskInput is used for update Risk object.
@@ -104480,6 +119322,9 @@ input UpdateTaskInput {
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -104942,6 +119787,228 @@ input UpdateUserSettingInput {
   clearUser: Boolean
   defaultOrgID: ID
   clearDefaultOrg: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+}
+"""
+UpdateVulnerabilityInput is used for update Vulnerability object.
+Input was generated by ent.
+"""
+input UpdateVulnerabilityInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  owner of the vulnerability
+  """
+  externalOwnerID: String
+  clearExternalOwnerID: Boolean
+  """
+  external identifier from the integration source for the vulnerability
+  """
+  externalID: String
+  """
+  CVE identifier for the vulnerability when applicable
+  """
+  cveID: String
+  clearCveID: Boolean
+  """
+  system that produced the vulnerability record
+  """
+  source: String
+  clearSource: Boolean
+  """
+  display name for the vulnerability when provided
+  """
+  displayName: String
+  clearDisplayName: Boolean
+  """
+  category of the vulnerability such as application or infrastructure
+  """
+  category: String
+  clearCategory: Boolean
+  """
+  severity label for the vulnerability
+  """
+  severity: String
+  clearSeverity: Boolean
+  """
+  overall score such as CVSS for the vulnerability
+  """
+  score: Float
+  clearScore: Boolean
+  """
+  impact score or rating for the vulnerability
+  """
+  impact: Float
+  clearImpact: Boolean
+  """
+  exploitability score or rating for the vulnerability
+  """
+  exploitability: Float
+  clearExploitability: Boolean
+  """
+  priority assigned to the vulnerability
+  """
+  priority: String
+  clearPriority: Boolean
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  clearStatus: Boolean
+  """
+  short summary of the vulnerability details
+  """
+  summary: String
+  clearSummary: Boolean
+  """
+  long form description of the vulnerability
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  clearVector: Boolean
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  clearRemediationSLA: Boolean
+  """
+  indicates if the vulnerability is still open
+  """
+  open: Boolean
+  clearOpen: Boolean
+  """
+  true when the vulnerability blocks production changes
+  """
+  blocking: Boolean
+  clearBlocking: Boolean
+  """
+  true when the vulnerability affects production systems
+  """
+  production: Boolean
+  clearProduction: Boolean
+  """
+  true when the vulnerability is publicly disclosed
+  """
+  public: Boolean
+  clearPublic: Boolean
+  """
+  true when the vulnerability has been validated by the security team
+  """
+  validated: Boolean
+  clearValidated: Boolean
+  """
+  reference links for the vulnerability
+  """
+  references: [String!]
+  appendReferences: [String!]
+  clearReferences: Boolean
+  """
+  targets or assets impacted by the vulnerability
+  """
+  impacts: [String!]
+  appendImpacts: [String!]
+  clearImpacts: Boolean
+  """
+  timestamp when the vulnerability was published
+  """
+  publishedAt: DateTime
+  clearPublishedAt: Boolean
+  """
+  timestamp when the vulnerability was discovered in the environment
+  """
+  discoveredAt: DateTime
+  clearDiscoveredAt: Boolean
+  """
+  timestamp when the source last updated the vulnerability
+  """
+  sourceUpdatedAt: DateTime
+  clearSourceUpdatedAt: Boolean
+  """
+  link to the vulnerability in the source system
+  """
+  externalURI: String
+  clearExternalURI: Boolean
+  """
+  raw metadata payload for the vulnerability from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  clearRawPayload: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addActionPlanIDs: [ID!]
+  removeActionPlanIDs: [ID!]
+  clearActionPlans: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -107149,6 +122216,2150 @@ input UserWhereInput {
   hasProgramMemberships: Boolean
   hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
 }
+type Vulnerability implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  owner of the vulnerability
+  """
+  externalOwnerID: String
+  """
+  external identifier from the integration source for the vulnerability
+  """
+  externalID: String!
+  """
+  CVE identifier for the vulnerability when applicable
+  """
+  cveID: String
+  """
+  system that produced the vulnerability record
+  """
+  source: String
+  """
+  display name for the vulnerability when provided
+  """
+  displayName: String
+  """
+  category of the vulnerability such as application or infrastructure
+  """
+  category: String
+  """
+  severity label for the vulnerability
+  """
+  severity: String
+  """
+  overall score such as CVSS for the vulnerability
+  """
+  score: Float
+  """
+  impact score or rating for the vulnerability
+  """
+  impact: Float
+  """
+  exploitability score or rating for the vulnerability
+  """
+  exploitability: Float
+  """
+  priority assigned to the vulnerability
+  """
+  priority: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  """
+  short summary of the vulnerability details
+  """
+  summary: String
+  """
+  long form description of the vulnerability
+  """
+  description: String
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  indicates if the vulnerability is still open
+  """
+  open: Boolean
+  """
+  true when the vulnerability blocks production changes
+  """
+  blocking: Boolean
+  """
+  true when the vulnerability affects production systems
+  """
+  production: Boolean
+  """
+  true when the vulnerability is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the vulnerability has been validated by the security team
+  """
+  validated: Boolean
+  """
+  reference links for the vulnerability
+  """
+  references: [String!]
+  """
+  targets or assets impacted by the vulnerability
+  """
+  impacts: [String!]
+  """
+  timestamp when the vulnerability was published
+  """
+  publishedAt: DateTime
+  """
+  timestamp when the vulnerability was discovered in the environment
+  """
+  discoveredAt: DateTime
+  """
+  timestamp when the source last updated the vulnerability
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the vulnerability in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the vulnerability from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+}
+"""
+A connection to a list of items.
+"""
+type VulnerabilityConnection {
+  """
+  A list of edges.
+  """
+  edges: [VulnerabilityEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type VulnerabilityEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Vulnerability
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type VulnerabilityHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: VulnerabilityHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  owner of the vulnerability
+  """
+  externalOwnerID: String
+  """
+  external identifier from the integration source for the vulnerability
+  """
+  externalID: String!
+  """
+  CVE identifier for the vulnerability when applicable
+  """
+  cveID: String
+  """
+  system that produced the vulnerability record
+  """
+  source: String
+  """
+  display name for the vulnerability when provided
+  """
+  displayName: String
+  """
+  category of the vulnerability such as application or infrastructure
+  """
+  category: String
+  """
+  severity label for the vulnerability
+  """
+  severity: String
+  """
+  overall score such as CVSS for the vulnerability
+  """
+  score: Float
+  """
+  impact score or rating for the vulnerability
+  """
+  impact: Float
+  """
+  exploitability score or rating for the vulnerability
+  """
+  exploitability: Float
+  """
+  priority assigned to the vulnerability
+  """
+  priority: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  """
+  short summary of the vulnerability details
+  """
+  summary: String
+  """
+  long form description of the vulnerability
+  """
+  description: String
+  """
+  attack vector string such as a CVSS vector
+  """
+  vector: String
+  """
+  remediation service level agreement in days
+  """
+  remediationSLA: Int
+  """
+  indicates if the vulnerability is still open
+  """
+  open: Boolean
+  """
+  true when the vulnerability blocks production changes
+  """
+  blocking: Boolean
+  """
+  true when the vulnerability affects production systems
+  """
+  production: Boolean
+  """
+  true when the vulnerability is publicly disclosed
+  """
+  public: Boolean
+  """
+  true when the vulnerability has been validated by the security team
+  """
+  validated: Boolean
+  """
+  reference links for the vulnerability
+  """
+  references: [String!]
+  """
+  targets or assets impacted by the vulnerability
+  """
+  impacts: [String!]
+  """
+  timestamp when the vulnerability was published
+  """
+  publishedAt: DateTime
+  """
+  timestamp when the vulnerability was discovered in the environment
+  """
+  discoveredAt: DateTime
+  """
+  timestamp when the source last updated the vulnerability
+  """
+  sourceUpdatedAt: DateTime
+  """
+  link to the vulnerability in the source system
+  """
+  externalURI: String
+  """
+  raw metadata payload for the vulnerability from the source system
+  """
+  metadata: Map
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawPayload: Map
+}
+"""
+A connection to a list of items.
+"""
+type VulnerabilityHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [VulnerabilityHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type VulnerabilityHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: VulnerabilityHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+VulnerabilityHistoryOpType is enum for the field operation
+"""
+enum VulnerabilityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for VulnerabilityHistory connections
+"""
+input VulnerabilityHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order VulnerabilityHistories.
+  """
+  field: VulnerabilityHistoryOrderField!
+}
+"""
+Properties by which VulnerabilityHistory connections can be ordered.
+"""
+enum VulnerabilityHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_owner_id
+  external_id
+  cve_id
+  category
+  severity
+}
+"""
+VulnerabilityHistoryWhereInput is used for filtering VulnerabilityHistory objects.
+Input was generated by ent.
+"""
+input VulnerabilityHistoryWhereInput {
+  not: VulnerabilityHistoryWhereInput
+  and: [VulnerabilityHistoryWhereInput!]
+  or: [VulnerabilityHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: VulnerabilityHistoryOpType
+  operationNEQ: VulnerabilityHistoryOpType
+  operationIn: [VulnerabilityHistoryOpType!]
+  operationNotIn: [VulnerabilityHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  cve_id field predicates
+  """
+  cveID: String
+  cveIDNEQ: String
+  cveIDIn: [String!]
+  cveIDNotIn: [String!]
+  cveIDGT: String
+  cveIDGTE: String
+  cveIDLT: String
+  cveIDLTE: String
+  cveIDContains: String
+  cveIDHasPrefix: String
+  cveIDHasSuffix: String
+  cveIDIsNil: Boolean
+  cveIDNotNil: Boolean
+  cveIDEqualFold: String
+  cveIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  severity field predicates
+  """
+  severity: String
+  severityNEQ: String
+  severityIn: [String!]
+  severityNotIn: [String!]
+  severityGT: String
+  severityGTE: String
+  severityLT: String
+  severityLTE: String
+  severityContains: String
+  severityHasPrefix: String
+  severityHasSuffix: String
+  severityIsNil: Boolean
+  severityNotNil: Boolean
+  severityEqualFold: String
+  severityContainsFold: String
+  """
+  score field predicates
+  """
+  score: Float
+  scoreNEQ: Float
+  scoreIn: [Float!]
+  scoreNotIn: [Float!]
+  scoreGT: Float
+  scoreGTE: Float
+  scoreLT: Float
+  scoreLTE: Float
+  scoreIsNil: Boolean
+  scoreNotNil: Boolean
+  """
+  impact field predicates
+  """
+  impact: Float
+  impactNEQ: Float
+  impactIn: [Float!]
+  impactNotIn: [Float!]
+  impactGT: Float
+  impactGTE: Float
+  impactLT: Float
+  impactLTE: Float
+  impactIsNil: Boolean
+  impactNotNil: Boolean
+  """
+  exploitability field predicates
+  """
+  exploitability: Float
+  exploitabilityNEQ: Float
+  exploitabilityIn: [Float!]
+  exploitabilityNotIn: [Float!]
+  exploitabilityGT: Float
+  exploitabilityGTE: Float
+  exploitabilityLT: Float
+  exploitabilityLTE: Float
+  exploitabilityIsNil: Boolean
+  exploitabilityNotNil: Boolean
+  """
+  priority field predicates
+  """
+  priority: String
+  priorityNEQ: String
+  priorityIn: [String!]
+  priorityNotIn: [String!]
+  priorityGT: String
+  priorityGTE: String
+  priorityLT: String
+  priorityLTE: String
+  priorityContains: String
+  priorityHasPrefix: String
+  priorityHasSuffix: String
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  priorityEqualFold: String
+  priorityContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  vector field predicates
+  """
+  vector: String
+  vectorNEQ: String
+  vectorIn: [String!]
+  vectorNotIn: [String!]
+  vectorGT: String
+  vectorGTE: String
+  vectorLT: String
+  vectorLTE: String
+  vectorContains: String
+  vectorHasPrefix: String
+  vectorHasSuffix: String
+  vectorIsNil: Boolean
+  vectorNotNil: Boolean
+  vectorEqualFold: String
+  vectorContainsFold: String
+  """
+  remediation_sla field predicates
+  """
+  remediationSLA: Int
+  remediationSLANEQ: Int
+  remediationSLAIn: [Int!]
+  remediationSLANotIn: [Int!]
+  remediationSLAGT: Int
+  remediationSLAGTE: Int
+  remediationSLALT: Int
+  remediationSLALTE: Int
+  remediationSLAIsNil: Boolean
+  remediationSLANotNil: Boolean
+  """
+  open field predicates
+  """
+  open: Boolean
+  openNEQ: Boolean
+  openIsNil: Boolean
+  openNotNil: Boolean
+  """
+  blocking field predicates
+  """
+  blocking: Boolean
+  blockingNEQ: Boolean
+  blockingIsNil: Boolean
+  blockingNotNil: Boolean
+  """
+  production field predicates
+  """
+  production: Boolean
+  productionNEQ: Boolean
+  productionIsNil: Boolean
+  productionNotNil: Boolean
+  """
+  public field predicates
+  """
+  public: Boolean
+  publicNEQ: Boolean
+  publicIsNil: Boolean
+  publicNotNil: Boolean
+  """
+  validated field predicates
+  """
+  validated: Boolean
+  validatedNEQ: Boolean
+  validatedIsNil: Boolean
+  validatedNotNil: Boolean
+  """
+  published_at field predicates
+  """
+  publishedAt: DateTime
+  publishedAtNEQ: DateTime
+  publishedAtIn: [DateTime!]
+  publishedAtNotIn: [DateTime!]
+  publishedAtGT: DateTime
+  publishedAtGTE: DateTime
+  publishedAtLT: DateTime
+  publishedAtLTE: DateTime
+  publishedAtIsNil: Boolean
+  publishedAtNotNil: Boolean
+  """
+  discovered_at field predicates
+  """
+  discoveredAt: DateTime
+  discoveredAtNEQ: DateTime
+  discoveredAtIn: [DateTime!]
+  discoveredAtNotIn: [DateTime!]
+  discoveredAtGT: DateTime
+  discoveredAtGTE: DateTime
+  discoveredAtLT: DateTime
+  discoveredAtLTE: DateTime
+  discoveredAtIsNil: Boolean
+  discoveredAtNotNil: Boolean
+  """
+  source_updated_at field predicates
+  """
+  sourceUpdatedAt: DateTime
+  sourceUpdatedAtNEQ: DateTime
+  sourceUpdatedAtIn: [DateTime!]
+  sourceUpdatedAtNotIn: [DateTime!]
+  sourceUpdatedAtGT: DateTime
+  sourceUpdatedAtGTE: DateTime
+  sourceUpdatedAtLT: DateTime
+  sourceUpdatedAtLTE: DateTime
+  sourceUpdatedAtIsNil: Boolean
+  sourceUpdatedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+}
+"""
+Ordering options for Vulnerability connections
+"""
+input VulnerabilityOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Vulnerabilities.
+  """
+  field: VulnerabilityOrderField!
+}
+"""
+Properties by which Vulnerability connections can be ordered.
+"""
+enum VulnerabilityOrderField {
+  created_at
+  updated_at
+  external_owner_id
+  external_id
+  cve_id
+  category
+  severity
+}
+"""
+VulnerabilityWhereInput is used for filtering Vulnerability objects.
+Input was generated by ent.
+"""
+input VulnerabilityWhereInput {
+  not: VulnerabilityWhereInput
+  and: [VulnerabilityWhereInput!]
+  or: [VulnerabilityWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  external_owner_id field predicates
+  """
+  externalOwnerID: String
+  externalOwnerIDNEQ: String
+  externalOwnerIDIn: [String!]
+  externalOwnerIDNotIn: [String!]
+  externalOwnerIDGT: String
+  externalOwnerIDGTE: String
+  externalOwnerIDLT: String
+  externalOwnerIDLTE: String
+  externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
+  externalOwnerIDHasSuffix: String
+  externalOwnerIDIsNil: Boolean
+  externalOwnerIDNotNil: Boolean
+  externalOwnerIDEqualFold: String
+  externalOwnerIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  cve_id field predicates
+  """
+  cveID: String
+  cveIDNEQ: String
+  cveIDIn: [String!]
+  cveIDNotIn: [String!]
+  cveIDGT: String
+  cveIDGTE: String
+  cveIDLT: String
+  cveIDLTE: String
+  cveIDContains: String
+  cveIDHasPrefix: String
+  cveIDHasSuffix: String
+  cveIDIsNil: Boolean
+  cveIDNotNil: Boolean
+  cveIDEqualFold: String
+  cveIDContainsFold: String
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryIsNil: Boolean
+  categoryNotNil: Boolean
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  severity field predicates
+  """
+  severity: String
+  severityNEQ: String
+  severityIn: [String!]
+  severityNotIn: [String!]
+  severityGT: String
+  severityGTE: String
+  severityLT: String
+  severityLTE: String
+  severityContains: String
+  severityHasPrefix: String
+  severityHasSuffix: String
+  severityIsNil: Boolean
+  severityNotNil: Boolean
+  severityEqualFold: String
+  severityContainsFold: String
+  """
+  score field predicates
+  """
+  score: Float
+  scoreNEQ: Float
+  scoreIn: [Float!]
+  scoreNotIn: [Float!]
+  scoreGT: Float
+  scoreGTE: Float
+  scoreLT: Float
+  scoreLTE: Float
+  scoreIsNil: Boolean
+  scoreNotNil: Boolean
+  """
+  impact field predicates
+  """
+  impact: Float
+  impactNEQ: Float
+  impactIn: [Float!]
+  impactNotIn: [Float!]
+  impactGT: Float
+  impactGTE: Float
+  impactLT: Float
+  impactLTE: Float
+  impactIsNil: Boolean
+  impactNotNil: Boolean
+  """
+  exploitability field predicates
+  """
+  exploitability: Float
+  exploitabilityNEQ: Float
+  exploitabilityIn: [Float!]
+  exploitabilityNotIn: [Float!]
+  exploitabilityGT: Float
+  exploitabilityGTE: Float
+  exploitabilityLT: Float
+  exploitabilityLTE: Float
+  exploitabilityIsNil: Boolean
+  exploitabilityNotNil: Boolean
+  """
+  priority field predicates
+  """
+  priority: String
+  priorityNEQ: String
+  priorityIn: [String!]
+  priorityNotIn: [String!]
+  priorityGT: String
+  priorityGTE: String
+  priorityLT: String
+  priorityLTE: String
+  priorityContains: String
+  priorityHasPrefix: String
+  priorityHasSuffix: String
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  priorityEqualFold: String
+  priorityContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryGT: String
+  summaryGTE: String
+  summaryLT: String
+  summaryLTE: String
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  vector field predicates
+  """
+  vector: String
+  vectorNEQ: String
+  vectorIn: [String!]
+  vectorNotIn: [String!]
+  vectorGT: String
+  vectorGTE: String
+  vectorLT: String
+  vectorLTE: String
+  vectorContains: String
+  vectorHasPrefix: String
+  vectorHasSuffix: String
+  vectorIsNil: Boolean
+  vectorNotNil: Boolean
+  vectorEqualFold: String
+  vectorContainsFold: String
+  """
+  remediation_sla field predicates
+  """
+  remediationSLA: Int
+  remediationSLANEQ: Int
+  remediationSLAIn: [Int!]
+  remediationSLANotIn: [Int!]
+  remediationSLAGT: Int
+  remediationSLAGTE: Int
+  remediationSLALT: Int
+  remediationSLALTE: Int
+  remediationSLAIsNil: Boolean
+  remediationSLANotNil: Boolean
+  """
+  open field predicates
+  """
+  open: Boolean
+  openNEQ: Boolean
+  openIsNil: Boolean
+  openNotNil: Boolean
+  """
+  blocking field predicates
+  """
+  blocking: Boolean
+  blockingNEQ: Boolean
+  blockingIsNil: Boolean
+  blockingNotNil: Boolean
+  """
+  production field predicates
+  """
+  production: Boolean
+  productionNEQ: Boolean
+  productionIsNil: Boolean
+  productionNotNil: Boolean
+  """
+  public field predicates
+  """
+  public: Boolean
+  publicNEQ: Boolean
+  publicIsNil: Boolean
+  publicNotNil: Boolean
+  """
+  validated field predicates
+  """
+  validated: Boolean
+  validatedNEQ: Boolean
+  validatedIsNil: Boolean
+  validatedNotNil: Boolean
+  """
+  published_at field predicates
+  """
+  publishedAt: DateTime
+  publishedAtNEQ: DateTime
+  publishedAtIn: [DateTime!]
+  publishedAtNotIn: [DateTime!]
+  publishedAtGT: DateTime
+  publishedAtGTE: DateTime
+  publishedAtLT: DateTime
+  publishedAtLTE: DateTime
+  publishedAtIsNil: Boolean
+  publishedAtNotNil: Boolean
+  """
+  discovered_at field predicates
+  """
+  discoveredAt: DateTime
+  discoveredAtNEQ: DateTime
+  discoveredAtIn: [DateTime!]
+  discoveredAtNotIn: [DateTime!]
+  discoveredAtGT: DateTime
+  discoveredAtGTE: DateTime
+  discoveredAtLT: DateTime
+  discoveredAtLTE: DateTime
+  discoveredAtIsNil: Boolean
+  discoveredAtNotNil: Boolean
+  """
+  source_updated_at field predicates
+  """
+  sourceUpdatedAt: DateTime
+  sourceUpdatedAtNEQ: DateTime
+  sourceUpdatedAtIn: [DateTime!]
+  sourceUpdatedAtNotIn: [DateTime!]
+  sourceUpdatedAtGT: DateTime
+  sourceUpdatedAtGTE: DateTime
+  sourceUpdatedAtLT: DateTime
+  sourceUpdatedAtLTE: DateTime
+  sourceUpdatedAtIsNil: Boolean
+  sourceUpdatedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+}
 type Webauthn implements Node {
   id: ID!
   createdAt: Time
@@ -107920,6 +125131,212 @@ type FileDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/fileextended.graphql", Input: `extend type File {
     presignedURL: String
+}`, BuiltIn: false},
+	{Name: "../schema/finding.graphql", Input: `extend type Query {
+    """
+    Look up finding by ID
+    """
+     finding(
+        """
+        ID of the finding
+        """
+        id: ID!
+    ):  Finding!
+}
+
+extend type Mutation{
+    """
+    Create a new finding
+    """
+    createFinding(
+        """
+        values of the finding
+        """
+        input: CreateFindingInput!
+    ): FindingCreatePayload!
+    """
+    Create multiple new findings
+    """
+    createBulkFinding(
+        """
+        values of the finding
+        """
+        input: [CreateFindingInput!]
+    ): FindingBulkCreatePayload!
+    """
+    Create multiple new findings via file upload
+    """
+    createBulkCSVFinding(
+        """
+        csv file containing values of the finding
+        """
+        input: Upload!
+    ): FindingBulkCreatePayload!
+    """
+    Update an existing finding
+    """
+    updateFinding(
+        """
+        ID of the finding
+        """
+        id: ID!
+        """
+        New values for the finding
+        """
+        input: UpdateFindingInput!
+    ): FindingUpdatePayload!
+    """
+    Delete an existing finding
+    """
+    deleteFinding(
+        """
+        ID of the finding
+        """
+        id: ID!
+    ): FindingDeletePayload!
+}
+
+"""
+Return response for createFinding mutation
+"""
+type FindingCreatePayload {
+    """
+    Created finding
+    """
+    finding: Finding!
+}
+
+"""
+Return response for updateFinding mutation
+"""
+type FindingUpdatePayload {
+    """
+    Updated finding
+    """
+    finding: Finding!
+}
+
+"""
+Return response for deleteFinding mutation
+"""
+type FindingDeletePayload {
+    """
+    Deleted finding ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkFinding mutation
+"""
+type FindingBulkCreatePayload {
+    """
+    Created findings
+    """
+    findings: [Finding!]
+}`, BuiltIn: false},
+	{Name: "../schema/findingcontrol.graphql", Input: `extend type Query {
+    """
+    Look up findingControl by ID
+    """
+     findingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+    ):  FindingControl!
+}
+
+extend type Mutation{
+    """
+    Create a new findingControl
+    """
+    createFindingControl(
+        """
+        values of the findingControl
+        """
+        input: CreateFindingControlInput!
+    ): FindingControlCreatePayload!
+    """
+    Create multiple new findingControls
+    """
+    createBulkFindingControl(
+        """
+        values of the findingControl
+        """
+        input: [CreateFindingControlInput!]
+    ): FindingControlBulkCreatePayload!
+    """
+    Create multiple new findingControls via file upload
+    """
+    createBulkCSVFindingControl(
+        """
+        csv file containing values of the findingControl
+        """
+        input: Upload!
+    ): FindingControlBulkCreatePayload!
+    """
+    Update an existing findingControl
+    """
+    updateFindingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+        """
+        New values for the findingControl
+        """
+        input: UpdateFindingControlInput!
+    ): FindingControlUpdatePayload!
+    """
+    Delete an existing findingControl
+    """
+    deleteFindingControl(
+        """
+        ID of the findingControl
+        """
+        id: ID!
+    ): FindingControlDeletePayload!
+}
+
+"""
+Return response for createFindingControl mutation
+"""
+type FindingControlCreatePayload {
+    """
+    Created findingControl
+    """
+    findingControl: FindingControl!
+}
+
+"""
+Return response for updateFindingControl mutation
+"""
+type FindingControlUpdatePayload {
+    """
+    Updated findingControl
+    """
+    findingControl: FindingControl!
+}
+
+"""
+Return response for deleteFindingControl mutation
+"""
+type FindingControlDeletePayload {
+    """
+    Deleted findingControl ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkFindingControl mutation
+"""
+type FindingControlBulkCreatePayload {
+    """
+    Created findingControls
+    """
+    findingControls: [FindingControl!]
 }`, BuiltIn: false},
 	{Name: "../schema/group.graphql", Input: `extend type Query {
     """
@@ -110995,6 +128412,212 @@ type ProgramMembershipBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
+	{Name: "../schema/remediation.graphql", Input: `extend type Query {
+    """
+    Look up remediation by ID
+    """
+     remediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+    ):  Remediation!
+}
+
+extend type Mutation{
+    """
+    Create a new remediation
+    """
+    createRemediation(
+        """
+        values of the remediation
+        """
+        input: CreateRemediationInput!
+    ): RemediationCreatePayload!
+    """
+    Create multiple new remediations
+    """
+    createBulkRemediation(
+        """
+        values of the remediation
+        """
+        input: [CreateRemediationInput!]
+    ): RemediationBulkCreatePayload!
+    """
+    Create multiple new remediations via file upload
+    """
+    createBulkCSVRemediation(
+        """
+        csv file containing values of the remediation
+        """
+        input: Upload!
+    ): RemediationBulkCreatePayload!
+    """
+    Update an existing remediation
+    """
+    updateRemediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+        """
+        New values for the remediation
+        """
+        input: UpdateRemediationInput!
+    ): RemediationUpdatePayload!
+    """
+    Delete an existing remediation
+    """
+    deleteRemediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+    ): RemediationDeletePayload!
+}
+
+"""
+Return response for createRemediation mutation
+"""
+type RemediationCreatePayload {
+    """
+    Created remediation
+    """
+    remediation: Remediation!
+}
+
+"""
+Return response for updateRemediation mutation
+"""
+type RemediationUpdatePayload {
+    """
+    Updated remediation
+    """
+    remediation: Remediation!
+}
+
+"""
+Return response for deleteRemediation mutation
+"""
+type RemediationDeletePayload {
+    """
+    Deleted remediation ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkRemediation mutation
+"""
+type RemediationBulkCreatePayload {
+    """
+    Created remediations
+    """
+    remediations: [Remediation!]
+}`, BuiltIn: false},
+	{Name: "../schema/review.graphql", Input: `extend type Query {
+    """
+    Look up review by ID
+    """
+     review(
+        """
+        ID of the review
+        """
+        id: ID!
+    ):  Review!
+}
+
+extend type Mutation{
+    """
+    Create a new review
+    """
+    createReview(
+        """
+        values of the review
+        """
+        input: CreateReviewInput!
+    ): ReviewCreatePayload!
+    """
+    Create multiple new reviews
+    """
+    createBulkReview(
+        """
+        values of the review
+        """
+        input: [CreateReviewInput!]
+    ): ReviewBulkCreatePayload!
+    """
+    Create multiple new reviews via file upload
+    """
+    createBulkCSVReview(
+        """
+        csv file containing values of the review
+        """
+        input: Upload!
+    ): ReviewBulkCreatePayload!
+    """
+    Update an existing review
+    """
+    updateReview(
+        """
+        ID of the review
+        """
+        id: ID!
+        """
+        New values for the review
+        """
+        input: UpdateReviewInput!
+    ): ReviewUpdatePayload!
+    """
+    Delete an existing review
+    """
+    deleteReview(
+        """
+        ID of the review
+        """
+        id: ID!
+    ): ReviewDeletePayload!
+}
+
+"""
+Return response for createReview mutation
+"""
+type ReviewCreatePayload {
+    """
+    Created review
+    """
+    review: Review!
+}
+
+"""
+Return response for updateReview mutation
+"""
+type ReviewUpdatePayload {
+    """
+    Updated review
+    """
+    review: Review!
+}
+
+"""
+Return response for deleteReview mutation
+"""
+type ReviewDeletePayload {
+    """
+    Deleted review ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkReview mutation
+"""
+type ReviewBulkCreatePayload {
+    """
+    Created reviews
+    """
+    reviews: [Review!]
+}`, BuiltIn: false},
 	{Name: "../schema/revision.graphql", Input: `extend input UpdateActionPlanInput {
     RevisionBump: VersionBump
 }
@@ -112037,6 +129660,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): FileConnection
     """
+    Search across Finding objects
+    """
+    findingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): FindingConnection
+    """
     Search across Group objects
     """
     groupSearch(
@@ -112462,6 +130110,56 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): ProgramConnection
     """
+    Search across Remediation objects
+    """
+    remediationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): RemediationConnection
+    """
+    Search across Review objects
+    """
+    reviewSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ReviewConnection
+    """
     Search across Risk objects
     """
     riskSearch(
@@ -112812,6 +130510,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): UserSettingConnection
     """
+    Search across Vulnerability objects
+    """
+    vulnerabilitySearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): VulnerabilityConnection
+    """
     Search across Webauthn objects
     """
     webauthnSearch(
@@ -112864,6 +130587,7 @@ type SearchResults{
   events: EventConnection
   evidences: EvidenceConnection
   files: FileConnection
+  findings: FindingConnection
   groups: GroupConnection
   integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
@@ -112881,6 +130605,8 @@ type SearchResults{
   personalAccessTokens: PersonalAccessTokenConnection
   procedures: ProcedureConnection
   programs: ProgramConnection
+  remediations: RemediationConnection
+  reviews: ReviewConnection
   risks: RiskConnection
   scans: ScanConnection
   standards: StandardConnection
@@ -112895,6 +130621,7 @@ type SearchResults{
   trustCenterDocs: TrustCenterDocConnection
   users: UserConnection
   userSettings: UserSettingConnection
+  vulnerabilities: VulnerabilityConnection
   webauthns: WebauthnConnection
 }
 
@@ -114825,6 +132552,109 @@ type UserSettingBulkDeletePayload {
     Deleted userSetting IDs
     """
     deletedIDs: [ID!]!
+}`, BuiltIn: false},
+	{Name: "../schema/vulnerability.graphql", Input: `extend type Query {
+    """
+    Look up vulnerability by ID
+    """
+     vulnerability(
+        """
+        ID of the vulnerability
+        """
+        id: ID!
+    ):  Vulnerability!
+}
+
+extend type Mutation{
+    """
+    Create a new vulnerability
+    """
+    createVulnerability(
+        """
+        values of the vulnerability
+        """
+        input: CreateVulnerabilityInput!
+    ): VulnerabilityCreatePayload!
+    """
+    Create multiple new vulnerabilitys
+    """
+    createBulkVulnerability(
+        """
+        values of the vulnerability
+        """
+        input: [CreateVulnerabilityInput!]
+    ): VulnerabilityBulkCreatePayload!
+    """
+    Create multiple new vulnerabilitys via file upload
+    """
+    createBulkCSVVulnerability(
+        """
+        csv file containing values of the vulnerability
+        """
+        input: Upload!
+    ): VulnerabilityBulkCreatePayload!
+    """
+    Update an existing vulnerability
+    """
+    updateVulnerability(
+        """
+        ID of the vulnerability
+        """
+        id: ID!
+        """
+        New values for the vulnerability
+        """
+        input: UpdateVulnerabilityInput!
+    ): VulnerabilityUpdatePayload!
+    """
+    Delete an existing vulnerability
+    """
+    deleteVulnerability(
+        """
+        ID of the vulnerability
+        """
+        id: ID!
+    ): VulnerabilityDeletePayload!
+}
+
+"""
+Return response for createVulnerability mutation
+"""
+type VulnerabilityCreatePayload {
+    """
+    Created vulnerability
+    """
+    vulnerability: Vulnerability!
+}
+
+"""
+Return response for updateVulnerability mutation
+"""
+type VulnerabilityUpdatePayload {
+    """
+    Updated vulnerability
+    """
+    vulnerability: Vulnerability!
+}
+
+"""
+Return response for deleteVulnerability mutation
+"""
+type VulnerabilityDeletePayload {
+    """
+    Deleted vulnerability ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVulnerability mutation
+"""
+type VulnerabilityBulkCreatePayload {
+    """
+    Created vulnerabilitys
+    """
+    vulnerabilities: [Vulnerability!]
 }`, BuiltIn: false},
 	{Name: "../schema/webauthn.graphql", Input: `extend type Mutation{
     """

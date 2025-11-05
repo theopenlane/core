@@ -88,10 +88,26 @@ const (
 	FieldActionPlanKindName = "action_plan_kind_name"
 	// FieldActionPlanKindID holds the string denoting the action_plan_kind_id field in the database.
 	FieldActionPlanKindID = "action_plan_kind_id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
+	// FieldCompletedAt holds the string denoting the completed_at field in the database.
+	FieldCompletedAt = "completed_at"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
+	// FieldRequiresApproval holds the string denoting the requires_approval field in the database.
+	FieldRequiresApproval = "requires_approval"
+	// FieldBlocked holds the string denoting the blocked field in the database.
+	FieldBlocked = "blocked"
+	// FieldBlockerReason holds the string denoting the blocker_reason field in the database.
+	FieldBlockerReason = "blocker_reason"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
+	// FieldRawPayload holds the string denoting the raw_payload field in the database.
+	FieldRawPayload = "raw_payload"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// Table holds the table name of the actionplanhistory in the database.
@@ -136,8 +152,16 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldActionPlanKindName,
 	FieldActionPlanKindID,
+	FieldTitle,
+	FieldDescription,
 	FieldDueDate,
+	FieldCompletedAt,
 	FieldPriority,
+	FieldRequiresApproval,
+	FieldBlocked,
+	FieldBlockerReason,
+	FieldMetadata,
+	FieldRawPayload,
 	FieldSource,
 }
 
@@ -190,6 +214,10 @@ var (
 	DefaultDismissedImprovementSuggestions []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultRequiresApproval holds the default value on creation for the "requires_approval" field.
+	DefaultRequiresApproval bool
+	// DefaultBlocked holds the default value on creation for the "blocked" field.
+	DefaultBlocked bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -386,14 +414,44 @@ func ByActionPlanKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActionPlanKindID, opts...).ToFunc()
 }
 
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
 // ByDueDate orders the results by the due_date field.
 func ByDueDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDueDate, opts...).ToFunc()
 }
 
+// ByCompletedAt orders the results by the completed_at field.
+func ByCompletedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompletedAt, opts...).ToFunc()
+}
+
 // ByPriority orders the results by the priority field.
 func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPriority, opts...).ToFunc()
+}
+
+// ByRequiresApproval orders the results by the requires_approval field.
+func ByRequiresApproval(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRequiresApproval, opts...).ToFunc()
+}
+
+// ByBlocked orders the results by the blocked field.
+func ByBlocked(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBlocked, opts...).ToFunc()
+}
+
+// ByBlockerReason orders the results by the blocker_reason field.
+func ByBlockerReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBlockerReason, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.

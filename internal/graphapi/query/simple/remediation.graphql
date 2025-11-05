@@ -1,0 +1,244 @@
+
+mutation CreateBulkCSVRemediation($input: Upload!) {
+  createBulkCSVRemediation(input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      dueAt
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      metadata
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      source
+      state
+      summary
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkRemediation($input: [CreateRemediationInput!]) {
+  createBulkRemediation(input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      dueAt
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      metadata
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      source
+      state
+      summary
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateRemediation($input: CreateRemediationInput!) {
+  createRemediation(input: $input) {
+    remediation {
+      completedAt
+      createdAt
+      createdBy
+      dueAt
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      metadata
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      source
+      state
+      summary
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteRemediation($deleteRemediationId: ID!) {
+  deleteRemediation(id: $deleteRemediationId) {
+    deletedID
+  }
+}
+
+query GetAllRemediations {
+  remediations {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        instructions
+        intent
+        metadata
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        repositoryURI
+        source
+        state
+        summary
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetRemediationByID($remediationId: ID!) {
+  remediation(id: $remediationId) {
+    completedAt
+    createdAt
+    createdBy
+    dueAt
+    error
+    explanation
+    externalID
+    externalOwnerID
+    externalURI
+    id
+    instructions
+    intent
+    metadata
+    ownerReference
+    prGeneratedAt
+    pullRequestURI
+    repositoryURI
+    source
+    state
+    summary
+    tags
+    ticketReference
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetRemediations($first: Int, $last: Int, $where: RemediationWhereInput) {
+  remediations(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        instructions
+        intent
+        metadata
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        repositoryURI
+        source
+        state
+        summary
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateRemediation($updateRemediationId: ID!, $input: UpdateRemediationInput!) {
+  updateRemediation(id: $updateRemediationId, input: $input) {
+    remediation {
+      completedAt
+      createdAt
+      createdBy
+      dueAt
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      metadata
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      source
+      state
+      summary
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

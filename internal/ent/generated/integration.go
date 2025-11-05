@@ -69,15 +69,33 @@ type IntegrationEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [10]map[string]int
 
-	namedSecrets map[string][]*Hush
-	namedFiles   map[string][]*File
-	namedEvents  map[string][]*Event
+	namedSecrets         map[string][]*Hush
+	namedFiles           map[string][]*File
+	namedEvents          map[string][]*Event
+	namedFindings        map[string][]*Finding
+	namedVulnerabilities map[string][]*Vulnerability
+	namedReviews         map[string][]*Review
+	namedRemediations    map[string][]*Remediation
+	namedTasks           map[string][]*Task
+	namedActionPlans     map[string][]*ActionPlan
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -116,6 +134,60 @@ func (e IntegrationEdges) EventsOrErr() ([]*Event, error) {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[4] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[5] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[6] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[7] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[8] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[9] {
+		return e.ActionPlans, nil
+	}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -305,6 +377,36 @@ func (_m *Integration) QueryEvents() *EventQuery {
 	return NewIntegrationClient(_m.config).QueryEvents(_m)
 }
 
+// QueryFindings queries the "findings" edge of the Integration entity.
+func (_m *Integration) QueryFindings() *FindingQuery {
+	return NewIntegrationClient(_m.config).QueryFindings(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Integration entity.
+func (_m *Integration) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewIntegrationClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the Integration entity.
+func (_m *Integration) QueryReviews() *ReviewQuery {
+	return NewIntegrationClient(_m.config).QueryReviews(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Integration entity.
+func (_m *Integration) QueryRemediations() *RemediationQuery {
+	return NewIntegrationClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the Integration entity.
+func (_m *Integration) QueryTasks() *TaskQuery {
+	return NewIntegrationClient(_m.config).QueryTasks(_m)
+}
+
+// QueryActionPlans queries the "action_plans" edge of the Integration entity.
+func (_m *Integration) QueryActionPlans() *ActionPlanQuery {
+	return NewIntegrationClient(_m.config).QueryActionPlans(_m)
+}
+
 // Update returns a builder for updating this Integration.
 // Note that you need to call Integration.Unwrap() before calling this method if this Integration
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -452,6 +554,150 @@ func (_m *Integration) appendNamedEvents(name string, edges ...*Event) {
 		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
 		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedActionPlans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
+	} else {
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 

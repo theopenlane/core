@@ -198,8 +198,16 @@ type CreateActionPlanInput struct {
 	InternalNotes                   *string
 	SystemInternalID                *string
 	ActionPlanKindName              *string
+	Title                           string
+	Description                     *string
 	DueDate                         *time.Time
+	CompletedAt                     *time.Time
 	Priority                        *enums.Priority
+	RequiresApproval                *bool
+	Blocked                         *bool
+	BlockerReason                   *string
+	Metadata                        map[string]interface{}
+	RawPayload                      map[string]interface{}
 	Source                          *string
 	ApproverID                      *string
 	DelegateID                      *string
@@ -208,6 +216,12 @@ type CreateActionPlanInput struct {
 	RiskIDs                         []string
 	ControlIDs                      []string
 	ProgramIDs                      []string
+	FindingIDs                      []string
+	VulnerabilityIDs                []string
+	ReviewIDs                       []string
+	RemediationIDs                  []string
+	TaskIDs                         []string
+	IntegrationIDs                  []string
 	FileID                          *string
 }
 
@@ -268,11 +282,33 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.ActionPlanKindName; v != nil {
 		m.SetActionPlanKindName(*v)
 	}
+	m.SetTitle(i.Title)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
+	}
+	if v := i.RequiresApproval; v != nil {
+		m.SetRequiresApproval(*v)
+	}
+	if v := i.Blocked; v != nil {
+		m.SetBlocked(*v)
+	}
+	if v := i.BlockerReason; v != nil {
+		m.SetBlockerReason(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -297,6 +333,24 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
@@ -355,10 +409,23 @@ type UpdateActionPlanInput struct {
 	SystemInternalID                      *string
 	ClearActionPlanKindName               bool
 	ActionPlanKindName                    *string
+	Title                                 *string
+	ClearDescription                      bool
+	Description                           *string
 	ClearDueDate                          bool
 	DueDate                               *time.Time
+	ClearCompletedAt                      bool
+	CompletedAt                           *time.Time
 	ClearPriority                         bool
 	Priority                              *enums.Priority
+	RequiresApproval                      *bool
+	Blocked                               *bool
+	ClearBlockerReason                    bool
+	BlockerReason                         *string
+	ClearMetadata                         bool
+	Metadata                              map[string]interface{}
+	ClearRawPayload                       bool
+	RawPayload                            map[string]interface{}
 	ClearSource                           bool
 	Source                                *string
 	ClearApprover                         bool
@@ -378,6 +445,24 @@ type UpdateActionPlanInput struct {
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
+	ClearFindings                         bool
+	AddFindingIDs                         []string
+	RemoveFindingIDs                      []string
+	ClearVulnerabilities                  bool
+	AddVulnerabilityIDs                   []string
+	RemoveVulnerabilityIDs                []string
+	ClearReviews                          bool
+	AddReviewIDs                          []string
+	RemoveReviewIDs                       []string
+	ClearRemediations                     bool
+	AddRemediationIDs                     []string
+	RemoveRemediationIDs                  []string
+	ClearTasks                            bool
+	AddTaskIDs                            []string
+	RemoveTaskIDs                         []string
+	ClearIntegrations                     bool
+	AddIntegrationIDs                     []string
+	RemoveIntegrationIDs                  []string
 	ClearFile                             bool
 	FileID                                *string
 }
@@ -516,17 +601,56 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.ActionPlanKindName; v != nil {
 		m.SetActionPlanKindName(*v)
 	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
 	if i.ClearPriority {
 		m.ClearPriority()
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
+	}
+	if v := i.RequiresApproval; v != nil {
+		m.SetRequiresApproval(*v)
+	}
+	if v := i.Blocked; v != nil {
+		m.SetBlocked(*v)
+	}
+	if i.ClearBlockerReason {
+		m.ClearBlockerReason()
+	}
+	if v := i.BlockerReason; v != nil {
+		m.SetBlockerReason(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearRawPayload {
+		m.ClearRawPayload()
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -584,6 +708,60 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
 	}
 	if i.ClearFile {
 		m.ClearFile()
@@ -1334,6 +1512,7 @@ type CreateControlInput struct {
 	ProgramIDs                 []string
 	AssetIDs                   []string
 	ScanIDs                    []string
+	FindingIDs                 []string
 	ControlImplementationIDs   []string
 	SubcontrolIDs              []string
 	ScheduledJobIDs            []string
@@ -1474,6 +1653,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
@@ -1601,6 +1783,9 @@ type UpdateControlInput struct {
 	ClearScans                      bool
 	AddScanIDs                      []string
 	RemoveScanIDs                   []string
+	ClearFindings                   bool
+	AddFindingIDs                   []string
+	RemoveFindingIDs                []string
 	ClearControlImplementations     bool
 	AddControlImplementationIDs     []string
 	RemoveControlImplementationIDs  []string
@@ -1937,6 +2122,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearControlImplementations {
 		m.ClearControlImplementations()
@@ -4721,6 +4915,946 @@ func (c *FileUpdate) SetInput(i UpdateFileInput) *FileUpdate {
 
 // SetInput applies the change-set in the UpdateFileInput on the FileUpdateOne builder.
 func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateFindingInput represents a mutation input for creating findings.
+type CreateFindingInput struct {
+	Tags               []string
+	InternalNotes      *string
+	SystemInternalID   *string
+	ExternalID         *string
+	ExternalOwnerID    *string
+	Source             *string
+	ResourceName       *string
+	DisplayName        *string
+	State              *string
+	Category           *string
+	Categories         []string
+	FindingClass       *string
+	Severity           *string
+	NumericSeverity    *float64
+	Score              *float64
+	Impact             *float64
+	Exploitability     *float64
+	Priority           *string
+	Open               *bool
+	BlocksProduction   *bool
+	Production         *bool
+	Public             *bool
+	Validated          *bool
+	AssessmentID       *string
+	Description        *string
+	Recommendation     *string
+	RecommendedActions *string
+	References         []string
+	StepsToReproduce   []string
+	Targets            []string
+	TargetDetails      map[string]interface{}
+	Vector             *string
+	RemediationSLA     *int
+	Status             *string
+	EventTime          *models.DateTime
+	ReportedAt         *models.DateTime
+	SourceUpdatedAt    *models.DateTime
+	ExternalURI        *string
+	Metadata           map[string]interface{}
+	RawPayload         map[string]interface{}
+	OwnerID            *string
+	BlockedGroupIDs    []string
+	EditorIDs          []string
+	ViewerIDs          []string
+	IntegrationIDs     []string
+	VulnerabilityIDs   []string
+	ActionPlanIDs      []string
+	ControlIDs         []string
+	SubcontrolIDs      []string
+	RiskIDs            []string
+	ProgramIDs         []string
+	AssetIDs           []string
+	EntityIDs          []string
+	ScanIDs            []string
+	TaskIDs            []string
+	RemediationIDs     []string
+	ReviewIDs          []string
+	CommentIDs         []string
+	FileIDs            []string
+}
+
+// Mutate applies the CreateFindingInput on the FindingMutation builder.
+func (i *CreateFindingInput) Mutate(m *FindingMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.ResourceName; v != nil {
+		m.SetResourceName(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if v := i.Categories; v != nil {
+		m.SetCategories(v)
+	}
+	if v := i.FindingClass; v != nil {
+		m.SetFindingClass(*v)
+	}
+	if v := i.Severity; v != nil {
+		m.SetSeverity(*v)
+	}
+	if v := i.NumericSeverity; v != nil {
+		m.SetNumericSeverity(*v)
+	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if v := i.Exploitability; v != nil {
+		m.SetExploitability(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if v := i.Open; v != nil {
+		m.SetOpen(*v)
+	}
+	if v := i.BlocksProduction; v != nil {
+		m.SetBlocksProduction(*v)
+	}
+	if v := i.Production; v != nil {
+		m.SetProduction(*v)
+	}
+	if v := i.Public; v != nil {
+		m.SetPublic(*v)
+	}
+	if v := i.Validated; v != nil {
+		m.SetValidated(*v)
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Recommendation; v != nil {
+		m.SetRecommendation(*v)
+	}
+	if v := i.RecommendedActions; v != nil {
+		m.SetRecommendedActions(*v)
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if v := i.StepsToReproduce; v != nil {
+		m.SetStepsToReproduce(v)
+	}
+	if v := i.Targets; v != nil {
+		m.SetTargets(v)
+	}
+	if v := i.TargetDetails; v != nil {
+		m.SetTargetDetails(v)
+	}
+	if v := i.Vector; v != nil {
+		m.SetVector(*v)
+	}
+	if v := i.RemediationSLA; v != nil {
+		m.SetRemediationSLA(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.EventTime; v != nil {
+		m.SetEventTime(*v)
+	}
+	if v := i.ReportedAt; v != nil {
+		m.SetReportedAt(*v)
+	}
+	if v := i.SourceUpdatedAt; v != nil {
+		m.SetSourceUpdatedAt(*v)
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateFindingInput on the FindingCreate builder.
+func (c *FindingCreate) SetInput(i CreateFindingInput) *FindingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateFindingInput represents a mutation input for updating findings.
+type UpdateFindingInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearExternalOwnerID    bool
+	ExternalOwnerID         *string
+	ClearSource             bool
+	Source                  *string
+	ClearResourceName       bool
+	ResourceName            *string
+	ClearDisplayName        bool
+	DisplayName             *string
+	ClearState              bool
+	State                   *string
+	ClearCategory           bool
+	Category                *string
+	ClearCategories         bool
+	Categories              []string
+	AppendCategories        []string
+	ClearFindingClass       bool
+	FindingClass            *string
+	ClearSeverity           bool
+	Severity                *string
+	ClearNumericSeverity    bool
+	NumericSeverity         *float64
+	ClearScore              bool
+	Score                   *float64
+	ClearImpact             bool
+	Impact                  *float64
+	ClearExploitability     bool
+	Exploitability          *float64
+	ClearPriority           bool
+	Priority                *string
+	ClearOpen               bool
+	Open                    *bool
+	ClearBlocksProduction   bool
+	BlocksProduction        *bool
+	ClearProduction         bool
+	Production              *bool
+	ClearPublic             bool
+	Public                  *bool
+	ClearValidated          bool
+	Validated               *bool
+	ClearAssessmentID       bool
+	AssessmentID            *string
+	ClearDescription        bool
+	Description             *string
+	ClearRecommendation     bool
+	Recommendation          *string
+	ClearRecommendedActions bool
+	RecommendedActions      *string
+	ClearReferences         bool
+	References              []string
+	AppendReferences        []string
+	ClearStepsToReproduce   bool
+	StepsToReproduce        []string
+	AppendStepsToReproduce  []string
+	ClearTargets            bool
+	Targets                 []string
+	AppendTargets           []string
+	ClearTargetDetails      bool
+	TargetDetails           map[string]interface{}
+	ClearVector             bool
+	Vector                  *string
+	ClearRemediationSLA     bool
+	RemediationSLA          *int
+	ClearStatus             bool
+	Status                  *string
+	ClearEventTime          bool
+	EventTime               *models.DateTime
+	ClearReportedAt         bool
+	ReportedAt              *models.DateTime
+	ClearSourceUpdatedAt    bool
+	SourceUpdatedAt         *models.DateTime
+	ClearExternalURI        bool
+	ExternalURI             *string
+	ClearMetadata           bool
+	Metadata                map[string]interface{}
+	ClearRawPayload         bool
+	RawPayload              map[string]interface{}
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
+	ClearIntegrations       bool
+	AddIntegrationIDs       []string
+	RemoveIntegrationIDs    []string
+	ClearVulnerabilities    bool
+	AddVulnerabilityIDs     []string
+	RemoveVulnerabilityIDs  []string
+	ClearActionPlans        bool
+	AddActionPlanIDs        []string
+	RemoveActionPlanIDs     []string
+	ClearControls           bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+	ClearSubcontrols        bool
+	AddSubcontrolIDs        []string
+	RemoveSubcontrolIDs     []string
+	ClearRisks              bool
+	AddRiskIDs              []string
+	RemoveRiskIDs           []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
+	ClearAssets             bool
+	AddAssetIDs             []string
+	RemoveAssetIDs          []string
+	ClearEntities           bool
+	AddEntityIDs            []string
+	RemoveEntityIDs         []string
+	ClearScans              bool
+	AddScanIDs              []string
+	RemoveScanIDs           []string
+	ClearTasks              bool
+	AddTaskIDs              []string
+	RemoveTaskIDs           []string
+	ClearRemediations       bool
+	AddRemediationIDs       []string
+	RemoveRemediationIDs    []string
+	ClearReviews            bool
+	AddReviewIDs            []string
+	RemoveReviewIDs         []string
+	ClearComments           bool
+	AddCommentIDs           []string
+	RemoveCommentIDs        []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
+}
+
+// Mutate applies the UpdateFindingInput on the FindingMutation builder.
+func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearExternalOwnerID {
+		m.ClearExternalOwnerID()
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearResourceName {
+		m.ClearResourceName()
+	}
+	if v := i.ResourceName; v != nil {
+		m.SetResourceName(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearState {
+		m.ClearState()
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearCategories {
+		m.ClearCategories()
+	}
+	if v := i.Categories; v != nil {
+		m.SetCategories(v)
+	}
+	if i.AppendCategories != nil {
+		m.AppendCategories(i.Categories)
+	}
+	if i.ClearFindingClass {
+		m.ClearFindingClass()
+	}
+	if v := i.FindingClass; v != nil {
+		m.SetFindingClass(*v)
+	}
+	if i.ClearSeverity {
+		m.ClearSeverity()
+	}
+	if v := i.Severity; v != nil {
+		m.SetSeverity(*v)
+	}
+	if i.ClearNumericSeverity {
+		m.ClearNumericSeverity()
+	}
+	if v := i.NumericSeverity; v != nil {
+		m.SetNumericSeverity(*v)
+	}
+	if i.ClearScore {
+		m.ClearScore()
+	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
+	if i.ClearImpact {
+		m.ClearImpact()
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if i.ClearExploitability {
+		m.ClearExploitability()
+	}
+	if v := i.Exploitability; v != nil {
+		m.SetExploitability(*v)
+	}
+	if i.ClearPriority {
+		m.ClearPriority()
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if i.ClearOpen {
+		m.ClearOpen()
+	}
+	if v := i.Open; v != nil {
+		m.SetOpen(*v)
+	}
+	if i.ClearBlocksProduction {
+		m.ClearBlocksProduction()
+	}
+	if v := i.BlocksProduction; v != nil {
+		m.SetBlocksProduction(*v)
+	}
+	if i.ClearProduction {
+		m.ClearProduction()
+	}
+	if v := i.Production; v != nil {
+		m.SetProduction(*v)
+	}
+	if i.ClearPublic {
+		m.ClearPublic()
+	}
+	if v := i.Public; v != nil {
+		m.SetPublic(*v)
+	}
+	if i.ClearValidated {
+		m.ClearValidated()
+	}
+	if v := i.Validated; v != nil {
+		m.SetValidated(*v)
+	}
+	if i.ClearAssessmentID {
+		m.ClearAssessmentID()
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearRecommendation {
+		m.ClearRecommendation()
+	}
+	if v := i.Recommendation; v != nil {
+		m.SetRecommendation(*v)
+	}
+	if i.ClearRecommendedActions {
+		m.ClearRecommendedActions()
+	}
+	if v := i.RecommendedActions; v != nil {
+		m.SetRecommendedActions(*v)
+	}
+	if i.ClearReferences {
+		m.ClearReferences()
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if i.AppendReferences != nil {
+		m.AppendReferences(i.References)
+	}
+	if i.ClearStepsToReproduce {
+		m.ClearStepsToReproduce()
+	}
+	if v := i.StepsToReproduce; v != nil {
+		m.SetStepsToReproduce(v)
+	}
+	if i.AppendStepsToReproduce != nil {
+		m.AppendStepsToReproduce(i.StepsToReproduce)
+	}
+	if i.ClearTargets {
+		m.ClearTargets()
+	}
+	if v := i.Targets; v != nil {
+		m.SetTargets(v)
+	}
+	if i.AppendTargets != nil {
+		m.AppendTargets(i.Targets)
+	}
+	if i.ClearTargetDetails {
+		m.ClearTargetDetails()
+	}
+	if v := i.TargetDetails; v != nil {
+		m.SetTargetDetails(v)
+	}
+	if i.ClearVector {
+		m.ClearVector()
+	}
+	if v := i.Vector; v != nil {
+		m.SetVector(*v)
+	}
+	if i.ClearRemediationSLA {
+		m.ClearRemediationSLA()
+	}
+	if v := i.RemediationSLA; v != nil {
+		m.SetRemediationSLA(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearEventTime {
+		m.ClearEventTime()
+	}
+	if v := i.EventTime; v != nil {
+		m.SetEventTime(*v)
+	}
+	if i.ClearReportedAt {
+		m.ClearReportedAt()
+	}
+	if v := i.ReportedAt; v != nil {
+		m.SetReportedAt(*v)
+	}
+	if i.ClearSourceUpdatedAt {
+		m.ClearSourceUpdatedAt()
+	}
+	if v := i.SourceUpdatedAt; v != nil {
+		m.SetSourceUpdatedAt(*v)
+	}
+	if i.ClearExternalURI {
+		m.ClearExternalURI()
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearRawPayload {
+		m.ClearRawPayload()
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateFindingInput on the FindingUpdate builder.
+func (c *FindingUpdate) SetInput(i UpdateFindingInput) *FindingUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateFindingInput on the FindingUpdateOne builder.
+func (c *FindingUpdateOne) SetInput(i UpdateFindingInput) *FindingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateFindingControlInput represents a mutation input for creating findingcontrols.
+type CreateFindingControlInput struct {
+	ExternalStandard        *string
+	ExternalStandardVersion *string
+	ExternalControlID       *string
+	Source                  *string
+	Metadata                map[string]interface{}
+	DiscoveredAt            *models.DateTime
+	FindingID               string
+	ControlID               string
+	StandardID              *string
+}
+
+// Mutate applies the CreateFindingControlInput on the FindingControlMutation builder.
+func (i *CreateFindingControlInput) Mutate(m *FindingControlMutation) {
+	if v := i.ExternalStandard; v != nil {
+		m.SetExternalStandard(*v)
+	}
+	if v := i.ExternalStandardVersion; v != nil {
+		m.SetExternalStandardVersion(*v)
+	}
+	if v := i.ExternalControlID; v != nil {
+		m.SetExternalControlID(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.DiscoveredAt; v != nil {
+		m.SetDiscoveredAt(*v)
+	}
+	m.SetFindingID(i.FindingID)
+	m.SetControlID(i.ControlID)
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateFindingControlInput on the FindingControlCreate builder.
+func (c *FindingControlCreate) SetInput(i CreateFindingControlInput) *FindingControlCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateFindingControlInput represents a mutation input for updating findingcontrols.
+type UpdateFindingControlInput struct {
+	ClearExternalStandard        bool
+	ExternalStandard             *string
+	ClearExternalStandardVersion bool
+	ExternalStandardVersion      *string
+	ClearExternalControlID       bool
+	ExternalControlID            *string
+	ClearSource                  bool
+	Source                       *string
+	ClearMetadata                bool
+	Metadata                     map[string]interface{}
+	ClearDiscoveredAt            bool
+	DiscoveredAt                 *models.DateTime
+}
+
+// Mutate applies the UpdateFindingControlInput on the FindingControlMutation builder.
+func (i *UpdateFindingControlInput) Mutate(m *FindingControlMutation) {
+	if i.ClearExternalStandard {
+		m.ClearExternalStandard()
+	}
+	if v := i.ExternalStandard; v != nil {
+		m.SetExternalStandard(*v)
+	}
+	if i.ClearExternalStandardVersion {
+		m.ClearExternalStandardVersion()
+	}
+	if v := i.ExternalStandardVersion; v != nil {
+		m.SetExternalStandardVersion(*v)
+	}
+	if i.ClearExternalControlID {
+		m.ClearExternalControlID()
+	}
+	if v := i.ExternalControlID; v != nil {
+		m.SetExternalControlID(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearDiscoveredAt {
+		m.ClearDiscoveredAt()
+	}
+	if v := i.DiscoveredAt; v != nil {
+		m.SetDiscoveredAt(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateFindingControlInput on the FindingControlUpdate builder.
+func (c *FindingControlUpdate) SetInput(i UpdateFindingControlInput) *FindingControlUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateFindingControlInput on the FindingControlUpdateOne builder.
+func (c *FindingControlUpdateOne) SetInput(i UpdateFindingControlInput) *FindingControlUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -7878,6 +9012,10 @@ type CreateOrganizationInput struct {
 	AssessmentResponseIDs           []string
 	CustomTypeEnumIDs               []string
 	TagDefinitionIDs                []string
+	RemediationIDs                  []string
+	FindingIDs                      []string
+	ReviewIDs                       []string
+	VulnerabilityIDs                []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -8105,6 +9243,18 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TagDefinitionIDs; len(v) > 0 {
 		m.AddTagDefinitionIDs(v...)
 	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -8322,6 +9472,18 @@ type UpdateOrganizationInput struct {
 	ClearTagDefinitions                   bool
 	AddTagDefinitionIDs                   []string
 	RemoveTagDefinitionIDs                []string
+	ClearRemediations                     bool
+	AddRemediationIDs                     []string
+	RemoveRemediationIDs                  []string
+	ClearFindings                         bool
+	AddFindingIDs                         []string
+	RemoveFindingIDs                      []string
+	ClearReviews                          bool
+	AddReviewIDs                          []string
+	RemoveReviewIDs                       []string
+	ClearVulnerabilities                  bool
+	AddVulnerabilityIDs                   []string
+	RemoveVulnerabilityIDs                []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8946,6 +10108,42 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveTagDefinitionIDs; len(v) > 0 {
 		m.RemoveTagDefinitionIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
 	}
 }
 
@@ -10469,6 +11667,1144 @@ func (c *ProgramMembershipUpdate) SetInput(i UpdateProgramMembershipInput) *Prog
 
 // SetInput applies the change-set in the UpdateProgramMembershipInput on the ProgramMembershipUpdateOne builder.
 func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *ProgramMembershipUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateRemediationInput represents a mutation input for creating remediations.
+type CreateRemediationInput struct {
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	ExternalID       *string
+	ExternalOwnerID  *string
+	Title            *string
+	State            *string
+	Intent           *string
+	Summary          *string
+	Explanation      *string
+	Instructions     *string
+	OwnerReference   *string
+	RepositoryURI    *string
+	PullRequestURI   *string
+	TicketReference  *string
+	DueAt            *models.DateTime
+	CompletedAt      *models.DateTime
+	PrGeneratedAt    *models.DateTime
+	Error            *string
+	Source           *string
+	ExternalURI      *string
+	Metadata         map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	IntegrationIDs   []string
+	FindingIDs       []string
+	VulnerabilityIDs []string
+	ActionPlanIDs    []string
+	TaskIDs          []string
+	ControlIDs       []string
+	SubcontrolIDs    []string
+	RiskIDs          []string
+	ProgramIDs       []string
+	AssetIDs         []string
+	EntityIDs        []string
+	ReviewIDs        []string
+	CommentIDs       []string
+	FileIDs          []string
+}
+
+// Mutate applies the CreateRemediationInput on the RemediationMutation builder.
+func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if v := i.Intent; v != nil {
+		m.SetIntent(*v)
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if v := i.Explanation; v != nil {
+		m.SetExplanation(*v)
+	}
+	if v := i.Instructions; v != nil {
+		m.SetInstructions(*v)
+	}
+	if v := i.OwnerReference; v != nil {
+		m.SetOwnerReference(*v)
+	}
+	if v := i.RepositoryURI; v != nil {
+		m.SetRepositoryURI(*v)
+	}
+	if v := i.PullRequestURI; v != nil {
+		m.SetPullRequestURI(*v)
+	}
+	if v := i.TicketReference; v != nil {
+		m.SetTicketReference(*v)
+	}
+	if v := i.DueAt; v != nil {
+		m.SetDueAt(*v)
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if v := i.PrGeneratedAt; v != nil {
+		m.SetPrGeneratedAt(*v)
+	}
+	if v := i.Error; v != nil {
+		m.SetError(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateRemediationInput on the RemediationCreate builder.
+func (c *RemediationCreate) SetInput(i CreateRemediationInput) *RemediationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateRemediationInput represents a mutation input for updating remediations.
+type UpdateRemediationInput struct {
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
+	ClearExternalID        bool
+	ExternalID             *string
+	ClearExternalOwnerID   bool
+	ExternalOwnerID        *string
+	ClearTitle             bool
+	Title                  *string
+	ClearState             bool
+	State                  *string
+	ClearIntent            bool
+	Intent                 *string
+	ClearSummary           bool
+	Summary                *string
+	ClearExplanation       bool
+	Explanation            *string
+	ClearInstructions      bool
+	Instructions           *string
+	ClearOwnerReference    bool
+	OwnerReference         *string
+	ClearRepositoryURI     bool
+	RepositoryURI          *string
+	ClearPullRequestURI    bool
+	PullRequestURI         *string
+	ClearTicketReference   bool
+	TicketReference        *string
+	ClearDueAt             bool
+	DueAt                  *models.DateTime
+	ClearCompletedAt       bool
+	CompletedAt            *models.DateTime
+	ClearPrGeneratedAt     bool
+	PrGeneratedAt          *models.DateTime
+	ClearError             bool
+	Error                  *string
+	ClearSource            bool
+	Source                 *string
+	ClearExternalURI       bool
+	ExternalURI            *string
+	ClearMetadata          bool
+	Metadata               map[string]interface{}
+	ClearBlockedGroups     bool
+	AddBlockedGroupIDs     []string
+	RemoveBlockedGroupIDs  []string
+	ClearEditors           bool
+	AddEditorIDs           []string
+	RemoveEditorIDs        []string
+	ClearViewers           bool
+	AddViewerIDs           []string
+	RemoveViewerIDs        []string
+	ClearIntegrations      bool
+	AddIntegrationIDs      []string
+	RemoveIntegrationIDs   []string
+	ClearFindings          bool
+	AddFindingIDs          []string
+	RemoveFindingIDs       []string
+	ClearVulnerabilities   bool
+	AddVulnerabilityIDs    []string
+	RemoveVulnerabilityIDs []string
+	ClearActionPlans       bool
+	AddActionPlanIDs       []string
+	RemoveActionPlanIDs    []string
+	ClearTasks             bool
+	AddTaskIDs             []string
+	RemoveTaskIDs          []string
+	ClearControls          bool
+	AddControlIDs          []string
+	RemoveControlIDs       []string
+	ClearSubcontrols       bool
+	AddSubcontrolIDs       []string
+	RemoveSubcontrolIDs    []string
+	ClearRisks             bool
+	AddRiskIDs             []string
+	RemoveRiskIDs          []string
+	ClearPrograms          bool
+	AddProgramIDs          []string
+	RemoveProgramIDs       []string
+	ClearAssets            bool
+	AddAssetIDs            []string
+	RemoveAssetIDs         []string
+	ClearEntities          bool
+	AddEntityIDs           []string
+	RemoveEntityIDs        []string
+	ClearReviews           bool
+	AddReviewIDs           []string
+	RemoveReviewIDs        []string
+	ClearComments          bool
+	AddCommentIDs          []string
+	RemoveCommentIDs       []string
+	ClearFiles             bool
+	AddFileIDs             []string
+	RemoveFileIDs          []string
+}
+
+// Mutate applies the UpdateRemediationInput on the RemediationMutation builder.
+func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearExternalOwnerID {
+		m.ClearExternalOwnerID()
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if i.ClearTitle {
+		m.ClearTitle()
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if i.ClearState {
+		m.ClearState()
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if i.ClearIntent {
+		m.ClearIntent()
+	}
+	if v := i.Intent; v != nil {
+		m.SetIntent(*v)
+	}
+	if i.ClearSummary {
+		m.ClearSummary()
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if i.ClearExplanation {
+		m.ClearExplanation()
+	}
+	if v := i.Explanation; v != nil {
+		m.SetExplanation(*v)
+	}
+	if i.ClearInstructions {
+		m.ClearInstructions()
+	}
+	if v := i.Instructions; v != nil {
+		m.SetInstructions(*v)
+	}
+	if i.ClearOwnerReference {
+		m.ClearOwnerReference()
+	}
+	if v := i.OwnerReference; v != nil {
+		m.SetOwnerReference(*v)
+	}
+	if i.ClearRepositoryURI {
+		m.ClearRepositoryURI()
+	}
+	if v := i.RepositoryURI; v != nil {
+		m.SetRepositoryURI(*v)
+	}
+	if i.ClearPullRequestURI {
+		m.ClearPullRequestURI()
+	}
+	if v := i.PullRequestURI; v != nil {
+		m.SetPullRequestURI(*v)
+	}
+	if i.ClearTicketReference {
+		m.ClearTicketReference()
+	}
+	if v := i.TicketReference; v != nil {
+		m.SetTicketReference(*v)
+	}
+	if i.ClearDueAt {
+		m.ClearDueAt()
+	}
+	if v := i.DueAt; v != nil {
+		m.SetDueAt(*v)
+	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if i.ClearPrGeneratedAt {
+		m.ClearPrGeneratedAt()
+	}
+	if v := i.PrGeneratedAt; v != nil {
+		m.SetPrGeneratedAt(*v)
+	}
+	if i.ClearError {
+		m.ClearError()
+	}
+	if v := i.Error; v != nil {
+		m.SetError(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearExternalURI {
+		m.ClearExternalURI()
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateRemediationInput on the RemediationUpdate builder.
+func (c *RemediationUpdate) SetInput(i UpdateRemediationInput) *RemediationUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateRemediationInput on the RemediationUpdateOne builder.
+func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateReviewInput represents a mutation input for creating reviews.
+type CreateReviewInput struct {
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	ExternalID       *string
+	ExternalOwnerID  *string
+	Title            string
+	State            *string
+	Category         *string
+	Classification   *string
+	Summary          *string
+	Details          *string
+	Reporter         *string
+	Approved         *bool
+	ReviewedAt       *models.DateTime
+	ReportedAt       *models.DateTime
+	ApprovedAt       *models.DateTime
+	Source           *string
+	ExternalURI      *string
+	Metadata         map[string]interface{}
+	RawPayload       map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	IntegrationIDs   []string
+	FindingIDs       []string
+	VulnerabilityIDs []string
+	ActionPlanIDs    []string
+	RemediationIDs   []string
+	ControlIDs       []string
+	SubcontrolIDs    []string
+	RiskIDs          []string
+	ProgramIDs       []string
+	AssetIDs         []string
+	EntityIDs        []string
+	TaskIDs          []string
+	ReviewerID       *string
+	CommentIDs       []string
+	FileIDs          []string
+}
+
+// Mutate applies the CreateReviewInput on the ReviewMutation builder.
+func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	m.SetTitle(i.Title)
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if v := i.Classification; v != nil {
+		m.SetClassification(*v)
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if v := i.Reporter; v != nil {
+		m.SetReporter(*v)
+	}
+	if v := i.Approved; v != nil {
+		m.SetApproved(*v)
+	}
+	if v := i.ReviewedAt; v != nil {
+		m.SetReviewedAt(*v)
+	}
+	if v := i.ReportedAt; v != nil {
+		m.SetReportedAt(*v)
+	}
+	if v := i.ApprovedAt; v != nil {
+		m.SetApprovedAt(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.ReviewerID; v != nil {
+		m.SetReviewerID(*v)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateReviewInput on the ReviewCreate builder.
+func (c *ReviewCreate) SetInput(i CreateReviewInput) *ReviewCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateReviewInput represents a mutation input for updating reviews.
+type UpdateReviewInput struct {
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
+	ClearExternalID        bool
+	ExternalID             *string
+	ClearExternalOwnerID   bool
+	ExternalOwnerID        *string
+	Title                  *string
+	ClearState             bool
+	State                  *string
+	ClearCategory          bool
+	Category               *string
+	ClearClassification    bool
+	Classification         *string
+	ClearSummary           bool
+	Summary                *string
+	ClearDetails           bool
+	Details                *string
+	ClearReporter          bool
+	Reporter               *string
+	ClearApproved          bool
+	Approved               *bool
+	ClearReviewedAt        bool
+	ReviewedAt             *models.DateTime
+	ClearReportedAt        bool
+	ReportedAt             *models.DateTime
+	ClearApprovedAt        bool
+	ApprovedAt             *models.DateTime
+	ClearSource            bool
+	Source                 *string
+	ClearExternalURI       bool
+	ExternalURI            *string
+	ClearMetadata          bool
+	Metadata               map[string]interface{}
+	ClearRawPayload        bool
+	RawPayload             map[string]interface{}
+	ClearBlockedGroups     bool
+	AddBlockedGroupIDs     []string
+	RemoveBlockedGroupIDs  []string
+	ClearEditors           bool
+	AddEditorIDs           []string
+	RemoveEditorIDs        []string
+	ClearViewers           bool
+	AddViewerIDs           []string
+	RemoveViewerIDs        []string
+	ClearIntegrations      bool
+	AddIntegrationIDs      []string
+	RemoveIntegrationIDs   []string
+	ClearFindings          bool
+	AddFindingIDs          []string
+	RemoveFindingIDs       []string
+	ClearVulnerabilities   bool
+	AddVulnerabilityIDs    []string
+	RemoveVulnerabilityIDs []string
+	ClearActionPlans       bool
+	AddActionPlanIDs       []string
+	RemoveActionPlanIDs    []string
+	ClearRemediations      bool
+	AddRemediationIDs      []string
+	RemoveRemediationIDs   []string
+	ClearControls          bool
+	AddControlIDs          []string
+	RemoveControlIDs       []string
+	ClearSubcontrols       bool
+	AddSubcontrolIDs       []string
+	RemoveSubcontrolIDs    []string
+	ClearRisks             bool
+	AddRiskIDs             []string
+	RemoveRiskIDs          []string
+	ClearPrograms          bool
+	AddProgramIDs          []string
+	RemoveProgramIDs       []string
+	ClearAssets            bool
+	AddAssetIDs            []string
+	RemoveAssetIDs         []string
+	ClearEntities          bool
+	AddEntityIDs           []string
+	RemoveEntityIDs        []string
+	ClearTasks             bool
+	AddTaskIDs             []string
+	RemoveTaskIDs          []string
+	ClearReviewer          bool
+	ReviewerID             *string
+	ClearComments          bool
+	AddCommentIDs          []string
+	RemoveCommentIDs       []string
+	ClearFiles             bool
+	AddFileIDs             []string
+	RemoveFileIDs          []string
+}
+
+// Mutate applies the UpdateReviewInput on the ReviewMutation builder.
+func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearExternalOwnerID {
+		m.ClearExternalOwnerID()
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if i.ClearState {
+		m.ClearState()
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearClassification {
+		m.ClearClassification()
+	}
+	if v := i.Classification; v != nil {
+		m.SetClassification(*v)
+	}
+	if i.ClearSummary {
+		m.ClearSummary()
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if i.ClearReporter {
+		m.ClearReporter()
+	}
+	if v := i.Reporter; v != nil {
+		m.SetReporter(*v)
+	}
+	if i.ClearApproved {
+		m.ClearApproved()
+	}
+	if v := i.Approved; v != nil {
+		m.SetApproved(*v)
+	}
+	if i.ClearReviewedAt {
+		m.ClearReviewedAt()
+	}
+	if v := i.ReviewedAt; v != nil {
+		m.SetReviewedAt(*v)
+	}
+	if i.ClearReportedAt {
+		m.ClearReportedAt()
+	}
+	if v := i.ReportedAt; v != nil {
+		m.SetReportedAt(*v)
+	}
+	if i.ClearApprovedAt {
+		m.ClearApprovedAt()
+	}
+	if v := i.ApprovedAt; v != nil {
+		m.SetApprovedAt(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearExternalURI {
+		m.ClearExternalURI()
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearRawPayload {
+		m.ClearRawPayload()
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearReviewer {
+		m.ClearReviewer()
+	}
+	if v := i.ReviewerID; v != nil {
+		m.SetReviewerID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateReviewInput on the ReviewUpdate builder.
+func (c *ReviewUpdate) SetInput(i UpdateReviewInput) *ReviewUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateReviewInput on the ReviewUpdateOne builder.
+func (c *ReviewUpdateOne) SetInput(i UpdateReviewInput) *ReviewUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -12633,6 +14969,7 @@ type CreateTaskInput struct {
 	ProgramIDs               []string
 	RiskIDs                  []string
 	ControlImplementationIDs []string
+	ActionPlanIDs            []string
 	EvidenceIDs              []string
 }
 
@@ -12708,6 +15045,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
@@ -12776,6 +15116,9 @@ type UpdateTaskInput struct {
 	ClearControlImplementations    bool
 	AddControlImplementationIDs    []string
 	RemoveControlImplementationIDs []string
+	ClearActionPlans               bool
+	AddActionPlanIDs               []string
+	RemoveActionPlanIDs            []string
 	ClearEvidence                  bool
 	AddEvidenceIDs                 []string
 	RemoveEvidenceIDs              []string
@@ -12947,6 +15290,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
 		m.RemoveControlImplementationIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -14603,6 +16955,722 @@ func (c *UserSettingUpdate) SetInput(i UpdateUserSettingInput) *UserSettingUpdat
 
 // SetInput applies the change-set in the UpdateUserSettingInput on the UserSettingUpdateOne builder.
 func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
+type CreateVulnerabilityInput struct {
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	ExternalOwnerID  *string
+	ExternalID       string
+	CveID            *string
+	Source           *string
+	DisplayName      *string
+	Category         *string
+	Severity         *string
+	Score            *float64
+	Impact           *float64
+	Exploitability   *float64
+	Priority         *string
+	Status           *string
+	Summary          *string
+	Description      *string
+	Vector           *string
+	RemediationSLA   *int
+	Open             *bool
+	Blocking         *bool
+	Production       *bool
+	Public           *bool
+	Validated        *bool
+	References       []string
+	Impacts          []string
+	PublishedAt      *models.DateTime
+	DiscoveredAt     *models.DateTime
+	SourceUpdatedAt  *models.DateTime
+	ExternalURI      *string
+	Metadata         map[string]interface{}
+	RawPayload       map[string]interface{}
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	IntegrationIDs   []string
+	FindingIDs       []string
+	ActionPlanIDs    []string
+	ControlIDs       []string
+	SubcontrolIDs    []string
+	RiskIDs          []string
+	ProgramIDs       []string
+	AssetIDs         []string
+	EntityIDs        []string
+	ScanIDs          []string
+	TaskIDs          []string
+	RemediationIDs   []string
+	ReviewIDs        []string
+	CommentIDs       []string
+	FileIDs          []string
+}
+
+// Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
+func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	m.SetExternalID(i.ExternalID)
+	if v := i.CveID; v != nil {
+		m.SetCveID(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if v := i.Severity; v != nil {
+		m.SetSeverity(*v)
+	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if v := i.Exploitability; v != nil {
+		m.SetExploitability(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Vector; v != nil {
+		m.SetVector(*v)
+	}
+	if v := i.RemediationSLA; v != nil {
+		m.SetRemediationSLA(*v)
+	}
+	if v := i.Open; v != nil {
+		m.SetOpen(*v)
+	}
+	if v := i.Blocking; v != nil {
+		m.SetBlocking(*v)
+	}
+	if v := i.Production; v != nil {
+		m.SetProduction(*v)
+	}
+	if v := i.Public; v != nil {
+		m.SetPublic(*v)
+	}
+	if v := i.Validated; v != nil {
+		m.SetValidated(*v)
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if v := i.Impacts; v != nil {
+		m.SetImpacts(v)
+	}
+	if v := i.PublishedAt; v != nil {
+		m.SetPublishedAt(*v)
+	}
+	if v := i.DiscoveredAt; v != nil {
+		m.SetDiscoveredAt(*v)
+	}
+	if v := i.SourceUpdatedAt; v != nil {
+		m.SetSourceUpdatedAt(*v)
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVulnerabilityInput on the VulnerabilityCreate builder.
+func (c *VulnerabilityCreate) SetInput(i CreateVulnerabilityInput) *VulnerabilityCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVulnerabilityInput represents a mutation input for updating vulnerabilities.
+type UpdateVulnerabilityInput struct {
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	ClearExternalOwnerID  bool
+	ExternalOwnerID       *string
+	ExternalID            *string
+	ClearCveID            bool
+	CveID                 *string
+	ClearSource           bool
+	Source                *string
+	ClearDisplayName      bool
+	DisplayName           *string
+	ClearCategory         bool
+	Category              *string
+	ClearSeverity         bool
+	Severity              *string
+	ClearScore            bool
+	Score                 *float64
+	ClearImpact           bool
+	Impact                *float64
+	ClearExploitability   bool
+	Exploitability        *float64
+	ClearPriority         bool
+	Priority              *string
+	ClearStatus           bool
+	Status                *string
+	ClearSummary          bool
+	Summary               *string
+	ClearDescription      bool
+	Description           *string
+	ClearVector           bool
+	Vector                *string
+	ClearRemediationSLA   bool
+	RemediationSLA        *int
+	ClearOpen             bool
+	Open                  *bool
+	ClearBlocking         bool
+	Blocking              *bool
+	ClearProduction       bool
+	Production            *bool
+	ClearPublic           bool
+	Public                *bool
+	ClearValidated        bool
+	Validated             *bool
+	ClearReferences       bool
+	References            []string
+	AppendReferences      []string
+	ClearImpacts          bool
+	Impacts               []string
+	AppendImpacts         []string
+	ClearPublishedAt      bool
+	PublishedAt           *models.DateTime
+	ClearDiscoveredAt     bool
+	DiscoveredAt          *models.DateTime
+	ClearSourceUpdatedAt  bool
+	SourceUpdatedAt       *models.DateTime
+	ClearExternalURI      bool
+	ExternalURI           *string
+	ClearMetadata         bool
+	Metadata              map[string]interface{}
+	ClearRawPayload       bool
+	RawPayload            map[string]interface{}
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearIntegrations     bool
+	AddIntegrationIDs     []string
+	RemoveIntegrationIDs  []string
+	ClearFindings         bool
+	AddFindingIDs         []string
+	RemoveFindingIDs      []string
+	ClearActionPlans      bool
+	AddActionPlanIDs      []string
+	RemoveActionPlanIDs   []string
+	ClearControls         bool
+	AddControlIDs         []string
+	RemoveControlIDs      []string
+	ClearSubcontrols      bool
+	AddSubcontrolIDs      []string
+	RemoveSubcontrolIDs   []string
+	ClearRisks            bool
+	AddRiskIDs            []string
+	RemoveRiskIDs         []string
+	ClearPrograms         bool
+	AddProgramIDs         []string
+	RemoveProgramIDs      []string
+	ClearAssets           bool
+	AddAssetIDs           []string
+	RemoveAssetIDs        []string
+	ClearEntities         bool
+	AddEntityIDs          []string
+	RemoveEntityIDs       []string
+	ClearScans            bool
+	AddScanIDs            []string
+	RemoveScanIDs         []string
+	ClearTasks            bool
+	AddTaskIDs            []string
+	RemoveTaskIDs         []string
+	ClearRemediations     bool
+	AddRemediationIDs     []string
+	RemoveRemediationIDs  []string
+	ClearReviews          bool
+	AddReviewIDs          []string
+	RemoveReviewIDs       []string
+	ClearComments         bool
+	AddCommentIDs         []string
+	RemoveCommentIDs      []string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
+}
+
+// Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
+func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternalOwnerID {
+		m.ClearExternalOwnerID()
+	}
+	if v := i.ExternalOwnerID; v != nil {
+		m.SetExternalOwnerID(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearCveID {
+		m.ClearCveID()
+	}
+	if v := i.CveID; v != nil {
+		m.SetCveID(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearSeverity {
+		m.ClearSeverity()
+	}
+	if v := i.Severity; v != nil {
+		m.SetSeverity(*v)
+	}
+	if i.ClearScore {
+		m.ClearScore()
+	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
+	if i.ClearImpact {
+		m.ClearImpact()
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if i.ClearExploitability {
+		m.ClearExploitability()
+	}
+	if v := i.Exploitability; v != nil {
+		m.SetExploitability(*v)
+	}
+	if i.ClearPriority {
+		m.ClearPriority()
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearSummary {
+		m.ClearSummary()
+	}
+	if v := i.Summary; v != nil {
+		m.SetSummary(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearVector {
+		m.ClearVector()
+	}
+	if v := i.Vector; v != nil {
+		m.SetVector(*v)
+	}
+	if i.ClearRemediationSLA {
+		m.ClearRemediationSLA()
+	}
+	if v := i.RemediationSLA; v != nil {
+		m.SetRemediationSLA(*v)
+	}
+	if i.ClearOpen {
+		m.ClearOpen()
+	}
+	if v := i.Open; v != nil {
+		m.SetOpen(*v)
+	}
+	if i.ClearBlocking {
+		m.ClearBlocking()
+	}
+	if v := i.Blocking; v != nil {
+		m.SetBlocking(*v)
+	}
+	if i.ClearProduction {
+		m.ClearProduction()
+	}
+	if v := i.Production; v != nil {
+		m.SetProduction(*v)
+	}
+	if i.ClearPublic {
+		m.ClearPublic()
+	}
+	if v := i.Public; v != nil {
+		m.SetPublic(*v)
+	}
+	if i.ClearValidated {
+		m.ClearValidated()
+	}
+	if v := i.Validated; v != nil {
+		m.SetValidated(*v)
+	}
+	if i.ClearReferences {
+		m.ClearReferences()
+	}
+	if v := i.References; v != nil {
+		m.SetReferences(v)
+	}
+	if i.AppendReferences != nil {
+		m.AppendReferences(i.References)
+	}
+	if i.ClearImpacts {
+		m.ClearImpacts()
+	}
+	if v := i.Impacts; v != nil {
+		m.SetImpacts(v)
+	}
+	if i.AppendImpacts != nil {
+		m.AppendImpacts(i.Impacts)
+	}
+	if i.ClearPublishedAt {
+		m.ClearPublishedAt()
+	}
+	if v := i.PublishedAt; v != nil {
+		m.SetPublishedAt(*v)
+	}
+	if i.ClearDiscoveredAt {
+		m.ClearDiscoveredAt()
+	}
+	if v := i.DiscoveredAt; v != nil {
+		m.SetDiscoveredAt(*v)
+	}
+	if i.ClearSourceUpdatedAt {
+		m.ClearSourceUpdatedAt()
+	}
+	if v := i.SourceUpdatedAt; v != nil {
+		m.SetSourceUpdatedAt(*v)
+	}
+	if i.ClearExternalURI {
+		m.ClearExternalURI()
+	}
+	if v := i.ExternalURI; v != nil {
+		m.SetExternalURI(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearRawPayload {
+		m.ClearRawPayload()
+	}
+	if v := i.RawPayload; v != nil {
+		m.SetRawPayload(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVulnerabilityInput on the VulnerabilityUpdate builder.
+func (c *VulnerabilityUpdate) SetInput(i UpdateVulnerabilityInput) *VulnerabilityUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVulnerabilityInput on the VulnerabilityUpdateOne builder.
+func (c *VulnerabilityUpdateOne) SetInput(i UpdateVulnerabilityInput) *VulnerabilityUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

@@ -71,6 +71,11 @@ type Task struct {
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges                  TaskEdges `json:"edges"`
 	custom_type_enum_tasks *string
+	finding_tasks          *string
+	integration_tasks      *string
+	remediation_tasks      *string
+	review_tasks           *string
+	vulnerability_tasks    *string
 	selectValues           sql.SelectValues
 }
 
@@ -104,13 +109,15 @@ type TaskEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// ControlImplementations holds the value of the control_implementations edge.
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedComments               map[string][]*Note
 	namedGroups                 map[string][]*Group
@@ -122,6 +129,7 @@ type TaskEdges struct {
 	namedPrograms               map[string][]*Program
 	namedRisks                  map[string][]*Risk
 	namedControlImplementations map[string][]*ControlImplementation
+	namedActionPlans            map[string][]*ActionPlan
 	namedEvidence               map[string][]*Evidence
 }
 
@@ -259,10 +267,19 @@ func (e TaskEdges) ControlImplementationsOrErr() ([]*ControlImplementation, erro
 	return nil, &NotLoadedError{edge: "control_implementations"}
 }
 
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[14] {
+		return e.ActionPlans, nil
+	}
+	return nil, &NotLoadedError{edge: "action_plans"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -284,6 +301,16 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case task.ForeignKeys[0]: // custom_type_enum_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[1]: // finding_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[2]: // integration_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[3]: // remediation_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[4]: // review_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[5]: // vulnerability_tasks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -451,6 +478,41 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				_m.custom_type_enum_tasks = new(string)
 				*_m.custom_type_enum_tasks = value.String
 			}
+		case task.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_tasks", values[i])
+			} else if value.Valid {
+				_m.finding_tasks = new(string)
+				*_m.finding_tasks = value.String
+			}
+		case task.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_tasks", values[i])
+			} else if value.Valid {
+				_m.integration_tasks = new(string)
+				*_m.integration_tasks = value.String
+			}
+		case task.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_tasks", values[i])
+			} else if value.Valid {
+				_m.remediation_tasks = new(string)
+				*_m.remediation_tasks = value.String
+			}
+		case task.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_tasks", values[i])
+			} else if value.Valid {
+				_m.review_tasks = new(string)
+				*_m.review_tasks = value.String
+			}
+		case task.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_tasks", values[i])
+			} else if value.Valid {
+				_m.vulnerability_tasks = new(string)
+				*_m.vulnerability_tasks = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -532,6 +594,11 @@ func (_m *Task) QueryRisks() *RiskQuery {
 // QueryControlImplementations queries the "control_implementations" edge of the Task entity.
 func (_m *Task) QueryControlImplementations() *ControlImplementationQuery {
 	return NewTaskClient(_m.config).QueryControlImplementations(_m)
+}
+
+// QueryActionPlans queries the "action_plans" edge of the Task entity.
+func (_m *Task) QueryActionPlans() *ActionPlanQuery {
+	return NewTaskClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Task entity.
@@ -872,6 +939,30 @@ func (_m *Task) appendNamedControlImplementations(name string, edges ...*Control
 		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
 		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
+	}
+}
+
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedActionPlans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
+	} else {
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up review by ID
+    """
+     review(
+        """
+        ID of the review
+        """
+        id: ID!
+    ):  Review!
+}
+
+extend type Mutation{
+    """
+    Create a new review
+    """
+    createReview(
+        """
+        values of the review
+        """
+        input: CreateReviewInput!
+    ): ReviewCreatePayload!
+    """
+    Create multiple new reviews
+    """
+    createBulkReview(
+        """
+        values of the review
+        """
+        input: [CreateReviewInput!]
+    ): ReviewBulkCreatePayload!
+    """
+    Create multiple new reviews via file upload
+    """
+    createBulkCSVReview(
+        """
+        csv file containing values of the review
+        """
+        input: Upload!
+    ): ReviewBulkCreatePayload!
+    """
+    Update an existing review
+    """
+    updateReview(
+        """
+        ID of the review
+        """
+        id: ID!
+        """
+        New values for the review
+        """
+        input: UpdateReviewInput!
+    ): ReviewUpdatePayload!
+    """
+    Delete an existing review
+    """
+    deleteReview(
+        """
+        ID of the review
+        """
+        id: ID!
+    ): ReviewDeletePayload!
+}
+
+"""
+Return response for createReview mutation
+"""
+type ReviewCreatePayload {
+    """
+    Created review
+    """
+    review: Review!
+}
+
+"""
+Return response for updateReview mutation
+"""
+type ReviewUpdatePayload {
+    """
+    Updated review
+    """
+    review: Review!
+}
+
+"""
+Return response for deleteReview mutation
+"""
+type ReviewDeletePayload {
+    """
+    Deleted review ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkReview mutation
+"""
+type ReviewBulkCreatePayload {
+    """
+    Created reviews
+    """
+    reviews: [Review!]
+}
