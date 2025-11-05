@@ -19,4 +19,8 @@ var (
 	ErrEmitterClosed = errors.New("soiree is closed")
 	// ErrEmitterAlreadyClosed is returned when the soiree is already closed
 	ErrEmitterAlreadyClosed = errors.New("soiree is already closed")
+	// errNilEventPool is returned when an event pool is nil
+	errNilEventPool = errors.New("event pool is nil")
+	// errMissingTypedUnwrap is returned when a typed topic is missing an unwrap helper
+	errMissingTypedUnwrap = errors.New("soiree: missing unwrap helper for typed topic")
 )

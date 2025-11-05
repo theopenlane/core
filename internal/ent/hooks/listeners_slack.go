@@ -6,18 +6,21 @@ import (
 	"os"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 	"github.com/theopenlane/utils/slack"
 )
 
 // SlackConfig defines the runtime configuration for Slack notifications emitted by listeners
 type SlackConfig struct {
-	WebhookURL               string
+	// WebhookURL is the endpoint to send messages to
+	WebhookURL string
+	// NewSubscriberMessageFile is an optional path to a bespoke Slack template for new subscriber notifications (cat memes)
 	NewSubscriberMessageFile string
-	NewUserMessageFile       string
+	// NewUserMessageFile is an optional path to a bespoke Slack template for new user notifications (welcome messages)
+	NewUserMessageFile string
 }
 
 var slackCfg SlackConfig
@@ -67,8 +70,9 @@ func sendSlackNotification(ctx *soiree.EventContext, overrideFile, embeddedTempl
 	}
 
 	var buf bytes.Buffer
+
 	if err := tmpl.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to execute slack template")
+		logx.FromContext(ctx.Context()).Debug().Msg("failed to execute slack template")
 		return err
 	}
 
@@ -82,13 +86,15 @@ func loadSlackTemplate(ctx *soiree.EventContext, fileOverride, embeddedTemplate 
 		// version when it is absent so environments without customisation still behave.
 		b, err := os.ReadFile(fileOverride)
 		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to read slack template")
+			logx.FromContext(ctx.Context()).Debug().Msg("failed to read slack template")
+
 			return nil, err
 		}
 
 		t, err := template.New("slack").Parse(string(b))
 		if err != nil {
-			zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse slack template")
+			logx.FromContext(ctx.Context()).Debug().Msg("failed to parse slack template")
+
 			return nil, err
 		}
 
@@ -97,7 +103,8 @@ func loadSlackTemplate(ctx *soiree.EventContext, fileOverride, embeddedTemplate 
 
 	t, err := template.ParseFS(slacktemplates.Templates, embeddedTemplate)
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
+		logx.FromContext(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
+
 		return nil, err
 	}
 

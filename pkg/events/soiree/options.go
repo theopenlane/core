@@ -10,6 +10,7 @@ import (
 // EventPoolOption defines a function type for Soiree configuration options
 type EventPoolOption func(Soiree)
 
+// DefaultErrorHandler is the default error handler that simply returns the error
 var DefaultErrorHandler = func(_ Event, err error) error {
 	return err
 }

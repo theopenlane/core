@@ -24,7 +24,6 @@ func main() {
 
 	if _, err := pool.On(topic, func(ctx *soiree.EventContext) error {
 		// Handle the event and return an error to trigger retries
-		_ = ctx
 		return nil
 	}); err != nil {
 		panic(err)
