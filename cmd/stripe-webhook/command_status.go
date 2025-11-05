@@ -1,3 +1,5 @@
+//go:build cli-stripe
+
 package main
 
 import (
