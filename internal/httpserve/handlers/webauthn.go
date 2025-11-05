@@ -38,6 +38,10 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, r.Email)
@@ -283,6 +287,10 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	if err != nil {
 		metrics.RecordLogin(false)
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := ctx.Request().Context()

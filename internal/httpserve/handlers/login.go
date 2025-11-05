@@ -28,6 +28,10 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	// check user in the database, username == email and ensure only one record is returned

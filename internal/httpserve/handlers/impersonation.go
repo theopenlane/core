@@ -23,6 +23,10 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// Get the current authenticated user (the impersonator)
 	currentUser, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
 	if err != nil {
