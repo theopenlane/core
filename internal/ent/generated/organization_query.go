@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
@@ -57,6 +58,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -71,6 +74,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -154,6 +158,10 @@ type OrganizationQuery struct {
 	withAssessmentResponses                *AssessmentResponseQuery
 	withCustomTypeEnums                    *CustomTypeEnumQuery
 	withTagDefinitions                     *TagDefinitionQuery
+	withRemediations                       *RemediationQuery
+	withFindings                           *FindingQuery
+	withReviews                            *ReviewQuery
+	withVulnerabilities                    *VulnerabilityQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -226,6 +234,10 @@ type OrganizationQuery struct {
 	withNamedAssessmentResponses           map[string]*AssessmentResponseQuery
 	withNamedCustomTypeEnums               map[string]*CustomTypeEnumQuery
 	withNamedTagDefinitions                map[string]*TagDefinitionQuery
+	withNamedRemediations                  map[string]*RemediationQuery
+	withNamedFindings                      map[string]*FindingQuery
+	withNamedReviews                       map[string]*ReviewQuery
+	withNamedVulnerabilities               map[string]*VulnerabilityQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -2063,6 +2075,106 @@ func (_q *OrganizationQuery) QueryTagDefinitions() *TagDefinitionQuery {
 	return query
 }
 
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *OrganizationQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.RemediationsTable, organization.RemediationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.Remediation
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *OrganizationQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingsTable, organization.FindingsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *OrganizationQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReviewsTable, organization.ReviewsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Review
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *OrganizationQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VulnerabilitiesTable, organization.VulnerabilitiesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2352,6 +2464,10 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withAssessmentResponses:           _q.withAssessmentResponses.Clone(),
 		withCustomTypeEnums:               _q.withCustomTypeEnums.Clone(),
 		withTagDefinitions:                _q.withTagDefinitions.Clone(),
+		withRemediations:                  _q.withRemediations.Clone(),
+		withFindings:                      _q.withFindings.Clone(),
+		withReviews:                       _q.withReviews.Clone(),
+		withVulnerabilities:               _q.withVulnerabilities.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -3152,6 +3268,50 @@ func (_q *OrganizationQuery) WithTagDefinitions(opts ...func(*TagDefinitionQuery
 	return _q
 }
 
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithRemediations(opts ...func(*RemediationQuery)) *OrganizationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithFindings(opts ...func(*FindingQuery)) *OrganizationQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithReviews(opts ...func(*ReviewQuery)) *OrganizationQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *OrganizationQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3247,7 +3407,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [73]bool{
+		loadedTypes = [77]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3320,6 +3480,10 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withAssessmentResponses != nil,
 			_q.withCustomTypeEnums != nil,
 			_q.withTagDefinitions != nil,
+			_q.withRemediations != nil,
+			_q.withFindings != nil,
+			_q.withReviews != nil,
+			_q.withVulnerabilities != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3879,6 +4043,34 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Remediations = []*Remediation{} },
+			func(n *Organization, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Findings = []*Finding{} },
+			func(n *Organization, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Reviews = []*Review{} },
+			func(n *Organization, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Organization, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4370,6 +4562,34 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadTagDefinitions(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTagDefinitions(name) },
 			func(n *Organization, e *TagDefinition) { n.appendNamedTagDefinitions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedRemediations(name) },
+			func(n *Organization, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedFindings(name) },
+			func(n *Organization, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedReviews(name) },
+			func(n *Organization, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVulnerabilities(name) },
+			func(n *Organization, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6708,6 +6928,130 @@ func (_q *OrganizationQuery) loadTagDefinitions(ctx context.Context, query *TagD
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Remediation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(remediation.FieldOwnerID)
+	}
+	query.Where(predicate.Remediation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.RemediationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Finding)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(finding.FieldOwnerID)
+	}
+	query.Where(predicate.Finding(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.FindingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Review)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(review.FieldOwnerID)
+	}
+	query.Where(predicate.Review(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ReviewsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Vulnerability)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vulnerability.FieldOwnerID)
+	}
+	query.Where(predicate.Vulnerability(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VulnerabilitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7806,6 +8150,62 @@ func (_q *OrganizationQuery) WithNamedTagDefinitions(name string, opts ...func(*
 		_q.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery)
 	}
 	_q.withNamedTagDefinitions[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *OrganizationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *OrganizationQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *OrganizationQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *OrganizationQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
 	return _q
 }
 

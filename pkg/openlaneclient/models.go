@@ -337,22 +337,44 @@ type ActionPlan struct {
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID *string `json:"actionPlanKindID,omitempty"`
+	// short title describing the action plan
+	Title string `json:"title"`
+	// detailed description of remediation steps and objectives
+	Description *string `json:"description,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
 	// priority of the action plan
 	Priority *enums.Priority `json:"priority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval bool `json:"requiresApproval"`
+	// true when the action plan is currently blocked
+	Blocked bool `json:"blocked"`
+	// context on why the action plan is blocked
+	BlockerReason *string `json:"blockerReason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 	// the group of users who are responsible for approving the action_plan
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
-	Delegate       *Group             `json:"delegate,omitempty"`
-	Owner          *Organization      `json:"owner,omitempty"`
-	ActionPlanKind *CustomTypeEnum    `json:"actionPlanKind,omitempty"`
-	Risks          *RiskConnection    `json:"risks"`
-	Controls       *ControlConnection `json:"controls"`
-	Programs       *ProgramConnection `json:"programs"`
-	File           *File              `json:"file,omitempty"`
+	Delegate        *Group                   `json:"delegate,omitempty"`
+	Owner           *Organization            `json:"owner,omitempty"`
+	ActionPlanKind  *CustomTypeEnum          `json:"actionPlanKind,omitempty"`
+	Risks           *RiskConnection          `json:"risks"`
+	Controls        *ControlConnection       `json:"controls"`
+	Programs        *ProgramConnection       `json:"programs"`
+	Findings        *FindingConnection       `json:"findings"`
+	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
+	Reviews         *ReviewConnection        `json:"reviews"`
+	Remediations    *RemediationConnection   `json:"remediations"`
+	Tasks           *TaskConnection          `json:"tasks"`
+	Integrations    *IntegrationConnection   `json:"integrations"`
+	File            *File                    `json:"file,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -467,10 +489,26 @@ type ActionPlanHistory struct {
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID *string `json:"actionPlanKindID,omitempty"`
+	// short title describing the action plan
+	Title string `json:"title"`
+	// detailed description of remediation steps and objectives
+	Description *string `json:"description,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
 	// priority of the action plan
 	Priority *enums.Priority `json:"priority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval bool `json:"requiresApproval"`
+	// true when the action plan is currently blocked
+	Blocked bool `json:"blocked"`
+	// context on why the action plan is blocked
+	BlockerReason *string `json:"blockerReason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 }
@@ -845,6 +883,36 @@ type ActionPlanHistoryWhereInput struct {
 	ActionPlanKindIDNotNil       *bool    `json:"actionPlanKindIDNotNil,omitempty"`
 	ActionPlanKindIDEqualFold    *string  `json:"actionPlanKindIDEqualFold,omitempty"`
 	ActionPlanKindIDContainsFold *string  `json:"actionPlanKindIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -856,6 +924,17 @@ type ActionPlanHistoryWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
+	// completed_at field predicates
+	CompletedAt       *time.Time   `json:"completedAt,omitempty"`
+	CompletedAtNeq    *time.Time   `json:"completedAtNEQ,omitempty"`
+	CompletedAtIn     []*time.Time `json:"completedAtIn,omitempty"`
+	CompletedAtNotIn  []*time.Time `json:"completedAtNotIn,omitempty"`
+	CompletedAtGt     *time.Time   `json:"completedAtGT,omitempty"`
+	CompletedAtGte    *time.Time   `json:"completedAtGTE,omitempty"`
+	CompletedAtLt     *time.Time   `json:"completedAtLT,omitempty"`
+	CompletedAtLte    *time.Time   `json:"completedAtLTE,omitempty"`
+	CompletedAtIsNil  *bool        `json:"completedAtIsNil,omitempty"`
+	CompletedAtNotNil *bool        `json:"completedAtNotNil,omitempty"`
 	// priority field predicates
 	Priority       *enums.Priority  `json:"priority,omitempty"`
 	PriorityNeq    *enums.Priority  `json:"priorityNEQ,omitempty"`
@@ -863,6 +942,28 @@ type ActionPlanHistoryWhereInput struct {
 	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
 	PriorityIsNil  *bool            `json:"priorityIsNil,omitempty"`
 	PriorityNotNil *bool            `json:"priorityNotNil,omitempty"`
+	// requires_approval field predicates
+	RequiresApproval    *bool `json:"requiresApproval,omitempty"`
+	RequiresApprovalNeq *bool `json:"requiresApprovalNEQ,omitempty"`
+	// blocked field predicates
+	Blocked    *bool `json:"blocked,omitempty"`
+	BlockedNeq *bool `json:"blockedNEQ,omitempty"`
+	// blocker_reason field predicates
+	BlockerReason             *string  `json:"blockerReason,omitempty"`
+	BlockerReasonNeq          *string  `json:"blockerReasonNEQ,omitempty"`
+	BlockerReasonIn           []string `json:"blockerReasonIn,omitempty"`
+	BlockerReasonNotIn        []string `json:"blockerReasonNotIn,omitempty"`
+	BlockerReasonGt           *string  `json:"blockerReasonGT,omitempty"`
+	BlockerReasonGte          *string  `json:"blockerReasonGTE,omitempty"`
+	BlockerReasonLt           *string  `json:"blockerReasonLT,omitempty"`
+	BlockerReasonLte          *string  `json:"blockerReasonLTE,omitempty"`
+	BlockerReasonContains     *string  `json:"blockerReasonContains,omitempty"`
+	BlockerReasonHasPrefix    *string  `json:"blockerReasonHasPrefix,omitempty"`
+	BlockerReasonHasSuffix    *string  `json:"blockerReasonHasSuffix,omitempty"`
+	BlockerReasonIsNil        *bool    `json:"blockerReasonIsNil,omitempty"`
+	BlockerReasonNotNil       *bool    `json:"blockerReasonNotNil,omitempty"`
+	BlockerReasonEqualFold    *string  `json:"blockerReasonEqualFold,omitempty"`
+	BlockerReasonContainsFold *string  `json:"blockerReasonContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -1207,6 +1308,36 @@ type ActionPlanWhereInput struct {
 	ActionPlanKindIDNotNil       *bool    `json:"actionPlanKindIDNotNil,omitempty"`
 	ActionPlanKindIDEqualFold    *string  `json:"actionPlanKindIDEqualFold,omitempty"`
 	ActionPlanKindIDContainsFold *string  `json:"actionPlanKindIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -1218,6 +1349,17 @@ type ActionPlanWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
+	// completed_at field predicates
+	CompletedAt       *time.Time   `json:"completedAt,omitempty"`
+	CompletedAtNeq    *time.Time   `json:"completedAtNEQ,omitempty"`
+	CompletedAtIn     []*time.Time `json:"completedAtIn,omitempty"`
+	CompletedAtNotIn  []*time.Time `json:"completedAtNotIn,omitempty"`
+	CompletedAtGt     *time.Time   `json:"completedAtGT,omitempty"`
+	CompletedAtGte    *time.Time   `json:"completedAtGTE,omitempty"`
+	CompletedAtLt     *time.Time   `json:"completedAtLT,omitempty"`
+	CompletedAtLte    *time.Time   `json:"completedAtLTE,omitempty"`
+	CompletedAtIsNil  *bool        `json:"completedAtIsNil,omitempty"`
+	CompletedAtNotNil *bool        `json:"completedAtNotNil,omitempty"`
 	// priority field predicates
 	Priority       *enums.Priority  `json:"priority,omitempty"`
 	PriorityNeq    *enums.Priority  `json:"priorityNEQ,omitempty"`
@@ -1225,6 +1367,28 @@ type ActionPlanWhereInput struct {
 	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
 	PriorityIsNil  *bool            `json:"priorityIsNil,omitempty"`
 	PriorityNotNil *bool            `json:"priorityNotNil,omitempty"`
+	// requires_approval field predicates
+	RequiresApproval    *bool `json:"requiresApproval,omitempty"`
+	RequiresApprovalNeq *bool `json:"requiresApprovalNEQ,omitempty"`
+	// blocked field predicates
+	Blocked    *bool `json:"blocked,omitempty"`
+	BlockedNeq *bool `json:"blockedNEQ,omitempty"`
+	// blocker_reason field predicates
+	BlockerReason             *string  `json:"blockerReason,omitempty"`
+	BlockerReasonNeq          *string  `json:"blockerReasonNEQ,omitempty"`
+	BlockerReasonIn           []string `json:"blockerReasonIn,omitempty"`
+	BlockerReasonNotIn        []string `json:"blockerReasonNotIn,omitempty"`
+	BlockerReasonGt           *string  `json:"blockerReasonGT,omitempty"`
+	BlockerReasonGte          *string  `json:"blockerReasonGTE,omitempty"`
+	BlockerReasonLt           *string  `json:"blockerReasonLT,omitempty"`
+	BlockerReasonLte          *string  `json:"blockerReasonLTE,omitempty"`
+	BlockerReasonContains     *string  `json:"blockerReasonContains,omitempty"`
+	BlockerReasonHasPrefix    *string  `json:"blockerReasonHasPrefix,omitempty"`
+	BlockerReasonHasSuffix    *string  `json:"blockerReasonHasSuffix,omitempty"`
+	BlockerReasonIsNil        *bool    `json:"blockerReasonIsNil,omitempty"`
+	BlockerReasonNotNil       *bool    `json:"blockerReasonNotNil,omitempty"`
+	BlockerReasonEqualFold    *string  `json:"blockerReasonEqualFold,omitempty"`
+	BlockerReasonContainsFold *string  `json:"blockerReasonContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -1262,6 +1426,24 @@ type ActionPlanWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
@@ -3634,9 +3816,11 @@ type Control struct {
 	Programs               *ProgramConnection               `json:"programs"`
 	Assets                 *AssetConnection                 `json:"assets"`
 	Scans                  *ScanConnection                  `json:"scans"`
+	Findings               *FindingConnection               `json:"findings"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
+	ControlMappings        *FindingControlConnection        `json:"controlMappings"`
 }
 
 func (Control) IsNode() {}
@@ -6065,6 +6249,9 @@ type ControlWhereInput struct {
 	// scans edge predicates
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// control_implementations edge predicates
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
@@ -6074,6 +6261,9 @@ type ControlWhereInput struct {
 	// scheduled_jobs edge predicates
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	// control_mappings edge predicates
+	HasControlMappings     *bool                       `json:"hasControlMappings,omitempty"`
+	HasControlMappingsWith []*FindingControlWhereInput `json:"hasControlMappingsWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -6141,10 +6331,26 @@ type CreateActionPlanInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
+	// short title describing the action plan
+	Title string `json:"title"`
+	// detailed description of remediation steps and objectives
+	Description *string `json:"description,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
 	// priority of the action plan
 	Priority *enums.Priority `json:"priority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval *bool `json:"requiresApproval,omitempty"`
+	// true when the action plan is currently blocked
+	Blocked *bool `json:"blocked,omitempty"`
+	// context on why the action plan is blocked
+	BlockerReason *string `json:"blockerReason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
 	// source of the action plan
 	Source           *string  `json:"source,omitempty"`
 	ApproverID       *string  `json:"approverID,omitempty"`
@@ -6154,6 +6360,12 @@ type CreateActionPlanInput struct {
 	RiskIDs          []string `json:"riskIDs,omitempty"`
 	ControlIDs       []string `json:"controlIDs,omitempty"`
 	ProgramIDs       []string `json:"programIDs,omitempty"`
+	FindingIDs       []string `json:"findingIDs,omitempty"`
+	VulnerabilityIDs []string `json:"vulnerabilityIDs,omitempty"`
+	ReviewIDs        []string `json:"reviewIDs,omitempty"`
+	RemediationIDs   []string `json:"remediationIDs,omitempty"`
+	TaskIDs          []string `json:"taskIDs,omitempty"`
+	IntegrationIDs   []string `json:"integrationIDs,omitempty"`
 	FileID           *string  `json:"fileID,omitempty"`
 }
 
@@ -6351,6 +6563,7 @@ type CreateControlInput struct {
 	ProgramIDs               []string `json:"programIDs,omitempty"`
 	AssetIDs                 []string `json:"assetIDs,omitempty"`
 	ScanIDs                  []string `json:"scanIDs,omitempty"`
+	FindingIDs               []string `json:"findingIDs,omitempty"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
 	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
 	ScheduledJobIDs          []string `json:"scheduledJobIDs,omitempty"`
@@ -6659,6 +6872,130 @@ type CreateFileInput struct {
 	SubprocessorIDs        []string   `json:"subprocessorIDs,omitempty"`
 	IntegrationIDs         []string   `json:"integrationIDs,omitempty"`
 	SecretIDs              []string   `json:"secretIDs,omitempty"`
+}
+
+// CreateFindingControlInput is used for create FindingControl object.
+// Input was generated by ent.
+type CreateFindingControlInput struct {
+	// external identifier for the standard provided by the source system such as iso or hipaa
+	ExternalStandard *string `json:"externalStandard,omitempty"`
+	// version for the external standard provided by the source system
+	ExternalStandardVersion *string `json:"externalStandardVersion,omitempty"`
+	// control identifier provided by the source system such as A.5.10
+	ExternalControlID *string `json:"externalControlID,omitempty"`
+	// the integration source that provided the mapping
+	Source *string `json:"source,omitempty"`
+	// additional metadata about the control mapping from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// timestamp when the mapping was first observed
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	FindingID    string           `json:"findingID"`
+	ControlID    string           `json:"controlID"`
+	StandardID   *string          `json:"standardID,omitempty"`
+}
+
+// CreateFindingInput is used for create Finding object.
+// Input was generated by ent.
+type CreateFindingInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the finding
+	ExternalID *string `json:"externalID,omitempty"`
+	// the owner of the finding
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// system that produced the finding, e.g. gcp_scc
+	Source *string `json:"source,omitempty"`
+	// resource identifier provided by the source system
+	ResourceName *string `json:"resourceName,omitempty"`
+	// display name for the finding when provided by the source
+	DisplayName *string `json:"displayName,omitempty"`
+	// state reported by the source system, such as ACTIVE or INACTIVE
+	State *string `json:"state,omitempty"`
+	// primary category of the finding
+	Category *string `json:"category,omitempty"`
+	// normalized categories for the finding
+	Categories []string `json:"categories,omitempty"`
+	// classification provided by the source, e.g. MISCONFIGURATION
+	FindingClass *string `json:"findingClass,omitempty"`
+	// severity label for the finding
+	Severity *string `json:"severity,omitempty"`
+	// numeric severity score for the finding if provided
+	NumericSeverity *float64 `json:"numericSeverity,omitempty"`
+	// aggregated score such as CVSS for the finding
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the finding
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the finding
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the finding
+	Priority *string `json:"priority,omitempty"`
+	// indicates if the finding is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the finding blocks production changes
+	BlocksProduction *bool `json:"blocksProduction,omitempty"`
+	// true when the finding affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the finding is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the finding has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// identifier for the assessment that generated the finding
+	AssessmentID *string `json:"assessmentID,omitempty"`
+	// long form description of the finding
+	Description *string `json:"description,omitempty"`
+	// short recommendation text from the source system (deprecated upstream)
+	Recommendation *string `json:"recommendation,omitempty"`
+	// markdown formatted remediation guidance for the finding
+	RecommendedActions *string `json:"recommendedActions,omitempty"`
+	// reference links for the finding
+	References []string `json:"references,omitempty"`
+	// steps required to reproduce the finding
+	StepsToReproduce []string `json:"stepsToReproduce,omitempty"`
+	// targets impacted by the finding such as projects or applications
+	Targets []string `json:"targets,omitempty"`
+	// structured details about the impacted targets
+	TargetDetails map[string]any `json:"targetDetails,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// lifecycle status of the finding
+	Status *string `json:"status,omitempty"`
+	// timestamp when the finding was last observed by the source
+	EventTime *models.DateTime `json:"eventTime,omitempty"`
+	// timestamp when the finding was first reported by the source
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the source last updated the finding
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the finding in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the finding from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload       map[string]any `json:"rawPayload,omitempty"`
+	OwnerID          *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs        []string       `json:"editorIDs,omitempty"`
+	ViewerIDs        []string       `json:"viewerIDs,omitempty"`
+	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
+	VulnerabilityIDs []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs    []string       `json:"actionPlanIDs,omitempty"`
+	ControlIDs       []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs    []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs          []string       `json:"riskIDs,omitempty"`
+	ProgramIDs       []string       `json:"programIDs,omitempty"`
+	AssetIDs         []string       `json:"assetIDs,omitempty"`
+	EntityIDs        []string       `json:"entityIDs,omitempty"`
+	ScanIDs          []string       `json:"scanIDs,omitempty"`
+	TaskIDs          []string       `json:"taskIDs,omitempty"`
+	RemediationIDs   []string       `json:"remediationIDs,omitempty"`
+	ReviewIDs        []string       `json:"reviewIDs,omitempty"`
+	CommentIDs       []string       `json:"commentIDs,omitempty"`
+	FileIDs          []string       `json:"fileIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -7161,6 +7498,10 @@ type CreateOrganizationInput struct {
 	AssessmentResponseIDs           []string                        `json:"assessmentResponseIDs,omitempty"`
 	CustomTypeEnumIDs               []string                        `json:"customTypeEnumIDs,omitempty"`
 	TagDefinitionIDs                []string                        `json:"tagDefinitionIDs,omitempty"`
+	RemediationIDs                  []string                        `json:"remediationIDs,omitempty"`
+	FindingIDs                      []string                        `json:"findingIDs,omitempty"`
+	ReviewIDs                       []string                        `json:"reviewIDs,omitempty"`
+	VulnerabilityIDs                []string                        `json:"vulnerabilityIDs,omitempty"`
 	CreateOrgSettings               *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -7368,6 +7709,137 @@ type CreateProgramWithMembersInput struct {
 	StandardVersion *string `json:"standardVersion,omitempty"`
 	// categories to limit the controls that are cloned from a standard. If standardID is empty, this field is ignored
 	Categories []string `json:"categories,omitempty"`
+}
+
+// CreateRemediationInput is used for create Remediation object.
+// Input was generated by ent.
+type CreateRemediationInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title or short description of the remediation effort
+	Title *string `json:"title,omitempty"`
+	// state of the remediation, such as pending or completed
+	State *string `json:"state,omitempty"`
+	// intent or goal of the remediation effort
+	Intent *string `json:"intent,omitempty"`
+	// summary of the remediation approach
+	Summary *string `json:"summary,omitempty"`
+	// detailed explanation of the remediation steps
+	Explanation *string `json:"explanation,omitempty"`
+	// specific instructions or steps to implement the remediation
+	Instructions *string `json:"instructions,omitempty"`
+	// reference to the owner responsible for remediation
+	OwnerReference *string `json:"ownerReference,omitempty"`
+	// source code repository URI associated with the remediation
+	RepositoryURI *string `json:"repositoryURI,omitempty"`
+	// pull request URI associated with the remediation
+	PullRequestURI *string `json:"pullRequestURI,omitempty"`
+	// reference to a tracking ticket for the remediation
+	TicketReference *string `json:"ticketReference,omitempty"`
+	// timestamp when the remediation is due
+	DueAt *models.DateTime `json:"dueAt,omitempty"`
+	// timestamp when the remediation was completed
+	CompletedAt *models.DateTime `json:"completedAt,omitempty"`
+	// timestamp when an automated pull request was generated
+	PrGeneratedAt *models.DateTime `json:"prGeneratedAt,omitempty"`
+	// details about any errors encountered during remediation automation
+	Error *string `json:"error,omitempty"`
+	// system that produced the remediation record
+	Source *string `json:"source,omitempty"`
+	// link to the remediation in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata         map[string]any `json:"metadata,omitempty"`
+	OwnerID          *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs        []string       `json:"editorIDs,omitempty"`
+	ViewerIDs        []string       `json:"viewerIDs,omitempty"`
+	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
+	FindingIDs       []string       `json:"findingIDs,omitempty"`
+	VulnerabilityIDs []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs    []string       `json:"actionPlanIDs,omitempty"`
+	TaskIDs          []string       `json:"taskIDs,omitempty"`
+	ControlIDs       []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs    []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs          []string       `json:"riskIDs,omitempty"`
+	ProgramIDs       []string       `json:"programIDs,omitempty"`
+	AssetIDs         []string       `json:"assetIDs,omitempty"`
+	EntityIDs        []string       `json:"entityIDs,omitempty"`
+	ReviewIDs        []string       `json:"reviewIDs,omitempty"`
+	CommentIDs       []string       `json:"commentIDs,omitempty"`
+	FileIDs          []string       `json:"fileIDs,omitempty"`
+}
+
+// CreateReviewInput is used for create Review object.
+// Input was generated by ent.
+type CreateReviewInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title of the review
+	Title string `json:"title"`
+	// state of the review
+	State *string `json:"state,omitempty"`
+	// category for the review record
+	Category *string `json:"category,omitempty"`
+	// classification or sensitivity of the review record
+	Classification *string `json:"classification,omitempty"`
+	// summary text for the review
+	Summary *string `json:"summary,omitempty"`
+	// detailed notes captured during the review
+	Details *string `json:"details,omitempty"`
+	// person or system that created the review
+	Reporter *string `json:"reporter,omitempty"`
+	// true when the review has been approved
+	Approved *bool `json:"approved,omitempty"`
+	// timestamp when the review was completed
+	ReviewedAt *models.DateTime `json:"reviewedAt,omitempty"`
+	// timestamp when the review was reported or opened
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the review was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// system that produced the review record
+	Source *string `json:"source,omitempty"`
+	// link to the review in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the review from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload       map[string]any `json:"rawPayload,omitempty"`
+	OwnerID          *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs        []string       `json:"editorIDs,omitempty"`
+	ViewerIDs        []string       `json:"viewerIDs,omitempty"`
+	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
+	FindingIDs       []string       `json:"findingIDs,omitempty"`
+	VulnerabilityIDs []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs    []string       `json:"actionPlanIDs,omitempty"`
+	RemediationIDs   []string       `json:"remediationIDs,omitempty"`
+	ControlIDs       []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs    []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs          []string       `json:"riskIDs,omitempty"`
+	ProgramIDs       []string       `json:"programIDs,omitempty"`
+	AssetIDs         []string       `json:"assetIDs,omitempty"`
+	EntityIDs        []string       `json:"entityIDs,omitempty"`
+	TaskIDs          []string       `json:"taskIDs,omitempty"`
+	ReviewerID       *string        `json:"reviewerID,omitempty"`
+	CommentIDs       []string       `json:"commentIDs,omitempty"`
+	FileIDs          []string       `json:"fileIDs,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -7683,6 +8155,7 @@ type CreateTaskInput struct {
 	ProgramIDs               []string `json:"programIDs,omitempty"`
 	RiskIDs                  []string `json:"riskIDs,omitempty"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
 }
 
@@ -7912,6 +8385,94 @@ type CreateUserSettingInput struct {
 	UserID       *string  `json:"userID,omitempty"`
 	DefaultOrgID *string  `json:"defaultOrgID,omitempty"`
 	FileIDs      []string `json:"fileIDs,omitempty"`
+}
+
+// CreateVulnerabilityInput is used for create Vulnerability object.
+// Input was generated by ent.
+type CreateVulnerabilityInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// owner of the vulnerability
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// external identifier from the integration source for the vulnerability
+	ExternalID string `json:"externalID"`
+	// CVE identifier for the vulnerability when applicable
+	CveID *string `json:"cveID,omitempty"`
+	// system that produced the vulnerability record
+	Source *string `json:"source,omitempty"`
+	// display name for the vulnerability when provided
+	DisplayName *string `json:"displayName,omitempty"`
+	// category of the vulnerability such as application or infrastructure
+	Category *string `json:"category,omitempty"`
+	// severity label for the vulnerability
+	Severity *string `json:"severity,omitempty"`
+	// overall score such as CVSS for the vulnerability
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the vulnerability
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the vulnerability
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the vulnerability
+	Priority *string `json:"priority,omitempty"`
+	// lifecycle status of the vulnerability
+	Status *string `json:"status,omitempty"`
+	// short summary of the vulnerability details
+	Summary *string `json:"summary,omitempty"`
+	// long form description of the vulnerability
+	Description *string `json:"description,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// indicates if the vulnerability is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the vulnerability blocks production changes
+	Blocking *bool `json:"blocking,omitempty"`
+	// true when the vulnerability affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the vulnerability is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the vulnerability has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// reference links for the vulnerability
+	References []string `json:"references,omitempty"`
+	// targets or assets impacted by the vulnerability
+	Impacts []string `json:"impacts,omitempty"`
+	// timestamp when the vulnerability was published
+	PublishedAt *models.DateTime `json:"publishedAt,omitempty"`
+	// timestamp when the vulnerability was discovered in the environment
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	// timestamp when the source last updated the vulnerability
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the vulnerability in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the vulnerability from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload      map[string]any `json:"rawPayload,omitempty"`
+	OwnerID         *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string       `json:"editorIDs,omitempty"`
+	ViewerIDs       []string       `json:"viewerIDs,omitempty"`
+	IntegrationIDs  []string       `json:"integrationIDs,omitempty"`
+	FindingIDs      []string       `json:"findingIDs,omitempty"`
+	ActionPlanIDs   []string       `json:"actionPlanIDs,omitempty"`
+	ControlIDs      []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs   []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs         []string       `json:"riskIDs,omitempty"`
+	ProgramIDs      []string       `json:"programIDs,omitempty"`
+	AssetIDs        []string       `json:"assetIDs,omitempty"`
+	EntityIDs       []string       `json:"entityIDs,omitempty"`
+	ScanIDs         []string       `json:"scanIDs,omitempty"`
+	TaskIDs         []string       `json:"taskIDs,omitempty"`
+	RemediationIDs  []string       `json:"remediationIDs,omitempty"`
+	ReviewIDs       []string       `json:"reviewIDs,omitempty"`
+	CommentIDs      []string       `json:"commentIDs,omitempty"`
+	FileIDs         []string       `json:"fileIDs,omitempty"`
 }
 
 type CustomDomain struct {
@@ -12837,6 +13398,1945 @@ type FileWhereInput struct {
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 }
 
+type Finding struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the finding
+	ExternalID *string `json:"externalID,omitempty"`
+	// the owner of the finding
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// system that produced the finding, e.g. gcp_scc
+	Source *string `json:"source,omitempty"`
+	// resource identifier provided by the source system
+	ResourceName *string `json:"resourceName,omitempty"`
+	// display name for the finding when provided by the source
+	DisplayName *string `json:"displayName,omitempty"`
+	// state reported by the source system, such as ACTIVE or INACTIVE
+	State *string `json:"state,omitempty"`
+	// primary category of the finding
+	Category *string `json:"category,omitempty"`
+	// normalized categories for the finding
+	Categories []string `json:"categories,omitempty"`
+	// classification provided by the source, e.g. MISCONFIGURATION
+	FindingClass *string `json:"findingClass,omitempty"`
+	// severity label for the finding
+	Severity *string `json:"severity,omitempty"`
+	// numeric severity score for the finding if provided
+	NumericSeverity *float64 `json:"numericSeverity,omitempty"`
+	// aggregated score such as CVSS for the finding
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the finding
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the finding
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the finding
+	Priority *string `json:"priority,omitempty"`
+	// indicates if the finding is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the finding blocks production changes
+	BlocksProduction *bool `json:"blocksProduction,omitempty"`
+	// true when the finding affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the finding is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the finding has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// identifier for the assessment that generated the finding
+	AssessmentID *string `json:"assessmentID,omitempty"`
+	// long form description of the finding
+	Description *string `json:"description,omitempty"`
+	// short recommendation text from the source system (deprecated upstream)
+	Recommendation *string `json:"recommendation,omitempty"`
+	// markdown formatted remediation guidance for the finding
+	RecommendedActions *string `json:"recommendedActions,omitempty"`
+	// reference links for the finding
+	References []string `json:"references,omitempty"`
+	// steps required to reproduce the finding
+	StepsToReproduce []string `json:"stepsToReproduce,omitempty"`
+	// targets impacted by the finding such as projects or applications
+	Targets []string `json:"targets,omitempty"`
+	// structured details about the impacted targets
+	TargetDetails map[string]any `json:"targetDetails,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// lifecycle status of the finding
+	Status *string `json:"status,omitempty"`
+	// timestamp when the finding was last observed by the source
+	EventTime *models.DateTime `json:"eventTime,omitempty"`
+	// timestamp when the finding was first reported by the source
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the source last updated the finding
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the finding in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the finding from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload      map[string]any            `json:"rawPayload,omitempty"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
+	Editors         *GroupConnection          `json:"editors"`
+	Viewers         *GroupConnection          `json:"viewers"`
+	Integrations    *IntegrationConnection    `json:"integrations"`
+	Vulnerabilities *VulnerabilityConnection  `json:"vulnerabilities"`
+	ActionPlans     *ActionPlanConnection     `json:"actionPlans"`
+	Controls        *ControlConnection        `json:"controls"`
+	Subcontrols     *SubcontrolConnection     `json:"subcontrols"`
+	Risks           *RiskConnection           `json:"risks"`
+	Programs        *ProgramConnection        `json:"programs"`
+	Assets          *AssetConnection          `json:"assets"`
+	Entities        *EntityConnection         `json:"entities"`
+	Scans           *ScanConnection           `json:"scans"`
+	Tasks           *TaskConnection           `json:"tasks"`
+	Remediations    *RemediationConnection    `json:"remediations"`
+	Reviews         *ReviewConnection         `json:"reviews"`
+	Comments        *NoteConnection           `json:"comments"`
+	Files           *FileConnection           `json:"files"`
+	ControlMappings *FindingControlConnection `json:"controlMappings"`
+}
+
+func (Finding) IsNode() {}
+
+// Return response for createBulkFinding mutation
+type FindingBulkCreatePayload struct {
+	// Created findings
+	Findings []*Finding `json:"findings,omitempty"`
+}
+
+// A connection to a list of items.
+type FindingConnection struct {
+	// A list of edges.
+	Edges []*FindingEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+type FindingControl struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the id of the finding associated with the control
+	FindingID string `json:"findingID"`
+	// the id of the control mapped to the finding when it exists in the catalog
+	ControlID string `json:"controlID"`
+	// the id of the standard that the control belongs to when it exists in the catalog
+	StandardID *string `json:"standardID,omitempty"`
+	// external identifier for the standard provided by the source system such as iso or hipaa
+	ExternalStandard *string `json:"externalStandard,omitempty"`
+	// version for the external standard provided by the source system
+	ExternalStandardVersion *string `json:"externalStandardVersion,omitempty"`
+	// control identifier provided by the source system such as A.5.10
+	ExternalControlID *string `json:"externalControlID,omitempty"`
+	// the integration source that provided the mapping
+	Source *string `json:"source,omitempty"`
+	// additional metadata about the control mapping from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// timestamp when the mapping was first observed
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	Finding      *Finding         `json:"finding"`
+	Control      *Control         `json:"control"`
+	Standard     *Standard        `json:"standard,omitempty"`
+}
+
+func (FindingControl) IsNode() {}
+
+// Return response for createBulkFindingControl mutation
+type FindingControlBulkCreatePayload struct {
+	// Created findingControls
+	FindingControls []*FindingControl `json:"findingControls,omitempty"`
+}
+
+// A connection to a list of items.
+type FindingControlConnection struct {
+	// A list of edges.
+	Edges []*FindingControlEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createFindingControl mutation
+type FindingControlCreatePayload struct {
+	// Created findingControl
+	FindingControl *FindingControl `json:"findingControl"`
+}
+
+// Return response for deleteFindingControl mutation
+type FindingControlDeletePayload struct {
+	// Deleted findingControl ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type FindingControlEdge struct {
+	// The item at the end of the edge.
+	Node *FindingControl `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type FindingControlHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// the id of the finding associated with the control
+	FindingID string `json:"findingID"`
+	// the id of the control mapped to the finding when it exists in the catalog
+	ControlID string `json:"controlID"`
+	// the id of the standard that the control belongs to when it exists in the catalog
+	StandardID *string `json:"standardID,omitempty"`
+	// external identifier for the standard provided by the source system such as iso or hipaa
+	ExternalStandard *string `json:"externalStandard,omitempty"`
+	// version for the external standard provided by the source system
+	ExternalStandardVersion *string `json:"externalStandardVersion,omitempty"`
+	// control identifier provided by the source system such as A.5.10
+	ExternalControlID *string `json:"externalControlID,omitempty"`
+	// the integration source that provided the mapping
+	Source *string `json:"source,omitempty"`
+	// additional metadata about the control mapping from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// timestamp when the mapping was first observed
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+}
+
+func (FindingControlHistory) IsNode() {}
+
+// A connection to a list of items.
+type FindingControlHistoryConnection struct {
+	// A list of edges.
+	Edges []*FindingControlHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type FindingControlHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *FindingControlHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for FindingControlHistory connections
+type FindingControlHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order FindingControlHistories.
+	Field FindingControlHistoryOrderField `json:"field"`
+}
+
+// FindingControlHistoryWhereInput is used for filtering FindingControlHistory objects.
+// Input was generated by ent.
+type FindingControlHistoryWhereInput struct {
+	Not *FindingControlHistoryWhereInput   `json:"not,omitempty"`
+	And []*FindingControlHistoryWhereInput `json:"and,omitempty"`
+	Or  []*FindingControlHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// finding_id field predicates
+	FindingID             *string  `json:"findingID,omitempty"`
+	FindingIdneq          *string  `json:"findingIDNEQ,omitempty"`
+	FindingIDIn           []string `json:"findingIDIn,omitempty"`
+	FindingIDNotIn        []string `json:"findingIDNotIn,omitempty"`
+	FindingIdgt           *string  `json:"findingIDGT,omitempty"`
+	FindingIdgte          *string  `json:"findingIDGTE,omitempty"`
+	FindingIdlt           *string  `json:"findingIDLT,omitempty"`
+	FindingIdlte          *string  `json:"findingIDLTE,omitempty"`
+	FindingIDContains     *string  `json:"findingIDContains,omitempty"`
+	FindingIDHasPrefix    *string  `json:"findingIDHasPrefix,omitempty"`
+	FindingIDHasSuffix    *string  `json:"findingIDHasSuffix,omitempty"`
+	FindingIDEqualFold    *string  `json:"findingIDEqualFold,omitempty"`
+	FindingIDContainsFold *string  `json:"findingIDContainsFold,omitempty"`
+	// control_id field predicates
+	ControlID             *string  `json:"controlID,omitempty"`
+	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
+	ControlIDIn           []string `json:"controlIDIn,omitempty"`
+	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
+	ControlIdgt           *string  `json:"controlIDGT,omitempty"`
+	ControlIdgte          *string  `json:"controlIDGTE,omitempty"`
+	ControlIdlt           *string  `json:"controlIDLT,omitempty"`
+	ControlIdlte          *string  `json:"controlIDLTE,omitempty"`
+	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
+	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
+	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
+	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
+	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
+	// standard_id field predicates
+	StandardID             *string  `json:"standardID,omitempty"`
+	StandardIdneq          *string  `json:"standardIDNEQ,omitempty"`
+	StandardIDIn           []string `json:"standardIDIn,omitempty"`
+	StandardIDNotIn        []string `json:"standardIDNotIn,omitempty"`
+	StandardIdgt           *string  `json:"standardIDGT,omitempty"`
+	StandardIdgte          *string  `json:"standardIDGTE,omitempty"`
+	StandardIdlt           *string  `json:"standardIDLT,omitempty"`
+	StandardIdlte          *string  `json:"standardIDLTE,omitempty"`
+	StandardIDContains     *string  `json:"standardIDContains,omitempty"`
+	StandardIDHasPrefix    *string  `json:"standardIDHasPrefix,omitempty"`
+	StandardIDHasSuffix    *string  `json:"standardIDHasSuffix,omitempty"`
+	StandardIDIsNil        *bool    `json:"standardIDIsNil,omitempty"`
+	StandardIDNotNil       *bool    `json:"standardIDNotNil,omitempty"`
+	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
+	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+	// external_standard field predicates
+	ExternalStandard             *string  `json:"externalStandard,omitempty"`
+	ExternalStandardNeq          *string  `json:"externalStandardNEQ,omitempty"`
+	ExternalStandardIn           []string `json:"externalStandardIn,omitempty"`
+	ExternalStandardNotIn        []string `json:"externalStandardNotIn,omitempty"`
+	ExternalStandardGt           *string  `json:"externalStandardGT,omitempty"`
+	ExternalStandardGte          *string  `json:"externalStandardGTE,omitempty"`
+	ExternalStandardLt           *string  `json:"externalStandardLT,omitempty"`
+	ExternalStandardLte          *string  `json:"externalStandardLTE,omitempty"`
+	ExternalStandardContains     *string  `json:"externalStandardContains,omitempty"`
+	ExternalStandardHasPrefix    *string  `json:"externalStandardHasPrefix,omitempty"`
+	ExternalStandardHasSuffix    *string  `json:"externalStandardHasSuffix,omitempty"`
+	ExternalStandardIsNil        *bool    `json:"externalStandardIsNil,omitempty"`
+	ExternalStandardNotNil       *bool    `json:"externalStandardNotNil,omitempty"`
+	ExternalStandardEqualFold    *string  `json:"externalStandardEqualFold,omitempty"`
+	ExternalStandardContainsFold *string  `json:"externalStandardContainsFold,omitempty"`
+	// external_standard_version field predicates
+	ExternalStandardVersion             *string  `json:"externalStandardVersion,omitempty"`
+	ExternalStandardVersionNeq          *string  `json:"externalStandardVersionNEQ,omitempty"`
+	ExternalStandardVersionIn           []string `json:"externalStandardVersionIn,omitempty"`
+	ExternalStandardVersionNotIn        []string `json:"externalStandardVersionNotIn,omitempty"`
+	ExternalStandardVersionGt           *string  `json:"externalStandardVersionGT,omitempty"`
+	ExternalStandardVersionGte          *string  `json:"externalStandardVersionGTE,omitempty"`
+	ExternalStandardVersionLt           *string  `json:"externalStandardVersionLT,omitempty"`
+	ExternalStandardVersionLte          *string  `json:"externalStandardVersionLTE,omitempty"`
+	ExternalStandardVersionContains     *string  `json:"externalStandardVersionContains,omitempty"`
+	ExternalStandardVersionHasPrefix    *string  `json:"externalStandardVersionHasPrefix,omitempty"`
+	ExternalStandardVersionHasSuffix    *string  `json:"externalStandardVersionHasSuffix,omitempty"`
+	ExternalStandardVersionIsNil        *bool    `json:"externalStandardVersionIsNil,omitempty"`
+	ExternalStandardVersionNotNil       *bool    `json:"externalStandardVersionNotNil,omitempty"`
+	ExternalStandardVersionEqualFold    *string  `json:"externalStandardVersionEqualFold,omitempty"`
+	ExternalStandardVersionContainsFold *string  `json:"externalStandardVersionContainsFold,omitempty"`
+	// external_control_id field predicates
+	ExternalControlID             *string  `json:"externalControlID,omitempty"`
+	ExternalControlIdneq          *string  `json:"externalControlIDNEQ,omitempty"`
+	ExternalControlIDIn           []string `json:"externalControlIDIn,omitempty"`
+	ExternalControlIDNotIn        []string `json:"externalControlIDNotIn,omitempty"`
+	ExternalControlIdgt           *string  `json:"externalControlIDGT,omitempty"`
+	ExternalControlIdgte          *string  `json:"externalControlIDGTE,omitempty"`
+	ExternalControlIdlt           *string  `json:"externalControlIDLT,omitempty"`
+	ExternalControlIdlte          *string  `json:"externalControlIDLTE,omitempty"`
+	ExternalControlIDContains     *string  `json:"externalControlIDContains,omitempty"`
+	ExternalControlIDHasPrefix    *string  `json:"externalControlIDHasPrefix,omitempty"`
+	ExternalControlIDHasSuffix    *string  `json:"externalControlIDHasSuffix,omitempty"`
+	ExternalControlIDIsNil        *bool    `json:"externalControlIDIsNil,omitempty"`
+	ExternalControlIDNotNil       *bool    `json:"externalControlIDNotNil,omitempty"`
+	ExternalControlIDEqualFold    *string  `json:"externalControlIDEqualFold,omitempty"`
+	ExternalControlIDContainsFold *string  `json:"externalControlIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// discovered_at field predicates
+	DiscoveredAt       *models.DateTime   `json:"discoveredAt,omitempty"`
+	DiscoveredAtNeq    *models.DateTime   `json:"discoveredAtNEQ,omitempty"`
+	DiscoveredAtIn     []*models.DateTime `json:"discoveredAtIn,omitempty"`
+	DiscoveredAtNotIn  []*models.DateTime `json:"discoveredAtNotIn,omitempty"`
+	DiscoveredAtGt     *models.DateTime   `json:"discoveredAtGT,omitempty"`
+	DiscoveredAtGte    *models.DateTime   `json:"discoveredAtGTE,omitempty"`
+	DiscoveredAtLt     *models.DateTime   `json:"discoveredAtLT,omitempty"`
+	DiscoveredAtLte    *models.DateTime   `json:"discoveredAtLTE,omitempty"`
+	DiscoveredAtIsNil  *bool              `json:"discoveredAtIsNil,omitempty"`
+	DiscoveredAtNotNil *bool              `json:"discoveredAtNotNil,omitempty"`
+}
+
+// Ordering options for FindingControl connections
+type FindingControlOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order FindingControls.
+	Field FindingControlOrderField `json:"field"`
+}
+
+// Return response for updateFindingControl mutation
+type FindingControlUpdatePayload struct {
+	// Updated findingControl
+	FindingControl *FindingControl `json:"findingControl"`
+}
+
+// FindingControlWhereInput is used for filtering FindingControl objects.
+// Input was generated by ent.
+type FindingControlWhereInput struct {
+	Not *FindingControlWhereInput   `json:"not,omitempty"`
+	And []*FindingControlWhereInput `json:"and,omitempty"`
+	Or  []*FindingControlWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// external_standard field predicates
+	ExternalStandard             *string  `json:"externalStandard,omitempty"`
+	ExternalStandardNeq          *string  `json:"externalStandardNEQ,omitempty"`
+	ExternalStandardIn           []string `json:"externalStandardIn,omitempty"`
+	ExternalStandardNotIn        []string `json:"externalStandardNotIn,omitempty"`
+	ExternalStandardGt           *string  `json:"externalStandardGT,omitempty"`
+	ExternalStandardGte          *string  `json:"externalStandardGTE,omitempty"`
+	ExternalStandardLt           *string  `json:"externalStandardLT,omitempty"`
+	ExternalStandardLte          *string  `json:"externalStandardLTE,omitempty"`
+	ExternalStandardContains     *string  `json:"externalStandardContains,omitempty"`
+	ExternalStandardHasPrefix    *string  `json:"externalStandardHasPrefix,omitempty"`
+	ExternalStandardHasSuffix    *string  `json:"externalStandardHasSuffix,omitempty"`
+	ExternalStandardIsNil        *bool    `json:"externalStandardIsNil,omitempty"`
+	ExternalStandardNotNil       *bool    `json:"externalStandardNotNil,omitempty"`
+	ExternalStandardEqualFold    *string  `json:"externalStandardEqualFold,omitempty"`
+	ExternalStandardContainsFold *string  `json:"externalStandardContainsFold,omitempty"`
+	// external_standard_version field predicates
+	ExternalStandardVersion             *string  `json:"externalStandardVersion,omitempty"`
+	ExternalStandardVersionNeq          *string  `json:"externalStandardVersionNEQ,omitempty"`
+	ExternalStandardVersionIn           []string `json:"externalStandardVersionIn,omitempty"`
+	ExternalStandardVersionNotIn        []string `json:"externalStandardVersionNotIn,omitempty"`
+	ExternalStandardVersionGt           *string  `json:"externalStandardVersionGT,omitempty"`
+	ExternalStandardVersionGte          *string  `json:"externalStandardVersionGTE,omitempty"`
+	ExternalStandardVersionLt           *string  `json:"externalStandardVersionLT,omitempty"`
+	ExternalStandardVersionLte          *string  `json:"externalStandardVersionLTE,omitempty"`
+	ExternalStandardVersionContains     *string  `json:"externalStandardVersionContains,omitempty"`
+	ExternalStandardVersionHasPrefix    *string  `json:"externalStandardVersionHasPrefix,omitempty"`
+	ExternalStandardVersionHasSuffix    *string  `json:"externalStandardVersionHasSuffix,omitempty"`
+	ExternalStandardVersionIsNil        *bool    `json:"externalStandardVersionIsNil,omitempty"`
+	ExternalStandardVersionNotNil       *bool    `json:"externalStandardVersionNotNil,omitempty"`
+	ExternalStandardVersionEqualFold    *string  `json:"externalStandardVersionEqualFold,omitempty"`
+	ExternalStandardVersionContainsFold *string  `json:"externalStandardVersionContainsFold,omitempty"`
+	// external_control_id field predicates
+	ExternalControlID             *string  `json:"externalControlID,omitempty"`
+	ExternalControlIdneq          *string  `json:"externalControlIDNEQ,omitempty"`
+	ExternalControlIDIn           []string `json:"externalControlIDIn,omitempty"`
+	ExternalControlIDNotIn        []string `json:"externalControlIDNotIn,omitempty"`
+	ExternalControlIdgt           *string  `json:"externalControlIDGT,omitempty"`
+	ExternalControlIdgte          *string  `json:"externalControlIDGTE,omitempty"`
+	ExternalControlIdlt           *string  `json:"externalControlIDLT,omitempty"`
+	ExternalControlIdlte          *string  `json:"externalControlIDLTE,omitempty"`
+	ExternalControlIDContains     *string  `json:"externalControlIDContains,omitempty"`
+	ExternalControlIDHasPrefix    *string  `json:"externalControlIDHasPrefix,omitempty"`
+	ExternalControlIDHasSuffix    *string  `json:"externalControlIDHasSuffix,omitempty"`
+	ExternalControlIDIsNil        *bool    `json:"externalControlIDIsNil,omitempty"`
+	ExternalControlIDNotNil       *bool    `json:"externalControlIDNotNil,omitempty"`
+	ExternalControlIDEqualFold    *string  `json:"externalControlIDEqualFold,omitempty"`
+	ExternalControlIDContainsFold *string  `json:"externalControlIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// discovered_at field predicates
+	DiscoveredAt       *models.DateTime   `json:"discoveredAt,omitempty"`
+	DiscoveredAtNeq    *models.DateTime   `json:"discoveredAtNEQ,omitempty"`
+	DiscoveredAtIn     []*models.DateTime `json:"discoveredAtIn,omitempty"`
+	DiscoveredAtNotIn  []*models.DateTime `json:"discoveredAtNotIn,omitempty"`
+	DiscoveredAtGt     *models.DateTime   `json:"discoveredAtGT,omitempty"`
+	DiscoveredAtGte    *models.DateTime   `json:"discoveredAtGTE,omitempty"`
+	DiscoveredAtLt     *models.DateTime   `json:"discoveredAtLT,omitempty"`
+	DiscoveredAtLte    *models.DateTime   `json:"discoveredAtLTE,omitempty"`
+	DiscoveredAtIsNil  *bool              `json:"discoveredAtIsNil,omitempty"`
+	DiscoveredAtNotNil *bool              `json:"discoveredAtNotNil,omitempty"`
+}
+
+// Return response for createFinding mutation
+type FindingCreatePayload struct {
+	// Created finding
+	Finding *Finding `json:"finding"`
+}
+
+// Return response for deleteFinding mutation
+type FindingDeletePayload struct {
+	// Deleted finding ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type FindingEdge struct {
+	// The item at the end of the edge.
+	Node *Finding `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type FindingHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the finding
+	ExternalID *string `json:"externalID,omitempty"`
+	// the owner of the finding
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// system that produced the finding, e.g. gcp_scc
+	Source *string `json:"source,omitempty"`
+	// resource identifier provided by the source system
+	ResourceName *string `json:"resourceName,omitempty"`
+	// display name for the finding when provided by the source
+	DisplayName *string `json:"displayName,omitempty"`
+	// state reported by the source system, such as ACTIVE or INACTIVE
+	State *string `json:"state,omitempty"`
+	// primary category of the finding
+	Category *string `json:"category,omitempty"`
+	// normalized categories for the finding
+	Categories []string `json:"categories,omitempty"`
+	// classification provided by the source, e.g. MISCONFIGURATION
+	FindingClass *string `json:"findingClass,omitempty"`
+	// severity label for the finding
+	Severity *string `json:"severity,omitempty"`
+	// numeric severity score for the finding if provided
+	NumericSeverity *float64 `json:"numericSeverity,omitempty"`
+	// aggregated score such as CVSS for the finding
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the finding
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the finding
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the finding
+	Priority *string `json:"priority,omitempty"`
+	// indicates if the finding is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the finding blocks production changes
+	BlocksProduction *bool `json:"blocksProduction,omitempty"`
+	// true when the finding affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the finding is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the finding has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// identifier for the assessment that generated the finding
+	AssessmentID *string `json:"assessmentID,omitempty"`
+	// long form description of the finding
+	Description *string `json:"description,omitempty"`
+	// short recommendation text from the source system (deprecated upstream)
+	Recommendation *string `json:"recommendation,omitempty"`
+	// markdown formatted remediation guidance for the finding
+	RecommendedActions *string `json:"recommendedActions,omitempty"`
+	// reference links for the finding
+	References []string `json:"references,omitempty"`
+	// steps required to reproduce the finding
+	StepsToReproduce []string `json:"stepsToReproduce,omitempty"`
+	// targets impacted by the finding such as projects or applications
+	Targets []string `json:"targets,omitempty"`
+	// structured details about the impacted targets
+	TargetDetails map[string]any `json:"targetDetails,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// lifecycle status of the finding
+	Status *string `json:"status,omitempty"`
+	// timestamp when the finding was last observed by the source
+	EventTime *models.DateTime `json:"eventTime,omitempty"`
+	// timestamp when the finding was first reported by the source
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the source last updated the finding
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the finding in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the finding from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
+}
+
+func (FindingHistory) IsNode() {}
+
+// A connection to a list of items.
+type FindingHistoryConnection struct {
+	// A list of edges.
+	Edges []*FindingHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type FindingHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *FindingHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for FindingHistory connections
+type FindingHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order FindingHistories.
+	Field FindingHistoryOrderField `json:"field"`
+}
+
+// FindingHistoryWhereInput is used for filtering FindingHistory objects.
+// Input was generated by ent.
+type FindingHistoryWhereInput struct {
+	Not *FindingHistoryWhereInput   `json:"not,omitempty"`
+	And []*FindingHistoryWhereInput `json:"and,omitempty"`
+	Or  []*FindingHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// resource_name field predicates
+	ResourceName             *string  `json:"resourceName,omitempty"`
+	ResourceNameNeq          *string  `json:"resourceNameNEQ,omitempty"`
+	ResourceNameIn           []string `json:"resourceNameIn,omitempty"`
+	ResourceNameNotIn        []string `json:"resourceNameNotIn,omitempty"`
+	ResourceNameGt           *string  `json:"resourceNameGT,omitempty"`
+	ResourceNameGte          *string  `json:"resourceNameGTE,omitempty"`
+	ResourceNameLt           *string  `json:"resourceNameLT,omitempty"`
+	ResourceNameLte          *string  `json:"resourceNameLTE,omitempty"`
+	ResourceNameContains     *string  `json:"resourceNameContains,omitempty"`
+	ResourceNameHasPrefix    *string  `json:"resourceNameHasPrefix,omitempty"`
+	ResourceNameHasSuffix    *string  `json:"resourceNameHasSuffix,omitempty"`
+	ResourceNameIsNil        *bool    `json:"resourceNameIsNil,omitempty"`
+	ResourceNameNotNil       *bool    `json:"resourceNameNotNil,omitempty"`
+	ResourceNameEqualFold    *string  `json:"resourceNameEqualFold,omitempty"`
+	ResourceNameContainsFold *string  `json:"resourceNameContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// finding_class field predicates
+	FindingClass             *string  `json:"findingClass,omitempty"`
+	FindingClassNeq          *string  `json:"findingClassNEQ,omitempty"`
+	FindingClassIn           []string `json:"findingClassIn,omitempty"`
+	FindingClassNotIn        []string `json:"findingClassNotIn,omitempty"`
+	FindingClassGt           *string  `json:"findingClassGT,omitempty"`
+	FindingClassGte          *string  `json:"findingClassGTE,omitempty"`
+	FindingClassLt           *string  `json:"findingClassLT,omitempty"`
+	FindingClassLte          *string  `json:"findingClassLTE,omitempty"`
+	FindingClassContains     *string  `json:"findingClassContains,omitempty"`
+	FindingClassHasPrefix    *string  `json:"findingClassHasPrefix,omitempty"`
+	FindingClassHasSuffix    *string  `json:"findingClassHasSuffix,omitempty"`
+	FindingClassIsNil        *bool    `json:"findingClassIsNil,omitempty"`
+	FindingClassNotNil       *bool    `json:"findingClassNotNil,omitempty"`
+	FindingClassEqualFold    *string  `json:"findingClassEqualFold,omitempty"`
+	FindingClassContainsFold *string  `json:"findingClassContainsFold,omitempty"`
+	// severity field predicates
+	Severity             *string  `json:"severity,omitempty"`
+	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
+	SeverityIn           []string `json:"severityIn,omitempty"`
+	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
+	SeverityGt           *string  `json:"severityGT,omitempty"`
+	SeverityGte          *string  `json:"severityGTE,omitempty"`
+	SeverityLt           *string  `json:"severityLT,omitempty"`
+	SeverityLte          *string  `json:"severityLTE,omitempty"`
+	SeverityContains     *string  `json:"severityContains,omitempty"`
+	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
+	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
+	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
+	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
+	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
+	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
+	// numeric_severity field predicates
+	NumericSeverity       *float64  `json:"numericSeverity,omitempty"`
+	NumericSeverityNeq    *float64  `json:"numericSeverityNEQ,omitempty"`
+	NumericSeverityIn     []float64 `json:"numericSeverityIn,omitempty"`
+	NumericSeverityNotIn  []float64 `json:"numericSeverityNotIn,omitempty"`
+	NumericSeverityGt     *float64  `json:"numericSeverityGT,omitempty"`
+	NumericSeverityGte    *float64  `json:"numericSeverityGTE,omitempty"`
+	NumericSeverityLt     *float64  `json:"numericSeverityLT,omitempty"`
+	NumericSeverityLte    *float64  `json:"numericSeverityLTE,omitempty"`
+	NumericSeverityIsNil  *bool     `json:"numericSeverityIsNil,omitempty"`
+	NumericSeverityNotNil *bool     `json:"numericSeverityNotNil,omitempty"`
+	// score field predicates
+	Score       *float64  `json:"score,omitempty"`
+	ScoreNeq    *float64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []float64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []float64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *float64  `json:"scoreGT,omitempty"`
+	ScoreGte    *float64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *float64  `json:"scoreLT,omitempty"`
+	ScoreLte    *float64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool     `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool     `json:"scoreNotNil,omitempty"`
+	// impact field predicates
+	Impact       *float64  `json:"impact,omitempty"`
+	ImpactNeq    *float64  `json:"impactNEQ,omitempty"`
+	ImpactIn     []float64 `json:"impactIn,omitempty"`
+	ImpactNotIn  []float64 `json:"impactNotIn,omitempty"`
+	ImpactGt     *float64  `json:"impactGT,omitempty"`
+	ImpactGte    *float64  `json:"impactGTE,omitempty"`
+	ImpactLt     *float64  `json:"impactLT,omitempty"`
+	ImpactLte    *float64  `json:"impactLTE,omitempty"`
+	ImpactIsNil  *bool     `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool     `json:"impactNotNil,omitempty"`
+	// exploitability field predicates
+	Exploitability       *float64  `json:"exploitability,omitempty"`
+	ExploitabilityNeq    *float64  `json:"exploitabilityNEQ,omitempty"`
+	ExploitabilityIn     []float64 `json:"exploitabilityIn,omitempty"`
+	ExploitabilityNotIn  []float64 `json:"exploitabilityNotIn,omitempty"`
+	ExploitabilityGt     *float64  `json:"exploitabilityGT,omitempty"`
+	ExploitabilityGte    *float64  `json:"exploitabilityGTE,omitempty"`
+	ExploitabilityLt     *float64  `json:"exploitabilityLT,omitempty"`
+	ExploitabilityLte    *float64  `json:"exploitabilityLTE,omitempty"`
+	ExploitabilityIsNil  *bool     `json:"exploitabilityIsNil,omitempty"`
+	ExploitabilityNotNil *bool     `json:"exploitabilityNotNil,omitempty"`
+	// priority field predicates
+	Priority             *string  `json:"priority,omitempty"`
+	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
+	PriorityIn           []string `json:"priorityIn,omitempty"`
+	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
+	PriorityGt           *string  `json:"priorityGT,omitempty"`
+	PriorityGte          *string  `json:"priorityGTE,omitempty"`
+	PriorityLt           *string  `json:"priorityLT,omitempty"`
+	PriorityLte          *string  `json:"priorityLTE,omitempty"`
+	PriorityContains     *string  `json:"priorityContains,omitempty"`
+	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
+	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
+	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
+	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
+	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
+	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	// open field predicates
+	Open       *bool `json:"open,omitempty"`
+	OpenNeq    *bool `json:"openNEQ,omitempty"`
+	OpenIsNil  *bool `json:"openIsNil,omitempty"`
+	OpenNotNil *bool `json:"openNotNil,omitempty"`
+	// blocks_production field predicates
+	BlocksProduction       *bool `json:"blocksProduction,omitempty"`
+	BlocksProductionNeq    *bool `json:"blocksProductionNEQ,omitempty"`
+	BlocksProductionIsNil  *bool `json:"blocksProductionIsNil,omitempty"`
+	BlocksProductionNotNil *bool `json:"blocksProductionNotNil,omitempty"`
+	// production field predicates
+	Production       *bool `json:"production,omitempty"`
+	ProductionNeq    *bool `json:"productionNEQ,omitempty"`
+	ProductionIsNil  *bool `json:"productionIsNil,omitempty"`
+	ProductionNotNil *bool `json:"productionNotNil,omitempty"`
+	// public field predicates
+	Public       *bool `json:"public,omitempty"`
+	PublicNeq    *bool `json:"publicNEQ,omitempty"`
+	PublicIsNil  *bool `json:"publicIsNil,omitempty"`
+	PublicNotNil *bool `json:"publicNotNil,omitempty"`
+	// validated field predicates
+	Validated       *bool `json:"validated,omitempty"`
+	ValidatedNeq    *bool `json:"validatedNEQ,omitempty"`
+	ValidatedIsNil  *bool `json:"validatedIsNil,omitempty"`
+	ValidatedNotNil *bool `json:"validatedNotNil,omitempty"`
+	// assessment_id field predicates
+	AssessmentID             *string  `json:"assessmentID,omitempty"`
+	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
+	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
+	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
+	AssessmentIdgt           *string  `json:"assessmentIDGT,omitempty"`
+	AssessmentIdgte          *string  `json:"assessmentIDGTE,omitempty"`
+	AssessmentIdlt           *string  `json:"assessmentIDLT,omitempty"`
+	AssessmentIdlte          *string  `json:"assessmentIDLTE,omitempty"`
+	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
+	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
+	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
+	AssessmentIDIsNil        *bool    `json:"assessmentIDIsNil,omitempty"`
+	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
+	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
+	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// recommendation field predicates
+	Recommendation             *string  `json:"recommendation,omitempty"`
+	RecommendationNeq          *string  `json:"recommendationNEQ,omitempty"`
+	RecommendationIn           []string `json:"recommendationIn,omitempty"`
+	RecommendationNotIn        []string `json:"recommendationNotIn,omitempty"`
+	RecommendationGt           *string  `json:"recommendationGT,omitempty"`
+	RecommendationGte          *string  `json:"recommendationGTE,omitempty"`
+	RecommendationLt           *string  `json:"recommendationLT,omitempty"`
+	RecommendationLte          *string  `json:"recommendationLTE,omitempty"`
+	RecommendationContains     *string  `json:"recommendationContains,omitempty"`
+	RecommendationHasPrefix    *string  `json:"recommendationHasPrefix,omitempty"`
+	RecommendationHasSuffix    *string  `json:"recommendationHasSuffix,omitempty"`
+	RecommendationIsNil        *bool    `json:"recommendationIsNil,omitempty"`
+	RecommendationNotNil       *bool    `json:"recommendationNotNil,omitempty"`
+	RecommendationEqualFold    *string  `json:"recommendationEqualFold,omitempty"`
+	RecommendationContainsFold *string  `json:"recommendationContainsFold,omitempty"`
+	// recommended_actions field predicates
+	RecommendedActions             *string  `json:"recommendedActions,omitempty"`
+	RecommendedActionsNeq          *string  `json:"recommendedActionsNEQ,omitempty"`
+	RecommendedActionsIn           []string `json:"recommendedActionsIn,omitempty"`
+	RecommendedActionsNotIn        []string `json:"recommendedActionsNotIn,omitempty"`
+	RecommendedActionsGt           *string  `json:"recommendedActionsGT,omitempty"`
+	RecommendedActionsGte          *string  `json:"recommendedActionsGTE,omitempty"`
+	RecommendedActionsLt           *string  `json:"recommendedActionsLT,omitempty"`
+	RecommendedActionsLte          *string  `json:"recommendedActionsLTE,omitempty"`
+	RecommendedActionsContains     *string  `json:"recommendedActionsContains,omitempty"`
+	RecommendedActionsHasPrefix    *string  `json:"recommendedActionsHasPrefix,omitempty"`
+	RecommendedActionsHasSuffix    *string  `json:"recommendedActionsHasSuffix,omitempty"`
+	RecommendedActionsIsNil        *bool    `json:"recommendedActionsIsNil,omitempty"`
+	RecommendedActionsNotNil       *bool    `json:"recommendedActionsNotNil,omitempty"`
+	RecommendedActionsEqualFold    *string  `json:"recommendedActionsEqualFold,omitempty"`
+	RecommendedActionsContainsFold *string  `json:"recommendedActionsContainsFold,omitempty"`
+	// vector field predicates
+	Vector             *string  `json:"vector,omitempty"`
+	VectorNeq          *string  `json:"vectorNEQ,omitempty"`
+	VectorIn           []string `json:"vectorIn,omitempty"`
+	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
+	VectorGt           *string  `json:"vectorGT,omitempty"`
+	VectorGte          *string  `json:"vectorGTE,omitempty"`
+	VectorLt           *string  `json:"vectorLT,omitempty"`
+	VectorLte          *string  `json:"vectorLTE,omitempty"`
+	VectorContains     *string  `json:"vectorContains,omitempty"`
+	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
+	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
+	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
+	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
+	VectorEqualFold    *string  `json:"vectorEqualFold,omitempty"`
+	VectorContainsFold *string  `json:"vectorContainsFold,omitempty"`
+	// remediation_sla field predicates
+	RemediationSLA       *int64  `json:"remediationSLA,omitempty"`
+	RemediationSLANeq    *int64  `json:"remediationSLANEQ,omitempty"`
+	RemediationSLAIn     []int64 `json:"remediationSLAIn,omitempty"`
+	RemediationSLANotIn  []int64 `json:"remediationSLANotIn,omitempty"`
+	RemediationSLAGt     *int64  `json:"remediationSLAGT,omitempty"`
+	RemediationSLAGte    *int64  `json:"remediationSLAGTE,omitempty"`
+	RemediationSLALt     *int64  `json:"remediationSLALT,omitempty"`
+	RemediationSLALte    *int64  `json:"remediationSLALTE,omitempty"`
+	RemediationSLAIsNil  *bool   `json:"remediationSLAIsNil,omitempty"`
+	RemediationSLANotNil *bool   `json:"remediationSLANotNil,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// event_time field predicates
+	EventTime       *models.DateTime   `json:"eventTime,omitempty"`
+	EventTimeNeq    *models.DateTime   `json:"eventTimeNEQ,omitempty"`
+	EventTimeIn     []*models.DateTime `json:"eventTimeIn,omitempty"`
+	EventTimeNotIn  []*models.DateTime `json:"eventTimeNotIn,omitempty"`
+	EventTimeGt     *models.DateTime   `json:"eventTimeGT,omitempty"`
+	EventTimeGte    *models.DateTime   `json:"eventTimeGTE,omitempty"`
+	EventTimeLt     *models.DateTime   `json:"eventTimeLT,omitempty"`
+	EventTimeLte    *models.DateTime   `json:"eventTimeLTE,omitempty"`
+	EventTimeIsNil  *bool              `json:"eventTimeIsNil,omitempty"`
+	EventTimeNotNil *bool              `json:"eventTimeNotNil,omitempty"`
+	// reported_at field predicates
+	ReportedAt       *models.DateTime   `json:"reportedAt,omitempty"`
+	ReportedAtNeq    *models.DateTime   `json:"reportedAtNEQ,omitempty"`
+	ReportedAtIn     []*models.DateTime `json:"reportedAtIn,omitempty"`
+	ReportedAtNotIn  []*models.DateTime `json:"reportedAtNotIn,omitempty"`
+	ReportedAtGt     *models.DateTime   `json:"reportedAtGT,omitempty"`
+	ReportedAtGte    *models.DateTime   `json:"reportedAtGTE,omitempty"`
+	ReportedAtLt     *models.DateTime   `json:"reportedAtLT,omitempty"`
+	ReportedAtLte    *models.DateTime   `json:"reportedAtLTE,omitempty"`
+	ReportedAtIsNil  *bool              `json:"reportedAtIsNil,omitempty"`
+	ReportedAtNotNil *bool              `json:"reportedAtNotNil,omitempty"`
+	// source_updated_at field predicates
+	SourceUpdatedAt       *models.DateTime   `json:"sourceUpdatedAt,omitempty"`
+	SourceUpdatedAtNeq    *models.DateTime   `json:"sourceUpdatedAtNEQ,omitempty"`
+	SourceUpdatedAtIn     []*models.DateTime `json:"sourceUpdatedAtIn,omitempty"`
+	SourceUpdatedAtNotIn  []*models.DateTime `json:"sourceUpdatedAtNotIn,omitempty"`
+	SourceUpdatedAtGt     *models.DateTime   `json:"sourceUpdatedAtGT,omitempty"`
+	SourceUpdatedAtGte    *models.DateTime   `json:"sourceUpdatedAtGTE,omitempty"`
+	SourceUpdatedAtLt     *models.DateTime   `json:"sourceUpdatedAtLT,omitempty"`
+	SourceUpdatedAtLte    *models.DateTime   `json:"sourceUpdatedAtLTE,omitempty"`
+	SourceUpdatedAtIsNil  *bool              `json:"sourceUpdatedAtIsNil,omitempty"`
+	SourceUpdatedAtNotNil *bool              `json:"sourceUpdatedAtNotNil,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+}
+
+// Ordering options for Finding connections
+type FindingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Findings.
+	Field FindingOrderField `json:"field"`
+}
+
+// Return response for updateFinding mutation
+type FindingUpdatePayload struct {
+	// Updated finding
+	Finding *Finding `json:"finding"`
+}
+
+// FindingWhereInput is used for filtering Finding objects.
+// Input was generated by ent.
+type FindingWhereInput struct {
+	Not *FindingWhereInput   `json:"not,omitempty"`
+	And []*FindingWhereInput `json:"and,omitempty"`
+	Or  []*FindingWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// resource_name field predicates
+	ResourceName             *string  `json:"resourceName,omitempty"`
+	ResourceNameNeq          *string  `json:"resourceNameNEQ,omitempty"`
+	ResourceNameIn           []string `json:"resourceNameIn,omitempty"`
+	ResourceNameNotIn        []string `json:"resourceNameNotIn,omitempty"`
+	ResourceNameGt           *string  `json:"resourceNameGT,omitempty"`
+	ResourceNameGte          *string  `json:"resourceNameGTE,omitempty"`
+	ResourceNameLt           *string  `json:"resourceNameLT,omitempty"`
+	ResourceNameLte          *string  `json:"resourceNameLTE,omitempty"`
+	ResourceNameContains     *string  `json:"resourceNameContains,omitempty"`
+	ResourceNameHasPrefix    *string  `json:"resourceNameHasPrefix,omitempty"`
+	ResourceNameHasSuffix    *string  `json:"resourceNameHasSuffix,omitempty"`
+	ResourceNameIsNil        *bool    `json:"resourceNameIsNil,omitempty"`
+	ResourceNameNotNil       *bool    `json:"resourceNameNotNil,omitempty"`
+	ResourceNameEqualFold    *string  `json:"resourceNameEqualFold,omitempty"`
+	ResourceNameContainsFold *string  `json:"resourceNameContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// finding_class field predicates
+	FindingClass             *string  `json:"findingClass,omitempty"`
+	FindingClassNeq          *string  `json:"findingClassNEQ,omitempty"`
+	FindingClassIn           []string `json:"findingClassIn,omitempty"`
+	FindingClassNotIn        []string `json:"findingClassNotIn,omitempty"`
+	FindingClassGt           *string  `json:"findingClassGT,omitempty"`
+	FindingClassGte          *string  `json:"findingClassGTE,omitempty"`
+	FindingClassLt           *string  `json:"findingClassLT,omitempty"`
+	FindingClassLte          *string  `json:"findingClassLTE,omitempty"`
+	FindingClassContains     *string  `json:"findingClassContains,omitempty"`
+	FindingClassHasPrefix    *string  `json:"findingClassHasPrefix,omitempty"`
+	FindingClassHasSuffix    *string  `json:"findingClassHasSuffix,omitempty"`
+	FindingClassIsNil        *bool    `json:"findingClassIsNil,omitempty"`
+	FindingClassNotNil       *bool    `json:"findingClassNotNil,omitempty"`
+	FindingClassEqualFold    *string  `json:"findingClassEqualFold,omitempty"`
+	FindingClassContainsFold *string  `json:"findingClassContainsFold,omitempty"`
+	// severity field predicates
+	Severity             *string  `json:"severity,omitempty"`
+	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
+	SeverityIn           []string `json:"severityIn,omitempty"`
+	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
+	SeverityGt           *string  `json:"severityGT,omitempty"`
+	SeverityGte          *string  `json:"severityGTE,omitempty"`
+	SeverityLt           *string  `json:"severityLT,omitempty"`
+	SeverityLte          *string  `json:"severityLTE,omitempty"`
+	SeverityContains     *string  `json:"severityContains,omitempty"`
+	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
+	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
+	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
+	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
+	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
+	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
+	// numeric_severity field predicates
+	NumericSeverity       *float64  `json:"numericSeverity,omitempty"`
+	NumericSeverityNeq    *float64  `json:"numericSeverityNEQ,omitempty"`
+	NumericSeverityIn     []float64 `json:"numericSeverityIn,omitempty"`
+	NumericSeverityNotIn  []float64 `json:"numericSeverityNotIn,omitempty"`
+	NumericSeverityGt     *float64  `json:"numericSeverityGT,omitempty"`
+	NumericSeverityGte    *float64  `json:"numericSeverityGTE,omitempty"`
+	NumericSeverityLt     *float64  `json:"numericSeverityLT,omitempty"`
+	NumericSeverityLte    *float64  `json:"numericSeverityLTE,omitempty"`
+	NumericSeverityIsNil  *bool     `json:"numericSeverityIsNil,omitempty"`
+	NumericSeverityNotNil *bool     `json:"numericSeverityNotNil,omitempty"`
+	// score field predicates
+	Score       *float64  `json:"score,omitempty"`
+	ScoreNeq    *float64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []float64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []float64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *float64  `json:"scoreGT,omitempty"`
+	ScoreGte    *float64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *float64  `json:"scoreLT,omitempty"`
+	ScoreLte    *float64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool     `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool     `json:"scoreNotNil,omitempty"`
+	// impact field predicates
+	Impact       *float64  `json:"impact,omitempty"`
+	ImpactNeq    *float64  `json:"impactNEQ,omitempty"`
+	ImpactIn     []float64 `json:"impactIn,omitempty"`
+	ImpactNotIn  []float64 `json:"impactNotIn,omitempty"`
+	ImpactGt     *float64  `json:"impactGT,omitempty"`
+	ImpactGte    *float64  `json:"impactGTE,omitempty"`
+	ImpactLt     *float64  `json:"impactLT,omitempty"`
+	ImpactLte    *float64  `json:"impactLTE,omitempty"`
+	ImpactIsNil  *bool     `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool     `json:"impactNotNil,omitempty"`
+	// exploitability field predicates
+	Exploitability       *float64  `json:"exploitability,omitempty"`
+	ExploitabilityNeq    *float64  `json:"exploitabilityNEQ,omitempty"`
+	ExploitabilityIn     []float64 `json:"exploitabilityIn,omitempty"`
+	ExploitabilityNotIn  []float64 `json:"exploitabilityNotIn,omitempty"`
+	ExploitabilityGt     *float64  `json:"exploitabilityGT,omitempty"`
+	ExploitabilityGte    *float64  `json:"exploitabilityGTE,omitempty"`
+	ExploitabilityLt     *float64  `json:"exploitabilityLT,omitempty"`
+	ExploitabilityLte    *float64  `json:"exploitabilityLTE,omitempty"`
+	ExploitabilityIsNil  *bool     `json:"exploitabilityIsNil,omitempty"`
+	ExploitabilityNotNil *bool     `json:"exploitabilityNotNil,omitempty"`
+	// priority field predicates
+	Priority             *string  `json:"priority,omitempty"`
+	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
+	PriorityIn           []string `json:"priorityIn,omitempty"`
+	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
+	PriorityGt           *string  `json:"priorityGT,omitempty"`
+	PriorityGte          *string  `json:"priorityGTE,omitempty"`
+	PriorityLt           *string  `json:"priorityLT,omitempty"`
+	PriorityLte          *string  `json:"priorityLTE,omitempty"`
+	PriorityContains     *string  `json:"priorityContains,omitempty"`
+	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
+	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
+	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
+	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
+	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
+	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	// open field predicates
+	Open       *bool `json:"open,omitempty"`
+	OpenNeq    *bool `json:"openNEQ,omitempty"`
+	OpenIsNil  *bool `json:"openIsNil,omitempty"`
+	OpenNotNil *bool `json:"openNotNil,omitempty"`
+	// blocks_production field predicates
+	BlocksProduction       *bool `json:"blocksProduction,omitempty"`
+	BlocksProductionNeq    *bool `json:"blocksProductionNEQ,omitempty"`
+	BlocksProductionIsNil  *bool `json:"blocksProductionIsNil,omitempty"`
+	BlocksProductionNotNil *bool `json:"blocksProductionNotNil,omitempty"`
+	// production field predicates
+	Production       *bool `json:"production,omitempty"`
+	ProductionNeq    *bool `json:"productionNEQ,omitempty"`
+	ProductionIsNil  *bool `json:"productionIsNil,omitempty"`
+	ProductionNotNil *bool `json:"productionNotNil,omitempty"`
+	// public field predicates
+	Public       *bool `json:"public,omitempty"`
+	PublicNeq    *bool `json:"publicNEQ,omitempty"`
+	PublicIsNil  *bool `json:"publicIsNil,omitempty"`
+	PublicNotNil *bool `json:"publicNotNil,omitempty"`
+	// validated field predicates
+	Validated       *bool `json:"validated,omitempty"`
+	ValidatedNeq    *bool `json:"validatedNEQ,omitempty"`
+	ValidatedIsNil  *bool `json:"validatedIsNil,omitempty"`
+	ValidatedNotNil *bool `json:"validatedNotNil,omitempty"`
+	// assessment_id field predicates
+	AssessmentID             *string  `json:"assessmentID,omitempty"`
+	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
+	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
+	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
+	AssessmentIdgt           *string  `json:"assessmentIDGT,omitempty"`
+	AssessmentIdgte          *string  `json:"assessmentIDGTE,omitempty"`
+	AssessmentIdlt           *string  `json:"assessmentIDLT,omitempty"`
+	AssessmentIdlte          *string  `json:"assessmentIDLTE,omitempty"`
+	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
+	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
+	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
+	AssessmentIDIsNil        *bool    `json:"assessmentIDIsNil,omitempty"`
+	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
+	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
+	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// recommendation field predicates
+	Recommendation             *string  `json:"recommendation,omitempty"`
+	RecommendationNeq          *string  `json:"recommendationNEQ,omitempty"`
+	RecommendationIn           []string `json:"recommendationIn,omitempty"`
+	RecommendationNotIn        []string `json:"recommendationNotIn,omitempty"`
+	RecommendationGt           *string  `json:"recommendationGT,omitempty"`
+	RecommendationGte          *string  `json:"recommendationGTE,omitempty"`
+	RecommendationLt           *string  `json:"recommendationLT,omitempty"`
+	RecommendationLte          *string  `json:"recommendationLTE,omitempty"`
+	RecommendationContains     *string  `json:"recommendationContains,omitempty"`
+	RecommendationHasPrefix    *string  `json:"recommendationHasPrefix,omitempty"`
+	RecommendationHasSuffix    *string  `json:"recommendationHasSuffix,omitempty"`
+	RecommendationIsNil        *bool    `json:"recommendationIsNil,omitempty"`
+	RecommendationNotNil       *bool    `json:"recommendationNotNil,omitempty"`
+	RecommendationEqualFold    *string  `json:"recommendationEqualFold,omitempty"`
+	RecommendationContainsFold *string  `json:"recommendationContainsFold,omitempty"`
+	// recommended_actions field predicates
+	RecommendedActions             *string  `json:"recommendedActions,omitempty"`
+	RecommendedActionsNeq          *string  `json:"recommendedActionsNEQ,omitempty"`
+	RecommendedActionsIn           []string `json:"recommendedActionsIn,omitempty"`
+	RecommendedActionsNotIn        []string `json:"recommendedActionsNotIn,omitempty"`
+	RecommendedActionsGt           *string  `json:"recommendedActionsGT,omitempty"`
+	RecommendedActionsGte          *string  `json:"recommendedActionsGTE,omitempty"`
+	RecommendedActionsLt           *string  `json:"recommendedActionsLT,omitempty"`
+	RecommendedActionsLte          *string  `json:"recommendedActionsLTE,omitempty"`
+	RecommendedActionsContains     *string  `json:"recommendedActionsContains,omitempty"`
+	RecommendedActionsHasPrefix    *string  `json:"recommendedActionsHasPrefix,omitempty"`
+	RecommendedActionsHasSuffix    *string  `json:"recommendedActionsHasSuffix,omitempty"`
+	RecommendedActionsIsNil        *bool    `json:"recommendedActionsIsNil,omitempty"`
+	RecommendedActionsNotNil       *bool    `json:"recommendedActionsNotNil,omitempty"`
+	RecommendedActionsEqualFold    *string  `json:"recommendedActionsEqualFold,omitempty"`
+	RecommendedActionsContainsFold *string  `json:"recommendedActionsContainsFold,omitempty"`
+	// vector field predicates
+	Vector             *string  `json:"vector,omitempty"`
+	VectorNeq          *string  `json:"vectorNEQ,omitempty"`
+	VectorIn           []string `json:"vectorIn,omitempty"`
+	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
+	VectorGt           *string  `json:"vectorGT,omitempty"`
+	VectorGte          *string  `json:"vectorGTE,omitempty"`
+	VectorLt           *string  `json:"vectorLT,omitempty"`
+	VectorLte          *string  `json:"vectorLTE,omitempty"`
+	VectorContains     *string  `json:"vectorContains,omitempty"`
+	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
+	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
+	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
+	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
+	VectorEqualFold    *string  `json:"vectorEqualFold,omitempty"`
+	VectorContainsFold *string  `json:"vectorContainsFold,omitempty"`
+	// remediation_sla field predicates
+	RemediationSLA       *int64  `json:"remediationSLA,omitempty"`
+	RemediationSLANeq    *int64  `json:"remediationSLANEQ,omitempty"`
+	RemediationSLAIn     []int64 `json:"remediationSLAIn,omitempty"`
+	RemediationSLANotIn  []int64 `json:"remediationSLANotIn,omitempty"`
+	RemediationSLAGt     *int64  `json:"remediationSLAGT,omitempty"`
+	RemediationSLAGte    *int64  `json:"remediationSLAGTE,omitempty"`
+	RemediationSLALt     *int64  `json:"remediationSLALT,omitempty"`
+	RemediationSLALte    *int64  `json:"remediationSLALTE,omitempty"`
+	RemediationSLAIsNil  *bool   `json:"remediationSLAIsNil,omitempty"`
+	RemediationSLANotNil *bool   `json:"remediationSLANotNil,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// event_time field predicates
+	EventTime       *models.DateTime   `json:"eventTime,omitempty"`
+	EventTimeNeq    *models.DateTime   `json:"eventTimeNEQ,omitempty"`
+	EventTimeIn     []*models.DateTime `json:"eventTimeIn,omitempty"`
+	EventTimeNotIn  []*models.DateTime `json:"eventTimeNotIn,omitempty"`
+	EventTimeGt     *models.DateTime   `json:"eventTimeGT,omitempty"`
+	EventTimeGte    *models.DateTime   `json:"eventTimeGTE,omitempty"`
+	EventTimeLt     *models.DateTime   `json:"eventTimeLT,omitempty"`
+	EventTimeLte    *models.DateTime   `json:"eventTimeLTE,omitempty"`
+	EventTimeIsNil  *bool              `json:"eventTimeIsNil,omitempty"`
+	EventTimeNotNil *bool              `json:"eventTimeNotNil,omitempty"`
+	// reported_at field predicates
+	ReportedAt       *models.DateTime   `json:"reportedAt,omitempty"`
+	ReportedAtNeq    *models.DateTime   `json:"reportedAtNEQ,omitempty"`
+	ReportedAtIn     []*models.DateTime `json:"reportedAtIn,omitempty"`
+	ReportedAtNotIn  []*models.DateTime `json:"reportedAtNotIn,omitempty"`
+	ReportedAtGt     *models.DateTime   `json:"reportedAtGT,omitempty"`
+	ReportedAtGte    *models.DateTime   `json:"reportedAtGTE,omitempty"`
+	ReportedAtLt     *models.DateTime   `json:"reportedAtLT,omitempty"`
+	ReportedAtLte    *models.DateTime   `json:"reportedAtLTE,omitempty"`
+	ReportedAtIsNil  *bool              `json:"reportedAtIsNil,omitempty"`
+	ReportedAtNotNil *bool              `json:"reportedAtNotNil,omitempty"`
+	// source_updated_at field predicates
+	SourceUpdatedAt       *models.DateTime   `json:"sourceUpdatedAt,omitempty"`
+	SourceUpdatedAtNeq    *models.DateTime   `json:"sourceUpdatedAtNEQ,omitempty"`
+	SourceUpdatedAtIn     []*models.DateTime `json:"sourceUpdatedAtIn,omitempty"`
+	SourceUpdatedAtNotIn  []*models.DateTime `json:"sourceUpdatedAtNotIn,omitempty"`
+	SourceUpdatedAtGt     *models.DateTime   `json:"sourceUpdatedAtGT,omitempty"`
+	SourceUpdatedAtGte    *models.DateTime   `json:"sourceUpdatedAtGTE,omitempty"`
+	SourceUpdatedAtLt     *models.DateTime   `json:"sourceUpdatedAtLT,omitempty"`
+	SourceUpdatedAtLte    *models.DateTime   `json:"sourceUpdatedAtLTE,omitempty"`
+	SourceUpdatedAtIsNil  *bool              `json:"sourceUpdatedAtIsNil,omitempty"`
+	SourceUpdatedAtNotNil *bool              `json:"sourceUpdatedAtNotNil,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// scans edge predicates
+	HasScans     *bool             `json:"hasScans,omitempty"`
+	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// control_mappings edge predicates
+	HasControlMappings     *bool                       `json:"hasControlMappings,omitempty"`
+	HasControlMappingsWith []*FindingControlWhereInput `json:"hasControlMappingsWith,omitempty"`
+}
+
 type Group struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -14981,11 +17481,17 @@ type Integration struct {
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType *string `json:"integrationType,omitempty"`
 	// additional metadata about the integration
-	Metadata map[string]any   `json:"metadata,omitempty"`
-	Owner    *Organization    `json:"owner,omitempty"`
-	Secrets  *HushConnection  `json:"secrets"`
-	Files    *FileConnection  `json:"files"`
-	Events   *EventConnection `json:"events"`
+	Metadata        map[string]any           `json:"metadata,omitempty"`
+	Owner           *Organization            `json:"owner,omitempty"`
+	Secrets         *HushConnection          `json:"secrets"`
+	Files           *FileConnection          `json:"files"`
+	Events          *EventConnection         `json:"events"`
+	Findings        *FindingConnection       `json:"findings"`
+	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
+	Reviews         *ReviewConnection        `json:"reviews"`
+	Remediations    *RemediationConnection   `json:"remediations"`
+	Tasks           *TaskConnection          `json:"tasks"`
+	ActionPlans     *ActionPlanConnection    `json:"actionPlans"`
 }
 
 func (Integration) IsNode() {}
@@ -15465,6 +17971,24 @@ type IntegrationWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 }
 
 type InternalPolicy struct {
@@ -21032,6 +23556,10 @@ type Organization struct {
 	AssessmentResponses           *AssessmentResponseConnection         `json:"assessmentResponses"`
 	CustomTypeEnums               *CustomTypeEnumConnection             `json:"customTypeEnums"`
 	TagDefinitions                *TagDefinitionConnection              `json:"tagDefinitions"`
+	Remediations                  *RemediationConnection                `json:"remediations"`
+	Findings                      *FindingConnection                    `json:"findings"`
+	Reviews                       *ReviewConnection                     `json:"reviews"`
+	Vulnerabilities               *VulnerabilityConnection              `json:"vulnerabilities"`
 	Members                       *OrgMembershipConnection              `json:"members"`
 }
 
@@ -22595,6 +25123,18 @@ type OrganizationWhereInput struct {
 	// tag_definitions edge predicates
 	HasTagDefinitions     *bool                      `json:"hasTagDefinitions,omitempty"`
 	HasTagDefinitionsWith []*TagDefinitionWhereInput `json:"hasTagDefinitionsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -25025,6 +27565,2139 @@ type ProgramWhereInput struct {
 type Query struct {
 }
 
+type Remediation struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title or short description of the remediation effort
+	Title *string `json:"title,omitempty"`
+	// state of the remediation, such as pending or completed
+	State *string `json:"state,omitempty"`
+	// intent or goal of the remediation effort
+	Intent *string `json:"intent,omitempty"`
+	// summary of the remediation approach
+	Summary *string `json:"summary,omitempty"`
+	// detailed explanation of the remediation steps
+	Explanation *string `json:"explanation,omitempty"`
+	// specific instructions or steps to implement the remediation
+	Instructions *string `json:"instructions,omitempty"`
+	// reference to the owner responsible for remediation
+	OwnerReference *string `json:"ownerReference,omitempty"`
+	// source code repository URI associated with the remediation
+	RepositoryURI *string `json:"repositoryURI,omitempty"`
+	// pull request URI associated with the remediation
+	PullRequestURI *string `json:"pullRequestURI,omitempty"`
+	// reference to a tracking ticket for the remediation
+	TicketReference *string `json:"ticketReference,omitempty"`
+	// timestamp when the remediation is due
+	DueAt *models.DateTime `json:"dueAt,omitempty"`
+	// timestamp when the remediation was completed
+	CompletedAt *models.DateTime `json:"completedAt,omitempty"`
+	// timestamp when an automated pull request was generated
+	PrGeneratedAt *models.DateTime `json:"prGeneratedAt,omitempty"`
+	// details about any errors encountered during remediation automation
+	Error *string `json:"error,omitempty"`
+	// system that produced the remediation record
+	Source *string `json:"source,omitempty"`
+	// link to the remediation in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata        map[string]any           `json:"metadata,omitempty"`
+	Owner           *Organization            `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
+	Editors         *GroupConnection         `json:"editors"`
+	Viewers         *GroupConnection         `json:"viewers"`
+	Integrations    *IntegrationConnection   `json:"integrations"`
+	Findings        *FindingConnection       `json:"findings"`
+	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
+	ActionPlans     *ActionPlanConnection    `json:"actionPlans"`
+	Tasks           *TaskConnection          `json:"tasks"`
+	Controls        *ControlConnection       `json:"controls"`
+	Subcontrols     *SubcontrolConnection    `json:"subcontrols"`
+	Risks           *RiskConnection          `json:"risks"`
+	Programs        *ProgramConnection       `json:"programs"`
+	Assets          *AssetConnection         `json:"assets"`
+	Entities        *EntityConnection        `json:"entities"`
+	Reviews         *ReviewConnection        `json:"reviews"`
+	Comments        *NoteConnection          `json:"comments"`
+	Files           *FileConnection          `json:"files"`
+}
+
+func (Remediation) IsNode() {}
+
+// Return response for createBulkRemediation mutation
+type RemediationBulkCreatePayload struct {
+	// Created remediations
+	Remediations []*Remediation `json:"remediations,omitempty"`
+}
+
+// A connection to a list of items.
+type RemediationConnection struct {
+	// A list of edges.
+	Edges []*RemediationEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createRemediation mutation
+type RemediationCreatePayload struct {
+	// Created remediation
+	Remediation *Remediation `json:"remediation"`
+}
+
+// Return response for deleteRemediation mutation
+type RemediationDeletePayload struct {
+	// Deleted remediation ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type RemediationEdge struct {
+	// The item at the end of the edge.
+	Node *Remediation `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type RemediationHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title or short description of the remediation effort
+	Title *string `json:"title,omitempty"`
+	// state of the remediation, such as pending or completed
+	State *string `json:"state,omitempty"`
+	// intent or goal of the remediation effort
+	Intent *string `json:"intent,omitempty"`
+	// summary of the remediation approach
+	Summary *string `json:"summary,omitempty"`
+	// detailed explanation of the remediation steps
+	Explanation *string `json:"explanation,omitempty"`
+	// specific instructions or steps to implement the remediation
+	Instructions *string `json:"instructions,omitempty"`
+	// reference to the owner responsible for remediation
+	OwnerReference *string `json:"ownerReference,omitempty"`
+	// source code repository URI associated with the remediation
+	RepositoryURI *string `json:"repositoryURI,omitempty"`
+	// pull request URI associated with the remediation
+	PullRequestURI *string `json:"pullRequestURI,omitempty"`
+	// reference to a tracking ticket for the remediation
+	TicketReference *string `json:"ticketReference,omitempty"`
+	// timestamp when the remediation is due
+	DueAt *models.DateTime `json:"dueAt,omitempty"`
+	// timestamp when the remediation was completed
+	CompletedAt *models.DateTime `json:"completedAt,omitempty"`
+	// timestamp when an automated pull request was generated
+	PrGeneratedAt *models.DateTime `json:"prGeneratedAt,omitempty"`
+	// details about any errors encountered during remediation automation
+	Error *string `json:"error,omitempty"`
+	// system that produced the remediation record
+	Source *string `json:"source,omitempty"`
+	// link to the remediation in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+}
+
+func (RemediationHistory) IsNode() {}
+
+// A connection to a list of items.
+type RemediationHistoryConnection struct {
+	// A list of edges.
+	Edges []*RemediationHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type RemediationHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *RemediationHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for RemediationHistory connections
+type RemediationHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order RemediationHistories.
+	Field RemediationHistoryOrderField `json:"field"`
+}
+
+// RemediationHistoryWhereInput is used for filtering RemediationHistory objects.
+// Input was generated by ent.
+type RemediationHistoryWhereInput struct {
+	Not *RemediationHistoryWhereInput   `json:"not,omitempty"`
+	And []*RemediationHistoryWhereInput `json:"and,omitempty"`
+	Or  []*RemediationHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// intent field predicates
+	Intent             *string  `json:"intent,omitempty"`
+	IntentNeq          *string  `json:"intentNEQ,omitempty"`
+	IntentIn           []string `json:"intentIn,omitempty"`
+	IntentNotIn        []string `json:"intentNotIn,omitempty"`
+	IntentGt           *string  `json:"intentGT,omitempty"`
+	IntentGte          *string  `json:"intentGTE,omitempty"`
+	IntentLt           *string  `json:"intentLT,omitempty"`
+	IntentLte          *string  `json:"intentLTE,omitempty"`
+	IntentContains     *string  `json:"intentContains,omitempty"`
+	IntentHasPrefix    *string  `json:"intentHasPrefix,omitempty"`
+	IntentHasSuffix    *string  `json:"intentHasSuffix,omitempty"`
+	IntentIsNil        *bool    `json:"intentIsNil,omitempty"`
+	IntentNotNil       *bool    `json:"intentNotNil,omitempty"`
+	IntentEqualFold    *string  `json:"intentEqualFold,omitempty"`
+	IntentContainsFold *string  `json:"intentContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// explanation field predicates
+	Explanation             *string  `json:"explanation,omitempty"`
+	ExplanationNeq          *string  `json:"explanationNEQ,omitempty"`
+	ExplanationIn           []string `json:"explanationIn,omitempty"`
+	ExplanationNotIn        []string `json:"explanationNotIn,omitempty"`
+	ExplanationGt           *string  `json:"explanationGT,omitempty"`
+	ExplanationGte          *string  `json:"explanationGTE,omitempty"`
+	ExplanationLt           *string  `json:"explanationLT,omitempty"`
+	ExplanationLte          *string  `json:"explanationLTE,omitempty"`
+	ExplanationContains     *string  `json:"explanationContains,omitempty"`
+	ExplanationHasPrefix    *string  `json:"explanationHasPrefix,omitempty"`
+	ExplanationHasSuffix    *string  `json:"explanationHasSuffix,omitempty"`
+	ExplanationIsNil        *bool    `json:"explanationIsNil,omitempty"`
+	ExplanationNotNil       *bool    `json:"explanationNotNil,omitempty"`
+	ExplanationEqualFold    *string  `json:"explanationEqualFold,omitempty"`
+	ExplanationContainsFold *string  `json:"explanationContainsFold,omitempty"`
+	// instructions field predicates
+	Instructions             *string  `json:"instructions,omitempty"`
+	InstructionsNeq          *string  `json:"instructionsNEQ,omitempty"`
+	InstructionsIn           []string `json:"instructionsIn,omitempty"`
+	InstructionsNotIn        []string `json:"instructionsNotIn,omitempty"`
+	InstructionsGt           *string  `json:"instructionsGT,omitempty"`
+	InstructionsGte          *string  `json:"instructionsGTE,omitempty"`
+	InstructionsLt           *string  `json:"instructionsLT,omitempty"`
+	InstructionsLte          *string  `json:"instructionsLTE,omitempty"`
+	InstructionsContains     *string  `json:"instructionsContains,omitempty"`
+	InstructionsHasPrefix    *string  `json:"instructionsHasPrefix,omitempty"`
+	InstructionsHasSuffix    *string  `json:"instructionsHasSuffix,omitempty"`
+	InstructionsIsNil        *bool    `json:"instructionsIsNil,omitempty"`
+	InstructionsNotNil       *bool    `json:"instructionsNotNil,omitempty"`
+	InstructionsEqualFold    *string  `json:"instructionsEqualFold,omitempty"`
+	InstructionsContainsFold *string  `json:"instructionsContainsFold,omitempty"`
+	// owner_reference field predicates
+	OwnerReference             *string  `json:"ownerReference,omitempty"`
+	OwnerReferenceNeq          *string  `json:"ownerReferenceNEQ,omitempty"`
+	OwnerReferenceIn           []string `json:"ownerReferenceIn,omitempty"`
+	OwnerReferenceNotIn        []string `json:"ownerReferenceNotIn,omitempty"`
+	OwnerReferenceGt           *string  `json:"ownerReferenceGT,omitempty"`
+	OwnerReferenceGte          *string  `json:"ownerReferenceGTE,omitempty"`
+	OwnerReferenceLt           *string  `json:"ownerReferenceLT,omitempty"`
+	OwnerReferenceLte          *string  `json:"ownerReferenceLTE,omitempty"`
+	OwnerReferenceContains     *string  `json:"ownerReferenceContains,omitempty"`
+	OwnerReferenceHasPrefix    *string  `json:"ownerReferenceHasPrefix,omitempty"`
+	OwnerReferenceHasSuffix    *string  `json:"ownerReferenceHasSuffix,omitempty"`
+	OwnerReferenceIsNil        *bool    `json:"ownerReferenceIsNil,omitempty"`
+	OwnerReferenceNotNil       *bool    `json:"ownerReferenceNotNil,omitempty"`
+	OwnerReferenceEqualFold    *string  `json:"ownerReferenceEqualFold,omitempty"`
+	OwnerReferenceContainsFold *string  `json:"ownerReferenceContainsFold,omitempty"`
+	// repository_uri field predicates
+	RepositoryURI             *string  `json:"repositoryURI,omitempty"`
+	RepositoryURINeq          *string  `json:"repositoryURINEQ,omitempty"`
+	RepositoryURIIn           []string `json:"repositoryURIIn,omitempty"`
+	RepositoryURINotIn        []string `json:"repositoryURINotIn,omitempty"`
+	RepositoryURIGt           *string  `json:"repositoryURIGT,omitempty"`
+	RepositoryURIGte          *string  `json:"repositoryURIGTE,omitempty"`
+	RepositoryURILt           *string  `json:"repositoryURILT,omitempty"`
+	RepositoryURILte          *string  `json:"repositoryURILTE,omitempty"`
+	RepositoryURIContains     *string  `json:"repositoryURIContains,omitempty"`
+	RepositoryURIHasPrefix    *string  `json:"repositoryURIHasPrefix,omitempty"`
+	RepositoryURIHasSuffix    *string  `json:"repositoryURIHasSuffix,omitempty"`
+	RepositoryURIIsNil        *bool    `json:"repositoryURIIsNil,omitempty"`
+	RepositoryURINotNil       *bool    `json:"repositoryURINotNil,omitempty"`
+	RepositoryURIEqualFold    *string  `json:"repositoryURIEqualFold,omitempty"`
+	RepositoryURIContainsFold *string  `json:"repositoryURIContainsFold,omitempty"`
+	// pull_request_uri field predicates
+	PullRequestURI             *string  `json:"pullRequestURI,omitempty"`
+	PullRequestURINeq          *string  `json:"pullRequestURINEQ,omitempty"`
+	PullRequestURIIn           []string `json:"pullRequestURIIn,omitempty"`
+	PullRequestURINotIn        []string `json:"pullRequestURINotIn,omitempty"`
+	PullRequestURIGt           *string  `json:"pullRequestURIGT,omitempty"`
+	PullRequestURIGte          *string  `json:"pullRequestURIGTE,omitempty"`
+	PullRequestURILt           *string  `json:"pullRequestURILT,omitempty"`
+	PullRequestURILte          *string  `json:"pullRequestURILTE,omitempty"`
+	PullRequestURIContains     *string  `json:"pullRequestURIContains,omitempty"`
+	PullRequestURIHasPrefix    *string  `json:"pullRequestURIHasPrefix,omitempty"`
+	PullRequestURIHasSuffix    *string  `json:"pullRequestURIHasSuffix,omitempty"`
+	PullRequestURIIsNil        *bool    `json:"pullRequestURIIsNil,omitempty"`
+	PullRequestURINotNil       *bool    `json:"pullRequestURINotNil,omitempty"`
+	PullRequestURIEqualFold    *string  `json:"pullRequestURIEqualFold,omitempty"`
+	PullRequestURIContainsFold *string  `json:"pullRequestURIContainsFold,omitempty"`
+	// ticket_reference field predicates
+	TicketReference             *string  `json:"ticketReference,omitempty"`
+	TicketReferenceNeq          *string  `json:"ticketReferenceNEQ,omitempty"`
+	TicketReferenceIn           []string `json:"ticketReferenceIn,omitempty"`
+	TicketReferenceNotIn        []string `json:"ticketReferenceNotIn,omitempty"`
+	TicketReferenceGt           *string  `json:"ticketReferenceGT,omitempty"`
+	TicketReferenceGte          *string  `json:"ticketReferenceGTE,omitempty"`
+	TicketReferenceLt           *string  `json:"ticketReferenceLT,omitempty"`
+	TicketReferenceLte          *string  `json:"ticketReferenceLTE,omitempty"`
+	TicketReferenceContains     *string  `json:"ticketReferenceContains,omitempty"`
+	TicketReferenceHasPrefix    *string  `json:"ticketReferenceHasPrefix,omitempty"`
+	TicketReferenceHasSuffix    *string  `json:"ticketReferenceHasSuffix,omitempty"`
+	TicketReferenceIsNil        *bool    `json:"ticketReferenceIsNil,omitempty"`
+	TicketReferenceNotNil       *bool    `json:"ticketReferenceNotNil,omitempty"`
+	TicketReferenceEqualFold    *string  `json:"ticketReferenceEqualFold,omitempty"`
+	TicketReferenceContainsFold *string  `json:"ticketReferenceContainsFold,omitempty"`
+	// due_at field predicates
+	DueAt       *models.DateTime   `json:"dueAt,omitempty"`
+	DueAtNeq    *models.DateTime   `json:"dueAtNEQ,omitempty"`
+	DueAtIn     []*models.DateTime `json:"dueAtIn,omitempty"`
+	DueAtNotIn  []*models.DateTime `json:"dueAtNotIn,omitempty"`
+	DueAtGt     *models.DateTime   `json:"dueAtGT,omitempty"`
+	DueAtGte    *models.DateTime   `json:"dueAtGTE,omitempty"`
+	DueAtLt     *models.DateTime   `json:"dueAtLT,omitempty"`
+	DueAtLte    *models.DateTime   `json:"dueAtLTE,omitempty"`
+	DueAtIsNil  *bool              `json:"dueAtIsNil,omitempty"`
+	DueAtNotNil *bool              `json:"dueAtNotNil,omitempty"`
+	// completed_at field predicates
+	CompletedAt       *models.DateTime   `json:"completedAt,omitempty"`
+	CompletedAtNeq    *models.DateTime   `json:"completedAtNEQ,omitempty"`
+	CompletedAtIn     []*models.DateTime `json:"completedAtIn,omitempty"`
+	CompletedAtNotIn  []*models.DateTime `json:"completedAtNotIn,omitempty"`
+	CompletedAtGt     *models.DateTime   `json:"completedAtGT,omitempty"`
+	CompletedAtGte    *models.DateTime   `json:"completedAtGTE,omitempty"`
+	CompletedAtLt     *models.DateTime   `json:"completedAtLT,omitempty"`
+	CompletedAtLte    *models.DateTime   `json:"completedAtLTE,omitempty"`
+	CompletedAtIsNil  *bool              `json:"completedAtIsNil,omitempty"`
+	CompletedAtNotNil *bool              `json:"completedAtNotNil,omitempty"`
+	// pr_generated_at field predicates
+	PrGeneratedAt       *models.DateTime   `json:"prGeneratedAt,omitempty"`
+	PrGeneratedAtNeq    *models.DateTime   `json:"prGeneratedAtNEQ,omitempty"`
+	PrGeneratedAtIn     []*models.DateTime `json:"prGeneratedAtIn,omitempty"`
+	PrGeneratedAtNotIn  []*models.DateTime `json:"prGeneratedAtNotIn,omitempty"`
+	PrGeneratedAtGt     *models.DateTime   `json:"prGeneratedAtGT,omitempty"`
+	PrGeneratedAtGte    *models.DateTime   `json:"prGeneratedAtGTE,omitempty"`
+	PrGeneratedAtLt     *models.DateTime   `json:"prGeneratedAtLT,omitempty"`
+	PrGeneratedAtLte    *models.DateTime   `json:"prGeneratedAtLTE,omitempty"`
+	PrGeneratedAtIsNil  *bool              `json:"prGeneratedAtIsNil,omitempty"`
+	PrGeneratedAtNotNil *bool              `json:"prGeneratedAtNotNil,omitempty"`
+	// error field predicates
+	Error             *string  `json:"error,omitempty"`
+	ErrorNeq          *string  `json:"errorNEQ,omitempty"`
+	ErrorIn           []string `json:"errorIn,omitempty"`
+	ErrorNotIn        []string `json:"errorNotIn,omitempty"`
+	ErrorGt           *string  `json:"errorGT,omitempty"`
+	ErrorGte          *string  `json:"errorGTE,omitempty"`
+	ErrorLt           *string  `json:"errorLT,omitempty"`
+	ErrorLte          *string  `json:"errorLTE,omitempty"`
+	ErrorContains     *string  `json:"errorContains,omitempty"`
+	ErrorHasPrefix    *string  `json:"errorHasPrefix,omitempty"`
+	ErrorHasSuffix    *string  `json:"errorHasSuffix,omitempty"`
+	ErrorIsNil        *bool    `json:"errorIsNil,omitempty"`
+	ErrorNotNil       *bool    `json:"errorNotNil,omitempty"`
+	ErrorEqualFold    *string  `json:"errorEqualFold,omitempty"`
+	ErrorContainsFold *string  `json:"errorContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+}
+
+// Ordering options for Remediation connections
+type RemediationOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Remediations.
+	Field RemediationOrderField `json:"field"`
+}
+
+// Return response for updateRemediation mutation
+type RemediationUpdatePayload struct {
+	// Updated remediation
+	Remediation *Remediation `json:"remediation"`
+}
+
+// RemediationWhereInput is used for filtering Remediation objects.
+// Input was generated by ent.
+type RemediationWhereInput struct {
+	Not *RemediationWhereInput   `json:"not,omitempty"`
+	And []*RemediationWhereInput `json:"and,omitempty"`
+	Or  []*RemediationWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
+	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// intent field predicates
+	Intent             *string  `json:"intent,omitempty"`
+	IntentNeq          *string  `json:"intentNEQ,omitempty"`
+	IntentIn           []string `json:"intentIn,omitempty"`
+	IntentNotIn        []string `json:"intentNotIn,omitempty"`
+	IntentGt           *string  `json:"intentGT,omitempty"`
+	IntentGte          *string  `json:"intentGTE,omitempty"`
+	IntentLt           *string  `json:"intentLT,omitempty"`
+	IntentLte          *string  `json:"intentLTE,omitempty"`
+	IntentContains     *string  `json:"intentContains,omitempty"`
+	IntentHasPrefix    *string  `json:"intentHasPrefix,omitempty"`
+	IntentHasSuffix    *string  `json:"intentHasSuffix,omitempty"`
+	IntentIsNil        *bool    `json:"intentIsNil,omitempty"`
+	IntentNotNil       *bool    `json:"intentNotNil,omitempty"`
+	IntentEqualFold    *string  `json:"intentEqualFold,omitempty"`
+	IntentContainsFold *string  `json:"intentContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// explanation field predicates
+	Explanation             *string  `json:"explanation,omitempty"`
+	ExplanationNeq          *string  `json:"explanationNEQ,omitempty"`
+	ExplanationIn           []string `json:"explanationIn,omitempty"`
+	ExplanationNotIn        []string `json:"explanationNotIn,omitempty"`
+	ExplanationGt           *string  `json:"explanationGT,omitempty"`
+	ExplanationGte          *string  `json:"explanationGTE,omitempty"`
+	ExplanationLt           *string  `json:"explanationLT,omitempty"`
+	ExplanationLte          *string  `json:"explanationLTE,omitempty"`
+	ExplanationContains     *string  `json:"explanationContains,omitempty"`
+	ExplanationHasPrefix    *string  `json:"explanationHasPrefix,omitempty"`
+	ExplanationHasSuffix    *string  `json:"explanationHasSuffix,omitempty"`
+	ExplanationIsNil        *bool    `json:"explanationIsNil,omitempty"`
+	ExplanationNotNil       *bool    `json:"explanationNotNil,omitempty"`
+	ExplanationEqualFold    *string  `json:"explanationEqualFold,omitempty"`
+	ExplanationContainsFold *string  `json:"explanationContainsFold,omitempty"`
+	// instructions field predicates
+	Instructions             *string  `json:"instructions,omitempty"`
+	InstructionsNeq          *string  `json:"instructionsNEQ,omitempty"`
+	InstructionsIn           []string `json:"instructionsIn,omitempty"`
+	InstructionsNotIn        []string `json:"instructionsNotIn,omitempty"`
+	InstructionsGt           *string  `json:"instructionsGT,omitempty"`
+	InstructionsGte          *string  `json:"instructionsGTE,omitempty"`
+	InstructionsLt           *string  `json:"instructionsLT,omitempty"`
+	InstructionsLte          *string  `json:"instructionsLTE,omitempty"`
+	InstructionsContains     *string  `json:"instructionsContains,omitempty"`
+	InstructionsHasPrefix    *string  `json:"instructionsHasPrefix,omitempty"`
+	InstructionsHasSuffix    *string  `json:"instructionsHasSuffix,omitempty"`
+	InstructionsIsNil        *bool    `json:"instructionsIsNil,omitempty"`
+	InstructionsNotNil       *bool    `json:"instructionsNotNil,omitempty"`
+	InstructionsEqualFold    *string  `json:"instructionsEqualFold,omitempty"`
+	InstructionsContainsFold *string  `json:"instructionsContainsFold,omitempty"`
+	// owner_reference field predicates
+	OwnerReference             *string  `json:"ownerReference,omitempty"`
+	OwnerReferenceNeq          *string  `json:"ownerReferenceNEQ,omitempty"`
+	OwnerReferenceIn           []string `json:"ownerReferenceIn,omitempty"`
+	OwnerReferenceNotIn        []string `json:"ownerReferenceNotIn,omitempty"`
+	OwnerReferenceGt           *string  `json:"ownerReferenceGT,omitempty"`
+	OwnerReferenceGte          *string  `json:"ownerReferenceGTE,omitempty"`
+	OwnerReferenceLt           *string  `json:"ownerReferenceLT,omitempty"`
+	OwnerReferenceLte          *string  `json:"ownerReferenceLTE,omitempty"`
+	OwnerReferenceContains     *string  `json:"ownerReferenceContains,omitempty"`
+	OwnerReferenceHasPrefix    *string  `json:"ownerReferenceHasPrefix,omitempty"`
+	OwnerReferenceHasSuffix    *string  `json:"ownerReferenceHasSuffix,omitempty"`
+	OwnerReferenceIsNil        *bool    `json:"ownerReferenceIsNil,omitempty"`
+	OwnerReferenceNotNil       *bool    `json:"ownerReferenceNotNil,omitempty"`
+	OwnerReferenceEqualFold    *string  `json:"ownerReferenceEqualFold,omitempty"`
+	OwnerReferenceContainsFold *string  `json:"ownerReferenceContainsFold,omitempty"`
+	// repository_uri field predicates
+	RepositoryURI             *string  `json:"repositoryURI,omitempty"`
+	RepositoryURINeq          *string  `json:"repositoryURINEQ,omitempty"`
+	RepositoryURIIn           []string `json:"repositoryURIIn,omitempty"`
+	RepositoryURINotIn        []string `json:"repositoryURINotIn,omitempty"`
+	RepositoryURIGt           *string  `json:"repositoryURIGT,omitempty"`
+	RepositoryURIGte          *string  `json:"repositoryURIGTE,omitempty"`
+	RepositoryURILt           *string  `json:"repositoryURILT,omitempty"`
+	RepositoryURILte          *string  `json:"repositoryURILTE,omitempty"`
+	RepositoryURIContains     *string  `json:"repositoryURIContains,omitempty"`
+	RepositoryURIHasPrefix    *string  `json:"repositoryURIHasPrefix,omitempty"`
+	RepositoryURIHasSuffix    *string  `json:"repositoryURIHasSuffix,omitempty"`
+	RepositoryURIIsNil        *bool    `json:"repositoryURIIsNil,omitempty"`
+	RepositoryURINotNil       *bool    `json:"repositoryURINotNil,omitempty"`
+	RepositoryURIEqualFold    *string  `json:"repositoryURIEqualFold,omitempty"`
+	RepositoryURIContainsFold *string  `json:"repositoryURIContainsFold,omitempty"`
+	// pull_request_uri field predicates
+	PullRequestURI             *string  `json:"pullRequestURI,omitempty"`
+	PullRequestURINeq          *string  `json:"pullRequestURINEQ,omitempty"`
+	PullRequestURIIn           []string `json:"pullRequestURIIn,omitempty"`
+	PullRequestURINotIn        []string `json:"pullRequestURINotIn,omitempty"`
+	PullRequestURIGt           *string  `json:"pullRequestURIGT,omitempty"`
+	PullRequestURIGte          *string  `json:"pullRequestURIGTE,omitempty"`
+	PullRequestURILt           *string  `json:"pullRequestURILT,omitempty"`
+	PullRequestURILte          *string  `json:"pullRequestURILTE,omitempty"`
+	PullRequestURIContains     *string  `json:"pullRequestURIContains,omitempty"`
+	PullRequestURIHasPrefix    *string  `json:"pullRequestURIHasPrefix,omitempty"`
+	PullRequestURIHasSuffix    *string  `json:"pullRequestURIHasSuffix,omitempty"`
+	PullRequestURIIsNil        *bool    `json:"pullRequestURIIsNil,omitempty"`
+	PullRequestURINotNil       *bool    `json:"pullRequestURINotNil,omitempty"`
+	PullRequestURIEqualFold    *string  `json:"pullRequestURIEqualFold,omitempty"`
+	PullRequestURIContainsFold *string  `json:"pullRequestURIContainsFold,omitempty"`
+	// ticket_reference field predicates
+	TicketReference             *string  `json:"ticketReference,omitempty"`
+	TicketReferenceNeq          *string  `json:"ticketReferenceNEQ,omitempty"`
+	TicketReferenceIn           []string `json:"ticketReferenceIn,omitempty"`
+	TicketReferenceNotIn        []string `json:"ticketReferenceNotIn,omitempty"`
+	TicketReferenceGt           *string  `json:"ticketReferenceGT,omitempty"`
+	TicketReferenceGte          *string  `json:"ticketReferenceGTE,omitempty"`
+	TicketReferenceLt           *string  `json:"ticketReferenceLT,omitempty"`
+	TicketReferenceLte          *string  `json:"ticketReferenceLTE,omitempty"`
+	TicketReferenceContains     *string  `json:"ticketReferenceContains,omitempty"`
+	TicketReferenceHasPrefix    *string  `json:"ticketReferenceHasPrefix,omitempty"`
+	TicketReferenceHasSuffix    *string  `json:"ticketReferenceHasSuffix,omitempty"`
+	TicketReferenceIsNil        *bool    `json:"ticketReferenceIsNil,omitempty"`
+	TicketReferenceNotNil       *bool    `json:"ticketReferenceNotNil,omitempty"`
+	TicketReferenceEqualFold    *string  `json:"ticketReferenceEqualFold,omitempty"`
+	TicketReferenceContainsFold *string  `json:"ticketReferenceContainsFold,omitempty"`
+	// due_at field predicates
+	DueAt       *models.DateTime   `json:"dueAt,omitempty"`
+	DueAtNeq    *models.DateTime   `json:"dueAtNEQ,omitempty"`
+	DueAtIn     []*models.DateTime `json:"dueAtIn,omitempty"`
+	DueAtNotIn  []*models.DateTime `json:"dueAtNotIn,omitempty"`
+	DueAtGt     *models.DateTime   `json:"dueAtGT,omitempty"`
+	DueAtGte    *models.DateTime   `json:"dueAtGTE,omitempty"`
+	DueAtLt     *models.DateTime   `json:"dueAtLT,omitempty"`
+	DueAtLte    *models.DateTime   `json:"dueAtLTE,omitempty"`
+	DueAtIsNil  *bool              `json:"dueAtIsNil,omitempty"`
+	DueAtNotNil *bool              `json:"dueAtNotNil,omitempty"`
+	// completed_at field predicates
+	CompletedAt       *models.DateTime   `json:"completedAt,omitempty"`
+	CompletedAtNeq    *models.DateTime   `json:"completedAtNEQ,omitempty"`
+	CompletedAtIn     []*models.DateTime `json:"completedAtIn,omitempty"`
+	CompletedAtNotIn  []*models.DateTime `json:"completedAtNotIn,omitempty"`
+	CompletedAtGt     *models.DateTime   `json:"completedAtGT,omitempty"`
+	CompletedAtGte    *models.DateTime   `json:"completedAtGTE,omitempty"`
+	CompletedAtLt     *models.DateTime   `json:"completedAtLT,omitempty"`
+	CompletedAtLte    *models.DateTime   `json:"completedAtLTE,omitempty"`
+	CompletedAtIsNil  *bool              `json:"completedAtIsNil,omitempty"`
+	CompletedAtNotNil *bool              `json:"completedAtNotNil,omitempty"`
+	// pr_generated_at field predicates
+	PrGeneratedAt       *models.DateTime   `json:"prGeneratedAt,omitempty"`
+	PrGeneratedAtNeq    *models.DateTime   `json:"prGeneratedAtNEQ,omitempty"`
+	PrGeneratedAtIn     []*models.DateTime `json:"prGeneratedAtIn,omitempty"`
+	PrGeneratedAtNotIn  []*models.DateTime `json:"prGeneratedAtNotIn,omitempty"`
+	PrGeneratedAtGt     *models.DateTime   `json:"prGeneratedAtGT,omitempty"`
+	PrGeneratedAtGte    *models.DateTime   `json:"prGeneratedAtGTE,omitempty"`
+	PrGeneratedAtLt     *models.DateTime   `json:"prGeneratedAtLT,omitempty"`
+	PrGeneratedAtLte    *models.DateTime   `json:"prGeneratedAtLTE,omitempty"`
+	PrGeneratedAtIsNil  *bool              `json:"prGeneratedAtIsNil,omitempty"`
+	PrGeneratedAtNotNil *bool              `json:"prGeneratedAtNotNil,omitempty"`
+	// error field predicates
+	Error             *string  `json:"error,omitempty"`
+	ErrorNeq          *string  `json:"errorNEQ,omitempty"`
+	ErrorIn           []string `json:"errorIn,omitempty"`
+	ErrorNotIn        []string `json:"errorNotIn,omitempty"`
+	ErrorGt           *string  `json:"errorGT,omitempty"`
+	ErrorGte          *string  `json:"errorGTE,omitempty"`
+	ErrorLt           *string  `json:"errorLT,omitempty"`
+	ErrorLte          *string  `json:"errorLTE,omitempty"`
+	ErrorContains     *string  `json:"errorContains,omitempty"`
+	ErrorHasPrefix    *string  `json:"errorHasPrefix,omitempty"`
+	ErrorHasSuffix    *string  `json:"errorHasSuffix,omitempty"`
+	ErrorIsNil        *bool    `json:"errorIsNil,omitempty"`
+	ErrorNotNil       *bool    `json:"errorNotNil,omitempty"`
+	ErrorEqualFold    *string  `json:"errorEqualFold,omitempty"`
+	ErrorContainsFold *string  `json:"errorContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
+type Review struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title of the review
+	Title string `json:"title"`
+	// state of the review
+	State *string `json:"state,omitempty"`
+	// category for the review record
+	Category *string `json:"category,omitempty"`
+	// classification or sensitivity of the review record
+	Classification *string `json:"classification,omitempty"`
+	// summary text for the review
+	Summary *string `json:"summary,omitempty"`
+	// detailed notes captured during the review
+	Details *string `json:"details,omitempty"`
+	// person or system that created the review
+	Reporter *string `json:"reporter,omitempty"`
+	// true when the review has been approved
+	Approved *bool `json:"approved,omitempty"`
+	// timestamp when the review was completed
+	ReviewedAt *models.DateTime `json:"reviewedAt,omitempty"`
+	// timestamp when the review was reported or opened
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the review was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// identifier for the user primarily responsible for the review
+	ReviewerID *string `json:"reviewerID,omitempty"`
+	// system that produced the review record
+	Source *string `json:"source,omitempty"`
+	// link to the review in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the review from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload      map[string]any           `json:"rawPayload,omitempty"`
+	Owner           *Organization            `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
+	Editors         *GroupConnection         `json:"editors"`
+	Viewers         *GroupConnection         `json:"viewers"`
+	Integrations    *IntegrationConnection   `json:"integrations"`
+	Findings        *FindingConnection       `json:"findings"`
+	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
+	ActionPlans     *ActionPlanConnection    `json:"actionPlans"`
+	Remediations    *RemediationConnection   `json:"remediations"`
+	Controls        *ControlConnection       `json:"controls"`
+	Subcontrols     *SubcontrolConnection    `json:"subcontrols"`
+	Risks           *RiskConnection          `json:"risks"`
+	Programs        *ProgramConnection       `json:"programs"`
+	Assets          *AssetConnection         `json:"assets"`
+	Entities        *EntityConnection        `json:"entities"`
+	Tasks           *TaskConnection          `json:"tasks"`
+	// primary reviewer responsible for the record
+	Reviewer *User           `json:"reviewer,omitempty"`
+	Comments *NoteConnection `json:"comments"`
+	Files    *FileConnection `json:"files"`
+}
+
+func (Review) IsNode() {}
+
+// Return response for createBulkReview mutation
+type ReviewBulkCreatePayload struct {
+	// Created reviews
+	Reviews []*Review `json:"reviews,omitempty"`
+}
+
+// A connection to a list of items.
+type ReviewConnection struct {
+	// A list of edges.
+	Edges []*ReviewEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createReview mutation
+type ReviewCreatePayload struct {
+	// Created review
+	Review *Review `json:"review"`
+}
+
+// Return response for deleteReview mutation
+type ReviewDeletePayload struct {
+	// Deleted review ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type ReviewEdge struct {
+	// The item at the end of the edge.
+	Node *Review `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type ReviewHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalID *string `json:"externalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// title of the review
+	Title string `json:"title"`
+	// state of the review
+	State *string `json:"state,omitempty"`
+	// category for the review record
+	Category *string `json:"category,omitempty"`
+	// classification or sensitivity of the review record
+	Classification *string `json:"classification,omitempty"`
+	// summary text for the review
+	Summary *string `json:"summary,omitempty"`
+	// detailed notes captured during the review
+	Details *string `json:"details,omitempty"`
+	// person or system that created the review
+	Reporter *string `json:"reporter,omitempty"`
+	// true when the review has been approved
+	Approved *bool `json:"approved,omitempty"`
+	// timestamp when the review was completed
+	ReviewedAt *models.DateTime `json:"reviewedAt,omitempty"`
+	// timestamp when the review was reported or opened
+	ReportedAt *models.DateTime `json:"reportedAt,omitempty"`
+	// timestamp when the review was approved
+	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
+	// identifier for the user primarily responsible for the review
+	ReviewerID *string `json:"reviewerID,omitempty"`
+	// system that produced the review record
+	Source *string `json:"source,omitempty"`
+	// link to the review in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the review from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
+}
+
+func (ReviewHistory) IsNode() {}
+
+// A connection to a list of items.
+type ReviewHistoryConnection struct {
+	// A list of edges.
+	Edges []*ReviewHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ReviewHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *ReviewHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ReviewHistory connections
+type ReviewHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ReviewHistories.
+	Field ReviewHistoryOrderField `json:"field"`
+}
+
+// ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
+// Input was generated by ent.
+type ReviewHistoryWhereInput struct {
+	Not *ReviewHistoryWhereInput   `json:"not,omitempty"`
+	And []*ReviewHistoryWhereInput `json:"and,omitempty"`
+	Or  []*ReviewHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// classification field predicates
+	Classification             *string  `json:"classification,omitempty"`
+	ClassificationNeq          *string  `json:"classificationNEQ,omitempty"`
+	ClassificationIn           []string `json:"classificationIn,omitempty"`
+	ClassificationNotIn        []string `json:"classificationNotIn,omitempty"`
+	ClassificationGt           *string  `json:"classificationGT,omitempty"`
+	ClassificationGte          *string  `json:"classificationGTE,omitempty"`
+	ClassificationLt           *string  `json:"classificationLT,omitempty"`
+	ClassificationLte          *string  `json:"classificationLTE,omitempty"`
+	ClassificationContains     *string  `json:"classificationContains,omitempty"`
+	ClassificationHasPrefix    *string  `json:"classificationHasPrefix,omitempty"`
+	ClassificationHasSuffix    *string  `json:"classificationHasSuffix,omitempty"`
+	ClassificationIsNil        *bool    `json:"classificationIsNil,omitempty"`
+	ClassificationNotNil       *bool    `json:"classificationNotNil,omitempty"`
+	ClassificationEqualFold    *string  `json:"classificationEqualFold,omitempty"`
+	ClassificationContainsFold *string  `json:"classificationContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// reporter field predicates
+	Reporter             *string  `json:"reporter,omitempty"`
+	ReporterNeq          *string  `json:"reporterNEQ,omitempty"`
+	ReporterIn           []string `json:"reporterIn,omitempty"`
+	ReporterNotIn        []string `json:"reporterNotIn,omitempty"`
+	ReporterGt           *string  `json:"reporterGT,omitempty"`
+	ReporterGte          *string  `json:"reporterGTE,omitempty"`
+	ReporterLt           *string  `json:"reporterLT,omitempty"`
+	ReporterLte          *string  `json:"reporterLTE,omitempty"`
+	ReporterContains     *string  `json:"reporterContains,omitempty"`
+	ReporterHasPrefix    *string  `json:"reporterHasPrefix,omitempty"`
+	ReporterHasSuffix    *string  `json:"reporterHasSuffix,omitempty"`
+	ReporterIsNil        *bool    `json:"reporterIsNil,omitempty"`
+	ReporterNotNil       *bool    `json:"reporterNotNil,omitempty"`
+	ReporterEqualFold    *string  `json:"reporterEqualFold,omitempty"`
+	ReporterContainsFold *string  `json:"reporterContainsFold,omitempty"`
+	// approved field predicates
+	Approved       *bool `json:"approved,omitempty"`
+	ApprovedNeq    *bool `json:"approvedNEQ,omitempty"`
+	ApprovedIsNil  *bool `json:"approvedIsNil,omitempty"`
+	ApprovedNotNil *bool `json:"approvedNotNil,omitempty"`
+	// reviewed_at field predicates
+	ReviewedAt       *models.DateTime   `json:"reviewedAt,omitempty"`
+	ReviewedAtNeq    *models.DateTime   `json:"reviewedAtNEQ,omitempty"`
+	ReviewedAtIn     []*models.DateTime `json:"reviewedAtIn,omitempty"`
+	ReviewedAtNotIn  []*models.DateTime `json:"reviewedAtNotIn,omitempty"`
+	ReviewedAtGt     *models.DateTime   `json:"reviewedAtGT,omitempty"`
+	ReviewedAtGte    *models.DateTime   `json:"reviewedAtGTE,omitempty"`
+	ReviewedAtLt     *models.DateTime   `json:"reviewedAtLT,omitempty"`
+	ReviewedAtLte    *models.DateTime   `json:"reviewedAtLTE,omitempty"`
+	ReviewedAtIsNil  *bool              `json:"reviewedAtIsNil,omitempty"`
+	ReviewedAtNotNil *bool              `json:"reviewedAtNotNil,omitempty"`
+	// reported_at field predicates
+	ReportedAt       *models.DateTime   `json:"reportedAt,omitempty"`
+	ReportedAtNeq    *models.DateTime   `json:"reportedAtNEQ,omitempty"`
+	ReportedAtIn     []*models.DateTime `json:"reportedAtIn,omitempty"`
+	ReportedAtNotIn  []*models.DateTime `json:"reportedAtNotIn,omitempty"`
+	ReportedAtGt     *models.DateTime   `json:"reportedAtGT,omitempty"`
+	ReportedAtGte    *models.DateTime   `json:"reportedAtGTE,omitempty"`
+	ReportedAtLt     *models.DateTime   `json:"reportedAtLT,omitempty"`
+	ReportedAtLte    *models.DateTime   `json:"reportedAtLTE,omitempty"`
+	ReportedAtIsNil  *bool              `json:"reportedAtIsNil,omitempty"`
+	ReportedAtNotNil *bool              `json:"reportedAtNotNil,omitempty"`
+	// approved_at field predicates
+	ApprovedAt       *models.DateTime   `json:"approvedAt,omitempty"`
+	ApprovedAtNeq    *models.DateTime   `json:"approvedAtNEQ,omitempty"`
+	ApprovedAtIn     []*models.DateTime `json:"approvedAtIn,omitempty"`
+	ApprovedAtNotIn  []*models.DateTime `json:"approvedAtNotIn,omitempty"`
+	ApprovedAtGt     *models.DateTime   `json:"approvedAtGT,omitempty"`
+	ApprovedAtGte    *models.DateTime   `json:"approvedAtGTE,omitempty"`
+	ApprovedAtLt     *models.DateTime   `json:"approvedAtLT,omitempty"`
+	ApprovedAtLte    *models.DateTime   `json:"approvedAtLTE,omitempty"`
+	ApprovedAtIsNil  *bool              `json:"approvedAtIsNil,omitempty"`
+	ApprovedAtNotNil *bool              `json:"approvedAtNotNil,omitempty"`
+	// reviewer_id field predicates
+	ReviewerID             *string  `json:"reviewerID,omitempty"`
+	ReviewerIdneq          *string  `json:"reviewerIDNEQ,omitempty"`
+	ReviewerIDIn           []string `json:"reviewerIDIn,omitempty"`
+	ReviewerIDNotIn        []string `json:"reviewerIDNotIn,omitempty"`
+	ReviewerIdgt           *string  `json:"reviewerIDGT,omitempty"`
+	ReviewerIdgte          *string  `json:"reviewerIDGTE,omitempty"`
+	ReviewerIdlt           *string  `json:"reviewerIDLT,omitempty"`
+	ReviewerIdlte          *string  `json:"reviewerIDLTE,omitempty"`
+	ReviewerIDContains     *string  `json:"reviewerIDContains,omitempty"`
+	ReviewerIDHasPrefix    *string  `json:"reviewerIDHasPrefix,omitempty"`
+	ReviewerIDHasSuffix    *string  `json:"reviewerIDHasSuffix,omitempty"`
+	ReviewerIDIsNil        *bool    `json:"reviewerIDIsNil,omitempty"`
+	ReviewerIDNotNil       *bool    `json:"reviewerIDNotNil,omitempty"`
+	ReviewerIDEqualFold    *string  `json:"reviewerIDEqualFold,omitempty"`
+	ReviewerIDContainsFold *string  `json:"reviewerIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+}
+
+// Ordering options for Review connections
+type ReviewOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Reviews.
+	Field ReviewOrderField `json:"field"`
+}
+
+// Return response for updateReview mutation
+type ReviewUpdatePayload struct {
+	// Updated review
+	Review *Review `json:"review"`
+}
+
+// ReviewWhereInput is used for filtering Review objects.
+// Input was generated by ent.
+type ReviewWhereInput struct {
+	Not *ReviewWhereInput   `json:"not,omitempty"`
+	And []*ReviewWhereInput `json:"and,omitempty"`
+	Or  []*ReviewWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// state field predicates
+	State             *string  `json:"state,omitempty"`
+	StateNeq          *string  `json:"stateNEQ,omitempty"`
+	StateIn           []string `json:"stateIn,omitempty"`
+	StateNotIn        []string `json:"stateNotIn,omitempty"`
+	StateGt           *string  `json:"stateGT,omitempty"`
+	StateGte          *string  `json:"stateGTE,omitempty"`
+	StateLt           *string  `json:"stateLT,omitempty"`
+	StateLte          *string  `json:"stateLTE,omitempty"`
+	StateContains     *string  `json:"stateContains,omitempty"`
+	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
+	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
+	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
+	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
+	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
+	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// classification field predicates
+	Classification             *string  `json:"classification,omitempty"`
+	ClassificationNeq          *string  `json:"classificationNEQ,omitempty"`
+	ClassificationIn           []string `json:"classificationIn,omitempty"`
+	ClassificationNotIn        []string `json:"classificationNotIn,omitempty"`
+	ClassificationGt           *string  `json:"classificationGT,omitempty"`
+	ClassificationGte          *string  `json:"classificationGTE,omitempty"`
+	ClassificationLt           *string  `json:"classificationLT,omitempty"`
+	ClassificationLte          *string  `json:"classificationLTE,omitempty"`
+	ClassificationContains     *string  `json:"classificationContains,omitempty"`
+	ClassificationHasPrefix    *string  `json:"classificationHasPrefix,omitempty"`
+	ClassificationHasSuffix    *string  `json:"classificationHasSuffix,omitempty"`
+	ClassificationIsNil        *bool    `json:"classificationIsNil,omitempty"`
+	ClassificationNotNil       *bool    `json:"classificationNotNil,omitempty"`
+	ClassificationEqualFold    *string  `json:"classificationEqualFold,omitempty"`
+	ClassificationContainsFold *string  `json:"classificationContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// reporter field predicates
+	Reporter             *string  `json:"reporter,omitempty"`
+	ReporterNeq          *string  `json:"reporterNEQ,omitempty"`
+	ReporterIn           []string `json:"reporterIn,omitempty"`
+	ReporterNotIn        []string `json:"reporterNotIn,omitempty"`
+	ReporterGt           *string  `json:"reporterGT,omitempty"`
+	ReporterGte          *string  `json:"reporterGTE,omitempty"`
+	ReporterLt           *string  `json:"reporterLT,omitempty"`
+	ReporterLte          *string  `json:"reporterLTE,omitempty"`
+	ReporterContains     *string  `json:"reporterContains,omitempty"`
+	ReporterHasPrefix    *string  `json:"reporterHasPrefix,omitempty"`
+	ReporterHasSuffix    *string  `json:"reporterHasSuffix,omitempty"`
+	ReporterIsNil        *bool    `json:"reporterIsNil,omitempty"`
+	ReporterNotNil       *bool    `json:"reporterNotNil,omitempty"`
+	ReporterEqualFold    *string  `json:"reporterEqualFold,omitempty"`
+	ReporterContainsFold *string  `json:"reporterContainsFold,omitempty"`
+	// approved field predicates
+	Approved       *bool `json:"approved,omitempty"`
+	ApprovedNeq    *bool `json:"approvedNEQ,omitempty"`
+	ApprovedIsNil  *bool `json:"approvedIsNil,omitempty"`
+	ApprovedNotNil *bool `json:"approvedNotNil,omitempty"`
+	// reviewed_at field predicates
+	ReviewedAt       *models.DateTime   `json:"reviewedAt,omitempty"`
+	ReviewedAtNeq    *models.DateTime   `json:"reviewedAtNEQ,omitempty"`
+	ReviewedAtIn     []*models.DateTime `json:"reviewedAtIn,omitempty"`
+	ReviewedAtNotIn  []*models.DateTime `json:"reviewedAtNotIn,omitempty"`
+	ReviewedAtGt     *models.DateTime   `json:"reviewedAtGT,omitempty"`
+	ReviewedAtGte    *models.DateTime   `json:"reviewedAtGTE,omitempty"`
+	ReviewedAtLt     *models.DateTime   `json:"reviewedAtLT,omitempty"`
+	ReviewedAtLte    *models.DateTime   `json:"reviewedAtLTE,omitempty"`
+	ReviewedAtIsNil  *bool              `json:"reviewedAtIsNil,omitempty"`
+	ReviewedAtNotNil *bool              `json:"reviewedAtNotNil,omitempty"`
+	// reported_at field predicates
+	ReportedAt       *models.DateTime   `json:"reportedAt,omitempty"`
+	ReportedAtNeq    *models.DateTime   `json:"reportedAtNEQ,omitempty"`
+	ReportedAtIn     []*models.DateTime `json:"reportedAtIn,omitempty"`
+	ReportedAtNotIn  []*models.DateTime `json:"reportedAtNotIn,omitempty"`
+	ReportedAtGt     *models.DateTime   `json:"reportedAtGT,omitempty"`
+	ReportedAtGte    *models.DateTime   `json:"reportedAtGTE,omitempty"`
+	ReportedAtLt     *models.DateTime   `json:"reportedAtLT,omitempty"`
+	ReportedAtLte    *models.DateTime   `json:"reportedAtLTE,omitempty"`
+	ReportedAtIsNil  *bool              `json:"reportedAtIsNil,omitempty"`
+	ReportedAtNotNil *bool              `json:"reportedAtNotNil,omitempty"`
+	// approved_at field predicates
+	ApprovedAt       *models.DateTime   `json:"approvedAt,omitempty"`
+	ApprovedAtNeq    *models.DateTime   `json:"approvedAtNEQ,omitempty"`
+	ApprovedAtIn     []*models.DateTime `json:"approvedAtIn,omitempty"`
+	ApprovedAtNotIn  []*models.DateTime `json:"approvedAtNotIn,omitempty"`
+	ApprovedAtGt     *models.DateTime   `json:"approvedAtGT,omitempty"`
+	ApprovedAtGte    *models.DateTime   `json:"approvedAtGTE,omitempty"`
+	ApprovedAtLt     *models.DateTime   `json:"approvedAtLT,omitempty"`
+	ApprovedAtLte    *models.DateTime   `json:"approvedAtLTE,omitempty"`
+	ApprovedAtIsNil  *bool              `json:"approvedAtIsNil,omitempty"`
+	ApprovedAtNotNil *bool              `json:"approvedAtNotNil,omitempty"`
+	// reviewer_id field predicates
+	ReviewerID             *string  `json:"reviewerID,omitempty"`
+	ReviewerIdneq          *string  `json:"reviewerIDNEQ,omitempty"`
+	ReviewerIDIn           []string `json:"reviewerIDIn,omitempty"`
+	ReviewerIDNotIn        []string `json:"reviewerIDNotIn,omitempty"`
+	ReviewerIdgt           *string  `json:"reviewerIDGT,omitempty"`
+	ReviewerIdgte          *string  `json:"reviewerIDGTE,omitempty"`
+	ReviewerIdlt           *string  `json:"reviewerIDLT,omitempty"`
+	ReviewerIdlte          *string  `json:"reviewerIDLTE,omitempty"`
+	ReviewerIDContains     *string  `json:"reviewerIDContains,omitempty"`
+	ReviewerIDHasPrefix    *string  `json:"reviewerIDHasPrefix,omitempty"`
+	ReviewerIDHasSuffix    *string  `json:"reviewerIDHasSuffix,omitempty"`
+	ReviewerIDIsNil        *bool    `json:"reviewerIDIsNil,omitempty"`
+	ReviewerIDNotNil       *bool    `json:"reviewerIDNotNil,omitempty"`
+	ReviewerIDEqualFold    *string  `json:"reviewerIDEqualFold,omitempty"`
+	ReviewerIDContainsFold *string  `json:"reviewerIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// reviewer edge predicates
+	HasReviewer     *bool             `json:"hasReviewer,omitempty"`
+	HasReviewerWith []*UserWhereInput `json:"hasReviewerWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
 type Risk struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -27092,6 +31765,7 @@ type SearchResults struct {
 	Events                      *EventConnection                      `json:"events,omitempty"`
 	Evidences                   *EvidenceConnection                   `json:"evidences,omitempty"`
 	Files                       *FileConnection                       `json:"files,omitempty"`
+	Findings                    *FindingConnection                    `json:"findings,omitempty"`
 	Groups                      *GroupConnection                      `json:"groups,omitempty"`
 	Integrations                *IntegrationConnection                `json:"integrations,omitempty"`
 	InternalPolicies            *InternalPolicyConnection             `json:"internalPolicies,omitempty"`
@@ -27109,6 +31783,8 @@ type SearchResults struct {
 	PersonalAccessTokens        *PersonalAccessTokenConnection        `json:"personalAccessTokens,omitempty"`
 	Procedures                  *ProcedureConnection                  `json:"procedures,omitempty"`
 	Programs                    *ProgramConnection                    `json:"programs,omitempty"`
+	Remediations                *RemediationConnection                `json:"remediations,omitempty"`
+	Reviews                     *ReviewConnection                     `json:"reviews,omitempty"`
 	Risks                       *RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *ScanConnection                       `json:"scans,omitempty"`
 	Standards                   *StandardConnection                   `json:"standards,omitempty"`
@@ -27123,6 +31799,7 @@ type SearchResults struct {
 	TrustCenterDocs             *TrustCenterDocConnection             `json:"trustCenterDocs,omitempty"`
 	Users                       *UserConnection                       `json:"users,omitempty"`
 	UserSettings                *UserSettingConnection                `json:"userSettings,omitempty"`
+	Vulnerabilities             *VulnerabilityConnection              `json:"vulnerabilities,omitempty"`
 	Webauthns                   *WebauthnConnection                   `json:"webauthns,omitempty"`
 	SearchContext               []*models.SearchContext               `json:"searchContext,omitempty"`
 }
@@ -30385,6 +35062,7 @@ type Task struct {
 	Programs               *ProgramConnection               `json:"programs"`
 	Risks                  *RiskConnection                  `json:"risks"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	ActionPlans            *ActionPlanConnection            `json:"actionPlans"`
 	Evidence               *EvidenceConnection              `json:"evidence"`
 }
 
@@ -31113,6 +35791,9 @@ type TaskWhereInput struct {
 	// control_implementations edge predicates
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -34861,35 +39542,74 @@ type UpdateActionPlanInput struct {
 	// the kind of the action_plan
 	ActionPlanKindName      *string `json:"actionPlanKindName,omitempty"`
 	ClearActionPlanKindName *bool   `json:"clearActionPlanKindName,omitempty"`
+	// short title describing the action plan
+	Title *string `json:"title,omitempty"`
+	// detailed description of remediation steps and objectives
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// due date of the action plan
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt      *time.Time `json:"completedAt,omitempty"`
+	ClearCompletedAt *bool      `json:"clearCompletedAt,omitempty"`
 	// priority of the action plan
 	Priority      *enums.Priority `json:"priority,omitempty"`
 	ClearPriority *bool           `json:"clearPriority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval *bool `json:"requiresApproval,omitempty"`
+	// true when the action plan is currently blocked
+	Blocked *bool `json:"blocked,omitempty"`
+	// context on why the action plan is blocked
+	BlockerReason      *string `json:"blockerReason,omitempty"`
+	ClearBlockerReason *bool   `json:"clearBlockerReason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload      map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload *bool          `json:"clearRawPayload,omitempty"`
 	// source of the action plan
-	Source              *string             `json:"source,omitempty"`
-	ClearSource         *bool               `json:"clearSource,omitempty"`
-	ApproverID          *string             `json:"approverID,omitempty"`
-	ClearApprover       *bool               `json:"clearApprover,omitempty"`
-	DelegateID          *string             `json:"delegateID,omitempty"`
-	ClearDelegate       *bool               `json:"clearDelegate,omitempty"`
-	OwnerID             *string             `json:"ownerID,omitempty"`
-	ClearOwner          *bool               `json:"clearOwner,omitempty"`
-	ActionPlanKindID    *string             `json:"actionPlanKindID,omitempty"`
-	ClearActionPlanKind *bool               `json:"clearActionPlanKind,omitempty"`
-	AddRiskIDs          []string            `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs       []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisks          *bool               `json:"clearRisks,omitempty"`
-	AddControlIDs       []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs    []string            `json:"removeControlIDs,omitempty"`
-	ClearControls       *bool               `json:"clearControls,omitempty"`
-	AddProgramIDs       []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs    []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms       *bool               `json:"clearPrograms,omitempty"`
-	FileID              *string             `json:"fileID,omitempty"`
-	ClearFile           *bool               `json:"clearFile,omitempty"`
-	RevisionBump        *models.VersionBump `json:"RevisionBump,omitempty"`
+	Source                 *string             `json:"source,omitempty"`
+	ClearSource            *bool               `json:"clearSource,omitempty"`
+	ApproverID             *string             `json:"approverID,omitempty"`
+	ClearApprover          *bool               `json:"clearApprover,omitempty"`
+	DelegateID             *string             `json:"delegateID,omitempty"`
+	ClearDelegate          *bool               `json:"clearDelegate,omitempty"`
+	OwnerID                *string             `json:"ownerID,omitempty"`
+	ClearOwner             *bool               `json:"clearOwner,omitempty"`
+	ActionPlanKindID       *string             `json:"actionPlanKindID,omitempty"`
+	ClearActionPlanKind    *bool               `json:"clearActionPlanKind,omitempty"`
+	AddRiskIDs             []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs          []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks             *bool               `json:"clearRisks,omitempty"`
+	AddControlIDs          []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs       []string            `json:"removeControlIDs,omitempty"`
+	ClearControls          *bool               `json:"clearControls,omitempty"`
+	AddProgramIDs          []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs       []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms          *bool               `json:"clearPrograms,omitempty"`
+	AddFindingIDs          []string            `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs       []string            `json:"removeFindingIDs,omitempty"`
+	ClearFindings          *bool               `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs    []string            `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs []string            `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities   *bool               `json:"clearVulnerabilities,omitempty"`
+	AddReviewIDs           []string            `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs        []string            `json:"removeReviewIDs,omitempty"`
+	ClearReviews           *bool               `json:"clearReviews,omitempty"`
+	AddRemediationIDs      []string            `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs   []string            `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations      *bool               `json:"clearRemediations,omitempty"`
+	AddTaskIDs             []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs          []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks             *bool               `json:"clearTasks,omitempty"`
+	AddIntegrationIDs      []string            `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs   []string            `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations      *bool               `json:"clearIntegrations,omitempty"`
+	FileID                 *string             `json:"fileID,omitempty"`
+	ClearFile              *bool               `json:"clearFile,omitempty"`
+	RevisionBump           *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateAssessmentInput is used for update Assessment object.
@@ -35212,6 +39932,9 @@ type UpdateControlInput struct {
 	AddScanIDs                     []string         `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                  []string         `json:"removeScanIDs,omitempty"`
 	ClearScans                     *bool            `json:"clearScans,omitempty"`
+	AddFindingIDs                  []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs               []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings                  *bool            `json:"clearFindings,omitempty"`
 	AddControlImplementationIDs    []string         `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string         `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations    *bool            `json:"clearControlImplementations,omitempty"`
@@ -35730,6 +40453,213 @@ type UpdateFileInput struct {
 	AddSecretIDs                 []string   `json:"addSecretIDs,omitempty"`
 	RemoveSecretIDs              []string   `json:"removeSecretIDs,omitempty"`
 	ClearSecrets                 *bool      `json:"clearSecrets,omitempty"`
+}
+
+// UpdateFindingControlInput is used for update FindingControl object.
+// Input was generated by ent.
+type UpdateFindingControlInput struct {
+	// external identifier for the standard provided by the source system such as iso or hipaa
+	ExternalStandard      *string `json:"externalStandard,omitempty"`
+	ClearExternalStandard *bool   `json:"clearExternalStandard,omitempty"`
+	// version for the external standard provided by the source system
+	ExternalStandardVersion      *string `json:"externalStandardVersion,omitempty"`
+	ClearExternalStandardVersion *bool   `json:"clearExternalStandardVersion,omitempty"`
+	// control identifier provided by the source system such as A.5.10
+	ExternalControlID      *string `json:"externalControlID,omitempty"`
+	ClearExternalControlID *bool   `json:"clearExternalControlID,omitempty"`
+	// the integration source that provided the mapping
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// additional metadata about the control mapping from the source system
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// timestamp when the mapping was first observed
+	DiscoveredAt      *models.DateTime `json:"discoveredAt,omitempty"`
+	ClearDiscoveredAt *bool            `json:"clearDiscoveredAt,omitempty"`
+}
+
+// UpdateFindingInput is used for update Finding object.
+// Input was generated by ent.
+type UpdateFindingInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// external identifier from the integration source for the finding
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// the owner of the finding
+	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
+	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// system that produced the finding, e.g. gcp_scc
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// resource identifier provided by the source system
+	ResourceName      *string `json:"resourceName,omitempty"`
+	ClearResourceName *bool   `json:"clearResourceName,omitempty"`
+	// display name for the finding when provided by the source
+	DisplayName      *string `json:"displayName,omitempty"`
+	ClearDisplayName *bool   `json:"clearDisplayName,omitempty"`
+	// state reported by the source system, such as ACTIVE or INACTIVE
+	State      *string `json:"state,omitempty"`
+	ClearState *bool   `json:"clearState,omitempty"`
+	// primary category of the finding
+	Category      *string `json:"category,omitempty"`
+	ClearCategory *bool   `json:"clearCategory,omitempty"`
+	// normalized categories for the finding
+	Categories       []string `json:"categories,omitempty"`
+	AppendCategories []string `json:"appendCategories,omitempty"`
+	ClearCategories  *bool    `json:"clearCategories,omitempty"`
+	// classification provided by the source, e.g. MISCONFIGURATION
+	FindingClass      *string `json:"findingClass,omitempty"`
+	ClearFindingClass *bool   `json:"clearFindingClass,omitempty"`
+	// severity label for the finding
+	Severity      *string `json:"severity,omitempty"`
+	ClearSeverity *bool   `json:"clearSeverity,omitempty"`
+	// numeric severity score for the finding if provided
+	NumericSeverity      *float64 `json:"numericSeverity,omitempty"`
+	ClearNumericSeverity *bool    `json:"clearNumericSeverity,omitempty"`
+	// aggregated score such as CVSS for the finding
+	Score      *float64 `json:"score,omitempty"`
+	ClearScore *bool    `json:"clearScore,omitempty"`
+	// impact score or rating for the finding
+	Impact      *float64 `json:"impact,omitempty"`
+	ClearImpact *bool    `json:"clearImpact,omitempty"`
+	// exploitability score or rating for the finding
+	Exploitability      *float64 `json:"exploitability,omitempty"`
+	ClearExploitability *bool    `json:"clearExploitability,omitempty"`
+	// priority assigned to the finding
+	Priority      *string `json:"priority,omitempty"`
+	ClearPriority *bool   `json:"clearPriority,omitempty"`
+	// indicates if the finding is still open
+	Open      *bool `json:"open,omitempty"`
+	ClearOpen *bool `json:"clearOpen,omitempty"`
+	// true when the finding blocks production changes
+	BlocksProduction      *bool `json:"blocksProduction,omitempty"`
+	ClearBlocksProduction *bool `json:"clearBlocksProduction,omitempty"`
+	// true when the finding affects production systems
+	Production      *bool `json:"production,omitempty"`
+	ClearProduction *bool `json:"clearProduction,omitempty"`
+	// true when the finding is publicly disclosed
+	Public      *bool `json:"public,omitempty"`
+	ClearPublic *bool `json:"clearPublic,omitempty"`
+	// true when the finding has been validated by the security team
+	Validated      *bool `json:"validated,omitempty"`
+	ClearValidated *bool `json:"clearValidated,omitempty"`
+	// identifier for the assessment that generated the finding
+	AssessmentID      *string `json:"assessmentID,omitempty"`
+	ClearAssessmentID *bool   `json:"clearAssessmentID,omitempty"`
+	// long form description of the finding
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// short recommendation text from the source system (deprecated upstream)
+	Recommendation      *string `json:"recommendation,omitempty"`
+	ClearRecommendation *bool   `json:"clearRecommendation,omitempty"`
+	// markdown formatted remediation guidance for the finding
+	RecommendedActions      *string `json:"recommendedActions,omitempty"`
+	ClearRecommendedActions *bool   `json:"clearRecommendedActions,omitempty"`
+	// reference links for the finding
+	References       []string `json:"references,omitempty"`
+	AppendReferences []string `json:"appendReferences,omitempty"`
+	ClearReferences  *bool    `json:"clearReferences,omitempty"`
+	// steps required to reproduce the finding
+	StepsToReproduce       []string `json:"stepsToReproduce,omitempty"`
+	AppendStepsToReproduce []string `json:"appendStepsToReproduce,omitempty"`
+	ClearStepsToReproduce  *bool    `json:"clearStepsToReproduce,omitempty"`
+	// targets impacted by the finding such as projects or applications
+	Targets       []string `json:"targets,omitempty"`
+	AppendTargets []string `json:"appendTargets,omitempty"`
+	ClearTargets  *bool    `json:"clearTargets,omitempty"`
+	// structured details about the impacted targets
+	TargetDetails      map[string]any `json:"targetDetails,omitempty"`
+	ClearTargetDetails *bool          `json:"clearTargetDetails,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector      *string `json:"vector,omitempty"`
+	ClearVector *bool   `json:"clearVector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA      *int64 `json:"remediationSLA,omitempty"`
+	ClearRemediationSLA *bool  `json:"clearRemediationSLA,omitempty"`
+	// lifecycle status of the finding
+	Status      *string `json:"status,omitempty"`
+	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// timestamp when the finding was last observed by the source
+	EventTime      *models.DateTime `json:"eventTime,omitempty"`
+	ClearEventTime *bool            `json:"clearEventTime,omitempty"`
+	// timestamp when the finding was first reported by the source
+	ReportedAt      *models.DateTime `json:"reportedAt,omitempty"`
+	ClearReportedAt *bool            `json:"clearReportedAt,omitempty"`
+	// timestamp when the source last updated the finding
+	SourceUpdatedAt      *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	ClearSourceUpdatedAt *bool            `json:"clearSourceUpdatedAt,omitempty"`
+	// link to the finding in the source system
+	ExternalURI      *string `json:"externalURI,omitempty"`
+	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
+	// raw metadata payload for the finding from the source system
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload             map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload        *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs     []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs  []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups     *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors           *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs           []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs        []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers           *bool          `json:"clearViewers,omitempty"`
+	AddIntegrationIDs      []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs   []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations      *bool          `json:"clearIntegrations,omitempty"`
+	AddVulnerabilityIDs    []string       `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs []string       `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities   *bool          `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs       []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs    []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans       *bool          `json:"clearActionPlans,omitempty"`
+	AddControlIDs          []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs       []string       `json:"removeControlIDs,omitempty"`
+	ClearControls          *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs       []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs    []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols       *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs             []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs          []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks             *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets            *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities          *bool          `json:"clearEntities,omitempty"`
+	AddScanIDs             []string       `json:"addScanIDs,omitempty"`
+	RemoveScanIDs          []string       `json:"removeScanIDs,omitempty"`
+	ClearScans             *bool          `json:"clearScans,omitempty"`
+	AddTaskIDs             []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs          []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks             *bool          `json:"clearTasks,omitempty"`
+	AddRemediationIDs      []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs   []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations      *bool          `json:"clearRemediations,omitempty"`
+	AddReviewIDs           []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs        []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews           *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs          []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs       []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments          *bool          `json:"clearComments,omitempty"`
+	AddFileIDs             []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs          []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles             *bool          `json:"clearFiles,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -36554,6 +41484,18 @@ type UpdateOrganizationInput struct {
 	AddTagDefinitionIDs                   []string                        `json:"addTagDefinitionIDs,omitempty"`
 	RemoveTagDefinitionIDs                []string                        `json:"removeTagDefinitionIDs,omitempty"`
 	ClearTagDefinitions                   *bool                           `json:"clearTagDefinitions,omitempty"`
+	AddRemediationIDs                     []string                        `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs                  []string                        `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations                     *bool                           `json:"clearRemediations,omitempty"`
+	AddFindingIDs                         []string                        `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs                      []string                        `json:"removeFindingIDs,omitempty"`
+	ClearFindings                         *bool                           `json:"clearFindings,omitempty"`
+	AddReviewIDs                          []string                        `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                       []string                        `json:"removeReviewIDs,omitempty"`
+	ClearReviews                          *bool                           `json:"clearReviews,omitempty"`
+	AddVulnerabilityIDs                   []string                        `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs                []string                        `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities                  *bool                           `json:"clearVulnerabilities,omitempty"`
 	AddOrgMembers                         []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                      []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                     *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -36883,6 +41825,247 @@ type UpdateProgramInput struct {
 // Input was generated by ent.
 type UpdateProgramMembershipInput struct {
 	Role *enums.Role `json:"role,omitempty"`
+}
+
+// UpdateRemediationInput is used for update Remediation object.
+// Input was generated by ent.
+type UpdateRemediationInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// external identifier from the integration source for the remediation
+	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
+	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// title or short description of the remediation effort
+	Title      *string `json:"title,omitempty"`
+	ClearTitle *bool   `json:"clearTitle,omitempty"`
+	// state of the remediation, such as pending or completed
+	State      *string `json:"state,omitempty"`
+	ClearState *bool   `json:"clearState,omitempty"`
+	// intent or goal of the remediation effort
+	Intent      *string `json:"intent,omitempty"`
+	ClearIntent *bool   `json:"clearIntent,omitempty"`
+	// summary of the remediation approach
+	Summary      *string `json:"summary,omitempty"`
+	ClearSummary *bool   `json:"clearSummary,omitempty"`
+	// detailed explanation of the remediation steps
+	Explanation      *string `json:"explanation,omitempty"`
+	ClearExplanation *bool   `json:"clearExplanation,omitempty"`
+	// specific instructions or steps to implement the remediation
+	Instructions      *string `json:"instructions,omitempty"`
+	ClearInstructions *bool   `json:"clearInstructions,omitempty"`
+	// reference to the owner responsible for remediation
+	OwnerReference      *string `json:"ownerReference,omitempty"`
+	ClearOwnerReference *bool   `json:"clearOwnerReference,omitempty"`
+	// source code repository URI associated with the remediation
+	RepositoryURI      *string `json:"repositoryURI,omitempty"`
+	ClearRepositoryURI *bool   `json:"clearRepositoryURI,omitempty"`
+	// pull request URI associated with the remediation
+	PullRequestURI      *string `json:"pullRequestURI,omitempty"`
+	ClearPullRequestURI *bool   `json:"clearPullRequestURI,omitempty"`
+	// reference to a tracking ticket for the remediation
+	TicketReference      *string `json:"ticketReference,omitempty"`
+	ClearTicketReference *bool   `json:"clearTicketReference,omitempty"`
+	// timestamp when the remediation is due
+	DueAt      *models.DateTime `json:"dueAt,omitempty"`
+	ClearDueAt *bool            `json:"clearDueAt,omitempty"`
+	// timestamp when the remediation was completed
+	CompletedAt      *models.DateTime `json:"completedAt,omitempty"`
+	ClearCompletedAt *bool            `json:"clearCompletedAt,omitempty"`
+	// timestamp when an automated pull request was generated
+	PrGeneratedAt      *models.DateTime `json:"prGeneratedAt,omitempty"`
+	ClearPrGeneratedAt *bool            `json:"clearPrGeneratedAt,omitempty"`
+	// details about any errors encountered during remediation automation
+	Error      *string `json:"error,omitempty"`
+	ClearError *bool   `json:"clearError,omitempty"`
+	// system that produced the remediation record
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// link to the remediation in the source system
+	ExternalURI      *string `json:"externalURI,omitempty"`
+	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata               map[string]any `json:"metadata,omitempty"`
+	ClearMetadata          *bool          `json:"clearMetadata,omitempty"`
+	AddBlockedGroupIDs     []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs  []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups     *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors           *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs           []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs        []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers           *bool          `json:"clearViewers,omitempty"`
+	AddIntegrationIDs      []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs   []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations      *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs          []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs       []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings          *bool          `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs    []string       `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs []string       `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities   *bool          `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs       []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs    []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans       *bool          `json:"clearActionPlans,omitempty"`
+	AddTaskIDs             []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs          []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks             *bool          `json:"clearTasks,omitempty"`
+	AddControlIDs          []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs       []string       `json:"removeControlIDs,omitempty"`
+	ClearControls          *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs       []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs    []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols       *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs             []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs          []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks             *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets            *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities          *bool          `json:"clearEntities,omitempty"`
+	AddReviewIDs           []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs        []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews           *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs          []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs       []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments          *bool          `json:"clearComments,omitempty"`
+	AddFileIDs             []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs          []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles             *bool          `json:"clearFiles,omitempty"`
+}
+
+// UpdateReviewInput is used for update Review object.
+// Input was generated by ent.
+type UpdateReviewInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// external identifier from the integration source for the review
+	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
+	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// title of the review
+	Title *string `json:"title,omitempty"`
+	// state of the review
+	State      *string `json:"state,omitempty"`
+	ClearState *bool   `json:"clearState,omitempty"`
+	// category for the review record
+	Category      *string `json:"category,omitempty"`
+	ClearCategory *bool   `json:"clearCategory,omitempty"`
+	// classification or sensitivity of the review record
+	Classification      *string `json:"classification,omitempty"`
+	ClearClassification *bool   `json:"clearClassification,omitempty"`
+	// summary text for the review
+	Summary      *string `json:"summary,omitempty"`
+	ClearSummary *bool   `json:"clearSummary,omitempty"`
+	// detailed notes captured during the review
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// person or system that created the review
+	Reporter      *string `json:"reporter,omitempty"`
+	ClearReporter *bool   `json:"clearReporter,omitempty"`
+	// true when the review has been approved
+	Approved      *bool `json:"approved,omitempty"`
+	ClearApproved *bool `json:"clearApproved,omitempty"`
+	// timestamp when the review was completed
+	ReviewedAt      *models.DateTime `json:"reviewedAt,omitempty"`
+	ClearReviewedAt *bool            `json:"clearReviewedAt,omitempty"`
+	// timestamp when the review was reported or opened
+	ReportedAt      *models.DateTime `json:"reportedAt,omitempty"`
+	ClearReportedAt *bool            `json:"clearReportedAt,omitempty"`
+	// timestamp when the review was approved
+	ApprovedAt      *models.DateTime `json:"approvedAt,omitempty"`
+	ClearApprovedAt *bool            `json:"clearApprovedAt,omitempty"`
+	// system that produced the review record
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// link to the review in the source system
+	ExternalURI      *string `json:"externalURI,omitempty"`
+	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
+	// raw metadata payload for the review from the source system
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload             map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload        *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs     []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs  []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups     *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors           *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs           []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs        []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers           *bool          `json:"clearViewers,omitempty"`
+	AddIntegrationIDs      []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs   []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations      *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs          []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs       []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings          *bool          `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs    []string       `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs []string       `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities   *bool          `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs       []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs    []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans       *bool          `json:"clearActionPlans,omitempty"`
+	AddRemediationIDs      []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs   []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations      *bool          `json:"clearRemediations,omitempty"`
+	AddControlIDs          []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs       []string       `json:"removeControlIDs,omitempty"`
+	ClearControls          *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs       []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs    []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols       *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs             []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs          []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks             *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets            *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities          *bool          `json:"clearEntities,omitempty"`
+	AddTaskIDs             []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs          []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks             *bool          `json:"clearTasks,omitempty"`
+	ReviewerID             *string        `json:"reviewerID,omitempty"`
+	ClearReviewer          *bool          `json:"clearReviewer,omitempty"`
+	AddCommentIDs          []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs       []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments          *bool          `json:"clearComments,omitempty"`
+	AddFileIDs             []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs          []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles             *bool          `json:"clearFiles,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -37405,6 +42588,9 @@ type UpdateTaskInput struct {
 	AddControlImplementationIDs    []string         `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string         `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations    *bool            `json:"clearControlImplementations,omitempty"`
+	AddActionPlanIDs               []string         `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs            []string         `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans               *bool            `json:"clearActionPlans,omitempty"`
 	AddEvidenceIDs                 []string         `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs              []string         `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                  *bool            `json:"clearEvidence,omitempty"`
@@ -37744,6 +42930,163 @@ type UpdateUserSettingInput struct {
 	AddFileIDs        []string `json:"addFileIDs,omitempty"`
 	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
 	ClearFiles        *bool    `json:"clearFiles,omitempty"`
+}
+
+// UpdateVulnerabilityInput is used for update Vulnerability object.
+// Input was generated by ent.
+type UpdateVulnerabilityInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// owner of the vulnerability
+	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
+	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// external identifier from the integration source for the vulnerability
+	ExternalID *string `json:"externalID,omitempty"`
+	// CVE identifier for the vulnerability when applicable
+	CveID      *string `json:"cveID,omitempty"`
+	ClearCveID *bool   `json:"clearCveID,omitempty"`
+	// system that produced the vulnerability record
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// display name for the vulnerability when provided
+	DisplayName      *string `json:"displayName,omitempty"`
+	ClearDisplayName *bool   `json:"clearDisplayName,omitempty"`
+	// category of the vulnerability such as application or infrastructure
+	Category      *string `json:"category,omitempty"`
+	ClearCategory *bool   `json:"clearCategory,omitempty"`
+	// severity label for the vulnerability
+	Severity      *string `json:"severity,omitempty"`
+	ClearSeverity *bool   `json:"clearSeverity,omitempty"`
+	// overall score such as CVSS for the vulnerability
+	Score      *float64 `json:"score,omitempty"`
+	ClearScore *bool    `json:"clearScore,omitempty"`
+	// impact score or rating for the vulnerability
+	Impact      *float64 `json:"impact,omitempty"`
+	ClearImpact *bool    `json:"clearImpact,omitempty"`
+	// exploitability score or rating for the vulnerability
+	Exploitability      *float64 `json:"exploitability,omitempty"`
+	ClearExploitability *bool    `json:"clearExploitability,omitempty"`
+	// priority assigned to the vulnerability
+	Priority      *string `json:"priority,omitempty"`
+	ClearPriority *bool   `json:"clearPriority,omitempty"`
+	// lifecycle status of the vulnerability
+	Status      *string `json:"status,omitempty"`
+	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// short summary of the vulnerability details
+	Summary      *string `json:"summary,omitempty"`
+	ClearSummary *bool   `json:"clearSummary,omitempty"`
+	// long form description of the vulnerability
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector      *string `json:"vector,omitempty"`
+	ClearVector *bool   `json:"clearVector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA      *int64 `json:"remediationSLA,omitempty"`
+	ClearRemediationSLA *bool  `json:"clearRemediationSLA,omitempty"`
+	// indicates if the vulnerability is still open
+	Open      *bool `json:"open,omitempty"`
+	ClearOpen *bool `json:"clearOpen,omitempty"`
+	// true when the vulnerability blocks production changes
+	Blocking      *bool `json:"blocking,omitempty"`
+	ClearBlocking *bool `json:"clearBlocking,omitempty"`
+	// true when the vulnerability affects production systems
+	Production      *bool `json:"production,omitempty"`
+	ClearProduction *bool `json:"clearProduction,omitempty"`
+	// true when the vulnerability is publicly disclosed
+	Public      *bool `json:"public,omitempty"`
+	ClearPublic *bool `json:"clearPublic,omitempty"`
+	// true when the vulnerability has been validated by the security team
+	Validated      *bool `json:"validated,omitempty"`
+	ClearValidated *bool `json:"clearValidated,omitempty"`
+	// reference links for the vulnerability
+	References       []string `json:"references,omitempty"`
+	AppendReferences []string `json:"appendReferences,omitempty"`
+	ClearReferences  *bool    `json:"clearReferences,omitempty"`
+	// targets or assets impacted by the vulnerability
+	Impacts       []string `json:"impacts,omitempty"`
+	AppendImpacts []string `json:"appendImpacts,omitempty"`
+	ClearImpacts  *bool    `json:"clearImpacts,omitempty"`
+	// timestamp when the vulnerability was published
+	PublishedAt      *models.DateTime `json:"publishedAt,omitempty"`
+	ClearPublishedAt *bool            `json:"clearPublishedAt,omitempty"`
+	// timestamp when the vulnerability was discovered in the environment
+	DiscoveredAt      *models.DateTime `json:"discoveredAt,omitempty"`
+	ClearDiscoveredAt *bool            `json:"clearDiscoveredAt,omitempty"`
+	// timestamp when the source last updated the vulnerability
+	SourceUpdatedAt      *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	ClearSourceUpdatedAt *bool            `json:"clearSourceUpdatedAt,omitempty"`
+	// link to the vulnerability in the source system
+	ExternalURI      *string `json:"externalURI,omitempty"`
+	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
+	// raw metadata payload for the vulnerability from the source system
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload            map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload       *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs    []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs          []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool          `json:"clearViewers,omitempty"`
+	AddIntegrationIDs     []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs  []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations     *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs         []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs      []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings         *bool          `json:"clearFindings,omitempty"`
+	AddActionPlanIDs      []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs   []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans      *bool          `json:"clearActionPlans,omitempty"`
+	AddControlIDs         []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs      []string       `json:"removeControlIDs,omitempty"`
+	ClearControls         *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs      []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs   []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols      *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs            []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs         []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks            *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs         []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs      []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms         *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs           []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs        []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets           *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs          []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs       []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities         *bool          `json:"clearEntities,omitempty"`
+	AddScanIDs            []string       `json:"addScanIDs,omitempty"`
+	RemoveScanIDs         []string       `json:"removeScanIDs,omitempty"`
+	ClearScans            *bool          `json:"clearScans,omitempty"`
+	AddTaskIDs            []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs         []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks            *bool          `json:"clearTasks,omitempty"`
+	AddRemediationIDs     []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs  []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations     *bool          `json:"clearRemediations,omitempty"`
+	AddReviewIDs          []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs       []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews          *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs         []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs      []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments         *bool          `json:"clearComments,omitempty"`
+	AddFileIDs            []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs         []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles            *bool          `json:"clearFiles,omitempty"`
 }
 
 type User struct {
@@ -39057,6 +44400,1247 @@ type UserWhereInput struct {
 	HasProgramMembershipsWith []*ProgramMembershipWhereInput `json:"hasProgramMembershipsWith,omitempty"`
 }
 
+type Vulnerability struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// owner of the vulnerability
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// external identifier from the integration source for the vulnerability
+	ExternalID string `json:"externalID"`
+	// CVE identifier for the vulnerability when applicable
+	CveID *string `json:"cveID,omitempty"`
+	// system that produced the vulnerability record
+	Source *string `json:"source,omitempty"`
+	// display name for the vulnerability when provided
+	DisplayName *string `json:"displayName,omitempty"`
+	// category of the vulnerability such as application or infrastructure
+	Category *string `json:"category,omitempty"`
+	// severity label for the vulnerability
+	Severity *string `json:"severity,omitempty"`
+	// overall score such as CVSS for the vulnerability
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the vulnerability
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the vulnerability
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the vulnerability
+	Priority *string `json:"priority,omitempty"`
+	// lifecycle status of the vulnerability
+	Status *string `json:"status,omitempty"`
+	// short summary of the vulnerability details
+	Summary *string `json:"summary,omitempty"`
+	// long form description of the vulnerability
+	Description *string `json:"description,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// indicates if the vulnerability is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the vulnerability blocks production changes
+	Blocking *bool `json:"blocking,omitempty"`
+	// true when the vulnerability affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the vulnerability is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the vulnerability has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// reference links for the vulnerability
+	References []string `json:"references,omitempty"`
+	// targets or assets impacted by the vulnerability
+	Impacts []string `json:"impacts,omitempty"`
+	// timestamp when the vulnerability was published
+	PublishedAt *models.DateTime `json:"publishedAt,omitempty"`
+	// timestamp when the vulnerability was discovered in the environment
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	// timestamp when the source last updated the vulnerability
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the vulnerability in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the vulnerability from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload    map[string]any         `json:"rawPayload,omitempty"`
+	Owner         *Organization          `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection       `json:"blockedGroups"`
+	Editors       *GroupConnection       `json:"editors"`
+	Viewers       *GroupConnection       `json:"viewers"`
+	Integrations  *IntegrationConnection `json:"integrations"`
+	Findings      *FindingConnection     `json:"findings"`
+	ActionPlans   *ActionPlanConnection  `json:"actionPlans"`
+	Controls      *ControlConnection     `json:"controls"`
+	Subcontrols   *SubcontrolConnection  `json:"subcontrols"`
+	Risks         *RiskConnection        `json:"risks"`
+	Programs      *ProgramConnection     `json:"programs"`
+	Assets        *AssetConnection       `json:"assets"`
+	Entities      *EntityConnection      `json:"entities"`
+	Scans         *ScanConnection        `json:"scans"`
+	Tasks         *TaskConnection        `json:"tasks"`
+	Remediations  *RemediationConnection `json:"remediations"`
+	Reviews       *ReviewConnection      `json:"reviews"`
+	Comments      *NoteConnection        `json:"comments"`
+	Files         *FileConnection        `json:"files"`
+}
+
+func (Vulnerability) IsNode() {}
+
+// Return response for createBulkVulnerability mutation
+type VulnerabilityBulkCreatePayload struct {
+	// Created vulnerabilitys
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+}
+
+// A connection to a list of items.
+type VulnerabilityConnection struct {
+	// A list of edges.
+	Edges []*VulnerabilityEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createVulnerability mutation
+type VulnerabilityCreatePayload struct {
+	// Created vulnerability
+	Vulnerability *Vulnerability `json:"vulnerability"`
+}
+
+// Return response for deleteVulnerability mutation
+type VulnerabilityDeletePayload struct {
+	// Deleted vulnerability ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type VulnerabilityEdge struct {
+	// The item at the end of the edge.
+	Node *Vulnerability `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type VulnerabilityHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// owner of the vulnerability
+	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// external identifier from the integration source for the vulnerability
+	ExternalID string `json:"externalID"`
+	// CVE identifier for the vulnerability when applicable
+	CveID *string `json:"cveID,omitempty"`
+	// system that produced the vulnerability record
+	Source *string `json:"source,omitempty"`
+	// display name for the vulnerability when provided
+	DisplayName *string `json:"displayName,omitempty"`
+	// category of the vulnerability such as application or infrastructure
+	Category *string `json:"category,omitempty"`
+	// severity label for the vulnerability
+	Severity *string `json:"severity,omitempty"`
+	// overall score such as CVSS for the vulnerability
+	Score *float64 `json:"score,omitempty"`
+	// impact score or rating for the vulnerability
+	Impact *float64 `json:"impact,omitempty"`
+	// exploitability score or rating for the vulnerability
+	Exploitability *float64 `json:"exploitability,omitempty"`
+	// priority assigned to the vulnerability
+	Priority *string `json:"priority,omitempty"`
+	// lifecycle status of the vulnerability
+	Status *string `json:"status,omitempty"`
+	// short summary of the vulnerability details
+	Summary *string `json:"summary,omitempty"`
+	// long form description of the vulnerability
+	Description *string `json:"description,omitempty"`
+	// attack vector string such as a CVSS vector
+	Vector *string `json:"vector,omitempty"`
+	// remediation service level agreement in days
+	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
+	// indicates if the vulnerability is still open
+	Open *bool `json:"open,omitempty"`
+	// true when the vulnerability blocks production changes
+	Blocking *bool `json:"blocking,omitempty"`
+	// true when the vulnerability affects production systems
+	Production *bool `json:"production,omitempty"`
+	// true when the vulnerability is publicly disclosed
+	Public *bool `json:"public,omitempty"`
+	// true when the vulnerability has been validated by the security team
+	Validated *bool `json:"validated,omitempty"`
+	// reference links for the vulnerability
+	References []string `json:"references,omitempty"`
+	// targets or assets impacted by the vulnerability
+	Impacts []string `json:"impacts,omitempty"`
+	// timestamp when the vulnerability was published
+	PublishedAt *models.DateTime `json:"publishedAt,omitempty"`
+	// timestamp when the vulnerability was discovered in the environment
+	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	// timestamp when the source last updated the vulnerability
+	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// link to the vulnerability in the source system
+	ExternalURI *string `json:"externalURI,omitempty"`
+	// raw metadata payload for the vulnerability from the source system
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]any `json:"rawPayload,omitempty"`
+}
+
+func (VulnerabilityHistory) IsNode() {}
+
+// A connection to a list of items.
+type VulnerabilityHistoryConnection struct {
+	// A list of edges.
+	Edges []*VulnerabilityHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type VulnerabilityHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *VulnerabilityHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for VulnerabilityHistory connections
+type VulnerabilityHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order VulnerabilityHistories.
+	Field VulnerabilityHistoryOrderField `json:"field"`
+}
+
+// VulnerabilityHistoryWhereInput is used for filtering VulnerabilityHistory objects.
+// Input was generated by ent.
+type VulnerabilityHistoryWhereInput struct {
+	Not *VulnerabilityHistoryWhereInput   `json:"not,omitempty"`
+	And []*VulnerabilityHistoryWhereInput `json:"and,omitempty"`
+	Or  []*VulnerabilityHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// cve_id field predicates
+	CveID             *string  `json:"cveID,omitempty"`
+	CveIdneq          *string  `json:"cveIDNEQ,omitempty"`
+	CveIDIn           []string `json:"cveIDIn,omitempty"`
+	CveIDNotIn        []string `json:"cveIDNotIn,omitempty"`
+	CveIdgt           *string  `json:"cveIDGT,omitempty"`
+	CveIdgte          *string  `json:"cveIDGTE,omitempty"`
+	CveIdlt           *string  `json:"cveIDLT,omitempty"`
+	CveIdlte          *string  `json:"cveIDLTE,omitempty"`
+	CveIDContains     *string  `json:"cveIDContains,omitempty"`
+	CveIDHasPrefix    *string  `json:"cveIDHasPrefix,omitempty"`
+	CveIDHasSuffix    *string  `json:"cveIDHasSuffix,omitempty"`
+	CveIDIsNil        *bool    `json:"cveIDIsNil,omitempty"`
+	CveIDNotNil       *bool    `json:"cveIDNotNil,omitempty"`
+	CveIDEqualFold    *string  `json:"cveIDEqualFold,omitempty"`
+	CveIDContainsFold *string  `json:"cveIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// severity field predicates
+	Severity             *string  `json:"severity,omitempty"`
+	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
+	SeverityIn           []string `json:"severityIn,omitempty"`
+	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
+	SeverityGt           *string  `json:"severityGT,omitempty"`
+	SeverityGte          *string  `json:"severityGTE,omitempty"`
+	SeverityLt           *string  `json:"severityLT,omitempty"`
+	SeverityLte          *string  `json:"severityLTE,omitempty"`
+	SeverityContains     *string  `json:"severityContains,omitempty"`
+	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
+	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
+	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
+	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
+	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
+	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
+	// score field predicates
+	Score       *float64  `json:"score,omitempty"`
+	ScoreNeq    *float64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []float64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []float64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *float64  `json:"scoreGT,omitempty"`
+	ScoreGte    *float64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *float64  `json:"scoreLT,omitempty"`
+	ScoreLte    *float64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool     `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool     `json:"scoreNotNil,omitempty"`
+	// impact field predicates
+	Impact       *float64  `json:"impact,omitempty"`
+	ImpactNeq    *float64  `json:"impactNEQ,omitempty"`
+	ImpactIn     []float64 `json:"impactIn,omitempty"`
+	ImpactNotIn  []float64 `json:"impactNotIn,omitempty"`
+	ImpactGt     *float64  `json:"impactGT,omitempty"`
+	ImpactGte    *float64  `json:"impactGTE,omitempty"`
+	ImpactLt     *float64  `json:"impactLT,omitempty"`
+	ImpactLte    *float64  `json:"impactLTE,omitempty"`
+	ImpactIsNil  *bool     `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool     `json:"impactNotNil,omitempty"`
+	// exploitability field predicates
+	Exploitability       *float64  `json:"exploitability,omitempty"`
+	ExploitabilityNeq    *float64  `json:"exploitabilityNEQ,omitempty"`
+	ExploitabilityIn     []float64 `json:"exploitabilityIn,omitempty"`
+	ExploitabilityNotIn  []float64 `json:"exploitabilityNotIn,omitempty"`
+	ExploitabilityGt     *float64  `json:"exploitabilityGT,omitempty"`
+	ExploitabilityGte    *float64  `json:"exploitabilityGTE,omitempty"`
+	ExploitabilityLt     *float64  `json:"exploitabilityLT,omitempty"`
+	ExploitabilityLte    *float64  `json:"exploitabilityLTE,omitempty"`
+	ExploitabilityIsNil  *bool     `json:"exploitabilityIsNil,omitempty"`
+	ExploitabilityNotNil *bool     `json:"exploitabilityNotNil,omitempty"`
+	// priority field predicates
+	Priority             *string  `json:"priority,omitempty"`
+	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
+	PriorityIn           []string `json:"priorityIn,omitempty"`
+	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
+	PriorityGt           *string  `json:"priorityGT,omitempty"`
+	PriorityGte          *string  `json:"priorityGTE,omitempty"`
+	PriorityLt           *string  `json:"priorityLT,omitempty"`
+	PriorityLte          *string  `json:"priorityLTE,omitempty"`
+	PriorityContains     *string  `json:"priorityContains,omitempty"`
+	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
+	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
+	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
+	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
+	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
+	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// vector field predicates
+	Vector             *string  `json:"vector,omitempty"`
+	VectorNeq          *string  `json:"vectorNEQ,omitempty"`
+	VectorIn           []string `json:"vectorIn,omitempty"`
+	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
+	VectorGt           *string  `json:"vectorGT,omitempty"`
+	VectorGte          *string  `json:"vectorGTE,omitempty"`
+	VectorLt           *string  `json:"vectorLT,omitempty"`
+	VectorLte          *string  `json:"vectorLTE,omitempty"`
+	VectorContains     *string  `json:"vectorContains,omitempty"`
+	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
+	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
+	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
+	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
+	VectorEqualFold    *string  `json:"vectorEqualFold,omitempty"`
+	VectorContainsFold *string  `json:"vectorContainsFold,omitempty"`
+	// remediation_sla field predicates
+	RemediationSLA       *int64  `json:"remediationSLA,omitempty"`
+	RemediationSLANeq    *int64  `json:"remediationSLANEQ,omitempty"`
+	RemediationSLAIn     []int64 `json:"remediationSLAIn,omitempty"`
+	RemediationSLANotIn  []int64 `json:"remediationSLANotIn,omitempty"`
+	RemediationSLAGt     *int64  `json:"remediationSLAGT,omitempty"`
+	RemediationSLAGte    *int64  `json:"remediationSLAGTE,omitempty"`
+	RemediationSLALt     *int64  `json:"remediationSLALT,omitempty"`
+	RemediationSLALte    *int64  `json:"remediationSLALTE,omitempty"`
+	RemediationSLAIsNil  *bool   `json:"remediationSLAIsNil,omitempty"`
+	RemediationSLANotNil *bool   `json:"remediationSLANotNil,omitempty"`
+	// open field predicates
+	Open       *bool `json:"open,omitempty"`
+	OpenNeq    *bool `json:"openNEQ,omitempty"`
+	OpenIsNil  *bool `json:"openIsNil,omitempty"`
+	OpenNotNil *bool `json:"openNotNil,omitempty"`
+	// blocking field predicates
+	Blocking       *bool `json:"blocking,omitempty"`
+	BlockingNeq    *bool `json:"blockingNEQ,omitempty"`
+	BlockingIsNil  *bool `json:"blockingIsNil,omitempty"`
+	BlockingNotNil *bool `json:"blockingNotNil,omitempty"`
+	// production field predicates
+	Production       *bool `json:"production,omitempty"`
+	ProductionNeq    *bool `json:"productionNEQ,omitempty"`
+	ProductionIsNil  *bool `json:"productionIsNil,omitempty"`
+	ProductionNotNil *bool `json:"productionNotNil,omitempty"`
+	// public field predicates
+	Public       *bool `json:"public,omitempty"`
+	PublicNeq    *bool `json:"publicNEQ,omitempty"`
+	PublicIsNil  *bool `json:"publicIsNil,omitempty"`
+	PublicNotNil *bool `json:"publicNotNil,omitempty"`
+	// validated field predicates
+	Validated       *bool `json:"validated,omitempty"`
+	ValidatedNeq    *bool `json:"validatedNEQ,omitempty"`
+	ValidatedIsNil  *bool `json:"validatedIsNil,omitempty"`
+	ValidatedNotNil *bool `json:"validatedNotNil,omitempty"`
+	// published_at field predicates
+	PublishedAt       *models.DateTime   `json:"publishedAt,omitempty"`
+	PublishedAtNeq    *models.DateTime   `json:"publishedAtNEQ,omitempty"`
+	PublishedAtIn     []*models.DateTime `json:"publishedAtIn,omitempty"`
+	PublishedAtNotIn  []*models.DateTime `json:"publishedAtNotIn,omitempty"`
+	PublishedAtGt     *models.DateTime   `json:"publishedAtGT,omitempty"`
+	PublishedAtGte    *models.DateTime   `json:"publishedAtGTE,omitempty"`
+	PublishedAtLt     *models.DateTime   `json:"publishedAtLT,omitempty"`
+	PublishedAtLte    *models.DateTime   `json:"publishedAtLTE,omitempty"`
+	PublishedAtIsNil  *bool              `json:"publishedAtIsNil,omitempty"`
+	PublishedAtNotNil *bool              `json:"publishedAtNotNil,omitempty"`
+	// discovered_at field predicates
+	DiscoveredAt       *models.DateTime   `json:"discoveredAt,omitempty"`
+	DiscoveredAtNeq    *models.DateTime   `json:"discoveredAtNEQ,omitempty"`
+	DiscoveredAtIn     []*models.DateTime `json:"discoveredAtIn,omitempty"`
+	DiscoveredAtNotIn  []*models.DateTime `json:"discoveredAtNotIn,omitempty"`
+	DiscoveredAtGt     *models.DateTime   `json:"discoveredAtGT,omitempty"`
+	DiscoveredAtGte    *models.DateTime   `json:"discoveredAtGTE,omitempty"`
+	DiscoveredAtLt     *models.DateTime   `json:"discoveredAtLT,omitempty"`
+	DiscoveredAtLte    *models.DateTime   `json:"discoveredAtLTE,omitempty"`
+	DiscoveredAtIsNil  *bool              `json:"discoveredAtIsNil,omitempty"`
+	DiscoveredAtNotNil *bool              `json:"discoveredAtNotNil,omitempty"`
+	// source_updated_at field predicates
+	SourceUpdatedAt       *models.DateTime   `json:"sourceUpdatedAt,omitempty"`
+	SourceUpdatedAtNeq    *models.DateTime   `json:"sourceUpdatedAtNEQ,omitempty"`
+	SourceUpdatedAtIn     []*models.DateTime `json:"sourceUpdatedAtIn,omitempty"`
+	SourceUpdatedAtNotIn  []*models.DateTime `json:"sourceUpdatedAtNotIn,omitempty"`
+	SourceUpdatedAtGt     *models.DateTime   `json:"sourceUpdatedAtGT,omitempty"`
+	SourceUpdatedAtGte    *models.DateTime   `json:"sourceUpdatedAtGTE,omitempty"`
+	SourceUpdatedAtLt     *models.DateTime   `json:"sourceUpdatedAtLT,omitempty"`
+	SourceUpdatedAtLte    *models.DateTime   `json:"sourceUpdatedAtLTE,omitempty"`
+	SourceUpdatedAtIsNil  *bool              `json:"sourceUpdatedAtIsNil,omitempty"`
+	SourceUpdatedAtNotNil *bool              `json:"sourceUpdatedAtNotNil,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+}
+
+// Ordering options for Vulnerability connections
+type VulnerabilityOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Vulnerabilities.
+	Field VulnerabilityOrderField `json:"field"`
+}
+
+// Return response for updateVulnerability mutation
+type VulnerabilityUpdatePayload struct {
+	// Updated vulnerability
+	Vulnerability *Vulnerability `json:"vulnerability"`
+}
+
+// VulnerabilityWhereInput is used for filtering Vulnerability objects.
+// Input was generated by ent.
+type VulnerabilityWhereInput struct {
+	Not *VulnerabilityWhereInput   `json:"not,omitempty"`
+	And []*VulnerabilityWhereInput `json:"and,omitempty"`
+	Or  []*VulnerabilityWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// external_owner_id field predicates
+	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
+	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
+	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
+	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
+	ExternalOwnerIdgt           *string  `json:"externalOwnerIDGT,omitempty"`
+	ExternalOwnerIdgte          *string  `json:"externalOwnerIDGTE,omitempty"`
+	ExternalOwnerIdlt           *string  `json:"externalOwnerIDLT,omitempty"`
+	ExternalOwnerIdlte          *string  `json:"externalOwnerIDLTE,omitempty"`
+	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
+	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
+	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
+	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
+	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
+	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
+	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// cve_id field predicates
+	CveID             *string  `json:"cveID,omitempty"`
+	CveIdneq          *string  `json:"cveIDNEQ,omitempty"`
+	CveIDIn           []string `json:"cveIDIn,omitempty"`
+	CveIDNotIn        []string `json:"cveIDNotIn,omitempty"`
+	CveIdgt           *string  `json:"cveIDGT,omitempty"`
+	CveIdgte          *string  `json:"cveIDGTE,omitempty"`
+	CveIdlt           *string  `json:"cveIDLT,omitempty"`
+	CveIdlte          *string  `json:"cveIDLTE,omitempty"`
+	CveIDContains     *string  `json:"cveIDContains,omitempty"`
+	CveIDHasPrefix    *string  `json:"cveIDHasPrefix,omitempty"`
+	CveIDHasSuffix    *string  `json:"cveIDHasSuffix,omitempty"`
+	CveIDIsNil        *bool    `json:"cveIDIsNil,omitempty"`
+	CveIDNotNil       *bool    `json:"cveIDNotNil,omitempty"`
+	CveIDEqualFold    *string  `json:"cveIDEqualFold,omitempty"`
+	CveIDContainsFold *string  `json:"cveIDContainsFold,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// severity field predicates
+	Severity             *string  `json:"severity,omitempty"`
+	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
+	SeverityIn           []string `json:"severityIn,omitempty"`
+	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
+	SeverityGt           *string  `json:"severityGT,omitempty"`
+	SeverityGte          *string  `json:"severityGTE,omitempty"`
+	SeverityLt           *string  `json:"severityLT,omitempty"`
+	SeverityLte          *string  `json:"severityLTE,omitempty"`
+	SeverityContains     *string  `json:"severityContains,omitempty"`
+	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
+	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
+	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
+	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
+	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
+	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
+	// score field predicates
+	Score       *float64  `json:"score,omitempty"`
+	ScoreNeq    *float64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []float64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []float64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *float64  `json:"scoreGT,omitempty"`
+	ScoreGte    *float64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *float64  `json:"scoreLT,omitempty"`
+	ScoreLte    *float64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool     `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool     `json:"scoreNotNil,omitempty"`
+	// impact field predicates
+	Impact       *float64  `json:"impact,omitempty"`
+	ImpactNeq    *float64  `json:"impactNEQ,omitempty"`
+	ImpactIn     []float64 `json:"impactIn,omitempty"`
+	ImpactNotIn  []float64 `json:"impactNotIn,omitempty"`
+	ImpactGt     *float64  `json:"impactGT,omitempty"`
+	ImpactGte    *float64  `json:"impactGTE,omitempty"`
+	ImpactLt     *float64  `json:"impactLT,omitempty"`
+	ImpactLte    *float64  `json:"impactLTE,omitempty"`
+	ImpactIsNil  *bool     `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool     `json:"impactNotNil,omitempty"`
+	// exploitability field predicates
+	Exploitability       *float64  `json:"exploitability,omitempty"`
+	ExploitabilityNeq    *float64  `json:"exploitabilityNEQ,omitempty"`
+	ExploitabilityIn     []float64 `json:"exploitabilityIn,omitempty"`
+	ExploitabilityNotIn  []float64 `json:"exploitabilityNotIn,omitempty"`
+	ExploitabilityGt     *float64  `json:"exploitabilityGT,omitempty"`
+	ExploitabilityGte    *float64  `json:"exploitabilityGTE,omitempty"`
+	ExploitabilityLt     *float64  `json:"exploitabilityLT,omitempty"`
+	ExploitabilityLte    *float64  `json:"exploitabilityLTE,omitempty"`
+	ExploitabilityIsNil  *bool     `json:"exploitabilityIsNil,omitempty"`
+	ExploitabilityNotNil *bool     `json:"exploitabilityNotNil,omitempty"`
+	// priority field predicates
+	Priority             *string  `json:"priority,omitempty"`
+	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
+	PriorityIn           []string `json:"priorityIn,omitempty"`
+	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
+	PriorityGt           *string  `json:"priorityGT,omitempty"`
+	PriorityGte          *string  `json:"priorityGTE,omitempty"`
+	PriorityLt           *string  `json:"priorityLT,omitempty"`
+	PriorityLte          *string  `json:"priorityLTE,omitempty"`
+	PriorityContains     *string  `json:"priorityContains,omitempty"`
+	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
+	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
+	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
+	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
+	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
+	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// summary field predicates
+	Summary             *string  `json:"summary,omitempty"`
+	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
+	SummaryIn           []string `json:"summaryIn,omitempty"`
+	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
+	SummaryGt           *string  `json:"summaryGT,omitempty"`
+	SummaryGte          *string  `json:"summaryGTE,omitempty"`
+	SummaryLt           *string  `json:"summaryLT,omitempty"`
+	SummaryLte          *string  `json:"summaryLTE,omitempty"`
+	SummaryContains     *string  `json:"summaryContains,omitempty"`
+	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
+	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
+	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
+	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
+	SummaryEqualFold    *string  `json:"summaryEqualFold,omitempty"`
+	SummaryContainsFold *string  `json:"summaryContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// vector field predicates
+	Vector             *string  `json:"vector,omitempty"`
+	VectorNeq          *string  `json:"vectorNEQ,omitempty"`
+	VectorIn           []string `json:"vectorIn,omitempty"`
+	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
+	VectorGt           *string  `json:"vectorGT,omitempty"`
+	VectorGte          *string  `json:"vectorGTE,omitempty"`
+	VectorLt           *string  `json:"vectorLT,omitempty"`
+	VectorLte          *string  `json:"vectorLTE,omitempty"`
+	VectorContains     *string  `json:"vectorContains,omitempty"`
+	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
+	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
+	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
+	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
+	VectorEqualFold    *string  `json:"vectorEqualFold,omitempty"`
+	VectorContainsFold *string  `json:"vectorContainsFold,omitempty"`
+	// remediation_sla field predicates
+	RemediationSLA       *int64  `json:"remediationSLA,omitempty"`
+	RemediationSLANeq    *int64  `json:"remediationSLANEQ,omitempty"`
+	RemediationSLAIn     []int64 `json:"remediationSLAIn,omitempty"`
+	RemediationSLANotIn  []int64 `json:"remediationSLANotIn,omitempty"`
+	RemediationSLAGt     *int64  `json:"remediationSLAGT,omitempty"`
+	RemediationSLAGte    *int64  `json:"remediationSLAGTE,omitempty"`
+	RemediationSLALt     *int64  `json:"remediationSLALT,omitempty"`
+	RemediationSLALte    *int64  `json:"remediationSLALTE,omitempty"`
+	RemediationSLAIsNil  *bool   `json:"remediationSLAIsNil,omitempty"`
+	RemediationSLANotNil *bool   `json:"remediationSLANotNil,omitempty"`
+	// open field predicates
+	Open       *bool `json:"open,omitempty"`
+	OpenNeq    *bool `json:"openNEQ,omitempty"`
+	OpenIsNil  *bool `json:"openIsNil,omitempty"`
+	OpenNotNil *bool `json:"openNotNil,omitempty"`
+	// blocking field predicates
+	Blocking       *bool `json:"blocking,omitempty"`
+	BlockingNeq    *bool `json:"blockingNEQ,omitempty"`
+	BlockingIsNil  *bool `json:"blockingIsNil,omitempty"`
+	BlockingNotNil *bool `json:"blockingNotNil,omitempty"`
+	// production field predicates
+	Production       *bool `json:"production,omitempty"`
+	ProductionNeq    *bool `json:"productionNEQ,omitempty"`
+	ProductionIsNil  *bool `json:"productionIsNil,omitempty"`
+	ProductionNotNil *bool `json:"productionNotNil,omitempty"`
+	// public field predicates
+	Public       *bool `json:"public,omitempty"`
+	PublicNeq    *bool `json:"publicNEQ,omitempty"`
+	PublicIsNil  *bool `json:"publicIsNil,omitempty"`
+	PublicNotNil *bool `json:"publicNotNil,omitempty"`
+	// validated field predicates
+	Validated       *bool `json:"validated,omitempty"`
+	ValidatedNeq    *bool `json:"validatedNEQ,omitempty"`
+	ValidatedIsNil  *bool `json:"validatedIsNil,omitempty"`
+	ValidatedNotNil *bool `json:"validatedNotNil,omitempty"`
+	// published_at field predicates
+	PublishedAt       *models.DateTime   `json:"publishedAt,omitempty"`
+	PublishedAtNeq    *models.DateTime   `json:"publishedAtNEQ,omitempty"`
+	PublishedAtIn     []*models.DateTime `json:"publishedAtIn,omitempty"`
+	PublishedAtNotIn  []*models.DateTime `json:"publishedAtNotIn,omitempty"`
+	PublishedAtGt     *models.DateTime   `json:"publishedAtGT,omitempty"`
+	PublishedAtGte    *models.DateTime   `json:"publishedAtGTE,omitempty"`
+	PublishedAtLt     *models.DateTime   `json:"publishedAtLT,omitempty"`
+	PublishedAtLte    *models.DateTime   `json:"publishedAtLTE,omitempty"`
+	PublishedAtIsNil  *bool              `json:"publishedAtIsNil,omitempty"`
+	PublishedAtNotNil *bool              `json:"publishedAtNotNil,omitempty"`
+	// discovered_at field predicates
+	DiscoveredAt       *models.DateTime   `json:"discoveredAt,omitempty"`
+	DiscoveredAtNeq    *models.DateTime   `json:"discoveredAtNEQ,omitempty"`
+	DiscoveredAtIn     []*models.DateTime `json:"discoveredAtIn,omitempty"`
+	DiscoveredAtNotIn  []*models.DateTime `json:"discoveredAtNotIn,omitempty"`
+	DiscoveredAtGt     *models.DateTime   `json:"discoveredAtGT,omitempty"`
+	DiscoveredAtGte    *models.DateTime   `json:"discoveredAtGTE,omitempty"`
+	DiscoveredAtLt     *models.DateTime   `json:"discoveredAtLT,omitempty"`
+	DiscoveredAtLte    *models.DateTime   `json:"discoveredAtLTE,omitempty"`
+	DiscoveredAtIsNil  *bool              `json:"discoveredAtIsNil,omitempty"`
+	DiscoveredAtNotNil *bool              `json:"discoveredAtNotNil,omitempty"`
+	// source_updated_at field predicates
+	SourceUpdatedAt       *models.DateTime   `json:"sourceUpdatedAt,omitempty"`
+	SourceUpdatedAtNeq    *models.DateTime   `json:"sourceUpdatedAtNEQ,omitempty"`
+	SourceUpdatedAtIn     []*models.DateTime `json:"sourceUpdatedAtIn,omitempty"`
+	SourceUpdatedAtNotIn  []*models.DateTime `json:"sourceUpdatedAtNotIn,omitempty"`
+	SourceUpdatedAtGt     *models.DateTime   `json:"sourceUpdatedAtGT,omitempty"`
+	SourceUpdatedAtGte    *models.DateTime   `json:"sourceUpdatedAtGTE,omitempty"`
+	SourceUpdatedAtLt     *models.DateTime   `json:"sourceUpdatedAtLT,omitempty"`
+	SourceUpdatedAtLte    *models.DateTime   `json:"sourceUpdatedAtLTE,omitempty"`
+	SourceUpdatedAtIsNil  *bool              `json:"sourceUpdatedAtIsNil,omitempty"`
+	SourceUpdatedAtNotNil *bool              `json:"sourceUpdatedAtNotNil,omitempty"`
+	// external_uri field predicates
+	ExternalURI             *string  `json:"externalURI,omitempty"`
+	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
+	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
+	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
+	ExternalURIGt           *string  `json:"externalURIGT,omitempty"`
+	ExternalURIGte          *string  `json:"externalURIGTE,omitempty"`
+	ExternalURILt           *string  `json:"externalURILT,omitempty"`
+	ExternalURILte          *string  `json:"externalURILTE,omitempty"`
+	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
+	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
+	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
+	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
+	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
+	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
+	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// scans edge predicates
+	HasScans     *bool             `json:"hasScans,omitempty"`
+	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+}
+
 type Webauthn struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -39260,6 +45844,7 @@ const (
 	ActionPlanHistoryOrderFieldStatus          ActionPlanHistoryOrderField = "STATUS"
 	ActionPlanHistoryOrderFieldReviewDue       ActionPlanHistoryOrderField = "review_due"
 	ActionPlanHistoryOrderFieldReviewFrequency ActionPlanHistoryOrderField = "REVIEW_FREQUENCY"
+	ActionPlanHistoryOrderFieldTitle           ActionPlanHistoryOrderField = "title"
 	ActionPlanHistoryOrderFieldDueDate         ActionPlanHistoryOrderField = "due_date"
 	ActionPlanHistoryOrderFieldPriority        ActionPlanHistoryOrderField = "PRIORITY"
 	ActionPlanHistoryOrderFieldSource          ActionPlanHistoryOrderField = "source"
@@ -39274,6 +45859,7 @@ var AllActionPlanHistoryOrderField = []ActionPlanHistoryOrderField{
 	ActionPlanHistoryOrderFieldStatus,
 	ActionPlanHistoryOrderFieldReviewDue,
 	ActionPlanHistoryOrderFieldReviewFrequency,
+	ActionPlanHistoryOrderFieldTitle,
 	ActionPlanHistoryOrderFieldDueDate,
 	ActionPlanHistoryOrderFieldPriority,
 	ActionPlanHistoryOrderFieldSource,
@@ -39281,7 +45867,7 @@ var AllActionPlanHistoryOrderField = []ActionPlanHistoryOrderField{
 
 func (e ActionPlanHistoryOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanHistoryOrderFieldHistoryTime, ActionPlanHistoryOrderFieldCreatedAt, ActionPlanHistoryOrderFieldUpdatedAt, ActionPlanHistoryOrderFieldRevision, ActionPlanHistoryOrderFieldName, ActionPlanHistoryOrderFieldStatus, ActionPlanHistoryOrderFieldReviewDue, ActionPlanHistoryOrderFieldReviewFrequency, ActionPlanHistoryOrderFieldDueDate, ActionPlanHistoryOrderFieldPriority, ActionPlanHistoryOrderFieldSource:
+	case ActionPlanHistoryOrderFieldHistoryTime, ActionPlanHistoryOrderFieldCreatedAt, ActionPlanHistoryOrderFieldUpdatedAt, ActionPlanHistoryOrderFieldRevision, ActionPlanHistoryOrderFieldName, ActionPlanHistoryOrderFieldStatus, ActionPlanHistoryOrderFieldReviewDue, ActionPlanHistoryOrderFieldReviewFrequency, ActionPlanHistoryOrderFieldTitle, ActionPlanHistoryOrderFieldDueDate, ActionPlanHistoryOrderFieldPriority, ActionPlanHistoryOrderFieldSource:
 		return true
 	}
 	return false
@@ -39333,6 +45919,7 @@ const (
 	ActionPlanOrderFieldStatus          ActionPlanOrderField = "STATUS"
 	ActionPlanOrderFieldReviewDue       ActionPlanOrderField = "review_due"
 	ActionPlanOrderFieldReviewFrequency ActionPlanOrderField = "REVIEW_FREQUENCY"
+	ActionPlanOrderFieldTitle           ActionPlanOrderField = "title"
 	ActionPlanOrderFieldDueDate         ActionPlanOrderField = "due_date"
 	ActionPlanOrderFieldPriority        ActionPlanOrderField = "PRIORITY"
 	ActionPlanOrderFieldSource          ActionPlanOrderField = "source"
@@ -39346,6 +45933,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 	ActionPlanOrderFieldStatus,
 	ActionPlanOrderFieldReviewDue,
 	ActionPlanOrderFieldReviewFrequency,
+	ActionPlanOrderFieldTitle,
 	ActionPlanOrderFieldDueDate,
 	ActionPlanOrderFieldPriority,
 	ActionPlanOrderFieldSource,
@@ -39353,7 +45941,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 
 func (e ActionPlanOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
+	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldTitle, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
 		return true
 	}
 	return false
@@ -41397,6 +47985,250 @@ func (e *FileOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e FileOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which FindingControlHistory connections can be ordered.
+type FindingControlHistoryOrderField string
+
+const (
+	FindingControlHistoryOrderFieldHistoryTime FindingControlHistoryOrderField = "history_time"
+	FindingControlHistoryOrderFieldCreatedAt   FindingControlHistoryOrderField = "created_at"
+	FindingControlHistoryOrderFieldUpdatedAt   FindingControlHistoryOrderField = "updated_at"
+)
+
+var AllFindingControlHistoryOrderField = []FindingControlHistoryOrderField{
+	FindingControlHistoryOrderFieldHistoryTime,
+	FindingControlHistoryOrderFieldCreatedAt,
+	FindingControlHistoryOrderFieldUpdatedAt,
+}
+
+func (e FindingControlHistoryOrderField) IsValid() bool {
+	switch e {
+	case FindingControlHistoryOrderFieldHistoryTime, FindingControlHistoryOrderFieldCreatedAt, FindingControlHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e FindingControlHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *FindingControlHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FindingControlHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FindingControlHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e FindingControlHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *FindingControlHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e FindingControlHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which FindingControl connections can be ordered.
+type FindingControlOrderField string
+
+const (
+	FindingControlOrderFieldCreatedAt FindingControlOrderField = "created_at"
+	FindingControlOrderFieldUpdatedAt FindingControlOrderField = "updated_at"
+)
+
+var AllFindingControlOrderField = []FindingControlOrderField{
+	FindingControlOrderFieldCreatedAt,
+	FindingControlOrderFieldUpdatedAt,
+}
+
+func (e FindingControlOrderField) IsValid() bool {
+	switch e {
+	case FindingControlOrderFieldCreatedAt, FindingControlOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e FindingControlOrderField) String() string {
+	return string(e)
+}
+
+func (e *FindingControlOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FindingControlOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FindingControlOrderField", str)
+	}
+	return nil
+}
+
+func (e FindingControlOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *FindingControlOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e FindingControlOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which FindingHistory connections can be ordered.
+type FindingHistoryOrderField string
+
+const (
+	FindingHistoryOrderFieldHistoryTime     FindingHistoryOrderField = "history_time"
+	FindingHistoryOrderFieldCreatedAt       FindingHistoryOrderField = "created_at"
+	FindingHistoryOrderFieldUpdatedAt       FindingHistoryOrderField = "updated_at"
+	FindingHistoryOrderFieldExternalID      FindingHistoryOrderField = "external_id"
+	FindingHistoryOrderFieldExternalOwnerID FindingHistoryOrderField = "external_owner_id"
+	FindingHistoryOrderFieldCategory        FindingHistoryOrderField = "category"
+	FindingHistoryOrderFieldSeverity        FindingHistoryOrderField = "severity"
+)
+
+var AllFindingHistoryOrderField = []FindingHistoryOrderField{
+	FindingHistoryOrderFieldHistoryTime,
+	FindingHistoryOrderFieldCreatedAt,
+	FindingHistoryOrderFieldUpdatedAt,
+	FindingHistoryOrderFieldExternalID,
+	FindingHistoryOrderFieldExternalOwnerID,
+	FindingHistoryOrderFieldCategory,
+	FindingHistoryOrderFieldSeverity,
+}
+
+func (e FindingHistoryOrderField) IsValid() bool {
+	switch e {
+	case FindingHistoryOrderFieldHistoryTime, FindingHistoryOrderFieldCreatedAt, FindingHistoryOrderFieldUpdatedAt, FindingHistoryOrderFieldExternalID, FindingHistoryOrderFieldExternalOwnerID, FindingHistoryOrderFieldCategory, FindingHistoryOrderFieldSeverity:
+		return true
+	}
+	return false
+}
+
+func (e FindingHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *FindingHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FindingHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FindingHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e FindingHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *FindingHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e FindingHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Finding connections can be ordered.
+type FindingOrderField string
+
+const (
+	FindingOrderFieldCreatedAt       FindingOrderField = "created_at"
+	FindingOrderFieldUpdatedAt       FindingOrderField = "updated_at"
+	FindingOrderFieldExternalID      FindingOrderField = "external_id"
+	FindingOrderFieldExternalOwnerID FindingOrderField = "external_owner_id"
+	FindingOrderFieldCategory        FindingOrderField = "category"
+	FindingOrderFieldSeverity        FindingOrderField = "severity"
+)
+
+var AllFindingOrderField = []FindingOrderField{
+	FindingOrderFieldCreatedAt,
+	FindingOrderFieldUpdatedAt,
+	FindingOrderFieldExternalID,
+	FindingOrderFieldExternalOwnerID,
+	FindingOrderFieldCategory,
+	FindingOrderFieldSeverity,
+}
+
+func (e FindingOrderField) IsValid() bool {
+	switch e {
+	case FindingOrderFieldCreatedAt, FindingOrderFieldUpdatedAt, FindingOrderFieldExternalID, FindingOrderFieldExternalOwnerID, FindingOrderFieldCategory, FindingOrderFieldSeverity:
+		return true
+	}
+	return false
+}
+
+func (e FindingOrderField) String() string {
+	return string(e)
+}
+
+func (e *FindingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FindingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FindingOrderField", str)
+	}
+	return nil
+}
+
+func (e FindingOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *FindingOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e FindingOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil
@@ -44100,6 +50932,266 @@ func (e ProgramOrderField) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// Properties by which RemediationHistory connections can be ordered.
+type RemediationHistoryOrderField string
+
+const (
+	RemediationHistoryOrderFieldHistoryTime     RemediationHistoryOrderField = "history_time"
+	RemediationHistoryOrderFieldCreatedAt       RemediationHistoryOrderField = "created_at"
+	RemediationHistoryOrderFieldUpdatedAt       RemediationHistoryOrderField = "updated_at"
+	RemediationHistoryOrderFieldExternalID      RemediationHistoryOrderField = "external_id"
+	RemediationHistoryOrderFieldExternalOwnerID RemediationHistoryOrderField = "external_owner_id"
+	RemediationHistoryOrderFieldTitle           RemediationHistoryOrderField = "title"
+	RemediationHistoryOrderFieldState           RemediationHistoryOrderField = "state"
+)
+
+var AllRemediationHistoryOrderField = []RemediationHistoryOrderField{
+	RemediationHistoryOrderFieldHistoryTime,
+	RemediationHistoryOrderFieldCreatedAt,
+	RemediationHistoryOrderFieldUpdatedAt,
+	RemediationHistoryOrderFieldExternalID,
+	RemediationHistoryOrderFieldExternalOwnerID,
+	RemediationHistoryOrderFieldTitle,
+	RemediationHistoryOrderFieldState,
+}
+
+func (e RemediationHistoryOrderField) IsValid() bool {
+	switch e {
+	case RemediationHistoryOrderFieldHistoryTime, RemediationHistoryOrderFieldCreatedAt, RemediationHistoryOrderFieldUpdatedAt, RemediationHistoryOrderFieldExternalID, RemediationHistoryOrderFieldExternalOwnerID, RemediationHistoryOrderFieldTitle, RemediationHistoryOrderFieldState:
+		return true
+	}
+	return false
+}
+
+func (e RemediationHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *RemediationHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RemediationHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RemediationHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e RemediationHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *RemediationHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e RemediationHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Remediation connections can be ordered.
+type RemediationOrderField string
+
+const (
+	RemediationOrderFieldCreatedAt       RemediationOrderField = "created_at"
+	RemediationOrderFieldUpdatedAt       RemediationOrderField = "updated_at"
+	RemediationOrderFieldExternalID      RemediationOrderField = "external_id"
+	RemediationOrderFieldExternalOwnerID RemediationOrderField = "external_owner_id"
+	RemediationOrderFieldTitle           RemediationOrderField = "title"
+	RemediationOrderFieldState           RemediationOrderField = "state"
+)
+
+var AllRemediationOrderField = []RemediationOrderField{
+	RemediationOrderFieldCreatedAt,
+	RemediationOrderFieldUpdatedAt,
+	RemediationOrderFieldExternalID,
+	RemediationOrderFieldExternalOwnerID,
+	RemediationOrderFieldTitle,
+	RemediationOrderFieldState,
+}
+
+func (e RemediationOrderField) IsValid() bool {
+	switch e {
+	case RemediationOrderFieldCreatedAt, RemediationOrderFieldUpdatedAt, RemediationOrderFieldExternalID, RemediationOrderFieldExternalOwnerID, RemediationOrderFieldTitle, RemediationOrderFieldState:
+		return true
+	}
+	return false
+}
+
+func (e RemediationOrderField) String() string {
+	return string(e)
+}
+
+func (e *RemediationOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RemediationOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RemediationOrderField", str)
+	}
+	return nil
+}
+
+func (e RemediationOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *RemediationOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e RemediationOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which ReviewHistory connections can be ordered.
+type ReviewHistoryOrderField string
+
+const (
+	ReviewHistoryOrderFieldHistoryTime     ReviewHistoryOrderField = "history_time"
+	ReviewHistoryOrderFieldCreatedAt       ReviewHistoryOrderField = "created_at"
+	ReviewHistoryOrderFieldUpdatedAt       ReviewHistoryOrderField = "updated_at"
+	ReviewHistoryOrderFieldExternalID      ReviewHistoryOrderField = "external_id"
+	ReviewHistoryOrderFieldExternalOwnerID ReviewHistoryOrderField = "external_owner_id"
+	ReviewHistoryOrderFieldTitle           ReviewHistoryOrderField = "title"
+	ReviewHistoryOrderFieldState           ReviewHistoryOrderField = "state"
+)
+
+var AllReviewHistoryOrderField = []ReviewHistoryOrderField{
+	ReviewHistoryOrderFieldHistoryTime,
+	ReviewHistoryOrderFieldCreatedAt,
+	ReviewHistoryOrderFieldUpdatedAt,
+	ReviewHistoryOrderFieldExternalID,
+	ReviewHistoryOrderFieldExternalOwnerID,
+	ReviewHistoryOrderFieldTitle,
+	ReviewHistoryOrderFieldState,
+}
+
+func (e ReviewHistoryOrderField) IsValid() bool {
+	switch e {
+	case ReviewHistoryOrderFieldHistoryTime, ReviewHistoryOrderFieldCreatedAt, ReviewHistoryOrderFieldUpdatedAt, ReviewHistoryOrderFieldExternalID, ReviewHistoryOrderFieldExternalOwnerID, ReviewHistoryOrderFieldTitle, ReviewHistoryOrderFieldState:
+		return true
+	}
+	return false
+}
+
+func (e ReviewHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ReviewHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ReviewHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ReviewHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ReviewHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ReviewHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ReviewHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Review connections can be ordered.
+type ReviewOrderField string
+
+const (
+	ReviewOrderFieldCreatedAt       ReviewOrderField = "created_at"
+	ReviewOrderFieldUpdatedAt       ReviewOrderField = "updated_at"
+	ReviewOrderFieldExternalID      ReviewOrderField = "external_id"
+	ReviewOrderFieldExternalOwnerID ReviewOrderField = "external_owner_id"
+	ReviewOrderFieldTitle           ReviewOrderField = "title"
+	ReviewOrderFieldState           ReviewOrderField = "state"
+)
+
+var AllReviewOrderField = []ReviewOrderField{
+	ReviewOrderFieldCreatedAt,
+	ReviewOrderFieldUpdatedAt,
+	ReviewOrderFieldExternalID,
+	ReviewOrderFieldExternalOwnerID,
+	ReviewOrderFieldTitle,
+	ReviewOrderFieldState,
+}
+
+func (e ReviewOrderField) IsValid() bool {
+	switch e {
+	case ReviewOrderFieldCreatedAt, ReviewOrderFieldUpdatedAt, ReviewOrderFieldExternalID, ReviewOrderFieldExternalOwnerID, ReviewOrderFieldTitle, ReviewOrderFieldState:
+		return true
+	}
+	return false
+}
+
+func (e ReviewOrderField) String() string {
+	return string(e)
+}
+
+func (e *ReviewOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ReviewOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ReviewOrderField", str)
+	}
+	return nil
+}
+
+func (e ReviewOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ReviewOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ReviewOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 // Properties by which RiskHistory connections can be ordered.
 type RiskHistoryOrderField string
 
@@ -46305,6 +53397,140 @@ func (e *UserSettingOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e UserSettingOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which VulnerabilityHistory connections can be ordered.
+type VulnerabilityHistoryOrderField string
+
+const (
+	VulnerabilityHistoryOrderFieldHistoryTime     VulnerabilityHistoryOrderField = "history_time"
+	VulnerabilityHistoryOrderFieldCreatedAt       VulnerabilityHistoryOrderField = "created_at"
+	VulnerabilityHistoryOrderFieldUpdatedAt       VulnerabilityHistoryOrderField = "updated_at"
+	VulnerabilityHistoryOrderFieldExternalOwnerID VulnerabilityHistoryOrderField = "external_owner_id"
+	VulnerabilityHistoryOrderFieldExternalID      VulnerabilityHistoryOrderField = "external_id"
+	VulnerabilityHistoryOrderFieldCveID           VulnerabilityHistoryOrderField = "cve_id"
+	VulnerabilityHistoryOrderFieldCategory        VulnerabilityHistoryOrderField = "category"
+	VulnerabilityHistoryOrderFieldSeverity        VulnerabilityHistoryOrderField = "severity"
+)
+
+var AllVulnerabilityHistoryOrderField = []VulnerabilityHistoryOrderField{
+	VulnerabilityHistoryOrderFieldHistoryTime,
+	VulnerabilityHistoryOrderFieldCreatedAt,
+	VulnerabilityHistoryOrderFieldUpdatedAt,
+	VulnerabilityHistoryOrderFieldExternalOwnerID,
+	VulnerabilityHistoryOrderFieldExternalID,
+	VulnerabilityHistoryOrderFieldCveID,
+	VulnerabilityHistoryOrderFieldCategory,
+	VulnerabilityHistoryOrderFieldSeverity,
+}
+
+func (e VulnerabilityHistoryOrderField) IsValid() bool {
+	switch e {
+	case VulnerabilityHistoryOrderFieldHistoryTime, VulnerabilityHistoryOrderFieldCreatedAt, VulnerabilityHistoryOrderFieldUpdatedAt, VulnerabilityHistoryOrderFieldExternalOwnerID, VulnerabilityHistoryOrderFieldExternalID, VulnerabilityHistoryOrderFieldCveID, VulnerabilityHistoryOrderFieldCategory, VulnerabilityHistoryOrderFieldSeverity:
+		return true
+	}
+	return false
+}
+
+func (e VulnerabilityHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *VulnerabilityHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = VulnerabilityHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid VulnerabilityHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e VulnerabilityHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *VulnerabilityHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e VulnerabilityHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Vulnerability connections can be ordered.
+type VulnerabilityOrderField string
+
+const (
+	VulnerabilityOrderFieldCreatedAt       VulnerabilityOrderField = "created_at"
+	VulnerabilityOrderFieldUpdatedAt       VulnerabilityOrderField = "updated_at"
+	VulnerabilityOrderFieldExternalOwnerID VulnerabilityOrderField = "external_owner_id"
+	VulnerabilityOrderFieldExternalID      VulnerabilityOrderField = "external_id"
+	VulnerabilityOrderFieldCveID           VulnerabilityOrderField = "cve_id"
+	VulnerabilityOrderFieldCategory        VulnerabilityOrderField = "category"
+	VulnerabilityOrderFieldSeverity        VulnerabilityOrderField = "severity"
+)
+
+var AllVulnerabilityOrderField = []VulnerabilityOrderField{
+	VulnerabilityOrderFieldCreatedAt,
+	VulnerabilityOrderFieldUpdatedAt,
+	VulnerabilityOrderFieldExternalOwnerID,
+	VulnerabilityOrderFieldExternalID,
+	VulnerabilityOrderFieldCveID,
+	VulnerabilityOrderFieldCategory,
+	VulnerabilityOrderFieldSeverity,
+}
+
+func (e VulnerabilityOrderField) IsValid() bool {
+	switch e {
+	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity:
+		return true
+	}
+	return false
+}
+
+func (e VulnerabilityOrderField) String() string {
+	return string(e)
+}
+
+func (e *VulnerabilityOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = VulnerabilityOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid VulnerabilityOrderField", str)
+	}
+	return nil
+}
+
+func (e VulnerabilityOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *VulnerabilityOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e VulnerabilityOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

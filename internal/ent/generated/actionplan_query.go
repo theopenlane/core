@@ -17,11 +17,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,24 +35,36 @@ import (
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx                *QueryContext
-	order              []actionplan.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.ActionPlan
-	withApprover       *GroupQuery
-	withDelegate       *GroupQuery
-	withOwner          *OrganizationQuery
-	withActionPlanKind *CustomTypeEnumQuery
-	withRisks          *RiskQuery
-	withControls       *ControlQuery
-	withPrograms       *ProgramQuery
-	withFile           *FileQuery
-	withFKs            bool
-	loadTotal          []func(context.Context, []*ActionPlan) error
-	modifiers          []func(*sql.Selector)
-	withNamedRisks     map[string]*RiskQuery
-	withNamedControls  map[string]*ControlQuery
-	withNamedPrograms  map[string]*ProgramQuery
+	ctx                      *QueryContext
+	order                    []actionplan.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.ActionPlan
+	withApprover             *GroupQuery
+	withDelegate             *GroupQuery
+	withOwner                *OrganizationQuery
+	withActionPlanKind       *CustomTypeEnumQuery
+	withRisks                *RiskQuery
+	withControls             *ControlQuery
+	withPrograms             *ProgramQuery
+	withFindings             *FindingQuery
+	withVulnerabilities      *VulnerabilityQuery
+	withReviews              *ReviewQuery
+	withRemediations         *RemediationQuery
+	withTasks                *TaskQuery
+	withIntegrations         *IntegrationQuery
+	withFile                 *FileQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*ActionPlan) error
+	modifiers                []func(*sql.Selector)
+	withNamedRisks           map[string]*RiskQuery
+	withNamedControls        map[string]*ControlQuery
+	withNamedPrograms        map[string]*ProgramQuery
+	withNamedFindings        map[string]*FindingQuery
+	withNamedVulnerabilities map[string]*VulnerabilityQuery
+	withNamedReviews         map[string]*ReviewQuery
+	withNamedRemediations    map[string]*RemediationQuery
+	withNamedTasks           map[string]*TaskQuery
+	withNamedIntegrations    map[string]*IntegrationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -252,6 +270,156 @@ func (_q *ActionPlanQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *ActionPlanQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.FindingsTable, actionplan.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *ActionPlanQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.VulnerabilitiesTable, actionplan.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *ActionPlanQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ReviewsTable, actionplan.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *ActionPlanQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RemediationsTable, actionplan.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *ActionPlanQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.TasksTable, actionplan.TasksPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ActionPlanTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (_q *ActionPlanQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.IntegrationsTable, actionplan.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -470,19 +638,25 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:             _q.config,
-		ctx:                _q.ctx.Clone(),
-		order:              append([]actionplan.OrderOption{}, _q.order...),
-		inters:             append([]Interceptor{}, _q.inters...),
-		predicates:         append([]predicate.ActionPlan{}, _q.predicates...),
-		withApprover:       _q.withApprover.Clone(),
-		withDelegate:       _q.withDelegate.Clone(),
-		withOwner:          _q.withOwner.Clone(),
-		withActionPlanKind: _q.withActionPlanKind.Clone(),
-		withRisks:          _q.withRisks.Clone(),
-		withControls:       _q.withControls.Clone(),
-		withPrograms:       _q.withPrograms.Clone(),
-		withFile:           _q.withFile.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]actionplan.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.ActionPlan{}, _q.predicates...),
+		withApprover:        _q.withApprover.Clone(),
+		withDelegate:        _q.withDelegate.Clone(),
+		withOwner:           _q.withOwner.Clone(),
+		withActionPlanKind:  _q.withActionPlanKind.Clone(),
+		withRisks:           _q.withRisks.Clone(),
+		withControls:        _q.withControls.Clone(),
+		withPrograms:        _q.withPrograms.Clone(),
+		withFindings:        _q.withFindings.Clone(),
+		withVulnerabilities: _q.withVulnerabilities.Clone(),
+		withReviews:         _q.withReviews.Clone(),
+		withRemediations:    _q.withRemediations.Clone(),
+		withTasks:           _q.withTasks.Clone(),
+		withIntegrations:    _q.withIntegrations.Clone(),
+		withFile:            _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -564,6 +738,72 @@ func (_q *ActionPlanQuery) WithPrograms(opts ...func(*ProgramQuery)) *ActionPlan
 		opt(query)
 	}
 	_q.withPrograms = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithFindings(opts ...func(*FindingQuery)) *ActionPlanQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *ActionPlanQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithReviews(opts ...func(*ReviewQuery)) *ActionPlanQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithRemediations(opts ...func(*RemediationQuery)) *ActionPlanQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithTasks(opts ...func(*TaskQuery)) *ActionPlanQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
+	return _q
+}
+
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *ActionPlanQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrations = query
 	return _q
 }
 
@@ -663,7 +903,7 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [14]bool{
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withOwner != nil,
@@ -671,6 +911,12 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			_q.withRisks != nil,
 			_q.withControls != nil,
 			_q.withPrograms != nil,
+			_q.withFindings != nil,
+			_q.withVulnerabilities != nil,
+			_q.withReviews != nil,
+			_q.withRemediations != nil,
+			_q.withTasks != nil,
+			_q.withIntegrations != nil,
 			_q.withFile != nil,
 		}
 	)
@@ -745,6 +991,48 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Findings = []*Finding{} },
+			func(n *ActionPlan, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *ActionPlan, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Reviews = []*Review{} },
+			func(n *ActionPlan, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Remediations = []*Remediation{} },
+			func(n *ActionPlan, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Tasks = []*Task{} },
+			func(n *ActionPlan, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Integrations = []*Integration{} },
+			func(n *ActionPlan, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *ActionPlan, e *File) { n.Edges.File = e }); err != nil {
@@ -769,6 +1057,48 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedPrograms(name) },
 			func(n *ActionPlan, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedFindings(name) },
+			func(n *ActionPlan, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedVulnerabilities(name) },
+			func(n *ActionPlan, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedReviews(name) },
+			func(n *ActionPlan, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedRemediations(name) },
+			func(n *ActionPlan, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedTasks(name) },
+			func(n *ActionPlan, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedIntegrations(name) },
+			func(n *ActionPlan, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1082,6 +1412,378 @@ func (_q *ActionPlanQuery) loadPrograms(ctx context.Context, query *ProgramQuery
 	}
 	return nil
 }
+func (_q *ActionPlanQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingActionPlans)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(actionplan.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityActionPlans)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(actionplan.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.ReviewsTable)
+		joinT.Schema(_q.schemaConfig.ReviewActionPlans)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(actionplan.ReviewsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ReviewsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.ReviewsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Remediation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.RemediationActionPlans)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(actionplan.RemediationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.RemediationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.RemediationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.TasksTable)
+		joinT.Schema(_q.schemaConfig.ActionPlanTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(actionplan.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(actionplan.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Integration)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.IntegrationsTable)
+		joinT.Schema(_q.schemaConfig.IntegrationActionPlans)
+		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(actionplan.IntegrationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.IntegrationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.IntegrationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Integration](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integrations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ActionPlanQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
@@ -1267,6 +1969,90 @@ func (_q *ActionPlanQuery) WithNamedPrograms(name string, opts ...func(*ProgramQ
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *ActionPlanQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *ActionPlanQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *ActionPlanQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *ActionPlanQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ActionPlanQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *ActionPlanQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	}
+	_q.withNamedIntegrations[name] = query
 	return _q
 }
 

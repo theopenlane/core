@@ -441,6 +441,54 @@ func (f FileHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FileHistoryMutation", m)
 }
 
+// The FindingFunc type is an adapter to allow the use of ordinary
+// function as Finding mutator.
+type FindingFunc func(context.Context, *generated.FindingMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FindingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.FindingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FindingMutation", m)
+}
+
+// The FindingControlFunc type is an adapter to allow the use of ordinary
+// function as FindingControl mutator.
+type FindingControlFunc func(context.Context, *generated.FindingControlMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FindingControlFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.FindingControlMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FindingControlMutation", m)
+}
+
+// The FindingControlHistoryFunc type is an adapter to allow the use of ordinary
+// function as FindingControlHistory mutator.
+type FindingControlHistoryFunc func(context.Context, *generated.FindingControlHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FindingControlHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.FindingControlHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FindingControlHistoryMutation", m)
+}
+
+// The FindingHistoryFunc type is an adapter to allow the use of ordinary
+// function as FindingHistory mutator.
+type FindingHistoryFunc func(context.Context, *generated.FindingHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FindingHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.FindingHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.FindingHistoryMutation", m)
+}
+
 // The GroupFunc type is an adapter to allow the use of ordinary
 // function as Group mutator.
 type GroupFunc func(context.Context, *generated.GroupMutation) (generated.Value, error)
@@ -1017,6 +1065,54 @@ func (f ProgramMembershipHistoryFunc) Mutate(ctx context.Context, m generated.Mu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProgramMembershipHistoryMutation", m)
 }
 
+// The RemediationFunc type is an adapter to allow the use of ordinary
+// function as Remediation mutator.
+type RemediationFunc func(context.Context, *generated.RemediationMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RemediationFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.RemediationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RemediationMutation", m)
+}
+
+// The RemediationHistoryFunc type is an adapter to allow the use of ordinary
+// function as RemediationHistory mutator.
+type RemediationHistoryFunc func(context.Context, *generated.RemediationHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RemediationHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.RemediationHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RemediationHistoryMutation", m)
+}
+
+// The ReviewFunc type is an adapter to allow the use of ordinary
+// function as Review mutator.
+type ReviewFunc func(context.Context, *generated.ReviewMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ReviewFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ReviewMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ReviewMutation", m)
+}
+
+// The ReviewHistoryFunc type is an adapter to allow the use of ordinary
+// function as ReviewHistory mutator.
+type ReviewHistoryFunc func(context.Context, *generated.ReviewHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ReviewHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ReviewHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ReviewHistoryMutation", m)
+}
+
 // The RiskFunc type is an adapter to allow the use of ordinary
 // function as Risk mutator.
 type RiskFunc func(context.Context, *generated.RiskMutation) (generated.Value, error)
@@ -1447,6 +1543,30 @@ func (f UserSettingHistoryFunc) Mutate(ctx context.Context, m generated.Mutation
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.UserSettingHistoryMutation", m)
+}
+
+// The VulnerabilityFunc type is an adapter to allow the use of ordinary
+// function as Vulnerability mutator.
+type VulnerabilityFunc func(context.Context, *generated.VulnerabilityMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VulnerabilityFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VulnerabilityMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VulnerabilityMutation", m)
+}
+
+// The VulnerabilityHistoryFunc type is an adapter to allow the use of ordinary
+// function as VulnerabilityHistory mutator.
+type VulnerabilityHistoryFunc func(context.Context, *generated.VulnerabilityHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VulnerabilityHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VulnerabilityHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VulnerabilityHistoryMutation", m)
 }
 
 // The WebauthnFunc type is an adapter to allow the use of ordinary

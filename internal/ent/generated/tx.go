@@ -84,6 +84,14 @@ type Tx struct {
 	FileDownloadToken *FileDownloadTokenClient
 	// FileHistory is the client for interacting with the FileHistory builders.
 	FileHistory *FileHistoryClient
+	// Finding is the client for interacting with the Finding builders.
+	Finding *FindingClient
+	// FindingControl is the client for interacting with the FindingControl builders.
+	FindingControl *FindingControlClient
+	// FindingControlHistory is the client for interacting with the FindingControlHistory builders.
+	FindingControlHistory *FindingControlHistoryClient
+	// FindingHistory is the client for interacting with the FindingHistory builders.
+	FindingHistory *FindingHistoryClient
 	// Group is the client for interacting with the Group builders.
 	Group *GroupClient
 	// GroupHistory is the client for interacting with the GroupHistory builders.
@@ -180,6 +188,14 @@ type Tx struct {
 	ProgramMembership *ProgramMembershipClient
 	// ProgramMembershipHistory is the client for interacting with the ProgramMembershipHistory builders.
 	ProgramMembershipHistory *ProgramMembershipHistoryClient
+	// Remediation is the client for interacting with the Remediation builders.
+	Remediation *RemediationClient
+	// RemediationHistory is the client for interacting with the RemediationHistory builders.
+	RemediationHistory *RemediationHistoryClient
+	// Review is the client for interacting with the Review builders.
+	Review *ReviewClient
+	// ReviewHistory is the client for interacting with the ReviewHistory builders.
+	ReviewHistory *ReviewHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -252,6 +268,10 @@ type Tx struct {
 	UserSetting *UserSettingClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// Vulnerability is the client for interacting with the Vulnerability builders.
+	Vulnerability *VulnerabilityClient
+	// VulnerabilityHistory is the client for interacting with the VulnerabilityHistory builders.
+	VulnerabilityHistory *VulnerabilityHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
 
@@ -421,6 +441,10 @@ func (tx *Tx) init() {
 	tx.File = NewFileClient(tx.config)
 	tx.FileDownloadToken = NewFileDownloadTokenClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
+	tx.Finding = NewFindingClient(tx.config)
+	tx.FindingControl = NewFindingControlClient(tx.config)
+	tx.FindingControlHistory = NewFindingControlHistoryClient(tx.config)
+	tx.FindingHistory = NewFindingHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
 	tx.GroupHistory = NewGroupHistoryClient(tx.config)
 	tx.GroupMembership = NewGroupMembershipClient(tx.config)
@@ -469,6 +493,10 @@ func (tx *Tx) init() {
 	tx.ProgramHistory = NewProgramHistoryClient(tx.config)
 	tx.ProgramMembership = NewProgramMembershipClient(tx.config)
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
+	tx.Remediation = NewRemediationClient(tx.config)
+	tx.RemediationHistory = NewRemediationHistoryClient(tx.config)
+	tx.Review = NewReviewClient(tx.config)
+	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
@@ -505,6 +533,8 @@ func (tx *Tx) init() {
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)
 	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
+	tx.Vulnerability = NewVulnerabilityClient(tx.config)
+	tx.VulnerabilityHistory = NewVulnerabilityHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
 }
 

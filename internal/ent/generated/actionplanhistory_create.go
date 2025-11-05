@@ -440,6 +440,26 @@ func (_c *ActionPlanHistoryCreate) SetNillableActionPlanKindID(v *string) *Actio
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *ActionPlanHistoryCreate) SetTitle(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *ActionPlanHistoryCreate) SetDescription(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableDescription(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanHistoryCreate) SetDueDate(v time.Time) *ActionPlanHistoryCreate {
 	_c.mutation.SetDueDate(v)
@@ -450,6 +470,20 @@ func (_c *ActionPlanHistoryCreate) SetDueDate(v time.Time) *ActionPlanHistoryCre
 func (_c *ActionPlanHistoryCreate) SetNillableDueDate(v *time.Time) *ActionPlanHistoryCreate {
 	if v != nil {
 		_c.SetDueDate(*v)
+	}
+	return _c
+}
+
+// SetCompletedAt sets the "completed_at" field.
+func (_c *ActionPlanHistoryCreate) SetCompletedAt(v time.Time) *ActionPlanHistoryCreate {
+	_c.mutation.SetCompletedAt(v)
+	return _c
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableCompletedAt(v *time.Time) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetCompletedAt(*v)
 	}
 	return _c
 }
@@ -465,6 +499,60 @@ func (_c *ActionPlanHistoryCreate) SetNillablePriority(v *enums.Priority) *Actio
 	if v != nil {
 		_c.SetPriority(*v)
 	}
+	return _c
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_c *ActionPlanHistoryCreate) SetRequiresApproval(v bool) *ActionPlanHistoryCreate {
+	_c.mutation.SetRequiresApproval(v)
+	return _c
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableRequiresApproval(v *bool) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetRequiresApproval(*v)
+	}
+	return _c
+}
+
+// SetBlocked sets the "blocked" field.
+func (_c *ActionPlanHistoryCreate) SetBlocked(v bool) *ActionPlanHistoryCreate {
+	_c.mutation.SetBlocked(v)
+	return _c
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableBlocked(v *bool) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetBlocked(*v)
+	}
+	return _c
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_c *ActionPlanHistoryCreate) SetBlockerReason(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetBlockerReason(v)
+	return _c
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableBlockerReason(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetBlockerReason(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *ActionPlanHistoryCreate) SetMetadata(v map[string]interface{}) *ActionPlanHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_c *ActionPlanHistoryCreate) SetRawPayload(v map[string]interface{}) *ActionPlanHistoryCreate {
+	_c.mutation.SetRawPayload(v)
 	return _c
 }
 
@@ -606,6 +694,14 @@ func (_c *ActionPlanHistoryCreate) defaults() error {
 		v := actionplanhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.RequiresApproval(); !ok {
+		v := actionplanhistory.DefaultRequiresApproval
+		_c.mutation.SetRequiresApproval(v)
+	}
+	if _, ok := _c.mutation.Blocked(); !ok {
+		v := actionplanhistory.DefaultBlocked
+		_c.mutation.SetBlocked(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if actionplanhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplanhistory.DefaultID (forgotten import generated/runtime?)")
@@ -642,10 +738,19 @@ func (_c *ActionPlanHistoryCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "ActionPlanHistory.title"`)}
+	}
 	if v, ok := _c.mutation.Priority(); ok {
 		if err := actionplanhistory.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.priority": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.RequiresApproval(); !ok {
+		return &ValidationError{Name: "requires_approval", err: errors.New(`generated: missing required field "ActionPlanHistory.requires_approval"`)}
+	}
+	if _, ok := _c.mutation.Blocked(); !ok {
+		return &ValidationError{Name: "blocked", err: errors.New(`generated: missing required field "ActionPlanHistory.blocked"`)}
 	}
 	return nil
 }
@@ -823,13 +928,45 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 		_spec.SetField(actionplanhistory.FieldActionPlanKindID, field.TypeString, value)
 		_node.ActionPlanKindID = value
 	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)
+		_node.Title = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
+	if value, ok := _c.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplanhistory.FieldCompletedAt, field.TypeTime, value)
+		_node.CompletedAt = &value
+	}
 	if value, ok := _c.mutation.Priority(); ok {
 		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 		_node.Priority = value
+	}
+	if value, ok := _c.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplanhistory.FieldRequiresApproval, field.TypeBool, value)
+		_node.RequiresApproval = value
+	}
+	if value, ok := _c.mutation.Blocked(); ok {
+		_spec.SetField(actionplanhistory.FieldBlocked, field.TypeBool, value)
+		_node.Blocked = value
+	}
+	if value, ok := _c.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplanhistory.FieldBlockerReason, field.TypeString, value)
+		_node.BlockerReason = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(actionplanhistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.RawPayload(); ok {
+		_spec.SetField(actionplanhistory.FieldRawPayload, field.TypeJSON, value)
+		_node.RawPayload = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)

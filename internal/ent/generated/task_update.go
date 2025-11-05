@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -542,6 +543,21 @@ func (_u *TaskUpdate) AddControlImplementations(v ...*ControlImplementation) *Ta
 	return _u.AddControlImplementationIDs(ids...)
 }
 
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *TaskUpdate) AddActionPlanIDs(ids ...string) *TaskUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *TaskUpdate) AddActionPlans(v ...*ActionPlan) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *TaskUpdate) AddEvidenceIDs(ids ...string) *TaskUpdate {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -788,6 +804,27 @@ func (_u *TaskUpdate) RemoveControlImplementations(v ...*ControlImplementation) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *TaskUpdate) ClearActionPlans() *TaskUpdate {
+	_u.mutation.ClearActionPlans()
+	return _u
+}
+
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *TaskUpdate) RemoveActionPlanIDs(ids ...string) *TaskUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *TaskUpdate) RemoveActionPlans(v ...*ActionPlan) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -1561,6 +1598,54 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2128,6 +2213,21 @@ func (_u *TaskUpdateOne) AddControlImplementations(v ...*ControlImplementation) 
 	return _u.AddControlImplementationIDs(ids...)
 }
 
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *TaskUpdateOne) AddActionPlanIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *TaskUpdateOne) AddActionPlans(v ...*ActionPlan) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *TaskUpdateOne) AddEvidenceIDs(ids ...string) *TaskUpdateOne {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -2374,6 +2474,27 @@ func (_u *TaskUpdateOne) RemoveControlImplementations(v ...*ControlImplementatio
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *TaskUpdateOne) ClearActionPlans() *TaskUpdateOne {
+	_u.mutation.ClearActionPlans()
+	return _u
+}
+
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *TaskUpdateOne) RemoveActionPlanIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *TaskUpdateOne) RemoveActionPlans(v ...*ActionPlan) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -3172,6 +3293,54 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

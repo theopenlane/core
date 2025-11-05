@@ -259,6 +259,10 @@ var ForeignKeys = []string{
 	"control_objective_risks",
 	"custom_type_enum_risks",
 	"custom_type_enum_risk_categories",
+	"finding_risks",
+	"remediation_risks",
+	"review_risks",
+	"vulnerability_risks",
 }
 
 var (

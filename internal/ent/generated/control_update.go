@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -937,6 +939,21 @@ func (_u *ControlUpdate) AddScans(v ...*Scan) *ControlUpdate {
 	return _u.AddScanIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ControlUpdate) AddFindingIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ControlUpdate) AddFindings(v ...*Finding) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
 func (_u *ControlUpdate) AddControlImplementationIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddControlImplementationIDs(ids...)
@@ -1010,6 +1027,21 @@ func (_u *ControlUpdate) AddMappedFromControls(v ...*MappedControl) *ControlUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddMappedFromControlIDs(ids...)
+}
+
+// AddControlMappingIDs adds the "control_mappings" edge to the FindingControl entity by IDs.
+func (_u *ControlUpdate) AddControlMappingIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddControlMappingIDs(ids...)
+	return _u
+}
+
+// AddControlMappings adds the "control_mappings" edges to the FindingControl entity.
+func (_u *ControlUpdate) AddControlMappings(v ...*FindingControl) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlMappingIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -1341,6 +1373,27 @@ func (_u *ControlUpdate) RemoveScans(v ...*Scan) *ControlUpdate {
 	return _u.RemoveScanIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ControlUpdate) ClearFindings() *ControlUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ControlUpdate) RemoveFindingIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ControlUpdate) RemoveFindings(v ...*Finding) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
 func (_u *ControlUpdate) ClearControlImplementations() *ControlUpdate {
 	_u.mutation.ClearControlImplementations()
@@ -1444,6 +1497,27 @@ func (_u *ControlUpdate) RemoveMappedFromControls(v ...*MappedControl) *ControlU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedFromControlIDs(ids...)
+}
+
+// ClearControlMappings clears all "control_mappings" edges to the FindingControl entity.
+func (_u *ControlUpdate) ClearControlMappings() *ControlUpdate {
+	_u.mutation.ClearControlMappings()
+	return _u
+}
+
+// RemoveControlMappingIDs removes the "control_mappings" edge to FindingControl entities by IDs.
+func (_u *ControlUpdate) RemoveControlMappingIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveControlMappingIDs(ids...)
+	return _u
+}
+
+// RemoveControlMappings removes "control_mappings" edges to FindingControl entities.
+func (_u *ControlUpdate) RemoveControlMappings(v ...*FindingControl) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlMappingIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2583,6 +2657,75 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2818,6 +2961,54 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.MappedControlFromControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlMappingsIDs(); len(nodes) > 0 && !_u.mutation.ControlMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlMappingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3730,6 +3921,21 @@ func (_u *ControlUpdateOne) AddScans(v ...*Scan) *ControlUpdateOne {
 	return _u.AddScanIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ControlUpdateOne) AddFindingIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ControlUpdateOne) AddFindings(v ...*Finding) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
 func (_u *ControlUpdateOne) AddControlImplementationIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddControlImplementationIDs(ids...)
@@ -3803,6 +4009,21 @@ func (_u *ControlUpdateOne) AddMappedFromControls(v ...*MappedControl) *ControlU
 		ids[i] = v[i].ID
 	}
 	return _u.AddMappedFromControlIDs(ids...)
+}
+
+// AddControlMappingIDs adds the "control_mappings" edge to the FindingControl entity by IDs.
+func (_u *ControlUpdateOne) AddControlMappingIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddControlMappingIDs(ids...)
+	return _u
+}
+
+// AddControlMappings adds the "control_mappings" edges to the FindingControl entity.
+func (_u *ControlUpdateOne) AddControlMappings(v ...*FindingControl) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlMappingIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -4134,6 +4355,27 @@ func (_u *ControlUpdateOne) RemoveScans(v ...*Scan) *ControlUpdateOne {
 	return _u.RemoveScanIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ControlUpdateOne) ClearFindings() *ControlUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ControlUpdateOne) RemoveFindingIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ControlUpdateOne) RemoveFindings(v ...*Finding) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
 func (_u *ControlUpdateOne) ClearControlImplementations() *ControlUpdateOne {
 	_u.mutation.ClearControlImplementations()
@@ -4237,6 +4479,27 @@ func (_u *ControlUpdateOne) RemoveMappedFromControls(v ...*MappedControl) *Contr
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedFromControlIDs(ids...)
+}
+
+// ClearControlMappings clears all "control_mappings" edges to the FindingControl entity.
+func (_u *ControlUpdateOne) ClearControlMappings() *ControlUpdateOne {
+	_u.mutation.ClearControlMappings()
+	return _u
+}
+
+// RemoveControlMappingIDs removes the "control_mappings" edge to FindingControl entities by IDs.
+func (_u *ControlUpdateOne) RemoveControlMappingIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveControlMappingIDs(ids...)
+	return _u
+}
+
+// RemoveControlMappings removes "control_mappings" edges to FindingControl entities.
+func (_u *ControlUpdateOne) RemoveControlMappings(v ...*FindingControl) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlMappingIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlUpdate builder.
@@ -5406,6 +5669,75 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FindingControlCreate{config: _u.config, mutation: newFindingControlMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5641,6 +5973,54 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.MappedControlFromControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlMappingsIDs(); len(nodes) > 0 && !_u.mutation.ControlMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlMappingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

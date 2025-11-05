@@ -48,6 +48,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -96,6 +100,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -132,6 +140,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
 
@@ -229,6 +239,10 @@ func checkColumn(t, c string) error {
 			file.Table:                              file.ValidColumn,
 			filedownloadtoken.Table:                 filedownloadtoken.ValidColumn,
 			filehistory.Table:                       filehistory.ValidColumn,
+			finding.Table:                           finding.ValidColumn,
+			findingcontrol.Table:                    findingcontrol.ValidColumn,
+			findingcontrolhistory.Table:             findingcontrolhistory.ValidColumn,
+			findinghistory.Table:                    findinghistory.ValidColumn,
 			group.Table:                             group.ValidColumn,
 			grouphistory.Table:                      grouphistory.ValidColumn,
 			groupmembership.Table:                   groupmembership.ValidColumn,
@@ -277,6 +291,10 @@ func checkColumn(t, c string) error {
 			programhistory.Table:                    programhistory.ValidColumn,
 			programmembership.Table:                 programmembership.ValidColumn,
 			programmembershiphistory.Table:          programmembershiphistory.ValidColumn,
+			remediation.Table:                       remediation.ValidColumn,
+			remediationhistory.Table:                remediationhistory.ValidColumn,
+			review.Table:                            review.ValidColumn,
+			reviewhistory.Table:                     reviewhistory.ValidColumn,
 			risk.Table:                              risk.ValidColumn,
 			riskhistory.Table:                       riskhistory.ValidColumn,
 			scan.Table:                              scan.ValidColumn,
@@ -313,6 +331,8 @@ func checkColumn(t, c string) error {
 			userhistory.Table:                       userhistory.ValidColumn,
 			usersetting.Table:                       usersetting.ValidColumn,
 			usersettinghistory.Table:                usersettinghistory.ValidColumn,
+			vulnerability.Table:                     vulnerability.ValidColumn,
+			vulnerabilityhistory.Table:              vulnerabilityhistory.ValidColumn,
 			webauthn.Table:                          webauthn.ValidColumn,
 		})
 	})

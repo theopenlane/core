@@ -90,10 +90,26 @@ type ActionPlanHistory struct {
 	ActionPlanKindName string `json:"action_plan_kind_name,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
+	// short title describing the action plan
+	Title string `json:"title,omitempty"`
+	// detailed description of remediation steps and objectives
+	Description string `json:"description,omitempty"`
 	// due date of the action plan
 	DueDate time.Time `json:"due_date,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt *time.Time `json:"completed_at,omitempty"`
 	// priority of the action plan
 	Priority enums.Priority `json:"priority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval bool `json:"requires_approval,omitempty"`
+	// true when the action plan is currently blocked
+	Blocked bool `json:"blocked,omitempty"`
+	// context on why the action plan is blocked
+	BlockerReason string `json:"blocker_reason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]interface{} `json:"raw_payload,omitempty"`
 	// source of the action plan
 	Source       string `json:"source,omitempty"`
 	selectValues sql.SelectValues
@@ -104,15 +120,15 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplanhistory.FieldTags, actionplanhistory.FieldTagSuggestions, actionplanhistory.FieldDismissedTagSuggestions, actionplanhistory.FieldControlSuggestions, actionplanhistory.FieldDismissedControlSuggestions, actionplanhistory.FieldImprovementSuggestions, actionplanhistory.FieldDismissedImprovementSuggestions:
+		case actionplanhistory.FieldTags, actionplanhistory.FieldTagSuggestions, actionplanhistory.FieldDismissedTagSuggestions, actionplanhistory.FieldControlSuggestions, actionplanhistory.FieldDismissedControlSuggestions, actionplanhistory.FieldImprovementSuggestions, actionplanhistory.FieldDismissedImprovementSuggestions, actionplanhistory.FieldMetadata, actionplanhistory.FieldRawPayload:
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned:
+		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate:
+		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate, actionplanhistory.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -363,17 +379,70 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.ActionPlanKindID = value.String
 			}
+		case actionplanhistory.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case actionplanhistory.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
 		case actionplanhistory.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
 				_m.DueDate = value.Time
 			}
+		case actionplanhistory.FieldCompletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field completed_at", values[i])
+			} else if value.Valid {
+				_m.CompletedAt = new(time.Time)
+				*_m.CompletedAt = value.Time
+			}
 		case actionplanhistory.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
 				_m.Priority = enums.Priority(value.String)
+			}
+		case actionplanhistory.FieldRequiresApproval:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field requires_approval", values[i])
+			} else if value.Valid {
+				_m.RequiresApproval = value.Bool
+			}
+		case actionplanhistory.FieldBlocked:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field blocked", values[i])
+			} else if value.Valid {
+				_m.Blocked = value.Bool
+			}
+		case actionplanhistory.FieldBlockerReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field blocker_reason", values[i])
+			} else if value.Valid {
+				_m.BlockerReason = value.String
+			}
+		case actionplanhistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case actionplanhistory.FieldRawPayload:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field raw_payload", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RawPayload); err != nil {
+					return fmt.Errorf("unmarshal field raw_payload: %w", err)
+				}
 			}
 		case actionplanhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -530,11 +599,37 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString("action_plan_kind_id=")
 	builder.WriteString(_m.ActionPlanKindID)
 	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(_m.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
+	if v := _m.CompletedAt; v != nil {
+		builder.WriteString("completed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
+	builder.WriteString(", ")
+	builder.WriteString("requires_approval=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RequiresApproval))
+	builder.WriteString(", ")
+	builder.WriteString("blocked=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Blocked))
+	builder.WriteString(", ")
+	builder.WriteString("blocker_reason=")
+	builder.WriteString(_m.BlockerReason)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("raw_payload=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RawPayload))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)

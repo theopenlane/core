@@ -364,6 +364,9 @@ var ForeignKeys = []string{
 	"asset_blocked_groups",
 	"asset_editors",
 	"asset_viewers",
+	"finding_blocked_groups",
+	"finding_editors",
+	"finding_viewers",
 	"organization_control_creators",
 	"organization_control_implementation_creators",
 	"organization_control_objective_creators",
@@ -378,6 +381,15 @@ var ForeignKeys = []string{
 	"organization_scheduled_job_creators",
 	"organization_standard_creators",
 	"organization_template_creators",
+	"remediation_blocked_groups",
+	"remediation_editors",
+	"remediation_viewers",
+	"review_blocked_groups",
+	"review_editors",
+	"review_viewers",
+	"vulnerability_blocked_groups",
+	"vulnerability_editors",
+	"vulnerability_viewers",
 }
 
 var (

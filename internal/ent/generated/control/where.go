@@ -2868,6 +2868,35 @@ func HasScansWith(preds ...predicate.Scan) predicate.Control {
 	})
 }
 
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControlImplementations applies the HasEdge predicate on the "control_implementations" edge.
 func HasControlImplementations() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
@@ -3005,6 +3034,35 @@ func HasMappedFromControlsWith(preds ...predicate.MappedControl) predicate.Contr
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.MappedControl
 		step.Edge.Schema = schemaConfig.MappedControlFromControls
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControlMappings applies the HasEdge predicate on the "control_mappings" edge.
+func HasControlMappings() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, ControlMappingsTable, ControlMappingsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlMappingsWith applies the HasEdge predicate on the "control_mappings" edge with a given conditions (other predicates).
+func HasControlMappingsWith(preds ...predicate.FindingControl) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newControlMappingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

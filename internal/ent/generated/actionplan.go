@@ -87,10 +87,26 @@ type ActionPlan struct {
 	ActionPlanKindName string `json:"action_plan_kind_name,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
+	// short title describing the action plan
+	Title string `json:"title,omitempty"`
+	// detailed description of remediation steps and objectives
+	Description string `json:"description,omitempty"`
 	// due date of the action plan
 	DueDate time.Time `json:"due_date,omitempty"`
+	// timestamp when the action plan was completed
+	CompletedAt *time.Time `json:"completed_at,omitempty"`
 	// priority of the action plan
 	Priority enums.Priority `json:"priority,omitempty"`
+	// indicates if the action plan requires explicit approval before closure
+	RequiresApproval bool `json:"requires_approval,omitempty"`
+	// true when the action plan is currently blocked
+	Blocked bool `json:"blocked,omitempty"`
+	// context on why the action plan is blocked
+	BlockerReason string `json:"blocker_reason,omitempty"`
+	// additional structured metadata for the action plan
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawPayload map[string]interface{} `json:"raw_payload,omitempty"`
 	// source of the action plan
 	Source string `json:"source,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -118,17 +134,35 @@ type ActionPlanEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
+	// integration that generated the action plan
+	Integrations []*Integration `json:"integrations,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [14]map[string]int
 
-	namedRisks    map[string][]*Risk
-	namedControls map[string][]*Control
-	namedPrograms map[string][]*Program
+	namedRisks           map[string][]*Risk
+	namedControls        map[string][]*Control
+	namedPrograms        map[string][]*Program
+	namedFindings        map[string][]*Finding
+	namedVulnerabilities map[string][]*Vulnerability
+	namedReviews         map[string][]*Review
+	namedRemediations    map[string][]*Remediation
+	namedTasks           map[string][]*Task
+	namedIntegrations    map[string][]*Integration
 }
 
 // ApproverOrErr returns the Approver value or an error if the edge
@@ -202,12 +236,66 @@ func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[7] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[8] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[9] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[10] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[11] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// IntegrationsOrErr returns the Integrations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
+	if e.loadedTypes[12] {
+		return e.Integrations, nil
+	}
+	return nil, &NotLoadedError{edge: "integrations"}
+}
+
 // FileOrErr returns the File value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -218,13 +306,13 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplan.FieldTags, actionplan.FieldTagSuggestions, actionplan.FieldDismissedTagSuggestions, actionplan.FieldControlSuggestions, actionplan.FieldDismissedControlSuggestions, actionplan.FieldImprovementSuggestions, actionplan.FieldDismissedImprovementSuggestions:
+		case actionplan.FieldTags, actionplan.FieldTagSuggestions, actionplan.FieldDismissedTagSuggestions, actionplan.FieldControlSuggestions, actionplan.FieldDismissedControlSuggestions, actionplan.FieldImprovementSuggestions, actionplan.FieldDismissedImprovementSuggestions, actionplan.FieldMetadata, actionplan.FieldRawPayload:
 			values[i] = new([]byte)
-		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned:
+		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
+		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate, actionplan.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
 		case actionplan.ForeignKeys[0]: // custom_type_enum_action_plans
 			values[i] = new(sql.NullString)
@@ -463,17 +551,70 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ActionPlanKindID = value.String
 			}
+		case actionplan.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case actionplan.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
 		case actionplan.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
 				_m.DueDate = value.Time
 			}
+		case actionplan.FieldCompletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field completed_at", values[i])
+			} else if value.Valid {
+				_m.CompletedAt = new(time.Time)
+				*_m.CompletedAt = value.Time
+			}
 		case actionplan.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
 				_m.Priority = enums.Priority(value.String)
+			}
+		case actionplan.FieldRequiresApproval:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field requires_approval", values[i])
+			} else if value.Valid {
+				_m.RequiresApproval = value.Bool
+			}
+		case actionplan.FieldBlocked:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field blocked", values[i])
+			} else if value.Valid {
+				_m.Blocked = value.Bool
+			}
+		case actionplan.FieldBlockerReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field blocker_reason", values[i])
+			} else if value.Valid {
+				_m.BlockerReason = value.String
+			}
+		case actionplan.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case actionplan.FieldRawPayload:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field raw_payload", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RawPayload); err != nil {
+					return fmt.Errorf("unmarshal field raw_payload: %w", err)
+				}
 			}
 		case actionplan.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -548,6 +689,36 @@ func (_m *ActionPlan) QueryControls() *ControlQuery {
 // QueryPrograms queries the "programs" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryPrograms() *ProgramQuery {
 	return NewActionPlanClient(_m.config).QueryPrograms(_m)
+}
+
+// QueryFindings queries the "findings" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryFindings() *FindingQuery {
+	return NewActionPlanClient(_m.config).QueryFindings(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewActionPlanClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryReviews() *ReviewQuery {
+	return NewActionPlanClient(_m.config).QueryReviews(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryRemediations() *RemediationQuery {
+	return NewActionPlanClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryTasks() *TaskQuery {
+	return NewActionPlanClient(_m.config).QueryTasks(_m)
+}
+
+// QueryIntegrations queries the "integrations" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryIntegrations() *IntegrationQuery {
+	return NewActionPlanClient(_m.config).QueryIntegrations(_m)
 }
 
 // QueryFile queries the "file" edge of the ActionPlan entity.
@@ -682,11 +853,37 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString("action_plan_kind_id=")
 	builder.WriteString(_m.ActionPlanKindID)
 	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(_m.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
+	if v := _m.CompletedAt; v != nil {
+		builder.WriteString("completed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
+	builder.WriteString(", ")
+	builder.WriteString("requires_approval=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RequiresApproval))
+	builder.WriteString(", ")
+	builder.WriteString("blocked=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Blocked))
+	builder.WriteString(", ")
+	builder.WriteString("blocker_reason=")
+	builder.WriteString(_m.BlockerReason)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("raw_payload=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RawPayload))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)
@@ -763,6 +960,150 @@ func (_m *ActionPlan) appendNamedPrograms(name string, edges ...*Program) {
 		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedIntegrations returns the Integrations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrations[name] = []*Integration{}
+	} else {
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
 	}
 }
 

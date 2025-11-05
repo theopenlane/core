@@ -14,16 +14,24 @@ var (
 	ExportTypeControl ExportType = "CONTROL"
 	// ExportTypeEvidence indicates the evidence.
 	ExportTypeEvidence ExportType = "EVIDENCE"
+	// ExportTypeFinding indicates the finding.
+	ExportTypeFinding ExportType = "FINDING"
 	// ExportTypeInternalPolicy indicates the internalpolicy.
 	ExportTypeInternalPolicy ExportType = "INTERNAL_POLICY"
 	// ExportTypeProcedure indicates the procedure.
 	ExportTypeProcedure ExportType = "PROCEDURE"
+	// ExportTypeRemediation indicates the remediation.
+	ExportTypeRemediation ExportType = "REMEDIATION"
+	// ExportTypeReview indicates the review.
+	ExportTypeReview ExportType = "REVIEW"
 	// ExportTypeRisk indicates the risk.
 	ExportTypeRisk ExportType = "RISK"
 	// ExportTypeSubscriber indicates the subscriber.
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
+	// ExportTypeVulnerability indicates the vulnerability.
+	ExportTypeVulnerability ExportType = "VULNERABILITY"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
@@ -33,11 +41,15 @@ func (ExportType) Values() []string {
 	return []string{
 		string(ExportTypeControl),
 		string(ExportTypeEvidence),
+		string(ExportTypeFinding),
 		string(ExportTypeInternalPolicy),
 		string(ExportTypeProcedure),
+		string(ExportTypeRemediation),
+		string(ExportTypeReview),
 		string(ExportTypeRisk),
 		string(ExportTypeSubscriber),
 		string(ExportTypeTask),
+		string(ExportTypeVulnerability),
 	}
 }
 
@@ -53,16 +65,24 @@ func ToExportType(r string) *ExportType {
 		return &ExportTypeControl
 	case ExportTypeEvidence.String():
 		return &ExportTypeEvidence
+	case ExportTypeFinding.String():
+		return &ExportTypeFinding
 	case ExportTypeInternalPolicy.String():
 		return &ExportTypeInternalPolicy
 	case ExportTypeProcedure.String():
 		return &ExportTypeProcedure
+	case ExportTypeRemediation.String():
+		return &ExportTypeRemediation
+	case ExportTypeReview.String():
+		return &ExportTypeReview
 	case ExportTypeRisk.String():
 		return &ExportTypeRisk
 	case ExportTypeSubscriber.String():
 		return &ExportTypeSubscriber
 	case ExportTypeTask.String():
 		return &ExportTypeTask
+	case ExportTypeVulnerability.String():
+		return &ExportTypeVulnerability
 	default:
 		return &ExportTypeInvalid
 	}

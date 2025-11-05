@@ -258,6 +258,10 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_programs",
+	"finding_programs",
+	"remediation_programs",
+	"review_programs",
+	"vulnerability_programs",
 }
 
 var (

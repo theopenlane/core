@@ -16,11 +16,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -592,6 +598,40 @@ func (_u *ActionPlanUpdate) ClearActionPlanKindID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ActionPlanUpdate) SetTitle(v string) *ActionPlanUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableTitle(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ActionPlanUpdate) SetDescription(v string) *ActionPlanUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableDescription(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ActionPlanUpdate) ClearDescription() *ActionPlanUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdate) SetDueDate(v time.Time) *ActionPlanUpdate {
 	_u.mutation.SetDueDate(v)
@@ -612,6 +652,26 @@ func (_u *ActionPlanUpdate) ClearDueDate() *ActionPlanUpdate {
 	return _u
 }
 
+// SetCompletedAt sets the "completed_at" field.
+func (_u *ActionPlanUpdate) SetCompletedAt(v time.Time) *ActionPlanUpdate {
+	_u.mutation.SetCompletedAt(v)
+	return _u
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableCompletedAt(v *time.Time) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetCompletedAt(*v)
+	}
+	return _u
+}
+
+// ClearCompletedAt clears the value of the "completed_at" field.
+func (_u *ActionPlanUpdate) ClearCompletedAt() *ActionPlanUpdate {
+	_u.mutation.ClearCompletedAt()
+	return _u
+}
+
 // SetPriority sets the "priority" field.
 func (_u *ActionPlanUpdate) SetPriority(v enums.Priority) *ActionPlanUpdate {
 	_u.mutation.SetPriority(v)
@@ -629,6 +689,78 @@ func (_u *ActionPlanUpdate) SetNillablePriority(v *enums.Priority) *ActionPlanUp
 // ClearPriority clears the value of the "priority" field.
 func (_u *ActionPlanUpdate) ClearPriority() *ActionPlanUpdate {
 	_u.mutation.ClearPriority()
+	return _u
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_u *ActionPlanUpdate) SetRequiresApproval(v bool) *ActionPlanUpdate {
+	_u.mutation.SetRequiresApproval(v)
+	return _u
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableRequiresApproval(v *bool) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetRequiresApproval(*v)
+	}
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ActionPlanUpdate) SetBlocked(v bool) *ActionPlanUpdate {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableBlocked(v *bool) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetBlocked(*v)
+	}
+	return _u
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_u *ActionPlanUpdate) SetBlockerReason(v string) *ActionPlanUpdate {
+	_u.mutation.SetBlockerReason(v)
+	return _u
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableBlockerReason(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetBlockerReason(*v)
+	}
+	return _u
+}
+
+// ClearBlockerReason clears the value of the "blocker_reason" field.
+func (_u *ActionPlanUpdate) ClearBlockerReason() *ActionPlanUpdate {
+	_u.mutation.ClearBlockerReason()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *ActionPlanUpdate) SetMetadata(v map[string]interface{}) *ActionPlanUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ActionPlanUpdate) ClearMetadata() *ActionPlanUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_u *ActionPlanUpdate) SetRawPayload(v map[string]interface{}) *ActionPlanUpdate {
+	_u.mutation.SetRawPayload(v)
+	return _u
+}
+
+// ClearRawPayload clears the value of the "raw_payload" field.
+func (_u *ActionPlanUpdate) ClearRawPayload() *ActionPlanUpdate {
+	_u.mutation.ClearRawPayload()
 	return _u
 }
 
@@ -715,6 +847,96 @@ func (_u *ActionPlanUpdate) AddPrograms(v ...*Program) *ActionPlanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ActionPlanUpdate) AddFindingIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ActionPlanUpdate) AddFindings(v ...*Finding) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ActionPlanUpdate) AddVulnerabilityIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ActionPlanUpdate) AddVulnerabilities(v ...*Vulnerability) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *ActionPlanUpdate) AddReviewIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *ActionPlanUpdate) AddReviews(v ...*Review) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ActionPlanUpdate) AddRemediationIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ActionPlanUpdate) AddRemediations(v ...*Remediation) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ActionPlanUpdate) AddTaskIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ActionPlanUpdate) AddTasks(v ...*Task) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *ActionPlanUpdate) AddIntegrationIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *ActionPlanUpdate) AddIntegrations(v ...*Integration) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -814,6 +1036,132 @@ func (_u *ActionPlanUpdate) RemovePrograms(v ...*Program) *ActionPlanUpdate {
 	return _u.RemoveProgramIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ActionPlanUpdate) ClearFindings() *ActionPlanUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ActionPlanUpdate) RemoveFindingIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ActionPlanUpdate) RemoveFindings(v ...*Finding) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ActionPlanUpdate) ClearVulnerabilities() *ActionPlanUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ActionPlanUpdate) RemoveVulnerabilityIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ActionPlanUpdate) RemoveVulnerabilities(v ...*Vulnerability) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *ActionPlanUpdate) ClearReviews() *ActionPlanUpdate {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *ActionPlanUpdate) RemoveReviewIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *ActionPlanUpdate) RemoveReviews(v ...*Review) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ActionPlanUpdate) ClearRemediations() *ActionPlanUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ActionPlanUpdate) RemoveRemediationIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ActionPlanUpdate) RemoveRemediations(v ...*Remediation) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ActionPlanUpdate) ClearTasks() *ActionPlanUpdate {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ActionPlanUpdate) RemoveTaskIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ActionPlanUpdate) RemoveTasks(v ...*Task) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *ActionPlanUpdate) ClearIntegrations() *ActionPlanUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *ActionPlanUpdate) RemoveIntegrationIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *ActionPlanUpdate) RemoveIntegrations(v ...*Integration) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
 // ClearFile clears the "file" edge to the File entity.
 func (_u *ActionPlanUpdate) ClearFile() *ActionPlanUpdate {
 	_u.mutation.ClearFile()
@@ -882,6 +1230,11 @@ func (_u *ActionPlanUpdate) check() error {
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Title(); ok {
+		if err := actionplan.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.title": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Priority(); ok {
@@ -1095,17 +1448,56 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.ActionPlanKindNameCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(actionplan.FieldDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
+	if value, ok := _u.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplan.FieldCompletedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CompletedAtCleared() {
+		_spec.ClearField(actionplan.FieldCompletedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 	}
 	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplan.FieldPriority, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplan.FieldRequiresApproval, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(actionplan.FieldBlocked, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplan.FieldBlockerReason, field.TypeString, value)
+	}
+	if _u.mutation.BlockerReasonCleared() {
+		_spec.ClearField(actionplan.FieldBlockerReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(actionplan.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(actionplan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RawPayload(); ok {
+		_spec.SetField(actionplan.FieldRawPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawPayloadCleared() {
+		_spec.ClearField(actionplan.FieldRawPayload, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
@@ -1376,6 +1768,294 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1988,6 +2668,40 @@ func (_u *ActionPlanUpdateOne) ClearActionPlanKindID() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ActionPlanUpdateOne) SetTitle(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableTitle(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ActionPlanUpdateOne) SetDescription(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableDescription(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ActionPlanUpdateOne) ClearDescription() *ActionPlanUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdateOne) SetDueDate(v time.Time) *ActionPlanUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -2008,6 +2722,26 @@ func (_u *ActionPlanUpdateOne) ClearDueDate() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetCompletedAt sets the "completed_at" field.
+func (_u *ActionPlanUpdateOne) SetCompletedAt(v time.Time) *ActionPlanUpdateOne {
+	_u.mutation.SetCompletedAt(v)
+	return _u
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableCompletedAt(v *time.Time) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetCompletedAt(*v)
+	}
+	return _u
+}
+
+// ClearCompletedAt clears the value of the "completed_at" field.
+func (_u *ActionPlanUpdateOne) ClearCompletedAt() *ActionPlanUpdateOne {
+	_u.mutation.ClearCompletedAt()
+	return _u
+}
+
 // SetPriority sets the "priority" field.
 func (_u *ActionPlanUpdateOne) SetPriority(v enums.Priority) *ActionPlanUpdateOne {
 	_u.mutation.SetPriority(v)
@@ -2025,6 +2759,78 @@ func (_u *ActionPlanUpdateOne) SetNillablePriority(v *enums.Priority) *ActionPla
 // ClearPriority clears the value of the "priority" field.
 func (_u *ActionPlanUpdateOne) ClearPriority() *ActionPlanUpdateOne {
 	_u.mutation.ClearPriority()
+	return _u
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_u *ActionPlanUpdateOne) SetRequiresApproval(v bool) *ActionPlanUpdateOne {
+	_u.mutation.SetRequiresApproval(v)
+	return _u
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableRequiresApproval(v *bool) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetRequiresApproval(*v)
+	}
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ActionPlanUpdateOne) SetBlocked(v bool) *ActionPlanUpdateOne {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableBlocked(v *bool) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetBlocked(*v)
+	}
+	return _u
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_u *ActionPlanUpdateOne) SetBlockerReason(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetBlockerReason(v)
+	return _u
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableBlockerReason(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetBlockerReason(*v)
+	}
+	return _u
+}
+
+// ClearBlockerReason clears the value of the "blocker_reason" field.
+func (_u *ActionPlanUpdateOne) ClearBlockerReason() *ActionPlanUpdateOne {
+	_u.mutation.ClearBlockerReason()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *ActionPlanUpdateOne) SetMetadata(v map[string]interface{}) *ActionPlanUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ActionPlanUpdateOne) ClearMetadata() *ActionPlanUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_u *ActionPlanUpdateOne) SetRawPayload(v map[string]interface{}) *ActionPlanUpdateOne {
+	_u.mutation.SetRawPayload(v)
+	return _u
+}
+
+// ClearRawPayload clears the value of the "raw_payload" field.
+func (_u *ActionPlanUpdateOne) ClearRawPayload() *ActionPlanUpdateOne {
+	_u.mutation.ClearRawPayload()
 	return _u
 }
 
@@ -2111,6 +2917,96 @@ func (_u *ActionPlanUpdateOne) AddPrograms(v ...*Program) *ActionPlanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ActionPlanUpdateOne) AddFindingIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ActionPlanUpdateOne) AddFindings(v ...*Finding) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ActionPlanUpdateOne) AddVulnerabilityIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ActionPlanUpdateOne) AddVulnerabilities(v ...*Vulnerability) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *ActionPlanUpdateOne) AddReviewIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *ActionPlanUpdateOne) AddReviews(v ...*Review) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ActionPlanUpdateOne) AddRemediationIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ActionPlanUpdateOne) AddRemediations(v ...*Remediation) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ActionPlanUpdateOne) AddTaskIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ActionPlanUpdateOne) AddTasks(v ...*Task) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *ActionPlanUpdateOne) AddIntegrationIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *ActionPlanUpdateOne) AddIntegrations(v ...*Integration) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -2210,6 +3106,132 @@ func (_u *ActionPlanUpdateOne) RemovePrograms(v ...*Program) *ActionPlanUpdateOn
 	return _u.RemoveProgramIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ActionPlanUpdateOne) ClearFindings() *ActionPlanUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveFindingIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ActionPlanUpdateOne) RemoveFindings(v ...*Finding) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ActionPlanUpdateOne) ClearVulnerabilities() *ActionPlanUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveVulnerabilityIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ActionPlanUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *ActionPlanUpdateOne) ClearReviews() *ActionPlanUpdateOne {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveReviewIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *ActionPlanUpdateOne) RemoveReviews(v ...*Review) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ActionPlanUpdateOne) ClearRemediations() *ActionPlanUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveRemediationIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ActionPlanUpdateOne) RemoveRemediations(v ...*Remediation) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ActionPlanUpdateOne) ClearTasks() *ActionPlanUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveTaskIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ActionPlanUpdateOne) RemoveTasks(v ...*Task) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *ActionPlanUpdateOne) ClearIntegrations() *ActionPlanUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveIntegrationIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *ActionPlanUpdateOne) RemoveIntegrations(v ...*Integration) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
 // ClearFile clears the "file" edge to the File entity.
 func (_u *ActionPlanUpdateOne) ClearFile() *ActionPlanUpdateOne {
 	_u.mutation.ClearFile()
@@ -2291,6 +3313,11 @@ func (_u *ActionPlanUpdateOne) check() error {
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Title(); ok {
+		if err := actionplan.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.title": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Priority(); ok {
@@ -2521,17 +3548,56 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	if _u.mutation.ActionPlanKindNameCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(actionplan.FieldDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
+	if value, ok := _u.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplan.FieldCompletedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CompletedAtCleared() {
+		_spec.ClearField(actionplan.FieldCompletedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 	}
 	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplan.FieldPriority, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplan.FieldRequiresApproval, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(actionplan.FieldBlocked, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplan.FieldBlockerReason, field.TypeString, value)
+	}
+	if _u.mutation.BlockerReasonCleared() {
+		_spec.ClearField(actionplan.FieldBlockerReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(actionplan.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(actionplan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RawPayload(); ok {
+		_spec.SetField(actionplan.FieldRawPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawPayloadCleared() {
+		_spec.ClearField(actionplan.FieldRawPayload, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
@@ -2802,6 +3868,294 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

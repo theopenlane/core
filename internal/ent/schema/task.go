@@ -122,7 +122,7 @@ func (t Task) Mixin() []ent.Mixin {
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}, ActionPlan{}),
 				withOrganizationOwner(true),
 			),
 			newCustomEnumMixin(t),
@@ -223,6 +223,13 @@ func (t Task) Edges() []ent.Edge {
 			edgeSchema: ControlImplementation{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(ControlImplementation{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ActionPlan{}.Name()),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
