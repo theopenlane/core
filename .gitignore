@@ -78,4 +78,3 @@ junit*.xml
 
 # build files
 dist/
-stripe-webhook

@@ -1,4 +1,4 @@
-//go:build cli-stripe
+//go:build clistripe
 
 package main
 
