@@ -12,7 +12,7 @@ coreConfiguration:
   # -- Domain provides a global domain value for other modules to inherit
   domain: ""  # @schema type:string
   # -- RefreshInterval determines how often to reload the config
-  refreshInterval: 10m0s  # @schema type:integer; default:10m
+  refreshInterval: "10m0s"  # @schema type:integer; default:10m
   # -- Server contains the echo server settings
   server:
     # -- Dev enables echo's dev mode options
@@ -22,15 +22,15 @@ coreConfiguration:
     # -- MetricsPort sets the port for the metrics endpoint
     metricsPort: ":17609"  # @schema type:string; default::17609
     # -- ShutdownGracePeriod sets the grace period for in flight requests before shutting down
-    shutdownGracePeriod: 10s  # @schema type:integer; default:10s
+    shutdownGracePeriod: "10s"  # @schema type:integer; default:10s
     # -- ReadTimeout sets the maximum duration for reading the entire request including the body
-    readTimeout: 15s  # @schema type:integer; default:15s
+    readTimeout: "15s"  # @schema type:integer; default:15s
     # -- WriteTimeout sets the maximum duration before timing out writes of the response
-    writeTimeout: 15s  # @schema type:integer; default:15s
+    writeTimeout: "15s"  # @schema type:integer; default:15s
     # -- IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled
-    idleTimeout: 30s  # @schema type:integer; default:30s
+    idleTimeout: "30s"  # @schema type:integer; default:30s
     # -- ReadHeaderTimeout sets the amount of time allowed to read request headers
-    readHeaderTimeout: 2s  # @schema type:integer; default:2s
+    readHeaderTimeout: "2s"  # @schema type:integer; default:2s
     # -- TLS contains the tls configuration settings
     tls:
       config: ""
@@ -229,13 +229,13 @@ coreConfiguration:
       audience: ""  # @schema type:string
       refreshAudience: ""  # @schema type:string
       issuer: ""  # @schema type:string
-      accessDuration: 1h0m0s  # @schema type:integer; default:1h
-      refreshDuration: 2h0m0s  # @schema type:integer; default:2h
-      refreshOverlap: -15m0s  # @schema type:integer; default:-15m
+      accessDuration: "1h0m0s"  # @schema type:integer; default:1h
+      refreshDuration: "2h0m0s"  # @schema type:integer; default:2h
+      refreshOverlap: "-15m0s"  # @schema type:integer; default:-15m
       jwksEndpoint: ""  # @schema type:string
       keys: {}
       generateKeys: true  # @schema type:boolean; default:true
-      jwksCacheTTL: 5m0s  # @schema type:integer; default:5m
+      jwksCacheTTL: "5m0s"  # @schema type:integer; default:5m
       redis:
         enabled: false  # @schema type:boolean; default:false
         config:
@@ -245,9 +245,9 @@ coreConfiguration:
           username: ""  # @schema type:string
           password: ""  # @schema type:string
           db: 0  # @schema type:integer; default:0
-          dialTimeout: 5s  # @schema type:integer; default:5s
-          readTimeout: 0s  # @schema type:integer; default:0
-          writeTimeout: 0s  # @schema type:integer; default:0
+          dialTimeout: "5s"  # @schema type:integer; default:5s
+          readTimeout: "0s"  # @schema type:integer; default:0
+          writeTimeout: "0s"  # @schema type:integer; default:0
           maxRetries: 3  # @schema type:integer; default:3
           minIdleConns: 0  # @schema type:integer; default:0
           maxIdleConns: 0  # @schema type:integer; default:0
@@ -279,7 +279,7 @@ coreConfiguration:
         requestOrigins: []
         maxDevices: 10  # @schema type:integer; default:10
         enforceTimeout: true  # @schema type:boolean; default:true
-        timeout: 1m0s  # @schema type:integer; default:60s
+        timeout: "1m0s"  # @schema type:integer; default:60s
         debug: false  # @schema type:boolean; default:false
   # -- Authz contains the authorization settings for fine grained access control
   authz:
@@ -318,7 +318,7 @@ coreConfiguration:
     # -- enables writing to two databases simultaneously
     multiWrite: false  # @schema type:boolean; default:false
     # -- cache results for subsequent requests
-    cacheTTL: 1s  # @schema type:integer; default:1s
+    cacheTTL: "1s"  # @schema type:integer; default:1s
     # -- run migrations on startup
     runMigrations: true  # @schema type:boolean; default:true
     # -- migration provider to use for running migrations
@@ -345,9 +345,9 @@ coreConfiguration:
     username: ""  # @schema type:string
     password: ""  # @schema type:string
     db: 0  # @schema type:integer; default:0
-    dialTimeout: 5s  # @schema type:integer; default:5s
-    readTimeout: 0s  # @schema type:integer; default:0
-    writeTimeout: 0s  # @schema type:integer; default:0
+    dialTimeout: "5s"  # @schema type:integer; default:5s
+    readTimeout: "0s"  # @schema type:integer; default:0
+    writeTimeout: "0s"  # @schema type:integer; default:0
     maxRetries: 3  # @schema type:integer; default:3
     minIdleConns: 0  # @schema type:integer; default:0
     maxIdleConns: 0  # @schema type:integer; default:0
@@ -366,7 +366,7 @@ coreConfiguration:
       certificate: ""  # @schema type:string
       headers: []
       compression: ""  # @schema type:string
-      timeout: 10s  # @schema type:integer; default:10s
+      timeout: "10s"  # @schema type:integer; default:10s
   # -- Email contains email sending configuration for the server
   email:
     companyName: ""  # @schema type:string

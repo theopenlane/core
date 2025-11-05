@@ -659,7 +659,8 @@ func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, bas
 		}
 		if configMapData != nil && !parentSecret {
 			helmRef := buildHelmValueReference(basePath)
-			configMapData.WriteString(fmt.Sprintf("  %s: {{ default %s %s | quote }}\n", baseKey, formatValue(value.Interface()), helmRef))
+			defaultLiteral := formatHelmDefaultLiteral(value.Interface())
+			configMapData.WriteString(fmt.Sprintf("  %s: {{ default %s %s | quote }}\n", baseKey, defaultLiteral, helmRef))
 		}
 	}
 }
@@ -1268,6 +1269,9 @@ func formatValue(v any) string {
 	case string:
 		// Always quote strings for Helm/YAML compatibility
 		return fmt.Sprintf(`"%s"`, val)
+	case time.Duration:
+		// Quote durations so Helm parses them as literal strings
+		return fmt.Sprintf(`"%s"`, val.String())
 	case bool:
 		// Helm expects true/false as unquoted
 		return fmt.Sprintf("%t", val)
@@ -1280,6 +1284,33 @@ func formatValue(v any) string {
 
 		return formatted
 	}
+}
+
+// formatHelmDefaultLiteral formats a value as a Helm template-friendly default literal.
+func formatHelmDefaultLiteral(v any) string {
+	if v == nil {
+		return "\"\""
+	}
+
+	value := reflect.ValueOf(v)
+	for value.Kind() == reflect.Ptr {
+		if value.IsNil() {
+			return "\"\""
+		}
+		value = value.Elem()
+	}
+
+	unwrapped := value.Interface()
+
+	if b, ok := unwrapped.(bool); ok {
+		return fmt.Sprintf("%t", b)
+	}
+
+	if d, ok := unwrapped.(time.Duration); ok {
+		return strconv.Quote(d.String())
+	}
+
+	return strconv.Quote(fmt.Sprintf("%v", unwrapped))
 }
 
 // hasSecretChildren checks if a struct has any sensitive child fields

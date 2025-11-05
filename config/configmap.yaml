@@ -330,10 +330,10 @@ data:
   CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeCount | quote | default "16" }}
   CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeLength | quote | default "8" }}
   CORE_RATELIMIT_ENABLED: {{ .Values.openlane.coreConfiguration.ratelimit.enabled | quote | default "false" }}
-  CORE_RATELIMIT_OPTIONS_0_REQUESTS: {{ default 500 (index .Values.openlane.coreConfiguration.ratelimit.options 0).requests | quote }}
-  CORE_RATELIMIT_OPTIONS_0_WINDOW: {{ default 1m0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).window | quote }}
-  CORE_RATELIMIT_OPTIONS_0_EXPIRATION: {{ default 0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).expiration | quote }}
-  CORE_RATELIMIT_OPTIONS_0_FLUSHINTERVAL: {{ default 0s (index .Values.openlane.coreConfiguration.ratelimit.options 0).flushInterval | quote }}
+  CORE_RATELIMIT_OPTIONS_0_REQUESTS: {{ default "500" (index .Values.openlane.coreConfiguration.ratelimit.options 0).requests | quote }}
+  CORE_RATELIMIT_OPTIONS_0_WINDOW: {{ default "1m0s" (index .Values.openlane.coreConfiguration.ratelimit.options 0).window | quote }}
+  CORE_RATELIMIT_OPTIONS_0_EXPIRATION: {{ default "0s" (index .Values.openlane.coreConfiguration.ratelimit.options 0).expiration | quote }}
+  CORE_RATELIMIT_OPTIONS_0_FLUSHINTERVAL: {{ default "0s" (index .Values.openlane.coreConfiguration.ratelimit.options 0).flushInterval | quote }}
   CORE_RATELIMIT_HEADERS: {{ join "," .Values.openlane.coreConfiguration.ratelimit.headers | quote | default "True-Client-IP" }}
   CORE_RATELIMIT_FORWARDEDINDEXFROMBEHIND: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind | quote | default "0" }}
   CORE_RATELIMIT_INCLUDEPATH: {{ .Values.openlane.coreConfiguration.ratelimit.includePath | quote | default "false" }}
