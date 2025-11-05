@@ -15,6 +15,7 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
 )
 
@@ -33,7 +34,6 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			// Delete operations return an int of the number of rows deleted
 			// so we do not want to skip emitting events for those operations
 			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
-				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msgf("mutation of type %s returned an int, skipping event emission", op)
 				return retVal, err
 			}
 
@@ -50,16 +50,18 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					eventID, err = parseEventID(retVal)
 					if err != nil {
 						log.Err(err).Msg("Failed to parse event ID")
+
 						return
 					}
 				}
 
 				if eventID == nil || eventID.ID == "" {
 					log.Err(ErrUnableToDetermineEventID).Msg("Event ID is nil or empty, cannot emit event")
+
 					return
 				}
 
-				zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+				logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 					return c.Str("mutation_id", eventID.ID)
 				})
 
@@ -74,6 +76,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				}
 
 				var emitterClient any
+
 				if e.Emitter != nil {
 					emitterClient = e.Emitter.GetClient()
 					if client, ok := emitterClient.(*entgen.Client); ok {
@@ -86,6 +89,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				event := soiree.NewBaseEvent(topic.Name(), payload)
 				event.SetProperties(props)
 				event.SetContext(context.WithoutCancel(ctx))
+
 				if payload.Client != nil {
 					event.SetClient(payload.Client)
 				} else if emitterClient != nil {
@@ -93,7 +97,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				}
 
 				if e.Emitter != nil {
-					// fire-and-forget; listeners drain the returned channel
+					// fire-and-forget pew pew (listeners drain the return channel)
 					e.Emitter.Emit(topic.Name(), event)
 				}
 			}
@@ -110,7 +114,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					})
 				})
 			} else {
-				defer emit()
+				defer emit() // SHIP IT
 			}
 
 			return retVal, err
@@ -234,8 +238,10 @@ func RegisterListeners(e *Eventer) error {
 		bindings = append(bindings, entries...)
 	}
 
+	// isnt this fancy? #MITB
 	if _, err := e.Emitter.RegisterListeners(bindings...); err != nil {
 		log.Error().Err(err).Msg("failed to register listeners")
+
 		return err
 	}
 
